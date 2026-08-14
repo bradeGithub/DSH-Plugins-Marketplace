@@ -85,10 +85,11 @@ function checkSyntax() {
 function checkTests() {
   if (!want("tests")) return;
   try {
-    execFileSync("node", ["scripts/tests/run.mjs"], { cwd: ROOT, stdio: "inherit" });
-    console.log("[OK] [tests] 测试金字塔全部通过");
+    // 常规提交只跑 unit+integration（快，<1s）；e2e（真实 npm 安装 ~23s）由 CI/--only=tests 全量执行
+    execFileSync("node", ["scripts/tests/run.mjs", "--level=unit,integration"], { cwd: ROOT, stdio: "inherit" });
+    console.log("[OK] [tests] unit+integration 全部通过");
   } catch {
-    fail("tests", "测试金字塔存在失败项");
+    fail("tests", "unit+integration 存在失败项");
   }
 }
 
@@ -167,14 +168,15 @@ function checkCommitMsg() {
   }
 }
 
-// ---- 6. 覆盖率检查（hook 校验逻辑 100% 覆盖）----
+// ---- 6. 覆盖率检查（hook 校验逻辑 100% 覆盖；含 e2e 全量，耗时 ~25s）----
+// 常规提交不执行（见 pre-commit 分组）；CI/PR 前用 `--only=coverage` 手动或自动执行。
 function checkCoverage() {
   if (!want("coverage")) return;
   try {
     execFileSync("node", ["scripts/coverage.mjs"], { cwd: ROOT, stdio: "inherit" });
     console.log("[OK] [coverage] 覆盖率达标");
   } catch {
-    fail("coverage", "覆盖率未达 100%，请补充 smoke-tests 断言");
+    fail("coverage", "覆盖率未达 100%，请补充测试断言");
   }
 }
 
@@ -183,7 +185,7 @@ if (stage === "pre-commit") {
   checkTests();
   checkToc();
   checkSecret();
-  checkCoverage();
+  // coverage 不在此列：耗时长（e2e 真实 npm 安装 ~25s），由 --only=coverage / CI 执行
   // --only=commit-msg 时单独执行（无 --only 时静默跳过）
   if (only === "commit-msg") checkCommitMsg();
 }
