@@ -364,6 +364,29 @@ function setupUrlRewrite(owner, repoName) {
     check("e2e cordis patch 已注册", /name:\s*demo-plugin/.test(patchText), true);
     check("e2e cordis detectInstalled", await lib.detectInstalled({ full_name: "e2e-owner/demo-plugin", name: "demo-plugin" }), true);
 
+    // 皮肤/多包仓库：根目录无清单、子目录含多个插件 → 识别为 cordis-plugin 并逐个安装
+    setupUrlRewrite(owner, "demo-skins");
+    makeFixtureRepo("demo-skins", {
+      "README.md": "# demo-skins\n皮肤合集仓库：根目录只有说明，插件在子目录。\n",
+      "skins/a/package.json": JSON.stringify({ name: "@dsh-external/dsh-client-ui-skin-a", version: "1.0.0", dsh: { version: "1.0.0" }, main: "index.js" }),
+      "skins/a/index.js": "module.exports = {}\n",
+      "skins/b/package.json": JSON.stringify({ name: "@dsh-external/dsh-client-ui-skin-b", version: "1.0.0", dsh: { version: "1.0.0" }, main: "index.js" }),
+      "skins/b/index.js": "module.exports = {}\n",
+    });
+
+    r = await postInstall("e2e-owner/demo-skins", {});
+    check("e2e 多插件仓库识别为 cordis-plugin", r.body && r.body.type, "cordis-plugin");
+    check("e2e 多插件 count=2", r.body && r.body.count, 2);
+    check("e2e 多插件名称", r.body && r.body.name, "2-plugins");
+    const skinA = join(HOME, "profiles", "web", "node_modules", "@dsh-external", "dsh-client-ui-skin-a");
+    const skinB = join(HOME, "profiles", "web", "node_modules", "@dsh-external", "dsh-client-ui-skin-b");
+    check("e2e 多插件 a 已安装", existsSync(join(skinA, "package.json")), true);
+    check("e2e 多插件 b 已安装", existsSync(join(skinB, "package.json")), true);
+    const skinPatch = readFileSync(join(HOME, "profiles", "web", "cordis.patch.yml"), "utf8");
+    check("e2e 多插件 patch 注册 a", skinPatch.includes("@dsh-external/dsh-client-ui-skin-a"), true);
+    check("e2e 多插件 patch 注册 b", skinPatch.includes("@dsh-external/dsh-client-ui-skin-b"), true);
+    check("e2e 多插件仓库 detectInstalled", await lib.detectInstalled({ full_name: "e2e-owner/demo-skins", name: "demo-skins" }), true);
+
     // npm 生命周期脚本确认流：有 prepare 脚本 → 先弹确认；deny → 中止并清空缓存
     setupUrlRewrite(owner, "demo-plugin-scripts");
     makeFixtureRepo("demo-plugin-scripts", {
