@@ -4,6 +4,11 @@
 
 ---
 
+## v1.3.6 — 2026-08-14（皮肤/多包仓库支持 + 安装确认回环修复 / Skin & multi-package repos + install round-trip fix）
+
+- **皮肤/多包仓库自动安装**：根目录无插件清单但子目录含 DSH 插件（如 `dsh-deep-whale` 的皮肤合集）时，自动发现全部子包清单（`findPluginRoots`，`looksLikeDshPlugin` 过滤防误装）并逐个安装——scoped 包名路径校验、patch 注册、npm 脚本/构建确认按子包汇总，完成显示「已安装 N 个插件」/ skin & multi-package repos: when the repo root has no manifest but subdirectories contain DSH plugins (e.g. the `dsh-deep-whale` skin collection), all sub-package manifests are discovered (`findPluginRoots`, filtered by `looksLikeDshPlugin`) and installed one by one — scoped-name path checks, patch registration, npm-script/build confirms aggregated per package, completion shows «N plugins installed»
+- **安装确认回环卡死对话框修复**：提交材料/确认后服务端不再重复克隆（复用 ≤15 分钟的新鲜缓存），二次请求从几十秒变为毫秒级；「运行中」阶段新增「取消并关闭」按钮，后台任务结束后 mutex 自动释放，杜绝无法关闭的卡死对话框 / stuck install dialog fixed: the server no longer re-clones on answer submission (reuses the fresh ≤15-min cache, round-trips drop from tens of seconds to milliseconds); a «Cancel & close» button was added to the running phase — the background task finishes and releases the mutex, so the dialog can never get stuck
+
 ## v1.3.5 — 2026-08-14（安装健壮性 + 测试体系收编 / Install robustness & test pyramid）
 
 - **空值跳过修复（issue #5）**：安装流程提交时预填所有问题 id 为空串——服务端按「键存在即视为已提供」判定，此前未触碰的输入框键缺失导致空值跳过后反复弹窗死循环；选项型问题不受影响 / empty-value skip fixed (issue #5): submit now pre-fills every question id with an empty string — the server treats key-presence as provided, and untouched fields previously had no key, causing an infinite re-prompt loop; option questions are unaffected
