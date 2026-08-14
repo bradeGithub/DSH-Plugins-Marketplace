@@ -19,11 +19,14 @@ const levelArg = process.argv.find((a) => a.startsWith("--level="));
 const level = levelArg ? levelArg.split("=")[1] : "all";
 const jsonOut = process.argv.includes("--json");
 
-if (level !== "all" && !LEVELS.includes(level)) {
-  console.error(`未知层级 "${level}"，可选: all | ${LEVELS.join(" | ")}`);
-  process.exit(1);
+const levelList = level === "all" ? LEVELS : level.split(",").map((s) => s.trim()).filter(Boolean);
+for (const lv of levelList) {
+  if (!LEVELS.includes(lv)) {
+    console.error(`未知层级 "${lv}"，可选: all | ${LEVELS.join(" | ")}`);
+    process.exit(1);
+  }
 }
-const targets = level === "all" ? LEVELS : [level];
+const targets = levelList;
 
 const results = [];
 let failed = false;

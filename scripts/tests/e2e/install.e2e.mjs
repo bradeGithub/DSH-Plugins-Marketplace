@@ -84,6 +84,14 @@ function setupUrlRewrite(owner, repoName) {
   lib = await import("../../../lib/index.js");
   console.log("[e2e] lib 动态加载后 DSH_HOME =", process.env.DSH_HOME);
 
+  // 隔离网络：apply() 预热的 getList 会真实请求 GitHub API（403 限流影响测试），
+  // 全局 mock fetch 返回空列表；仅 git/npm 子进程走真实（本地 fixture）。
+  globalThis.fetch = async () => ({
+    ok: true, status: 200,
+    json: async () => ({ items: [], total_count: 0, repos: [], generated_at: new Date().toISOString() }),
+    text: async () => "[]",
+  });
+
   const owner = "e2e-owner";
   const repoName = "demo-skill";
   setupUrlRewrite(owner, repoName);
@@ -222,10 +230,10 @@ function setupUrlRewrite(owner, repoName) {
     check("e2e list handler 存在", false, true);
   }
 
-  // ---- env 变量缺失问题流：scanRequirements 命中 KEY → awaiting-input ----
+  // ---- env 变量缺失问题流：cordis-plugin 类型（scanRequirements 仅对 script/cordis-plugin 生效）----
   setupUrlRewrite(owner, "demo-skill-env");
   makeFixtureRepo("demo-skill-env", {
-    "SKILL.md": "---\nname: demo-skill-env\n---\n# Demo skill with env\n",
+    "package.json": JSON.stringify({ name: "demo-skill-env", version: "1.0.0", dsh: {} }),
     ".env.example": "OPENAI_API_KEY=sk-placeholder\n",
   });
 
