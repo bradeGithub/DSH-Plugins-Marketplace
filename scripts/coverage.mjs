@@ -25,24 +25,24 @@ const jsonOut = process.argv.includes("--json");
 // 豁免：无法通过测试触发的合理分支。
 // - toc.mjs 主循环（isMain() 内，仅 CLI 运行时执行）
 // - lib/index.js：runNpm 等命名深集成函数（按函数名），以及
-//   防御性死代码闭包（按行号）——见审计记录
+//   防御性死代码闭包（按源码特征子串定位——比行号鲁棒，lib 增删行不受影响）
 const EXEMPT_LIB_FUNCS = [
   "runNpm", "npmInstallWithFallback", "readJsonBody",
   "exists", "json", "readPackageVersion", "readPackageName",
   "readPackageJsonObject", "copyFilter",
 ];
 
-/** lib/index.js 中防御性死代码闭包的起始行号（v8 匿名闭包无法按名豁免）。 */
-const EXEMPT_LIB_LINES = [
-  976,   // 启动预热 getList 失败 catch（getList 实际永不 reject）
-  1172,  // npm 脚本拒绝分支清理闭包
-  1201,  // 非插件取消分支清理闭包
-  1228,  // manual 取消分支清理闭包
-  1252,  // instructions→manual 结果路径清理闭包
-  1262,  // 安装失败 catch 清理闭包
+/** lib/index.js 中防御性死代码闭包的源码特征（indexOf 定位起始偏移）。 */
+const EXEMPT_LIB_MARKERS = [
+  // 启动预热 getList 失败 catch（getList 实际永不 reject）
+  "getList().catch(",
+  // 各分支的 cacheDir 清理闭包（fs.rm 权限/占用时才触发）
+  "rm(cacheDir, { recursive: true, force: true }).catch(",
+  // readSkillManifest 的 readdir 兜底（findSkillRoots 只返回存在的目录，reject 为防御性死代码）
+  "readdir(skillRoot).catch(",
 ];
 
-/** 计算 lib/index.js 中豁免函数的起始偏移集合（函数名 + 行号）。 */
+/** 计算 lib/index.js 中豁免函数的起始偏移集合（函数名 + 源码特征）。 */
 function libExemptOffsets(root) {
   const path = join(root, "lib", "index.js");
   if (!existsSync(path)) return new Set();
@@ -52,16 +52,23 @@ function libExemptOffsets(root) {
     const i = src.indexOf("function " + name);
     if (i !== -1) set.add(i);
   }
-  // 按行号豁免（匿名闭包）：行号 → 行首偏移
-  const lines = src.split("\n");
-  for (const ln of EXEMPT_LIB_LINES) {
-    if (ln >= 1 && ln <= lines.length) {
-      let off = 0;
-      for (let i = 0; i < ln - 1; i++) off += lines[i].length + 1;
-      set.add(off);
+  // 按源码特征定位（匿名闭包）：收集所有匹配位置的起始偏移
+  for (const marker of EXEMPT_LIB_MARKERS) {
+    let idx = src.indexOf(marker);
+    while (idx !== -1) {
+      set.add(idx);
+      idx = src.indexOf(marker, idx + marker.length);
     }
   }
   return set;
+}
+
+/** 判断 offset 是否落在豁免特征点附近（闭包起始可能在 marker 后几字节）。 */
+function libExemptNear(offset) {
+  for (const off of libExempt) {
+    if (Math.abs(offset - off) <= 80) return true;
+  }
+  return false;
 }
 
 /** 计算 toc.mjs 主循环豁免（isMain 起始偏移）。 */
@@ -86,20 +93,7 @@ try {
 // 2. 聚合 v8 覆盖率 JSON
 const libSrc = existsSync(join(ROOT, "lib", "index.js")) ? readFileSync(join(ROOT, "lib", "index.js"), "utf8") : "";
 const libLines = libSrc.split("\n");
-/** 行号 → 该行起始偏移（用于把 v8 偏移换算为行号）。 */
-function offsetToLine(offset) {
-  let ln = 1;
-  for (let i = 0; i < libLines.length; i++) {
-    if (offset > offsetOfLine(i + 1)) ln = i + 2;
-  }
-  return ln;
-}
-function offsetOfLine(n) {
-  let off = 0;
-  for (let i = 0; i < n - 1 && i < libLines.length; i++) off += libLines[i].length + 1;
-  return off;
-}
-const EXEMPT_LIB_LINE_SET = new Set(EXEMPT_LIB_LINES);
+const EXEMPT_LIB_LINE_SET = new Set(); // 保留空集合占位（兼容旧引用）
 const libExempt = libExemptOffsets(ROOT);
 const tocMain = tocMainOffset(ROOT);
 // 仓库根目录的 file:// 前缀：e2e 触发真实 npm install 时，npm 子进程（也在
@@ -122,7 +116,8 @@ for (const f of files) {
       // 豁免判断
       let exempt = false;
       if (url.endsWith("/lib/index.js")) {
-        exempt = libExempt.has(offset) || EXEMPT_LIB_LINE_SET.has(offsetToLine(offset));
+        // 精确偏移 或 落在豁免特征附近（闭包起始可能在 marker 后几字节）
+        exempt = libExempt.has(offset) || libExemptNear(offset);
       } else if (url.endsWith("/scripts/toc.mjs") && tocMain !== -1) {
         exempt = offset >= tocMain;
       }

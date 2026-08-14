@@ -31,6 +31,7 @@ A plugin marketplace for [DeepSeek Harness](https://github.com/deepseek-ai/deeps
 - [⚠️ Security notes](#security-notes)
 - [⚖️ Disclaimer](#disclaimer)
 - [🔄 Known limitations](#known-limitations)
+- [🌱 Third-party ecosystem](#third-party-ecosystem)
 - [🛠️ Development & maintenance](#development-maintenance)
 - [📝 Changelog](#changelog)
 - [📄 License](#license)
