@@ -139,7 +139,28 @@ function setupUrlRewrite(owner, repoName) {
     return out;
   };
 
-  // 触发其他路由 handler（skills GET 列表）
+  const uninstallHandler = handlers.find((h) => h.path === "/api/marketplace/uninstall")?.handler;
+  const postUninstall = async (repo) => {
+    const bodyStr = JSON.stringify({ repo });
+    const req = {
+      method: "POST",
+      headers: { "x-dsh-marketplace": "1", host: "127.0.0.1:3080" },
+      url: "/api/marketplace/uninstall",
+      [Symbol.asyncIterator]() {
+        let sent = false;
+        return {
+          next: async () => {
+            if (!sent) { sent = true; return { value: Buffer.from(bodyStr), done: false }; }
+            return { value: undefined, done: true };
+          },
+        };
+      },
+    };
+    const out = { status: 0, body: null };
+    await uninstallHandler(req, { writeHead: (s) => { out.status = s; }, end: (b) => { try { out.body = JSON.parse(b); } catch { out.body = b; } } });
+    return out;
+  };
+
   const skillsHandler = handlers.find((h) => h.path === "/api/marketplace/skills")?.handler;
   console.log("[e2e] handlers:", JSON.stringify(handlers.map(h => h.path)));
   if (skillsHandler) {
@@ -485,6 +506,29 @@ function setupUrlRewrite(owner, repoName) {
 
   r = await postInstall("e2e-owner/demo-skill-3", {});
   check("e2e installed 队列恢复后 done", r.body && r.body.status, "done");
+
+  // ---- 卸载：skill / 单插件 / 多插件 / 未安装 ----
+  check("e2e 卸载 handler 注册", uninstallHandler !== null, true);
+
+  r = await postUninstall("e2e-owner/demo-skill");
+  check("e2e 卸载 skill done", r.body && r.body.status, "done");
+  check("e2e 卸载 skill 目录已删", existsSync(join(HOME, "skills", "demo-skill")), false);
+  check("e2e 卸载 skill 后检测为未安装", await lib.detectSkillInstalled({ full_name: "e2e-owner/demo-skill", name: "demo-skill" }), false);
+
+  r = await postUninstall("e2e-owner/demo-plugin");
+  check("e2e 卸载插件 done", r.body && r.body.status, "done");
+  check("e2e 卸载插件目录已删", existsSync(join(HOME, "profiles", "web", "node_modules", "demo-plugin")), false);
+  check("e2e 卸载插件后检测为未安装", await lib.detectInstalled({ full_name: "e2e-owner/demo-plugin", name: "demo-plugin" }), false);
+
+  r = await postUninstall("e2e-owner/demo-skins");
+  check("e2e 卸载多插件 done", r.body && r.body.status, "done");
+  check("e2e 卸载多插件 a 已删", existsSync(join(HOME, "profiles", "web", "node_modules", "@dsh-external", "dsh-client-ui-skin-a")), false);
+  check("e2e 卸载多插件 b 已删", existsSync(join(HOME, "profiles", "web", "node_modules", "@dsh-external", "dsh-client-ui-skin-b")), false);
+  check("e2e 卸载多插件后检测为未安装", await lib.detectInstalled({ full_name: "e2e-owner/demo-skins", name: "demo-skins" }), false);
+
+  r = await postUninstall("e2e-owner/never-installed");
+  check("e2e 卸载未安装仓库 done", r.body && r.body.status, "done");
+  check("e2e 卸载未安装 removed=0", r.body && r.body.removed, 0);
 
   console.log(`\n${pass} passed, ${fail} failed`);
   process.exit(fail === 0 ? 0 : 1);
