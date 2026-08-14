@@ -245,6 +245,11 @@ function setupUrlRewrite(owner, repoName) {
   r = await postInstall("e2e-owner/demo-skill-env", { OPENAI_API_KEY: "sk-test" });
   check("e2e env 提供后安装 done", r.body && r.body.status, "done");
 
+  // Issue #5 回归：空值跳过——客户端 submit() 预填空串后，服务端「键存在即视为已提供」
+  // 判定生效，空串提交必须跳过材料输入直接安装（此前未触碰的键缺失导致死循环弹窗）。
+  r = await postInstall("e2e-owner/demo-skill-env", { OPENAI_API_KEY: "" });
+  check("e2e env 空串跳过安装 done", r.body && r.body.status, "done");
+
   // ---- instructions 手动安装流（无可自动安装内容）----
   setupUrlRewrite(owner, "demo-manual");
   makeFixtureRepo("demo-manual", { "notes.txt": "nothing auto-installable here\n" });
@@ -311,6 +316,9 @@ function setupUrlRewrite(owner, repoName) {
   } else {
     // 离线安装：file: 依赖 + npm_config_offline，杜绝对 npm registry 的网络依赖
     process.env.npm_config_offline = "true";
+    // Windows 无符号链接特权（非管理员/未开开发者模式）时 npm 对 file: 依赖建 symlink 会 EPERM——
+    // 用 install-links 让 file: 依赖复制安装（测试隔离环境适配，非被测行为）
+    process.env.npm_config_install_links = "true";
 
     // 插件 fixture：dsh 字段（通过 looksLikeDshPlugin 免非插件确认）+ pnpm link: 依赖（验证剥离）
     // + file: 依赖（真实 npm install 的载体，完全离线可装）
