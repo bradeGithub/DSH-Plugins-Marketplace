@@ -4,6 +4,12 @@
 
 ---
 
+## v1.3.11 — 2026-08-15（卸载大小写修复 / Uninstall case-sensitivity fix）
+
+- **卸载假完成修复**：安装处理器保存记录时未规范化仓库名，`Small-tailqwq/dsh-deep-whale` 这类带大写字母的仓库记录键保留了原始大小写；卸载处理器把请求规范化成小写后查不到记录，返回「done」但什么都没删——表现为弹「卸载完成」却无实际效果、卸载按钮仍在。修复：记录键统一按 `normalizeRepoRef` 小写规范化（加载/保存/删除/查询全部走同一入口），旧文件遗留的大写键在加载时自动迁移 / uninstall falsely reported "done": install saved the record under the raw-case repo key (e.g. `Small-tailqwq/dsh-deep-whale`), while uninstall normalized the request to lowercase and missed the record — nothing was deleted but the dialog said "complete". Fix: all install-record keys are canonicalized to lowercase via one lookup entry (`installedKey`), and legacy mixed-case keys are normalized on load
+- **客户端不再假报成功**：卸载响应 `removed=0`（无记录/无可定位目录）时弹日志原文提示，不再显示「已卸载」/ the client no longer claims success when nothing was removed — `removed=0` shows the server log text instead of "uninstalled"
+- **e2e 回归**：新增 5 条大小写不一致用例（大写键记录 + 小写卸载请求 → 真正删除目录与记录）/ 5 new e2e cases cover the mixed-case record + lowercase uninstall path
+
 ## v1.3.10 — 2026-08-15（列表源容灾 + CI 修复 / List-source resilience & CI fix）
 
 - **列表索引磁盘缓存**：索引网络源（api.github.com / jsDelivr CDN / raw.githubusercontent）全挂时不再回退到搜索 API 的残缺结果（dsh 上限 1000 条、skills 兜底仅 266 条）——改为优先使用上次成功拉取的**完整索引**（本地 `marketplace/list-cache/`，api/CDN/raw 全失败自动启用），搜索 API 仅作最后应急且不污染缓存 / a disk cache now keeps the last successful full index (`marketplace/list-cache/`); when all three index sources are unreachable the list serves the complete cached index instead of the truncated search-API fallback (1000-plugin cap / 266 skills), and search results never downgrade a good cache

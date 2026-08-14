@@ -81,6 +81,18 @@ function setupUrlRewrite(owner, repoName) {
 }
 
 (async () => {
+  // 遗留大小写记录回归（必须在 lib 导入前写盘——loadInstalled 在模块加载时执行）：
+  // 旧版 installed.json 可能带原始大小写键（如 "Small-tailqwq/dsh-deep-whale"），
+  // 卸载请求经 normalizeRepoRef 为小写——键不规范化会 miss → 假「卸载完成」。
+  const legacyInstalledPath = join(HOME, "marketplace", "installed.json");
+  mkdirSync(join(HOME, "marketplace"), { recursive: true });
+  writeFileSync(legacyInstalledPath, JSON.stringify({
+    "Small-Owner/demo-case-skill": { type: "skill", name: "demo-case-skill", location: join(HOME, "skills", "demo-case-skill"), version: null, installedAt: Date.now() }
+  }, null, 2), "utf8");
+  const caseSkillDir = join(HOME, "skills", "demo-case-skill");
+  mkdirSync(caseSkillDir, { recursive: true });
+  writeFileSync(join(caseSkillDir, "SKILL.md"), "---\nname: demo-case-skill\n---\n# case\n");
+
   lib = await import("../../../lib/index.js");
   console.log("[e2e] lib 动态加载后 DSH_HOME =", process.env.DSH_HOME);
 
@@ -546,6 +558,15 @@ function setupUrlRewrite(owner, repoName) {
 
   // ---- 卸载：skill / 单插件 / 多插件 / 未安装 ----
   check("e2e 卸载 handler 注册", uninstallHandler !== null, true);
+
+  // 大小写回归：遗留记录键为原始大小写（Small-Owner/...），小写卸载请求必须真正命中并删除
+  check("e2e 大写记录 detectInstalled（原始大小写）", await lib.detectInstalled({ full_name: "Small-Owner/demo-case-skill", name: "demo-case-skill" }), true);
+  check("e2e 大写记录 detectInstalled（小写查询）", await lib.detectInstalled({ full_name: "small-owner/demo-case-skill", name: "demo-case-skill" }), true);
+  r = await postUninstall("small-owner/demo-case-skill");
+  check("e2e 大小写不一致卸载 done", r.body && r.body.status, "done");
+  check("e2e 大小写不一致卸载 removed=1", r.body && r.body.removed, 1);
+  check("e2e 大小写不一致卸载目录已删", existsSync(caseSkillDir), false);
+  check("e2e 大小写不一致卸载后未安装", await lib.detectInstalled({ full_name: "Small-Owner/demo-case-skill", name: "demo-case-skill" }), false);
 
   r = await postUninstall("e2e-owner/demo-skill");
   check("e2e 卸载 skill done", r.body && r.body.status, "done");
