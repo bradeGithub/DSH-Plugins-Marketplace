@@ -4,6 +4,15 @@
 
 ---
 
+## Unreleased / v1.4.0（插件分类 / Plugin categories）
+
+- **插件分类**：registry 构建时按 description + name + 过滤后的 topics 做关键词规则分类（零额外 API，无需读 README），输出 `category` 字段（vision / document / memory / model / notify / coding / conversation / web-ui / agent / tool / resource / other）——生态泛标签（ai-agent/llm/deepseek 等）不参与分类，规则按优先级匹配，无法分类的归「其他」/ plugin categories: built into the registry at build time from description + name + filtered topics (zero extra API calls, no README reading) — `category` field (vision/document/memory/model/notify/coding/conversation/web-ui/agent/tool/resource/other); ecosystem-wide tags (ai-agent/llm/deepseek…) are excluded, rules match by priority, unmatched repos go to «other»
+- **前端分类筛选**：DSH 插件 tab 新增分类 chips（全部 + 12 类），点击筛选，可与搜索词联合过滤；卡片名称旁显示分类徽章 / category filter chips added to the plugins tab (All + 12 categories), combinable with the search box; cards show a category badge
+- **包名冲突与源码型插件修复**（漏洞发现与修复方案由 **bubble-w8** 提供，见 PR #3；修复经评审并结合进本仓库）：/ pkg-name conflicts & source-only plugins fixed (vulnerability report and fix design by **bubble-w8**, PR #3; merged after review):
+  - **pkg_name 冲突消解**：同名 npm 包在 node_modules 安装目标互斥——列表只保留一个（已安装优先，其次 Star 高者），索引构建期同步去重（40+ 组冲突实测归零）；「已安装」识别之后再去重，避免隐藏手动安装的低 Star 仓库 / pkg_name conflict resolution: same-name npm packages share one node_modules target — only one entry is kept (installed first, then higher stars), dedup also applied at index build time (40+ conflict groups measured to zero); dedup runs after installed-detection so manually installed low-star repos stay visible
+  - **源码型插件构建**：只提交源码（main / client bundle 缺失，含 conditional exports 形态）的插件安装前弹窗确认，允许则 pnpm/npm 装依赖并执行 build；构建路径不清洗 `link:`/`workspace:` 依赖（pnpm 原生支持，清洗会破坏 monorepo 构建）/ source-only plugin builds: plugins shipping source only (missing main / client bundle, including conditional-exports shapes) ask for confirmation and run `install && build`; the build path keeps `link:`/`workspace:` deps intact (pnpm-native, stripping them breaks monorepo builds)
+  - **scoped 包 YAML 引号**：`@scope/name` 包名注册到 cordis.patch.yml 时自动加引号（plain scalar 非法），`hasPatchEntry` 兼容引号形式防重复注册 / scoped-package YAML quoting: `@scope/name` entries are quoted when registered into cordis.patch.yml (plain scalars are invalid); `hasPatchEntry` accepts quoted forms to avoid duplicate registrations
+
 ## v1.3.2 — 2026-08-14（安装体验升级 + 第三方生态 / Guided installs & third-party ecosystem）
 
 - **多 Skill 仓库一键安装**：自动发现仓库根目录与子目录中的全部 `SKILL.md` 并逐个安装（`anthropics/skills` 等合集仓库不再只装一个或误判为文档）；完成时显示「已安装 N 个 Skills」/ multi-Skill install: every `SKILL.md` in the repo root or subdirectories is discovered and installed one by one (collection repos like `anthropics/skills` are no longer misjudged); completion shows «N Skills installed»

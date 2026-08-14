@@ -191,6 +191,27 @@ try {
   check("无 build 脚本 → 无需构建", await needsPluginBuild(srcOnly), false);
   writeFileSync(join(srcOnly, "package.json"), JSON.stringify({ name: "x", scripts: { build: "tsdown" } }));
   check("无 main/client 入口 → 无需构建", await needsPluginBuild(srcOnly), false);
+  // conditional exports：{ "./client": { "import": "./dist/client.js" } } 也应识别为需要构建
+  writeFileSync(join(srcOnly, "package.json"), JSON.stringify({
+    name: "x",
+    scripts: { build: "tsdown" },
+    exports: { "./client": { "import": "./dist/client.js" } }
+  }));
+  check("conditional exports import 缺失 → 需要构建", await needsPluginBuild(srcOnly), true);
+  mkdirSync(join(srcOnly, "dist"));
+  writeFileSync(join(srcOnly, "dist/client.js"), "//x");
+  check("conditional exports 产物齐全 → 无需构建", await needsPluginBuild(srcOnly), false);
+  // 嵌套条件：{ "./client": { "browser": { "default": "./dist/client.js" } } }
+  rmSync(join(srcOnly, "dist"), { recursive: true, force: true });
+  writeFileSync(join(srcOnly, "package.json"), JSON.stringify({
+    name: "x",
+    scripts: { build: "tsdown" },
+    exports: { "./client": { "browser": { "default": "./dist/client.js" } } }
+  }));
+  check("嵌套条件 default 缺失 → 需要构建", await needsPluginBuild(srcOnly), true);
+  mkdirSync(join(srcOnly, "dist"));
+  writeFileSync(join(srcOnly, "dist/client.js"), "//x");
+  check("嵌套条件产物齐全 → 无需构建", await needsPluginBuild(srcOnly), false);
 } finally {
   rmSync(tmpSmoke, { recursive: true, force: true });
 }
