@@ -38,6 +38,7 @@ jobs:
           node --check lib/client.js
           node scripts/smoke-tests.mjs
           node scripts/guided-install-tests.mjs
+          node scripts/tests/run.mjs --level=unit,integration
 
       - name: Build DSH registry
         run: node scripts/build-registry.mjs

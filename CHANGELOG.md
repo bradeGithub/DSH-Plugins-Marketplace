@@ -4,6 +4,14 @@
 
 ---
 
+## v1.3.5 — 2026-08-14（安装健壮性 + 测试体系收编 / Install robustness & test pyramid）
+
+- **空值跳过修复（issue #5）**：安装流程提交时预填所有问题 id 为空串——服务端按「键存在即视为已提供」判定，此前未触碰的输入框键缺失导致空值跳过后反复弹窗死循环；选项型问题不受影响 / empty-value skip fixed (issue #5): submit now pre-fills every question id with an empty string — the server treats key-presence as provided, and untouched fields previously had no key, causing an infinite re-prompt loop; option questions are unaffected
+- **Windows pnpm 构建修复（PR #4）**：`runPnpm` 的 win32 分支改为经 `cmd.exe /d /s /c` 启动——Node `execFile` 无法直接启动 `.cmd`，此前凡带 `pnpm-lock.yaml` 的源码型插件在 Windows 上构建必失败（spawn EINVAL）/ Windows pnpm builds fixed (PR #4): `runPnpm` now launches via `cmd.exe /d /s /c` on win32 — `execFile` cannot start `.cmd` shims, so source-only plugins with `pnpm-lock.yaml` always failed to build on Windows (spawn EINVAL)
+- **webServer 依赖注入（PR #7）**：`lib/index.js` 声明 `export const inject = ["webServer"]`——此前未声明服务依赖，cordis 不保证 webServer 先启动，`dsh web` 插件树加载存在竞态失败 / webServer dependency injection (PR #7): declared `inject = ["webServer"]` — without it cordis does not guarantee the service starts first, causing a racy plugin-tree load failure
+- **测试体系收编（PR #8 + follow-up）**：测试金字塔 unit 160 / integration 51 / e2e 49 全量收编（本地 fixture git 仓库 + mock 网络 + 隔离 DSH_HOME，e2e 附 Windows 无符号链接权限适配）；覆盖率工具（NODE_V8_COVERAGE 零依赖）；Git Hook 体系按 review 降级收编——`merge` 加入提交类型白名单、emoji/TOC 默认 warn 不阻断、密钥扫描保持 error，`install-hooks` 可选不强制；规范文档体系恢复（作者 force-push 时丢失的 docs/ 已从旧 head 找回）/ test pyramid adopted (PR #8 + follow-ups): unit 160 / integration 51 / e2e 49 (local fixture git repos + mocked network + isolated DSH_HOME; e2e adapted for Windows without symlink privilege); zero-dependency coverage tool; Git Hooks adopted in downgraded form per review — `merge` added to the commit-type whitelist, emoji/TOC default to warn (non-blocking), secret scan stays error, `install-hooks` remains optional; docs restored (the author's force-push dropped `docs/`; recovered from the old head)
+- **lib API 问题转 issue**：测试排查发现的 10 条 lib API 设计问题转 [issue #9](https://github.com/bradeGithub/DSH-Plugins-Marketplace/issues/9) 跟踪 / the 10 lib API design findings from test-driven review are tracked in [issue #9](https://github.com/bradeGithub/DSH-Plugins-Marketplace/issues/9)
+
 ## v1.3.4 — 2026-08-14（更新检测修复 + 启动自检 / Update detection fix & startup self-check）
 
 - **更新检测改用 registry 版本号**：`latestVersion` 不再只依赖本地安装缓存（缓存只在安装动作时重建——手动安装的插件永远不提示更新、正常安装的插件也发现不了新版本）；构建期从各仓库 `package.json` 抓取 `version` 写入索引（CI 每 2 小时刷新），列表直接对比真实最新版 / update detection now uses registry versions: `latestVersion` no longer relies solely on the local install cache (which is only refreshed during installs — manually installed plugins never got update hints, and normally installed ones missed new releases); the build captures each repo's `version` from its `package.json` into the index (refreshed by CI every 2h), and the list compares against the real latest version

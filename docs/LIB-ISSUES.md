@@ -1,4 +1,6 @@
-﻿# lib/index.js 排查记录（测试驱动暴露的问题，暂不修改）
+# lib/index.js 排查记录（测试驱动暴露的问题，暂不修改）
+
+> **跟踪 issue：[#9 lib API 设计问题清单](https://github.com/bradeGithub/DSH-Plugins-Marketplace/issues/9)**——本文件为原始排查记录，后续动作在 issue 中跟进。
 
 排查方式：为 lib 编写全覆盖测试时发现的 API/行为问题。
 **原则**：fix branch 不修上游代码，问题先记录，商讨后再决定动作（单独 issue/PR/保持）。
