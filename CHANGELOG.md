@@ -4,6 +4,11 @@
 
 ---
 
+## v1.3.4 — 2026-08-14（更新检测修复 + 启动自检 / Update detection fix & startup self-check）
+
+- **更新检测改用 registry 版本号**：`latestVersion` 不再只依赖本地安装缓存（缓存只在安装动作时重建——手动安装的插件永远不提示更新、正常安装的插件也发现不了新版本）；构建期从各仓库 `package.json` 抓取 `version` 写入索引（CI 每 2 小时刷新），列表直接对比真实最新版 / update detection now uses registry versions: `latestVersion` no longer relies solely on the local install cache (which is only refreshed during installs — manually installed plugins never got update hints, and normally installed ones missed new releases); the build captures each repo's `version` from its `package.json` into the index (refreshed by CI every 2h), and the list compares against the real latest version
+- **启动自检市场本体更新（小优待）**：每次 DSH 启动直链 GitHub 查询插件市场本体最新版本（contents API 实时读取，不过 CDN 缓存），有更新时在市场页顶部显示「插件市场有可用更新：v{old} → v{new}」提示条；打开页面超过 30 分钟未检查会顺带重查 / startup self-check (perk): every DSH launch queries GitHub directly for a newer marketplace version (contents API, no CDN cache); when available, a banner at the top of the marketplace page shows «Marketplace update available: v{old} → v{new}»; opening the page re-checks when the last check was over 30 minutes ago
+
 ## v1.3.3 — 2026-08-14（插件分类上线 + 安装健壮性修复 / Categories & install robustness fixes）
 
 - **插件分类**：registry 构建时按 description + name + 过滤后的 topics 做关键词规则分类（零额外 API，无需读 README），输出 `category` 字段（vision / document / memory / model / notify / coding / conversation / web-ui / agent / tool / resource / other）——生态泛标签（ai-agent/llm/deepseek 等）不参与分类，规则按优先级匹配，无法分类的归「其他」/ plugin categories: built into the registry at build time from description + name + filtered topics (zero extra API calls, no README reading) — `category` field (vision/document/memory/model/notify/coding/conversation/web-ui/agent/tool/resource/other); ecosystem-wide tags (ai-agent/llm/deepseek…) are excluded, rules match by priority, unmatched repos go to «other»
