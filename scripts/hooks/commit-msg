@@ -1,0 +1,6 @@
+#!/bin/sh
+# Git Hook: commit-msg —— 校验提交信息符合仓库规范（<type>(<scope>): <描述>）
+# 由 scripts/install-hooks.sh 安装，git 会传入提交信息文件路径作为 $1。
+# hook 位于 .git/hooks/，仓库根在其上两级。
+ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
+node "$ROOT/scripts/hooks/check.mjs" --stage=commit-msg "$1"

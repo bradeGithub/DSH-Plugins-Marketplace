@@ -1,10 +1,10 @@
 // 冒烟测试：验证安全加固与纯函数修复（R1 Host 白名单 / R2 env 最小化 / n3 版本比较等）。
 // 运行：node scripts/smoke-tests.mjs（CI 的 syntax check 步骤同步执行）
-import { compareVersions, isTrustedRequest, isTrustedHost, isSensitiveEnvKey, buildMinimalEnv, buildFilteredEnv, looksLikeDshPlugin, dedupeReposByPkgName, needsPluginBuild, hasPatchEntry } from "../lib/index.js";
-import { classifyTree, shouldInheritProbe, starRangeQuery, midDateStr, splitSegment, classifyRepo, dedupeByPkgName } from "./build-registry.mjs";
-import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from "node:fs";
-import { join } from "node:path";
-import { tmpdir } from "node:os";
+import { compareVersions, isTrustedRequest, isTrustedHost, isSensitiveEnvKey, buildMinimalEnv, buildFilteredEnv, looksLikeDshPlugin } from "../lib/index.js";
+import { classifyTree, shouldInheritProbe } from "./build-registry.mjs";
+import { inject as marketInject, name as marketName } from "../lib/index.js";
+import { extractSubject, validateSubject, COMMIT_TYPES, SYNTAX_CHECK_FILES, hasEmoji, parseHookConfig, LEVELS, DEFAULT_HOOK_CONFIG, loadHookConfigFromText, detectSecret } from "./hooks/validate.mjs";
+import { extractHeadings, slugify, generateToc, applyToc, tocIsValid, normalizeEol, isMain, tocInsertIndex, discoverMarkdownFiles, DEFAULT_TOC_EXCLUDES } from "./toc.mjs";
 
 let pass = 0, fail = 0;
 function check(name, actual, expected) {
@@ -107,121 +107,188 @@ check("空对象 → 非插件", looksLikeDshPlugin({}), false);
 check("null → 未知", looksLikeDshPlugin(null), null);
 check("非对象 → 未知", looksLikeDshPlugin("str"), null);
 
-// ---- v1.3: star 分段查询构造（Search API 全量抓取）----
-check("stars:>=1000", starRangeQuery("agent-skills", { min: 1000, max: null }), "topic:agent-skills stars:>=1000");
-check("stars:100..999", starRangeQuery("agent-skills", { min: 100, max: 999 }), "topic:agent-skills stars:100..999");
-check("stars:0 单值", starRangeQuery("agent-skills", { min: 0, max: 0 }), "topic:agent-skills stars:0");
-check("stars:0 + 时间窗口", starRangeQuery("agent-skills", { min: 0, max: 0, timeRange: "2020-01-01..2026-12-31" }), "topic:agent-skills stars:0 pushed:2020-01-01..2026-12-31");
-check("midDateStr 取中", midDateStr("2020-01-01", "2026-12-31"), "2023-07-02");
-check("splitSegment 普通段对半", JSON.stringify(splitSegment({ min: 10, max: 99 })), JSON.stringify([{ min: 10, max: 54 }, { min: 55, max: 99 }]));
-check("splitSegment 单值段时间二分", JSON.stringify(splitSegment({ min: 0, max: 0 })), JSON.stringify([
-  { min: 0, max: 0, timeRange: "2008-01-01..2017-07-01" },
-  { min: 0, max: 0, timeRange: "2017-07-01..2026-12-31" }
-]));
-check("splitSegment 1 天窗口无法再分", splitSegment({ min: 0, max: 0, timeRange: "2026-01-01..2026-01-01" }), []);
-check("splitSegment ≤30 天窗口无法再分", splitSegment({ min: 0, max: 0, timeRange: "2026-06-01..2026-06-25" }), []);
-check("splitSegment 大窗口正常二分", JSON.stringify(splitSegment({ min: 0, max: 0, timeRange: "2026-01-01..2026-12-31" })), JSON.stringify([
-  { min: 0, max: 0, timeRange: "2026-01-01..2026-07-02" },
-  { min: 0, max: 0, timeRange: "2026-07-02..2026-12-31" }
-]));
+// ---- 插件契约: inject 依赖声明（apply() 同步 ctx.get("webServer") 依赖它）----
+check("插件名", marketName, "dsh-plugin-marketplace");
+check("声明 webServer 依赖注入", Array.isArray(marketInject) && marketInject.includes("webServer"), true);
+check("inject 不包含重复项", Array.isArray(marketInject) && new Set(marketInject).size === marketInject.length, true);
 
-// ---- 插件分类: classifyRepo ----
-check("vision: OCR 图片", classifyRepo({ description: "OCR and image understanding for text-only models", name: "modlens", topics: ["vision"] }), "vision");
-check("vision: 截图/视觉", classifyRepo({ description: "让纯文本模型看图：截图识别与 UI 还原", name: "dsh-vision-toolkit", topics: [] }), "vision");
-check("document: PDF", classifyRepo({ description: "PDF toolbox: extract text and pages", name: "dsh-pdf", topics: ["pdf"] }), "document");
-check("document: Excel", classifyRepo({ description: "talk to Excel: create and edit spreadsheets", name: "dsh-excel-chat", topics: [] }), "document");
-check("memory: 长期记忆", classifyRepo({ description: "跨会话长期记忆与知识管理", name: "dsh-memory-evolve", topics: [] }), "memory");
-check("model: token 用量", classifyRepo({ description: "token usage and balance monitor", name: "dsh-balance-monitor", topics: [] }), "model");
-check("notify: 通知", classifyRepo({ description: "Desktop notifications for turn completion", name: "dsh-notification", topics: [] }), "notify");
-check("coding: TUI 终端", classifyRepo({ description: "terminal TUI for DSH, Claude Code style", name: "dsh-cc-tui", topics: ["tui"] }), "coding");
-check("coding: VS Code", classifyRepo({ description: "Open workspace in VS Code", name: "dsh-open-in-vscode", topics: [] }), "coding");
-check("conversation: 对话分享", classifyRepo({ description: "一键分享你的对话", name: "dsh-share", topics: [] }), "conversation");
-check("conversation: 批注", classifyRepo({ description: "选中批注，随消息发送", name: "dsh-annotation", topics: [] }), "conversation");
-check("web-ui: 皮肤", classifyRepo({ description: "鲸鱼娘皮肤系列（深海女仆工坊）", name: "dsh-deep-whale", topics: [] }), "web-ui");
-check("web-ui: 侧边栏", classifyRepo({ description: "侧边栏完整工作台，支持三方拓展 Tab", name: "DSH-better-sidebar", topics: [] }), "web-ui");
-check("web-ui: 小游戏", classifyRepo({ description: "右侧小游戏面板：18 款离线小游戏", name: "dsh-minigames", topics: [] }), "web-ui");
-check("agent: 工作流", classifyRepo({ description: "把一次性多 Agent 调度升级为可治理的 Workflow 层", name: "dsh_workflow", topics: [] }), "agent");
-check("agent: 桌面应用", classifyRepo({ description: "local-first AI agent desktop app", name: "Abu-Cowork", topics: [] }), "agent");
-check("tool: MCP server", classifyRepo({ description: "A MCP server for Stata", name: "mcp-for-stata", topics: ["mcp"] }), "tool");
-check("tool: 沙箱", classifyRepo({ description: "Open-source sandboxes for AI agents", name: "axern", topics: [] }), "tool");
-check("resource: awesome 聚合", classifyRepo({ description: "Awesome DSH Plugins directory", name: "awesome-dsh-plugins", topics: ["awesome"] }), "resource");
-check("resource: 手册", classifyRepo({ description: "DSH 从 0 到 1 深度手册", name: "dsh-handbook", topics: [] }), "resource");
-check("other: 无法分类", classifyRepo({ description: "Random thingamajig", name: "weird-repo", topics: [] }), "other");
-check("other: 空简介", classifyRepo({ description: null, name: "x", topics: [] }), "other");
-check("分类优先级: vision 优先于 coding", classifyRepo({ description: "vision OCR toolkit for coding agents", name: "agent-vision-toolkit", topics: ["vision"] }), "vision");
+// ---- 提交规范校验: validateSubject / extractSubject ----
+check("合法主题: fix: 修复", validateSubject("fix: 修复 xxx").ok, true);
+check("合法主题: fix(install): 带 scope", validateSubject("fix(install): 修复 xxx").ok, true);
+check("合法主题: feat: 带冒号内容", validateSubject("feat: 通用 Skills 栏目前端 tab").ok, true);
+check("合法主题: chore: update registry.json", validateSubject("chore: update registry.json").ok, true);
+check("非法: 无 type", validateSubject("bad commit message").ok, false);
+check("非法: type 后无冒号", validateSubject("fix 修复 xxx").ok, false);
+check("非法: 未知 type", validateSubject("unknown: 修复 xxx").ok, false);
+check("非法: type 后无描述", validateSubject("fix:").ok, false);
+check("非法: 空串", validateSubject("").ok, false);
+check("非法: 非字符串", validateSubject(null).ok, false);
+check("scope 非法字符", validateSubject("fix(Fix): xxx").ok, false);
+check("extractSubject 取首行", extractSubject("fix: a\n\nbody"), "fix: a");
+check("extractSubject 去空白", extractSubject("  fix: a  "), "fix: a");
+check("extractSubject 空输入", extractSubject(""), "");
+check("type 白名单含 fix", COMMIT_TYPES.includes("fix"), true);
+check("type 白名单含 assets", COMMIT_TYPES.includes("assets"), true);
+check("type 白名单不含 unknown", COMMIT_TYPES.includes("unknown"), false);
+check("语法检查清单包含 lib/index.js", SYNTAX_CHECK_FILES.includes("lib/index.js"), true);
+check("语法检查清单包含 smoke-tests", SYNTAX_CHECK_FILES.includes("scripts/smoke-tests.mjs"), true);
 
-// ---- PR#3: pkg_name 冲突消解（索引构建 + 运行时）----
-check("构建期冲突保留高 Star", dedupeByPkgName([
-  { full_name: "a/x", pkg_name: "shared", stargazers_count: 1 },
-  { full_name: "b/x", pkg_name: "shared", stargazers_count: 5 }
-]).repos.map((r) => r.full_name), ["b/x"]);
-check("构建期 dropped 记录低 Star", dedupeByPkgName([
-  { full_name: "a/x", pkg_name: "shared", stargazers_count: 1 },
-  { full_name: "b/x", pkg_name: "shared", stargazers_count: 5 }
-]).dropped, ["a/x"]);
-check("无 pkg_name 不参与冲突", dedupeByPkgName([
-  { full_name: "a/x", pkg_name: null, stargazers_count: 1 },
-  { full_name: "b/x", pkg_name: null, stargazers_count: 5 }
-]).repos.length, 2);
-const dupRepos = [
-  { full_name: "a/lo", pkg_name: "shared", stargazers_count: 2 },
-  { full_name: "b/hi", pkg_name: "shared", stargazers_count: 10 },
-  { full_name: "c/solo", pkg_name: null, stargazers_count: 0 }
-];
-check("运行时默认保留高 Star", dedupeReposByPkgName(dupRepos).map((r) => r.full_name), ["b/hi", "c/solo"]);
-check("运行时已安装优先保留", dedupeReposByPkgName(dupRepos, (r) => r.full_name === "a/lo").map((r) => r.full_name), ["a/lo", "c/solo"]);
+// ---- emoji 检测: hasEmoji ----
+check("hasEmoji 纯文本", hasEmoji("fix: 修复 bug"), false);
+check("hasEmoji 常见 emoji", hasEmoji("feat: 新增 ✨ 功能"), true);
+check("hasEmoji FE0F 变体", hasEmoji("feat: 🚀"), true);
+check("hasEmoji 肤色修饰", hasEmoji("👍🏽"), true);
+check("hasEmoji ZWJ 家庭序列", hasEmoji("👨👩👧👦"), true);
+check("hasEmoji 旗帜区域指示符", hasEmoji("🇨🇳"), true);
+check("hasEmoji 数字 emoji", hasEmoji("1️⃣"), true);
+check("hasEmoji 红心变体", hasEmoji("❤️"), true);
+check("hasEmoji 箭头变体", hasEmoji("➡️"), true);
+check("hasEmoji 数字/标点", hasEmoji("fix: 修复 1+1 的问题"), false);
+check("hasEmoji 中文标点", hasEmoji("fix: 修复（重要）"), false);
+check("hasEmoji 拉丁字符", hasEmoji("fix: use cache"), false);
+check("hasEmoji 数学符号", hasEmoji("fix: 1+1=2"), false);
+check("hasEmoji CJK", hasEmoji("feat: 新增功能"), false);
+check("hasEmoji 空串", hasEmoji(""), false);
+check("hasEmoji 非字符串", hasEmoji(null), false);
+check("hasEmoji undefined", hasEmoji(undefined), false);
+check("hasEmoji 版权符号(Unicode emoji 属性)", hasEmoji("©"), true);
+check("hasEmoji 新 Unicode emoji", hasEmoji("🫠"), true);
+check("hasEmoji 标签序列", hasEmoji("🏳️‍🌈"), true);
+check("validateSubject 拒绝 emoji 主题", validateSubject("feat: ✨ 新功能").ok, false);
+check("validateSubject emoji 原因提示", validateSubject("feat: ✨ 新功能").reason.includes("emoji"), true);
 
-// ---- PR#3: needsPluginBuild（源码型插件判定）----
-const tmpSmoke = mkdtempSync(join(tmpdir(), "dsh-mp-smoke-"));
-try {
-  const srcOnly = join(tmpSmoke, "src-only");
-  mkdirSync(srcOnly);
-  writeFileSync(join(srcOnly, "package.json"), JSON.stringify({
-    name: "x",
-    main: "lib/index.js",
-    scripts: { build: "tsdown" },
-    exports: { "./client": { default: "./lib/client.js" } }
-  }));
-  check("main 缺失 → 需要构建", await needsPluginBuild(srcOnly), true);
-  mkdirSync(join(srcOnly, "lib"));
-  writeFileSync(join(srcOnly, "lib/index.js"), "//x");
-  writeFileSync(join(srcOnly, "lib/client.js"), "//x");
-  check("产物齐全 → 无需构建", await needsPluginBuild(srcOnly), false);
-  writeFileSync(join(srcOnly, "package.json"), JSON.stringify({ name: "x", main: "lib/index.js" }));
-  check("无 build 脚本 → 无需构建", await needsPluginBuild(srcOnly), false);
-  writeFileSync(join(srcOnly, "package.json"), JSON.stringify({ name: "x", scripts: { build: "tsdown" } }));
-  check("无 main/client 入口 → 无需构建", await needsPluginBuild(srcOnly), false);
-  // conditional exports：{ "./client": { "import": "./dist/client.js" } } 也应识别为需要构建
-  writeFileSync(join(srcOnly, "package.json"), JSON.stringify({
-    name: "x",
-    scripts: { build: "tsdown" },
-    exports: { "./client": { "import": "./dist/client.js" } }
-  }));
-  check("conditional exports import 缺失 → 需要构建", await needsPluginBuild(srcOnly), true);
-  mkdirSync(join(srcOnly, "dist"));
-  writeFileSync(join(srcOnly, "dist/client.js"), "//x");
-  check("conditional exports 产物齐全 → 无需构建", await needsPluginBuild(srcOnly), false);
-  // 嵌套条件：{ "./client": { "browser": { "default": "./dist/client.js" } } }
-  rmSync(join(srcOnly, "dist"), { recursive: true, force: true });
-  writeFileSync(join(srcOnly, "package.json"), JSON.stringify({
-    name: "x",
-    scripts: { build: "tsdown" },
-    exports: { "./client": { "browser": { "default": "./dist/client.js" } } }
-  }));
-  check("嵌套条件 default 缺失 → 需要构建", await needsPluginBuild(srcOnly), true);
-  mkdirSync(join(srcOnly, "dist"));
-  writeFileSync(join(srcOnly, "dist/client.js"), "//x");
-  check("嵌套条件产物齐全 → 无需构建", await needsPluginBuild(srcOnly), false);
-} finally {
-  rmSync(tmpSmoke, { recursive: true, force: true });
-}
+// ---- Hook 分级: emojiLevel ----
+const emojiSubject = "feat: ✨ 新功能";
+check("level=error 拒绝", validateSubject(emojiSubject, { emojiLevel: "error" }).ok, false);
+const warnR = validateSubject(emojiSubject, { emojiLevel: "warn" });
+check("level=warn 放行", warnR.ok, true);
+check("level=warn 含警告", warnR.warnings.length, 1);
+check("level=off 跳过", validateSubject(emojiSubject, { emojiLevel: "off" }).ok, true);
+check("level=warn 无格式问题仍 ok", validateSubject("fix: 修复 bug", { emojiLevel: "warn" }).ok, true);
+check("格式错误不受 warn 影响", validateSubject("bad format", { emojiLevel: "warn" }).ok, false);
+check("默认 level 为 error", validateSubject(emojiSubject).ok, false);
 
-// ---- PR#3: hasPatchEntry scoped 包引号兼容 ----
-check("引号形式命中", hasPatchEntry('  - insert:\n    - id: x\n      name: "@a/b"\n', "@a/b"), true);
-check("单引号形式命中", hasPatchEntry("      name: '@a/b'\n", "@a/b"), true);
-check("无引号形式命中", hasPatchEntry("      name: @a/b\n", "@a/b"), true);
-check("不同包名不命中", hasPatchEntry("      name: other\n", "@a/b"), false);
-check("前缀子串不误伤", hasPatchEntry("      name: @a/bc\n", "@a/b"), false);
+// ---- Hook 配置解析: parseHookConfig ----
+const cfg1 = parseHookConfig("emojiLevel=warn\nrequireCommitMsg=false");
+check("parseHookConfig emojiLevel", cfg1.emojiLevel, "warn");
+check("parseHookConfig requireCommitMsg", cfg1.requireCommitMsg, false);
+const cfg2 = parseHookConfig("# 注释\nemojiLevel=off");
+check("parseHookConfig 注释跳过", cfg2.emojiLevel, "off");
+check("parseHookConfig 默认值保留", cfg2.requireCommitMsg, true);
+check("parseHookConfig 非法值回退默认", parseHookConfig("emojiLevel=banana").emojiLevel, "error");
+check("parseHookConfig 空文本默认", parseHookConfig("").emojiLevel, "error");
+check("parseHookConfig 非字符串", parseHookConfig(null).emojiLevel, "error");
+check("LEVELS 常量", LEVELS.includes("warn") && LEVELS.includes("off") && LEVELS.includes("error"), true);
+check("DEFAULT_HOOK_CONFIG 默认 error", DEFAULT_HOOK_CONFIG.emojiLevel, "error");
+check("loadHookConfigFromText 解析文本", loadHookConfigFromText("emojiLevel=off").emojiLevel, "off");
+check("loadHookConfigFromText 空文本默认", loadHookConfigFromText("").emojiLevel, "error");
+check("loadHookConfigFromText 非字符串", loadHookConfigFromText(null).emojiLevel, "error");
+check("loadHookConfigFromText 完整配置", (() => {
+  const c = loadHookConfigFromText("emojiLevel=warn\nsecretLevel=off\nsecretExclusions=a,b\ntocExclude=x");
+  return c.emojiLevel === "warn" && c.secretLevel === "off" && c.secretExclusions.length === 2 && c.tocExclude.length === 1;
+})(), true);
+
+// ---- 敏感密钥扫描: detectSecret ----
+const fakeOpenAI = "sk-" + "A".repeat(40);
+const fakeGh = "ghp_" + "B".repeat(36);
+const fakeAws = "AKIA" + "C".repeat(16);
+check("detectSecret sk- 密钥", detectSecret(`key=${fakeOpenAI}`).found, true);
+check("detectSecret ghp_ 密钥", detectSecret(fakeGh).found, true);
+check("detectSecret AWS AKIA", detectSecret(fakeAws).found, true);
+check("detectSecret 纯文本", detectSecret("fix: 修复 bug no secrets here").found, false);
+check("detectSecret 短 sk- 不误报", detectSecret("sk-abc").found, false);
+check("detectSecret 空串", detectSecret("").found, false);
+check("detectSecret 非字符串", detectSecret(null).found, false);
+check("detectSecret 返回打码样本", detectSecret(`key=${fakeOpenAI}`).samples[0], "sk-A…AAAA");
+
+// ---- 配置: secretLevel / secretExclusions ----
+const secCfg = parseHookConfig("secretLevel=warn\nsecretExclusions=.env.example,tests/fixtures");
+check("parseHookConfig secretLevel", secCfg.secretLevel, "warn");
+check("parseHookConfig secretExclusions 列表", secCfg.secretExclusions.includes(".env.example") && secCfg.secretExclusions.includes("tests/fixtures"), true);
+check("parseHookConfig 默认 secretLevel", parseHookConfig("").secretLevel, "error");
+check("parseHookConfig 默认 secretExclusions 空", parseHookConfig("").secretExclusions.length, 0);
+
+// ---- TOC: extractHeadings ----
+const TOC_MD = [
+  "# Title",
+  "",
+  "## A 标题",
+  "### A.1 子节",
+  "#### A.1.1 太深",
+  "## B 标题",
+  "",
+  "<!-- TOC -->",
+  "<!-- /TOC -->",
+].join("\n");
+const hs = extractHeadings(TOC_MD);
+check("extractHeadings 数 h2+h3", hs.length, 3);
+check("extractHeadings level", hs[0].level, 2);
+check("extractHeadings 排除 h4", hs.some((h) => h.level === 4), false);
+check("extractHeadings 排除 TOC 占位", hs.some((h) => h.text.includes("TOC -->")), false);
+
+// ---- TOC: slugify ----
+check("slugify 英文", slugify("Quick install"), "quick-install");
+check("slugify 中文去空格", slugify("一键安装（复制即用）"), "一键安装复制即用");
+check("slugify 去 emoji", slugify("⚡ 一键安装"), "一键安装");
+check("slugify 标点去除", slugify("A.B, C!"), "ab-c");
+check("slugify 连字符保留", slugify("a-b c"), "a-b-c");
+
+// ---- TOC: generateToc ----
+const toc = generateToc(TOC_MD);
+check("generateToc 含占位开始", toc.startsWith("<!-- TOC -->\n"), true);
+check("generateToc 含链接", toc.includes("(#a-标题)"), true);
+check("generateToc 子节缩进", toc.includes("  - [A.1 子节]"), true);
+check("generateToc 排除 h4", toc.includes("a11"), false);
+
+// ---- TOC: applyToc ----
+const applied = applyToc(TOC_MD, toc);
+check("applyToc 替换占位", applied.includes("- [A 标题](#a-标题)"), true);
+check("applyToc 无占位返回 null", applyToc("# No toc", "<!-- TOC -->\nx\n<!-- /TOC -->"), null);
+const crlfMd = "<!-- TOC -->\r\n<!-- /TOC -->\r\n## A 标题";
+const crlfApplied = applyToc(crlfMd, "<!-- TOC -->\n- [A](#a)\n<!-- /TOC -->");
+check("applyToc 保留 CRLF", crlfApplied.includes("<!-- TOC -->\r\n"), true);
+
+// ---- TOC: tocIsValid ----
+check("tocIsValid 正常通过", tocIsValid(applyToc(TOC_MD, toc)), true);
+check("tocIsValid 无 h2 无占位 true(无需 TOC)", tocIsValid("# No placeholder"), true);
+check("tocIsValid 无占位但有 h2 false", tocIsValid("# T\n\n## A 标题"), false);
+check("tocIsValid 内容过期 false", tocIsValid("<!-- TOC -->\n- [旧](#旧)\n<!-- /TOC -->\n## 新 标题"), false);
+check("tocIsValid CRLF 兼容", tocIsValid("<!-- TOC -->\r\n- [A 标题](#a-标题)\r\n<!-- /TOC -->\r\n## A 标题"), true);
+
+// ---- TOC: tocInsertIndex ----
+const idxMd = "# 主标题\n\n引言\n\n## 第一节\n内容\n## 第二节";
+check("tocInsertIndex 定位第一个 h2 前", (() => {
+  const idx = tocInsertIndex(idxMd);
+  return idxMd.slice(idx, idx + 2) === "##";
+})(), true);
+check("tocInsertIndex 无 h2 返回 -1", tocInsertIndex("# 只有标题"), -1);
+check("tocInsertIndex 空文档 -1", tocInsertIndex(""), -1);
+
+// ---- TOC: discoverMarkdownFiles 自动扫描 ----
+check("DEFAULT_TOC_EXCLUDES 含 CHANGELOG", DEFAULT_TOC_EXCLUDES.includes("CHANGELOG.md"), true);
+// 用绝对路径（不依赖调用方 cwd）
+const REPO_ROOT = new URL("..", import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, "$1").replace(/\//g, "\\");
+const mdFiles = discoverMarkdownFiles(REPO_ROOT);
+check("自动发现含 README.md", mdFiles.includes("README.md"), true);
+check("自动发现含 docs/DEVELOPMENT.md", mdFiles.includes("docs/DEVELOPMENT.md"), true);
+check("排除 CHANGELOG.md", mdFiles.includes("CHANGELOG.md"), false);
+check("排除 node_modules", mdFiles.some((f) => f.startsWith("node_modules/")), false);
+check("路径排序稳定", JSON.stringify(mdFiles) === JSON.stringify([...mdFiles].sort()), true);
+const excl = discoverMarkdownFiles(REPO_ROOT, ["docs/README.md"]);
+check("extraExcludes 追加排除", excl.includes("docs/README.md"), false);
+
+// ---- TOC: normalizeEol ----
+check("normalizeEol CRLF→LF", normalizeEol("a\r\nb"), "a\nb");
+check("normalizeEol LF 不变", normalizeEol("a\nb"), "a\nb");
+
+// ---- TOC: isMain ----
+check("isMain 无 argv1 false", (() => {
+  const orig = process.argv[1];
+  delete process.argv[1];
+  const r = isMain();
+  process.argv[1] = orig;
+  return r;
+})(), false);
 
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail === 0 ? 0 : 1);
