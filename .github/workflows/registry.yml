@@ -2,9 +2,16 @@ name: build-registry
 
 on:
   schedule:
-    # 每 2 小时更新一次索引（UTC；即北京时间每偶数点整）
+    # 每 2 小时增量更新一次索引（UTC；即北京时间每偶数点整）
     - cron: "0 */2 * * *"
-  workflow_dispatch: {}
+    # 每天 04:00 UTC（北京时间 12:00）全量重建 skills 索引，刷新 star 数等静态数据
+    - cron: "0 4 * * *"
+  workflow_dispatch:
+    inputs:
+      full:
+        description: "全量重建 skills 索引（默认增量）"
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -36,8 +43,17 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build skills registry
+      # skills 索引：增量（每 2 小时，只拉最近 3 天 pushed 的仓库，几分钟完成）
+      # 或全量（每天 04:00 / 手动勾选 full），刷新全量 star 数
+      - name: Build skills registry (full)
+        if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.full == 'true' || github.event.schedule == '0 4 * * *' }}
         run: SOURCES_MODE=skills node scripts/build-registry.mjs
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build skills registry (incremental)
+        if: ${{ !(github.event_name == 'workflow_dispatch' && github.event.inputs.full == 'true' || github.event.schedule == '0 4 * * *') }}
+        run: SOURCES_MODE=skills INCREMENTAL_DAYS=3 node scripts/build-registry.mjs
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

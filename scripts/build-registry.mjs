@@ -67,6 +67,13 @@ const SEGMENT_QUEUE_LIMIT = 120; // 防无限分裂的安全上限（超过则�
 /** 单值段时间窗口最小粒度（天）：0-star 长尾仓库极多，按周切会无限查询；
  *  窗口窄于该值仍超 1000 条就接受部分结果（0-star 仓库价值最低，不值得穷尽）。 */
 const MIN_WINDOW_DAYS = 30;
+/** 增量模式窗口（天）：>0 时只拉最近 N 天 pushed 的仓库（新/更新仓库），
+ *  老仓库从旧索引继承 + stale 剔除。CI 每 2 小时用增量（几分钟），每天全量刷新 star。 */
+const INCREMENTAL_DAYS = Number(process.env.INCREMENTAL_DAYS ?? 0);
+/** 增量模式的时间窗口上界（动态：当前日期 + 1 年，覆盖 pushed:>=since 查询）。 */
+function incrementalEndDate() {
+  return new Date(Date.now() + 365 * 86400000).toISOString().slice(0, 10);
+}
 
 // ── 探测护栏（仅 skills 模式）──
 const PROBE_CONCURRENCY = 8;   // 探测并发（沿用 enrichPkgNames 的 worker 模式）
@@ -112,13 +119,14 @@ function normalize(r) {
 }
 
 /** 构造 star 范围查询串：{ min:100, max:null } → "stars:>=100"；{ min:0, max:0 } → "stars:0"；
- *  带 timeRange 时追加 " pushed:YYYY-MM-DD..YYYY-MM-DD"（单值段的第二维度）。 */
-export function starRangeQuery(topic, seg) {
+ *  带 timeRange 时追加 " pushed:YYYY-MM-DD..YYYY-MM-DD"（单值段的第二维度）；
+ *  增量模式（since 非空且无 timeRange）时追加 " pushed:>=YYYY-MM-DD"。 */
+export function starRangeQuery(topic, seg, since) {
   const max = seg.max ?? null;
   const range = max === null
     ? `stars:>=${seg.min}`
     : (seg.min === max ? `stars:${seg.min}` : `stars:${seg.min}..${max}`);
-  const time = seg.timeRange ? ` pushed:${seg.timeRange}` : "";
+  const time = seg.timeRange ? ` pushed:${seg.timeRange}` : (since ? ` pushed:>=${since}` : "");
   return `topic:${topic} ${range}${time}`;
 }
 
@@ -157,8 +165,8 @@ export function splitSegment(seg) {
  *   full=false 表示 10 页全满、该段可能还有更多（需分裂）；
  *   newCount=0 表示本段没有新增仓库（数据已被其他段覆盖）→ 调用方直接收敛，不再分裂。
  */
-async function fetchStarSegment(topic, seg) {
-  const query = starRangeQuery(topic, seg);
+async function fetchStarSegment(topic, seg, since) {
+  const query = starRangeQuery(topic, seg, since);
   const collected = [];
   const seen = new Set();
   let newCount = 0;
@@ -186,13 +194,20 @@ async function fetchStarSegment(topic, seg) {
 }
 
 /**
- * v1.3：skills 模式全量获取——star 分段 BFS，段拉满 1000 条则对半分裂递归。
- * 返回 { repos, complete }（complete=true 表示所有段都收敛，即全量）。
+ * v1.3：skills 模式获取——star 分段 BFS，段拉满 1000 条则对半分裂递归。
+ * since 非空 = 增量模式：所有查询加 pushed:>=since（只拉最近更新的仓库），
+ * 单值段（stars:0）初始时间窗口以 since 为下界；老仓库由调用方从旧索引继承。
+ * 返回 { repos, complete }（complete=true 表示所有段都收敛）。
  */
-async function crawlByStars(topic) {
+async function crawlByStars(topic, since) {
   const all = [];
   const seen = new Set();
-  const queue = [...SKILL_STAR_SEGMENTS];
+  // 增量模式：单值段初始时间窗口 = since..未来（避免 splitSegment 用 2008 默认下界）
+  const queue = since
+    ? SKILL_STAR_SEGMENTS.map((seg) => seg.min === seg.max
+        ? { ...seg, timeRange: `${since}..${incrementalEndDate()}` }
+        : { ...seg })
+    : [...SKILL_STAR_SEGMENTS];
   let complete = true;
   while (queue.length > 0) {
     if (queue.length > SEGMENT_QUEUE_LIMIT) {
@@ -201,7 +216,7 @@ async function crawlByStars(topic) {
       break;
     }
     const seg = queue.shift();
-    const { repos, newCount, full } = await fetchStarSegment(topic, seg);
+    const { repos, newCount, full } = await fetchStarSegment(topic, seg, since);
     let added = 0;
     for (const r of repos) {
       if (seen.has(r.full_name)) continue;
@@ -209,12 +224,12 @@ async function crawlByStars(topic) {
       all.push(r);
       added++;
     }
-    log(`[${topic}] 段 ${starRangeQuery(topic, seg)}：+${added}（累计 ${all.length}）${newCount === 0 ? "，无新增收敛" : (full ? "，收敛" : "，拉满需分裂")}`);
+    log(`[${topic}] 段 ${starRangeQuery(topic, seg, since)}：+${added}（累计 ${all.length}）${newCount === 0 ? "，无新增收敛" : (full ? "，收敛" : "，拉满需分裂")}`);
     if (!full && newCount > 0) {
       // 拉满 1000 条且有新增 → 分裂（普通段按 star 对半；单值段按时间窗口二分）
       const children = splitSegment(seg);
       if (children.length === 0) {
-        log(`[${topic}] 段 ${starRangeQuery(topic, seg)} 已到最小粒度仍超 1000 条，接受部分结果`);
+        log(`[${topic}] 段 ${starRangeQuery(topic, seg, since)} 已到最小粒度仍超 1000 条，接受部分结果`);
         complete = false;
       } else {
         queue.push(...children);
@@ -231,23 +246,26 @@ async function crawlByStars(topic) {
 
 /**
  * 获取全部仓库：skills 模式用 stars 分段全量（突破 1000/query 上限），失败回退单 query 分页；
- * dsh 模式保持原行为。
+ * dsh 模式保持原行为。INCREMENTAL_DAYS>0 时进入增量模式（只拉最近更新的仓库）。
  */
 async function fetchAllTopics() {
   if (MODE === "skills") {
     try {
       const merged = new Map();
       let allComplete = true;
+      const since = INCREMENTAL_DAYS > 0
+        ? new Date(Date.now() - INCREMENTAL_DAYS * 86400000).toISOString().slice(0, 10)
+        : null;
       for (const q of QUERIES) {
         // QUERIES 是完整 Search query（"topic:agent-skills"），分段需要纯 topic 名
         const topic = String(q).replace(/^topic:/, "");
-        const { repos, complete } = await crawlByStars(topic);
+        const { repos, complete } = await crawlByStars(topic, since);
         if (!complete) allComplete = false;
         for (const r of repos) {
           if (!merged.has(r.full_name)) merged.set(r.full_name, r);
         }
       }
-      return { repos: [...merged.values()], complete: allComplete, stars: true };
+      return { repos: [...merged.values()], complete: allComplete, stars: true, incremental: since ? true : false };
     } catch (error) {
       log(`stars 分段拉取失败：${error.message}，回退单 query 分页（1000 条/query 上限）`);
     }
@@ -415,7 +433,7 @@ async function loadExisting() {
 
 async function main() {
   log(`模式=${MODE}，queries=[${QUERIES.join(", ")}]，输出=${OUT_FILE}`);
-  const { repos: fresh, complete, stars } = await fetchAllTopics();
+  const { repos: fresh, complete, stars, incremental } = await fetchAllTopics();
 
   // 增量合并：完整拉取则整体替换，否则保留旧条目（新数据优先）。
   // skills 模式即使完整拉取也必须加载旧索引——探测继承依赖旧探测结果（探测远比 Search 贵）。
@@ -468,7 +486,7 @@ async function main() {
 
   const out = {
     generated_at: new Date().toISOString(),
-    ...(MODE === "skills" ? { schema_version: 1, ...(stars ? { index_mode: "stars" } : {}) } : {}), // dsh 模式输出与历史版本逐字段一致（回归）
+    ...(MODE === "skills" ? { schema_version: 1, ...(stars ? { index_mode: incremental ? "incremental" : "stars" } : {}) } : {}), // dsh 模式输出与历史版本逐字段一致（回归）
     count: repos.length,
     source: complete ? "full" : "partial-merge",
     repos
