@@ -1,7 +1,7 @@
 // 冒烟测试：验证安全加固与纯函数修复（R1 Host 白名单 / R2 env 最小化 / n3 版本比较等）。
 // 运行：node scripts/smoke-tests.mjs（CI 的 syntax check 步骤同步执行）
 import { compareVersions, isTrustedRequest, isTrustedHost, isSensitiveEnvKey, buildMinimalEnv, buildFilteredEnv, looksLikeDshPlugin } from "../lib/index.js";
-import { classifyTree, shouldInheritProbe } from "./build-registry.mjs";
+import { classifyTree, shouldInheritProbe, starRangeQuery, midDateStr, splitSegment } from "./build-registry.mjs";
 
 let pass = 0, fail = 0;
 function check(name, actual, expected) {
@@ -103,6 +103,24 @@ check("无依赖无字段 → 非插件", looksLikeDshPlugin({ name: "x" }), fal
 check("空对象 → 非插件", looksLikeDshPlugin({}), false);
 check("null → 未知", looksLikeDshPlugin(null), null);
 check("非对象 → 未知", looksLikeDshPlugin("str"), null);
+
+// ---- v1.3: star 分段查询构造（Search API 全量抓取）----
+check("stars:>=1000", starRangeQuery("agent-skills", { min: 1000, max: null }), "topic:agent-skills stars:>=1000");
+check("stars:100..999", starRangeQuery("agent-skills", { min: 100, max: 999 }), "topic:agent-skills stars:100..999");
+check("stars:0 单值", starRangeQuery("agent-skills", { min: 0, max: 0 }), "topic:agent-skills stars:0");
+check("stars:0 + 时间窗口", starRangeQuery("agent-skills", { min: 0, max: 0, timeRange: "2020-01-01..2026-12-31" }), "topic:agent-skills stars:0 pushed:2020-01-01..2026-12-31");
+check("midDateStr 取中", midDateStr("2020-01-01", "2026-12-31"), "2023-07-02");
+check("splitSegment 普通段对半", JSON.stringify(splitSegment({ min: 10, max: 99 })), JSON.stringify([{ min: 10, max: 54 }, { min: 55, max: 99 }]));
+check("splitSegment 单值段时间二分", JSON.stringify(splitSegment({ min: 0, max: 0 })), JSON.stringify([
+  { min: 0, max: 0, timeRange: "2008-01-01..2017-07-01" },
+  { min: 0, max: 0, timeRange: "2017-07-01..2026-12-31" }
+]));
+check("splitSegment 1 天窗口无法再分", splitSegment({ min: 0, max: 0, timeRange: "2026-01-01..2026-01-01" }), []);
+check("splitSegment ≤30 天窗口无法再分", splitSegment({ min: 0, max: 0, timeRange: "2026-06-01..2026-06-25" }), []);
+check("splitSegment 大窗口正常二分", JSON.stringify(splitSegment({ min: 0, max: 0, timeRange: "2026-01-01..2026-12-31" })), JSON.stringify([
+  { min: 0, max: 0, timeRange: "2026-01-01..2026-07-02" },
+  { min: 0, max: 0, timeRange: "2026-07-02..2026-12-31" }
+]));
 
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail === 0 ? 0 : 1);

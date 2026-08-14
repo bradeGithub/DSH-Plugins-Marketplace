@@ -4,6 +4,14 @@
 
 ---
 
+## Unreleased / v1.3.0（全量 Skills 索引 / Full skills index）
+
+- **全量 skills 索引**：`skills.json` 从 1867 条扩展至 **11000+ 条**——GitHub Search API 单 query 硬上限 1000 条、topic 页爬虫也被限制 50 页，因此改用「**stars 分段 + 时间窗口二分**」突破限制取全量：按 star 数分段查询（`stars:>=1000` / `100..999` / `10..99` / …），段拉满 1000 条即对半分裂，单值段（如 `stars:0`）按 `pushed` 时间窗口二分（窗口窄于 30 天即接受部分结果）；段内 0 新增直接收敛避免无谓查询 / full skills index: `skills.json` grew from 1867 to **11,000+ repos** — since both Search API (1000/query) and topic-page crawling (50 pages) are capped, we now use «stars segments + time-window bisection»: query by star ranges, bisect segments that fill 1000, bisect single-value segments (e.g. `stars:0`) by pushed time windows (accept partial results below 30-day granularity); segments with 0 new repos converge early
+- **冷启动预算**：全量拉取约 1.5 小时（Search 30/min 限额是主要瓶颈）；`has_skill` 探测按 Core API 5000/h 额度护栏分批，CI 每 2 小时增量续跑直至全量探测完成（未探测仓库显示「未验证」）/ cold-start budget: ~1.5h for the full fetch (Search 30/min is the bottleneck); `has_skill` probing batches under the 5000/h Core quota guardrail, CI resumes incrementally every 2h until all repos are probed
+- **探测分支回退**：爬虫来源已移除（GitHub 未认证 topic 页限制 50 页/1000 条），Trees 探测增加 main→master 分支回退（Search 数据自带 default_branch，爬虫数据没有）/ branch fallback main→master added to Trees probing (crawler source removed; Search data carries default_branch)
+
+---
+
 ## v1.2.0 — 2026-08-14（Skills 栏目 + 安装安全强化 / Skills column & install hardening）
 
 - **通用 Skills 栏目（完整上线）**：设置页新增 tab「DSH 插件 | 通用 Skills」——`GET /api/marketplace/skills` 路由 + `skills.json` 全量索引构建器（`SOURCES_MODE=skills` 拉取 `topic:agent-skills` ∪ `topic:claude-skills` 并集，Trees API 探测 `has_skill` / `has_install_script`，truncated 大仓库标 null 不误判，增量继承 + 断点快照续跑 + 额度护栏）；前端分页触底加载（每页 60 + IntersectionObserver）、搜索、🛡 含安装脚本角标、「未验证」弱提示，安装复用现有 skill 流程 / Skills column fully shipped: new «DSH Plugins | General Skills» tabs — `/api/marketplace/skills` route + `skills.json` builder (multi-topic union, Trees probing, incremental inheritance, rate-limit guardrail); front-end paginated infinite scroll (60/page + IntersectionObserver), search, 🛡 install-script badge, «unverified» hint; install reuses the existing skill pipeline

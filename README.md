@@ -189,7 +189,7 @@ GitHub Actions（每 2 小时，仓库自带 token）
 - **安全模型**：安装端点无用户认证，防护依赖「本地网络隔离 + CSRF 头 + Host 白名单（本机/局域网/可配置）+ Origin 校验」——请勿将 DSH web 端口暴露到不可信网络；安装即意味着在机器上执行第三方代码（npm 依赖与安装脚本），请只安装你信任并已核验的仓库
 - 版本检测仅对含 `package.json` 的插件生效；skill / 预设 / 脚本类无版本概念
 - 插件列表默认走静态索引（CDN）；仅当索引的两个源都不可用时才回退 GitHub 搜索 API，此时未认证限流 **10 次/分钟**，频繁点「刷新」可能触发限流（会提示刷新失败，稍等再试）
-- **Skills 索引范围**：受 GitHub Search API 单 query 硬上限（1000 条）约束，`skills.json` 当前收录 `agent-skills` 与 `claude-skills` 两个 topic 各自最新更新的 1000 条（并集 1867 个仓库）；全量索引（topic 页爬取）计划在 v1.3 实现
+- **Skills 索引范围**：v1.3 起为**全量索引**——通过 Search API「stars 分段 + 时间窗口二分」突破单 query 1000 条上限，收录 `agent-skills` ∪ `claude-skills` 全部仓库（当前 11000+）；`has_skill` 探测按 Core API 额度分批补齐（CI 每 2 小时增量续跑，未探测的仓库显示「未验证」）
 - 安装脚本类插件的「已安装」判定基于缓存目录存在性，卸载（删除缓存）后会重新显示为可安装
 - 插件代码修改后需**重启 DSH** 才能生效（Web profile 的 HMR 处于禁用状态）
 
