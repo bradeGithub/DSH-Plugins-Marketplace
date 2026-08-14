@@ -197,8 +197,11 @@ function mockFetch(payload, status = 200) {
       { writeHead: (s) => { listStatus = s; }, end: (b) => { try { listBody = JSON.parse(b); } catch { listBody = null; } } });
     globalThis.fetch = origList;
     check("list worker 标注 200", listStatus, 200);
-    check("list worker 已安装置顶 + 冲突保留", listBody && listBody.repos.map((r) => r.full_name), ["o/a", "o/d"]);
-    check("list worker installed 标注", listBody && listBody.repos.map((r) => r.installed), [true, false]);
+    // 注：响应会叠加适配层（adaptor.json）补入的真实条目（如 yejiming/dsh-museai-tavern），
+    // 断言按 mock 前缀 o/ 过滤，与适配层内容解耦。
+    const mockRepos = listBody && listBody.repos.filter((r) => r.full_name.startsWith("o/"));
+    check("list worker 已安装置顶 + 冲突保留", mockRepos && mockRepos.map((r) => r.full_name), ["o/a", "o/d"]);
+    check("list worker installed 标注", mockRepos && mockRepos.map((r) => r.installed), [true, false]);
     check("list worker updateAvailable 布尔", listBody && typeof listBody.repos[0].updateAvailable, "boolean");
   } else {
     check("list handler 存在", false, true);
@@ -219,6 +222,19 @@ function mockFetch(payload, status = 200) {
   } else {
     check("skills handler 存在", false, true);
   }
+
+  // ---- 适配层（adaptor.json 硬编码重定向）----
+  check("adaptorRedirectRepo MuseAI → tavern", lib.adaptorRedirectRepo("yejiming/MuseAI"), "yejiming/dsh-museai-tavern");
+  check("adaptorRedirectRepo 无关仓库 null", lib.adaptorRedirectRepo("some/other"), null);
+  check("adaptorRedirectRepo 空值 null", lib.adaptorRedirectRepo(null), null);
+  const adapted = lib.applyAdaptorList([
+    { full_name: "yejiming/MuseAI", name: "MuseAI" },
+    { full_name: "a/b", name: "b" }
+  ]);
+  check("applyAdaptorList 移除错误条目", adapted.some((r) => r.full_name === "yejiming/MuseAI"), false);
+  check("applyAdaptorList 补入真实条目", adapted.some((r) => r.full_name === "yejiming/dsh-museai-tavern"), true);
+  check("applyAdaptorList 保留无关条目", adapted.some((r) => r.full_name === "a/b"), true);
+  check("applyAdaptorList 非数组原样返回", lib.applyAdaptorList(null), null);
 
   console.log(`\n${pass} passed, ${fail} failed`);
   process.exit(fail === 0 ? 0 : 1);

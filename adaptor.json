@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "description": "适配层：硬编码处理不规范/非常规项目——打错 tag、本体非插件、真实插件藏在子项目等。列表时移除错误条目并补入真实插件，安装时重定向到真实仓库。新增条目：复制 redirects 数组里的一个对象，from=市场里出现的错误条目，to=真实插件仓库，meta=to 的展示元数据（hardcode，避免运行时请求）。",
+  "redirects": [
+    {
+      "from": "yejiming/MuseAI",
+      "to": "yejiming/dsh-museai-tavern",
+      "reason": "MuseAI 本体是独立软件（AI 角色聊天应用），不支持 DSH 一键安装；真正的 DSH 插件是其关联子项目 dsh-museai-tavern，但该子项目未打 dsh-plugin tag，市场索引拉取不到——已重定向，避免用户安装本体时崩溃。",
+      "meta": {
+        "full_name": "yejiming/dsh-museai-tavern",
+        "name": "dsh-museai-tavern",
+        "description": "MuseAI 的 DeepSeek Harness 插件：把 MuseAI 角色放进 DSH 使用（注意：yejiming/MuseAI 本体是独立软件，非插件）",
+        "html_url": "https://github.com/yejiming/dsh-museai-tavern",
+        "stargazers_count": 1,
+        "updated_at": "2026-08-14T00:00:00.000Z",
+        "default_branch": "main",
+        "topics": ["dsh-plugin", "museai", "deepseek-harness"],
+        "license": "MIT"
+      }
+    }
+  ]
+}

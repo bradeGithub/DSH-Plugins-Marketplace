@@ -1,4 +1,5 @@
 import { extractHeadings, slugify, generateToc, applyToc, tocIsValid, normalizeEol, isMain, tocInsertIndex, discoverMarkdownFiles, DEFAULT_TOC_EXCLUDES } from "../../toc.mjs";
+import { fileURLToPath } from "node:url";
 
 let pass = 0, fail = 0;
 function check(name, actual, expected) {
@@ -65,8 +66,9 @@ check("tocInsertIndex 空文档 -1", tocInsertIndex(""), -1);
 
 // ---- TOC: discoverMarkdownFiles 自动扫描 ----
 check("DEFAULT_TOC_EXCLUDES 含 CHANGELOG", DEFAULT_TOC_EXCLUDES.includes("CHANGELOG.md"), true);
-// 用绝对路径（不依赖调用方 cwd）
-const REPO_ROOT = new URL("../../..", import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, "$1").replace(/\//g, "\\");
+// 用 fileURLToPath 取仓库根（跨平台：Windows 反斜杠 / Linux 正斜杠），
+// 此前手写 pathname 替换会把 Linux 路径也转成反斜杠导致 CI 扫描失败。
+const REPO_ROOT = fileURLToPath(new URL("../../..", import.meta.url));
 const mdFiles = discoverMarkdownFiles(REPO_ROOT);
 check("自动发现含 README.md", mdFiles.includes("README.md"), true);
 check("自动发现含 docs/DEVELOPMENT.md", mdFiles.includes("docs/DEVELOPMENT.md"), true);

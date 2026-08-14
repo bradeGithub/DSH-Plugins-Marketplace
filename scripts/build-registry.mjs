@@ -579,6 +579,25 @@ async function main() {
   }
   let repos = [...merged.values()].sort((a, b) => (b.stargazers_count ?? 0) - (a.stargazers_count ?? 0));
 
+  // 适配层（adaptor.json）：移除打错 tag 的错误条目（本体非插件等），补入真实插件条目。
+  // 放在富化/分类之前，让补入条目同样获得 pkg_name / category 处理。
+  if (MODE === "dsh") {
+    const adaptor = JSON.parse(await readFile(join(ROOT, "..", "adaptor.json"), "utf8").catch(() => "{}"));
+    const redirects = Array.isArray(adaptor.redirects)
+      ? adaptor.redirects.filter((r) => r && typeof r.from === "string" && r.meta && typeof r.meta.full_name === "string")
+      : [];
+    if (redirects.length > 0) {
+      const fromSet = new Set(redirects.map((r) => r.from));
+      repos = repos.filter((r) => !fromSet.has(r.full_name));
+      for (const r of redirects) {
+        if (!repos.some((x) => x.full_name === r.meta.full_name)) {
+          repos.push({ ...r.meta, registry_seen_at: new Date().toISOString() });
+        }
+        log(`适配层：${r.from} → ${r.meta.full_name}`);
+      }
+    }
+  }
+
   // skills 模式：增量继承（控额度的命根子）+ Trees 探测
   if (MODE === "skills") {
     const probeQueue = [];
