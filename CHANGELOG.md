@@ -4,15 +4,20 @@
 
 ---
 
-## v1.3.1 — 2026-08-14（插件列表全量修复 / Full plugin registry fix）
+## v1.3.2 — 2026-08-14（安装体验升级 + 第三方生态 / Guided installs & third-party ecosystem）
 
-- **插件列表突破 1000 条上限**：`registry.json` 从 999 条扩展至 **1500+ 条**（实测 1552）——dsh 模式此前沿用单 query 分页，被 GitHub Search API 单 query 1000 条硬上限截断（且把截断误判为「完整」）；v1.3.1 起 dsh / skills 模式统一使用「stars 分段 + 时间窗口二分」全量抓取，插件市场与 GitHub 实况对齐 / plugin list now exceeds 1000: `registry.json` grew from 999 to **1500+ repos** (1552 measured) — the dsh build previously used single-query pagination, silently truncated by the Search API 1000/query cap (and mislabeled as complete); since v1.3.1 both dsh and skills modes use the «stars segments + time-window bisection» full crawl, aligning the marketplace with GitHub
-- **部分结果不再冒充完整**：分段抓取单页失败（限流/网络）标记 `failed` 并停止分裂，索引标记 `partial-merge` 且保留旧条目合并，杜绝截断数据标成 `full` / partial results are no longer labeled complete: segment page failures (rate limit/network) flag `failed` and stop splitting, the index becomes `partial-merge` and keeps old entries — truncated data can never claim `full`
+- **多 Skill 仓库一键安装**：自动发现仓库根目录与子目录中的全部 `SKILL.md` 并逐个安装（`anthropics/skills` 等合集仓库不再只装一个或误判为文档）；完成时显示「已安装 N 个 Skills」/ multi-Skill install: every `SKILL.md` in the repo root or subdirectories is discovered and installed one by one (collection repos like `anthropics/skills` are no longer misjudged); completion shows «N Skills installed»
+- **安装面板居中弹层**：安装进度改为固定居中浮层 + 动画进度条，不再把页面滚到顶部；运行中隐藏「返回列表」按钮 / the install panel became a fixed centered overlay with an animated progress bar (no scroll-to-top); the back button is hidden while running
+- **确认式安装**：Skill / Agent 预设不再误扫 README 示例索要 API Key——只有真正执行脚本或安装插件时才检查环境变量；「提交材料」改为「安装前确认」，纯选项问题点击选项即提交 / confirm-before-install: skills and presets no longer scan README examples for API keys — env checks run only for scripts/plugins; «submit materials» became «confirm before install», option questions submit on click
+- **第三方生态条目**：README 新增「第三方生态」小节（Harness Desktop——社区 Windows 桌面版，稳定版内置本市场；作者关联与官方无关性均已披露），由作者提交 PR 经评审合并 / README gained a «Third-party ecosystem» section (Harness Desktop — community Windows desktop app whose stable release embeds this marketplace; affiliation disclosed), submitted by the author and merged after review
+- **测试接入 CI**：guided-install 冒烟测试并入 CI 语法检查步骤 / guided-install smoke tests wired into the CI syntax-check step
 
 ---
 
-## Unreleased / v1.4.0（插件分类 / Plugin categories）
+## v1.3.1 — 2026-08-14（插件列表全量修复 + 插件分类 / Full plugin registry fix & categories）
 
+- **插件列表突破 1000 条上限**：`registry.json` 从 999 条扩展至 **1500+ 条**（实测 1552）——dsh 模式此前沿用单 query 分页，被 GitHub Search API 单 query 1000 条硬上限截断（且把截断误判为「完整」）；v1.3.1 起 dsh / skills 模式统一使用「stars 分段 + 时间窗口二分」全量抓取，插件市场与 GitHub 实况对齐 / plugin list now exceeds 1000: `registry.json` grew from 999 to **1500+ repos** (1552 measured) — the dsh build previously used single-query pagination, silently truncated by the Search API 1000/query cap (and mislabeled as complete); since v1.3.1 both dsh and skills modes use the «stars segments + time-window bisection» full crawl, aligning the marketplace with GitHub
+- **部分结果不再冒充完整**：分段抓取单页失败（限流/网络）标记 `failed` 并停止分裂，索引标记 `partial-merge` 且保留旧条目合并，杜绝截断数据标成 `full` / partial results are no longer labeled complete: segment page failures (rate limit/network) flag `failed` and stop splitting, the index becomes `partial-merge` and keeps old entries — truncated data can never claim `full`
 - **插件分类**：registry 构建时按 description + name + 过滤后的 topics 做关键词规则分类（零额外 API，无需读 README），输出 `category` 字段（vision / document / memory / model / notify / coding / conversation / web-ui / agent / tool / resource / other）——生态泛标签（ai-agent/llm/deepseek 等）不参与分类，规则按优先级匹配，无法分类的归「其他」/ plugin categories: built into the registry at build time from description + name + filtered topics (zero extra API calls, no README reading) — `category` field (vision/document/memory/model/notify/coding/conversation/web-ui/agent/tool/resource/other); ecosystem-wide tags (ai-agent/llm/deepseek…) are excluded, rules match by priority, unmatched repos go to «other»
 - **前端分类筛选**：DSH 插件 tab 新增分类 chips（全部 + 12 类），点击筛选，可与搜索词联合过滤；卡片名称旁显示分类徽章 / category filter chips added to the plugins tab (All + 12 categories), combinable with the search box; cards show a category badge
 
