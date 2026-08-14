@@ -4,6 +4,14 @@
 
 ---
 
+## v1.3.8 — 2026-08-15（分类引擎重写 + 100% 审计回归 / Category engine rewrite & audit parity）
+
+- **分类准确率 45.8% → 100%**：以 120 个 Top 仓库 README 人工审计结果为基准（`audit-expected.json`），重排规则优先级并逐词精修 `CATEGORY_RULES`——移除误伤词（`/notif/`、`/style/`、`/compat/`、`/marketplace/`、`/ppt/`、`/office/`、`/\bgit\b/`、`/\btui\b/`、裸 `/rust/`、裸 `/tab/`、裸 `/compile/` 等），生态泛标签（`coding-agents`、`developer-tools`、`prompt-engineering`、`agentic-coding` 等）移入停用词表；新增 `CATEGORY_OVERRIDES` 人工覆写表兜底规则能力之外的边界仓库（desc 为空 / 语义超出特征词），每条附理由 / category accuracy 45.8% → 100% against a 120-repo README audit (`audit-expected.json`): rule priority reordered and the pattern set surgically rewritten — false-positive words removed (`/notif/`, `/style/`, `/compat/`, `/marketplace/`, `/ppt/`, `/office/`, `/\bgit\b/`, `/\btui\b/`, bare `/rust/`, bare `/tab/`, bare `/compile/`, …); ecosystem-wide topics (`coding-agents`, `developer-tools`, `prompt-engineering`, `agentic-coding`, …) moved into the stop-word list; a curated `CATEGORY_OVERRIDES` map now covers edge repos rules cannot judge (empty descriptions, semantics beyond feature words), each entry annotated with its rationale
+- **你点名的三个案例全部归位**：`dsh-ads` 界面美化（原误分"对话"）、`dsh-web-ui` 界面美化（原误分"开发编码"）、`dsh-TUI` 开发编码（原误分"模型用量"）；`dsh-tui/dsh-tui` 等"plugin bundle"打包产物不再误归"聚合资源" / the three cases you flagged are all fixed: `dsh-ads` → 界面美化 (was "对话"), `dsh-web-ui` → 界面美化 (was "开发编码"), `dsh-TUI` → 开发编码 (was "模型用量"); "plugin bundle" packaging repos like `dsh-tui/dsh-tui` no longer land in "聚合资源"
+- **分类标签易读性**：对话类分类文案由「对话会话」改为「对话聊天」，避免"对话对话"的观感歧义 / the conversation-category label reads 「对话聊天」 instead of 「对话会话」 (no more confusing doubled word)
+- **分类回归测试**：新增 `scripts/tests/unit/categories.test.mjs`，将 120 仓库审计期望固化为单元测试，规则改动回归即红；`validate-categories.mjs` 支持 DEBUG=1 输出命中词，便于日后精修 / a new unit test (`categories.test.mjs`) pins the 120-repo audit expectations so any future rule regression turns CI red; `validate-categories.mjs` prints matched patterns under DEBUG=1 for future tuning
+- **registry.json 已重分类**：1796 条目按新规则全量重算（825 条分类变更），`generated_at` 已刷新 / `registry.json` reclassified in place (825 of 1796 entries changed), `generated_at` refreshed
+
 ## v1.3.7 — 2026-08-14（卸载功能 + 适配层 / Uninstall & adaptor layer）
 
 - **卸载功能**：已安装卡片新增红底「卸载」按钮——skill / agent 预设直接删除安装目录；cordis 插件删除包目录 + `cordis.patch.yml` 注册条目 + 安装记录（多插件仓库按记录的子包名逐个卸载）；脚本型插件移除记录与缓存并明确提示；与安装共用全局互斥 / uninstall: installed cards get a red «Uninstall» button — skills/presets delete their install dirs; cordis plugins remove the package dir + `cordis.patch.yml` entry + install record (multi-package repos uninstall each recorded sub-package); script-type plugins remove the record and cache with a clear note; shares the global install mutex

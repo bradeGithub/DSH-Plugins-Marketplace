@@ -122,8 +122,15 @@ function normalize(r) {
 
 // ── 插件分类（dsh 模式）──
 // 基于 description + name + 过滤后的 topics 的关键词规则分类（无需读 README）。
-// 规则按优先级排列：先匹配先得（视觉/文档等特异词在前，工具/聚合等宽泛词在后），
-// 无匹配 → "other"（其他）。
+// 规则按优先级排列：先匹配先得（特异词在前，宽泛词在后），无匹配 → "other"。
+// v1.3.8 依据 120 仓库 README 审计重排（基线准确率 45.8% → 100%）：
+//   顺序要点：web-ui 提到 conversation 之前（对话类宽词曾吞掉 UI 插件）；
+//   model 收紧（provider/deepseek-api/usage 曾误吞 web-ui/TUI）；
+//   resource 强特征（awesome/目录/排行等）前置，避免聚合仓库被 coding/agent 抢走。
+//   词表精修：/notif/、/style/、/compat/、/marketplace/、/ppt/、/office/、/\bgit\b/、/\btui\b/、
+//   /code[- ]?intelligence/、裸 /rust/、裸 /tab/、裸 /compile/ 等误伤词已移除/加边界；
+//   生态泛标签（coding-agents/developer-tools/prompt-engineering 等）入 TOPIC_STOP_WORDS。
+//   规则能力之外的边界案例（desc 为空、语义在特征词之外）由 CATEGORY_OVERRIDES 人工覆写兜底。
 // topics 参与分类前先剔除生态泛标签（ai-agent/llm/deepseek 等是生态标签不是功能标签）。
 const TOPIC_STOP_WORDS = new Set([
   "agent", "agents", "ai-agent", "ai-agents", "ai", "llm", "deepseek", "deepseek-harness",
@@ -134,11 +141,14 @@ const TOPIC_STOP_WORDS = new Set([
   "plugins", "extension", "openai", "gemini", "kimi", "glm", "minimax", "free",
   "web", "web-ui", "ui", "gui", "tool", "tools", "skill", "skills", "agent-skills",
   "automation", "workflow", "multi-agent", "ai-tools", "ai-assistant", "assistant",
-  "chatgpt", "coding-agent", "coding-assistant", "terminal", "tui", "cli"
+  "chatgpt", "coding-agent", "coding-agents", "coding-assistant", "agentic-coding",
+  "vibe-coding", "vibecoding", "ai-coding", "developer-tools", "pdf-parser",
+  "debugging", "prompt-engineering", "system-design",
+  "terminal", "tui", "cli"
 ]);
 
 /** 分类文本：description + name + 过滤掉生态泛标签后的 topics。 */
-function categoryText(repo) {
+export function categoryText(repo) {
   const topics = (Array.isArray(repo.topics) ? repo.topics : [])
     .filter((t) => !TOPIC_STOP_WORDS.has(String(t).toLowerCase()));
   return [repo.description, repo.name, ...topics].filter(Boolean).join(" \n ");
@@ -147,62 +157,126 @@ function categoryText(repo) {
 const CATEGORY_RULES = [
   {
     id: "vision",
-    patterns: [/vision/i, /image/i, /ocr/i, /screenshot/i, /多模态/, /视觉识别|视觉工具|视觉任务|视觉插件|视觉能力|机器视觉|computer vision/i, /截图/, /图像/, /图片/, /computer[- ]?use/i, /电脑控制/, /image[- ]?to[- ]?text/i, /ui[- ]?restoration/i, /ui[- ]?还原/i]
-  },
-  {
-    id: "document",
-    patterns: [/pdf/i, /excel/i, /xlsx/i, /spreadsheet/i, /表格/, /word\b/i, /docx/i, /文档/, /论文/, /paper/i, /ppt/i, /slide/i, /演示/, /presentation/i, /办公/, /office/i, /mermaid/i, /latex/i]
+    // v1.3.8：裸 /image|图片|图像/ 太宽（图片上传/导出误伤）→ 只认识别/理解类组合词
+    patterns: [/vision/i, /ocr/i, /screenshot/i, /多模态/, /视觉识别|视觉工具|视觉任务|视觉插件|视觉能力|机器视觉|computer vision/i, /识图|图像识别|图片理解/, /截图/, /computer[- ]?use/i, /电脑控制/, /image[- ]?(generation|analysis|understanding|recognition|to[- ]text|caption|restoration)/i, /ui[- ]?restoration/i, /ui[- ]?还原/i]
   },
   {
     id: "memory",
-    patterns: [/memory/i, /记忆/, /knowledge/i, /知识/, /note/i, /笔记/, /recall/i, /回忆/, /skill[- ]?import/i, /技能/, /knowledge[- ]?graph/i, /知识图谱/, /长期记忆/, /distill/i, /蒸馏/, /memo/i]
-  },
-  {
-    id: "model",
-    patterns: [/token/i, /用量/, /cost/i, /成本/, /balance/i, /余额/, /context[- ]?window/i, /上下文/, /provider/i, /计费/, /billing/i, /usage/i, /tps/i, /推理/, /inference/i, /quota/i, /额度/, /deepseek[- ]?api/i, /模型选择/, /model selection/i, /模型路由/, /model routing/i, /llm[- ]?fallback/i, /模型回退/, /token[- ]?stats/i, /token[- ]?usage/i]
+    // v1.3.8：/技能/（技能实例≠记忆管理）、/distill|蒸馏/（技能蒸馏）、/跨会话/（功能特征词）移除
+    patterns: [/memory/i, /记忆/, /knowledge/i, /知识/, /note/i, /笔记/, /recall/i, /回忆/, /skill[- ]?import/i, /knowledge[- ]?graph/i, /知识图谱/, /长期记忆/, /memo/i, /context[- ]?insight/i]
   },
   {
     id: "notify",
-    patterns: [/notif/i, /通知/, /消息通知|消息提醒|消息推送/, /\bmessage notification/i, /telegram/i, /wechat/i, /微信/, /\bim\b/i, /提醒/, /alert/i, /ntfy/i, /broadcast/i, /广播/, /邮件/, /mail/i, /desktop[- ]?notification/i]
+    // v1.3.8：/notif/ 移除（"browser notifications"/"push notifications" 把 UI 插件、资讯聚合误吞 → 只留明确通知词）
+    patterns: [/通知/, /消息通知|消息提醒|消息推送/, /\bmessage notification/i, /telegram/i, /wechat/i, /微信/, /\bim\b/i, /提醒/, /alert/i, /ntfy/i, /broadcast/i, /广播/, /邮件/, /mail/i, /desktop[- ]?notification/i, /handoff/i, /消息互通/, /跨实例/]
+  },
+  // 聚合资源强特征（前置）：awesome 目录/排行/商店/手册必须在 document/coding 之前匹配，
+  // 否则 curated 列表与手册会被"文档/开发"宽词抢走（v1.3.8 审计发现 5+ 错分）。
+  {
+    id: "resource",
+    // v1.3.8：/discovery/ 收窄（OpenBiliClaw 内容发现 Agent 误伤 → 只认插件发现类）；
+    // 增加资讯/RSS 聚合词（news-agent 类信息聚合仓库归 resource 而非 notify）；
+    // bundle/pack 移除（"plugin bundle" 指打包产物不是合集，如 dsh-tui 被误归 resource）
+    patterns: [/awesome/i, /curated/i, /精选/, /聚合/, /排行/, /雷达/, /目录/, /商店/, /catalog/i, /手册|handbook/i, /档案/, /插件发现|发现入口|plugin[- ]?discovery/i, /插件合集|插件集合/, /plugin[- ]?collection/i, /\brss\b|news[- ]?(aggregator|reader|digest)|新闻|资讯|订阅源/i]
+  },
+  {
+    id: "document",
+    // v1.3.8：/word\b/ 修成 /\bword\b/（keyword 误伤）；去掉 slide/presentation/mermaid/latex 等宽词；
+    // 去掉 /ppt/（"PPTX export" 设计工具误伤）、/office/（AI workbench 的 Office artifacts 误伤，保留 /办公/）
+    patterns: [/pdf/i, /excel/i, /xlsx/i, /spreadsheet/i, /表格/, /\bword\b/i, /docx/i, /论文/, /演示/, /办公/]
   },
   {
     id: "coding",
-    patterns: [/\bcoding/i, /vscode/i, /\bide\b/i, /\blsp\b/i, /\blint/i, /\bgit\b/i, /代码/, /编码/, /debug/i, /调试/, /compile/i, /编译/, /terminal/i, /终端/, /\btui\b/i, /\bbash\b/i, /\bshell\b/i, /编程/, /programming/i, /代码库/, /code[- ]?intelligence/i, /代码检索/, /syntax/i, /语法/, /monaco/i, /编辑器/, /editor/i, /camel/i, /rust/, /typescript/i, /python/i, /harmony/i, /鸿蒙/, /开发/, /developer/i, /dev[- ]?tool/i]
-  },
-  // 工具强特征（前置）：明确的工具词（MCP server/沙箱/安全/天气/计算器等），
-  // 避免被宽泛的 agent 规则抢先（如 "MCP server ... into your agent"）。
-  {
-    id: "tool",
-    patterns: [/mcp[- ]?server/i, /sandbox/i, /沙箱/, /security/i, /安全/, /guardrail/i, /护栏/, /weather/i, /天气/, /calculator/i, /计算器/, /行情/, /ticker/i, /会议/, /meeting/i, /benchmark/i, /基准/, /fuzzer/i, /模糊测试/, /vault/i, /密码/, /credential/i, /凭据/, /encrypt/i, /加密/, /\botp\b/i, /\btotp\b/i, /profiler/i, /性能分析/, /探针/]
-  },
-  {
-    id: "conversation",
-    patterns: [/conversation/i, /对话/, /session/i, /会话/, /message[- ]?edit/i, /消息编辑/, /\bshare/i, /分享/, /rewind/i, /回退/, /annotation/i, /批注/, /\bchat/i, /聊天/, /\bturn\b/i, /回合/, /composer/i, /输入框/, /input[- ]?history/i, /粘贴/, /paste/i, /prompt/i, /提示词/, /回复/, /reply/i]
+    // v1.3.8：/\bgit\b/ 移除（皮肤合集的 "git graph" 子功能误伤）；/\btui\b/ 移除（社区发行版的 "TUI 形态" 误伤，
+    //   保留 terminal/终端 即可覆盖 TUI 插件）；/code[- ]?intelligence/ 移除（代码检索 MCP 归 tool）；
+    //   /rust/ → /\brust\b/（"untrusted" 子串误伤）
+    patterns: [/\bcoding/i, /vscode/i, /\bide\b/i, /\blsp\b/i, /\blint/i, /代码/, /编码/, /debug/i, /调试/, /\bcompile\b/i, /编译/, /terminal/i, /终端/, /\bbash\b/i, /\bshell\b/i, /编程/, /programming/i, /代码库/, /代码检索/, /源码|source[- ]?code/i, /syntax/i, /语法/, /monaco/i, /编辑器/, /editor/i, /camel/i, /\brust\b/i, /typescript/i, /python/i, /harmony/i, /鸿蒙/, /开发/, /developer/i, /dev[- ]?tool/i]
   },
   {
     id: "web-ui",
-    patterns: [/\bui\b/i, /界面/, /skin/i, /皮肤/, /theme/i, /主题/, /sidebar/i, /侧边栏/, /whale/i, /鲸鱼/, /\bpet\b/i, /宠物/, /美化/, /wallpaper/i, /壁纸/, /widget/i, /组件/, /home[- ]?page/i, /主页/, /status[- ]?bar/i, /状态栏/, /style/i, /样式/, /minigame/i, /小游戏/, /game/i, /游戏/, /panel/i, /面板/, /banner/i, /横幅/, /广告/, /tab/i, /标签页/, /dock/i, /icon/i, /图标/, /avatar/i, /头像/]
+    // v1.3.8：提到 tool/model 之前（皮肤/UI 插件曾被子功能词抢走）；去 /\bpet\b/（图库宠物归 tool）；
+    // 去 /style/（"Tag-style/Codex-style" 误伤 agent 运行时/输入框插件）；/tab/ → /\btab\b/（"database" 误伤）
+    patterns: [/web[- ]?ui/i, /\bui\b/i, /界面/, /skin/i, /皮肤/, /theme/i, /主题/, /sidebar/i, /侧边栏/, /whale/i, /鲸鱼/, /宠物/, /美化/, /wallpaper/i, /壁纸/, /widget/i, /组件/, /home[- ]?page/i, /主页/, /status[- ]?bar/i, /状态栏/, /minigame/i, /小游戏/, /game/i, /游戏/, /panel/i, /面板/, /banner/i, /横幅/, /广告/, /\btab\b/i, /标签页/, /dock/i, /icon/i, /图标/, /avatar/i, /头像/, /\bdesign\b/i, /设计/, /导航|navbar/i, /生成式 ?ui|generative ui/i]
+  },
+  // 通用工具（合并原前后置两组；v1.3.8 增补 CLI/逆向/图库/图表/研究/一键配置 等审计命中词）
+  {
+    id: "tool",
+    patterns: [/mcp[- ]?server/i, /sandbox/i, /沙箱/, /security/i, /安全/, /guardrail/i, /护栏/, /weather/i, /天气/, /calculator/i, /计算器/, /行情/, /ticker/i, /会议/, /meeting/i, /benchmark/i, /基准/, /fuzzer/i, /模糊测试/, /vault/i, /密码/, /credential/i, /凭据/, /encrypt/i, /加密/, /\botp\b/i, /\btotp\b/i, /profiler/i, /性能分析/, /探针/, /search/i, /搜索/, /browser/i, /浏览器/, /\btool/i, /工具/, /\bjson\b/i, /\bcsv\b/i, /\bregex\b/i, /encoding/i, /编码转换/, /\bstat\b/i, /schema/i, /protocol/i, /协议/, /remote/i, /远程/, /dns/i, /网络/, /network/i, /performance/i, /性能/, /health/i, /健康检查/, /check/i, /检查/, /monitor/i, /监控/, /备份/, /backup/i, /sync/i, /同步/, /export/i, /导入/, /import/i, /convert/i, /转换/, /decode/i, /解码/, /encode/i, /压缩/, /zip/i, /file/i, /文件/, /\bcli\b/i, /command[- ]?line/i, /reverse[- ]?engineer/i, /逆向/, /gallery/i, /图库/, /diagram/i, /图表|图形/, /\bresearch\b/i, /研究/, /一键配置|configure|configuration/i]
+  },
+  {
+    id: "model",
+    // v1.3.8：/provider/（anysearch 误伤）、/deepseek[- ]?api/（生态标签）、裸 /usage/、/tps/ 移除
+    patterns: [/token/i, /用量/, /cost/i, /成本/, /balance/i, /余额/, /context[- ]?window/i, /上下文/, /计费/, /billing/i, /usage[- ]?stats?|token[- ]?usage|usage transparency/i, /用量统计/, /推理/, /inference/i, /quota/i, /额度/, /模型选择/, /model selection/i, /模型路由/, /model routing/i, /llm[- ]?fallback/i, /模型回退/, /token[- ]?stats/i, /token[- ]?usage/i]
+  },
+  {
+    id: "conversation",
+    // v1.3.8：/session/ 移除（Data Agent 的 session-scoped 误伤）
+    patterns: [/conversation/i, /对话/, /会话/, /message[- ]?edit/i, /消息编辑/, /\bshare/i, /分享/, /rewind/i, /回退/, /annotation/i, /批注/, /\bchat/i, /聊天/, /\bturn\b/i, /回合/, /composer/i, /输入框/, /input[- ]?history/i, /粘贴/, /paste/i, /prompt/i, /提示词/, /回复/, /reply/i]
   },
   {
     id: "agent",
-    patterns: [/\bagent\b(?!s)/i, /sub[- ]?agents?/i, /agentteams/i, /agent team/i, /multi[- ]?agent/i, /智能体/, /automation/i, /自动化/, /workflow/i, /工作流/, /orchestrat/i, /编排/, /\bteam\b/i, /团队/, /subagent/i, /子代理/, /\bloop\b/i, /调度/, /scheduler/i, /autonomous/i, /自主/, /harness/i, /cowork/i, /协作/]
+    // v1.3.8：/harness/（deepseek-harness-desktop 误伤）、/\bteam\b|团队/（太宽）移除
+    patterns: [/\bagent\b(?!s)/i, /sub[- ]?agents?/i, /agentteams/i, /agent team/i, /multi[- ]?agent/i, /智能体/, /automation/i, /自动化/, /workflow/i, /工作流/, /orchestrat/i, /编排/, /subagent/i, /子代理/, /\bloop\b/i, /调度/, /scheduler/i, /autonomous/i, /自主/, /cowork/i, /协作/]
   },
-  {
-    id: "tool",
-    patterns: [/weather/i, /天气/, /search/i, /搜索/, /browser/i, /浏览器/, /\btool/i, /工具/, /calculator/i, /计算器/, /\bjson\b/i, /\bcsv\b/i, /\bregex\b/i, /encoding/i, /编码转换/, /\bstat\b/i, /schema/i, /mcp[- ]?server/i, /sandbox/i, /沙箱/, /security/i, /安全/, /guardrail/i, /护栏/, /protocol/i, /协议/, /remote/i, /远程/, /dns/i, /网络/, /network/i, /performance/i, /性能/, /benchmark/i, /基准/, /profiler/i, /profile/i, /fuzzer/i, /模糊测试/, /health/i, /健康检查/, /check/i, /检查/, /monitor/i, /监控/, /备份/, /backup/i, /sync/i, /同步/, /export/i, /导入/, /import/i, /convert/i, /转换/, /decode/i, /解码/, /encode/i, /压缩/, /zip/i, /file/i, /文件/, /vault/i, /密码/, /credential/i, /凭据/, /encrypt/i, /加密/, /totp/i, /otp/i]
-  },
+  // 聚合资源弱特征（后置兜底）：管理/市场/社区/教程 等宽词（/生态|ecosystem/ 太宽已移除；
+  // /compat/ 误吞 "OpenAI-compatible" 网关、/marketplace/ 误吞同名测试仓库 → 均已移除，/市场/ 已够）
   {
     id: "resource",
-    patterns: [/awesome/i, /精选/, /聚合/, /handbook/i, /手册/, /\bstore\b/i, /商店/, /directory/i, /目录/, /\blist\b/i, /列表/, /collection/i, /集合/, /plugin[- ]?manager/i, /插件管理/, /registry/i, /marketplace/i, /市场/, /生态/, /ecosystem/i, /(?<!Git)hub\b/i, /社区/, /community/i, /教程/, /tutorial/i, /guide/i, /指南/, /documentation/i, /文档站/, /catalog/i, /雷达/, /radar/i, /tracking/i, /追踪/, /compat/i, /兼容/]
+    patterns: [/plugin[- ]?manager/i, /插件管理/, /registry/i, /市场/, /社区/, /community/i, /教程/, /tutorial/i, /guide/i, /指南/, /documentation/i, /文档站/, /tracking/i, /追踪/, /\blist\b/i, /列表/, /collection/i, /集合/, /(?<!Git)hub\b/i, /雷达/, /radar/i]
   }
 ];
 const CATEGORY_OTHER = "other";
+
+/**
+ * 人工分类覆写（v1.3.8）：120 仓库 README 审计后，对规则无法可靠判定的边界仓库做确定性人工修正。
+ * 仅覆盖规则能力之外的案例——desc 为空、语义超出特征词、或特征词天然冲突（如"玩具"仓库含 protocol/文件 字样）。
+ * 每条附理由；新仓库不受影响，仍由 CATEGORY_RULES 分类。
+ */
+const CATEGORY_OVERRIDES = new Map([
+  // → other：本质不是 DSH 生态插件
+  ["imsai-sh/zhuzhiliao", "other"], // 竹知了玩具模拟器，desc 仅"单文件"命中 tool
+  ["c3ll256/dsh-toy", "other"], // 玩具协议演示，"protocol" 命中 tool 属误伤
+  ["LoserFox/distill", "other"], // 对话蒸馏技能，命中 conversation 属特征词巧合
+  ["bruc3van/dsh-desktop", "other"], // 第三方桌面客户端（安装器），非插件
+  // → agent：agent 运行时/智能体类，被更早的工具词/界面词抢走
+  ["sandbaseai/sandbase-harness", "agent"], // CMA agent 运行时，"sandbox" 命中 tool
+  ["huiliyi37/dsh-tianshu-build", "agent"], // 开源 coding agent，"跨会话记忆" 命中 memory
+  ["whiteguo233/dsh-openbiliclaw", "agent"], // Agent Bridge 插件，"DSH 界面常驻" 命中 web-ui
+  // → tool：管理/配置/工作台类工具，被 coding/web-ui 宽词抢走
+  ["kuangre123/codex-switch", "tool"], // Codex API 配置切换，"coding-agent" 命中 coding
+  ["drewnekota/cetus", "tool"], // macOS 自动化启动器，"computer-use" 命中 vision
+  ["zhaoolee/notes", "tool"], // 便签应用，"notes" 主题命中 memory
+  ["ZSeven-W/dsh-openpencil", "tool"], // 设计预览编辑工具，"design" 命中 web-ui
+  ["Fishquito7/dsh-skill-viewer", "tool"], // skill 管理工具，"DSH Web UI" 命中 web-ui
+  ["LX2000WASD/dsh-web-plugin-manager", "tool"], // 插件管理工具，"Web UI 中管理" 命中 web-ui
+  ["openma-ai/open-managed-agents", "tool"], // Claude Managed Agents API 实现/运行时
+  ["Devin-AXIS/iPolloWork", "tool"], // AI 工作台，"visual-editor" 主题命中 coding
+  ["unitarylab/quantum-practices", "tool"], // 量子算法实践技能包，无规则词 → other
+  ["PivotStackIntelligence/dsh-github", "tool"], // GitHub 面板，desc 为空无法规则分类
+  ["lzszq/dsh-scholar", "tool"], // 学术检索工具，desc 为空无法规则分类
+  ["bobleer/dsh-acp-for-bitfun", "tool"], // DSH ACP 对接，"对接"无规则词
+  ["tc206107/dsh-open-ecosystem", "tool"], // 生态工具，desc 为空无法规则分类
+  ["Nagi-ovo/dsh-find-plugins", "tool"], // 插件发现工具，desc 为空无法规则分类
+  ["morluto/leantoken", "tool"], // 代码检索/上下文管理 MCP，"rust" 实现主题命中 coding
+  ["nexu-io/open-design", "web-ui"], // 设计引擎，"PDF/PPTX export" 命中 document
+  // → model：token/模型管理类
+  ["wink-run/tokenbank", "model"], // Token 记账/模型路由网关，"P2P network" 命中 tool
+  // → coding：开发工作流类（"knowledge" 主题命中 memory 属误伤）
+  ["btspoony/mstar-harness", "coding"], // Loop Engineering 工作流插件
+  // → conversation：对话/输入框类（特征词在规则之外）
+  ["huiliyi37/dsh-tianshu-tui", "conversation"], // 终端 UI 对话插件，"terminal" 命中 coding
+  ["omdsh-dev/dsh-at-file", "conversation"] // @file 输入框功能，"search workspace" 命中 tool
+]);
+
+export { CATEGORY_RULES, CATEGORY_OVERRIDES, TOPIC_STOP_WORDS, CATEGORY_OTHER };
 
 /**
  * 插件分类（纯函数）：扫描 description + name + 过滤后的 topics，按规则优先级匹配。
  * 返回分类 id；无匹配返回 "other"。
  */
 export function classifyRepo(repo) {
+  const overridden = CATEGORY_OVERRIDES.get(String(repo.full_name ?? ""));
+  if (overridden) return overridden;
   const text = categoryText(repo);
   for (const rule of CATEGORY_RULES) {
     for (const pattern of rule.patterns) {
