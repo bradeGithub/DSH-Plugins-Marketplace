@@ -4,10 +4,12 @@
 
 ---
 
-## Unreleased / v1.4.0（插件分类 / Plugin categories）
+## v1.3.3 — 2026-08-14（插件分类上线 + 安装健壮性修复 / Categories & install robustness fixes）
 
 - **插件分类**：registry 构建时按 description + name + 过滤后的 topics 做关键词规则分类（零额外 API，无需读 README），输出 `category` 字段（vision / document / memory / model / notify / coding / conversation / web-ui / agent / tool / resource / other）——生态泛标签（ai-agent/llm/deepseek 等）不参与分类，规则按优先级匹配，无法分类的归「其他」/ plugin categories: built into the registry at build time from description + name + filtered topics (zero extra API calls, no README reading) — `category` field (vision/document/memory/model/notify/coding/conversation/web-ui/agent/tool/resource/other); ecosystem-wide tags (ai-agent/llm/deepseek…) are excluded, rules match by priority, unmatched repos go to «other»
 - **前端分类筛选**：DSH 插件 tab 新增分类 chips（全部 + 12 类），点击筛选，可与搜索词联合过滤；卡片名称旁显示分类徽章 / category filter chips added to the plugins tab (All + 12 categories), combinable with the search box; cards show a category badge
+- **修复分类筛选全部匹配 0**：服务端 `normalizeRepo` 未透传 registry.json 的 `category` 字段，导致客户端每个插件都按「其他」处理——点击任一具体分类均显示「匹配 0 个」，卡片分类徽章也全部消失；现已透传并做 12 类白名单校验 / category filter matched 0 for every category: the server's `normalizeRepo` dropped the `category` field from registry.json, so every plugin fell back to «other» — every category chip matched nothing and card badges vanished; the field now passes through with a 12-key whitelist check
+- **分类空态文案**：仅按分类筛选（搜索框为空）时显示「该分类下暂无插件」，不再出现「没有匹配「」的插件」/ category-only empty state now shows «No plugins in this category» instead of a message with empty quotes
 - **包名冲突与源码型插件修复**（漏洞发现与修复方案由 **bubble-w8** 提供，见 PR #3；修复经评审并结合进本仓库）：/ pkg-name conflicts & source-only plugins fixed (vulnerability report and fix design by **bubble-w8**, PR #3; merged after review):
   - **pkg_name 冲突消解**：同名 npm 包在 node_modules 安装目标互斥——列表只保留一个（已安装优先，其次 Star 高者），索引构建期同步去重（40+ 组冲突实测归零）；「已安装」识别之后再去重，避免隐藏手动安装的低 Star 仓库 / pkg_name conflict resolution: same-name npm packages share one node_modules target — only one entry is kept (installed first, then higher stars), dedup also applied at index build time (40+ conflict groups measured to zero); dedup runs after installed-detection so manually installed low-star repos stay visible
   - **源码型插件构建**：只提交源码（main / client bundle 缺失，含 conditional exports 形态）的插件安装前弹窗确认，允许则 pnpm/npm 装依赖并执行 build；构建路径不清洗 `link:`/`workspace:` 依赖（pnpm 原生支持，清洗会破坏 monorepo 构建）/ source-only plugin builds: plugins shipping source only (missing main / client bundle, including conditional-exports shapes) ask for confirmation and run `install && build`; the build path keeps `link:`/`workspace:` deps intact (pnpm-native, stripping them breaks monorepo builds)
