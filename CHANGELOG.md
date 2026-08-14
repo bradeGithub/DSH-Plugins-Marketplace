@@ -4,6 +4,13 @@
 
 ---
 
+## v1.3.1 — 2026-08-14（插件列表全量修复 / Full plugin registry fix）
+
+- **插件列表突破 1000 条上限**：`registry.json` 从 999 条扩展至 **1500+ 条**（实测 1552）——dsh 模式此前沿用单 query 分页，被 GitHub Search API 单 query 1000 条硬上限截断（且把截断误判为「完整」）；v1.3.1 起 dsh / skills 模式统一使用「stars 分段 + 时间窗口二分」全量抓取，插件市场与 GitHub 实况对齐 / plugin list now exceeds 1000: `registry.json` grew from 999 to **1500+ repos** (1552 measured) — the dsh build previously used single-query pagination, silently truncated by the Search API 1000/query cap (and mislabeled as complete); since v1.3.1 both dsh and skills modes use the «stars segments + time-window bisection» full crawl, aligning the marketplace with GitHub
+- **部分结果不再冒充完整**：分段抓取单页失败（限流/网络）标记 `failed` 并停止分裂，索引标记 `partial-merge` 且保留旧条目合并，杜绝截断数据标成 `full` / partial results are no longer labeled complete: segment page failures (rate limit/network) flag `failed` and stop splitting, the index becomes `partial-merge` and keeps old entries — truncated data can never claim `full`
+
+---
+
 ## Unreleased / v1.4.0（插件分类 / Plugin categories）
 
 - **插件分类**：registry 构建时按 description + name + 过滤后的 topics 做关键词规则分类（零额外 API，无需读 README），输出 `category` 字段（vision / document / memory / model / notify / coding / conversation / web-ui / agent / tool / resource / other）——生态泛标签（ai-agent/llm/deepseek 等）不参与分类，规则按优先级匹配，无法分类的归「其他」/ plugin categories: built into the registry at build time from description + name + filtered topics (zero extra API calls, no README reading) — `category` field (vision/document/memory/model/notify/coding/conversation/web-ui/agent/tool/resource/other); ecosystem-wide tags (ai-agent/llm/deepseek…) are excluded, rules match by priority, unmatched repos go to «other»
