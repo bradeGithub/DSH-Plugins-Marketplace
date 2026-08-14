@@ -262,6 +262,16 @@ function setupUrlRewrite(owner, repoName) {
   check("e2e manual 结果状态", r.body && r.body.status, "manual");
   check("e2e manual 结果类型", r.body && r.body.type, "instructions");
 
+  // 卡死对话框回归：awaiting-input 回环复用克隆缓存（二次请求不重复克隆，
+  // 消除「提交确认后长时间运行中且无法关闭」的窗口）；cancel 后 mutex 释放。
+  r = await postInstall("e2e-owner/demo-manual", {});
+  check("e2e manual 二次等待输入", r.body && r.body.status, "awaiting-input");
+  r = await postInstall("e2e-owner/demo-manual", { __confirm_manual__: "cancel" });
+  check("e2e manual cancel → aborted", r.body && r.body.status, "aborted");
+  check("e2e manual 回环零克隆", (r.body?.log ?? []).filter((l) => l.includes("克隆完成")).length, 0);
+  r = await postInstall("e2e-owner/demo-manual", {});
+  check("e2e manual cancel 后 mutex 释放", r.body && r.body.status, "awaiting-input");
+
   // ---- install handler 状态分支：405 / 413 / 409 ----
   // 405：非 POST 请求（在 readJsonBody 之前短路）
   const mReq = {
