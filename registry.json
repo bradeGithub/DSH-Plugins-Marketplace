@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-08-14T14:48:48.227Z",
-  "count": 1785,
+  "generated_at": "2026-08-14T15:41:39.718Z",
+  "count": 1784,
   "source": "partial-merge",
   "repos": [
     {
@@ -121,7 +121,8 @@
       ],
       "license": "NOASSERTION",
       "registry_seen_at": "2026-08-14T13:15:59.718Z",
-      "category": "tool"
+      "category": "tool",
+      "installable": "non-plugin"
     },
     {
       "full_name": "crafter-station/petdex",
@@ -151,7 +152,8 @@
       ],
       "license": "MIT",
       "registry_seen_at": "2026-08-14T13:15:59.718Z",
-      "category": "tool"
+      "category": "tool",
+      "installable": "non-plugin"
     },
     {
       "full_name": "imsai-sh/zhuzhiliao",
@@ -255,7 +257,8 @@
       ],
       "license": "Apache-2.0",
       "registry_seen_at": "2026-08-14T13:15:59.718Z",
-      "category": "web-ui"
+      "category": "web-ui",
+      "installable": "non-plugin"
     },
     {
       "full_name": "liustack/modlens",
@@ -466,7 +469,8 @@
       ],
       "license": "CC0-1.0",
       "registry_seen_at": "2026-08-14T13:15:59.718Z",
-      "category": "resource"
+      "category": "resource",
+      "installable": "non-plugin"
     },
     {
       "full_name": "hellowind777/helloagents",
@@ -784,7 +788,8 @@
       "registry_seen_at": "2026-08-14T11:21:37.129Z",
       "pkg_name": "flowix",
       "version": "1.1.15",
-      "category": "memory"
+      "category": "memory",
+      "installable": "non-plugin"
     },
     {
       "full_name": "cofy-x/axern",
@@ -1497,7 +1502,8 @@
       ],
       "license": null,
       "registry_seen_at": "2026-08-14T13:15:59.718Z",
-      "category": "resource"
+      "category": "resource",
+      "installable": "non-plugin"
     },
     {
       "full_name": "Alex-Yanggg/awesome-DSH-plugin",
@@ -2574,7 +2580,8 @@
       ],
       "license": "Apache-2.0",
       "registry_seen_at": "2026-08-14T13:15:59.718Z",
-      "category": "tool"
+      "category": "tool",
+      "installable": "manual"
     },
     {
       "full_name": "william-jin-cmu/dsh-vision",
@@ -3842,7 +3849,8 @@
       ],
       "license": "MIT",
       "registry_seen_at": "2026-08-14T13:15:59.718Z",
-      "category": "web-ui"
+      "category": "web-ui",
+      "installable": "manual"
     },
     {
       "full_name": "cyijun/surfing-plugin",
@@ -7867,7 +7875,8 @@
       ],
       "license": "BSD-3-Clause",
       "registry_seen_at": "2026-08-14T13:15:59.718Z",
-      "category": "tool"
+      "category": "tool",
+      "installable": "manual"
     },
     {
       "full_name": "morluto/gitcontribute",
@@ -9108,7 +9117,8 @@
       ],
       "license": "MIT",
       "registry_seen_at": "2026-08-14T13:15:59.718Z",
-      "category": "agent"
+      "category": "agent",
+      "installable": "manual"
     },
     {
       "full_name": "jiruidai/dsh-meta-orchestrator",
@@ -11556,7 +11566,8 @@
       ],
       "license": "Apache-2.0",
       "registry_seen_at": "2026-08-14T13:15:59.718Z",
-      "category": "tool"
+      "category": "tool",
+      "installable": "manual"
     },
     {
       "full_name": "InklingYoshi584/dsh-tool-hashline",
@@ -15444,7 +15455,8 @@
       ],
       "license": null,
       "registry_seen_at": "2026-08-14T13:15:59.718Z",
-      "category": "tool"
+      "category": "tool",
+      "installable": "manual"
     },
     {
       "full_name": "anweat/dsh-plugin-dev-guide",
@@ -17614,8 +17626,7 @@
       "registry_seen_at": "2026-08-14T13:15:59.720Z",
       "pkg_name": "dsh-usage-meter",
       "version": "0.1.0",
-      "category": "model",
-      "installable": "non-plugin"
+      "category": "model"
     },
     {
       "full_name": "omdsh-dev/toybox",
@@ -17637,7 +17648,8 @@
       "registry_seen_at": "2026-08-14T13:15:59.720Z",
       "pkg_name": "dsh-toybox",
       "version": "0.1.0-rc.2",
-      "category": "other"
+      "category": "other",
+      "installable": "non-plugin"
     },
     {
       "full_name": "huguangyu666/dsh-plugin-session-import",
@@ -21644,7 +21656,8 @@
       "registry_seen_at": "2026-08-14T13:15:59.720Z",
       "pkg_name": "intent-flow",
       "version": "0.7.0",
-      "category": "coding"
+      "category": "coding",
+      "installable": "non-plugin"
     },
     {
       "full_name": "cesaryike/dsh-image-to-path",
@@ -28693,8 +28706,7 @@
       "registry_seen_at": "2026-08-14T13:15:59.719Z",
       "pkg_name": "loongport",
       "version": "0.1.0",
-      "category": "tool",
-      "installable": "non-plugin"
+      "category": "tool"
     },
     {
       "full_name": "jinhuang712/dsh-survey",
@@ -35995,28 +36007,6 @@
       "version": "0.1.0-rc.1",
       "category": "tool",
       "installable": "non-plugin"
-    },
-    {
-      "full_name": "zhijun-dai/dsh-Solarized",
-      "name": "dsh-Solarized",
-      "description": "Solarized + Selenized themes for DeepSeek Harness (dsh): four faithful palettes registered into the theme runtime, with a Settings picker row and canonical code-block syntax colors",
-      "html_url": "https://github.com/zhijun-dai/dsh-Solarized",
-      "stargazers_count": 0,
-      "updated_at": "2026-08-14T13:13:00Z",
-      "default_branch": "main",
-      "topics": [
-        "deepseek-harness",
-        "dsh-plugin",
-        "plugin",
-        "selenized",
-        "solarized",
-        "theme"
-      ],
-      "license": "NOASSERTION",
-      "registry_seen_at": "2026-08-14T13:15:59.719Z",
-      "pkg_name": "dsh-solarized",
-      "version": "0.1.0",
-      "category": "coding"
     },
     {
       "full_name": "WJNCT55555/dsh-web-preview-float",

@@ -124,14 +124,17 @@ async function main() {
   let repos = registry.repos;
   if (LIMIT > 0) repos = repos.slice(0, LIMIT);
 
-  // 断点续跑：已有结论的仓库跳过
+  // 断点续跑：已有**非 pending** 结论的仓库跳过（pending=unknown 的条目下次重试）
   let results = {};
   try {
     const prev = JSON.parse(await readFile(SNAPSHOT, "utf8"));
     if (Array.isArray(prev.repos)) for (const r of prev.repos) results[r.full_name] = r;
   } catch { /* 首次运行 */ }
 
-  const todo = repos.filter((r) => !results[r.full_name]);
+  const todo = repos.filter((r) => {
+    const e = results[r.full_name];
+    return !e || e.pending === true;
+  });
   console.log(`探测 ${todo.length}/${repos.length} 个仓库（并发 ${CONCURRENCY}，额度护栏 < ${RATE_FLOOR}）...`);
 
   let cursor = 0;
@@ -198,9 +201,9 @@ async function main() {
     }
   };
   await Promise.all(Array.from({ length: CONCURRENCY }, () => worker()));
-  // 兜底：任何原因未探测到的条目记 unknown，保证报告条目与 registry 对齐（续跑可补齐）
+  // 兜底：任何原因未探测到的条目记 unknown+pending（保证报告条目与 registry 对齐；续跑自动重试）
   for (const r of todo) {
-    if (!results[r.full_name]) results[r.full_name] = { full_name: r.full_name, verdict: "unknown" };
+    if (!results[r.full_name]) results[r.full_name] = { full_name: r.full_name, verdict: "unknown", pending: true };
   }
   await writeFile(SNAPSHOT, JSON.stringify({ repos: [...Object.values(results)] }, null, 2), "utf8").catch(() => {});
 
