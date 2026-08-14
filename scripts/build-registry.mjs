@@ -212,6 +212,34 @@ export function classifyRepo(repo) {
   return CATEGORY_OTHER;
 }
 
+/**
+ * pkg_name 冲突消解（纯函数）：同名 npm 包在 node_modules 的安装目标互斥（同目录互相覆盖），
+ * 索引并列会误导（显示两张卡、装一个盖掉另一个，如 dsh-archive-viewer 的 keepermttl/csiroqa）。
+ * 保留 Star 高者，低者移入 dropped。无 pkg_name 的条目按 full_name 天然唯一，不参与冲突。
+ * @returns {{ repos: Array, dropped: string[] }} dropped 为被隐藏条目的 full_name 列表。
+ */
+export function dedupeByPkgName(repos) {
+  const byKey = new Map();
+  const dropped = [];
+  for (const r of repos) {
+    const key = r.pkg_name ? `pkg:${r.pkg_name}` : `repo:${r.full_name}`;
+    const prev = byKey.get(key);
+    if (!prev) {
+      byKey.set(key, r);
+      continue;
+    }
+    const prevStars = prev.stargazers_count ?? 0;
+    const curStars = r.stargazers_count ?? 0;
+    if (curStars > prevStars) {
+      dropped.push(prev.full_name);
+      byKey.set(key, r);
+    } else {
+      dropped.push(r.full_name);
+    }
+  }
+  return { repos: [...byKey.values()], dropped };
+}
+
 /** 构造 star 范围查询串：{ min:100, max:null } → "stars:>=100"；{ min:0, max:0 } → "stars:0"；
  *  带 timeRange 时追加 " pushed:YYYY-MM-DD..YYYY-MM-DD"（单值段的第二维度）；
  *  增量模式（since 非空且无 timeRange）时追加 " pushed:>=YYYY-MM-DD"。 */
@@ -549,7 +577,7 @@ async function main() {
     if (Date.parse(seenAt) < now - STALE_DAYS * 24 * 3600 * 1000) continue;
     merged.set(r.full_name, { ...r, registry_seen_at: seenAt });
   }
-  const repos = [...merged.values()].sort((a, b) => (b.stargazers_count ?? 0) - (a.stargazers_count ?? 0));
+  let repos = [...merged.values()].sort((a, b) => (b.stargazers_count ?? 0) - (a.stargazers_count ?? 0));
 
   // skills 模式：增量继承（控额度的命根子）+ Trees 探测
   if (MODE === "skills") {
@@ -585,6 +613,19 @@ async function main() {
   // dsh 模式：按简介/标签关键词分类（skills 模式本期不分类）
   if (MODE === "dsh") {
     for (const repo of repos) repo.category = classifyRepo(repo);
+  }
+
+  // dsh 模式：pkg_name 冲突消解——同名 npm 包在 node_modules 安装目标互斥，
+  // 索引并列会误导（如 dsh-archive-viewer 的 keepermttl/csiroqa 两个仓库）。
+  // skills 模式不进 node_modules，同名包不冲突，不去重。
+  if (MODE === "dsh") {
+    const { repos: deduped, dropped: droppedRepos } = dedupeByPkgName(repos);
+    if (droppedRepos.length > 0) {
+      for (const fullName of droppedRepos) {
+        log(`pkg_name 冲突：隐藏低 Star 条目 ${fullName}（同名 npm 包只能安装一个，请原作者改名）`);
+      }
+    }
+    repos = deduped;
   }
 
   const out = {

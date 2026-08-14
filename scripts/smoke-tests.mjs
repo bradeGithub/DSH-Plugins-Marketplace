@@ -1,7 +1,10 @@
 // 冒烟测试：验证安全加固与纯函数修复（R1 Host 白名单 / R2 env 最小化 / n3 版本比较等）。
 // 运行：node scripts/smoke-tests.mjs（CI 的 syntax check 步骤同步执行）
-import { compareVersions, isTrustedRequest, isTrustedHost, isSensitiveEnvKey, buildMinimalEnv, buildFilteredEnv, looksLikeDshPlugin } from "../lib/index.js";
-import { classifyTree, shouldInheritProbe, starRangeQuery, midDateStr, splitSegment, classifyRepo } from "./build-registry.mjs";
+import { compareVersions, isTrustedRequest, isTrustedHost, isSensitiveEnvKey, buildMinimalEnv, buildFilteredEnv, looksLikeDshPlugin, dedupeReposByPkgName, needsPluginBuild, hasPatchEntry } from "../lib/index.js";
+import { classifyTree, shouldInheritProbe, starRangeQuery, midDateStr, splitSegment, classifyRepo, dedupeByPkgName } from "./build-registry.mjs";
+import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from "node:fs";
+import { join } from "node:path";
+import { tmpdir } from "node:os";
 
 let pass = 0, fail = 0;
 function check(name, actual, expected) {
@@ -146,6 +149,58 @@ check("resource: 手册", classifyRepo({ description: "DSH 从 0 到 1 深度手
 check("other: 无法分类", classifyRepo({ description: "Random thingamajig", name: "weird-repo", topics: [] }), "other");
 check("other: 空简介", classifyRepo({ description: null, name: "x", topics: [] }), "other");
 check("分类优先级: vision 优先于 coding", classifyRepo({ description: "vision OCR toolkit for coding agents", name: "agent-vision-toolkit", topics: ["vision"] }), "vision");
+
+// ---- PR#3: pkg_name 冲突消解（索引构建 + 运行时）----
+check("构建期冲突保留高 Star", dedupeByPkgName([
+  { full_name: "a/x", pkg_name: "shared", stargazers_count: 1 },
+  { full_name: "b/x", pkg_name: "shared", stargazers_count: 5 }
+]).repos.map((r) => r.full_name), ["b/x"]);
+check("构建期 dropped 记录低 Star", dedupeByPkgName([
+  { full_name: "a/x", pkg_name: "shared", stargazers_count: 1 },
+  { full_name: "b/x", pkg_name: "shared", stargazers_count: 5 }
+]).dropped, ["a/x"]);
+check("无 pkg_name 不参与冲突", dedupeByPkgName([
+  { full_name: "a/x", pkg_name: null, stargazers_count: 1 },
+  { full_name: "b/x", pkg_name: null, stargazers_count: 5 }
+]).repos.length, 2);
+const dupRepos = [
+  { full_name: "a/lo", pkg_name: "shared", stargazers_count: 2 },
+  { full_name: "b/hi", pkg_name: "shared", stargazers_count: 10 },
+  { full_name: "c/solo", pkg_name: null, stargazers_count: 0 }
+];
+check("运行时默认保留高 Star", dedupeReposByPkgName(dupRepos).map((r) => r.full_name), ["b/hi", "c/solo"]);
+check("运行时已安装优先保留", dedupeReposByPkgName(dupRepos, (r) => r.full_name === "a/lo").map((r) => r.full_name), ["a/lo", "c/solo"]);
+
+// ---- PR#3: needsPluginBuild（源码型插件判定）----
+const tmpSmoke = mkdtempSync(join(tmpdir(), "dsh-mp-smoke-"));
+try {
+  const srcOnly = join(tmpSmoke, "src-only");
+  mkdirSync(srcOnly);
+  writeFileSync(join(srcOnly, "package.json"), JSON.stringify({
+    name: "x",
+    main: "lib/index.js",
+    scripts: { build: "tsdown" },
+    exports: { "./client": { default: "./lib/client.js" } }
+  }));
+  check("main 缺失 → 需要构建", await needsPluginBuild(srcOnly), true);
+  mkdirSync(join(srcOnly, "lib"));
+  writeFileSync(join(srcOnly, "lib/index.js"), "//x");
+  writeFileSync(join(srcOnly, "lib/client.js"), "//x");
+  check("产物齐全 → 无需构建", await needsPluginBuild(srcOnly), false);
+  writeFileSync(join(srcOnly, "package.json"), JSON.stringify({ name: "x", main: "lib/index.js" }));
+  check("无 build 脚本 → 无需构建", await needsPluginBuild(srcOnly), false);
+  writeFileSync(join(srcOnly, "package.json"), JSON.stringify({ name: "x", scripts: { build: "tsdown" } }));
+  check("无 main/client 入口 → 无需构建", await needsPluginBuild(srcOnly), false);
+} finally {
+  rmSync(tmpSmoke, { recursive: true, force: true });
+}
+
+// ---- PR#3: hasPatchEntry scoped 包引号兼容 ----
+check("引号形式命中", hasPatchEntry('  - insert:\n    - id: x\n      name: "@a/b"\n', "@a/b"), true);
+check("单引号形式命中", hasPatchEntry("      name: '@a/b'\n", "@a/b"), true);
+check("无引号形式命中", hasPatchEntry("      name: @a/b\n", "@a/b"), true);
+check("不同包名不命中", hasPatchEntry("      name: other\n", "@a/b"), false);
+check("前缀子串不误伤", hasPatchEntry("      name: @a/bc\n", "@a/b"), false);
 
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail === 0 ? 0 : 1);
