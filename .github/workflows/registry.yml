@@ -69,9 +69,11 @@ jobs:
             exit 0
           fi
           git commit -m "chore: update registry.json"
-          # 远端可能已被作者或其他提交推进：先 rebase 再推，最多重试 3 次
+          # 远端可能已被作者或其他提交推进：先 rebase 再推，最多重试 3 次。
+          # -X theirs：索引文件（registry.json/skills.json）冲突时保留 CI 刚构建的版本
+          # （CI 数据最新），否则 rebase 因 content 冲突失败、3 次重试全挂（job 失败）。
           for i in 1 2 3; do
-            if git pull --rebase origin main >/dev/null 2>&1 && git push origin main >/dev/null 2>&1; then
+            if git pull --rebase -X theirs origin main >/dev/null 2>&1 && git push origin main >/dev/null 2>&1; then
               echo "已提交更新"
               exit 0
             fi
