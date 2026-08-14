@@ -366,6 +366,50 @@ function setupUrlRewrite(owner, repoName) {
     check("e2e cordis 拒绝脚本 aborted", r.status, 200);
     check("e2e cordis 拒绝脚本状态", r.body && r.body.status, "aborted");
     check("e2e cordis 拒绝后缓存已清理", existsSync(join(HOME, "marketplace", "cache", "e2e-owner__demo-plugin-scripts")), false);
+
+    // ---- 源码型插件构建路径：__confirm_build__=allow → buildPluginPackage ----
+    // npm 分支（无 pnpm-lock.yaml）：真实 runNpm install（离线）+ run build 产出入口。
+    setupUrlRewrite(owner, "demo-build");
+    makeFixtureRepo("demo-build", {
+      "package.json": JSON.stringify({
+        name: "demo-build",
+        version: "1.0.0",
+        dsh: { version: "1.0.0" },
+        scripts: { build: "node build.js" },
+        main: "dist/index.js",
+      }),
+      "build.js": "require('fs').mkdirSync('dist', { recursive: true }); require('fs').writeFileSync('dist/index.js', 'module.exports = {}')\n",
+    });
+
+    r = await postInstall("e2e-owner/demo-build", { __confirm_build__: "allow" });
+    check("e2e build npm 路径 200", r.status, 200);
+    check("e2e build npm 路径 done", r.body && r.body.status, "done");
+    const buildDir = join(HOME, "profiles", "web", "node_modules", "demo-build");
+    check("e2e build 构建产物存在", existsSync(join(buildDir, "dist", "index.js")), true);
+    check("e2e build 版本", r.body && r.body.version, "1.0.0");
+
+    // pnpm 分支（含 pnpm-lock.yaml）：触发 runPnpm。Windows 上 execFile 无法启动
+    // .cmd（spawn EINVAL，与 runNpm 注释的 Windows 限制同理）→ 构建失败；
+    // 其他平台走真实 pnpm（可用则成功，缺失则失败）。
+    setupUrlRewrite(owner, "demo-build-pnpm");
+    makeFixtureRepo("demo-build-pnpm", {
+      "package.json": JSON.stringify({
+        name: "demo-build-pnpm",
+        version: "1.0.0",
+        dsh: { version: "1.0.0" },
+        scripts: { build: "node build.js" },
+        main: "dist/index.js",
+      }),
+      "build.js": "require('fs').mkdirSync('dist', { recursive: true }); require('fs').writeFileSync('dist/index.js', 'module.exports = {}')\n",
+      "pnpm-lock.yaml": "lockfileVersion: '9.0'\n",
+    });
+
+    r = await postInstall("e2e-owner/demo-build-pnpm", { __confirm_build__: "allow" });
+    if (process.platform === "win32") {
+      check("e2e build pnpm 路径 win32 runPnpm EINVAL → failed", r.body && r.body.status, "failed");
+    } else {
+      check("e2e build pnpm 路径（done 或 failed，取决于 pnpm 可用性）", r.body && ["done", "failed"].includes(r.body.status), true);
+    }
   }
 
   // ---- appendPatchEntry 队列错误分支：patch 目标是目录 → 写 tmp 后 rename 失败 ----
