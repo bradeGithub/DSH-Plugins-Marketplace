@@ -15,6 +15,27 @@ A plugin marketplace for [DeepSeek Harness](https://github.com/deepseek-ai/deeps
 
 ---
 
+
+<!-- TOC -->
+- [⚡ Quick install (copy & run)](#quick-install-copy-run)
+- [✨ Features](#features)
+- [📦 Installing this plugin](#installing-this-plugin)
+- [🚀 Usage](#usage)
+- [🔧 How it works](#how-it-works)
+  - [Data source (registry first, search API fallback)](#data-source-registry-first-search-api-fallback)
+  - [Install pipeline (5 steps)](#install-pipeline-5-steps)
+  - [Version detection logic](#version-detection-logic)
+  - [Installed detection (five-way, auto-reconciled on every open)](#installed-detection-five-way-auto-reconciled-on-every-open)
+- [📁 File structure](#file-structure)
+- [📡 HTTP API](#http-api)
+- [⚠️ Security notes](#security-notes)
+- [⚖️ Disclaimer](#disclaimer)
+- [🔄 Known limitations](#known-limitations)
+- [🛠️ Development & maintenance](#development-maintenance)
+- [📝 Changelog](#changelog)
+- [📄 License](#license)
+<!-- /TOC -->
+
 ## ⚡ Quick install (copy & run)
 
 **One sentence to hand to an AI** (any AI with command execution works — no further explanation needed):
