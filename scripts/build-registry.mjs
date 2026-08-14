@@ -607,7 +607,7 @@ async function main() {
   if (process.env.SKIP_ENRICH === "1") {
     log("SKIP_ENRICH=1：跳过 pkg_name 富化");
   } else {
-    await enrichPkgNames(repos);
+    await enrichPkgNames(repos, MODE === "dsh");
   }
 
   // dsh 模式：按简介/标签关键词分类（skills 模式本期不分类）
@@ -641,9 +641,11 @@ async function main() {
   log(`已写入 ${OUT_FILE}：${repos.length} 个仓库（${out.source}${stars ? "，stars 分段全量" : ""}）`);
 }
 
-/** 并发抓取仓库 package.json 的 name 字段写入 pkg_name（已存在的跳过）。 */
-async function enrichPkgNames(repos) {
-  const todo = repos.filter((r) => !r.pkg_name);
+/** 并发抓取仓库 package.json 的 name 字段写入 pkg_name；includeVersion 时顺带抓 version
+ *  （dsh 模式启用——市场「更新」检测用 registry 版本号对比已装版本，不再依赖本地缓存）。
+ *  已存在且无需刷新的仓库跳过（skills 模式保持只补缺，避免每次增量全量重抓 12000+ 仓库）。 */
+async function enrichPkgNames(repos, includeVersion = false) {
+  const todo = repos.filter((r) => (includeVersion ? !r.pkg_name || !r.version : !r.pkg_name));
   if (todo.length === 0) return;
   let cursor = 0;
   const worker = async () => {
@@ -660,12 +662,15 @@ async function enrichPkgNames(repos) {
           if (typeof pkg.name === "string" && pkg.name.length > 0) {
             r.pkg_name = pkg.name;
           }
+          if (includeVersion && typeof pkg.version === "string" && pkg.version.length > 0) {
+            r.version = pkg.version;
+          }
         }
       } catch { /* 网络失败：保持 null */ }
     }
   };
   await Promise.all(Array.from({ length: 8 }, () => worker()));
-  log(`pkg_name 富化完成：${todo.filter((r) => r.pkg_name).length}/${todo.length}`);
+  log(`pkg_name 富化完成：${todo.filter((r) => r.pkg_name).length}/${todo.length}${includeVersion ? `，version ${todo.filter((r) => r.version).length}` : ""}`);
 }
 
 // 直接运行才执行 main（被 smoke-tests import 时只暴露纯函数，无副作用）
