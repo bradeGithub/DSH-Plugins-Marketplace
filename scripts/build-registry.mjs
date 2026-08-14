@@ -153,6 +153,34 @@ export function shouldInheritProbe(repo, old) {
   return Boolean(old && old.updated_at === repo.updated_at && typeof old.has_skill === "boolean");
 }
 
+/**
+ * pkg_name 冲突消解（纯函数）：同名 npm 包在 node_modules 的安装目标互斥（同目录互相覆盖），
+ * 索引并列会误导（显示两张卡、装一个盖掉另一个）。保留 Star 高者，低者移入 dropped。
+ * 无 pkg_name 的条目按 full_name 天然唯一，不参与冲突。
+ * @returns {{ repos: Array, dropped: string[] }} dropped 为被隐藏条目的 full_name 列表。
+ */
+export function dedupeByPkgName(repos) {
+  const byKey = new Map();
+  const dropped = [];
+  for (const r of repos) {
+    const key = r.pkg_name ? `pkg:${r.pkg_name}` : `repo:${r.full_name}`;
+    const prev = byKey.get(key);
+    if (!prev) {
+      byKey.set(key, r);
+      continue;
+    }
+    const prevStars = prev.stargazers_count ?? 0;
+    const curStars = r.stargazers_count ?? 0;
+    if (curStars > prevStars) {
+      dropped.push(prev.full_name);
+      byKey.set(key, r);
+    } else {
+      dropped.push(r.full_name);
+    }
+  }
+  return { repos: [...byKey.values()], dropped };
+}
+
 /** 探测单个仓库（Trees API 一次调用同时拿到 has_skill / has_install_script）。失败容忍：null 表示未知。 */
 async function probeRepo(repo) {
   const url = `https://api.github.com/repos/${repo.full_name}/git/trees/${repo.default_branch}?recursive=1`;
@@ -260,7 +288,7 @@ async function main() {
     if (Date.parse(seenAt) < now - STALE_DAYS * 24 * 3600 * 1000) continue;
     merged.set(r.full_name, { ...r, registry_seen_at: seenAt });
   }
-  const repos = [...merged.values()].sort((a, b) => (b.stargazers_count ?? 0) - (a.stargazers_count ?? 0));
+  let repos = [...merged.values()].sort((a, b) => (b.stargazers_count ?? 0) - (a.stargazers_count ?? 0));
 
   // skills 模式：增量继承（控额度的命根子）+ Trees 探测
   if (MODE === "skills") {
@@ -292,6 +320,17 @@ async function main() {
   } else {
     await enrichPkgNames(repos);
   }
+
+  // pkg_name 冲突消解：同名 npm 包在 node_modules 里的安装目标互斥（同目录互相覆盖），
+  // 索引里并列会误导用户（显示两张卡、装一个盖掉另一个，如 dsh-archive-viewer 的
+  // keepermttl/csiroqa 两个仓库）。保留 Star 高者，低者从索引剔除并告警维护者改名。
+  const { repos: deduped, dropped: droppedRepos } = dedupeByPkgName(repos);
+  if (droppedRepos.length > 0) {
+    for (const fullName of droppedRepos) {
+      log(`pkg_name 冲突：隐藏低 Star 条目 ${fullName}（同名 npm 包只能安装一个，请原作者改名）`);
+    }
+  }
+  repos = deduped;
 
   const out = {
     generated_at: new Date().toISOString(),
