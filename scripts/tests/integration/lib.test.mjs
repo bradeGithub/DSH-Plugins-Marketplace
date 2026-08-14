@@ -64,17 +64,18 @@ function mockFetch(payload, status = 200) {
     { full_name: "a/low", name: "low", pkg_name: "shared-pkg", stargazers_count: 5 },
     { full_name: "a/high", name: "high", pkg_name: "shared-pkg", stargazers_count: 100 },
   ];
-  check("dedupe 默认参数 冲突保留高 Star", lib.dedupeReposByPkgName(dupRepos).map((r) => r.full_name), ["a/high"]);
-  check("dedupe 默认参数 只留一条", lib.dedupeReposByPkgName(dupRepos).length, 1);
+  check("dedupe 默认参数 冲突保留高 Star", lib.dedupeReposByPkgName(dupRepos).repos.map((r) => r.full_name), ["a/high"]);
+  check("dedupe 默认参数 只留一条", lib.dedupeReposByPkgName(dupRepos).repos.length, 1);
+  check("dedupe 默认参数 返回 dropped 列表", lib.dedupeReposByPkgName(dupRepos).dropped, ["a/low"]);
   const dupInstalled = [
     { full_name: "x/inst", name: "inst", pkg_name: "p", stargazers_count: 0 },
     { full_name: "x/star", name: "star", pkg_name: "p", stargazers_count: 999 },
   ];
-  check("dedupe 已装优先（rank 1e12 分支）", lib.dedupeReposByPkgName(dupInstalled, (r) => r.full_name === "x/inst").map((r) => r.full_name), ["x/inst"]);
+  check("dedupe 已装优先（rank 1e12 分支）", lib.dedupeReposByPkgName(dupInstalled, (r) => r.full_name === "x/inst").repos.map((r) => r.full_name), ["x/inst"]);
   check("dedupe 无 pkg_name 不冲突", lib.dedupeReposByPkgName([
     { full_name: "u/v", name: "v", stargazers_count: 1 },
     { full_name: "u/w", name: "w", stargazers_count: 2 },
-  ]).map((r) => r.full_name), ["u/v", "u/w"]);
+  ]).repos.map((r) => r.full_name), ["u/v", "u/w"]);
 
   // ==================== 文件 IO（临时 DSH_HOME）====================
   // 构造临时仓库目录（含 package.json）

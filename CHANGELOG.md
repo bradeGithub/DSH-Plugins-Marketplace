@@ -4,6 +4,22 @@
 
 ---
 
+## v1.3.12 — 2026-08-15（KIMI K3 代码审阅整改 / Review fixes per KIMI K3 audit）
+
+按《DSH插件市场-代码审阅-review.md》逐项整改（H1-H4 全部修复，M3-M6/L1/L3-L5 修复，M1/M2 记为已知限制） / all H1–H4 and M3–M6/L1/L3–L5 items from the KIMI K3 review fixed; M1/M2 documented as known limitations
+
+- **H1 安装脚本幂等失效**：`install.sh`/`install.ps1` 的注册检查用 `^name:` 行首锚定，匹配不到 `- insert:` 块内的缩进行 → 每次运行重复追加条目；改为 `^\s*name:` 与服务端一致 / install scripts' idempotency check now allows leading whitespace (indented `name:` inside `- insert:` blocks), matching the server
+- **H2 script 类型平台选择**：不再无条件 ps1 优先——Windows 优先 ps1、其他平台优先 sh，首选缺失回退另一脚本，两者皆缺给出明确报错 / script-type installs now pick the script by platform (ps1 on Windows, sh elsewhere) with a clear error when neither fits
+- **H3 skills 列表无界并发**：已安装标注复用 12-worker 并发池（12000+ 仓库不再一次性发起上万并发 fs.stat）/ skills flagging uses the same 12-worker pool as the plugin list
+- **H4 skills.json 超 1MB**：GitHub Contents API 对 >1MB 文件必 403 → skills 模式跳过 api 源，不再每次刷新白打一个必失败的请求 / the api source is skipped for skills (11MB index exceeds the 1MB Contents API limit)
+- **M3 非法 JSON 静默吞掉**：`readJsonBody` 解析失败抛 400（此前被当成空 body 报 badRepo，误导排障）；卸载处理器错误码统一用 `status` / invalid JSON now throws 400 instead of being silently treated as an empty body
+- **M4 环境变量扫描**：camelCase 分支去掉裸 `Key|Pass`（"hotKey" 等普通词不再误报）；扫描递归两层（跳过点目录/node_modules/dist/build），多包仓库子目录 README 不再漏报 / env scan: dropped bare `Key|Pass` suffixes (no more `hotKey` false positives) and recursed two levels for sub-directory READMEs
+- **M5 适配层重定向明示**：安装日志首行输出「适配层重定向：实际安装的是 X」 / adaptor redirects are now announced in the install log
+- **M6 文档漂移**：README 补全 `/api/marketplace/uninstall`、`/api/marketplace/self-update` 端点与手动预装插件不可卸载的说明 / README documents the missing endpoints and the manual-install uninstall limitation
+- **L1/L3/L5**：`removePatchEntry` 声明仅支持本插件生成格式；`install.sh` curl|bash 模式临时目录加 `trap` 清理；`-plugins$` 防呆过滤补注释
+- **L4 同名包隐藏提示**：`dedupeReposByPkgName` 返回 `{ repos, dropped }`，列表接口透传 `dropped` 计数，客户端显示「N 个同名包已隐藏」提示条 / duplicate-package hiding is no longer silent: the API reports `dropped` and the client shows a hint
+- **审计集同步**：CI 重建的 registry 暂缺 `bruc3van/dsh-desktop`、`JustGenius-s/DSH-Desktop`（搜索索引滞后，完整爬取后回归）→ 移出审计集；`Nagi-ovo/dsh-visualize` 简介明确为「在 DSH 对话中生成」→ 期望改为 conversation
+
 ## v1.3.11 — 2026-08-15（卸载大小写修复 / Uninstall case-sensitivity fix）
 
 - **卸载假完成修复**：安装处理器保存记录时未规范化仓库名，`Small-tailqwq/dsh-deep-whale` 这类带大写字母的仓库记录键保留了原始大小写；卸载处理器把请求规范化成小写后查不到记录，返回「done」但什么都没删——表现为弹「卸载完成」却无实际效果、卸载按钮仍在。修复：记录键统一按 `normalizeRepoRef` 小写规范化（加载/保存/删除/查询全部走同一入口），旧文件遗留的大写键在加载时自动迁移 / uninstall falsely reported "done": install saved the record under the raw-case repo key (e.g. `Small-tailqwq/dsh-deep-whale`), while uninstall normalized the request to lowercase and missed the record — nothing was deleted but the dialog said "complete". Fix: all install-record keys are canonicalized to lowercase via one lookup entry (`installedKey`), and legacy mixed-case keys are normalized on load

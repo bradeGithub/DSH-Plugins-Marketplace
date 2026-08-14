@@ -36,11 +36,13 @@ Remove-Item (Join-Path $dest "install.ps1") -Force -ErrorAction SilentlyContinue
 Remove-Item (Join-Path $dest "install.sh") -Force -ErrorAction SilentlyContinue
 Remove-Item (Join-Path $dest ".ca-bundle.crt") -Force -ErrorAction SilentlyContinue
 
-# 注册到 web profile 补丁（幂等；行级精确匹配，避免前缀子串误判）
+# 注册到 web profile 补丁（幂等；行级精确匹配，避免前缀子串误判）。
+# 注意：patch 条目是 `- insert:` 块内的缩进行（`      name: ...`），
+# 行首锚定必须允许前导空白，否则永远匹配不到 → 每次运行都会追加重复条目（KIMI 审阅 H1）。
 $patch = Join-Path $env:USERPROFILE ".dsh\profiles\web\cordis.patch.yml"
 $registered = $false
 if (Test-Path $patch) {
-  $registered = [bool](Select-String -Path $patch -Pattern "^name:\s+dsh-plugin-marketplace\s*$" -Quiet)
+  $registered = [bool](Select-String -Path $patch -Pattern "^\s*name:\s+dsh-plugin-marketplace\s*$" -Quiet)
 }
 if (-not $registered) {
   $entry = "`n- insert:`n    - id: dsh-plugin-marketplace`n      name: dsh-plugin-marketplace`n"

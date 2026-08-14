@@ -20,6 +20,8 @@ if [[ -f "$SCRIPT_DIR/package.json" ]]; then
   SRC="$SCRIPT_DIR"
 else
   TMP="$(mktemp -d)"
+  # L3（KIMI 审阅）：curl|bash 模式下载的临时目录退出时清理，不残留
+  trap 'rm -rf "$TMP"' EXIT
   echo "Downloading $REPO_URL ..."
   curl -fsSL "$REPO_URL/archive/refs/heads/main.tar.gz" | tar xz -C "$TMP"
   SRC="$TMP/DSH-Plugins-Marketplace-main"
@@ -32,9 +34,11 @@ cp -r "$SRC" "$DEST"
 rm -rf "$DEST/.git"
 rm -f "$DEST/install.ps1" "$DEST/install.sh" "$DEST/.ca-bundle.crt"
 
-# 注册到 web profile 补丁（幂等；行级精确匹配，避免前缀子串误判）
+# 注册到 web profile 补丁（幂等；行级精确匹配，避免前缀子串误判）。
+# 注意：patch 条目是 `- insert:` 块内的缩进行（`      name: ...`），
+# 行首锚定必须允许前导空白，否则永远匹配不到 → 每次运行都会追加重复条目（KIMI 审阅 H1）。
 PATCH="$HOME/.dsh/profiles/web/cordis.patch.yml"
-if [[ -f "$PATCH" ]] && grep -qE '^name:[[:space:]]+dsh-plugin-marketplace[[:space:]]*$' "$PATCH"; then
+if [[ -f "$PATCH" ]] && grep -qE '^[[:space:]]*name:[[:space:]]+dsh-plugin-marketplace[[:space:]]*$' "$PATCH"; then
   echo "Already registered in cordis.patch.yml (skipped)"
 else
   printf '\n- insert:\n    - id: dsh-plugin-marketplace\n      name: dsh-plugin-marketplace\n' >> "$PATCH"

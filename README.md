@@ -182,9 +182,19 @@ GitHub Actions（每 2 小时，仓库自带 token）
 
 | 接口 | 方法 | 说明 |
 |---|---|---|
-| `/api/marketplace/list` | GET | 插件列表（按 Star 降序，含 `installed` / `installedVersion` / `latestVersion` / `updateAvailable`）；`?refresh=1` 强制重新拉取 |
+| `/api/marketplace/list` | GET | 插件列表（按 Star 降序，含 `installed` / `installedVersion` / `latestVersion` / `updateAvailable`、`source` 数据源、`dropped` 同名隐藏数）；`?refresh=1` 强制重新拉取 |
 | `/api/marketplace/skills` | GET | 通用 Skills 列表（`skills.json` 索引，过滤 `has_skill !== false`，含 `installed` / `installedAt`）；`?refresh=1` 强制重新拉取 |
-| `/api/marketplace/install` | POST | 安装 / 更新，body：`{ "repo": "owner/name", "answers": { "ENV_NAME": "值" } }`；返回 `done` / `awaiting-input` / `aborted` / `failed` 状态 + 逐步日志 |
+| `/api/marketplace/install` | POST | 安装 / 更新，body：`{ "repo": "owner/name", "answers": { "ENV_NAME": "值" } }`；返回 `done` / `awaiting-input` / `aborted` / `failed` / `manual` 状态 + 逐步日志 |
+| `/api/marketplace/uninstall` | POST | 卸载，body：`{ "repo": "owner/name" }`；删除安装目录 / 包目录 + `cordis.patch.yml` 注册条目 + 安装记录；返回 `done`（含 `removed` 计数与日志） |
+| `/api/marketplace/self-update` | GET | 市场本体自更新检测（`{ installedVersion, latestVersion, updateAvailable, checkedAt }`） |
+
+> 说明：卸载依赖 `installed.json` 安装记录——**通过本市场安装**的插件可完整卸载；手动（非市场）预装的插件仅能被识别为「已安装」，不提供卸载按钮。
+
+## 🧱 已知限制
+
+- 安装任务整体同步挂在单个 POST 请求上（克隆 + npm 安装 + 构建 + 材料确认多轮回环），若在 DSH 前套了短超时的反向代理（默认 60s），连接可能被切断——后端任务仍会继续执行，前端需刷新状态确认结果
+- 「更新」检测基于 `package.json` 的 `version` 字段对比 registry 索引版本；作者发版不 bump version 时不会提示更新
+- 安装脚本的临时目录 / 供应链校验说明见 `install.sh` 头部注释（tarball 无签名校验是 curl|bash 模式的固有限制）
 
 ---
 
