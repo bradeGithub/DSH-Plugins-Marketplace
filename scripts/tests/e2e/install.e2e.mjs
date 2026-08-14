@@ -173,6 +173,25 @@ function setupUrlRewrite(owner, repoName) {
     check("e2e skills handler 存在", false, true);
   }
 
+  // ---- 列表磁盘缓存兜底：fetch 全部返回空（模拟三源全挂）时，
+  //      优先返回本地缓存（上次成功索引），而不是搜索 API 的残缺结果；
+  //      无缓存时才走搜索兜底。----
+  const cacheDir2 = join(HOME, "marketplace", "list-cache");
+  mkdirSync(cacheDir2, { recursive: true });
+  const cachedRepo = { full_name: "cached-owner/demo-cached", name: "demo-cached", description: "cached", html_url: "https://github.com/cached-owner/demo-cached", stargazers_count: 5, updated_at: "2026-01-01T00:00:00Z", default_branch: "main", topics: [], license: null, pkg_name: null, version: null, category: null, has_skill: false, has_install_script: false };
+  writeFileSync(join(cacheDir2, "dsh.json"), JSON.stringify({ saved_at: new Date().toISOString(), kind: "dsh", count: 1, repos: [cachedRepo] }), "utf8");
+  const cachedList = await lib.fetchAllRepos("dsh");
+  check("e2e 磁盘缓存兜底返回缓存条目", cachedList.some((r) => r.full_name === "cached-owner/demo-cached"), true);
+
+  rmSync(join(cacheDir2, "dsh.json"), { force: true });
+  const searchFallback = await lib.fetchAllRepos("dsh");
+  check("e2e 无缓存时搜索兜底返回空数组", Array.isArray(searchFallback), true);
+  const skillCacheDir = join(HOME, "marketplace", "list-cache");
+  writeFileSync(join(skillCacheDir, "skills.json"), JSON.stringify({ saved_at: new Date().toISOString(), kind: "skills", count: 2, repos: [cachedRepo, { ...cachedRepo, full_name: "cached-owner/demo-cached-2", name: "demo-cached-2" }] }), "utf8");
+  const cachedSkills = await lib.fetchAllRepos("skills");
+  check("e2e skills 磁盘缓存兜底 2 条", cachedSkills.length, 2);
+  rmSync(join(skillCacheDir, "skills.json"), { force: true });
+
   // install handler 错误分支：非法 repo → 400
   const badReq = {
     method: "POST",

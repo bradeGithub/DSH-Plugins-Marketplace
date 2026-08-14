@@ -37,10 +37,11 @@ const headers = { Authorization: `Bearer ${TOKEN}`, "User-Agent": "dsh-marketpla
 async function fetchJson(url, accept) {
   const res = await fetch(url, { headers: { ...headers, ...(accept ? { Accept: accept } : {}) }, signal: AbortSignal.timeout(20000) });
   const remaining = Number(res.headers.get("x-ratelimit-remaining") ?? "0");
-  if (res.status === 404) return { status: 404, remaining };
-  if (res.status === 403) return { status: 403, remaining };
-  if (!res.ok) return { status: res.status, remaining };
-  return { status: 200, remaining, body: await res.text() };
+  const resetMs = Number(res.headers.get("x-ratelimit-reset") ?? "0") * 1000 || 0;
+  if (res.status === 404) return { status: 404, remaining, resetMs };
+  if (res.status === 403) return { status: 403, remaining, resetMs };
+  if (!res.ok) return { status: res.status, remaining, resetMs };
+  return { status: 200, remaining, resetMs, body: await res.text() };
 }
 
 const SKILL_RE = /(^|\/)SKILL\.md$/i;
@@ -67,7 +68,7 @@ async function probeTree(repo) {
   for (const branch of branches) {
     const url = `https://api.github.com/repos/${repo.full_name}/git/trees/${branch}?recursive=1`;
     const res = await fetchJson(url, "application/vnd.github+json");
-    if (res.status === 403) return { rateLimited: true, remaining: res.remaining };
+    if (res.status === 403) return { rateLimited: true, remaining: res.remaining, resetMs: res.resetMs };
     if (res.status === 404) return { gone: true, remaining: res.remaining };
     if (res.status !== 200) continue;
     let tree = [];
@@ -95,7 +96,7 @@ async function probeTree(repo) {
 async function fetchPkg(repo, path) {
   const url = `https://api.github.com/repos/${repo.full_name}/contents/${path.split("/").map(encodeURIComponent).join("/")}`;
   const res = await fetchJson(url, "application/vnd.github.raw+json");
-  if (res.status === 403) return { rateLimited: true, remaining: res.remaining };
+  if (res.status === 403) return { rateLimited: true, remaining: res.remaining, resetMs: res.resetMs };
   if (res.status !== 200) return { ok: false, remaining: res.remaining };
   try {
     const pkg = JSON.parse(res.body);
@@ -135,17 +136,32 @@ async function main() {
 
   let cursor = 0;
   let done = 0;
-  let rateLimited = false;
   let remaining = 5000;
+  let waits = 0;
+  const MAX_WAITS = 2; // 最多等 2 个 reset 窗口（2 小时），之后带已收集结果收尾
+
+  /** 额度耗尽：不消费当前仓库（等待后重试同一仓库），超过最大等待次数返回 false。 */
+  async function waitForQuota(resetMs) {
+    const waitMs = Math.max(0, (resetMs ?? Date.now() + 60000) - Date.now()) + 10000;
+    waits++;
+    if (waits > MAX_WAITS) return false;
+    console.log(`额度耗尽（剩余 ${remaining}），等待 ${Math.round(waitMs / 60000)} 分钟后重试（第 ${waits} 次）...`);
+    await new Promise((res) => setTimeout(res, waitMs));
+    return true;
+  }
 
   const worker = async () => {
-    while (cursor < todo.length && !rateLimited) {
+    while (cursor < todo.length) {
       const repo = todo[cursor++];
       const entry = { full_name: repo.full_name, verdict: "unknown" };
       try {
         const sig = await probeTree(repo);
         if (!sig) { results[repo.full_name] = entry; done++; continue; }
-        if (sig.rateLimited) { rateLimited = true; remaining = sig.remaining; continue; }
+        if (sig.rateLimited) {
+          cursor--; // 同一仓库等待后重试
+          if (!(await waitForQuota(sig.resetMs))) break;
+          continue;
+        }
         if (sig.gone) { entry.verdict = "gone"; }
         else if (sig.remaining != null) remaining = sig.remaining;
         if (!sig.gone && (sig.rootPkg || sig.nestedPkgs.length > 0)) {
@@ -153,13 +169,18 @@ async function main() {
           const paths = sig.rootPkg ? ["package.json"] : sig.nestedPkgs.slice(0, 3);
           let looks = false;
           let stopped = false;
+          let resetMs = 0;
           for (const p of paths) {
             const r = await fetchPkg(repo, p);
-            if (r.rateLimited) { rateLimited = true; remaining = r.remaining; stopped = true; break; }
+            if (r.rateLimited) { remaining = r.remaining; resetMs = r.resetMs; stopped = true; break; }
             if (r.ok && r.looksLike) { looks = true; break; }
             if (r.remaining != null) remaining = r.remaining;
           }
-          if (stopped) continue;
+          if (stopped) {
+            cursor--; // 同一仓库等待后重试
+            if (!(await waitForQuota(resetMs))) break;
+            continue;
+          }
           entry.verdict = verdictOf(sig, looks, looks);
         } else if (!sig.gone) {
           entry.verdict = verdictOf(sig, false, false);
@@ -174,10 +195,13 @@ async function main() {
         await writeFile(SNAPSHOT, JSON.stringify({ repos: [...Object.values(results)] }, null, 2), "utf8").catch(() => {});
         console.log(`  进度 ${done}/${todo.length}（剩余额度 ${remaining}）`);
       }
-      if (rateLimited) console.log(`额度护栏触发：X-RateLimit-Remaining=${remaining}，停止（等一小时重跑同一命令续跑）`);
     }
   };
   await Promise.all(Array.from({ length: CONCURRENCY }, () => worker()));
+  // 兜底：任何原因未探测到的条目记 unknown，保证报告条目与 registry 对齐（续跑可补齐）
+  for (const r of todo) {
+    if (!results[r.full_name]) results[r.full_name] = { full_name: r.full_name, verdict: "unknown" };
+  }
   await writeFile(SNAPSHOT, JSON.stringify({ repos: [...Object.values(results)] }, null, 2), "utf8").catch(() => {});
 
   // 汇总

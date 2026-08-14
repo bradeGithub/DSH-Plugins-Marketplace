@@ -4,6 +4,15 @@
 
 ---
 
+## v1.3.10 — 2026-08-15（列表源容灾 + CI 修复 / List-source resilience & CI fix）
+
+- **列表索引磁盘缓存**：索引网络源（api.github.com / jsDelivr CDN / raw.githubusercontent）全挂时不再回退到搜索 API 的残缺结果（dsh 上限 1000 条、skills 兜底仅 266 条）——改为优先使用上次成功拉取的**完整索引**（本地 `marketplace/list-cache/`，api/CDN/raw 全失败自动启用），搜索 API 仅作最后应急且不污染缓存 / a disk cache now keeps the last successful full index (`marketplace/list-cache/`); when all three index sources are unreachable the list serves the complete cached index instead of the truncated search-API fallback (1000-plugin cap / 266 skills), and search results never downgrade a good cache
+- **数据源透明化**：列表接口新增 `source` 字段（registry / cache / search），客户端在「本地缓存」或「搜索兜底」模式下显示黄色提示条，不再让用户困惑于数量骤变 / list APIs now report `source` (registry/cache/search); the client shows a warning banner in cache/search mode so count changes are self-explanatory
+- **api 源带 token**：环境存在 GH_TOKEN/GITHUB_TOKEN 时 api.github.com 源携带认证（60 次/小时 → 5000 次/小时） / the api.github.com source uses the env token when present (60/hr → 5000/hr)
+- **探测工具容灾**：`verify-installability.mjs` 遇到限流 403 时记录 unknown 并**等待 reset 后重试同一仓库**（最多 2 个窗口），结尾兜底补 unknown，报告条目永远与 registry 对齐 / `verify-installability.mjs` now waits out rate-limit 403s and retries the same repo (up to 2 windows), and backfills unknown entries so the report always matches the registry
+- **CI Linux 失败修复**：smoke-tests 自动发现路径改用 `fileURLToPath`（367dab2 引入的 Windows-only 路径转换在 Linux 上生成无效反斜杠路径，导致 13:14/14:55 两个定时任务失败并触发失败邮件）/ CI Linux failure fixed: the smoke-test auto-discovery path now uses `fileURLToPath` (a Windows-only path conversion from 367dab2 produced invalid backslash paths on Linux, failing the 13:14/14:55 scheduled builds)
+- **点目录技能误装修复**：`findSkillRoots`/探测跳过 `.codex/.opencode` 等点目录——其 SKILL.md 是仓库自身开发流程技能（如 iPolloWork 的 72 个 Codex 技能），不再被误判为可安装 skill 而倒进用户 skills 目录；iPolloWork 探测结论修正为「非 DSH 插件」/ dot-directory SKILL.md no longer counts as installable (`.codex/.opencode` skills are the repo's own dev flows — e.g. iPolloWork's 72 Codex skills won't be dumped into `~/.dsh/skills/` anymore); iPolloWork now probes as "not a DSH plugin"
+
 ## v1.3.9 — 2026-08-15（可安装性徽标 + 全量探测 / Installability badges & full probe）
 
 - **全量可安装性探测**：新增 `scripts/verify-installability.mjs`——对 registry 全部 1796 个仓库做两阶段 GitHub API 探测（git/trees 找 SKILL.md/安装脚本/package.json + contents API 读清单判定真 DSH 插件），输出 `installability-report.json`（断点续跑、额度护栏）/ new `verify-installability.mjs` probes every registry repo in two phases (trees for SKILL.md / install scripts / manifests + package.json contents for the real-plugin check), writing `installability-report.json` (resumable, rate-limit guarded)
