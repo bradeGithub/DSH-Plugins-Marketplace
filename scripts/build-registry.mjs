@@ -271,6 +271,26 @@ const CATEGORY_OVERRIDES = new Map([
 export { CATEGORY_RULES, CATEGORY_OVERRIDES, TOPIC_STOP_WORDS, CATEGORY_OTHER };
 
 /**
+ * 可安装性徽标盖章（纯函数）：从 verify-installability.mjs 的探测报告（full_name → verdict）映射为
+ * 面向客户端的精简字段 `installable`，只标注两类需要提示的仓库：
+ *   "pkg-plain" → "non-plugin"（有 package.json 但非 DSH 插件，装了不可用）
+ *   "manual"    → "manual"（无可自动安装内容，只能按 README 手动装）
+ * 其余（cordis-plugin/skill/script/multi-plugin/agent-preset/unknown）不写字段 → 客户端默认无徽标。
+ * 报告缺失或条目缺失 → 删除旧盖章（徽标随报告刷新，避免过期误导）。
+ * @param {Array} repos registry 条目数组
+ * @param {Map<string,string>} verdictMap full_name → 探测 verdict
+ */
+export function applyInstallability(repos, verdictMap) {
+  for (const repo of repos) {
+    const v = verdictMap.get(String(repo.full_name ?? ""));
+    if (v === "pkg-plain") repo.installable = "non-plugin";
+    else if (v === "manual") repo.installable = "manual";
+    else delete repo.installable;
+  }
+  return repos;
+}
+
+/**
  * 插件分类（纯函数）：扫描 description + name + 过滤后的 topics，按规则优先级匹配。
  * 返回分类 id；无匹配返回 "other"。
  */
@@ -706,6 +726,20 @@ async function main() {
   // dsh 模式：按简介/标签关键词分类（skills 模式本期不分类）
   if (MODE === "dsh") {
     for (const repo of repos) repo.category = classifyRepo(repo);
+  }
+
+  // dsh 模式：可安装性徽标盖章（installability-report.json，由 scripts/verify-installability.mjs 刷新）。
+  // 报告缺失/损坏 → 不标注（不阻断构建）；条目不在报告内 → 视为可一键安装（无徽标）。
+  if (MODE === "dsh") {
+    try {
+      const report = JSON.parse(await readFile(join(ROOT, "installability-report.json"), "utf8"));
+      const verdictMap = new Map(
+        Array.isArray(report.repos) ? report.repos.map((r) => [String(r.full_name), r.verdict]) : []
+      );
+      applyInstallability(repos, verdictMap);
+    } catch {
+      log("installability-report.json 缺失或损坏：本次构建不标注可安装性徽标");
+    }
   }
 
   // dsh 模式：pkg_name 冲突消解——同名 npm 包在 node_modules 安装目标互斥，

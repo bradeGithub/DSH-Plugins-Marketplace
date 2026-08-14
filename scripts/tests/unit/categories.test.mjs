@@ -5,7 +5,7 @@
 import { readFileSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import { classifyRepo } from "../../build-registry.mjs";
+import { classifyRepo, applyInstallability } from "../../build-registry.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
 const registry = JSON.parse(readFileSync(join(ROOT, "registry.json"), "utf8"));
@@ -33,3 +33,28 @@ if (failed.length > 0) {
   process.exit(1);
 }
 console.log(`PASS 分类审计: ${pass}/${entries.length} 全部命中`);
+
+// 可安装性盖章回归：pkg-plain → non-plugin、manual → manual、其余不写字段、报告缺失条目清旧章。
+{
+  const verdicts = new Map([
+    ["a/pkg", "cordis-plugin"],
+    ["b/plain", "pkg-plain"],
+    ["c/man", "manual"],
+    ["d/skill", "skill"]
+  ]);
+  const repos = [
+    { full_name: "a/pkg" },
+    { full_name: "b/plain" },
+    { full_name: "c/man" },
+    { full_name: "d/skill" },
+    { full_name: "e/none", installable: "manual" } // 报告外条目 → 清除旧章
+  ];
+  applyInstallability(repos, verdicts);
+  const expect = { "a/pkg": undefined, "b/plain": "non-plugin", "c/man": "manual", "d/skill": undefined, "e/none": undefined };
+  const bad = repos.filter((r) => r.installable !== expect[r.full_name]);
+  if (bad.length > 0) {
+    console.error(`可安装性盖章失败: ${JSON.stringify(bad)}`);
+    process.exit(1);
+  }
+  console.log(`PASS 可安装性盖章: ${repos.length}/${repos.length} 条符合预期`);
+}

@@ -4,6 +4,14 @@
 
 ---
 
+## v1.3.9 — 2026-08-15（可安装性徽标 + 全量探测 / Installability badges & full probe）
+
+- **全量可安装性探测**：新增 `scripts/verify-installability.mjs`——对 registry 全部 1796 个仓库做两阶段 GitHub API 探测（git/trees 找 SKILL.md/安装脚本/package.json + contents API 读清单判定真 DSH 插件），输出 `installability-report.json`（断点续跑、额度护栏）/ new `verify-installability.mjs` probes every registry repo in two phases (trees for SKILL.md / install scripts / manifests + package.json contents for the real-plugin check), writing `installability-report.json` (resumable, rate-limit guarded)
+- **探测结论（1796 仓库）**：84.9% 可一键安装——cordis 插件 1122、技能 283、脚本 62、多包 56、agent 预设 1；8.6%（155）有 package.json 但非 DSH 插件（如 PicGo-Core）；5.8%（105）仅能手动安装（awesome 列表/文档仓库）；11 个仓库已删除（已从 registry 清理）/ verdicts across 1796 repos: 84.9% one-click installable (1122 cordis plugins, 283 skills, 62 scripts, 56 multi-package, 1 preset); 8.6% (155) have a manifest but are not DSH plugins (e.g. PicGo-Core); 5.8% (105) manual-only (awesome lists / docs); 11 deleted repos cleaned from the registry
+- **卡片徽标**：构建期把探测结论盖章进 registry（`installable` 字段），卡片显示「仅手动安装」灰标 /「非 DSH 插件」红标，列表不隐藏，信息透明 / registry now carries an `installable` stamp from the probe; cards show a gray "manual only" or red "not a DSH plugin" badge without hiding anything
+- **盖章纯函数 + 回归测试**：`applyInstallability` 导出并固化为单元测试（pkg-plain→non-plugin、manual→manual、报告外清章） / `applyInstallability` is a pure exported function pinned by a unit test
+- **审计集同步**：已消失的 `UntR/dsh-plugin-marketplace-e2e-verification`（临时验证仓库）从 `audit-expected.json` 移除（119 条）/ the deleted disposable verification repo dropped from the audit set (119 entries)
+
 ## v1.3.8 — 2026-08-15（分类引擎重写 + 100% 审计回归 / Category engine rewrite & audit parity）
 
 - **分类准确率 45.8% → 100%**：以 120 个 Top 仓库 README 人工审计结果为基准（`audit-expected.json`），重排规则优先级并逐词精修 `CATEGORY_RULES`——移除误伤词（`/notif/`、`/style/`、`/compat/`、`/marketplace/`、`/ppt/`、`/office/`、`/\bgit\b/`、`/\btui\b/`、裸 `/rust/`、裸 `/tab/`、裸 `/compile/` 等），生态泛标签（`coding-agents`、`developer-tools`、`prompt-engineering`、`agentic-coding` 等）移入停用词表；新增 `CATEGORY_OVERRIDES` 人工覆写表兜底规则能力之外的边界仓库（desc 为空 / 语义超出特征词），每条附理由 / category accuracy 45.8% → 100% against a 120-repo README audit (`audit-expected.json`): rule priority reordered and the pattern set surgically rewritten — false-positive words removed (`/notif/`, `/style/`, `/compat/`, `/marketplace/`, `/ppt/`, `/office/`, `/\bgit\b/`, `/\btui\b/`, bare `/rust/`, bare `/tab/`, bare `/compile/`, …); ecosystem-wide topics (`coding-agents`, `developer-tools`, `prompt-engineering`, `agentic-coding`, …) moved into the stop-word list; a curated `CATEGORY_OVERRIDES` map now covers edge repos rules cannot judge (empty descriptions, semantics beyond feature words), each entry annotated with its rationale
