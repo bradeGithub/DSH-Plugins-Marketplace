@@ -4,6 +4,13 @@
 
 ---
 
+## v1.3.7 — 2026-08-14（卸载功能 + 适配层 / Uninstall & adaptor layer）
+
+- **卸载功能**：已安装卡片新增红底「卸载」按钮——skill / agent 预设直接删除安装目录；cordis 插件删除包目录 + `cordis.patch.yml` 注册条目 + 安装记录（多插件仓库按记录的子包名逐个卸载）；脚本型插件移除记录与缓存并明确提示；与安装共用全局互斥 / uninstall: installed cards get a red «Uninstall» button — skills/presets delete their install dirs; cordis plugins remove the package dir + `cordis.patch.yml` entry + install record (multi-package repos uninstall each recorded sub-package); script-type plugins remove the record and cache with a clear note; shares the global install mutex
+- **「更新」按钮橙底**：可更新时主按钮改为橙色高亮 / the «Update» button now uses an orange highlight
+- **适配层 adaptor.json**：硬编码重定向不规范项目——如 `yejiming/MuseAI`（本体是独立软件却打了 dsh-plugin tag，安装会崩溃）重定向到真实插件 `yejiming/dsh-museai-tavern`（未打 tag，索引拉不到）；列表移除错误条目并补入真实条目，安装请求自动重定向；构建期与运行时双路径生效 / adaptor layer (`adaptor.json`): hardcoded redirects for misbehaving projects — e.g. `yejiming/MuseAI` (a standalone app that wrongly carries the dsh-plugin tag and crashes on install) redirects to the real plugin `yejiming/dsh-museai-tavern` (untagged, invisible to the index); the list drops the wrong entry and adds the real one, install requests are redirected; applied both at build time and at runtime
+- **测试金字塔跨平台修复**：`toc.test.mjs` 的仓库根路径改用 `fileURLToPath`（此前 Windows-only 的路径转换导致 Linux CI 的 Syntax check 失败）/ cross-platform test fix: `toc.test.mjs` resolves the repo root via `fileURLToPath` (the previous Windows-only path conversion broke the Linux CI syntax check)
+
 ## v1.3.6 — 2026-08-14（皮肤/多包仓库支持 + 安装确认回环修复 / Skin & multi-package repos + install round-trip fix）
 
 - **皮肤/多包仓库自动安装**：根目录无插件清单但子目录含 DSH 插件（如 `dsh-deep-whale` 的皮肤合集）时，自动发现全部子包清单（`findPluginRoots`，`looksLikeDshPlugin` 过滤防误装）并逐个安装——scoped 包名路径校验、patch 注册、npm 脚本/构建确认按子包汇总，完成显示「已安装 N 个插件」/ skin & multi-package repos: when the repo root has no manifest but subdirectories contain DSH plugins (e.g. the `dsh-deep-whale` skin collection), all sub-package manifests are discovered (`findPluginRoots`, filtered by `looksLikeDshPlugin`) and installed one by one — scoped-name path checks, patch registration, npm-script/build confirms aggregated per package, completion shows «N plugins installed»
