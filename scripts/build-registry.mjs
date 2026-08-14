@@ -118,6 +118,98 @@ function normalize(r) {
   };
 }
 
+// ── 插件分类（dsh 模式）──
+// 基于 description + name + 过滤后的 topics 的关键词规则分类（无需读 README）。
+// 规则按优先级排列：先匹配先得（视觉/文档等特异词在前，工具/聚合等宽泛词在后），
+// 无匹配 → "other"（其他）。
+// topics 参与分类前先剔除生态泛标签（ai-agent/llm/deepseek 等是生态标签不是功能标签）。
+const TOPIC_STOP_WORDS = new Set([
+  "agent", "agents", "ai-agent", "ai-agents", "ai", "llm", "deepseek", "deepseek-harness",
+  "dsh", "dsh-plugin", "dsh-plugins", "dshtopic", "dsh-ecosystem", "cordis", "cordis-plugin",
+  "claude", "claude-code", "claude-skills", "codex", "opencode", "openclaw", "hermes-agent",
+  "harness", "harness-engineering", "typescript", "javascript", "python", "react", "nodejs",
+  "open-source", "self-hosted", "local-first", "privacy-first", "api", "sdk", "plugin",
+  "plugins", "extension", "openai", "gemini", "kimi", "glm", "minimax", "free",
+  "web", "web-ui", "ui", "gui", "tool", "tools", "skill", "skills", "agent-skills",
+  "automation", "workflow", "multi-agent", "ai-tools", "ai-assistant", "assistant",
+  "chatgpt", "coding-agent", "coding-assistant", "terminal", "tui", "cli"
+]);
+
+/** 分类文本：description + name + 过滤掉生态泛标签后的 topics。 */
+function categoryText(repo) {
+  const topics = (Array.isArray(repo.topics) ? repo.topics : [])
+    .filter((t) => !TOPIC_STOP_WORDS.has(String(t).toLowerCase()));
+  return [repo.description, repo.name, ...topics].filter(Boolean).join(" \n ");
+}
+
+const CATEGORY_RULES = [
+  {
+    id: "vision",
+    patterns: [/vision/i, /image/i, /ocr/i, /screenshot/i, /多模态/, /视觉识别|视觉工具|视觉任务|视觉插件|视觉能力|机器视觉|computer vision/i, /截图/, /图像/, /图片/, /computer[- ]?use/i, /电脑控制/, /image[- ]?to[- ]?text/i, /ui[- ]?restoration/i, /ui[- ]?还原/i]
+  },
+  {
+    id: "document",
+    patterns: [/pdf/i, /excel/i, /xlsx/i, /spreadsheet/i, /表格/, /word\b/i, /docx/i, /文档/, /论文/, /paper/i, /ppt/i, /slide/i, /演示/, /presentation/i, /办公/, /office/i, /mermaid/i, /latex/i]
+  },
+  {
+    id: "memory",
+    patterns: [/memory/i, /记忆/, /knowledge/i, /知识/, /note/i, /笔记/, /recall/i, /回忆/, /skill[- ]?import/i, /技能/, /knowledge[- ]?graph/i, /知识图谱/, /长期记忆/, /distill/i, /蒸馏/, /memo/i]
+  },
+  {
+    id: "model",
+    patterns: [/token/i, /用量/, /cost/i, /成本/, /balance/i, /余额/, /context[- ]?window/i, /上下文/, /provider/i, /计费/, /billing/i, /usage/i, /tps/i, /推理/, /inference/i, /quota/i, /额度/, /deepseek[- ]?api/i, /模型选择/, /model selection/i, /模型路由/, /model routing/i, /llm[- ]?fallback/i, /模型回退/, /token[- ]?stats/i, /token[- ]?usage/i]
+  },
+  {
+    id: "notify",
+    patterns: [/notif/i, /通知/, /消息通知|消息提醒|消息推送/, /\bmessage notification/i, /telegram/i, /wechat/i, /微信/, /\bim\b/i, /提醒/, /alert/i, /ntfy/i, /broadcast/i, /广播/, /邮件/, /mail/i, /desktop[- ]?notification/i]
+  },
+  {
+    id: "coding",
+    patterns: [/\bcoding/i, /vscode/i, /\bide\b/i, /\blsp\b/i, /\blint/i, /\bgit\b/i, /代码/, /编码/, /debug/i, /调试/, /compile/i, /编译/, /terminal/i, /终端/, /\btui\b/i, /\bbash\b/i, /\bshell\b/i, /编程/, /programming/i, /代码库/, /code[- ]?intelligence/i, /代码检索/, /syntax/i, /语法/, /monaco/i, /编辑器/, /editor/i, /camel/i, /rust/, /typescript/i, /python/i, /harmony/i, /鸿蒙/, /开发/, /developer/i, /dev[- ]?tool/i]
+  },
+  // 工具强特征（前置）：明确的工具词（MCP server/沙箱/安全/天气/计算器等），
+  // 避免被宽泛的 agent 规则抢先（如 "MCP server ... into your agent"）。
+  {
+    id: "tool",
+    patterns: [/mcp[- ]?server/i, /sandbox/i, /沙箱/, /security/i, /安全/, /guardrail/i, /护栏/, /weather/i, /天气/, /calculator/i, /计算器/, /行情/, /ticker/i, /会议/, /meeting/i, /benchmark/i, /基准/, /fuzzer/i, /模糊测试/, /vault/i, /密码/, /credential/i, /凭据/, /encrypt/i, /加密/, /\botp\b/i, /\btotp\b/i, /profiler/i, /性能分析/, /探针/]
+  },
+  {
+    id: "conversation",
+    patterns: [/conversation/i, /对话/, /session/i, /会话/, /message[- ]?edit/i, /消息编辑/, /\bshare/i, /分享/, /rewind/i, /回退/, /annotation/i, /批注/, /\bchat/i, /聊天/, /\bturn\b/i, /回合/, /composer/i, /输入框/, /input[- ]?history/i, /粘贴/, /paste/i, /prompt/i, /提示词/, /回复/, /reply/i]
+  },
+  {
+    id: "web-ui",
+    patterns: [/\bui\b/i, /界面/, /skin/i, /皮肤/, /theme/i, /主题/, /sidebar/i, /侧边栏/, /whale/i, /鲸鱼/, /\bpet\b/i, /宠物/, /美化/, /wallpaper/i, /壁纸/, /widget/i, /组件/, /home[- ]?page/i, /主页/, /status[- ]?bar/i, /状态栏/, /style/i, /样式/, /minigame/i, /小游戏/, /game/i, /游戏/, /panel/i, /面板/, /banner/i, /横幅/, /广告/, /tab/i, /标签页/, /dock/i, /icon/i, /图标/, /avatar/i, /头像/]
+  },
+  {
+    id: "agent",
+    patterns: [/\bagent\b(?!s)/i, /sub[- ]?agents?/i, /agentteams/i, /agent team/i, /multi[- ]?agent/i, /智能体/, /automation/i, /自动化/, /workflow/i, /工作流/, /orchestrat/i, /编排/, /\bteam\b/i, /团队/, /subagent/i, /子代理/, /\bloop\b/i, /调度/, /scheduler/i, /autonomous/i, /自主/, /harness/i, /cowork/i, /协作/]
+  },
+  {
+    id: "tool",
+    patterns: [/weather/i, /天气/, /search/i, /搜索/, /browser/i, /浏览器/, /\btool/i, /工具/, /calculator/i, /计算器/, /\bjson\b/i, /\bcsv\b/i, /\bregex\b/i, /encoding/i, /编码转换/, /\bstat\b/i, /schema/i, /mcp[- ]?server/i, /sandbox/i, /沙箱/, /security/i, /安全/, /guardrail/i, /护栏/, /protocol/i, /协议/, /remote/i, /远程/, /dns/i, /网络/, /network/i, /performance/i, /性能/, /benchmark/i, /基准/, /profiler/i, /profile/i, /fuzzer/i, /模糊测试/, /health/i, /健康检查/, /check/i, /检查/, /monitor/i, /监控/, /备份/, /backup/i, /sync/i, /同步/, /export/i, /导入/, /import/i, /convert/i, /转换/, /decode/i, /解码/, /encode/i, /压缩/, /zip/i, /file/i, /文件/, /vault/i, /密码/, /credential/i, /凭据/, /encrypt/i, /加密/, /totp/i, /otp/i]
+  },
+  {
+    id: "resource",
+    patterns: [/awesome/i, /精选/, /聚合/, /handbook/i, /手册/, /\bstore\b/i, /商店/, /directory/i, /目录/, /\blist\b/i, /列表/, /collection/i, /集合/, /plugin[- ]?manager/i, /插件管理/, /registry/i, /marketplace/i, /市场/, /生态/, /ecosystem/i, /(?<!Git)hub\b/i, /社区/, /community/i, /教程/, /tutorial/i, /guide/i, /指南/, /documentation/i, /文档站/, /catalog/i, /雷达/, /radar/i, /tracking/i, /追踪/, /compat/i, /兼容/]
+  }
+];
+const CATEGORY_OTHER = "other";
+
+/**
+ * 插件分类（纯函数）：扫描 description + name + 过滤后的 topics，按规则优先级匹配。
+ * 返回分类 id；无匹配返回 "other"。
+ */
+export function classifyRepo(repo) {
+  const text = categoryText(repo);
+  for (const rule of CATEGORY_RULES) {
+    for (const pattern of rule.patterns) {
+      if (pattern.test(text)) return rule.id;
+    }
+  }
+  return CATEGORY_OTHER;
+}
+
 /** 构造 star 范围查询串：{ min:100, max:null } → "stars:>=100"；{ min:0, max:0 } → "stars:0"；
  *  带 timeRange 时追加 " pushed:YYYY-MM-DD..YYYY-MM-DD"（单值段的第二维度）；
  *  增量模式（since 非空且无 timeRange）时追加 " pushed:>=YYYY-MM-DD"。 */
@@ -482,6 +574,11 @@ async function main() {
     log("SKIP_ENRICH=1：跳过 pkg_name 富化");
   } else {
     await enrichPkgNames(repos);
+  }
+
+  // dsh 模式：按简介/标签关键词分类（skills 模式本期不分类）
+  if (MODE === "dsh") {
+    for (const repo of repos) repo.category = classifyRepo(repo);
   }
 
   const out = {

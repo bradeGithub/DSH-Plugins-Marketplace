@@ -1,7 +1,7 @@
 // 冒烟测试：验证安全加固与纯函数修复（R1 Host 白名单 / R2 env 最小化 / n3 版本比较等）。
 // 运行：node scripts/smoke-tests.mjs（CI 的 syntax check 步骤同步执行）
 import { compareVersions, isTrustedRequest, isTrustedHost, isSensitiveEnvKey, buildMinimalEnv, buildFilteredEnv, looksLikeDshPlugin } from "../lib/index.js";
-import { classifyTree, shouldInheritProbe, starRangeQuery, midDateStr, splitSegment } from "./build-registry.mjs";
+import { classifyTree, shouldInheritProbe, starRangeQuery, midDateStr, splitSegment, classifyRepo } from "./build-registry.mjs";
 
 let pass = 0, fail = 0;
 function check(name, actual, expected) {
@@ -121,6 +121,31 @@ check("splitSegment 大窗口正常二分", JSON.stringify(splitSegment({ min: 0
   { min: 0, max: 0, timeRange: "2026-01-01..2026-07-02" },
   { min: 0, max: 0, timeRange: "2026-07-02..2026-12-31" }
 ]));
+
+// ---- 插件分类: classifyRepo ----
+check("vision: OCR 图片", classifyRepo({ description: "OCR and image understanding for text-only models", name: "modlens", topics: ["vision"] }), "vision");
+check("vision: 截图/视觉", classifyRepo({ description: "让纯文本模型看图：截图识别与 UI 还原", name: "dsh-vision-toolkit", topics: [] }), "vision");
+check("document: PDF", classifyRepo({ description: "PDF toolbox: extract text and pages", name: "dsh-pdf", topics: ["pdf"] }), "document");
+check("document: Excel", classifyRepo({ description: "talk to Excel: create and edit spreadsheets", name: "dsh-excel-chat", topics: [] }), "document");
+check("memory: 长期记忆", classifyRepo({ description: "跨会话长期记忆与知识管理", name: "dsh-memory-evolve", topics: [] }), "memory");
+check("model: token 用量", classifyRepo({ description: "token usage and balance monitor", name: "dsh-balance-monitor", topics: [] }), "model");
+check("notify: 通知", classifyRepo({ description: "Desktop notifications for turn completion", name: "dsh-notification", topics: [] }), "notify");
+check("coding: TUI 终端", classifyRepo({ description: "terminal TUI for DSH, Claude Code style", name: "dsh-cc-tui", topics: ["tui"] }), "coding");
+check("coding: VS Code", classifyRepo({ description: "Open workspace in VS Code", name: "dsh-open-in-vscode", topics: [] }), "coding");
+check("conversation: 对话分享", classifyRepo({ description: "一键分享你的对话", name: "dsh-share", topics: [] }), "conversation");
+check("conversation: 批注", classifyRepo({ description: "选中批注，随消息发送", name: "dsh-annotation", topics: [] }), "conversation");
+check("web-ui: 皮肤", classifyRepo({ description: "鲸鱼娘皮肤系列（深海女仆工坊）", name: "dsh-deep-whale", topics: [] }), "web-ui");
+check("web-ui: 侧边栏", classifyRepo({ description: "侧边栏完整工作台，支持三方拓展 Tab", name: "DSH-better-sidebar", topics: [] }), "web-ui");
+check("web-ui: 小游戏", classifyRepo({ description: "右侧小游戏面板：18 款离线小游戏", name: "dsh-minigames", topics: [] }), "web-ui");
+check("agent: 工作流", classifyRepo({ description: "把一次性多 Agent 调度升级为可治理的 Workflow 层", name: "dsh_workflow", topics: [] }), "agent");
+check("agent: 桌面应用", classifyRepo({ description: "local-first AI agent desktop app", name: "Abu-Cowork", topics: [] }), "agent");
+check("tool: MCP server", classifyRepo({ description: "A MCP server for Stata", name: "mcp-for-stata", topics: ["mcp"] }), "tool");
+check("tool: 沙箱", classifyRepo({ description: "Open-source sandboxes for AI agents", name: "axern", topics: [] }), "tool");
+check("resource: awesome 聚合", classifyRepo({ description: "Awesome DSH Plugins directory", name: "awesome-dsh-plugins", topics: ["awesome"] }), "resource");
+check("resource: 手册", classifyRepo({ description: "DSH 从 0 到 1 深度手册", name: "dsh-handbook", topics: [] }), "resource");
+check("other: 无法分类", classifyRepo({ description: "Random thingamajig", name: "weird-repo", topics: [] }), "other");
+check("other: 空简介", classifyRepo({ description: null, name: "x", topics: [] }), "other");
+check("分类优先级: vision 优先于 coding", classifyRepo({ description: "vision OCR toolkit for coding agents", name: "agent-vision-toolkit", topics: ["vision"] }), "vision");
 
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail === 0 ? 0 : 1);
