@@ -1,15 +1,19 @@
 // 提交规范校验纯函数：供 Git Hook 与 smoke-tests 共同使用。
 // 校验规则与仓库提交历史对齐（见 git log）：
 //   <type>(<scope>): <中文描述>
-// type 白名单: feat/fix/chore/ci/docs/style/refactor/test/perf/assets/revert
+// type 白名单: feat/fix/chore/ci/docs/style/refactor/test/perf/assets/revert/merge
 // scope 可选: 小写字母/连字符，如 fix(install)
+// 兼容 git 默认合并提交主题（"Merge branch ..." / "Merge pull request ..."）。
 
 export const COMMIT_TYPES = [
   "feat", "fix", "chore", "ci", "docs", "style",
-  "refactor", "test", "perf", "assets", "revert",
+  "refactor", "test", "perf", "assets", "revert", "merge",
 ];
 
-export const SUBJECT_PATTERN = /^(feat|fix|chore|ci|docs|style|refactor|test|perf|assets|revert)(\([a-z][a-z0-9-]*\))?: .+/;
+export const SUBJECT_PATTERN = /^(feat|fix|chore|ci|docs|style|refactor|test|perf|assets|revert|merge)(\([a-z][a-z0-9-]*\))?: .+/;
+
+/** git 默认合并提交主题（本地 merge / PR 合入产物）直接放行。 */
+const MERGE_SUBJECT_PATTERN = /^Merge\b/;
 
 /** 取提交信息的第一行（主题）并去空白。 */
 export function extractSubject(message) {
@@ -42,6 +46,10 @@ export function validateSubject(subject, opts = {}) {
     warnings.push(msg);
   }
   if (!SUBJECT_PATTERN.test(subject)) {
+    // git 默认合并提交主题（"Merge branch 'x'" 等）不属于规范格式但属于合法合并产物，直接放行
+    if (MERGE_SUBJECT_PATTERN.test(subject)) {
+      return { ok: true, reason: "", warnings };
+    }
     return { ok: false, reason: `格式不符: "${subject}"，期望 <type>(<scope>): <描述>` };
   }
   const type = subject.split(/[(:]/)[0];
@@ -86,13 +94,14 @@ export const SYNTAX_CHECK_FILES = [
 /** 有效等级集合。 */
 export const LEVELS = ["error", "warn", "off"];
 
-/** Hook 配置默认值。 */
+/** Hook 配置默认值（仓库默认降级：emoji/TOC 只提醒不阻断，密钥扫描保持 error）。 */
 export const DEFAULT_HOOK_CONFIG = {
-  emojiLevel: "error",
+  emojiLevel: "warn",              // error | warn | off（提交信息 emoji 检查，默认 warn 不阻断）
+  tocLevel: "warn",                // error | warn | off（README TOC 检查，默认 warn 不阻断）
   requireCommitMsg: true,
-  secretLevel: "error",        // error | warn | off（密钥扫描）
-  secretExclusions: [],        // 排除路径片段（如 ".env.example"）
-  tocExclude: [],              // TOC 自动扫描追加排除片段（逗号分隔）
+  secretLevel: "error",            // error | warn | off（密钥扫描）
+  secretExclusions: [],            // 排除路径片段（如 ".env.example"）
+  tocExclude: [],                  // TOC 自动扫描追加排除片段（逗号分隔）
 };
 
 /**
@@ -154,6 +163,8 @@ export function parseHookConfig(text) {
     const value = line.slice(eq + 1).trim();
     if (key === "emojiLevel") {
       if (LEVELS.includes(value)) cfg.emojiLevel = value;
+    } else if (key === "tocLevel") {
+      if (LEVELS.includes(value)) cfg.tocLevel = value;
     } else if (key === "requireCommitMsg") {
       cfg.requireCommitMsg = value === "true";
     } else if (key === "secretLevel") {

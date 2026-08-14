@@ -93,11 +93,12 @@ function checkTests() {
   }
 }
 
-// ---- 3. TOC 检测 ----
+// ---- 3. TOC 检测（tocLevel: error 阻断 / warn 仅提示 / off 跳过，默认 warn）----
 function checkToc() {
   if (!want("toc")) return;
+  const tocCfg = loadHookConfig(ROOT);
+  if (tocCfg.tocLevel === "off") return;
   try {
-    const tocCfg = loadHookConfig(ROOT);
     const args = ["scripts/toc.mjs", "--check"];
     if ((tocCfg.tocExclude ?? []).length > 0) {
       args.push("--exclude=" + tocCfg.tocExclude.join(","));
@@ -105,7 +106,11 @@ function checkToc() {
     execFileSync("node", args, { cwd: ROOT, stdio: "inherit" });
     console.log("[OK] [toc] 文档 TOC 有效");
   } catch {
-    fail("toc", "文档 TOC 缺失或过期，请运行 node scripts/toc.mjs 重新生成");
+    if (tocCfg.tocLevel === "error") {
+      fail("toc", "文档 TOC 缺失或过期，请运行 node scripts/toc.mjs 重新生成");
+    } else {
+      console.warn("[WARN] [toc] 文档 TOC 缺失或过期（warn 等级，不阻断；可运行 node scripts/toc.mjs 重新生成）");
+    }
   }
 }
 

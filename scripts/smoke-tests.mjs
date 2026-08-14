@@ -175,18 +175,27 @@ check("parseHookConfig requireCommitMsg", cfg1.requireCommitMsg, false);
 const cfg2 = parseHookConfig("# 注释\nemojiLevel=off");
 check("parseHookConfig 注释跳过", cfg2.emojiLevel, "off");
 check("parseHookConfig 默认值保留", cfg2.requireCommitMsg, true);
-check("parseHookConfig 非法值回退默认", parseHookConfig("emojiLevel=banana").emojiLevel, "error");
-check("parseHookConfig 空文本默认", parseHookConfig("").emojiLevel, "error");
-check("parseHookConfig 非字符串", parseHookConfig(null).emojiLevel, "error");
+check("parseHookConfig 非法值回退默认", parseHookConfig("emojiLevel=banana").emojiLevel, "warn");
+check("parseHookConfig 空文本默认", parseHookConfig("").emojiLevel, "warn");
+check("parseHookConfig 非字符串", parseHookConfig(null).emojiLevel, "warn");
 check("LEVELS 常量", LEVELS.includes("warn") && LEVELS.includes("off") && LEVELS.includes("error"), true);
-check("DEFAULT_HOOK_CONFIG 默认 error", DEFAULT_HOOK_CONFIG.emojiLevel, "error");
+check("DEFAULT_HOOK_CONFIG 默认 warn", DEFAULT_HOOK_CONFIG.emojiLevel, "warn");
+check("DEFAULT_HOOK_CONFIG tocLevel 默认 warn", DEFAULT_HOOK_CONFIG.tocLevel, "warn");
+check("parseHookConfig tocLevel", parseHookConfig("tocLevel=error").tocLevel, "error");
+check("parseHookConfig tocLevel 非法回退", parseHookConfig("tocLevel=banana").tocLevel, "warn");
 check("loadHookConfigFromText 解析文本", loadHookConfigFromText("emojiLevel=off").emojiLevel, "off");
-check("loadHookConfigFromText 空文本默认", loadHookConfigFromText("").emojiLevel, "error");
-check("loadHookConfigFromText 非字符串", loadHookConfigFromText(null).emojiLevel, "error");
+check("loadHookConfigFromText 空文本默认", loadHookConfigFromText("").emojiLevel, "warn");
+check("loadHookConfigFromText 非字符串", loadHookConfigFromText(null).emojiLevel, "warn");
 check("loadHookConfigFromText 完整配置", (() => {
   const c = loadHookConfigFromText("emojiLevel=warn\nsecretLevel=off\nsecretExclusions=a,b\ntocExclude=x");
   return c.emojiLevel === "warn" && c.secretLevel === "off" && c.secretExclusions.length === 2 && c.tocExclude.length === 1;
 })(), true);
+
+// ---- merge 类型与 git 默认合并主题 ----
+check("type 白名单含 merge", COMMIT_TYPES.includes("merge"), true);
+check("merge: 规范主题放行", validateSubject("merge: 合并 CI 索引更新").ok, true);
+check("git 默认合并主题放行", validateSubject("Merge branch 'main'").ok, true);
+check("Merge pull request 主题放行", validateSubject("Merge pull request #8 from lgnorant-lu/fix/webserver-inject").ok, true);
 
 // ---- 敏感密钥扫描: detectSecret ----
 const fakeOpenAI = "sk-" + "A".repeat(40);

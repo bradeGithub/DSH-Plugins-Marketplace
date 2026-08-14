@@ -1,0 +1,7 @@
+# Git Hook 分级配置（仓库默认策略，见 docs/GIT_HOOKS.md）
+# 密钥扫描：error（发现疑似密钥即阻止提交）
+secretLevel=error
+# 提交信息 emoji 检查：warn（仅提醒，不阻断）
+emojiLevel=warn
+# README TOC 检查：warn（仅提醒，不阻断）
+tocLevel=warn
