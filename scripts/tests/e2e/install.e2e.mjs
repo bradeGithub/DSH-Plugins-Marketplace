@@ -507,6 +507,24 @@ function setupUrlRewrite(owner, repoName) {
   r = await postInstall("e2e-owner/demo-skill-3", {});
   check("e2e installed 队列恢复后 done", r.body && r.body.status, "done");
 
+  // ---- 点目录 SKILL.md 不误判为 skill（iPolloWork 类仓库回归）：
+  //      .codex/.opencode 等 agent 配置目录里的 SKILL.md 是项目自身开发流程技能，
+  //      不是给用户安装的 DSH 技能——只有点目录内容时按 manual（instructions）处理，
+  //      根目录另有普通 package.json 时按 cordis-plugin 走（随后触发非插件确认）。----
+  const dotSkillDir = join(FIXTURE_BASE, "demo-dot-skills");
+  makeFixtureRepo("demo-dot-skills", {
+    ".codex/skills/github-sync-pr-flow/SKILL.md": "---\nname: github-sync-pr-flow\n---\n# Project dev flow\n",
+    ".opencode/skills/browser-automation/SKILL.md": "---\nname: browser-automation\n---\n# Project dev flow\n",
+  });
+  check("e2e 点目录 SKILL.md → instructions", await lib.detectType(dotSkillDir), "instructions");
+
+  const dotSkillPkgDir = join(FIXTURE_BASE, "demo-dot-skills-pkg");
+  makeFixtureRepo("demo-dot-skills-pkg", {
+    ".codex/skills/x/SKILL.md": "---\nname: x\n---\n# Project dev flow\n",
+    "package.json": JSON.stringify({ name: "demo-dot-skills-pkg", version: "1.0.0" }),
+  });
+  check("e2e 点目录 SKILL.md + 普通 package.json → cordis-plugin", await lib.detectType(dotSkillPkgDir), "cordis-plugin");
+
   // ---- 卸载：skill / 单插件 / 多插件 / 未安装 ----
   check("e2e 卸载 handler 注册", uninstallHandler !== null, true);
 

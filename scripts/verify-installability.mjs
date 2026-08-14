@@ -47,6 +47,11 @@ const SKILL_RE = /(^|\/)SKILL\.md$/i;
 const SCRIPT_RE = /(^|\/)install\.(sh|ps1|bat)$/i;
 const PKG_RE = /package\.json$/i;
 
+/** 过滤掉含点路径段的文件（.codex/.opencode/.github 等）：agent 工具链配置，不是用户可安装内容。 */
+function visiblePaths(paths) {
+  return paths.filter((p) => !String(p).split("/").some((seg) => seg.startsWith(".")));
+}
+
 /** 与 lib/index.js looksLikeDshPlugin 同款标准。 */
 function looksLikeDshPlugin(pkg) {
   if (!pkg || typeof pkg !== "object") return false;
@@ -74,7 +79,8 @@ async function probeTree(repo) {
     } catch {
       return null;
     }
-    const paths = tree.map((f) => String(f.path ?? ""));
+    const allPaths = tree.map((f) => String(f.path ?? ""));
+    const paths = visiblePaths(allPaths);
     const rootPkg = paths.includes("package.json");
     const nestedPkgs = paths.filter((p) => PKG_RE.test(p) && p !== "package.json").slice(0, 5);
     const hasSkill = paths.some((p) => SKILL_RE.test(p));
