@@ -197,6 +197,14 @@ GitHub Actions（每 2 小时，仓库自带 token）
 
 ---
 
+## 🌱 第三方生态
+
+[Harness Desktop](https://github.com/baiyuscc13724-max/deepseek-harness-desktop) 是第三方社区维护的 Windows 桌面版，稳定版已内置本插件市场。用户可以在 **设置 → DSH插件市场** 中直接查看、安装和更新社区插件，无需使用命令行。
+
+此条目由 Harness Desktop 作者提交；该作者同时维护桌面端使用的 DSH-Plugins-Marketplace 分支。Harness Desktop 与本仓库及 DeepSeek 官方均无官方关联。
+
+---
+
 ## 🛠️ 开发与维护
 
 - 修改服务端逻辑：编辑 `lib/index.js`（语法检查：`node --check`）

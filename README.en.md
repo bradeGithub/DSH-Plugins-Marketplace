@@ -195,6 +195,14 @@ When both exist and differ → the card shows an «Update» button plus `install
 
 ---
 
+## 🌱 Third-party ecosystem
+
+[Harness Desktop](https://github.com/baiyuscc13724-max/deepseek-harness-desktop) is a third-party, community-maintained Windows desktop app. Its stable release includes this marketplace, so users can browse, install, and update community plugins from **Settings → DSH Plugin Marketplace** without using the command line.
+
+This entry was submitted by the Harness Desktop author, who also maintains the DSH-Plugins-Marketplace fork used by the desktop app. Harness Desktop has no official affiliation with this repository or DeepSeek.
+
+---
+
 ## 🛠️ Development & maintenance
 
 - Server-side logic: edit `lib/index.js` (syntax check: `node --check`)
