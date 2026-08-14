@@ -6,16 +6,18 @@
  * 产物提交回 main 分支，插件通过 jsDelivr CDN 读取，零 API 限流。
  *
  * 模式（环境变量 SOURCES_MODE）：
- *   dsh（默认）  topic:dsh-plugin → registry.json（DSH 插件市场，行为与历史版本完全一致）
+ *   dsh（默认）  topic:dsh-plugin → registry.json（DSH 插件市场）
  *   skills       topic:agent-skills + topic:claude-skills 并集 → skills.json
  *                （额外用 Trees API 探测 has_skill / has_install_script，见下方「探测」注释）
  *
- * v1.3（skills 全量）：GitHub Search API 单 query 硬上限 1000 条（topic 页爬虫同样被限制 50 页），
- * 因此 skills 模式用「stars 分段 + 时间窗口二分」突破上限取全量：
+ * v1.3.1（全量）：GitHub Search API 单 query 硬上限 1000 条（topic 页爬虫同样被限制 50 页），
+ * dsh / skills 模式统一用「stars 分段 + 时间窗口二分」突破上限取全量：
  *   - 按 star 数分段查询（stars:>=1000 / 100..999 / 10..99 / ...），每段 ≤1000 条即收敛；
  *   - 段拉满 1000 条说明还有更多 → 对半分裂（普通段按 star，单值段如 stars:0 按 pushed
  *     时间窗口二分，窗口窄于 MIN_WINDOW_DAYS 天即接受部分结果）；
  *   - 段内 0 新增（数据已被其他段覆盖）→ 直接收敛，避免无谓查询。
+ * （v1.3 起 skills 模式使用；v1.3.1 起 dsh 模式同样使用——修复 topic:dsh-plugin 被
+ *   单 query 1000 条上限截断、插件市场列表只显示 999 个（GitHub 实为 1500+）的问题。）
  * 带 token 时冷启动全量 ~12000+ 仓库约需 1.5 小时（Search 30/min 限额是主要瓶颈）；
  * CI 每 2 小时增量跑，updated_at 继承 + 0 新增收敛使其逐步收敛。
  *
@@ -253,9 +255,10 @@ export function splitSegment(seg) {
 
 /**
  * v1.3：单 star 段拉取（sort=stars 降序，最多 10 页 = 1000 条）。
- * 返回 { repos, newCount, full }：
+ * 返回 { repos, newCount, full, failed }：
  *   full=false 表示 10 页全满、该段可能还有更多（需分裂）；
- *   newCount=0 表示本段没有新增仓库（数据已被其他段覆盖）→ 调用方直接收敛，不再分裂。
+ *   newCount=0 表示本段没有新增仓库（数据已被其他段覆盖）→ 调用方直接收敛，不再分裂；
+ *   failed=true 表示中途有页面失败（限流/网络）→ 数据可能不全，调用方标记未完成但不分裂。
  */
 async function fetchStarSegment(topic, seg, since) {
   const query = starRangeQuery(topic, seg, since);
@@ -267,9 +270,9 @@ async function fetchStarSegment(topic, seg, since) {
     try {
       data = await fetchPage(query, page, "stars");
     } catch (error) {
-      // 单页失败：使用已收集数据并标记 full（该段视为拉完，避免死循环）
+      // 单页失败：使用已收集数据并标记 failed（该段视为拉完，避免限流下死循环/雪崩）
       log(`[seg:${query}] page ${page} 失败：${error.message}，使用已收集的 ${collected.length} 条`);
-      return { repos: collected, newCount, full: true };
+      return { repos: collected, newCount, full: true, failed: true };
     }
     const items = data.items ?? [];
     for (const r of items) {
@@ -286,7 +289,7 @@ async function fetchStarSegment(topic, seg, since) {
 }
 
 /**
- * v1.3：skills 模式获取——star 分段 BFS，段拉满 1000 条则对半分裂递归。
+ * v1.3.1：dsh / skills 模式获取——star 分段 BFS，段拉满 1000 条则对半分裂递归。
  * since 非空 = 增量模式：所有查询加 pushed:>=since（只拉最近更新的仓库），
  * 单值段（stars:0）初始时间窗口以 since 为下界；老仓库由调用方从旧索引继承。
  * 返回 { repos, complete }（complete=true 表示所有段都收敛）。
@@ -308,7 +311,7 @@ async function crawlByStars(topic, since) {
       break;
     }
     const seg = queue.shift();
-    const { repos, newCount, full } = await fetchStarSegment(topic, seg, since);
+    const { repos, newCount, full, failed } = await fetchStarSegment(topic, seg, since);
     let added = 0;
     for (const r of repos) {
       if (seen.has(r.full_name)) continue;
@@ -316,8 +319,11 @@ async function crawlByStars(topic, since) {
       all.push(r);
       added++;
     }
-    log(`[${topic}] 段 ${starRangeQuery(topic, seg, since)}：+${added}（累计 ${all.length}）${newCount === 0 ? "，无新增收敛" : (full ? "，收敛" : "，拉满需分裂")}`);
-    if (!full && newCount > 0) {
+    log(`[${topic}] 段 ${starRangeQuery(topic, seg, since)}：+${added}（累计 ${all.length}）${failed ? "，部分失败不完整" : (newCount === 0 ? "，无新增收敛" : (full ? "，收敛" : "，拉满需分裂"))}`);
+    if (failed) {
+      // 段内页面失败（限流/网络）：数据可能不全，标记未完成；不再分裂，避免限流下雪崩
+      complete = false;
+    } else if (!full && newCount > 0) {
       // 拉满 1000 条且有新增 → 分裂（普通段按 star 对半；单值段按时间窗口二分）
       const children = splitSegment(seg);
       if (children.length === 0) {
@@ -337,31 +343,31 @@ async function crawlByStars(topic, since) {
 }
 
 /**
- * 获取全部仓库：skills 模式用 stars 分段全量（突破 1000/query 上限），失败回退单 query 分页；
- * dsh 模式保持原行为。INCREMENTAL_DAYS>0 时进入增量模式（只拉最近更新的仓库）。
+ * 获取全部仓库：dsh / skills 模式统一用 stars 分段全量（突破单 query 1000 条上限），
+ * 失败回退单 query 分页（兜底仍受 1000 条/query 物理上限限制，标记部分结果而非完整）。
+ * INCREMENTAL_DAYS>0 时进入增量模式（只拉最近更新的仓库，老条目由旧索引继承）。
  */
 async function fetchAllTopics() {
-  if (MODE === "skills") {
-    try {
-      const merged = new Map();
-      let allComplete = true;
-      const since = INCREMENTAL_DAYS > 0
-        ? new Date(Date.now() - INCREMENTAL_DAYS * 86400000).toISOString().slice(0, 10)
-        : null;
-      for (const q of QUERIES) {
-        // QUERIES 是完整 Search query（"topic:agent-skills"），分段需要纯 topic 名
-        const topic = String(q).replace(/^topic:/, "");
-        const { repos, complete } = await crawlByStars(topic, since);
-        if (!complete) allComplete = false;
-        for (const r of repos) {
-          if (!merged.has(r.full_name)) merged.set(r.full_name, r);
-        }
+  try {
+    const merged = new Map();
+    let allComplete = true;
+    const since = INCREMENTAL_DAYS > 0
+      ? new Date(Date.now() - INCREMENTAL_DAYS * 86400000).toISOString().slice(0, 10)
+      : null;
+    for (const q of QUERIES) {
+      // QUERIES 是完整 Search query（"topic:dsh-plugin" / "topic:agent-skills"），分段需要纯 topic 名
+      const topic = String(q).replace(/^topic:/, "");
+      const { repos, complete } = await crawlByStars(topic, since);
+      if (!complete) allComplete = false;
+      for (const r of repos) {
+        if (!merged.has(r.full_name)) merged.set(r.full_name, r);
       }
-      return { repos: [...merged.values()], complete: allComplete, stars: true, incremental: since ? true : false };
-    } catch (error) {
-      log(`stars 分段拉取失败：${error.message}，回退单 query 分页（1000 条/query 上限）`);
     }
+    return { repos: [...merged.values()], complete: allComplete, stars: true, incremental: since ? true : false };
+  } catch (error) {
+    log(`stars 分段拉取失败：${error.message}，回退单 query 分页（1000 条/query 物理上限，结果可能不全）`);
   }
+  // ── 兜底：单 query 分页（历史实现；Search API 对单 query 最多返回 1000 条）──
   const merged = new Map();
   let allComplete = true;
   for (const q of QUERIES) {
@@ -384,11 +390,11 @@ async function fetchAllTopics() {
         if (totalCount != null && freshCount >= totalCount) { complete = true; break; }
       } catch (error) {
         // GitHub Search API 硬上限：单 query 最多返回 1000 条（第 11 页起 422）。
-        // 此时数据已拉满，视为完整而非失败——每 query 1000 条是 Search 方案的物理上限。
+        // 这是截断而非完整——标记未完成，让旧索引条目保留合并，避免把部分结果冒充 full。
         const limited = /Only the first 1000 search results/.test(String(error?.message ?? ""));
         if (limited) {
-          complete = true;
-          log(`[${q}] 已达 Search API 1000 条/query 上限（${freshCount} 条），视为完整`);
+          complete = false;
+          log(`[${q}] 已达 Search API 1000 条/query 上限（${freshCount} 条），数据被截断，标记部分结果`);
         } else {
           log(`[${q}] page ${page} 失败：${error.message}（使用已拉取的部分数据）`);
         }
