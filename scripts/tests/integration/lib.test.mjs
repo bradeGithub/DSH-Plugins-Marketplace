@@ -122,6 +122,22 @@ function mockFetch(payload, status = 200) {
   writeFileSync(join(presetRootDir, "preset.yml"), "# p\n", "utf8");
   writeFileSync(join(presetRootDir, "agent.cordis.yml"), "# a\n", "utf8");
   check("detectType 根预设仍 agent-preset", await lib.detectType(presetRootDir), "agent-preset");
+
+  // ---- classifyInstallFailure（失败分类提示）----
+  check("分类 EINTEGRITY", lib.classifyInstallFailure("npm ERR! code EINTEGRITY\nintegrity checksum failed").includes("完整性"), true);
+  check("分类 node-gyp", lib.classifyInstallFailure("gyp ERR! stack Error: not found: python3").includes("node-gyp"), true);
+  check("分类 网络", lib.classifyInstallFailure("fetch failed: ENOTFOUND registry.npmjs.org", "zh").includes("网络"), true);
+  check("分类 版本不存在", lib.classifyInstallFailure("No matching version found for dep@9.9.9").includes("版本不存在"), true);
+  check("分类 无匹配返回 null", lib.classifyInstallFailure("just a normal error"), null);
+  check("分类 en 语言", lib.classifyInstallFailure("integrity checksum failed", "en").includes("integrity"), true);
+
+  // ---- sanitizeLog（日志脱敏）----
+  check("脱敏 Windows 主目录", lib.sanitizeLog("C:\\Users\\wyzin\\.dsh\\marketplace\\cache\\a"), "~\\<user>\\.dsh\\marketplace\\cache\\a");
+  check("脱敏 Unix 主目录", lib.sanitizeLog("cd /home/alice/dsh && pwd"), "cd ~/<user> && pwd");
+  check("脱敏 sk- 密钥", lib.sanitizeLog("key=sk-ABC12345XYZ"), "key=sk-ABC123…");
+  check("脱敏 ghp_ 密钥", lib.sanitizeLog("token=ghp_abcdefgh123456789"), "token=ghp_abcdef…");
+  check("脱敏 AKIA", lib.sanitizeLog("AKIAIOSFODNN7EXAMPLE"), "AKIAIOSFOD…");
+  check("脱敏不影响普通文本", lib.sanitizeLog("install ok: demo-plugin"), "install ok: demo-plugin");
   const cliNoHintDir = join(process.env.DSH_HOME, "cli-no-hint");
   mkdirSync(cliNoHintDir, { recursive: true });
   writeFileSync(join(cliNoHintDir, "README.md"), "# No command here\nInstall via marketplace.\n", "utf8");

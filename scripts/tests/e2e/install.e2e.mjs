@@ -678,6 +678,25 @@ function setupUrlRewrite(owner, repoName) {
   check("e2e 嵌套预设卸载目录2已删", existsSync(presetId2), false);
   check("e2e 嵌套预设卸载后未安装", await lib.detectInstalled({ full_name: "e2e-owner/demo-preset-nested", name: "demo-preset-nested" }), false);
 
+  // ---- 安装后有效性验证：main 缺失 → done 但带 warnings 与日志提示 ----
+  setupUrlRewrite(owner, "demo-no-entry");
+  makeFixtureRepo("demo-no-entry", {
+    "package.json": JSON.stringify({ name: "demo-no-entry", version: "1.0.0", dsh: {}, main: "lib/missing.js" }),
+  });
+  r = await postInstall("e2e-owner/demo-no-entry", {});
+  check("e2e 入口缺失 done", r.body && r.body.status, "done");
+  check("e2e 入口缺失 warnings 含包名", Array.isArray(r.body && r.body.warnings) && r.body.warnings.includes("demo-no-entry"), true);
+  check("e2e 入口缺失日志提示", Array.isArray(r.body && r.body.log) && r.body.log.some((l) => l.includes("demo-no-entry")), true);
+
+  // ---- 导出脱敏日志：含安装记录、路径已打码 ----
+  const logsHandler = handlers.find((h) => h.path === "/api/marketplace/logs")?.handler;
+  check("e2e logs handler 注册", logsHandler !== null, true);
+  let logsBody = null, logsStatus = 0;
+  await logsHandler({ method: "GET", headers: { "x-dsh-marketplace": "1", host: "127.0.0.1:3080" }, url: "/api/marketplace/logs" }, { writeHead: (s) => { logsStatus = s; }, end: (b) => { try { logsBody = JSON.parse(b); } catch { logsBody = null; } } });
+  check("e2e logs 200", logsStatus, 200);
+  check("e2e logs 含安装记录", typeof logsBody.text === "string" && logsBody.text.includes("install e2e-owner/demo-no-entry"), true);
+  check("e2e logs 无原始主目录路径", typeof logsBody.text === "string" && !logsBody.text.includes("C:\\Users\\"), true);
+
   // ---- appendPatchEntry 队列错误分支：patch 目标是目录 → 写 tmp 后 rename 失败 ----
   const patchPath = join(HOME, "profiles", "web", "cordis.patch.yml");
   rmSync(patchPath, { recursive: true, force: true });
