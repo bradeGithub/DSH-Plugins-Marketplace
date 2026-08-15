@@ -3,6 +3,15 @@
 本仓库的版本迭代记录。**v1.0.0 之前的版本均为 beta 系列**（开发期迭代，未单独打 tag）。/ Version history of this repository. **All versions before v1.0.0 are part of the beta series** (development iterations, not individually tagged).
 ---
 
+## v1.4.3 — 2026-08-15（已安装插件环境变量编辑 / Edit env vars of installed plugins）
+
+**新功能（issue #18）**：安装后没有入口重新配置 API KEY 等环境变量的问题——已安装卡片新增「编辑」按钮，补填/修改环境变量，重启 DSH 生效。 / new "Edit" button on installed cards lets you add or change environment variables (API keys) after installation, taking effect on the next DSH restart.
+
+- **编辑按钮**：已安装卡片（插件市场与 Skills 双栏目）新增「编辑」→ 弹窗列出该插件安装时扫描到的 env 键名（值不回显，已配置打标），可补填/修改/删除，也可手动添加键 / installed cards now show an Edit button opening a dialog with the plugin's scanned env keys (values never echoed back; configured keys are marked), supporting add / modify / remove and manual key entry
+- **值存储与生效**：值写入市场本地 `envs.json`（不随备份导出）+ 合并写入 `~/.dsh/.env`（dsh user 层，`loadLayeredEnv` 每次启动注入 process.env）——重启 DSH 后生效；安装记录保存 env 键名白名单（只存键名，保持「备份不含密钥」承诺） / values are stored in the marketplace-local `envs.json` (excluded from backups) and merged into `~/.dsh/.env`, the dsh user env layer injected at every startup — effective after a DSH restart; install records keep an env-key whitelist (names only, honoring the no-secrets-in-backups promise)
+- **安全**：键名格式校验（UPPER_SNAKE / 驼峰 API 键形态）、`DSH_` 保留前缀拒绝、未安装 404、单次上限 16 键 / key names are format-validated, the reserved `DSH_` prefix is rejected, uninstalled repos get 404, and at most 16 keys per save
+- **回归测试**：e2e +9（404 / 非法键 / 保留前缀 / 落盘 / 值不回显 / 未安装空列表）；smoke 191 / 单元+集成 113 / e2e 151 全绿 / 9 new e2e cases; full suite green (smoke 191 / unit+integration 113 / e2e 151)
+
 ## v1.4.2 — 2026-08-15（hotfix：修复安装反馈弹窗导致市场白屏 / hotfix: fix marketplace blank screen from the feedback dialog）
 
 **紧急修复**：v1.4.1 引入的安装反馈弹窗在部分环境下使插件市场整页空白——`fbDismissed`（「稍后再说」会话标记）的模块级声明在编辑时未落盘，`useEffect` 读取未声明变量抛 `ReferenceError`，React 组件树崩溃。本版补上声明并回归验证。 / v1.4.1's install-feedback dialog could blank out the whole marketplace: the module-level declaration of `fbDismissed` (the "later" session flag) was lost during editing, so the effect read an undeclared variable and React crashed. Declaration restored and the full suite re-verified.
