@@ -5,7 +5,7 @@
 // 注意：必须用动态 import 控制加载顺序——静态 import 会被提升，lib/index.js
 // 求值时 process.env.DSH_HOME 尚未设置，模块级常量会回退到真实 ~/.dsh（污染主目录）。
 
-import { mkdtempSync, mkdirSync, writeFileSync, existsSync, renameSync, rmSync } from "node:fs";
+import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, existsSync, renameSync, rmSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { join, dirname } from "node:path";
 import { tmpdir } from "node:os";
@@ -18,6 +18,15 @@ process.env.DSH_HOME = mkdtempSync(join(tmpdir(), "dsh-libtest-")).replace(/\\/g
 mkdirSync(join(process.env.DSH_HOME, "marketplace"), { recursive: true });
 writeFileSync(join(process.env.DSH_HOME, "marketplace", "installed.json"), JSON.stringify({
   "none/already-installed": { type: "skill", name: "already-installed", location: join(process.env.DSH_HOME, "skills", "already-installed"), installedAt: Date.now() }
+}, null, 2), "utf8");
+// 预写 feedback.json（apply 时 loadFeedback 异步读入）：注入一条 pending 反馈，
+// 供 feedback 提交 handler 的 GitHub 自动建 issue 分支（doCreate）判定。
+writeFileSync(join(process.env.DSH_HOME, "marketplace", "feedback.json"), JSON.stringify({
+  pending: [
+    { repo: "none/feedback-repo", name: "feedback-repo", type: "skill", version: "1.0.0", installedAt: Date.now() },
+    { repo: "none/feedback-repo2", name: "feedback-repo2", type: "skill", version: "1.0.0", installedAt: Date.now() }
+  ],
+  token: ""
 }, null, 2), "utf8");
 
 let pass = 0, fail = 0;
@@ -387,6 +396,74 @@ function mockFetch(payload, status = 200) {
     check("restore/webdav badBackup 400", r.s, 400);
   } else {
     check("restore/webdav handler 存在", false, true);
+  }
+
+  // ---- feedback：GitHub 自动建 issue（doCreate 闭包——token 已配置 + fetch mock）----
+  // e2e 已覆盖无 token 的 manualUrl 分支；此处补 token 分支：422 label 重试 + 成功创建。
+  const fbSubmit = registered.find((h) => h.path === "/api/marketplace/feedback")?.handler;
+  const fbToken = registered.find((h) => h.path === "/api/marketplace/feedback/token")?.handler;
+  if (fbSubmit && fbToken) {
+    await new Promise((r) => setTimeout(r, 50)); // 等 apply 里 loadFeedback 异步读盘完成
+    const fbCall = async (handler, body) => {
+      const bodyStr = JSON.stringify(body ?? {});
+      let sent = false;
+      const req = {
+        method: "POST",
+        headers: { "x-dsh-marketplace": "1", host: "127.0.0.1:3080" },
+        url: "/api/marketplace/feedback",
+        [Symbol.asyncIterator]() {
+          return { next: async () => sent ? { value: undefined, done: true } : (sent = true, { value: Buffer.from(bodyStr), done: false }) };
+        },
+      };
+      let s = 0, b = null;
+      await handler(req, { writeHead: (x) => { s = x; }, end: (x) => { try { b = JSON.parse(x); } catch { b = null; } } });
+      return { s, b };
+    };
+    // 保存 token
+    let r = await fbCall(fbToken, { token: "ghp_fake-token" });
+    check("feedback token 保存 hasToken", r.b && r.b.hasToken, true);
+    // 提交：fetch 返回 422（label 尚未创建）→ 不带 label 重试 → 仍失败 → manualUrl + error
+    // （提交成功即移除 pending——422 测试与成功测试用不同 repo）
+    const orig422 = mockFetch({}, 422);
+    r = await fbCall(fbSubmit, { repo: "none/feedback-repo", ok: true, note: "x" });
+    globalThis.fetch = orig422;
+    check("feedback 422 重试后 manualUrl", typeof (r.b && r.b.manualUrl) === "string", true);
+    check("feedback 422 重试后 error 含 422", r.b && r.b.error && r.b.error.includes("422"), true);
+    // 提交：fetch 返回 200 + html_url → 自动创建成功 → issueUrl
+    const origOk = mockFetch({ html_url: "https://github.com/bradeGithub/DSH-Plugins-Marketplace/issues/1" }, 200);
+    r = await fbCall(fbSubmit, { repo: "none/feedback-repo2", ok: false, note: "y" });
+    globalThis.fetch = origOk;
+    check("feedback 自动建 issue 200", r.s, 200);
+    check("feedback issueUrl", r.b && r.b.issueUrl, "https://github.com/bradeGithub/DSH-Plugins-Marketplace/issues/1");
+    // 清除 token
+    r = await fbCall(fbToken, { token: "" });
+    check("feedback token 清除", r.b && r.b.hasToken, false);
+  } else {
+    check("feedback handler 存在", false, true);
+  }
+
+  // ---- self-update POST：执行更新（v1.4.7 一键更新）——mock 同版本 → no-update 路径 ----
+  // 版本更高才走真实 git clone + 原子替换本体（测试环境不触发，避免污染工作区）。
+  const selfUpdateHandler = registered.find((h) => h.path === "/api/marketplace/self-update")?.handler;
+  if (selfUpdateHandler) {
+    const ownVersion = JSON.parse(readFileSync(join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..", "package.json"), "utf8")).version;
+    const suCall = async (method) => {
+      let s = 0, b = null;
+      await selfUpdateHandler({ method, headers: { "x-dsh-marketplace": "1", host: "127.0.0.1:3080" }, url: "/api/marketplace/self-update" },
+        { writeHead: (x) => { s = x; }, end: (x) => { try { b = JSON.parse(x); } catch { b = null; } } });
+      return { s, b };
+    };
+    // mock 远端与本地同版本 → compareVersions >= 0 → no-update（不 clone 不替换）
+    const origSu = mockFetch({ version: ownVersion });
+    let r = await suCall("POST");
+    globalThis.fetch = origSu;
+    check("self-update POST 同版本 200", r.s, 200);
+    check("self-update POST no-update", r.b && r.b.status, "no-update");
+    // 非 GET/POST → 405
+    r = await suCall("DELETE");
+    check("self-update DELETE 405", r.s, 405);
+  } else {
+    check("self-update handler 存在", false, true);
   }
 
   // ---- list handler：触发并发 worker 闭包 + pkg 冲突消解 + 已安装置顶排序 ----
