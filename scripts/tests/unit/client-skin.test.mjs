@@ -45,6 +45,12 @@ const pagePatch = /body\[data-dsh-retro\]:not\(\[data-ds-dark-theme\]\),body\[da
 check("页面级覆盖：4 皮肤亮色 body 选择器", pagePatch.test(client), true);
 check("页面级覆盖：foreground 重绑为 label-primary", /--dsw-alias-label-primary-foreground:var\(--dsw-alias-label-primary\)!important/.test(client), true);
 
+// ---- 契约 5：injectStyles 幂等必须覆写（防 HMR/重复加载后新 CSS 不生效）----
+// 旧实现 `if (document.getElementById("dshm-styles")) return;` —— 页面已有旧 style
+// 标签时新 bundle 的 CSS 永不注入（bundle 更新后修复不生效，实测暴露）。
+check("injectStyles 覆写式（标签存在时更新内容）", /if \(el\) \{ el\.textContent = css; return; \}/.test(client), true);
+check("injectStyles 无 return 跳过旧逻辑", !/document\.getElementById\("dshm-styles"\)\) return;/.test(client), true);
+
 // ---- 契约 3：次要文本元素统一带 .dshm-dim ----
 const dimUsage = (client.match(/className: "dshm-dim"/g) ?? []).length;
 check("dshm-dim 使用点 ≥8（badge×3/meta×2/sub/loading×2/empty×3/count×2/tabBtn×2/disclaimer/btnInstalled）",
