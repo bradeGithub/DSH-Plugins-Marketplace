@@ -24,7 +24,15 @@ else
   trap 'rm -rf "$TMP"' EXIT
   echo "Downloading $REPO_URL ..."
   curl -fsSL "$REPO_URL/archive/refs/heads/main.tar.gz" | tar xz -C "$TMP"
-  SRC="$TMP/DSH-Plugins-Marketplace-main"
+  # 不硬编码解压后的顶层目录名（issue #17）：GitHub 归档命名随规则变化，
+  # 且部分环境的 tar（如 TAR_OPTIONS=--strip-components）会去掉顶层目录、
+  # 把文件直接铺进临时目录——动态定位含 package.json 的目录，两种布局都兼容。
+  SRC="$(find "$TMP" -maxdepth 2 -name package.json -print -quit)"
+  SRC="${SRC%/package.json}"
+  if [[ -z "$SRC" || ! -f "$SRC/package.json" ]]; then
+    echo "下载内容异常：未在临时目录（$TMP）找到仓库源码。请重试，或改用 git clone 方式安装。" >&2
+    exit 1
+  fi
 fi
 
 DEST="$HOME/.dsh/profiles/web/node_modules/dsh-plugin-marketplace"
