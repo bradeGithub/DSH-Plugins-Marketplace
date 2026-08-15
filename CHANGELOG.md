@@ -3,6 +3,11 @@
 本仓库的版本迭代记录。**v1.0.0 之前的版本均为 beta 系列**（开发期迭代，未单独打 tag）。/ Version history of this repository. **All versions before v1.0.0 are part of the beta series** (development iterations, not individually tagged).
 ---
 
+## v1.4.7 — 2026-08-15（市场本体一键更新 / One-click marketplace self-update）
+
+- **市场本体一键更新（新）**：更新横幅新增「立即更新」按钮——服务端克隆最新仓库、校验版本与 staging 完整性后**原子替换**本体目录（失败自动回滚），完成后提示重启 DSH 生效；与安装共用全局互斥（进行中返回 409），已是最新版本时友好提示 / the update banner now has an "Update now" button — the server clones the latest repo, verifies version & staged completeness, atomically swaps the marketplace directory (auto-rollback on failure), then asks you to restart DSH; shares the global install mutex (409 while busy) and reports "already up to date" gracefully
+- **回归测试**：smoke 191 / 单元 169 全绿 / full suite green
+
 ## v1.4.6 — 2026-08-15（反馈开关 + 人工验证徽章 +2 / Feedback toggle & verified-install badges +2）
 
 - **反馈开关（新）**：市场右上角新增「是否发送反馈」小开关，默认开启；关闭后不再弹出「插件是否正常安装并运行」确认弹窗（安装反馈队列仍保留在服务端，重新打开开关后恢复提示）；偏好保存在本机 localStorage / a new "send feedback" toggle in the top-right of the marketplace, on by default; turning it off suppresses the install-feedback dialog (the pending queue is kept server-side and resumes when re-enabled); the preference is stored in localStorage
