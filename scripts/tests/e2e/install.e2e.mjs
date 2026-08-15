@@ -651,6 +651,33 @@ function setupUrlRewrite(owner, repoName) {
   rmSync(failFlag, { force: true });
   process.env.PATH = origPath;
 
+  // ---- 嵌套 agent 预设（dsh-anchored-standard 场景）：预设目录在子目录 → agent-preset ----
+  setupUrlRewrite(owner, "demo-preset-nested");
+  makeFixtureRepo("demo-preset-nested", {
+    "package.json": JSON.stringify({ name: "demo-preset-nested", version: "1.0.0" }),
+    "preset/preset.yml": "# preset\n",
+    "preset/agent.cordis.yml": "# agent\n",
+    "preset/tool.mjs": "export const x = 1;\n",
+    "whoami-standard/preset.yml": "# whoami\n",
+    "whoami-standard/agent.cordis.yml": "# agent\n",
+  });
+  r = await postInstall("e2e-owner/demo-preset-nested", {});
+  check("e2e 嵌套预设 done", r.body && r.body.status, "done");
+  check("e2e 嵌套预设类型 agent-preset", r.body && r.body.type, "agent-preset");
+  check("e2e 嵌套预设 count=2", r.body && r.body.count, 2);
+  const presetId1 = join(HOME, ".agent-presets", "demo-preset-nested");
+  const presetId2 = join(HOME, ".agent-presets", "whoami-standard");
+  check("e2e 嵌套预设 preset/ 已安装(仓库名 id)", existsSync(join(presetId1, "preset.yml")), true);
+  check("e2e 嵌套预设 whoami-standard 已安装", existsSync(join(presetId2, "preset.yml")), true);
+  check("e2e 嵌套预设 detectInstalled", await lib.detectInstalled({ full_name: "e2e-owner/demo-preset-nested", name: "demo-preset-nested" }), true);
+
+  // 卸载：按 names 逐个删（不误删整个 .agent-presets）
+  r = await postUninstall("e2e-owner/demo-preset-nested");
+  check("e2e 嵌套预设卸载 done", r.body && r.body.status, "done");
+  check("e2e 嵌套预设卸载目录已删", existsSync(presetId1), false);
+  check("e2e 嵌套预设卸载目录2已删", existsSync(presetId2), false);
+  check("e2e 嵌套预设卸载后未安装", await lib.detectInstalled({ full_name: "e2e-owner/demo-preset-nested", name: "demo-preset-nested" }), false);
+
   // ---- appendPatchEntry 队列错误分支：patch 目标是目录 → 写 tmp 后 rename 失败 ----
   const patchPath = join(HOME, "profiles", "web", "cordis.patch.yml");
   rmSync(patchPath, { recursive: true, force: true });

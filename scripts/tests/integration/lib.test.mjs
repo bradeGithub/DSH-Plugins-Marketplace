@@ -103,6 +103,25 @@ function mockFetch(payload, status = 200) {
   check("findCliInstall tier-2 时 scanCliInstallHint 仍为 null", await lib.scanCliInstallHint(cliTier2Dir, "zhu1090093659/dsh-web-ui"), null);
   const cliNone = await lib.findCliInstall(join(process.env.DSH_HOME, "cli-none-dir"), "owner/demo-plugin");
   check("findCliInstall 无指令 null", cliNone, null);
+
+  // ---- findPresetRoots / 嵌套预设识别（dsh-anchored-standard 场景）----
+  const presetNestedDir = join(process.env.DSH_HOME, "preset-nested");
+  mkdirSync(join(presetNestedDir, "preset"), { recursive: true });
+  mkdirSync(join(presetNestedDir, "whoami-standard"), { recursive: true });
+  writeFileSync(join(presetNestedDir, "package.json"), JSON.stringify({ name: "demo-preset-nested", version: "1.0.0" }), "utf8");
+  for (const sub of ["preset", "whoami-standard"]) {
+    writeFileSync(join(presetNestedDir, sub, "preset.yml"), "# p\n", "utf8");
+    writeFileSync(join(presetNestedDir, sub, "agent.cordis.yml"), "# a\n", "utf8");
+  }
+  const presetRoots = await lib.findPresetRoots(presetNestedDir);
+  check("findPresetRoots 发现 2 个嵌套预设", presetRoots.length, 2);
+  check("findPresetRoots 含 preset 目录", presetRoots.some((r) => r.endsWith("preset")), true);
+  check("detectType 嵌套预设 → agent-preset", await lib.detectType(presetNestedDir), "agent-preset");
+  const presetRootDir = join(process.env.DSH_HOME, "preset-root");
+  mkdirSync(presetRootDir, { recursive: true });
+  writeFileSync(join(presetRootDir, "preset.yml"), "# p\n", "utf8");
+  writeFileSync(join(presetRootDir, "agent.cordis.yml"), "# a\n", "utf8");
+  check("detectType 根预设仍 agent-preset", await lib.detectType(presetRootDir), "agent-preset");
   const cliNoHintDir = join(process.env.DSH_HOME, "cli-no-hint");
   mkdirSync(cliNoHintDir, { recursive: true });
   writeFileSync(join(cliNoHintDir, "README.md"), "# No command here\nInstall via marketplace.\n", "utf8");
