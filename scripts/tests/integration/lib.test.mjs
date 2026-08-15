@@ -48,6 +48,10 @@ function mockFetch(payload, status = 200) {
   check("hasPatchEntry 存在", lib.hasPatchEntry("name: b", "b"), true);
   check("hasPatchEntry 缺失", lib.hasPatchEntry("name: a", "b"), false);
   check("normalizeRepo github", lib.normalizeRepo({ full_name: "owner/repo", html_url: "https://github.com/owner/repo" }).full_name, "owner/repo");
+  // 回归:插件市场(dsh)模式不得输出 has_skill(否则满屏「未验证」);skills 模式保留三态
+  check("normalizeRepo dsh 无 has_skill", "has_skill" in lib.normalizeRepo({ full_name: "a/b", has_skill: null }), false);
+  check("normalizeRepo skills 保留三态", lib.normalizeRepo({ full_name: "a/b", has_skill: null }, "skills").has_skill, null);
+  check("normalizeRepo skills true", lib.normalizeRepo({ full_name: "a/b", has_skill: true }, "skills").has_skill, true);
   check("compareVersions 基础", lib.compareVersions("1.0.0", "1.0.1"), -1);
   check("isTrustedHost 本地", lib.isTrustedHost("127.0.0.1:3080"), true);
   check("isTrustedHost 外网", lib.isTrustedHost("evil.com:3080"), false);
