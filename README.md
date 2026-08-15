@@ -103,7 +103,7 @@ dsh plugin --profile web install bradeGithub/DSH-Plugins-Marketplace   # 重装�
 
 ```yaml
 - insert:
-    - id: plugin-marketplace
+    - id: dsh-plugin-marketplace
       name: dsh-plugin-marketplace
 ```
 
