@@ -85,6 +85,24 @@ function mockFetch(payload, status = 200) {
   writeFileSync(join(cliOtherDir, "package.json"), JSON.stringify({ name: "dshmarket", version: "1.0.0", dsh: {} }), "utf8");
   writeFileSync(join(cliOtherDir, "README.md"), "Install with:\n```bash\ndsh plugin add somebody-else/another-market\n```\n", "utf8");
   check("cliHint 指令指向他包不命中", await lib.scanCliInstallHint(cliOtherDir, "dsh-market/dsh-market"), null);
+
+  // ---- findCliInstall（安装流程执行用：tier-1 本仓库包 / tier-2 README 首条指令）----
+  const cliExec1 = await lib.findCliInstall(cliDir, "owner/demo-plugin");
+  check("findCliInstall tier-1 命中本仓库", cliExec1 && cliExec1.target, "owner/demo-plugin");
+  check("findCliInstall tier-1 verb", cliExec1 && cliExec1.verb, "install");
+  const cliExec2 = await lib.findCliInstall(cliFlagsDir, "dsh-market/dsh-market");
+  check("findCliInstall tier-1 包名命中", cliExec2 && cliExec2.target, "dshmarket");
+  // tier-2：README 首条指令指向聚合发布包（dsh-web-ui 场景）——scanCliInstallHint 不提示但执行路径采用
+  const cliTier2Dir = join(process.env.DSH_HOME, "cli-tier2");
+  mkdirSync(cliTier2Dir, { recursive: true });
+  writeFileSync(join(cliTier2Dir, "package.json"), JSON.stringify({ name: "dsh-web-ui", version: "1.0.0", dsh: {} }), "utf8");
+  writeFileSync(join(cliTier2Dir, "README.md"), "## 安装\n推荐聚合包:\n```bash\ndsh plugin --profile web add @linxin666/dsh-web-ui-all\n```\n", "utf8");
+  const cliTier2 = await lib.findCliInstall(cliTier2Dir, "zhu1090093659/dsh-web-ui");
+  check("findCliInstall tier-2 采用 README 首条指令", cliTier2 && cliTier2.target, "@linxin666/dsh-web-ui-all");
+  check("findCliInstall tier-2 verb=add", cliTier2 && cliTier2.verb, "add");
+  check("findCliInstall tier-2 时 scanCliInstallHint 仍为 null", await lib.scanCliInstallHint(cliTier2Dir, "zhu1090093659/dsh-web-ui"), null);
+  const cliNone = await lib.findCliInstall(join(process.env.DSH_HOME, "cli-none-dir"), "owner/demo-plugin");
+  check("findCliInstall 无指令 null", cliNone, null);
   const cliNoHintDir = join(process.env.DSH_HOME, "cli-no-hint");
   mkdirSync(cliNoHintDir, { recursive: true });
   writeFileSync(join(cliNoHintDir, "README.md"), "# No command here\nInstall via marketplace.\n", "utf8");

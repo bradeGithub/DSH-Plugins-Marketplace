@@ -597,6 +597,60 @@ function setupUrlRewrite(owner, repoName) {
     }
   }
 
+  // ---- README 官方 CLI 安装：README 有 dsh plugin 指令时直接执行官方 CLI（fake dsh 垫片）----
+  const fakeBin = join(HOME, "fakebin");
+  mkdirSync(fakeBin, { recursive: true });
+  const argsLog = join(HOME, "dsh-args.txt");
+  const failFlag = join(HOME, "dsh-fail.flag");
+  const argsLogPosix = argsLog.replace(/\\/g, "/");
+  const failFlagPosix = failFlag.replace(/\\/g, "/");
+  writeFileSync(join(fakeBin, "dsh"), [
+    "#!/usr/bin/env bash",
+    `echo "$*" >> "${argsLogPosix}"`,
+    `if [ -f "${failFlagPosix}" ]; then exit 1; fi`,
+    "exit 0"
+  ].join("\n"), "utf8");
+  writeFileSync(join(fakeBin, "dsh.cmd"), [
+    "@echo off",
+    `echo %* >> "${argsLog}"`,
+    `if exist "${failFlag}" exit /b 1`,
+    "exit /b 0"
+  ].join("\r\n"), "utf8");
+  const origPath = process.env.PATH;
+  process.env.PATH = fakeBin + (process.platform === "win32" ? ";" : ":") + (origPath || "");
+
+  setupUrlRewrite(owner, "demo-cli");
+  makeFixtureRepo("demo-cli", {
+    "README.md": "# demo-cli\n\n## Install\n```bash\ndsh plugin --profile web add demo-cli-pkg\n```\n",
+    "package.json": JSON.stringify({ name: "demo-cli-pkg", version: "1.0.0", dsh: {} }),
+  });
+  r = await postInstall("e2e-owner/demo-cli", {});
+  check("e2e CLI 安装 done", r.body && r.body.status, "done");
+  check("e2e CLI 安装类型 cli", r.body && r.body.type, "cli");
+  check("e2e CLI 安装 cliCommand", r.body && r.body.cliCommand, "dsh plugin --profile web add demo-cli-pkg");
+  check("e2e CLI 安装 detectInstalled", await lib.detectInstalled({ full_name: "e2e-owner/demo-cli", name: "demo-cli" }), true);
+  const argsText = existsSync(argsLog) ? readFileSync(argsLog, "utf8") : "";
+  check("e2e CLI 实际执行参数", argsText.includes("plugin --profile web add demo-cli-pkg"), true);
+
+  // cli 类型卸载：删安装记录 + patch 条目（包目录由 CLI 管理，不存在也不报错）
+  r = await postUninstall("e2e-owner/demo-cli");
+  check("e2e CLI 卸载 done", r.body && r.body.status, "done");
+  check("e2e CLI 卸载后未安装", await lib.detectInstalled({ full_name: "e2e-owner/demo-cli", name: "demo-cli" }), false);
+
+  // 回退：CLI 执行失败（fake dsh exit 1）→ 走市场常规流程（根清单带 dsh 字段 → cordis-plugin）
+  writeFileSync(failFlag, "1", "utf8");
+  rmSync(argsLog, { force: true });
+  setupUrlRewrite(owner, "demo-cli-fail");
+  makeFixtureRepo("demo-cli-fail", {
+    "README.md": "# demo-cli-fail\n\n```bash\ndsh plugin add demo-cli-fail-pkg\n```\n",
+    "package.json": JSON.stringify({ name: "demo-cli-fail-pkg", version: "1.0.0", dsh: {} }),
+  });
+  r = await postInstall("e2e-owner/demo-cli-fail", {});
+  check("e2e CLI 失败回退 done", r.body && r.body.status, "done");
+  check("e2e CLI 失败回退 cordis-plugin", r.body && r.body.type, "cordis-plugin");
+  rmSync(failFlag, { force: true });
+  process.env.PATH = origPath;
+
   // ---- appendPatchEntry 队列错误分支：patch 目标是目录 → 写 tmp 后 rename 失败 ----
   const patchPath = join(HOME, "profiles", "web", "cordis.patch.yml");
   rmSync(patchPath, { recursive: true, force: true });
