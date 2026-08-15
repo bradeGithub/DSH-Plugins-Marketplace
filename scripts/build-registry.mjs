@@ -697,9 +697,11 @@ async function main() {
 
   // 增量合并：完整拉取则整体替换，否则保留旧条目（新数据优先）。
   // skills 模式即使完整拉取也必须加载旧索引——探测继承依赖旧探测结果（探测远比 Search 贵）。
+  // incremental 也必须加载旧索引：增量只拉最近 N 天 pushed 的仓库，若所有段恰好都收敛
+  // （complete=true），不合并会把旧索引整体替换成残缺子集（v1.4.5 修复）。
   const STALE_DAYS = 14;
   const now = Date.now();
-  const existing = (MODE === "skills" || !complete) ? await loadExisting() : [];
+  const existing = (MODE === "skills" || !complete || incremental) ? await loadExisting() : [];
   const oldMap = new Map(existing.map((r) => [r.full_name, r]));
   const freshNames = new Set(fresh.map((r) => r.full_name));
   const merged = new Map();

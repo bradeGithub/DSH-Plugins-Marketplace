@@ -3,6 +3,12 @@
 本仓库的版本迭代记录。**v1.0.0 之前的版本均为 beta 系列**（开发期迭代，未单独打 tag）。/ Version history of this repository. **All versions before v1.0.0 are part of the beta series** (development iterations, not individually tagged).
 ---
 
+## v1.4.5 — 2026-08-15（dsh 索引改增量构建 + 移除手动刷新脚本 / Incremental dsh-index builds & remove manual refresh scripts）
+
+- **dsh 索引改增量构建**：插件市场索引（registry.json）与 skills 索引对称——每 2 小时只拉最近 3 天 pushed 的仓库并与旧索引合并（几分钟完成），每天 04:00 UTC 全量重建刷新 star 数；修复增量构建所有段恰好收敛时 dsh 模式不加载旧索引、索引被整体替换成残缺子集的隐患（`loadExisting` 条件补 `incremental`）/ the marketplace index now builds incrementally like the skills index (2h runs fetch only repos pushed in the last 3 days and merge with the old index; a full rebuild at 04:00 UTC daily refreshes stars); fixes dsh mode replacing the whole index with a partial subset when an incremental run happened to converge
+- **移除全部手动触发脚本**：`update-registry.bat` / `.ps1` / `.sh` 从仓库移除（防止手动触发 CI 被滥用/刷屏），本地已有副本不受影响，README 同步更新 / all manual refresh scripts (`update-registry.bat` / `.ps1` / `.sh`) are removed from the repo to deter CI-spam; existing local copies keep working; README updated
+- **回归测试**：smoke 191 / 单元 169 全绿 / full suite green
+
 ## v1.4.4 — 2026-08-15（修复:满屏「未验证」+ 徽章不显示 + git 网络错误分类 / Fixes: unverified badges everywhere, missing badges & git network error classification）
 
 **修复批次（issue #19/#20/#21 反馈闭环产出 + 实测回归）**：市场本体更新到 v1.4.3 后的五个问题一次修复 / a fix batch from the feedback loop and real-world regression: five issues found after the v1.4.3 release

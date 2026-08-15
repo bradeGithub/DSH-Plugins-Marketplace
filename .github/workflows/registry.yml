@@ -4,12 +4,12 @@ on:
   schedule:
     # 每 2 小时增量更新一次索引（UTC；即北京时间每偶数点整）
     - cron: "0 */2 * * *"
-    # 每天 04:00 UTC（北京时间 12:00）全量重建 skills 索引，刷新 star 数等静态数据
+    # 每天 04:00 UTC（北京时间 12:00）全量重建两个索引，刷新 star 数等静态数据
     - cron: "0 4 * * *"
   workflow_dispatch:
     inputs:
       full:
-        description: "全量重建 skills 索引（默认增量）"
+        description: "全量重建两个索引（默认增量）"
         type: boolean
         default: false
 
@@ -40,8 +40,17 @@ jobs:
           node scripts/guided-install-tests.mjs
           node scripts/tests/run.mjs --level=unit,integration
 
-      - name: Build DSH registry
+      - name: Build DSH registry (full)
+        # 每天 04:00 UTC（北京时间 12:00）或手动勾选 full：全量重建，刷新 star 数等静态数据
+        if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.full == 'true' || github.event.schedule == '0 4 * * *' }}
         run: node scripts/build-registry.mjs
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build DSH registry (incremental)
+        # 其余每 2 小时：增量模式，只拉最近 3 天 pushed 的仓库并与旧索引合并（几分钟完成）
+        if: ${{ !(github.event_name == 'workflow_dispatch' && github.event.inputs.full == 'true' || github.event.schedule == '0 4 * * *') }}
+        run: INCREMENTAL_DAYS=3 node scripts/build-registry.mjs
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
