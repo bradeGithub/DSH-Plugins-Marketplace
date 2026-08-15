@@ -8,7 +8,7 @@
 // 独立文件的原因：lib 模块在 import 时从 DSH_HOME/marketplace/installed.json 加载安装清单
 // （installedMap 为模块内部状态），必须在本文件内先构造 DSH_HOME + installed.json 再 import。
 
-import { mkdtempSync, mkdirSync, writeFileSync, existsSync, rmSync } from "node:fs";
+import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, existsSync, rmSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { tmpdir } from "node:os";
 import { fileURLToPath } from "node:url";
@@ -34,14 +34,24 @@ mkdirSync(join(skillsDir, "other-skill"), { recursive: true });
 writeFileSync(join(skillsDir, "other-skill", "SKILL.md"), "# y", "utf8");
 mkdirSync(presetsDir, { recursive: true });
 writeFileSync(join(presetsDir, "preset.yml"), "x", "utf8");
+// cordis-plugin 场景：包目录 + patch 注册条目（卸载时 removePatchEntry 移除 insert 块）
+const profileNm = join(home, "profiles", "web", "node_modules");
+const cordisPkgDir = join(profileNm, "cordispkg");
+mkdirSync(cordisPkgDir, { recursive: true });
+writeFileSync(join(cordisPkgDir, "package.json"), JSON.stringify({ name: "cordispkg", version: "1.0.0" }), "utf8");
+const patchFile = join(home, "profiles", "web", "cordis.patch.yml");
+writeFileSync(patchFile, "# --- dsh-skin managed (auto-generated; do not edit) ---\n- id: ui-skin-x\n  disabled: true\n# --- end dsh-skin managed ---\n- insert:\n    - id: cordispkg\n      name: cordispkg\n- insert:\n    - id: cordispkg2\n      name: cordispkg2\n", "utf8");
 writeFileSync(join(marketRoot, "installed.json"), JSON.stringify({
   "owner/inside": { type: "script", name: "inside", location: insideDir, installedAt: 1 },
   "owner/outside": { type: "script", name: "outside", location: outsideDir, installedAt: 1 },
   "owner/normalskill": { type: "skill", name: "normalskill", location: normalSkillDir, installedAt: 1 },
   "owner/multiskill": { type: "skill", name: "2-skills", names: ["a", "b"], location: skillsDir, installedAt: 1 },
   "owner/multipreset": { type: "agent-preset", name: "2-presets", names: ["p1", "p2"], location: presetsDir, installedAt: 1 },
-  "owner/badskill": { type: "skill", name: "badskill", location: outsideDir, installedAt: 1 }
+  "owner/badskill": { type: "skill", name: "badskill", location: outsideDir, installedAt: 1 },
+  "owner/cordis": { type: "cordis-plugin", name: "cordispkg", names: ["cordispkg"], location: cordisPkgDir, installedAt: 1 },
+  "owner/cordis2": { type: "cordis-plugin", name: "cordispkg2", names: ["cordispkg2"], location: join(profileNm, "cordispkg2"), installedAt: 1 }
 }), "utf8");
+mkdirSync(join(profileNm, "cordispkg2"), { recursive: true });
 
 const lib = await import("../../../lib/index.js");
 
@@ -128,6 +138,26 @@ if (uninstallHandler) {
   await uninstallHandler(mkReq("owner/badskill"), r7.res);
   check("uninstall skill 外部 location → 200（记录移除但目录不删）", r7.status, 200);
   check("uninstall skill 外部 location → 目录保留（受管约束仍生效）", existsSync(outsideDir), true);
+
+  // 场景 8：cordis-plugin 卸载——包目录删除 + patch 注册条目（insert 块）移除（flushBlock 路径）
+  const r8 = mkRes();
+  await uninstallHandler(mkReq("owner/cordis"), r8.res);
+  check("uninstall cordis-plugin → 200", r8.status, 200);
+  check("uninstall cordis-plugin 包目录已删", existsSync(cordisPkgDir), false);
+  const patchAfter = readFileSync(patchFile, "utf8");
+  // 精确匹配：includes("cordispkg") 会被保留的 cordispkg2 误匹配
+  check("uninstall patch insert 块已移除", !/name:\s*cordispkg(?![-\w])/.test(patchAfter), true);
+  check("uninstall patch 其他内容保留（skin 块不受影响）", patchAfter.includes("dsh-skin managed"), true);
+  check("uninstall patch 另一 insert 块保留（cordispkg2 未误删）", patchAfter.includes("cordispkg2"), true);
+
+  // 场景 9：卸载第二个 cordis 插件 → 第二个 insert 块移除，skin 块与注释仍保留
+  const r9 = mkRes();
+  await uninstallHandler(mkReq("owner/cordis2"), r9.res);
+  check("uninstall cordis-plugin 2 → 200", r9.status, 200);
+  check("uninstall cordis-plugin 2 包目录已删", existsSync(join(profileNm, "cordispkg2")), false);
+  const patchFinal = readFileSync(patchFile, "utf8");
+  check("uninstall patch 第二个 insert 块已移除", !patchFinal.includes("cordispkg2"), true);
+  check("uninstall patch 最后一个插件卸载后 skin 块仍保留", patchFinal.includes("dsh-skin managed"), true);
 }
 
 rmSync(home, { recursive: true, force: true });
