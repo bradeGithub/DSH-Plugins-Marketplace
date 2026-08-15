@@ -89,7 +89,7 @@
 
 ```yaml
 - insert:
-    - id: plugin-marketplace
+    - id: dsh-plugin-marketplace
       name: dsh-plugin-marketplace
 ```
 

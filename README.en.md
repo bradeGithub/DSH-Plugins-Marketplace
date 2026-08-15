@@ -88,7 +88,7 @@ The plugin lives at `~/.dsh/profiles/web/node_modules/dsh-plugin-marketplace/` a
 
 ```yaml
 - insert:
-    - id: plugin-marketplace
+    - id: dsh-plugin-marketplace
       name: dsh-plugin-marketplace
 ```
 
