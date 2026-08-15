@@ -48,6 +48,10 @@ mkdirSync(join(profileNm, "the-real-pkg"), { recursive: true });
 mkdirSync(join(profileNm, "@deepseek-ai", "dsh-web"), { recursive: true });
 writeFileSync(join(profileNm, "@deepseek-ai", "dsh-web", "package.json"),
   JSON.stringify({ name: "@deepseek-ai/dsh-web", version: "1.0.0" }), "utf8");
+// ④ repository 撞名拦截：otherpkg 的 package.json 指向别的仓库 → 带该 pkg_name 的 repo 不判已安装
+mkdirSync(join(profileNm, "otherpkg"), { recursive: true });
+writeFileSync(join(profileNm, "otherpkg", "package.json"),
+  JSON.stringify({ name: "otherpkg", version: "1.0.0", repository: { url: "https://github.com/other/real" } }), "utf8");
 // 本体识别（③）：repo.full_name 命中本插件 package.json 的 repository
 const ownPkg = JSON.parse(readFileSync(join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..", "package.json"), "utf8"));
 const OWN_REPO = String(ownPkg.repository?.url ?? "").replace(/^https?:\/\/github\.com\//i, "").replace(/\.git$/i, "");
@@ -73,6 +77,8 @@ const dshRepos = [
   mkRepo("t1/pkgnamed", { pkg_name: "the-real-pkg" }),    // ④ pkg_name 索引 → true
   mkRepo(OWN_REPO),                                       // ③ 本体 → true
   mkRepo("t1/official", { pkg_name: "@deepseek-ai/dsh-web" }), // 官方排除 → false
+  mkRepo("t1/trap", { pkg_name: "otherpkg" }),            // ④ repository 撞名 → false
+  mkRepo("t1/manual"),                                    // 未安装（A2 手动安装场景用）
   mkRepo("t1/clean"),                                     // 未安装 → false
 ];
 const skillsRepos = [
@@ -106,8 +112,10 @@ const fakeCtx = {
 lib.apply(fakeCtx);
 const listHandler = registered.find((h) => h.path === "/api/marketplace/list")?.handler;
 const skillsHandler = registered.find((h) => h.path === "/api/marketplace/skills")?.handler;
+const uninstallHandler = registered.find((h) => h.path === "/api/marketplace/uninstall")?.handler;
 check("list 路由已注册", !!listHandler, true);
 check("skills 路由已注册", !!skillsHandler, true);
+check("uninstall 路由已注册", !!uninstallHandler, true);
 
 const mkReq = (url) => ({ method: "GET", url });
 const mkRes = () => {
@@ -147,6 +155,31 @@ const fpOf = (body) => body?.fp;
   check("list fp 两次响应一致", fpOf(r2.body), fpOf(r.body));
 }
 
+// ==================== B1 验证：索引侧 repository 撞名拦截 ====================
+// profileNm/otherpkg 的 package.json repository 指向 other/real → 带 pkg_name "otherpkg"
+// 的仓库 t1/trap 不应判已安装（同探测路径 matchProfileEntry 语义）。
+{
+  const r = mkRes();
+  await listHandler(mkReq("/api/marketplace/list"), r.res);
+  check("B1 repository 撞名 → 不判已安装", installedMapOf(r.body)["t1/trap"], false);
+}
+
+// ==================== A2 复现：force refresh（refresh=1）不失效索引 ====================
+// 用户手动装了 skill（直接建目录，不经过市场安装流程）后点「刷新」——
+// 列表重拉了但 InstalledIndex 仍用旧快照 → 目录启发式 miss → 标注陈旧。
+{
+  const r = mkRes();
+  await listHandler(mkReq("/api/marketplace/list"), r.res);
+  check("A2 前置：t1/manual 初始未安装", installedMapOf(r.body)["t1/manual"], false);
+  // 手动安装：直接在 skills 目录建 skill（索引构建于首次 list，dirs 集合不含 manual）
+  mkdirSync(join(skillsDir, "manual"), { recursive: true });
+  writeFileSync(join(skillsDir, "manual", "SKILL.md"), "# x", "utf8");
+  const r2 = mkRes();
+  await listHandler(mkReq("/api/marketplace/list?refresh=1"), r2.res);
+  // 期望：目录启发式应命中（manual 目录已存在）→ 标注 true；当前实现 refresh 不失效索引 → 仍是 false
+  check("A2 force refresh 后目录启发式命中（索引已失效重建）", installedMapOf(r2.body)["t1/manual"], true);
+}
+
 // ==================== skills handler：两重标注 + fp ====================
 {
   const r = mkRes();
@@ -158,6 +191,27 @@ const fpOf = (body) => body?.fp;
   check("skills has_skill=false 被过滤", map["t1/hidden"], undefined);
   check("skills 过滤后进栏目 3 条", r.body?.repos?.length, 3);
   check("skills fp 存在且为字符串", typeof fpOf(r.body), "string");
+}
+
+// ==================== B2 验证：卸载事件失效 → 普通 list 懒重建 ====================
+// uninstall handler → removeInstalled（删记录 + installedIndex=null + 删目录）→
+// 下次 list 懒重建 → 标注翻转为未安装。A2 与 B2 的差别：B2 走事件失效，A2 只重拉列表。
+// 放在 skills 场景之后：B2 删除 skillsDir/recorded，不影响前面的 recorded 断言。
+{
+  const mkUninstallReq = (repo) => ({
+    method: "POST",
+    headers: { "x-dsh-marketplace": "1", host: "127.0.0.1:3080" },
+    [Symbol.asyncIterator]: function* () { yield Buffer.from(JSON.stringify({ repo })); },
+  });
+  const r = mkRes();
+  await listHandler(mkReq("/api/marketplace/list"), r.res);
+  check("B2 前置：t1/recorded 已安装", installedMapOf(r.body)["t1/recorded"], true);
+  const ur = mkRes();
+  await uninstallHandler(mkUninstallReq("t1/recorded"), ur.res);
+  check("B2 卸载成功", ur.status, 200);
+  const r2 = mkRes();
+  await listHandler(mkReq("/api/marketplace/list"), r2.res);
+  check("B2 卸载后列表标注翻转为未安装（事件失效→懒重建）", installedMapOf(r2.body)["t1/recorded"], false);
 }
 
 globalThis.fetch = origFetch;
