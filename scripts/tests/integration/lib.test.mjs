@@ -5,8 +5,9 @@
 // 注意：必须用动态 import 控制加载顺序——静态 import 会被提升，lib/index.js
 // 求值时 process.env.DSH_HOME 尚未设置，模块级常量会回退到真实 ~/.dsh（污染主目录）。
 
-import { mkdtempSync, mkdirSync, writeFileSync, existsSync } from "node:fs";
-import { join } from "node:path";
+import { mkdtempSync, mkdirSync, writeFileSync, existsSync, renameSync } from "node:fs";
+import { fileURLToPath } from "node:url";
+import { join, dirname } from "node:path";
 import { tmpdir } from "node:os";
 
 // ---- mock 基建：临时 DSH_HOME（必须在 import lib 之前设置）----
@@ -155,13 +156,20 @@ function mockFetch(payload, status = 200) {
   check("fetchRegistryRepos 数组", Array.isArray(reg), true);
 
   // fetchJson 错误路径（fetchJson 未导出，经 fetchAllRepos 内部触发）：
-  // 所有 registry 源返回 403 → 回退搜索 API → fetchJson 抛错被捕获（含
+  // 所有 registry 源返回 403 → （内置索引存在会先兜底，#12——临时移开以覆盖
+  // 更深层路径）→ 磁盘缓存（空）→ 搜索 API → fetchJson 抛错被捕获（含
   // res.text() 失败时的 .catch(() => "") 分支）→ 降级返回空数组。
-  const orig5 = globalThis.fetch;
-  globalThis.fetch = async () => ({ ok: false, status: 403, json: async () => ({}), text: async () => { throw new Error("text boom"); } });
-  const degraded = await lib.fetchAllRepos("dsh");
-  globalThis.fetch = orig5;
-  check("fetchAllRepos 全失败降级空数组", Array.isArray(degraded) && degraded.length === 0, true);
+  const bundledDsh = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..", "registry.json");
+  renameSync(bundledDsh, bundledDsh + ".bak");
+  try {
+    const orig5 = globalThis.fetch;
+    globalThis.fetch = async () => ({ ok: false, status: 403, json: async () => ({}), text: async () => { throw new Error("text boom"); } });
+    const degraded = await lib.fetchAllRepos("dsh");
+    globalThis.fetch = orig5;
+    check("fetchAllRepos 全失败降级空数组", Array.isArray(degraded) && degraded.length === 0, true);
+  } finally {
+    renameSync(bundledDsh + ".bak", bundledDsh);
+  }
 
   // apply(ctx) mock：验证路由注册（install handler 依赖真实 git/npm 子进程，属 e2e 覆盖）
   let registered = [];
@@ -236,6 +244,81 @@ function mockFetch(payload, status = 200) {
   check("applyAdaptorList 补入真实条目", adapted.some((r) => r.full_name === "yejiming/dsh-museai-tavern"), true);
   check("applyAdaptorList 保留无关条目", adapted.some((r) => r.full_name === "a/b"), true);
   check("applyAdaptorList 非数组原样返回", lib.applyAdaptorList(null), null);
+
+  // ---- readBundledIndex（#12）：随包内置索引可读、去重、排除本体 ----
+  {
+    const bundled = await lib.readBundledIndex("dsh");
+    check("readBundledIndex dsh 非空", Array.isArray(bundled) && bundled.length > 100, true);
+    check("readBundledIndex 排除本体", bundled.some((r) => r.name === "deepseek-harness"), false);
+    const names = bundled.map((r) => r.full_name);
+    check("readBundledIndex 去重", new Set(names).size === names.length, true);
+    const bundledSkills = await lib.readBundledIndex("skills");
+    check("readBundledIndex skills 非空", Array.isArray(bundledSkills) && bundledSkills.length > 1000, true);
+  }
+
+  // ==================== #10 / #11 回归 ====================
+  // ---- parseGitmodulesUrls（纯函数）：https 与相对路径放行，file:// / git@ / git:// 拒绝 ----
+  {
+    const gm = '[submodule "a"]\n\tpath = upstream/a\n\turl = https://github.com/o/a.git\n'
+      + '[submodule "b"]\n\tpath = upstream/b\n\turl = ../b.git\n';
+    const ok = lib.parseGitmodulesUrls(gm);
+    check("gitmodules https+相对路径 urls", ok.urls.length, 2);
+    check("gitmodules https+相对路径 unsafe 为空", ok.unsafe, []);
+    const bad = lib.parseGitmodulesUrls('[submodule "x"]\n\turl = file:///etc/passwd\n[submodule "y"]\n\turl = git@github.com:o/y.git\n');
+    check("gitmodules file/git@ 被拒绝", bad.unsafe, ["file:///etc/passwd", "git@github.com:o/y.git"]);
+    check("gitmodules 空文本", lib.parseGitmodulesUrls(""), { urls: [], unsafe: [] });
+    check("gitmodules null 入参", lib.parseGitmodulesUrls(null), { urls: [], unsafe: [] });
+  }
+
+  // ---- detectType 分层判定 + findSkillRoots vendored 跳过（#11 fixture 回归）----
+  const dtBase = join(process.env.DSH_HOME, "detecttype-fixtures");
+  const mkFixture = (name, files) => {
+    const root = join(dtBase, name);
+    for (const [rel, content] of Object.entries(files)) {
+      const f = join(root, rel);
+      mkdirSync(dirname(f), { recursive: true });
+      writeFileSync(f, content, "utf8");
+    }
+    return root;
+  };
+  const DSH_PLUGIN_PKG = JSON.stringify({ name: "demo", version: "1.0.0", dsh: { client: { platform: "web", inject: [], immediately: true } } });
+  // 1. 插件仓库 + vendored 子模块里的上游技能（oh-dsh 形态）→ cordis-plugin（修复前误判 skill）
+  check("detectType 插件+vendored技能 → cordis-plugin",
+    await lib.detectType(mkFixture("oh-dsh-like", {
+      "package.json": DSH_PLUGIN_PKG,
+      "upstream/dsh-tui/skills/audit/SKILL.md": "---\nname: audit\n---\n",
+      "upstream/dsh-tui/skills/review/SKILL.md": "---\nname: review\n---\n"
+    })), "cordis-plugin");
+  // 2. 纯 skill 仓库带工具链 package.json（无 dsh 声明）→ skill（分层判定不能翻转为插件）
+  check("detectType skill+工具package.json → skill",
+    await lib.detectType(mkFixture("skill-with-tooling", {
+      "package.json": JSON.stringify({ name: "skill-docs", scripts: { lint: "echo ok" } }),
+      "SKILL.md": "---\nname: my-skill\n---\n"
+    })), "skill");
+  // 3. 嵌套技能集合仓库（无 package.json）→ skill
+  check("detectType 嵌套技能集合 → skill",
+    await lib.detectType(mkFixture("skill-collection", {
+      "skills/a/SKILL.md": "---\nname: a\n---\n",
+      "skills/b/SKILL.md": "---\nname: b\n---\n"
+    })), "skill");
+  // 4. 非插件 package.json（无 SKILL.md）→ cordis-plugin（保留非插件确认弹窗路径）
+  check("detectType 非插件package.json → cordis-plugin",
+    await lib.detectType(mkFixture("plain-npm", {
+      "package.json": JSON.stringify({ name: "plain-project" })
+    })), "cordis-plugin");
+  // 5. 皮肤/多包仓库（根无清单，子目录有插件清单）→ cordis-plugin（原行为保留）
+  check("detectType 皮肤多包 → cordis-plugin",
+    await lib.detectType(mkFixture("skins-like", {
+      "skins/dark/package.json": DSH_PLUGIN_PKG,
+      "README.md": "# skins"
+    })), "cordis-plugin");
+  // 6. 仅 vendored 目录含 SKILL.md（无 package.json）→ instructions（技能是上游的，不算本仓库内容）
+  check("detectType 仅vendored技能 → instructions",
+    await lib.detectType(mkFixture("vendored-only", {
+      "upstream/x/SKILL.md": "---\nname: x\n---\n",
+      "README.md": "# readme"
+    })), "instructions");
+  check("findSkillRoots 跳过 upstream/", (await lib.findSkillRoots(join(dtBase, "vendored-only"))).length, 0);
 
   console.log(`\n${pass} passed, ${fail} failed`);
   process.exit(fail === 0 ? 0 : 1);
