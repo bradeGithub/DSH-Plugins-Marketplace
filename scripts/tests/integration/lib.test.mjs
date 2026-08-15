@@ -55,6 +55,14 @@ function mockFetch(payload, status = 200) {
   check("hasPatchEntry 存在", lib.hasPatchEntry("name: b", "b"), true);
   check("hasPatchEntry 缺失", lib.hasPatchEntry("name: a", "b"), false);
   check("normalizeRepo github", lib.normalizeRepo({ full_name: "owner/repo", html_url: "https://github.com/owner/repo" }).full_name, "owner/repo");
+  // 回归:插件市场(dsh)模式不得输出 has_skill(否则满屏「未验证」);skills 模式保留三态
+  check("normalizeRepo dsh 无 has_skill", "has_skill" in lib.normalizeRepo({ full_name: "a/b", has_skill: null }), false);
+  check("normalizeRepo skills 保留三态", lib.normalizeRepo({ full_name: "a/b", has_skill: null }, "skills").has_skill, null);
+  check("normalizeRepo skills true", lib.normalizeRepo({ full_name: "a/b", has_skill: true }, "skills").has_skill, true);
+  // 回归:构建期盖章字段必须透传(否则徽章永不显示——market_tags/installable 被 normalizeRepo 丢掉)
+  check("normalizeRepo 透传 market_tags", JSON.stringify(lib.normalizeRepo({ full_name: "a/b", market_tags: ["verified-install"] }).market_tags), JSON.stringify(["verified-install"]));
+  check("normalizeRepo 透传 installable", lib.normalizeRepo({ full_name: "a/b", installable: "manual" }).installable, "manual");
+  check("normalizeRepo 忽略无关 installable", lib.normalizeRepo({ full_name: "a/b", installable: "cordis-plugin" }).installable, undefined);
   check("compareVersions 基础", lib.compareVersions("1.0.0", "1.0.1"), -1);
   check("isTrustedHost 本地", lib.isTrustedHost("127.0.0.1:3080"), true);
   check("isTrustedHost 外网", lib.isTrustedHost("evil.com:3080"), false);
@@ -111,6 +119,25 @@ function mockFetch(payload, status = 200) {
   const cliNone = await lib.findCliInstall(join(process.env.DSH_HOME, "cli-none-dir"), "owner/demo-plugin");
   check("findCliInstall 无指令 null", cliNone, null);
 
+  // 相对路径/本地路径指令拒绝（dsh-deep-whale 场景：README 的 `add ../dsh-deep-whale/maid-atelier`
+  // 是作者本地开发用法，依赖 cwd——市场代执行只会装出死链接，必须跳过）
+  const cliRelDir = join(process.env.DSH_HOME, "cli-relpath");
+  mkdirSync(cliRelDir, { recursive: true });
+  writeFileSync(join(cliRelDir, "package.json"), JSON.stringify({ name: "demo-rel", version: "1.0.0", dsh: {} }), "utf8");
+  writeFileSync(join(cliRelDir, "README.md"), [
+    "# demo-rel",
+    "## 安装",
+    "```bash",
+    "dsh plugin --profile web add ../demo-rel/maid-atelier",
+    "```",
+    "或本地绝对路径:",
+    "```bash",
+    "dsh plugin add C:\\work\\demo-rel\\maid-atelier",
+    "```",
+  ].join("\n"), "utf8");
+  check("findCliInstall 相对路径不采用", await lib.findCliInstall(cliRelDir, "owner/demo-rel"), null);
+  check("scanCliInstallHint 相对路径不提示", await lib.scanCliInstallHint(cliRelDir, "owner/demo-rel"), null);
+
   // ---- scanExternalCliHint（第三方 CLI 官方 DSH 接入指令识别，open-design 场景：
   // README 提供 `od agent setup deepseek-harness`，但市场无法代执行——只作展示提示）----
   const extCliDir = join(process.env.DSH_HOME, "cli-external");
@@ -159,6 +186,10 @@ function mockFetch(payload, status = 200) {
   check("分类 版本不存在", lib.classifyInstallFailure("No matching version found for dep@9.9.9").includes("版本不存在"), true);
   check("分类 缺少模块", lib.classifyInstallFailure("internal/modules/cjs/loader: Cannot find module 'foo'", "zh").includes("缺少模块"), true);
   check("分类 构建命令失败", lib.classifyInstallFailure("ERR_PNPM_LOCKFILE_UP_TO_DATE Command failed with exit code 1", "zh").includes("构建"), true);
+  // issue #21：git clone 网络失败（`Command failed: git clone ... unable to access ... Couldn't connect`）
+  // 必须命中网络类而非笼统的「构建/包管理命令失败」
+  check("分类 git clone 网络", lib.classifyInstallFailure("Command failed: git clone --depth 1 https://github.com/a/b.git\nfatal: unable to access 'https://github.com/a/b.git/': Failed to connect to github.com port 443: Couldn't connect to server").includes("网络"), true);
+  check("分类 git clone 网络 en", lib.classifyInstallFailure("fatal: unable to access: Couldn't connect to server", "en").includes("proxy"), true);
   check("分类 无匹配返回 null", lib.classifyInstallFailure("just a normal error"), null);
   check("分类 en 语言", lib.classifyInstallFailure("integrity checksum failed", "en").includes("integrity"), true);
 

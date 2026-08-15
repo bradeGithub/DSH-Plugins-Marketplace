@@ -62,3 +62,21 @@ console.log(`PASS 分类审计: ${pass}/${entries.length} 命中（${skipped} �
   }
   console.log(`PASS 可安装性盖章: ${repos.length}/${repos.length} 条符合预期`);
 }
+
+// 人工验证优先：verified-install 仓库跳过机器盖章（dsh-web-ui 场景：根目录非插件
+// 但 README 官方聚合包实测可装 → 探测 pkg-plain 会误盖 non-plugin，人工实测覆盖）。
+{
+  const verdicts = new Map([["v/repo", "pkg-plain"], ["v/manual", "manual"]]);
+  const repos = [
+    { full_name: "v/repo", market_tags: ["verified-install"] },
+    { full_name: "v/manual", market_tags: ["verified-install", "prereq"] },
+    { full_name: "v/plain" }
+  ];
+  applyInstallability(repos, verdicts);
+  const bad = repos.filter((r) => r.installable !== undefined);
+  if (bad.length > 0) {
+    console.error(`verified-install 跳过盖章失败: ${JSON.stringify(bad)}`);
+    process.exit(1);
+  }
+  console.log("PASS verified-install 跳过机器盖章（人工实测优先）");
+}

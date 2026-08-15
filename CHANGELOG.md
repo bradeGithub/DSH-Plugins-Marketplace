@@ -3,9 +3,73 @@
 本仓库的版本迭代记录。**v1.0.0 之前的版本均为 beta 系列**（开发期迭代，未单独打 tag）。/ Version history of this repository. **All versions before v1.0.0 are part of the beta series** (development iterations, not individually tagged).
 ---
 
-## v1.4.0 — 2026-08-15（官方 CLI 安装优先 + 嵌套预设 + 安装体验 / Official CLI-first install, nested presets & install experience）
+## v1.4.9 — 2026-08-15（修复：非插件徽章盖章从未生效 / Fix: non-plugin badge stamping never worked）
 
-**里程碑版本**：1.3 系列 12 个迭代后的一次功能集结——安装方式、识别能力、排障体验三个方向同时升级 / a milestone release bundling the post-1.3 feature batch: install method, type detection and troubleshooting experience
+- **修复可安装性盖章路径 bug（重要）**：`build-registry.mjs` 的 `ROOT` 指向 `scripts/` 目录，读 `installability-report.json` 时少了一层 `..`——报告实际在仓库根，旧代码永远读到不存在的 `scripts/installability-report.json` 并静默降级（log「缺失或损坏」），导致「非 DSH 插件 / 仅手动安装」徽章**自 v1.4.1 起从未在构建产物里盖章**（138 个 pkg-plain 非插件仓库一直无标记）；修复后盖章恢复，实测本地构建 non-plugin 138 / manual 111 / critical: `ROOT` in build-registry.mjs points at `scripts/`, but the installability report lives at the repo root — the missing `..` made every build read a non-existent `scripts/installability-report.json` and silently degrade, so "not a DSH plugin / manual only" badges were never stamped since v1.4.1 (138 pkg-plain repos went unmarked); now fixed — local build stamps 138 non-plugin + 111 manual
+- **非 DSH 插件安装按钮禁用（新）**：`installable=non-plugin` 的卡片安装按钮变灰不可点击（悬停提示「非 DSH 插件，无法一键安装」），卡片保留展示并带「非 DSH 插件」徽章；已手动安装的不受影响 / install buttons on non-plugin cards are now disabled (greyed out with a hover explanation); cards stay visible with the "not a DSH plugin" badge; manually installed ones keep their installed state
+- **回归测试**：smoke 191 / 单元 180 全绿 / full suite green
+
+## v1.4.8 — 2026-08-15（社区收录徽章 + 0-star 长尾截断修复 / Community-listed badges & 0-star tail truncation fix）
+
+- **社区收录徽章（新）**：构建期抓取 awesome 聚合页（默认 [awesome-dsh-plugin/awesome-dsh-plugin](https://github.com/awesome-dsh-plugin/awesome-dsh-plugin)，社区人工筛选）收录的仓库，与索引交集打「社区收录」蓝色徽章（悬停提示「此项目已被 awesome-dsh-plugin 等聚合页收录」）；随每次构建统一重算（聚合页更新后增量构建也能同步），机器探测明确非插件的仓库不打标；聚合页源可配置扩展（`COMMUNITY_PICK_SOURCES`）/ the build now fetches community-curated awesome lists (default: awesome-dsh-plugin/awesome-dsh-plugin), marks intersecting repos with a blue "Community listed" badge (hover tooltip explains the source), recomputes on every build (incremental builds track list updates), skips machine-flagged non-plugins, and supports adding more list sources
+- **修复 0-star 长尾截断导致索引收录不全（重要）**：实测 `topic:dsh-plugin` 的 0-star 仓库几乎全部在近 3 天 pushed（窗口 1155 条 > Search 单 query 1000 条上限），原 30 天最小时间窗口粒度必然截断——聚合页收录的插件有 19 个因此持续进不了索引；`MIN_WINDOW_DAYS` 改为按模式区分（dsh=1 天全量收敛，skills 保持 30 天），全量/增量构建均受益 / important: 0-star repos are almost all pushed within the last 3 days (1155 > the 1000-per-query Search cap), so the old 30-day minimum window always truncated the tail — 19 awesome-listed plugins never made it into the index; `MIN_WINDOW_DAYS` is now mode-aware (1 day for dsh, 30 for skills), fixing coverage in both full and incremental builds
+- **回归测试**：smoke 191 / 单元 180 全绿 / full suite green
+
+## v1.4.7 — 2026-08-15（市场本体一键更新 / One-click marketplace self-update）
+
+- **市场本体一键更新（新）**：更新横幅新增「立即更新」按钮——服务端克隆最新仓库、校验版本与 staging 完整性后**原子替换**本体目录（失败自动回滚），完成后提示重启 DSH 生效；与安装共用全局互斥（进行中返回 409），已是最新版本时友好提示 / the update banner now has an "Update now" button — the server clones the latest repo, verifies version & staged completeness, atomically swaps the marketplace directory (auto-rollback on failure), then asks you to restart DSH; shares the global install mutex (409 while busy) and reports "already up to date" gracefully
+- **回归测试**：smoke 191 / 单元 169 全绿 / full suite green
+
+## v1.4.6 — 2026-08-15（反馈开关 + 人工验证徽章 +2 / Feedback toggle & verified-install badges +2）
+
+- **反馈开关（新）**：市场右上角新增「是否发送反馈」小开关，默认开启；关闭后不再弹出「插件是否正常安装并运行」确认弹窗（安装反馈队列仍保留在服务端，重新打开开关后恢复提示）；偏好保存在本机 localStorage / a new "send feedback" toggle in the top-right of the marketplace, on by default; turning it off suppresses the install-feedback dialog (the pending queue is kept server-side and resumes when re-enabled); the preference is stored in localStorage
+- **人工验证徽章 +2（反馈闭环）**：titanwings/colleague-skill（issue #22）、wx-yss/dsh-message-rail（issue #23）用户反馈正常，加入「✓ 已验证安装」徽章 / two more verified-install badges from user feedback (issues #22/#23)
+- **回归测试**：smoke 191 / 单元 169 全绿 / full suite green
+
+## v1.4.5 — 2026-08-15（dsh 索引改增量构建 + 移除手动刷新脚本 / Incremental dsh-index builds & remove manual refresh scripts）
+
+- **dsh 索引改增量构建**：插件市场索引（registry.json）与 skills 索引对称——每 2 小时只拉最近 3 天 pushed 的仓库并与旧索引合并（几分钟完成），每天 04:00 UTC 全量重建刷新 star 数；修复增量构建所有段恰好收敛时 dsh 模式不加载旧索引、索引被整体替换成残缺子集的隐患（`loadExisting` 条件补 `incremental`）/ the marketplace index now builds incrementally like the skills index (2h runs fetch only repos pushed in the last 3 days and merge with the old index; a full rebuild at 04:00 UTC daily refreshes stars); fixes dsh mode replacing the whole index with a partial subset when an incremental run happened to converge
+- **移除全部手动触发脚本**：`update-registry.bat` / `.ps1` / `.sh` 从仓库移除（防止手动触发 CI 被滥用/刷屏），本地已有副本不受影响，README 同步更新 / all manual refresh scripts (`update-registry.bat` / `.ps1` / `.sh`) are removed from the repo to deter CI-spam; existing local copies keep working; README updated
+- **回归测试**：smoke 191 / 单元 169 全绿 / full suite green
+
+## v1.4.4 — 2026-08-15（修复:满屏「未验证」+ 徽章不显示 + git 网络错误分类 / Fixes: unverified badges everywhere, missing badges & git network error classification）
+
+**修复批次（issue #19/#20/#21 反馈闭环产出 + 实测回归）**：市场本体更新到 v1.4.3 后的五个问题一次修复 / a fix batch from the feedback loop and real-world regression: five issues found after the v1.4.3 release
+
+- **修复插件市场满屏「未验证」（issue #21 截图确认）**：`normalizeRepo` 把插件市场（registry.json）条目也归一化出 `has_skill: null`——该字段本只属于 Skills 栏目（探测未知的弱化提示），导致整个插件市场 tab 每条都显示「未验证」徽章。现在仅 skills 模式输出三态（true/false/null），插件市场不再显示；实测插件市场 3283 条 0 条带该字段，Skills 栏目 null 仅 8 条不变 / the plugin-marketplace tab showed "unverified" on every card because `normalizeRepo` stamped `has_skill: null` onto registry entries that never had the field (it belongs only to the Skills tab's unknown-probe hint); now only skills mode carries the tri-state field — 0/3283 marketplace entries affected, Skills tab unchanged
+- **修复「已验证安装」等徽章不显示（实测回归）**：`normalizeRepo` 未透传构建期盖章字段 `market_tags` / `installable`——列表接口把它们丢掉，前端「✓ 已验证安装」「仅手动安装」「非 DSH 插件」徽章从未显示。补透传后 dsh-market / dsh-web-ui / dsh-anchored-standard / 市场本体 / archify / dsh-deep-whale / dsh-tdai-memory 全部显示徽章 / `normalizeRepo` dropped the build-time stamp fields `market_tags` and `installable`, so the "verified install", "manual only" and "not a plugin" badges never rendered; now passed through — all seven verified repos show their badge
+- **修复老安装记录「编辑」无 env 键（实测回归）**：v1.4.3 之前安装的记录没有 `envKeys` 字段，编辑弹窗无键可配；现在从已安装的包目录重新扫描 API KEY 形态键名（dsh-balance-monitor 实测重扫出 `DEEPSEEK_API_KEY`）/ install records created before v1.4.3 lack `envKeys`, leaving the edit dialog empty; the env-keys endpoint now rescans the installed package directory (dsh-balance-monitor resurfaces `DEEPSEEK_API_KEY`)
+- **修复 git clone 网络失败误报「构建失败」（issue #21）**：用户无法直连 github.com 时（`Failed to connect to github.com port 443`）错误被归类为「构建/包管理命令失败」，误导排查；新增 git 网络错误识别（置于 Command failed 之前），提示检查网络 / 配置 git 代理（附 Windows 示例）/ git clone network failures (no direct github.com access) were misreported as build failures; a dedicated network rule now fires first with proxy configuration guidance
+- **人工验证徽章 +2（反馈闭环）**：dsh-deep-whale（issue #19）、dsh-tdai-memory（issue #20）加入「✓ 已验证安装」/ two more verified-install badges from user feedback
+- **回归测试**：smoke 191 / 单元+集成 121 / e2e 152 全绿 / full suite green
+
+## v1.4.3 — 2026-08-15（已安装插件环境变量编辑 / Edit env vars of installed plugins）
+
+**新功能（issue #18）**：安装后没有入口重新配置 API KEY 等环境变量的问题——已安装卡片新增「编辑」按钮，补填/修改环境变量，重启 DSH 生效。 / new "Edit" button on installed cards lets you add or change environment variables (API keys) after installation, taking effect on the next DSH restart.
+
+- **编辑按钮**：已安装卡片（插件市场与 Skills 双栏目）新增「编辑」→ 弹窗列出该插件安装时扫描到的 env 键名（值不回显，已配置打标），可补填/修改/删除，也可手动添加键 / installed cards now show an Edit button opening a dialog with the plugin's scanned env keys (values never echoed back; configured keys are marked), supporting add / modify / remove and manual key entry
+- **值存储与生效**：值写入市场本地 `envs.json`（不随备份导出）+ 合并写入 `~/.dsh/.env`（dsh user 层，`loadLayeredEnv` 每次启动注入 process.env）——重启 DSH 后生效；安装记录保存 env 键名白名单（只存键名，保持「备份不含密钥」承诺） / values are stored in the marketplace-local `envs.json` (excluded from backups) and merged into `~/.dsh/.env`, the dsh user env layer injected at every startup — effective after a DSH restart; install records keep an env-key whitelist (names only, honoring the no-secrets-in-backups promise)
+- **安全**：键名格式校验（UPPER_SNAKE / 驼峰 API 键形态）、`DSH_` 保留前缀拒绝、未安装 404、单次上限 16 键 / key names are format-validated, the reserved `DSH_` prefix is rejected, uninstalled repos get 404, and at most 16 keys per save
+- **回归测试**：e2e +9（404 / 非法键 / 保留前缀 / 落盘 / 值不回显 / 未安装空列表）；smoke 191 / 单元+集成 113 / e2e 151 全绿 / 9 new e2e cases; full suite green (smoke 191 / unit+integration 113 / e2e 151)
+
+## v1.4.2 — 2026-08-15（hotfix：修复安装反馈弹窗导致市场白屏 / hotfix: fix marketplace blank screen from the feedback dialog）
+
+**紧急修复**：v1.4.1 引入的安装反馈弹窗在部分环境下使插件市场整页空白——`fbDismissed`（「稍后再说」会话标记）的模块级声明在编辑时未落盘，`useEffect` 读取未声明变量抛 `ReferenceError`，React 组件树崩溃。本版补上声明并回归验证。 / v1.4.1's install-feedback dialog could blank out the whole marketplace: the module-level declaration of `fbDismissed` (the "later" session flag) was lost during editing, so the effect read an undeclared variable and React crashed. Declaration restored and the full suite re-verified.
+
+- **修复**：补回 `fbDismissed` 模块级声明（`lib/client.js`），mock 浏览器环境执行 client 工厂无运行时异常；新增引用的 25 个标识符逐一核对均有声明 / restored the missing module-level declaration; the client factory runs clean in a mocked browser environment and every new identifier was verified declared
+- **回归测试**：smoke 191 / 单元+集成 111 / e2e 140 全绿 / full suite green
+
+## v1.4.1 — 2026-08-15（安装反馈闭环 + 人工验证标注 + 第三方 CLI 接入提示 / Install-feedback loop, curated verification tags & third-party CLI integration hints）
+
+**小版本迭代**：安装体验闭环——装完问用户、反馈进 GitHub issue；市场列表新增人工验证徽章；扫描器补上第三方 CLI 的 DSH 接入指令识别 / a minor release closing the install-feedback loop (ask after install, file results as GitHub issues), adding curated verification badges to the listing and recognizing third-party CLI integration commands in READMEs
+
+- **安装反馈闭环（新）**：安装成功后登记待确认队列，下次打开插件市场弹出「插件 X 是否正常安装并运行?」——✓ 正常 / ✗ 不正常（可填备注）/ 稍后再说；提交后自动同步 GitHub issue（配置 Token 则自动创建，标题 `[安装反馈] ✅/❌: 仓库`、带 `install-feedback` label；未配置则打开预填好的新建 issue 页面，反馈一条不丢） / after each install a confirmation dialog appears the next time the marketplace opens; answers (works/broken + optional notes) are filed as GitHub issues automatically when a Token is configured, or via a pre-filled issue page otherwise
+- **人工验证标注（新）**：`market_tags` 构建期注入——实测可一键安装的仓库盖「✓ 已验证安装」绿徽章（dsh-market / dsh-web-ui / dsh-anchored-standard / 市场本体 / archify），open-design 盖「需前置内容」橙徽章（需先装官方 dsh CLI 并经其自带 od CLI 接入）；人工实测优先于机器探测（dsh-web-ui 根目录非插件但官方聚合包实测可装，不再误盖「非 DSH 插件」） / curated `market_tags` stamped at build time: green "install verified" badges on repos proven to install one-click, orange "prereqs needed" on open-design; human verification overrides machine probing
+- **第三方 CLI 接入指令识别（新）**：扫描 README 中 `<cli> agent setup deepseek-harness` 形式（如 Open Design 的 `od agent setup deepseek-harness`）——识别为官方接入方式并以安装日志提示，不代执行（需对方 daemon 在跑，且语义是接入 dsh 而非安装市场插件） / READMEs documenting DSH integration via another tool's own CLI (e.g. `od agent setup deepseek-harness`) are surfaced as official-method hints without being executed
+- **测试残留自动清理（新）**：新增 `scripts/tests/cleanup.mjs` 并接入测试运行器——每次测试后自动删除 %TEMP% 下测试/验证产生的临时目录与文件（保留运行中 DSH harness 的近 7 天临时文件） / a cleanup script hooked into the test runner removes test leftovers from %TEMP% after every run (running harness temp files are kept)
+- **回归测试**：smoke 191 / 单元+集成 111 / e2e 140 全绿 / full suite green
+
+## v1.4.0 — 2026-08-15（官方 CLI 安装优先 + 嵌套预设 + 安装体验 / Official CLI-first install, nested presets & install experience）**里程碑版本**：1.3 系列 12 个迭代后的一次功能集结——安装方式、识别能力、排障体验三个方向同时升级 / a milestone release bundling the post-1.3 feature batch: install method, type detection and troubleshooting experience
 
 - **README 官方 CLI 安装优先（新安装方式）**：克隆后解析 README 的 `dsh plugin install/add` 指令——存在则**直接执行官方 CLI 安装**（`dsh plugin --profile web <install|add> <目标>`，目标两级策略：本仓库包优先，否则采用 README 首条指令如聚合包），成功即完成、失败自动回退市场流程；`cli` 类型记录可正常卸载 / when the README offers an official `dsh plugin install/add` command, the installer now executes it directly (repo/package target preferred, otherwise the README's first command such as an aggregate package), falling back to the marketplace flow on failure; `cli`-type records are uninstallable
 - **CLI 指令识别兼容 flags+包名写法**：`dsh plugin --profile web add dshmarket`（flags 在动词前、目标为 npm 包名）也能识别，返回整条指令 / the README scanner recognizes flags-before-verb and package-name forms
