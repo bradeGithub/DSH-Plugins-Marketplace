@@ -821,6 +821,8 @@ async function main() {
     log("SKIP_ENRICH=1：跳过 pkg_name 富化");
   } else {
     await enrichPkgNames(repos, MODE === "dsh");
+    // v1.4.11：npm 版本富化（issue #26）——npm 发布型插件的升级提示数据源
+    if (MODE === "dsh") await enrichNpmVersions(repos);
   }
 
   // dsh 模式：按简介/标签关键词分类（skills 模式本期不分类）
@@ -931,6 +933,43 @@ async function enrichPkgNames(repos, includeVersion = false) {
   };
   await Promise.all(Array.from({ length: 8 }, () => worker()));
   log(`pkg_name 富化完成：${todo.filter((r) => r.pkg_name).length}/${todo.length}${includeVersion ? `，version ${todo.filter((r) => r.version).length}` : ""}`);
+}
+
+/**
+ * npm 版本富化（v1.4.11）：对有 pkg_name 但缺 npm_version 的仓库查 npm registry
+ * （npmmirror）拿 dist-tags.latest 与真实包名，写入 npm_version / npm_pkg_name。
+ * 解决 issue #26：monorepo / npm 发布型插件（如 dsh-web-ui）根 package.json version
+ * 常年不 bump，GitHub 侧版本与 npm 实际发布版本脱节——npm 型 cli 的自动升级提示
+ * 以 npm_version（安装源同源）为准。
+ * 继承策略：合并后旧条目保留 npm_version（不重查）；本轮 fresh 重拉的仓库字段缺失 → 重查；
+ * 每天 04:00 全量重建（complete 整体替换）时全部重查 → 每天刷新一次 npm 版本。
+ * npm 实时性由前端「检测更新」手动按钮兜底（实时查 registry，不依赖索引）。 */
+async function enrichNpmVersions(repos) {
+  const todo = repos.filter((r) => typeof r.pkg_name === "string" && r.pkg_name.length > 0 && !r.npm_version);
+  if (todo.length === 0) return;
+  let cursor = 0;
+  let hit = 0;
+  const worker = async () => {
+    while (cursor < todo.length) {
+      const r = todo[cursor++];
+      try {
+        const res = await fetch(`https://registry.npmmirror.com/${encodeURIComponent(r.pkg_name)}`, {
+          headers: { "User-Agent": "dsh-plugin-marketplace-registry" },
+          signal: AbortSignal.timeout(8000)
+        });
+        if (!res.ok) continue;
+        const d = await res.json();
+        if (d && typeof d["dist-tags"]?.latest === "string" && d["dist-tags"].latest.length > 0) {
+          r.npm_version = d["dist-tags"].latest;
+          // npm 返回的真实包名（monorepo 根 name 可能与实际发布名不同，如 dsh-web-ui → @linxin666/dsh-web-ui-all）
+          if (typeof d.name === "string" && d.name.length > 0) r.npm_pkg_name = d.name;
+          hit++;
+        }
+      } catch { /* npm 不可达：保持缺失（前端手动检测兜底） */ }
+    }
+  };
+  await Promise.all(Array.from({ length: 16 }, () => worker()));
+  log(`npm 版本富化完成：${hit}/${todo.length}`);
 }
 
 // 直接运行才执行 main（被 smoke-tests import 时只暴露纯函数，无副作用）
