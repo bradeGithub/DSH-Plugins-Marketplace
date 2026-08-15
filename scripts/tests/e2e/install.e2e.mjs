@@ -640,6 +640,52 @@ function setupUrlRewrite(owner, repoName) {
   const argsText = existsSync(argsLog) ? readFileSync(argsLog, "utf8") : "";
   check("e2e CLI 实际执行参数", argsText.includes("plugin --profile web add demo-cli-pkg"), true);
 
+  // ---- 安装反馈闭环：安装成功 → pending 队列 → 提交反馈（无 token → manualUrl）----
+  const fbPendingHandler = handlers.find((h) => h.path === "/api/marketplace/feedback/pending")?.handler;
+  const fbSubmitHandler = handlers.find((h) => h.path === "/api/marketplace/feedback")?.handler;
+  check("e2e feedback pending handler 注册", fbPendingHandler !== null, true);
+  check("e2e feedback submit handler 注册", fbSubmitHandler !== null, true);
+  const callHandler = async (handler, body, method = "GET") => {
+    const bodyStr = body ? JSON.stringify(body) : "";
+    const req = {
+      method,
+      headers: { "x-dsh-marketplace": "1", host: "127.0.0.1:3080" },
+      url: "/api/marketplace/feedback",
+      [Symbol.asyncIterator]() {
+        let sent = false;
+        return {
+          next: async () => {
+            if (!sent) { sent = true; return { value: Buffer.from(bodyStr), done: false }; }
+            return { value: undefined, done: true };
+          },
+        };
+      },
+    };
+    const out = { status: 0, body: null };
+    const res = { writeHead: (s) => { out.status = s; }, end: (b) => { try { out.body = JSON.parse(b); } catch { out.body = b; } } };
+    await handler(req, res);
+    return out;
+  };
+  let fbRes = await callHandler(fbPendingHandler);
+  check("e2e 安装后 pending 队列含 demo-cli", (fbRes.body.pending || []).some((p) => p.repo === "e2e-owner/demo-cli"), true);
+  // 提交「正常」反馈：无 token → 返回 manualUrl 预填链接
+  fbRes = await callHandler(fbSubmitHandler, { repo: "e2e-owner/demo-cli", ok: true, note: "e2e 测试正常" }, "POST");
+  check("e2e 反馈提交 done", fbRes.body && fbRes.body.status, "done");
+  check("e2e 反馈 manualUrl 预填", typeof fbRes.body.manualUrl === "string" && fbRes.body.manualUrl.includes("/issues/new"), true);
+  check("e2e 反馈 manualUrl 含 repo", fbRes.body.manualUrl.includes(encodeURIComponent("e2e-owner/demo-cli")), true);
+  fbRes = await callHandler(fbPendingHandler);
+  check("e2e 提交后 pending 移除 demo-cli", (fbRes.body.pending || []).some((p) => p.repo === "e2e-owner/demo-cli"), false);
+  // 重复提交已移除条目 → feedbackNotFound
+  fbRes = await callHandler(fbSubmitHandler, { repo: "e2e-owner/demo-cli", ok: false }, "POST");
+  check("e2e 重复提交 feedbackNotFound", fbRes.body && fbRes.body.error, "该反馈不存在或已提交。");
+  // token 配置端点：保存 → 回显 hasToken；清除
+  const fbTokenHandler = handlers.find((h) => h.path === "/api/marketplace/feedback/token")?.handler;
+  check("e2e feedback token handler 注册", fbTokenHandler !== null, true);
+  fbRes = await callHandler(fbTokenHandler, { token: "ghp_e2e-fake-token" }, "POST");
+  check("e2e token 保存 hasToken", fbRes.body && fbRes.body.hasToken, true);
+  fbRes = await callHandler(fbTokenHandler, { token: "" }, "POST");
+  check("e2e token 清除 hasToken=false", fbRes.body && fbRes.body.hasToken, false);
+
   // cli 类型卸载：删安装记录 + patch 条目（包目录由 CLI 管理，不存在也不报错）
   r = await postUninstall("e2e-owner/demo-cli");
   check("e2e CLI 卸载 done", r.body && r.body.status, "done");
