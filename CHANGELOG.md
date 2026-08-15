@@ -3,11 +3,17 @@
 本仓库的版本迭代记录。**v1.0.0 之前的版本均为 beta 系列**（开发期迭代，未单独打 tag）。/ Version history of this repository. **All versions before v1.0.0 are part of the beta series** (development iterations, not individually tagged).
 ---
 
-## v1.3.16 — 2026-08-15（CLI 指令识别兼容 flags+包名写法 / CLI hint: flags & package-name forms）
+## v1.4.0 — 2026-08-15（官方 CLI 安装优先 + 嵌套预设 + 安装体验 / Official CLI-first install, nested presets & install experience）
 
-- **识别器兼容两种新写法**（dsh-market 实测反馈）：`dsh plugin --profile web add dshmarket`（flags 在动词前）与指令使用 npm 包名而非仓库名（如 `add dshmarket` ← package.json 的 name）；返回整条指令含 flags / the README CLI hint now recognizes `dsh plugin --profile web add <pkg>` forms: flags before the verb and package-name targets (from the repo's own package.json), returning the full command including flags
-- **实测验证**：真实克隆 dsh-market/dsh-market → `detectType = cordis-plugin`、`scanCliInstallHint = "dsh plugin --profile web add dshmarket"` / verified against a real clone of dsh-market
-- **回归测试**：集成 +2（flags+包名命中、指令指向他包不命中）；smoke 187 / 单元+集成 82 / e2e 103 全绿 / +2 integration cases; suite green
+**里程碑版本**：1.3 系列 12 个迭代后的一次功能集结——安装方式、识别能力、排障体验三个方向同时升级 / a milestone release bundling the post-1.3 feature batch: install method, type detection and troubleshooting experience
+
+- **README 官方 CLI 安装优先（新安装方式）**：克隆后解析 README 的 `dsh plugin install/add` 指令——存在则**直接执行官方 CLI 安装**（`dsh plugin --profile web <install|add> <目标>`，目标两级策略：本仓库包优先，否则采用 README 首条指令如聚合包），成功即完成、失败自动回退市场流程；`cli` 类型记录可正常卸载 / when the README offers an official `dsh plugin install/add` command, the installer now executes it directly (repo/package target preferred, otherwise the README's first command such as an aggregate package), falling back to the marketplace flow on failure; `cli`-type records are uninstallable
+- **CLI 指令识别兼容 flags+包名写法**：`dsh plugin --profile web add dshmarket`（flags 在动词前、目标为 npm 包名）也能识别，返回整条指令 / the README scanner recognizes flags-before-verb and package-name forms
+- **嵌套 agent 预设识别**：`findPresetRoots` 扫描子目录中的 `preset.yml + agent.cordis.yml`——预设目录在子目录的仓库（如 dsh-anchored-standard 的 preset/）从「非插件拦截」变为一键安装；多预设按目录名逐个装到 `~/.dsh/.agent-presets/`（`preset` 惯例目录用仓库名作 id），卸载按 names 逐个删防误删 / presets living in subdirectories are now detected and installed one-click (multi-preset repos install each variant; the conventional `preset/` dir takes the repo name as its id); uninstall removes per-name only
+- **安装后有效性验证**：cordis 插件安装后检查可加载入口（main/lib/index.js/顶层 JS/纯 client 清单），缺失则明示「已安装但可能未生效」并随响应返回 warnings / post-install verification checks for a loadable entry and warns explicitly when missing
+- **安装失败分类提示**：常见 npm/pnpm 错误（网络/EINTEGRITY/版本缺失/node-gyp/模块缺失/权限）翻译成双语排查建议，接入失败日志与响应 / common npm/pnpm failures are classified into actionable bilingual hints
+- **脱敏日志导出**：近期操作日志环形缓冲 + `/api/marketplace/logs` 导出（主目录路径与密钥形态打码），客户端「导出日志」一键下载 / sanitized recent-operation log export for bug reports
+- **回归测试**：smoke 187 / 单元+集成 105 / e2e 129 全绿 / full suite green
 
 ## v1.3.15 — 2026-08-15（README 官方 CLI 安装指令提示 / README CLI install hint）
 
