@@ -18,7 +18,12 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const TARGETS = [
   "scripts/hooks/validate.mjs",
   "scripts/toc.mjs",
+  "scripts/validate-manifest.mjs",
+  "scripts/build-skin-manifest.mjs",
+  "scripts/extract-skin-palette.mjs",
+  "scripts/inject-skin-manifest.mjs",
   "lib/index.js",
+  "lib/skin-manifest.js",
 ];
 const jsonOut = process.argv.includes("--json");
 
@@ -94,6 +99,20 @@ function tocMainOffset(root) {
   return readFileSync(path, "utf8").indexOf("if (isMain())");
 }
 
+/** 计算 validate-manifest.mjs CLI 入口豁免（isMain 起始偏移）。 */
+function validateManifestMainOffset(root) {
+  const path = join(root, "scripts", "validate-manifest.mjs");
+  if (!existsSync(path)) return -1;
+  return readFileSync(path, "utf8").indexOf("if (isMain(import.meta))");
+}
+
+/** 通用：计算脚本 CLI 入口豁免（marker 起始偏移）。 */
+function cliMainOffset(root, relPath, marker) {
+  const path = join(root, relPath);
+  if (!existsSync(path)) return -1;
+  return readFileSync(path, "utf8").indexOf(marker);
+}
+
 // 1. 临时目录收集覆盖率
 const covDir = mkdtempSync(join(tmpdir(), "dsh-cov-"));
 try {
@@ -112,6 +131,10 @@ const libLines = libSrc.split("\n");
 const EXEMPT_LIB_LINE_SET = new Set(); // 保留空集合占位（兼容旧引用）
 const libExempt = libExemptOffsets(ROOT);
 const tocMain = tocMainOffset(ROOT);
+const validateManifestMain = validateManifestMainOffset(ROOT);
+const buildManifestMain = cliMainOffset(ROOT, "scripts/build-skin-manifest.mjs", "// ---- CLI ----");
+const extractPaletteMain = cliMainOffset(ROOT, "scripts/extract-skin-palette.mjs", "if (process.argv[1] && import.meta.url");
+const injectManifestMain = cliMainOffset(ROOT, "scripts/inject-skin-manifest.mjs", "if (process.argv[1] && import.meta.url");
 // 仓库根目录的 file:// 前缀：e2e 触发真实 npm install 时，npm 子进程（也在
 // NODE_V8_COVERAGE 下运行）会为 npm 自身 node_modules 里的模块生成 coverage，
 // 其中不少也名为 lib/index.js——只按尾部路径匹配会误收，必须限定在仓库根目录内。
@@ -136,6 +159,14 @@ for (const f of files) {
         exempt = libExempt.has(offset) || libExemptNear(offset);
       } else if (url.endsWith("/scripts/toc.mjs") && tocMain !== -1) {
         exempt = offset >= tocMain;
+      } else if (url.endsWith("/scripts/validate-manifest.mjs") && validateManifestMain !== -1) {
+        exempt = offset >= validateManifestMain;
+      } else if (url.endsWith("/scripts/build-skin-manifest.mjs") && buildManifestMain !== -1) {
+        exempt = offset >= buildManifestMain;
+      } else if (url.endsWith("/scripts/extract-skin-palette.mjs") && extractPaletteMain !== -1) {
+        exempt = offset >= extractPaletteMain;
+      } else if (url.endsWith("/scripts/inject-skin-manifest.mjs") && injectManifestMain !== -1) {
+        exempt = offset >= injectManifestMain;
       }
       if (exempt) continue;
       const key = `${fn.functionName}@${offset}`;
