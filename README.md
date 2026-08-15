@@ -86,6 +86,7 @@ dsh plugin --profile web install bradeGithub/DSH-Plugins-Marketplace   # 重装�
 - **版本检测与更新**：cordis 插件自动对比已装版本与仓库最新版本（从本地缓存读取，零额外网络请求），不一致时按钮变为「更新」，点击即可覆盖升级
 - **搜索**：按插件名 / 仓库全名 / 标签实时过滤
 - **插件分类**：构建时按简介/标签自动分类（12 类：视觉多模态 / 文档办公 / 记忆知识 / 模型用量 / 通知通讯 / 开发编码 / 对话会话 / 界面美化 / Agent 自动化 / 通用工具 / 聚合资源 / 其他），前端分类 chips 筛选 + 卡片分类徽章
+- **社区收录徽章**：构建期抓取 awesome 聚合页（[awesome-dsh-plugin](https://github.com/awesome-dsh-plugin/awesome-dsh-plugin)，社区人工筛选）收录的仓库，自动打「社区收录」蓝色徽章（悬停可见来源说明）——快速识别社区认可的插件（聚合页收录 ≠ 本市场背书）
 - **通用 Skills 栏目**：设置页 tab 切换到「通用 Skills」——浏览 CI 构建的全量 skills 索引（`agent-skills` ∪ `claude-skills`，12000+ 仓库），支持搜索 / 分页触底加载 / 一键安装到 `~/.dsh/skills/` / 已安装识别；含安装脚本的仓库带 🛡 标识，探测未知的仓库带「未验证」弱提示
 - **刷新反馈**：点「刷新」强制重新拉取，并以弹窗提示「刷新成功 / 刷新失败」
 - **Github原链**：每个卡片提供跳转到原仓库的链接（新标签页打开）
@@ -237,6 +238,7 @@ GitHub Actions（每 2 小时，仓库自带 token）
 - **Skills 索引范围**：v1.3 起为**全量索引**——通过 Search API「stars 分段 + 时间窗口二分」突破单 query 1000 条上限，收录 `agent-skills` ∪ `claude-skills` 全部仓库（当前 12000+）；`has_skill` 探测按 Core API 额度分批补齐（CI 每 2 小时增量续跑，未探测的仓库显示「未验证」）
 - **索引更新节奏**：两个索引均为 CI 每 2 小时增量拉取（最近 3 天 pushed 的仓库，新仓库/star/更新时间即时捕获）并与旧索引合并，每天 04:00 UTC 全量重建刷新 star 数
 - 安装脚本类插件的「已安装」判定基于缓存目录存在性，卸载（删除缓存）后会重新显示为可安装
+- 「社区收录」徽章来自第三方 awesome 聚合页（默认 [awesome-dsh-plugin](https://github.com/awesome-dsh-plugin/awesome-dsh-plugin)），聚合页抓取失败时本轮构建不更新徽章（增量构建保留旧标，下次构建恢复）；收录与否不代表本市场对插件的质量背书
 - 插件代码修改后需**重启 DSH** 才能生效（Web profile 的 HMR 处于禁用状态）
 
 ---

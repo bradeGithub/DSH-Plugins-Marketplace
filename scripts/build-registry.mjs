@@ -68,8 +68,14 @@ const SKILL_STAR_SEGMENTS = [ // 起始分段（大 star 段大概率 <1000 直�
 ];
 const SEGMENT_QUEUE_LIMIT = 120; // 防无限分裂的安全上限（超过则停止分裂，接受部分结果）
 /** 单值段时间窗口最小粒度（天）：0-star 长尾仓库极多，按周切会无限查询；
- *  窗口窄于该值仍超 1000 条就接受部分结果（0-star 仓库价值最低，不值得穷尽）。 */
-const MIN_WINDOW_DAYS = 30;
+ *  窗口窄于该值仍超 1000 条就接受部分结果。
+ *  v1.4.8：dsh 模式收紧到 1 天——实测 topic:dsh-plugin 的 0-star 仓库几乎全部在近 3 天
+ *  pushed（窗口 1155 > 1000），30 天粒度下必然截断，导致聚合页收录的 0-star 插件
+ *  持续进不了索引（awesome-dsh-plugin 收录缺失 83 个中的 19 个即此因）。
+ *  1 天粒度下每日新增 0-star ~400 条 < 1000，可全量收敛；全量模式查询量增加但可接受。
+ *  skills 模式保持 30 天：0-star 长尾规模大一个数量级（数万条），穷尽成本不成比例，
+ *  且其 0-star 仓库价值更低（README 已声明接受部分结果）。 */
+const MIN_WINDOW_DAYS = MODE === "dsh" ? 1 : 30;
 /** 增量模式窗口（天）：>0 时只拉最近 N 天 pushed 的仓库（新/更新仓库），
  *  老仓库从旧索引继承 + stale 剔除。CI 每 2 小时用增量（几分钟），每天全量刷新 star。 */
 const INCREMENTAL_DAYS = Number(process.env.INCREMENTAL_DAYS ?? 0);
@@ -330,6 +336,53 @@ export function applyInstallability(repos, verdictMap) {
     else delete repo.installable;
   }
   return repos;
+}
+
+/**
+ * 社区精选标注（v1.4.8）：构建期抓取 awesome 聚合页收录的仓库，与索引交集打
+ * 「社区精选」徽章（market_tags 追加 "community-pick"）。
+ * 聚合页由社区维护、人工筛选，代表「社区认可的插件」；徽章随每次构建刷新，
+ * 列表更新后增量构建也能同步（统一重算）。机器探测明确非插件的仓库不打标。
+ */
+const COMMUNITY_PICK_SOURCES = [
+  // 社区聚合页（awesome 列表）。新增源：追加 { repo, branch }（并集）。
+  { repo: "awesome-dsh-plugin/awesome-dsh-plugin", branch: "main" }
+];
+
+/** 从聚合页 README 提取仓库链接（纯函数）：只取 github.com/owner/repo 形态，
+ *  去 .git 后缀 / 尾部斜杠，转小写，去重。 */
+export function extractCommunityPickLinks(text) {
+  const out = new Set();
+  const re = /github\.com\/([\w.-]+\/[\w.-]+)/g;
+  let m;
+  while ((m = re.exec(String(text ?? ""))) !== null) {
+    out.add(m[1].replace(/\.git$/i, "").replace(/\/+$/, "").toLowerCase());
+  }
+  return out;
+}
+
+/** 抓取全部聚合页的收录集合（小写 full_name）。源全部失败返回空 Set（调用方降级，
+ *  本次不打标——增量构建旧索引条目保留旧字段，下次构建恢复）。 */
+async function fetchCommunityPicks() {
+  const picks = new Set();
+  for (const source of COMMUNITY_PICK_SOURCES) {
+    try {
+      const res = await fetch(`https://api.github.com/repos/${source.repo}/readme`, {
+        headers: { ...ghHeaders(), Accept: "application/vnd.github.raw" },
+        signal: AbortSignal.timeout(20000)
+      });
+      if (!res.ok) {
+        log(`社区精选源 ${source.repo} 抓取失败：HTTP ${res.status}`);
+        continue;
+      }
+      const links = extractCommunityPickLinks(await res.text());
+      for (const f of links) picks.add(f);
+      log(`社区精选源 ${source.repo}：收录 ${links.size} 个仓库`);
+    } catch (error) {
+      log(`社区精选源 ${source.repo} 抓取失败：${error.message}`);
+    }
+  }
+  return picks;
 }
 
 /**
@@ -800,6 +853,27 @@ async function main() {
       }
     }
     repos = deduped;
+  }
+
+  // 社区精选徽章（v1.4.8）：统一重算（先移除旧标再按最新列表添加），增量构建也能
+  // 同步聚合页更新；抓取失败时跳过重算（增量模式旧索引条目保留旧字段，下次构建恢复）。
+  if (MODE === "dsh") {
+    const picks = await fetchCommunityPicks();
+    if (picks.size > 0) {
+      let picked = 0;
+      for (const repo of repos) {
+        const tags = Array.isArray(repo.market_tags) ? repo.market_tags.filter((t) => t !== "community-pick") : [];
+        if (picks.has(String(repo.full_name ?? "").toLowerCase()) && repo.installable !== "non-plugin") {
+          tags.push("community-pick");
+          picked++;
+        }
+        if (tags.length > 0) repo.market_tags = tags;
+        else delete repo.market_tags;
+      }
+      log(`社区精选打标完成：${picked}/${repos.length} 个仓库`);
+    } else {
+      log("社区精选列表抓取失败：本次不更新徽章（增量模式旧字段保留，下次构建恢复）");
+    }
   }
 
   const out = {

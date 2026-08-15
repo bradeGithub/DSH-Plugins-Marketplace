@@ -3,6 +3,12 @@
 本仓库的版本迭代记录。**v1.0.0 之前的版本均为 beta 系列**（开发期迭代，未单独打 tag）。/ Version history of this repository. **All versions before v1.0.0 are part of the beta series** (development iterations, not individually tagged).
 ---
 
+## v1.4.8 — 2026-08-15（社区收录徽章 + 0-star 长尾截断修复 / Community-listed badges & 0-star tail truncation fix）
+
+- **社区收录徽章（新）**：构建期抓取 awesome 聚合页（默认 [awesome-dsh-plugin/awesome-dsh-plugin](https://github.com/awesome-dsh-plugin/awesome-dsh-plugin)，社区人工筛选）收录的仓库，与索引交集打「社区收录」蓝色徽章（悬停提示「此项目已被 awesome-dsh-plugin 等聚合页收录」）；随每次构建统一重算（聚合页更新后增量构建也能同步），机器探测明确非插件的仓库不打标；聚合页源可配置扩展（`COMMUNITY_PICK_SOURCES`）/ the build now fetches community-curated awesome lists (default: awesome-dsh-plugin/awesome-dsh-plugin), marks intersecting repos with a blue "Community listed" badge (hover tooltip explains the source), recomputes on every build (incremental builds track list updates), skips machine-flagged non-plugins, and supports adding more list sources
+- **修复 0-star 长尾截断导致索引收录不全（重要）**：实测 `topic:dsh-plugin` 的 0-star 仓库几乎全部在近 3 天 pushed（窗口 1155 条 > Search 单 query 1000 条上限），原 30 天最小时间窗口粒度必然截断——聚合页收录的插件有 19 个因此持续进不了索引；`MIN_WINDOW_DAYS` 改为按模式区分（dsh=1 天全量收敛，skills 保持 30 天），全量/增量构建均受益 / important: 0-star repos are almost all pushed within the last 3 days (1155 > the 1000-per-query Search cap), so the old 30-day minimum window always truncated the tail — 19 awesome-listed plugins never made it into the index; `MIN_WINDOW_DAYS` is now mode-aware (1 day for dsh, 30 for skills), fixing coverage in both full and incremental builds
+- **回归测试**：smoke 191 / 单元 180 全绿 / full suite green
+
 ## v1.4.7 — 2026-08-15（市场本体一键更新 / One-click marketplace self-update）
 
 - **市场本体一键更新（新）**：更新横幅新增「立即更新」按钮——服务端克隆最新仓库、校验版本与 staging 完整性后**原子替换**本体目录（失败自动回滚），完成后提示重启 DSH 生效；与安装共用全局互斥（进行中返回 409），已是最新版本时友好提示 / the update banner now has an "Update now" button — the server clones the latest repo, verifies version & staged completeness, atomically swaps the marketplace directory (auto-rollback on failure), then asks you to restart DSH; shares the global install mutex (409 while busy) and reports "already up to date" gracefully
