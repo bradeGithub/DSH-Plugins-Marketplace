@@ -72,7 +72,8 @@ const EXEMPT_LIB_MARKERS = [
   "loadFeedback().catch((error) => {",
   "loadEnvStore().catch((error) => {",
   // install 成功路径 queueFeedback 调用的异常吞掉闭包（queueFeedback 写盘失败时触发，防御分支）
-  "queueFeedback({ repo",
+  // 特征取 Date.now() }).catch：靠近 catch 回调（±80 容差内），且仅匹配这两处调用点
+  "now() }).catch(() => {})",
   // selfLatestFromCache 的 find 回调：真实触发条件为「启动预热完成后 >30 分钟再次打开页面
   // 且直连失败」——apply 预热已更新 checkedAt，测试无法模拟 30 分钟等待，豁免（真实路径可达）
   "repos.find((r) => r.full_name === SELF_UPDATE_REPO)",
