@@ -1,6 +1,16 @@
 # 更新日志 / Changelog
 
 本仓库的版本迭代记录。**v1.0.0 之前的版本均为 beta 系列**（开发期迭代，未单独打 tag）。/ Version history of this repository. **All versions before v1.0.0 are part of the beta series** (development iterations, not individually tagged).
+---
+
+## v1.3.13 — 2026-08-15（子模块安装 + 类型识别分层 + Skills 内置索引 / Submodule install + layered type detection + bundled skills index）
+
+- **git submodule 插件安装修复（#10）**：克隆后检测 `.gitmodules`，存在即递归拉取子模块（`--depth 1`），修复 oh-dsh 等以子模块组织源码的插件构建失败（`Could not resolve upstream/*/src/index.ts`）；子模块地址做安全校验——仅放行 https 与相对路径，`file://` 等协议直接拒绝安装（本地文件泄露防护），并显式禁用 file 协议兜底 / clone now detects `.gitmodules` and initializes submodules recursively, fixing build failures for submodule-based plugins like oh-dsh; submodule URLs are validated (https / relative only, `file://` rejected) with the file protocol explicitly disabled
+- **安装类型识别分层重构（#11）**：`detectType` 不再把 skill 检测放在全局最高优先——改为 预设/脚本 → 根 package.json 声明 DSH 能力 → 根 SKILL.md → 嵌套插件根 → 嵌套技能根 的分层判定；SKILL.md 与 package.json 共存的插件仓库（如 oh-dsh）不再被误判为 skill 而漏装插件本体，带工具链 package.json 的纯 skill 仓库也不会反向误判；`findSkillRoots` 新增 vendored 目录跳过（upstream/vendor/third_party 等，子模块上游技能不算本仓库分发内容）/ `detectType` is now layered instead of skill-first: repos with a DSH-capable package.json are no longer misjudged as skills (which skipped the plugin itself), while pure skill repos with tooling package.json stay skills; `findSkillRoots` skips vendored dirs (upstream/vendor/third_party/...)
+- **Skills 栏目内置索引兜底（#12）**：skills 列表默认直读随包分发的 skills.json（秒开、离线可用），点「刷新」仍走网络源获取最新；修复 12MB skills.json 撞 15s 硬超时导致栏目刷不出来/数据残缺的问题；前端新增「内置索引」数据源提示条 / the skills tab now reads the bundled skills.json by default (instant, offline-ready) with Refresh still hitting network sources; fixes the 12MB index hitting the 15s timeout; a new "bundled" data-source banner is shown
+- **搜索兜底不再污染磁盘缓存（#12 根因）**：搜索 API 的残缺结果（单 query 上限 1000 条）不再写入磁盘缓存，避免把上次成功的完整索引降级 / partial search-API fallback results no longer overwrite the last good full index on disk
+- **回归测试**：新增 19 条用例（.gitmodules 地址校验、detectType 六种形态、vendored 跳过、内置索引可读/去重/排除本体、兜底顺序、搜索不污染缓存），e2e 与集成的 3 条缓存兜底用例适配内置索引层（临时移开内置文件以覆盖更深层路径）/ 19 new regression cases covering gitmodules URL validation, six detectType shapes, vendored-dir skipping, bundled index integrity, fallback ordering and no search-cache pollution; 3 cache-fallback cases adapted to the bundled-index tier
+- 致谢 / Thanks: @lws2004（#10 #11 报告与补丁草案）、@GangCLiu（#12 报告与完整补丁）
 
 ---
 

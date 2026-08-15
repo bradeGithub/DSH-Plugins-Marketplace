@@ -6,10 +6,11 @@
 // 前置：git 可用（`git --version`）；npm 缺失时跳过 cordis-plugin 分支。
 // 运行：node scripts/tests/e2e/install.e2e.mjs
 
-import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, existsSync, rmSync } from "node:fs";
+import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, existsSync, rmSync, renameSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { tmpdir } from "node:os";
 import { execFileSync } from "node:child_process";
+import { fileURLToPath } from "node:url";
 
 // 检查 git
 try {
@@ -185,24 +186,55 @@ function setupUrlRewrite(owner, repoName) {
     check("e2e skills handler 存在", false, true);
   }
 
-  // ---- 列表磁盘缓存兜底：fetch 全部返回空（模拟三源全挂）时，
-  //      优先返回本地缓存（上次成功索引），而不是搜索 API 的残缺结果；
-  //      无缓存时才走搜索兜底。----
+  // ---- 列表兜底顺序（#12）：网络源全挂（本 e2e 无网络 mock，fetch 恒失败）→
+  //      内置索引（随包分发，真实 registry.json/skills.json）→ 磁盘缓存 → 搜索兜底。
+  //      磁盘缓存用例需临时移开内置文件才能覆盖该层；fire-and-forget 的缓存落盘
+  //      用短暂等待规避竞态。----
   const cacheDir2 = join(HOME, "marketplace", "list-cache");
   mkdirSync(cacheDir2, { recursive: true });
   const cachedRepo = { full_name: "cached-owner/demo-cached", name: "demo-cached", description: "cached", html_url: "https://github.com/cached-owner/demo-cached", stargazers_count: 5, updated_at: "2026-01-01T00:00:00Z", default_branch: "main", topics: [], license: null, pkg_name: null, version: null, category: null, has_skill: false, has_install_script: false };
-  writeFileSync(join(cacheDir2, "dsh.json"), JSON.stringify({ saved_at: new Date().toISOString(), kind: "dsh", count: 1, repos: [cachedRepo] }), "utf8");
-  const cachedList = await lib.fetchAllRepos("dsh");
-  check("e2e 磁盘缓存兜底返回缓存条目", cachedList.some((r) => r.full_name === "cached-owner/demo-cached"), true);
+  const bundledDir = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
+  const bundledDsh = join(bundledDir, "registry.json");
+  const bundledSkills = join(bundledDir, "skills.json");
+  const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
-  rmSync(join(cacheDir2, "dsh.json"), { force: true });
-  const searchFallback = await lib.fetchAllRepos("dsh");
-  check("e2e 无缓存时搜索兜底返回空数组", Array.isArray(searchFallback), true);
-  const skillCacheDir = join(HOME, "marketplace", "list-cache");
-  writeFileSync(join(skillCacheDir, "skills.json"), JSON.stringify({ saved_at: new Date().toISOString(), kind: "skills", count: 2, repos: [cachedRepo, { ...cachedRepo, full_name: "cached-owner/demo-cached-2", name: "demo-cached-2" }] }), "utf8");
-  const cachedSkills = await lib.fetchAllRepos("skills");
-  check("e2e skills 磁盘缓存兜底 2 条", cachedSkills.length, 2);
-  rmSync(join(skillCacheDir, "skills.json"), { force: true });
+  // 1) dsh 网络全挂 → 内置索引兜底（不含假缓存条目，条目数为真实量级）
+  const bundledList = await lib.fetchAllRepos("dsh");
+  check("e2e dsh 网络全挂回退内置索引", bundledList.length > 100 && !bundledList.some((r) => r.full_name === "cached-owner/demo-cached"), true);
+  await sleep(500); // 等待 bundled 分支的磁盘缓存落盘完成，避免与下面重写缓存文件交错
+
+  // 2) 内置索引缺失（临时移开）→ 磁盘缓存兜底
+  renameSync(bundledDsh, bundledDsh + ".bak");
+  try {
+    writeFileSync(join(cacheDir2, "dsh.json"), JSON.stringify({ saved_at: new Date().toISOString(), kind: "dsh", count: 1, repos: [cachedRepo] }), "utf8");
+    const cachedList = await lib.fetchAllRepos("dsh");
+    check("e2e 磁盘缓存兜底返回缓存条目", cachedList.some((r) => r.full_name === "cached-owner/demo-cached"), true);
+
+    // 3) 无内置无缓存 → 搜索兜底；残缺结果不得写盘污染磁盘缓存（#12）
+    rmSync(join(cacheDir2, "dsh.json"), { force: true });
+    const searchFallback = await lib.fetchAllRepos("dsh");
+    check("e2e 无缓存时搜索兜底返回空数组", Array.isArray(searchFallback), true);
+    await sleep(200);
+    check("e2e 搜索兜底不污染磁盘缓存", existsSync(join(cacheDir2, "dsh.json")), false);
+  } finally {
+    renameSync(bundledDsh + ".bak", bundledDsh);
+  }
+
+  // 4) skills 默认（非刷新）直读内置索引，完全不依赖网络（#12 的核心修复）
+  const skillsBundled = await lib.fetchAllRepos("skills");
+  check("e2e skills 默认直读内置索引", skillsBundled.length > 10000, true);
+  await sleep(500);
+
+  // 5) skills 内置缺失（临时移开）→ 磁盘缓存兜底
+  renameSync(bundledSkills, bundledSkills + ".bak");
+  try {
+    writeFileSync(join(cacheDir2, "skills.json"), JSON.stringify({ saved_at: new Date().toISOString(), kind: "skills", count: 2, repos: [cachedRepo, { ...cachedRepo, full_name: "cached-owner/demo-cached-2", name: "demo-cached-2" }] }), "utf8");
+    const cachedSkills = await lib.fetchAllRepos("skills");
+    check("e2e skills 磁盘缓存兜底 2 条", cachedSkills.length, 2);
+  } finally {
+    renameSync(bundledSkills + ".bak", bundledSkills);
+  }
+  rmSync(join(cacheDir2, "skills.json"), { force: true });
 
   // install handler 错误分支：非法 repo → 400
   const badReq = {
