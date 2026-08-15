@@ -70,11 +70,13 @@ const OLD = new Date(Date.now() - 7 * 24 * 3600 * 1000).toISOString(); // 7 天�
 // ==================== 修复 1：search 兜底不写盘 ====================
 
 // 场景 A：list-cache 目录不存在 → registry 全挂 + search 成功 → 返回 search 结果，且目录不被创建
+// 注：search payload 给 2 条——V8 覆盖率里 sort 比较回调只在数组长度 >1 时被调用，
+// 单条数组 sort 回调 count=0（覆盖率伪未覆盖，见 coverage.mjs 审计记录）。
 {
-  const orig = mockFetch(null, searchItems(["s1/skill-a"]));
+  const orig = mockFetch(null, searchItems(["s1/skill-a", "s1/skill-b"]));
   const list = await lib.fetchAllRepos("dsh");
   globalThis.fetch = orig;
-  check("search 兜底返回当次结果", list.map((r) => r.full_name), ["s1/skill-a"]);
+  check("search 兜底返回当次结果", list.map((r) => r.full_name), ["s1/skill-a", "s1/skill-b"]);
   check("search 兜底不创建 list-cache 目录", listCacheFiles(), null);
 }
 
@@ -83,10 +85,10 @@ const OLD = new Date(Date.now() - 7 * 24 * 3600 * 1000).toISOString(); // 7 天�
   const staleContent = JSON.stringify({ saved_at: OLD, generated_at: OLD, kind: "dsh", count: 1, repos: [cacheRepo("c1/stale")] }, null, 2);
   mkdirSync(listCacheDir, { recursive: true });
   writeFileSync(cacheFile("dsh"), staleContent, "utf8");
-  const orig = mockFetch(null, searchItems(["s2/skill-b"]));
+  const orig = mockFetch(null, searchItems(["s2/skill-b", "s2/skill-c"]));
   const list = await lib.fetchAllRepos("dsh");
   globalThis.fetch = orig;
-  check("过期缓存 + search 兜底返回 search 结果", list.map((r) => r.full_name), ["s2/skill-b"]);
+  check("过期缓存 + search 兜底返回 search 结果", list.map((r) => r.full_name), ["s2/skill-b", "s2/skill-c"]);
   check("search 兜底不改写缓存文件", readFileSync(cacheFile("dsh"), "utf8"), staleContent);
   check("search 兜底不新增缓存文件", listCacheFiles(), ["dsh.json"]);
 }
