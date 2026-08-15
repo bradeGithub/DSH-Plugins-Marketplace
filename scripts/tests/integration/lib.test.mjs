@@ -5,7 +5,7 @@
 // 注意：必须用动态 import 控制加载顺序——静态 import 会被提升，lib/index.js
 // 求值时 process.env.DSH_HOME 尚未设置，模块级常量会回退到真实 ~/.dsh（污染主目录）。
 
-import { mkdtempSync, mkdirSync, writeFileSync, existsSync, renameSync } from "node:fs";
+import { mkdtempSync, mkdirSync, writeFileSync, existsSync, renameSync, rmSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { join, dirname } from "node:path";
 import { tmpdir } from "node:os";
@@ -157,11 +157,15 @@ function mockFetch(payload, status = 200) {
 
   // fetchJson 错误路径（fetchJson 未导出，经 fetchAllRepos 内部触发）：
   // 所有 registry 源返回 403 → （内置索引存在会先兜底，#12——临时移开以覆盖
-  // 更深层路径）→ 磁盘缓存（空）→ 搜索 API → fetchJson 抛错被捕获（含
+  // 更深层路径）→ 磁盘缓存（清空）→ 搜索 API → fetchJson 抛错被捕获（含
   // res.text() 失败时的 .catch(() => "") 分支）→ 降级返回空数组。
   const bundledDsh = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..", "registry.json");
   renameSync(bundledDsh, bundledDsh + ".bak");
   try {
+    // 前文 fetchAllRepos 的内置索引兜底会 fire-and-forget 落盘 list-cache/dsh.json，
+    // 先等其写完再清空，否则磁盘缓存层会先命中、覆盖不了搜索兜底路径。
+    await new Promise((r) => setTimeout(r, 500));
+    rmSync(join(process.env.DSH_HOME, "marketplace", "list-cache", "dsh.json"), { force: true });
     const orig5 = globalThis.fetch;
     globalThis.fetch = async () => ({ ok: false, status: 403, json: async () => ({}), text: async () => { throw new Error("text boom"); } });
     const degraded = await lib.fetchAllRepos("dsh");
