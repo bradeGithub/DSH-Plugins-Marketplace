@@ -405,6 +405,17 @@ function setupUrlRewrite(owner, repoName) {
   r = await postInstall("e2e-owner/demo-skill-env", { OPENAI_API_KEY: "" });
   check("e2e env 空串跳过安装 done", r.body && r.body.status, "done");
 
+  // ---- 备份排序：多条安装记录时 installedAt 升序（buildBackup 的 sort 回调）----
+  // 此时 installedMap 已有 ≥2 条记录（legacy 遗留 + demo-skill + demo-skill-env），
+  // 触发 sort 比较回调（空/单条时 V8 不会调用比较器，覆盖不到该分支）。
+  let bkSorted = null, bkSortStatus = 0;
+  await backupHandler({ method: "GET", headers: { "x-dsh-marketplace": "1", host: "127.0.0.1:3080" }, url: "/api/marketplace/backup" },
+    { writeHead: (s) => { bkSortStatus = s; }, end: (b) => { try { bkSorted = JSON.parse(b); } catch { bkSorted = null; } } });
+  const reposSorted = bkSorted && bkSorted.backup && bkSorted.backup.repos;
+  check("e2e backup 多记录 200", bkSortStatus, 200);
+  check("e2e backup 多记录 installedAt 升序", Array.isArray(reposSorted) && reposSorted.length >= 2
+    && reposSorted.every((x, i) => i === 0 || (reposSorted[i - 1].installedAt ?? 0) <= (x.installedAt ?? 0)), true);
+
   // ---- instructions 手动安装流（无可自动安装内容）----
   setupUrlRewrite(owner, "demo-manual");
   makeFixtureRepo("demo-manual", { "notes.txt": "nothing auto-installable here\n" });
@@ -702,6 +713,18 @@ function setupUrlRewrite(owner, repoName) {
   check("e2e 入口缺失 done", r.body && r.body.status, "done");
   check("e2e 入口缺失 warnings 含包名", Array.isArray(r.body && r.body.warnings) && r.body.warnings.includes("demo-no-entry"), true);
   check("e2e 入口缺失日志提示", Array.isArray(r.body && r.body.log) && r.body.log.some((l) => l.includes("demo-no-entry")), true);
+
+  // ---- 安装后有效性验证：无 main/无 lib/index.js/无 dsh client 声明但顶层有 js 文件 → readdir 检测 ----
+  // demo-no-entry 的 readdir 返回空（顶层无 js），.some() 比较器不执行；本 fixture 顶层放
+  // index.js 触发该分支：entryOk 由「任意顶层 js」判定为 true，无 entryMissing 警告。
+  setupUrlRewrite(owner, "demo-js-top");
+  makeFixtureRepo("demo-js-top", {
+    "package.json": JSON.stringify({ name: "demo-js-top", version: "1.0.0", dsh: {} }),
+    "index.js": "module.exports = {};\n",
+  });
+  r = await postInstall("e2e-owner/demo-js-top", {});
+  check("e2e 顶层 js 入口 done", r.body && r.body.status, "done");
+  check("e2e 顶层 js 入口无 entryMissing 警告", !(Array.isArray(r.body && r.body.warnings) && r.body.warnings.includes("demo-js-top")), true);
 
   // ---- 导出脱敏日志：含安装记录、路径已打码 ----
   const logsHandler = handlers.find((h) => h.path === "/api/marketplace/logs")?.handler;
