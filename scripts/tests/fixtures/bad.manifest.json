@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "id": "bad-skin",
+  "name": { "zh": "坏样例", "en": "Bad Sample" },
+  "author": "test",
+  "accent": "#fff",
+  "bodyAttr": "data-dsh-bad",
+  "package": "@test/bad-skin",
+  "palette": {
+    "modes": ["light", "dark"],
+    "light": {
+      "bg-base": "#ffffff",
+      "label-primary": "#ffffff",
+      "label-primary-foreground": "#ffffff"
+    }
+  },
+  "components": {
+    "titlebar": {
+      "text": "#ffffff",
+      "background": "body[data-dsh-bad]{color:#fff}",
+      "ratio": 9
+    }
+  },
+  "settings": [
+    { "id": "x", "type": "color", "target": { "kind": "css" } }
+  ],
+  "checks": [
+    { "kind": "contrast", "text": "ref:label-primary", "background": "ref:bg-base", "minRatio": 99 }
+  ],
+  "unknownField": true
+}
