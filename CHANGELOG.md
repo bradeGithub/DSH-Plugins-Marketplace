@@ -3,9 +3,17 @@
 本仓库的版本迭代记录。**v1.0.0 之前的版本均为 beta 系列**（开发期迭代，未单独打 tag）。/ Version history of this repository. **All versions before v1.0.0 are part of the beta series** (development iterations, not individually tagged).
 ---
 
-## v1.4.0 — 2026-08-15（官方 CLI 安装优先 + 嵌套预设 + 安装体验 / Official CLI-first install, nested presets & install experience）
+## v1.4.1 — 2026-08-15（安装反馈闭环 + 人工验证标注 + 第三方 CLI 接入提示 / Install-feedback loop, curated verification tags & third-party CLI integration hints）
 
-**里程碑版本**：1.3 系列 12 个迭代后的一次功能集结——安装方式、识别能力、排障体验三个方向同时升级 / a milestone release bundling the post-1.3 feature batch: install method, type detection and troubleshooting experience
+**小版本迭代**：安装体验闭环——装完问用户、反馈进 GitHub issue；市场列表新增人工验证徽章；扫描器补上第三方 CLI 的 DSH 接入指令识别 / a minor release closing the install-feedback loop (ask after install, file results as GitHub issues), adding curated verification badges to the listing and recognizing third-party CLI integration commands in READMEs
+
+- **安装反馈闭环（新）**：安装成功后登记待确认队列，下次打开插件市场弹出「插件 X 是否正常安装并运行?」——✓ 正常 / ✗ 不正常（可填备注）/ 稍后再说；提交后自动同步 GitHub issue（配置 Token 则自动创建，标题 `[安装反馈] ✅/❌: 仓库`、带 `install-feedback` label；未配置则打开预填好的新建 issue 页面，反馈一条不丢） / after each install a confirmation dialog appears the next time the marketplace opens; answers (works/broken + optional notes) are filed as GitHub issues automatically when a Token is configured, or via a pre-filled issue page otherwise
+- **人工验证标注（新）**：`market_tags` 构建期注入——实测可一键安装的仓库盖「✓ 已验证安装」绿徽章（dsh-market / dsh-web-ui / dsh-anchored-standard / 市场本体 / archify），open-design 盖「需前置内容」橙徽章（需先装官方 dsh CLI 并经其自带 od CLI 接入）；人工实测优先于机器探测（dsh-web-ui 根目录非插件但官方聚合包实测可装，不再误盖「非 DSH 插件」） / curated `market_tags` stamped at build time: green "install verified" badges on repos proven to install one-click, orange "prereqs needed" on open-design; human verification overrides machine probing
+- **第三方 CLI 接入指令识别（新）**：扫描 README 中 `<cli> agent setup deepseek-harness` 形式（如 Open Design 的 `od agent setup deepseek-harness`）——识别为官方接入方式并以安装日志提示，不代执行（需对方 daemon 在跑，且语义是接入 dsh 而非安装市场插件） / READMEs documenting DSH integration via another tool's own CLI (e.g. `od agent setup deepseek-harness`) are surfaced as official-method hints without being executed
+- **测试残留自动清理（新）**：新增 `scripts/tests/cleanup.mjs` 并接入测试运行器——每次测试后自动删除 %TEMP% 下测试/验证产生的临时目录与文件（保留运行中 DSH harness 的近 7 天临时文件） / a cleanup script hooked into the test runner removes test leftovers from %TEMP% after every run (running harness temp files are kept)
+- **回归测试**：smoke 191 / 单元+集成 111 / e2e 140 全绿 / full suite green
+
+## v1.4.0 — 2026-08-15（官方 CLI 安装优先 + 嵌套预设 + 安装体验 / Official CLI-first install, nested presets & install experience）**里程碑版本**：1.3 系列 12 个迭代后的一次功能集结——安装方式、识别能力、排障体验三个方向同时升级 / a milestone release bundling the post-1.3 feature batch: install method, type detection and troubleshooting experience
 
 - **README 官方 CLI 安装优先（新安装方式）**：克隆后解析 README 的 `dsh plugin install/add` 指令——存在则**直接执行官方 CLI 安装**（`dsh plugin --profile web <install|add> <目标>`，目标两级策略：本仓库包优先，否则采用 README 首条指令如聚合包），成功即完成、失败自动回退市场流程；`cli` 类型记录可正常卸载 / when the README offers an official `dsh plugin install/add` command, the installer now executes it directly (repo/package target preferred, otherwise the README's first command such as an aggregate package), falling back to the marketplace flow on failure; `cli`-type records are uninstallable
 - **CLI 指令识别兼容 flags+包名写法**：`dsh plugin --profile web add dshmarket`（flags 在动词前、目标为 npm 包名）也能识别，返回整条指令 / the README scanner recognizes flags-before-verb and package-name forms
