@@ -54,4 +54,11 @@ if (jsonOut) {
   const ok = results.filter((r) => r.ok).length;
   console.log(`\n测试金字塔: ${ok}/${total} 通过`);
 }
+
+// 清理测试在 %TEMP%（C 盘）留下的临时目录/文件（失败不阻塞测试结果）
+try {
+  execFileSync(process.execPath, [join(TESTS, "cleanup.mjs")], { cwd: ROOT, stdio: "inherit" });
+} catch {
+  console.error("[cleanup] 清理脚本执行失败（不影响测试结果）");
+}
 process.exit(failed ? 1 : 0);
