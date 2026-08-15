@@ -78,7 +78,9 @@ check("annotateSkillInstalled 走 ensure 入口", /await ensureInstalledIndex\(\
 
 // ---- 契约 5：内容指纹 fp ----
 const fpCount = (lib.match(/fp: listFingerprint\(deduped\)/g) ?? []).length;
-check("list + skills 两处响应都带 fp", fpCount, 2);
+// 上游 1.4.0（#14）skills 改服务端分页后响应不再带 fp——指纹门控被 fetchPage seq 竞态
+// 保护替代（client.js skillsFetchSeq）；仅插件列表（全量返回）保留 fp。
+check("插件列表响应带 fp（skills 分页化后仅一处）", fpCount, 1);
 check("listFingerprint 实现存在", /function listFingerprint\(repos\) \{[\s\S]*?\n\}/.test(lib), true);
 check("client.js fingerprintOf 优先 data.fp", /if \(typeof data\.fp === "string"\) return data\.fp;/.test(client), true);
 // 回退必须含 cached_at（见 A3：只按 source+total 门控会在内容一进一出时漏更新）——A3 断言同一契约

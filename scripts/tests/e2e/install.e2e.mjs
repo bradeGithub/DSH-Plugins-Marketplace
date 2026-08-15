@@ -6,10 +6,11 @@
 // 前置：git 可用（`git --version`）；npm 缺失时跳过 cordis-plugin 分支。
 // 运行：node scripts/tests/e2e/install.e2e.mjs
 
-import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, existsSync, rmSync } from "node:fs";
+import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, existsSync, rmSync, renameSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { tmpdir } from "node:os";
 import { execFileSync } from "node:child_process";
+import { fileURLToPath } from "node:url";
 
 // 检查 git
 try {
@@ -31,6 +32,17 @@ try {
   }
 } catch {
   npmAvailable = false;
+}
+
+// 检查 pnpm（pnpm 分支需要真实 pnpm；缺失时该分支断言为失败路径）。
+// Windows 上 pnpm 是 .cmd 垫片——与 lib 的 runPnpm 同款（cmd.exe /c pnpm）。
+let pnpmAvailable = true;
+try {
+  execFileSync(process.platform === "win32" ? "cmd.exe" : "pnpm",
+    process.platform === "win32" ? ["/d", "/s", "/c", "pnpm", "--version"] : ["--version"],
+    { stdio: "pipe" });
+} catch {
+  pnpmAvailable = false;
 }
 
 // 临时 DSH_HOME + fixture 目录（必须在 lib 加载前设置——用动态 import 控制顺序）
@@ -185,24 +197,115 @@ function setupUrlRewrite(owner, repoName) {
     check("e2e skills handler 存在", false, true);
   }
 
-  // ---- 列表磁盘缓存兜底：fetch 全部返回空（模拟三源全挂）时，
-  //      优先返回本地缓存（上次成功索引），而不是搜索 API 的残缺结果；
-  //      无缓存时才走搜索兜底。----
+  // ---- 列表兜底顺序（#12）：网络源全挂（本 e2e 无网络 mock，fetch 恒失败）→
+  //      内置索引（随包分发，真实 registry.json/skills.json）→ 磁盘缓存 → 搜索兜底。
+  //      磁盘缓存用例需临时移开内置文件才能覆盖该层；fire-and-forget 的缓存落盘
+  //      用短暂等待规避竞态。----
+  // 注：缓存兜底用例由上游 1.4.0 的重写版本覆盖（下方 1-5 步，用 renameSync 临时
+  // 移开内置索引文件）——合并时删除旧版重复场景（无内置文件隔离，bundled 源
+  // 会先兜底返回真实索引，缓存断言必然失败）。
   const cacheDir2 = join(HOME, "marketplace", "list-cache");
   mkdirSync(cacheDir2, { recursive: true });
   const cachedRepo = { full_name: "cached-owner/demo-cached", name: "demo-cached", description: "cached", html_url: "https://github.com/cached-owner/demo-cached", stargazers_count: 5, updated_at: "2026-01-01T00:00:00Z", default_branch: "main", topics: [], license: null, pkg_name: null, version: null, category: null, has_skill: false, has_install_script: false };
-  writeFileSync(join(cacheDir2, "dsh.json"), JSON.stringify({ saved_at: new Date().toISOString(), generated_at: new Date().toISOString(), kind: "dsh", count: 1, repos: [cachedRepo] }), "utf8");
-  const cachedList = await lib.fetchAllRepos("dsh");
-  check("e2e 磁盘缓存兜底返回缓存条目", cachedList.some((r) => r.full_name === "cached-owner/demo-cached"), true);
+  const bundledDir = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
+  const bundledDsh = join(bundledDir, "registry.json");
+  const bundledSkills = join(bundledDir, "skills.json");
+  const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
-  rmSync(join(cacheDir2, "dsh.json"), { force: true });
-  const searchFallback = await lib.fetchAllRepos("dsh");
-  check("e2e 无缓存时搜索兜底返回空数组", Array.isArray(searchFallback), true);
-  const skillCacheDir = join(HOME, "marketplace", "list-cache");
-  writeFileSync(join(skillCacheDir, "skills.json"), JSON.stringify({ saved_at: new Date().toISOString(), generated_at: new Date().toISOString(), kind: "skills", count: 2, repos: [cachedRepo, { ...cachedRepo, full_name: "cached-owner/demo-cached-2", name: "demo-cached-2" }] }), "utf8");
-  const cachedSkills = await lib.fetchAllRepos("skills");
-  check("e2e skills 磁盘缓存兜底 2 条", cachedSkills.length, 2);
-  rmSync(join(skillCacheDir, "skills.json"), { force: true });
+  // 1) dsh 网络全挂 → 内置索引兜底（不含假缓存条目，条目数为真实量级）
+  const bundledList = await lib.fetchAllRepos("dsh");
+  check("e2e dsh 网络全挂回退内置索引", bundledList.length > 100 && !bundledList.some((r) => r.full_name === "cached-owner/demo-cached"), true);
+  await sleep(500); // 等待 bundled 分支的磁盘缓存落盘完成，避免与下面重写缓存文件交错
+
+  // 2) 内置索引缺失（临时移开）→ 磁盘缓存兜底
+  renameSync(bundledDsh, bundledDsh + ".bak");
+  try {
+    writeFileSync(join(cacheDir2, "dsh.json"), JSON.stringify({ saved_at: new Date().toISOString(), generated_at: new Date().toISOString(), kind: "dsh", count: 1, repos: [cachedRepo] }), "utf8");
+    const cachedList = await lib.fetchAllRepos("dsh");
+    check("e2e 磁盘缓存兜底返回缓存条目", cachedList.some((r) => r.full_name === "cached-owner/demo-cached"), true);
+
+    // 3) 无内置无缓存 → 搜索兜底；残缺结果不得写盘污染磁盘缓存（#12）
+    rmSync(join(cacheDir2, "dsh.json"), { force: true });
+    const searchFallback = await lib.fetchAllRepos("dsh");
+    check("e2e 无缓存时搜索兜底返回空数组", Array.isArray(searchFallback), true);
+    await sleep(200);
+    check("e2e 搜索兜底不污染磁盘缓存", existsSync(join(cacheDir2, "dsh.json")), false);
+  } finally {
+    renameSync(bundledDsh + ".bak", bundledDsh);
+  }
+
+  // 4) skills 默认（非刷新）直读内置索引，完全不依赖网络（#12 的核心修复）
+  const skillsBundled = await lib.fetchAllRepos("skills");
+  check("e2e skills 默认直读内置索引", skillsBundled.length > 10000, true);
+  await sleep(500);
+
+  // 5) skills 内置缺失（临时移开）→ 磁盘缓存兜底
+  renameSync(bundledSkills, bundledSkills + ".bak");
+  try {
+    writeFileSync(join(cacheDir2, "skills.json"), JSON.stringify({ saved_at: new Date().toISOString(), generated_at: new Date().toISOString(), kind: "skills", count: 2, repos: [cachedRepo, { ...cachedRepo, full_name: "cached-owner/demo-cached-2", name: "demo-cached-2" }] }), "utf8");
+    const cachedSkills = await lib.fetchAllRepos("skills");
+    check("e2e skills 磁盘缓存兜底 2 条", cachedSkills.length, 2);
+  } finally {
+    renameSync(bundledSkills + ".bak", bundledSkills);
+  }
+  rmSync(join(cacheDir2, "skills.json"), { force: true });
+
+  // ---- #14：skills 服务端分页 + 搜索下推（真实内置索引）----
+  if (skillsHandler) {
+    let paged = null, pagedStatus = 0;
+    await skillsHandler({ method: "GET", headers: { "x-dsh-marketplace": "1", host: "127.0.0.1:3080" }, url: "/api/marketplace/skills?page=1&pageSize=5" }, { writeHead: (s) => { pagedStatus = s; }, end: (b) => { try { paged = JSON.parse(b); } catch { paged = null; } } });
+    check("e2e skills 分页 200", pagedStatus, 200);
+    check("e2e skills 分页每页≤5", paged && Array.isArray(paged.repos) && paged.repos.length <= 5, true);
+    check("e2e skills 分页 total>0", paged && paged.total > 0, true);
+    check("e2e skills 分页 page 字段", paged && paged.page, 1);
+    let qr = null;
+    await skillsHandler({ method: "GET", headers: { "x-dsh-marketplace": "1", host: "127.0.0.1:3080" }, url: "/api/marketplace/skills?page=1&pageSize=10&q=pdf" }, { writeHead: () => {}, end: (b) => { try { qr = JSON.parse(b); } catch { qr = null; } } });
+    check("e2e skills 搜索下推过滤", qr && Array.isArray(qr.repos) && qr.repos.length > 0 && qr.repos.every((r) => (r.name + " " + r.full_name + " " + (r.topics || []).join(" ") + " " + (r.description || "")).toLowerCase().includes("pdf")), true);
+  }
+
+  // ---- #15：备份 / 恢复 ----
+  const backupHandler = handlers.find((h) => h.path === "/api/marketplace/backup")?.handler;
+  const diffHandler = handlers.find((h) => h.path === "/api/marketplace/restore/diff")?.handler;
+  const wdBackupHandler = handlers.find((h) => h.path === "/api/marketplace/backup/webdav")?.handler;
+  check("e2e backup handler 注册", backupHandler !== null, true);
+  check("e2e restore/diff handler 注册", diffHandler !== null, true);
+  let bk = null, bkStatus = 0;
+  await backupHandler({ method: "GET", headers: { "x-dsh-marketplace": "1", host: "127.0.0.1:3080" }, url: "/api/marketplace/backup" }, { writeHead: (s) => { bkStatus = s; }, end: (b) => { try { bk = JSON.parse(b); } catch { bk = null; } } });
+  check("e2e backup 200", bkStatus, 200);
+  check("e2e backup 含安装记录", bk && bk.backup && Array.isArray(bk.backup.repos) && bk.backup.repos.length >= 1, true);
+  check("e2e backup 键已规范化小写", bk && bk.backup.repos.some((r) => r.repo === "small-owner/demo-case-skill"), true);
+  let df = null, dfStatus = 0;
+  const fakeBackup = {
+    repos: [
+      { repo: "small-owner/demo-case-skill", type: "skill", name: "demo-case-skill" },
+      { repo: "zzz-none/not-installed", type: "skill", name: "x" }
+    ]
+  };
+  const dfReq = {
+    method: "POST",
+    headers: { "x-dsh-marketplace": "1", host: "127.0.0.1:3080" },
+    url: "/api/marketplace/restore/diff",
+    [Symbol.asyncIterator]() {
+      let sent = false;
+      return { next: async () => sent ? { value: undefined, done: true } : (sent = true, { value: Buffer.from(JSON.stringify({ backup: fakeBackup })), done: false }) };
+    },
+  };
+  await diffHandler(dfReq, { writeHead: (s) => { dfStatus = s; }, end: (b) => { try { df = JSON.parse(b); } catch { df = null; } } });
+  check("e2e restore/diff 200", dfStatus, 200);
+  check("e2e restore/diff missing 只含未安装", df && df.missing, ["zzz-none/not-installed"]);
+  check("e2e restore/diff already 含已安装", df && df.already, ["small-owner/demo-case-skill"]);
+  let wdStatus = 0;
+  const wdReq = {
+    method: "POST",
+    headers: { "x-dsh-marketplace": "1", host: "127.0.0.1:3080" },
+    url: "/api/marketplace/backup/webdav",
+    [Symbol.asyncIterator]() {
+      let sent = false;
+      return { next: async () => sent ? { value: undefined, done: true } : (sent = true, { value: Buffer.from(JSON.stringify({ url: "file:///etc/passwd" })), done: false }) };
+    },
+  };
+  await wdBackupHandler(wdReq, { writeHead: (s) => { wdStatus = s; }, end: () => {} });
+  check("e2e webdav 非 http 地址 400", wdStatus, 400);
 
   // install handler 错误分支：非法 repo → 400
   const badReq = {
@@ -396,6 +499,8 @@ function setupUrlRewrite(owner, repoName) {
         }
       }),
       "packages/dep/package.json": JSON.stringify({ name: "dep-pkg", version: "1.1.0" }),
+      // README 官方 CLI 安装指令（scanCliInstallHint 应识别并随响应返回 cliCommand）
+      "README.md": "# demo-plugin\n\n## Install\n```bash\ndsh plugin install e2e-owner/demo-plugin\n```\n",
     });
 
     let r = await postInstall("e2e-owner/demo-plugin", {});
@@ -404,6 +509,7 @@ function setupUrlRewrite(owner, repoName) {
     check("e2e cordis installed", r.body && r.body.installed, true);
     check("e2e cordis 类型", r.body && r.body.type, "cordis-plugin");
     check("e2e cordis 包名", r.body && r.body.name, "demo-plugin");
+    check("e2e README CLI 指令识别", r.body && r.body.cliCommand, "dsh plugin install e2e-owner/demo-plugin");
     check("e2e cordis 版本", r.body && r.body.version, "1.0.0");
 
     const pluginDir = join(HOME, "profiles", "web", "node_modules", "demo-plugin");
@@ -495,15 +601,116 @@ function setupUrlRewrite(owner, repoName) {
       }),
       "build.js": "require('fs').mkdirSync('dist', { recursive: true }); require('fs').writeFileSync('dist/index.js', 'module.exports = {}')\n",
       "pnpm-lock.yaml": "lockfileVersion: '9.0'\n",
+      // 空 workspace 文件阻断 pnpm 向上解析用户机器的全局 pnpm-workspace.yaml
+      // （本机 C:/Users/Lenovo/pnpm-workspace.yaml 是 DSH 开发 workspace）——否则
+      // pnpm install 会拉入全局 workspace 依赖并因 ignored builds 报错退出（ERR_PNPM_IGNORED_BUILDS）。
+      "pnpm-workspace.yaml": "",
     });
 
     r = await postInstall("e2e-owner/demo-build-pnpm", { __confirm_build__: "allow" });
-    if (process.platform === "win32") {
-      check("e2e build pnpm 路径 win32 runPnpm EINVAL → failed", r.body && r.body.status, "failed");
-    } else {
-      check("e2e build pnpm 路径（done 或 failed，取决于 pnpm 可用性）", r.body && ["done", "failed"].includes(r.body.status), true);
-    }
+    // pnpm 可用（本机已全局安装，如 11.x）→ 构建成功 done；缺失 → 失败 failed。
+    check("e2e build pnpm 路径 " + (pnpmAvailable ? "（pnpm 可用）done" : "（pnpm 缺失）failed"), r.body && r.body.status, pnpmAvailable ? "done" : "failed");
   }
+
+  // ---- README 官方 CLI 安装：README 有 dsh plugin 指令时直接执行官方 CLI（fake dsh 垫片）----
+  const fakeBin = join(HOME, "fakebin");
+  mkdirSync(fakeBin, { recursive: true });
+  const argsLog = join(HOME, "dsh-args.txt");
+  const failFlag = join(HOME, "dsh-fail.flag");
+  const argsLogPosix = argsLog.replace(/\\/g, "/");
+  const failFlagPosix = failFlag.replace(/\\/g, "/");
+  writeFileSync(join(fakeBin, "dsh"), [
+    "#!/usr/bin/env bash",
+    `echo "$*" >> "${argsLogPosix}"`,
+    `if [ -f "${failFlagPosix}" ]; then exit 1; fi`,
+    "exit 0"
+  ].join("\n"), "utf8");
+  writeFileSync(join(fakeBin, "dsh.cmd"), [
+    "@echo off",
+    `echo %* >> "${argsLog}"`,
+    `if exist "${failFlag}" exit /b 1`,
+    "exit /b 0"
+  ].join("\r\n"), "utf8");
+  const origPath = process.env.PATH;
+  process.env.PATH = fakeBin + (process.platform === "win32" ? ";" : ":") + (origPath || "");
+
+  setupUrlRewrite(owner, "demo-cli");
+  makeFixtureRepo("demo-cli", {
+    "README.md": "# demo-cli\n\n## Install\n```bash\ndsh plugin --profile web add demo-cli-pkg\n```\n",
+    "package.json": JSON.stringify({ name: "demo-cli-pkg", version: "1.0.0", dsh: {} }),
+  });
+  r = await postInstall("e2e-owner/demo-cli", {});
+  check("e2e CLI 安装 done", r.body && r.body.status, "done");
+  check("e2e CLI 安装类型 cli", r.body && r.body.type, "cli");
+  check("e2e CLI 安装 cliCommand", r.body && r.body.cliCommand, "dsh plugin --profile web add demo-cli-pkg");
+  check("e2e CLI 安装 detectInstalled", await lib.detectInstalled({ full_name: "e2e-owner/demo-cli", name: "demo-cli" }), true);
+  const argsText = existsSync(argsLog) ? readFileSync(argsLog, "utf8") : "";
+  check("e2e CLI 实际执行参数", argsText.includes("plugin --profile web add demo-cli-pkg"), true);
+
+  // cli 类型卸载：删安装记录 + patch 条目（包目录由 CLI 管理，不存在也不报错）
+  r = await postUninstall("e2e-owner/demo-cli");
+  check("e2e CLI 卸载 done", r.body && r.body.status, "done");
+  check("e2e CLI 卸载后未安装", await lib.detectInstalled({ full_name: "e2e-owner/demo-cli", name: "demo-cli" }), false);
+
+  // 回退：CLI 执行失败（fake dsh exit 1）→ 走市场常规流程（根清单带 dsh 字段 → cordis-plugin）
+  writeFileSync(failFlag, "1", "utf8");
+  rmSync(argsLog, { force: true });
+  setupUrlRewrite(owner, "demo-cli-fail");
+  makeFixtureRepo("demo-cli-fail", {
+    "README.md": "# demo-cli-fail\n\n```bash\ndsh plugin add demo-cli-fail-pkg\n```\n",
+    "package.json": JSON.stringify({ name: "demo-cli-fail-pkg", version: "1.0.0", dsh: {} }),
+  });
+  r = await postInstall("e2e-owner/demo-cli-fail", {});
+  check("e2e CLI 失败回退 done", r.body && r.body.status, "done");
+  check("e2e CLI 失败回退 cordis-plugin", r.body && r.body.type, "cordis-plugin");
+  rmSync(failFlag, { force: true });
+  process.env.PATH = origPath;
+
+  // ---- 嵌套 agent 预设（dsh-anchored-standard 场景）：预设目录在子目录 → agent-preset ----
+  setupUrlRewrite(owner, "demo-preset-nested");
+  makeFixtureRepo("demo-preset-nested", {
+    "package.json": JSON.stringify({ name: "demo-preset-nested", version: "1.0.0" }),
+    "preset/preset.yml": "# preset\n",
+    "preset/agent.cordis.yml": "# agent\n",
+    "preset/tool.mjs": "export const x = 1;\n",
+    "whoami-standard/preset.yml": "# whoami\n",
+    "whoami-standard/agent.cordis.yml": "# agent\n",
+  });
+  r = await postInstall("e2e-owner/demo-preset-nested", {});
+  check("e2e 嵌套预设 done", r.body && r.body.status, "done");
+  check("e2e 嵌套预设类型 agent-preset", r.body && r.body.type, "agent-preset");
+  check("e2e 嵌套预设 count=2", r.body && r.body.count, 2);
+  const presetId1 = join(HOME, ".agent-presets", "demo-preset-nested");
+  const presetId2 = join(HOME, ".agent-presets", "whoami-standard");
+  check("e2e 嵌套预设 preset/ 已安装(仓库名 id)", existsSync(join(presetId1, "preset.yml")), true);
+  check("e2e 嵌套预设 whoami-standard 已安装", existsSync(join(presetId2, "preset.yml")), true);
+  check("e2e 嵌套预设 detectInstalled", await lib.detectInstalled({ full_name: "e2e-owner/demo-preset-nested", name: "demo-preset-nested" }), true);
+
+  // 卸载：按 names 逐个删（不误删整个 .agent-presets）
+  r = await postUninstall("e2e-owner/demo-preset-nested");
+  check("e2e 嵌套预设卸载 done", r.body && r.body.status, "done");
+  check("e2e 嵌套预设卸载目录已删", existsSync(presetId1), false);
+  check("e2e 嵌套预设卸载目录2已删", existsSync(presetId2), false);
+  check("e2e 嵌套预设卸载后未安装", await lib.detectInstalled({ full_name: "e2e-owner/demo-preset-nested", name: "demo-preset-nested" }), false);
+
+  // ---- 安装后有效性验证：main 缺失 → done 但带 warnings 与日志提示 ----
+  setupUrlRewrite(owner, "demo-no-entry");
+  makeFixtureRepo("demo-no-entry", {
+    "package.json": JSON.stringify({ name: "demo-no-entry", version: "1.0.0", dsh: {}, main: "lib/missing.js" }),
+  });
+  r = await postInstall("e2e-owner/demo-no-entry", {});
+  check("e2e 入口缺失 done", r.body && r.body.status, "done");
+  check("e2e 入口缺失 warnings 含包名", Array.isArray(r.body && r.body.warnings) && r.body.warnings.includes("demo-no-entry"), true);
+  check("e2e 入口缺失日志提示", Array.isArray(r.body && r.body.log) && r.body.log.some((l) => l.includes("demo-no-entry")), true);
+
+  // ---- 导出脱敏日志：含安装记录、路径已打码 ----
+  const logsHandler = handlers.find((h) => h.path === "/api/marketplace/logs")?.handler;
+  check("e2e logs handler 注册", logsHandler !== null, true);
+  let logsBody = null, logsStatus = 0;
+  await logsHandler({ method: "GET", headers: { "x-dsh-marketplace": "1", host: "127.0.0.1:3080" }, url: "/api/marketplace/logs" }, { writeHead: (s) => { logsStatus = s; }, end: (b) => { try { logsBody = JSON.parse(b); } catch { logsBody = null; } } });
+  check("e2e logs 200", logsStatus, 200);
+  check("e2e logs 含安装记录", typeof logsBody.text === "string" && logsBody.text.includes("install e2e-owner/demo-no-entry"), true);
+  check("e2e logs 无原始主目录路径", typeof logsBody.text === "string" && !logsBody.text.includes("C:\\Users\\"), true);
 
   // ---- appendPatchEntry 队列错误分支：patch 目标是目录 → 写 tmp 后 rename 失败 ----
   const patchPath = join(HOME, "profiles", "web", "cordis.patch.yml");

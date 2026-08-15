@@ -12,8 +12,27 @@
   完成后需重启 DSH（重新运行 dsh web）再刷新页面。
 #>
 $ErrorActionPreference = "Stop"
+# PowerShell 7.3+ 默认不把外部命令非零退出视为异常（即使 ErrorActionPreference=Stop）——
+# 不开启则下方 catch 回退分支永远不可达：dsh 官方安装失败时会「假成功」。旧版 PS 无此变量，忽略即可。
+$PSNativeCommandUseErrorActionPreference = $true
 
 $RepoUrl = "https://github.com/bradeGithub/DSH-Plugins-Marketplace"
+
+# 优先使用官方安装方式：dsh CLI 可用时由 harness 完成安装与 reconcile（免手工拷贝/注册）；
+# 失败则回退手动安装。
+if (Get-Command dsh -ErrorAction SilentlyContinue) {
+  Write-Host "检测到 dsh CLI，使用官方安装方式：dsh plugin --profile web install bradeGithub/DSH-Plugins-Marketplace"
+  try {
+    dsh plugin --profile web install "bradeGithub/DSH-Plugins-Marketplace"
+    Write-Host ""
+    Write-Host "✔ dsh-plugin-marketplace installed via official CLI"
+    Write-Host "  请重启 DSH（重新运行 dsh web）后刷新页面生效。"
+    Write-Host "  Restart DSH (re-run dsh web), then refresh the page."
+    exit 0
+  } catch {
+    Write-Host "官方 CLI 安装失败，回退到手动安装方式..." -ForegroundColor Yellow
+  }
+}
 
 # 定位源码目录：直接运行 = 脚本所在目录；irm|iex 模式 = 无路径，改为下载仓库 zip
 $src = $PSScriptRoot

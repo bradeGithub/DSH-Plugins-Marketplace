@@ -5,8 +5,9 @@
 // 注意：必须用动态 import 控制加载顺序——静态 import 会被提升，lib/index.js
 // 求值时 process.env.DSH_HOME 尚未设置，模块级常量会回退到真实 ~/.dsh（污染主目录）。
 
-import { mkdtempSync, mkdirSync, writeFileSync, existsSync } from "node:fs";
-import { join } from "node:path";
+import { mkdtempSync, mkdirSync, writeFileSync, existsSync, renameSync, rmSync } from "node:fs";
+import { fileURLToPath } from "node:url";
+import { join, dirname } from "node:path";
 import { tmpdir } from "node:os";
 
 // ---- mock 基建：临时 DSH_HOME（必须在 import lib 之前设置）----
@@ -56,6 +57,114 @@ function mockFetch(payload, status = 200) {
   check("t 中文键", typeof lib.t("zh", "install"), "string");
   check("normalizeRepo 对象入参", lib.normalizeRepo({ full_name: "a/b", html_url: "https://github.com/a/b" }).full_name, "a/b");
   check("sanitizeManifest 返回类型", typeof lib.sanitizeManifest({ name: "x" }), "object");
+
+  // ---- scanCliInstallHint（README 官方 CLI 安装指令识别）----
+  const cliDir = join(process.env.DSH_HOME, "cli-hint");
+  mkdirSync(cliDir, { recursive: true });
+  writeFileSync(join(cliDir, "README.md"), [
+    "# Demo",
+    "",
+    "## 安装",
+    "```bash",
+    "dsh plugin install owner/demo-plugin",
+    "```",
+    "也可以 `dsh plugin add owner/demo-plugin`"
+  ].join("\n"), "utf8");
+  check("cliHint 命中 install 指令", await lib.scanCliInstallHint(cliDir, "owner/demo-plugin"), "dsh plugin install owner/demo-plugin");
+  check("cliHint 大小写不敏感", await lib.scanCliInstallHint(cliDir, "OWNER/Demo-Plugin"), "dsh plugin install owner/demo-plugin");
+  check("cliHint 其他仓库不命中", await lib.scanCliInstallHint(cliDir, "other/repo"), null);
+  // dsh-market 实测写法：flags 在动词前 + 用 npm 包名（`dsh plugin --profile web add dshmarket`）
+  const cliFlagsDir = join(process.env.DSH_HOME, "cli-flags");
+  mkdirSync(cliFlagsDir, { recursive: true });
+  writeFileSync(join(cliFlagsDir, "package.json"), JSON.stringify({ name: "dshmarket", version: "1.0.0", dsh: {} }), "utf8");
+  writeFileSync(join(cliFlagsDir, "README.md"), "Install:\n```bash\ndsh plugin --profile web add dshmarket\n```\n", "utf8");
+  check("cliHint flags+包名 写法", await lib.scanCliInstallHint(cliFlagsDir, "dsh-market/dsh-market"), "dsh plugin --profile web add dshmarket");
+  // 负例：README 指令指向别的包/仓库时不提示（候选 = 仓库全名/仓库名/本包 package.json 的 name）
+  const cliOtherDir = join(process.env.DSH_HOME, "cli-other");
+  mkdirSync(cliOtherDir, { recursive: true });
+  writeFileSync(join(cliOtherDir, "package.json"), JSON.stringify({ name: "dshmarket", version: "1.0.0", dsh: {} }), "utf8");
+  writeFileSync(join(cliOtherDir, "README.md"), "Install with:\n```bash\ndsh plugin add somebody-else/another-market\n```\n", "utf8");
+  check("cliHint 指令指向他包不命中", await lib.scanCliInstallHint(cliOtherDir, "dsh-market/dsh-market"), null);
+
+  // ---- findCliInstall（安装流程执行用：tier-1 本仓库包 / tier-2 README 首条指令）----
+  const cliExec1 = await lib.findCliInstall(cliDir, "owner/demo-plugin");
+  check("findCliInstall tier-1 命中本仓库", cliExec1 && cliExec1.target, "owner/demo-plugin");
+  check("findCliInstall tier-1 verb", cliExec1 && cliExec1.verb, "install");
+  const cliExec2 = await lib.findCliInstall(cliFlagsDir, "dsh-market/dsh-market");
+  check("findCliInstall tier-1 包名命中", cliExec2 && cliExec2.target, "dshmarket");
+  // tier-2：README 首条指令指向聚合发布包（dsh-web-ui 场景）——scanCliInstallHint 不提示但执行路径采用
+  const cliTier2Dir = join(process.env.DSH_HOME, "cli-tier2");
+  mkdirSync(cliTier2Dir, { recursive: true });
+  writeFileSync(join(cliTier2Dir, "package.json"), JSON.stringify({ name: "dsh-web-ui", version: "1.0.0", dsh: {} }), "utf8");
+  writeFileSync(join(cliTier2Dir, "README.md"), "## 安装\n推荐聚合包:\n```bash\ndsh plugin --profile web add @linxin666/dsh-web-ui-all\n```\n", "utf8");
+  const cliTier2 = await lib.findCliInstall(cliTier2Dir, "zhu1090093659/dsh-web-ui");
+  check("findCliInstall tier-2 采用 README 首条指令", cliTier2 && cliTier2.target, "@linxin666/dsh-web-ui-all");
+  check("findCliInstall tier-2 verb=add", cliTier2 && cliTier2.verb, "add");
+  check("findCliInstall tier-2 时 scanCliInstallHint 仍为 null", await lib.scanCliInstallHint(cliTier2Dir, "zhu1090093659/dsh-web-ui"), null);
+  const cliNone = await lib.findCliInstall(join(process.env.DSH_HOME, "cli-none-dir"), "owner/demo-plugin");
+  check("findCliInstall 无指令 null", cliNone, null);
+
+  // ---- scanExternalCliHint（第三方 CLI 官方 DSH 接入指令识别，open-design 场景：
+  // README 提供 `od agent setup deepseek-harness`，但市场无法代执行——只作展示提示）----
+  const extCliDir = join(process.env.DSH_HOME, "cli-external");
+  mkdirSync(extCliDir, { recursive: true });
+  writeFileSync(join(extCliDir, "package.json"), JSON.stringify({ name: "open-design", version: "1.0.0" }), "utf8");
+  writeFileSync(join(extCliDir, "README.md"), [
+    "| [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) | ✅ Native runtime | `od agent setup deepseek-harness` |",
+    "For DeepSeek Harness, install the official `dsh` CLI first, then select it in Open Design or run `od agent setup deepseek-harness` to install/repair OD's connection component.",
+  ].join("\n"), "utf8");
+  const extHint = await lib.scanExternalCliHint(extCliDir);
+  check("externalCliHint 识别 od 指令", extHint && extHint.cli, "od");
+  check("externalCliHint 命令完整", extHint && extHint.command, "od agent setup deepseek-harness");
+  // 第三方 CLI 接入指令不应被当成 dsh plugin 安装指令（不执行、不提示为等效安装）
+  check("externalCliHint 不影响 scanCliInstallHint", await lib.scanCliInstallHint(extCliDir, "nexu-io/open-design"), null);
+  check("externalCliHint 不影响 findCliInstall", await lib.findCliInstall(extCliDir, "nexu-io/open-design"), null);
+  // dsh 自身的 setup 指令不落入第三方扫描
+  const extDshDir = join(process.env.DSH_HOME, "cli-external-dsh");
+  mkdirSync(extDshDir, { recursive: true });
+  writeFileSync(join(extDshDir, "README.md"), "```bash\ndsh agent setup deepseek-harness\n```\n", "utf8");
+  check("externalCliHint 忽略 dsh 自身", await lib.scanExternalCliHint(extDshDir), null);
+  check("externalCliHint 无指令目录 null", await lib.scanExternalCliHint(join(process.env.DSH_HOME, "nope")), null);
+
+  // ---- findPresetRoots / 嵌套预设识别（dsh-anchored-standard 场景）----
+  const presetNestedDir = join(process.env.DSH_HOME, "preset-nested");
+  mkdirSync(join(presetNestedDir, "preset"), { recursive: true });
+  mkdirSync(join(presetNestedDir, "whoami-standard"), { recursive: true });
+  writeFileSync(join(presetNestedDir, "package.json"), JSON.stringify({ name: "demo-preset-nested", version: "1.0.0" }), "utf8");
+  for (const sub of ["preset", "whoami-standard"]) {
+    writeFileSync(join(presetNestedDir, sub, "preset.yml"), "# p\n", "utf8");
+    writeFileSync(join(presetNestedDir, sub, "agent.cordis.yml"), "# a\n", "utf8");
+  }
+  const presetRoots = await lib.findPresetRoots(presetNestedDir);
+  check("findPresetRoots 发现 2 个嵌套预设", presetRoots.length, 2);
+  check("findPresetRoots 含 preset 目录", presetRoots.some((r) => r.endsWith("preset")), true);
+  check("detectType 嵌套预设 → agent-preset", await lib.detectType(presetNestedDir), "agent-preset");
+  const presetRootDir = join(process.env.DSH_HOME, "preset-root");
+  mkdirSync(presetRootDir, { recursive: true });
+  writeFileSync(join(presetRootDir, "preset.yml"), "# p\n", "utf8");
+  writeFileSync(join(presetRootDir, "agent.cordis.yml"), "# a\n", "utf8");
+  check("detectType 根预设仍 agent-preset", await lib.detectType(presetRootDir), "agent-preset");
+
+  // ---- classifyInstallFailure（失败分类提示）----
+  check("分类 EINTEGRITY", lib.classifyInstallFailure("npm ERR! code EINTEGRITY\nintegrity checksum failed").includes("完整性"), true);
+  check("分类 node-gyp", lib.classifyInstallFailure("gyp ERR! stack Error: not found: python3").includes("node-gyp"), true);
+  check("分类 网络", lib.classifyInstallFailure("fetch failed: ENOTFOUND registry.npmjs.org", "zh").includes("网络"), true);
+  check("分类 版本不存在", lib.classifyInstallFailure("No matching version found for dep@9.9.9").includes("版本不存在"), true);
+  check("分类 无匹配返回 null", lib.classifyInstallFailure("just a normal error"), null);
+  check("分类 en 语言", lib.classifyInstallFailure("integrity checksum failed", "en").includes("integrity"), true);
+
+  // ---- sanitizeLog（日志脱敏）----
+  check("脱敏 Windows 主目录", lib.sanitizeLog("C:\\Users\\wyzin\\.dsh\\marketplace\\cache\\a"), "~\\<user>\\.dsh\\marketplace\\cache\\a");
+  check("脱敏 Unix 主目录", lib.sanitizeLog("cd /home/alice/dsh && pwd"), "cd ~/<user> && pwd");
+  check("脱敏 sk- 密钥", lib.sanitizeLog("key=sk-ABC12345XYZ"), "key=sk-ABC123…");
+  check("脱敏 ghp_ 密钥", lib.sanitizeLog("token=ghp_abcdefgh123456789"), "token=ghp_abcdef…");
+  check("脱敏 AKIA", lib.sanitizeLog("AKIAIOSFODNN7EXAMPLE"), "AKIAIOSFOD…");
+  check("脱敏不影响普通文本", lib.sanitizeLog("install ok: demo-plugin"), "install ok: demo-plugin");
+  const cliNoHintDir = join(process.env.DSH_HOME, "cli-no-hint");
+  mkdirSync(cliNoHintDir, { recursive: true });
+  writeFileSync(join(cliNoHintDir, "README.md"), "# No command here\nInstall via marketplace.\n", "utf8");
+  check("cliHint 无指令返回 null", await lib.scanCliInstallHint(cliNoHintDir, "owner/demo-plugin"), null);
+  check("cliHint 目录不存在返回 null", await lib.scanCliInstallHint(join(process.env.DSH_HOME, "nope"), "a/b"), null);
 
   // ---- dedupeReposByPkgName（pkg_name 冲突消解：已装优先，其次 Star 高者）----
   // 不传 isInstalled 参数：触发默认闭包 `isInstalled = (r) => installedMap.has(r.full_name)`
@@ -155,13 +264,24 @@ function mockFetch(payload, status = 200) {
   check("fetchRegistryRepos 数组", Array.isArray(reg), true);
 
   // fetchJson 错误路径（fetchJson 未导出，经 fetchAllRepos 内部触发）：
-  // 所有 registry 源返回 403 → 回退搜索 API → fetchJson 抛错被捕获（含
+  // 所有 registry 源返回 403 → （内置索引存在会先兜底，#12——临时移开以覆盖
+  // 更深层路径）→ 磁盘缓存（清空）→ 搜索 API → fetchJson 抛错被捕获（含
   // res.text() 失败时的 .catch(() => "") 分支）→ 降级返回空数组。
-  const orig5 = globalThis.fetch;
-  globalThis.fetch = async () => ({ ok: false, status: 403, json: async () => ({}), text: async () => { throw new Error("text boom"); } });
-  const degraded = await lib.fetchAllRepos("dsh");
-  globalThis.fetch = orig5;
-  check("fetchAllRepos 全失败降级空数组", Array.isArray(degraded) && degraded.length === 0, true);
+  const bundledDsh = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..", "registry.json");
+  renameSync(bundledDsh, bundledDsh + ".bak");
+  try {
+    // 前文 fetchAllRepos 的内置索引兜底会 fire-and-forget 落盘 list-cache/dsh.json，
+    // 先等其写完再清空，否则磁盘缓存层会先命中、覆盖不了搜索兜底路径。
+    await new Promise((r) => setTimeout(r, 500));
+    rmSync(join(process.env.DSH_HOME, "marketplace", "list-cache", "dsh.json"), { force: true });
+    const orig5 = globalThis.fetch;
+    globalThis.fetch = async () => ({ ok: false, status: 403, json: async () => ({}), text: async () => { throw new Error("text boom"); } });
+    const degraded = await lib.fetchAllRepos("dsh");
+    globalThis.fetch = orig5;
+    check("fetchAllRepos 全失败降级空数组", Array.isArray(degraded) && degraded.length === 0, true);
+  } finally {
+    renameSync(bundledDsh + ".bak", bundledDsh);
+  }
 
   // apply(ctx) mock：验证路由注册（install handler 依赖真实 git/npm 子进程，属 e2e 覆盖）
   let registered = [];
@@ -260,6 +380,81 @@ function mockFetch(payload, status = 200) {
   check("applyAdaptorList 补入真实条目", adapted.some((r) => r.full_name === "yejiming/dsh-museai-tavern"), true);
   check("applyAdaptorList 保留无关条目", adapted.some((r) => r.full_name === "a/b"), true);
   check("applyAdaptorList 非数组原样返回", lib.applyAdaptorList(null), null);
+
+  // ---- readBundledIndex（#12）：随包内置索引可读、去重、排除本体 ----
+  {
+    const bundled = await lib.readBundledIndex("dsh");
+    check("readBundledIndex dsh 非空", Array.isArray(bundled) && bundled.length > 100, true);
+    check("readBundledIndex 排除本体", bundled.some((r) => r.name === "deepseek-harness"), false);
+    const names = bundled.map((r) => r.full_name);
+    check("readBundledIndex 去重", new Set(names).size === names.length, true);
+    const bundledSkills = await lib.readBundledIndex("skills");
+    check("readBundledIndex skills 非空", Array.isArray(bundledSkills) && bundledSkills.length > 1000, true);
+  }
+
+  // ==================== #10 / #11 回归 ====================
+  // ---- parseGitmodulesUrls（纯函数）：https 与相对路径放行，file:// / git@ / git:// 拒绝 ----
+  {
+    const gm = '[submodule "a"]\n\tpath = upstream/a\n\turl = https://github.com/o/a.git\n'
+      + '[submodule "b"]\n\tpath = upstream/b\n\turl = ../b.git\n';
+    const ok = lib.parseGitmodulesUrls(gm);
+    check("gitmodules https+相对路径 urls", ok.urls.length, 2);
+    check("gitmodules https+相对路径 unsafe 为空", ok.unsafe, []);
+    const bad = lib.parseGitmodulesUrls('[submodule "x"]\n\turl = file:///etc/passwd\n[submodule "y"]\n\turl = git@github.com:o/y.git\n');
+    check("gitmodules file/git@ 被拒绝", bad.unsafe, ["file:///etc/passwd", "git@github.com:o/y.git"]);
+    check("gitmodules 空文本", lib.parseGitmodulesUrls(""), { urls: [], unsafe: [] });
+    check("gitmodules null 入参", lib.parseGitmodulesUrls(null), { urls: [], unsafe: [] });
+  }
+
+  // ---- detectType 分层判定 + findSkillRoots vendored 跳过（#11 fixture 回归）----
+  const dtBase = join(process.env.DSH_HOME, "detecttype-fixtures");
+  const mkFixture = (name, files) => {
+    const root = join(dtBase, name);
+    for (const [rel, content] of Object.entries(files)) {
+      const f = join(root, rel);
+      mkdirSync(dirname(f), { recursive: true });
+      writeFileSync(f, content, "utf8");
+    }
+    return root;
+  };
+  const DSH_PLUGIN_PKG = JSON.stringify({ name: "demo", version: "1.0.0", dsh: { client: { platform: "web", inject: [], immediately: true } } });
+  // 1. 插件仓库 + vendored 子模块里的上游技能（oh-dsh 形态）→ cordis-plugin（修复前误判 skill）
+  check("detectType 插件+vendored技能 → cordis-plugin",
+    await lib.detectType(mkFixture("oh-dsh-like", {
+      "package.json": DSH_PLUGIN_PKG,
+      "upstream/dsh-tui/skills/audit/SKILL.md": "---\nname: audit\n---\n",
+      "upstream/dsh-tui/skills/review/SKILL.md": "---\nname: review\n---\n"
+    })), "cordis-plugin");
+  // 2. 纯 skill 仓库带工具链 package.json（无 dsh 声明）→ skill（分层判定不能翻转为插件）
+  check("detectType skill+工具package.json → skill",
+    await lib.detectType(mkFixture("skill-with-tooling", {
+      "package.json": JSON.stringify({ name: "skill-docs", scripts: { lint: "echo ok" } }),
+      "SKILL.md": "---\nname: my-skill\n---\n"
+    })), "skill");
+  // 3. 嵌套技能集合仓库（无 package.json）→ skill
+  check("detectType 嵌套技能集合 → skill",
+    await lib.detectType(mkFixture("skill-collection", {
+      "skills/a/SKILL.md": "---\nname: a\n---\n",
+      "skills/b/SKILL.md": "---\nname: b\n---\n"
+    })), "skill");
+  // 4. 非插件 package.json（无 SKILL.md）→ cordis-plugin（保留非插件确认弹窗路径）
+  check("detectType 非插件package.json → cordis-plugin",
+    await lib.detectType(mkFixture("plain-npm", {
+      "package.json": JSON.stringify({ name: "plain-project" })
+    })), "cordis-plugin");
+  // 5. 皮肤/多包仓库（根无清单，子目录有插件清单）→ cordis-plugin（原行为保留）
+  check("detectType 皮肤多包 → cordis-plugin",
+    await lib.detectType(mkFixture("skins-like", {
+      "skins/dark/package.json": DSH_PLUGIN_PKG,
+      "README.md": "# skins"
+    })), "cordis-plugin");
+  // 6. 仅 vendored 目录含 SKILL.md（无 package.json）→ instructions（技能是上游的，不算本仓库内容）
+  check("detectType 仅vendored技能 → instructions",
+    await lib.detectType(mkFixture("vendored-only", {
+      "upstream/x/SKILL.md": "---\nname: x\n---\n",
+      "README.md": "# readme"
+    })), "instructions");
+  check("findSkillRoots 跳过 upstream/", (await lib.findSkillRoots(join(dtBase, "vendored-only"))).length, 0);
 
   console.log(`\n${pass} passed, ${fail} failed`);
   process.exit(fail === 0 ? 0 : 1);

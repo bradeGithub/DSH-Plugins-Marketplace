@@ -30,19 +30,28 @@ const targets = levelList;
 
 const results = [];
 let failed = false;
+// 每文件超时（防死锁：execFileSync 无超时会永久挂住整个运行器——测试文件内
+// 若有未关闭的 handle/等待不来的事件，进程不退出即卡死。超时后子进程被终止，
+// 该文件标记失败并继续下一文件，不阻塞后续层）。unit/integration 各文件秒级，
+// e2e 含真实 npm install 放宽。
+const FILE_TIMEOUT_MS = { unit: 120_000, integration: 180_000, e2e: 600_000 };
 for (const lv of targets) {
   const dir = join(TESTS, lv);
   if (!existsSync(dir)) continue;
   const files = readdirSync(dir).filter((f) => f.endsWith(".test.mjs") || f.endsWith(".e2e.mjs")).sort();
   for (const f of files) {
     try {
-      execFileSync("node", [join(dir, f)], { cwd: ROOT, stdio: "inherit" });
+      execFileSync("node", [join(dir, f)], { cwd: ROOT, stdio: "inherit", timeout: FILE_TIMEOUT_MS[lv] ?? 300_000 });
       results.push({ level: lv, file: f, ok: true });
       if (!jsonOut) console.log(`[OK] [${lv}] ${f}`);
     } catch (e) {
       failed = true;
       results.push({ level: lv, file: f, ok: false });
-      if (!jsonOut) console.error(`[FAIL] [${lv}] ${f}`);
+      if (!jsonOut) {
+        const isTimeout = typeof e === "object" && e !== null && "killed" in e && e.code === "ETIMEDOUT" && "signal" in e;
+        if (isTimeout) console.error(`[FAIL] [${lv}] ${f} —— 超时（${(FILE_TIMEOUT_MS[lv] ?? 300_000) / 1000}s 未结束，疑似死锁，已终止）`);
+        else console.error(`[FAIL] [${lv}] ${f}`);
+      }
     }
   }
 }
@@ -53,5 +62,12 @@ if (jsonOut) {
   const total = results.length;
   const ok = results.filter((r) => r.ok).length;
   console.log(`\n测试金字塔: ${ok}/${total} 通过`);
+}
+
+// 清理测试在 %TEMP%（C 盘）留下的临时目录/文件（失败不阻塞测试结果）
+try {
+  execFileSync(process.execPath, [join(TESTS, "cleanup.mjs")], { cwd: ROOT, stdio: "inherit" });
+} catch {
+  console.error("[cleanup] 清理脚本执行失败（不影响测试结果）");
 }
 process.exit(failed ? 1 : 0);

@@ -73,11 +73,23 @@ try {
 // ---- install.ps1：pwsh 沙箱（仅 Windows 本机）----
 if (process.platform === "win32") {
   function runPs1(userProfile) {
-    execFileSync("pwsh", ["-NoProfile", "-File", join(ROOT, "install.ps1")], {
-      env: { ...process.env, USERPROFILE: userProfile },
-      cwd: ROOT,
-      stdio: "pipe"
-    });
+    // 沙箱隔离：宿主 dsh CLI 会令脚本走「官方安装」分支（写真实 profile 而非
+    // USERPROFILE，且每次 60s+）——PATH 前置必然失败的 stub dsh：脚本
+    // $ErrorActionPreference=Stop 下外部命令非零退出即抛异常 → catch 回退手动分支，
+    // 沙箱断言才成立（install.ps1 顶部的 dsh 检测本意是真实用户环境的优化）。
+    const stubDir = mkdtempSync(join(tmpdir(), "dsh-stub-"));
+    writeFileSync(join(stubDir, "dsh.cmd"), "@echo off\r\nexit /b 1\r\n", "utf8");
+    writeFileSync(join(stubDir, "dsh"), "#!/bin/sh\nexit 1\n", "utf8");
+    const env = { ...process.env, USERPROFILE: userProfile, PATH: `${stubDir};${process.env.PATH ?? ""}` };
+    try {
+      execFileSync("pwsh", ["-NoProfile", "-File", join(ROOT, "install.ps1")], {
+        env,
+        cwd: ROOT,
+        stdio: "pipe"
+      });
+    } finally {
+      rmSync(stubDir, { recursive: true, force: true });
+    }
   }
   // A：全新环境
   const psA = mkdtempSync(join(tmpdir(), "dsh-inst-ps-a-"));

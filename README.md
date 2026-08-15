@@ -40,19 +40,31 @@
 
 ## ⚡ 一键安装（复制即用）
 
-**喂给 AI 的一句话**（AI 具备命令执行能力即可，无需解释）：
+**方式一（推荐）：官方 dsh CLI**——由 Harness 官方安装机制完成安装与注册（需要 `dsh` CLI 与 `pnpm`，`dsh web` 用户通常已具备）：
 
-> 安装 DSH 插件市场插件（dsh-plugin-marketplace）：克隆 https://github.com/bradeGithub/DSH-Plugins-Marketplace 到 ~/.dsh/profiles/web/node_modules/dsh-plugin-marketplace，在 ~/.dsh/profiles/web/cordis.patch.yml 中注册（id: plugin-marketplace，name: dsh-plugin-marketplace），然后重启 dsh web。
+```bash
+dsh plugin --profile web install bradeGithub/DSH-Plugins-Marketplace
+```
 
-**或者直接复制命令执行：**
+卸载 / 更新同样走官方命令：
+
+```bash
+dsh plugin --profile web remove bradeGithub/DSH-Plugins-Marketplace
+dsh plugin --profile web install bradeGithub/DSH-Plugins-Marketplace   # 重装即更新
+```
+
+**方式二：安装脚本**（没有 dsh CLI 的环境；脚本检测到 dsh CLI 时会自动改用官方方式）：
 
 | 平台 | 命令 |
 |---|---|
 | Windows (PowerShell) | `irm https://raw.githubusercontent.com/bradeGithub/DSH-Plugins-Marketplace/main/install.ps1 \| iex` |
 | macOS / Linux | `curl -sL https://raw.githubusercontent.com/bradeGithub/DSH-Plugins-Marketplace/main/install.sh \| bash` |
 
-> ⚠️ 上述命令会从本仓库下载并执行安装脚本（复制插件本体 + 注册 `cordis.patch.yml`），属于「信任即执行」；也可以克隆仓库后手动运行 `install.ps1` / `install.sh`，或直接在本插件市场中安装本仓库（含 `install.ps1`，市场会先征求你的确认）。
-> 建议先下载脚本**肉眼检查一遍**再执行（`irm <url> | iex` / `curl <url> | bash` 是公认的远程代码执行模式）。
+**喂给 AI 的一句话**（AI 具备命令执行能力即可，无需解释）：
+
+> 安装 DSH 插件市场插件（dsh-plugin-marketplace）：运行 `dsh plugin --profile web install bradeGithub/DSH-Plugins-Marketplace`；若没有 dsh CLI，则克隆 https://github.com/bradeGithub/DSH-Plugins-Marketplace 到 ~/.dsh/profiles/web/node_modules/dsh-plugin-marketplace，在 ~/.dsh/profiles/web/cordis.patch.yml 中注册（id: plugin-marketplace，name: dsh-plugin-marketplace）。完成后重启 dsh web。
+
+> ⚠️ 安装脚本方式会从本仓库下载并执行脚本（复制插件本体 + 注册 `cordis.patch.yml`），属于「信任即执行」；建议先下载脚本**肉眼检查一遍**再执行（`irm <url> | iex` / `curl <url> | bash` 是公认的远程代码执行模式）。官方 CLI 方式由 Harness 自身完成安装，无需执行第三方脚本。
 > 安装完成后需**重启 DSH**（重新运行 `dsh web`）再刷新页面。
 
 ---

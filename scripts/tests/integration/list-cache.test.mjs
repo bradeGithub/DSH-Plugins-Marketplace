@@ -9,7 +9,8 @@
 // 状态（构造/清空/断言），避免与其他测试的缓存写入互相干扰。
 
 import { mkdtempSync, mkdirSync, writeFileSync, readdirSync, readFileSync, rmSync, existsSync } from "node:fs";
-import { join } from "node:path";
+import { join, dirname } from "node:path";
+import { fileURLToPath } from "node:url";
 import { tmpdir } from "node:os";
 
 // 必须在 import lib 之前设置临时 DSH_HOME
@@ -20,6 +21,14 @@ const cacheFile = (kind) => join(listCacheDir, `${kind}.json`);
 const listCacheFiles = () => { try { return readdirSync(listCacheDir); } catch { return null; } }; // null = 目录不存在
 
 const lib = await import("../../../lib/index.js");
+
+// bundled 源（readBundledIndex）读仓库根 registry.json——固定路径、不走 fetch、不可被
+// DSH_HOME 隔离。registry mock 失败时 bundled 会兜底成功并写盘，破坏本文件全部
+// 「registry 失败 → search/缓存」场景的断言（上游 1.4.0 #14 新增）。统一临时替换为
+// 坏 JSON 使 bundled 失败，测试结束恢复。
+const bundledPath = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..", "registry.json");
+const bundledBackup = existsSync(bundledPath) ? readFileSync(bundledPath) : null;
+writeFileSync(bundledPath, "{broken", "utf8");
 
 let pass = 0, fail = 0;
 function check(name, actual, expected) {
@@ -34,14 +43,22 @@ function check(name, actual, expected) {
 // ---- mock：按 URL 分派——registry 源 vs 搜索 API；payload 传 null 表示该路失败（403）----
 function mockFetch(registryPayload, searchPayload) {
   const orig = globalThis.fetch;
+  // headers.get 返回 null：lib 的 L6 响应上限检查（responseTooLarge）只读
+  // content-length——null 视为未声明长度，通过检查（真实响应必有 headers 对象）。
+  // arrayBuffer：registry 多源含 .gz 源（上游 #14），fetchRegistryRepos 对 .gz URL
+  // 调 res.arrayBuffer() 解压——缺它该源 TypeError 后整链失败。
+  const mockRes = (payload, ok) => ({
+    ok, status: ok ? 200 : 403, json: async () => payload, headers: { get: () => null },
+    // text/arrayBuffer 都返回 payload 的 JSON 文本：registry 多源里非 gz 源走 text() 解析
+    // （返回空串会 JSON.parse 抛错）、gz 源走 arrayBuffer() 解压（返回未压缩数据同样抛错）——
+    // 上游 1.4.0 的 registry 成功路径需要两者都可用。
+    text: async () => JSON.stringify(payload),
+    arrayBuffer: async () => Buffer.from(JSON.stringify(payload)),
+  });
   globalThis.fetch = async (url) => {
     const u = String(url);
-    if (u.includes("/search/repositories")) {
-      if (searchPayload === null) return { ok: false, status: 403, json: async () => ({}), text: async () => "" };
-      return { ok: true, status: 200, json: async () => searchPayload, text: async () => "" };
-    }
-    if (registryPayload === null) return { ok: false, status: 403, json: async () => ({}), text: async () => "" };
-    return { ok: true, status: 200, json: async () => registryPayload, text: async () => "" };
+    if (u.includes("/search/repositories")) return mockRes(searchPayload, searchPayload !== null);
+    return mockRes(registryPayload, registryPayload !== null);
   };
   return orig;
 }
@@ -165,6 +182,11 @@ const OLD = new Date(Date.now() - 7 * 24 * 3600 * 1000).toISOString(); // 7 天�
   check("全挂时新鲜缓存兜底生效", fromDisk.map((r) => r.full_name), ["r1/good"]);
 }
 
+// 恢复 bundled 源（exit 钩子：断言失败 process.exit 与未捕获异常都走这里，不留坏文件）
+process.on("exit", () => {
+  if (bundledBackup !== null) writeFileSync(bundledPath, bundledBackup, "utf8");
+  else rmSync(bundledPath, { force: true });
+});
 rmSync(home, { recursive: true, force: true });
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail === 0 ? 0 : 1);

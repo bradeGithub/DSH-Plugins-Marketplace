@@ -14,7 +14,7 @@
 // 必须在本文件内先构造临时 DSH_HOME 再动态 import；且独占控制 list-cache 目录状态
 // （预置有效缓存避免网络）。
 
-import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, rmSync } from "node:fs";
+import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, rmSync, existsSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { tmpdir } from "node:os";
 import { fileURLToPath } from "node:url";
@@ -96,6 +96,23 @@ for (const [kind, repos] of [["dsh", dshRepos], ["skills", skillsRepos]]) {
 }
 
 const lib = await import("../../../lib/index.js");
+
+// bundled 源隔离（同 list-cache.test.mjs）：readBundledIndex 读仓库根 registry.json
+// （固定路径、不走 fetch）——registry mock 失败时 bundled 会兜底返回真实索引，
+// 列表数据全是真实仓库，测试的虚构仓库（t1/recorded 等）installed 标注全 undefined。
+// 临时替换为坏 JSON 使 bundled 失败；exit 钩子保证任何退出路径都恢复。
+const bundledPath = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..", "registry.json");
+const bundledSkillsPath = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..", "skills.json");
+const bundledBackup = existsSync(bundledPath) ? readFileSync(bundledPath) : null;
+const bundledSkillsBackup = existsSync(bundledSkillsPath) ? readFileSync(bundledSkillsPath) : null;
+writeFileSync(bundledPath, "{broken", "utf8");
+writeFileSync(bundledSkillsPath, "{broken", "utf8");
+process.on("exit", () => {
+  if (bundledBackup !== null) writeFileSync(bundledPath, bundledBackup, "utf8");
+  else rmSync(bundledPath, { force: true });
+  if (bundledSkillsBackup !== null) writeFileSync(bundledSkillsPath, bundledSkillsBackup, "utf8");
+  else rmSync(bundledSkillsPath, { force: true });
+});
 
 let pass = 0, fail = 0;
 function check(name, actual, expected) {
@@ -191,7 +208,9 @@ const fpOf = (body) => body?.fp;
   check("skills 未安装 → false", map["t1/clean"], false);
   check("skills has_skill=false 被过滤", map["t1/hidden"], undefined);
   check("skills 过滤后进栏目 3 条", r.body?.repos?.length, 3);
-  check("skills fp 存在且为字符串", typeof fpOf(r.body), "string");
+  // 上游 1.4.0（#14）skills 改服务端分页后响应不再带 fp（指纹门控被 fetchPage seq
+  // 竞态替代，见 unit/installed-index.test.mjs 的对应更新）——断言分页字段替代。
+  check("skills 响应带服务端分页字段", typeof r.body?.total, "number");
 }
 
 // ==================== A2b 排查：force refresh 须同时失效 profileScanCache ====================
