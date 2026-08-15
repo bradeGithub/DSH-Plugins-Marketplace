@@ -691,6 +691,55 @@ function setupUrlRewrite(owner, repoName) {
   check("e2e CLI 卸载 done", r.body && r.body.status, "done");
   check("e2e CLI 卸载后未安装", await lib.detectInstalled({ full_name: "e2e-owner/demo-cli", name: "demo-cli" }), false);
 
+  // ---- 环境变量编辑（issue #18）：env-keys 读取 / env-edit 保存 → .env 写入 ----
+  const envKeysHandler = handlers.find((h) => h.path === "/api/marketplace/env-keys")?.handler;
+  const envEditHandler = handlers.find((h) => h.path === "/api/marketplace/env-edit")?.handler;
+  check("e2e env-keys handler 注册", envKeysHandler !== null, true);
+  check("e2e env-edit handler 注册", envEditHandler !== null, true);
+  const callEnv = async (handler, url, body) => {
+    const bodyStr = body ? JSON.stringify(body) : "";
+    const req = {
+      method: body ? "POST" : "GET",
+      headers: { "x-dsh-marketplace": "1", host: "127.0.0.1:3080" },
+      url,
+      [Symbol.asyncIterator]() {
+        let sent = false;
+        return {
+          next: async () => {
+            if (!sent) { sent = true; return { value: Buffer.from(bodyStr), done: false }; }
+            return { value: undefined, done: true };
+          },
+        };
+      },
+    };
+    const out = { status: 0, body: null };
+    const res = { writeHead: (s) => { out.status = s; }, end: (b) => { try { out.body = JSON.parse(b); } catch { out.body = b; } } };
+    await handler(req, res);
+    return out;
+  };
+  // 未安装仓库 → 404
+  let envRes = await callEnv(envEditHandler, "/api/marketplace/env-edit", { repo: "e2e-owner/not-installed", values: { A: "1" } });
+  check("e2e env-edit 未安装 404", envRes.status, 404);
+  // 非法键名 → 400
+  envRes = await callEnv(envEditHandler, "/api/marketplace/env-edit", { repo: "e2e-owner/demo-skill", values: { "bad key!": "1" } });
+  check("e2e env-edit 非法键名 400", envRes.status, 400);
+  // DSH_ 保留前缀 → 400
+  envRes = await callEnv(envEditHandler, "/api/marketplace/env-edit", { repo: "e2e-owner/demo-skill", values: { DSH_HOME: "x" } });
+  check("e2e env-edit DSH_ 保留 400", envRes.status, 400);
+  // 合法保存 → done + restartRequired + .env 落盘
+  envRes = await callEnv(envEditHandler, "/api/marketplace/env-edit", { repo: "e2e-owner/demo-skill", values: { MY_API_KEY: "secret-123" } });
+  check("e2e env-edit 保存 done", envRes.body && envRes.body.status, "done");
+  check("e2e env-edit restartRequired", envRes.body && envRes.body.restartRequired, true);
+  const dotenvPath = join(HOME, ".env");
+  check("e2e env-edit .env 已写入", existsSync(dotenvPath) && readFileSync(dotenvPath, "utf8").includes("MY_API_KEY=secret-123"), true);
+  // env-keys 只回显键名与已配置标记，不回显值
+  envRes = await callEnv(envKeysHandler, "/api/marketplace/env-keys?repo=e2e-owner/demo-skill");
+  check("e2e env-keys done", envRes.body && envRes.body.status, "done");
+  check("e2e env-keys 不含值", JSON.stringify(envRes.body).includes("secret-123"), false);
+  // 未安装仓库 env-keys → 空列表
+  envRes = await callEnv(envKeysHandler, "/api/marketplace/env-keys?repo=e2e-owner/nope");
+  check("e2e env-keys 未安装空列表", Array.isArray(envRes.body && envRes.body.envKeys) && envRes.body.envKeys.length === 0, true);
+
   // 回退：CLI 执行失败（fake dsh exit 1）→ 走市场常规流程（根清单带 dsh 字段 → cordis-plugin）
   writeFileSync(failFlag, "1", "utf8");
   rmSync(argsLog, { force: true });
