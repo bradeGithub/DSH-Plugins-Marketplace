@@ -15,6 +15,22 @@ $ErrorActionPreference = "Stop"
 
 $RepoUrl = "https://github.com/bradeGithub/DSH-Plugins-Marketplace"
 
+# 优先使用官方安装方式：dsh CLI 可用时由 harness 完成安装与 reconcile（免手工拷贝/注册）；
+# 失败则回退手动安装。
+if (Get-Command dsh -ErrorAction SilentlyContinue) {
+  Write-Host "检测到 dsh CLI，使用官方安装方式：dsh plugin --profile web install bradeGithub/DSH-Plugins-Marketplace"
+  try {
+    dsh plugin --profile web install "bradeGithub/DSH-Plugins-Marketplace"
+    Write-Host ""
+    Write-Host "✔ dsh-plugin-marketplace installed via official CLI"
+    Write-Host "  请重启 DSH（重新运行 dsh web）后刷新页面生效。"
+    Write-Host "  Restart DSH (re-run dsh web), then refresh the page."
+    exit 0
+  } catch {
+    Write-Host "官方 CLI 安装失败，回退到手动安装方式..." -ForegroundColor Yellow
+  }
+}
+
 # 定位源码目录：直接运行 = 脚本所在目录；irm|iex 模式 = 无路径，改为下载仓库 zip
 $src = $PSScriptRoot
 if (-not $src -or -not (Test-Path (Join-Path $src "package.json"))) {
