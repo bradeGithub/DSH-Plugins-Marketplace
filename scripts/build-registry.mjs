@@ -284,6 +284,7 @@ const MARKET_TAGS = new Map([
   ["xiaobright/dsh-anchored-standard", ["verified-install"]],
   ["bradegithub/dsh-plugins-marketplace", ["verified-install"]],
   ["tt-a1i/archify", ["verified-install"]],
+  ["small-tailqwq/dsh-deep-whale", ["verified-install"]], // issue #19 用户反馈正常 + 修复相对路径指令后实测可装
   ["nexu-io/open-design", ["prereq"]],
 ]);
 
