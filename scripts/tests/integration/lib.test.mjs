@@ -224,6 +224,30 @@ function mockFetch(payload, status = 200) {
     check("skills handler 存在", false, true);
   }
 
+  // ---- L7：safeAssign 防原型污染（执行行为）----
+  const polluted = JSON.parse('{"__proto__": {"polluted": true}, "a": 1}');
+  const merged = lib.safeAssign({}, polluted, { b: 2 });
+  check("safeAssign 剔除 __proto__ 键", Object.prototype.polluted, undefined);
+  check("safeAssign 保留正常字段", merged.a, 1);
+  check("safeAssign 合并后续源", merged.b, 2);
+  // 注意：用 Object.hasOwn（own property）——`in` 会命中继承的 Object.prototype.constructor
+  check("safeAssign 剔除 constructor（own 检查）", Object.hasOwn(lib.safeAssign({}, JSON.parse('{"constructor": {"x": 1}}')), "constructor"), false);
+  check("safeAssign 剔除 prototype（own 检查）", Object.hasOwn(lib.safeAssign({}, JSON.parse('{"prototype": {"x": 1}}')), "prototype"), false);
+
+  // ---- L6：fetchRegistryRepos 对超大 Content-Length 弃用该源 ----
+  {
+    const orig6 = globalThis.fetch;
+    globalThis.fetch = async () => ({
+      ok: true, status: 200,
+      headers: { get: (k) => (k === "content-length" ? String(64 * 1024 * 1024) : null) },
+      json: async () => ({ repos: [{ full_name: "huge/source", name: "source" }] }),
+      text: async () => "",
+    });
+    const registry = await lib.fetchRegistryRepos("dsh");
+    globalThis.fetch = orig6;
+    check("registry 超限响应弃用（返回 null 走下一级）", registry, null);
+  }
+
   // ---- 适配层（adaptor.json 硬编码重定向）----
   check("adaptorRedirectRepo MuseAI → tavern", lib.adaptorRedirectRepo("yejiming/MuseAI"), "yejiming/dsh-museai-tavern");
   check("adaptorRedirectRepo 无关仓库 null", lib.adaptorRedirectRepo("some/other"), null);
