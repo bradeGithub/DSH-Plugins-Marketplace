@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // lib/index.js 导出函数全覆盖测试：mock fetch + 临时 DSH_HOME + 假 ctx。
-// 运行：node scripts/lib-tests.mjs
+// 运行：node scripts/tests/integration/lib.test.mjs（或 node scripts/tests/run.mjs --level=integration）
 // 与 smoke-tests.mjs 共用 check() 风格；coverage.mjs 同时统计两者。
 // 注意：必须用动态 import 控制加载顺序——静态 import 会被提升，lib/index.js
 // 求值时 process.env.DSH_HOME 尚未设置，模块级常量会回退到真实 ~/.dsh（污染主目录）。
