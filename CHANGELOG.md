@@ -3,6 +3,12 @@
 本仓库的版本迭代记录。**v1.0.0 之前的版本均为 beta 系列**（开发期迭代，未单独打 tag）。/ Version history of this repository. **All versions before v1.0.0 are part of the beta series** (development iterations, not individually tagged).
 ---
 
+## v1.3.15 — 2026-08-15（README 官方 CLI 安装指令提示 / README CLI install hint）
+
+- **安装时检查 README 的 `dsh plugin install <repo>` 指令**：克隆完成后扫描 README（含 README.en.md 等变体），发现指向当前仓库的官方 CLI 安装指令时——安装日志首行提示「README 提供官方 CLI 安装指令」（与市场安装等效，二选一）；完成/手动响应携带 `cliCommand`，安装面板显示**可一键复制**的指令块（clipboard API 失败自动降级 execCommand）/ the installer now scans the cloned README for a `dsh plugin install <repo>` command targeting the current repo: a hint line is logged and the done/manual response carries `cliCommand`, rendered in the install panel as a copyable snippet with clipboard fallback
+- **安全与正确性**：只识别指向当前仓库的指令（大小写不敏感，兼容 `dsh plugin add`、完整 URL / `.git` 后缀写法），README 里其他仓库的示例不会误提示 / only commands targeting the current repo are shown (case-insensitive; supports `dsh plugin add`, full URLs and `.git` suffixes); examples for other repos are ignored
+- **回归测试**：集成 +5（install/add 变体、大小写、他仓库不命中、无指令/目录缺失返回 null）、e2e +1（安装响应断言 cliCommand）；smoke 187 / 单元+集成 80 / e2e 103 全绿 / +5 integration and +1 e2e cases; full suite green
+
 ## v1.3.14 — 2026-08-15（索引 gzip 分页 + 备份恢复 / Gzip indexes, server-side paging & backup/restore）
 
 - **索引 gzip 产物（#14）**：构建期同步产出 `registry.json.gz` / `skills.json.gz`（11.3MB → 2.0MB、1.8MB → 0.3MB）；运行时所有网络源优先拉 `.gz`（下载后解压），registry.json.gz 回落到 1MB 以内使 GitHub Contents API 的 api 源对两个索引都重新可用；CI 提交步骤纳入 `.gz` / the build now emits gzipped indexes (11.3MB→2.0MB); all runtime sources prefer `.json.gz` and gunzip after download; the api source works again for both indexes since the gz files fit under the 1MB Contents API limit; CI commits the `.gz` artifacts

@@ -485,6 +485,8 @@ function setupUrlRewrite(owner, repoName) {
         }
       }),
       "packages/dep/package.json": JSON.stringify({ name: "dep-pkg", version: "1.1.0" }),
+      // README 官方 CLI 安装指令（scanCliInstallHint 应识别并随响应返回 cliCommand）
+      "README.md": "# demo-plugin\n\n## Install\n```bash\ndsh plugin install e2e-owner/demo-plugin\n```\n",
     });
 
     let r = await postInstall("e2e-owner/demo-plugin", {});
@@ -493,6 +495,7 @@ function setupUrlRewrite(owner, repoName) {
     check("e2e cordis installed", r.body && r.body.installed, true);
     check("e2e cordis 类型", r.body && r.body.type, "cordis-plugin");
     check("e2e cordis 包名", r.body && r.body.name, "demo-plugin");
+    check("e2e README CLI 指令识别", r.body && r.body.cliCommand, "dsh plugin install e2e-owner/demo-plugin");
     check("e2e cordis 版本", r.body && r.body.version, "1.0.0");
 
     const pluginDir = join(HOME, "profiles", "web", "node_modules", "demo-plugin");

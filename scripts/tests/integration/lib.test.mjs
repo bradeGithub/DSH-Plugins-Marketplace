@@ -58,6 +58,27 @@ function mockFetch(payload, status = 200) {
   check("normalizeRepo 对象入参", lib.normalizeRepo({ full_name: "a/b", html_url: "https://github.com/a/b" }).full_name, "a/b");
   check("sanitizeManifest 返回类型", typeof lib.sanitizeManifest({ name: "x" }), "object");
 
+  // ---- scanCliInstallHint（README 官方 CLI 安装指令识别）----
+  const cliDir = join(process.env.DSH_HOME, "cli-hint");
+  mkdirSync(cliDir, { recursive: true });
+  writeFileSync(join(cliDir, "README.md"), [
+    "# Demo",
+    "",
+    "## 安装",
+    "```bash",
+    "dsh plugin install owner/demo-plugin",
+    "```",
+    "也可以 `dsh plugin add owner/demo-plugin`"
+  ].join("\n"), "utf8");
+  check("cliHint 命中 install 指令", await lib.scanCliInstallHint(cliDir, "owner/demo-plugin"), "dsh plugin install owner/demo-plugin");
+  check("cliHint 大小写不敏感", await lib.scanCliInstallHint(cliDir, "OWNER/Demo-Plugin"), "dsh plugin install owner/demo-plugin");
+  check("cliHint 其他仓库不命中", await lib.scanCliInstallHint(cliDir, "other/repo"), null);
+  const cliNoHintDir = join(process.env.DSH_HOME, "cli-no-hint");
+  mkdirSync(cliNoHintDir, { recursive: true });
+  writeFileSync(join(cliNoHintDir, "README.md"), "# No command here\nInstall via marketplace.\n", "utf8");
+  check("cliHint 无指令返回 null", await lib.scanCliInstallHint(cliNoHintDir, "owner/demo-plugin"), null);
+  check("cliHint 目录不存在返回 null", await lib.scanCliInstallHint(join(process.env.DSH_HOME, "nope"), "a/b"), null);
+
   // ---- dedupeReposByPkgName（pkg_name 冲突消解：已装优先，其次 Star 高者）----
   // 不传 isInstalled 参数：触发默认闭包 `isInstalled = (r) => installedMap.has(r.full_name)`
   // 与内部 `rank` 闭包（isInstalled 命中时 +1e12 权重）。
