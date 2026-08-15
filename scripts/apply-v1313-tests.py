@@ -43,7 +43,7 @@ edit("scripts/tests/integration/lib.test.mjs", [
     renameSync(bundledDsh + ".bak", bundledDsh);
   }'''),
 # readBundledIndex + #10/#11 regression block before final summary
-('''  console.log(`\n${pass} passed, ${fail} failed`);
+('''  console.log(`\\n${pass} passed, ${fail} failed`);
   process.exit(fail === 0 ? 0 : 1);
 })();''',
 '''  // ---- readBundledIndex（#12）：随包内置索引可读、去重、排除本体 ----
@@ -60,12 +60,12 @@ edit("scripts/tests/integration/lib.test.mjs", [
   // ==================== #10 / #11 回归 ====================
   // ---- parseGitmodulesUrls（纯函数）：https 与相对路径放行，file:// / git@ / git:// 拒绝 ----
   {
-    const gm = '[submodule "a"]\n\tpath = upstream/a\n\turl = https://github.com/o/a.git\n'
-      + '[submodule "b"]\n\tpath = upstream/b\n\turl = ../b.git\n';
+    const gm = '[submodule "a"]\\n\\tpath = upstream/a\\n\\turl = https://github.com/o/a.git\\n'
+      + '[submodule "b"]\\n\\tpath = upstream/b\\n\\turl = ../b.git\\n';
     const ok = lib.parseGitmodulesUrls(gm);
     check("gitmodules https+相对路径 urls", ok.urls.length, 2);
     check("gitmodules https+相对路径 unsafe 为空", ok.unsafe, []);
-    const bad = lib.parseGitmodulesUrls('[submodule "x"]\n\turl = file:///etc/passwd\n[submodule "y"]\n\turl = git@github.com:o/y.git\n');
+    const bad = lib.parseGitmodulesUrls('[submodule "x"]\\n\\turl = file:///etc/passwd\\n[submodule "y"]\\n\\turl = git@github.com:o/y.git\\n');
     check("gitmodules file/git@ 被拒绝", bad.unsafe, ["file:///etc/passwd", "git@github.com:o/y.git"]);
     check("gitmodules 空文本", lib.parseGitmodulesUrls(""), { urls: [], unsafe: [] });
     check("gitmodules null 入参", lib.parseGitmodulesUrls(null), { urls: [], unsafe: [] });
@@ -87,20 +87,20 @@ edit("scripts/tests/integration/lib.test.mjs", [
   check("detectType 插件+vendored技能 → cordis-plugin",
     await lib.detectType(mkFixture("oh-dsh-like", {
       "package.json": DSH_PLUGIN_PKG,
-      "upstream/dsh-tui/skills/audit/SKILL.md": "---\nname: audit\n---\n",
-      "upstream/dsh-tui/skills/review/SKILL.md": "---\nname: review\n---\n"
+      "upstream/dsh-tui/skills/audit/SKILL.md": "---\\nname: audit\\n---\\n",
+      "upstream/dsh-tui/skills/review/SKILL.md": "---\\nname: review\\n---\\n"
     })), "cordis-plugin");
   // 2. 纯 skill 仓库带工具链 package.json（无 dsh 声明）→ skill（分层判定不能翻转为插件）
   check("detectType skill+工具package.json → skill",
     await lib.detectType(mkFixture("skill-with-tooling", {
       "package.json": JSON.stringify({ name: "skill-docs", scripts: { lint: "echo ok" } }),
-      "SKILL.md": "---\nname: my-skill\n---\n"
+      "SKILL.md": "---\\nname: my-skill\\n---\\n"
     })), "skill");
   // 3. 嵌套技能集合仓库（无 package.json）→ skill
   check("detectType 嵌套技能集合 → skill",
     await lib.detectType(mkFixture("skill-collection", {
-      "skills/a/SKILL.md": "---\nname: a\n---\n",
-      "skills/b/SKILL.md": "---\nname: b\n---\n"
+      "skills/a/SKILL.md": "---\\nname: a\\n---\\n",
+      "skills/b/SKILL.md": "---\\nname: b\\n---\\n"
     })), "skill");
   // 4. 非插件 package.json（无 SKILL.md）→ cordis-plugin（保留非插件确认弹窗路径）
   check("detectType 非插件package.json → cordis-plugin",
@@ -116,12 +116,12 @@ edit("scripts/tests/integration/lib.test.mjs", [
   // 6. 仅 vendored 目录含 SKILL.md（无 package.json）→ instructions（技能是上游的，不算本仓库内容）
   check("detectType 仅vendored技能 → instructions",
     await lib.detectType(mkFixture("vendored-only", {
-      "upstream/x/SKILL.md": "---\nname: x\n---\n",
+      "upstream/x/SKILL.md": "---\\nname: x\\n---\\n",
       "README.md": "# readme"
     })), "instructions");
   check("findSkillRoots 跳过 upstream/", (await lib.findSkillRoots(join(dtBase, "vendored-only"))).length, 0);
 
-  console.log(`\n${pass} passed, ${fail} failed`);
+  console.log(`\\n${pass} passed, ${fail} failed`);
   process.exit(fail === 0 ? 0 : 1);
 })();'''),
 ])
