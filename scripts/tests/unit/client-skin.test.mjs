@@ -35,6 +35,13 @@ check("对比度 CSS：.dshm-dim 提升为 label-secondary", /\.dshm-dim\{color:
 check("对比度 CSS：带亮色限定 :not([data-ds-dark-theme])",
   /body\[data-dsh-qq98\]:not\(\[data-ds-dark-theme\]\)/.test(client), true);
 
+// ---- 契约 4：皮肤包原生 UI 白字浅底修正（页面级变量覆盖）----
+// 4 皮肤亮色模式 label-primary-foreground = #fff 配浅 bg-layer → 原生设置面板文字
+// 不可读（皮肤包 bug）；页面级覆盖为 var(--dsw-alias-label-primary)（亮色下深色系）。
+const pagePatch = /body\[data-dsh-qq98\]:not\(\[data-ds-dark-theme\]\),body\[data-dsh-trading\]:not\(\[data-ds-dark-theme\]\),body\[data-dsh-xp\]:not\(\[data-ds-dark-theme\]\),body\[data-dsh-miku\]:not\(\[data-ds-dark-theme\]\)\{--dsw-alias-label-primary-foreground:var\(--dsw-alias-label-primary\)\}/;
+check("页面级覆盖：4 皮肤亮色 body 选择器", pagePatch.test(client), true);
+check("页面级覆盖：foreground 重绑为 label-primary", /--dsw-alias-label-primary-foreground:var\(--dsw-alias-label-primary\)/.test(client), true);
+
 // ---- 契约 3：次要文本元素统一带 .dshm-dim ----
 const dimUsage = (client.match(/className: "dshm-dim"/g) ?? []).length;
 check("dshm-dim 使用点 ≥8（badge×3/meta×2/sub/loading×2/empty×3/count×2/tabBtn×2/disclaimer/btnInstalled）",
