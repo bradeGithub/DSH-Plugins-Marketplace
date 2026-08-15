@@ -59,6 +59,15 @@ const EXEMPT_LIB_MARKERS = [
   // 安装后 entryOk 校验的 readdir 失败兜底（dest 刚 cp 成功，readdir 失败为极小概率 IO 事件，
   // 失败时按「无顶层 js」处理——防御死代码；.some 回调本身由 e2e demo-js-top 覆盖）
   "await readdir(dest).catch(() => [])",
+  // v1.4.x 新增队列/加载失败兜底（队列仅在前序任务 reject 时触发；加载失败仅文件损坏时触发）：
+  // envsQueue/feedbackQueue 队列链 catch 兜底（与 installedQueue 同模式）
+  "envsQueue = envsQueue.catch(() => {})",
+  "feedbackQueue = feedbackQueue.catch(() => {})",
+  // 启动时反馈队列/env 存储加载失败的 logger 兜底（文件损坏才触发，防御分支）
+  "loadFeedback().catch((error) => {",
+  "loadEnvStore().catch((error) => {",
+  // install 成功路径 queueFeedback 调用的异常吞掉闭包（queueFeedback 写盘失败时触发，防御分支）
+  "queueFeedback({ repo",
   // selfLatestFromCache 的 find 回调：真实触发条件为「启动预热完成后 >30 分钟再次打开页面
   // 且直连失败」——apply 预热已更新 checkedAt，测试无法模拟 30 分钟等待，豁免（真实路径可达）
   "repos.find((r) => r.full_name === SELF_UPDATE_REPO)",

@@ -10,7 +10,7 @@
 // 契约的静态断言见 unit/install-scripts.test.mjs（跨平台必跑）。
 
 import { execFileSync } from "node:child_process";
-import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, rmSync, existsSync } from "node:fs";
+import { mkdtempSync, mkdirSync, writeFileSync, copyFileSync, readFileSync, rmSync, existsSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { tmpdir } from "node:os";
 import { fileURLToPath } from "node:url";
@@ -77,18 +77,27 @@ if (process.platform === "win32") {
     // USERPROFILE，且每次 60s+）——PATH 前置必然失败的 stub dsh：脚本
     // $ErrorActionPreference=Stop 下外部命令非零退出即抛异常 → catch 回退手动分支，
     // 沙箱断言才成立（install.ps1 顶部的 dsh 检测本意是真实用户环境的优化）。
+    // 不直接跑仓库根 install.ps1：$PSScriptRoot=仓库根 → Copy-Item 复制整个仓库
+    // （含 .git，~60MB 逐文件 + Defender 扫描 ~90s/次）——复制脚本到最小 fixture
+    // 目录（占位 package.json 满足 PSScriptRoot 检查），$src 只复制 KB 级内容。
     const stubDir = mkdtempSync(join(tmpdir(), "dsh-stub-"));
+    const srcDir = mkdtempSync(join(tmpdir(), "dsh-ps1-src-"));
+    copyFileSync(join(ROOT, "install.ps1"), join(srcDir, "install.ps1"));
+    writeFileSync(join(srcDir, "package.json"), JSON.stringify({ name: "fixture-market", version: "1.0.0" }), "utf8");
     writeFileSync(join(stubDir, "dsh.cmd"), "@echo off\r\nexit /b 1\r\n", "utf8");
     writeFileSync(join(stubDir, "dsh"), "#!/bin/sh\nexit 1\n", "utf8");
     const env = { ...process.env, USERPROFILE: userProfile, PATH: `${stubDir};${process.env.PATH ?? ""}` };
     try {
-      execFileSync("pwsh", ["-NoProfile", "-File", join(ROOT, "install.ps1")], {
+      // 超时兜底：网络/复制异常挂起时防止整个测试文件无限阻塞（超时抛 ETIMEDOUT 明确失败）
+      execFileSync("pwsh", ["-NoProfile", "-File", join(srcDir, "install.ps1")], {
         env,
-        cwd: ROOT,
-        stdio: "pipe"
+        cwd: srcDir,
+        stdio: "pipe",
+        timeout: 100_000
       });
     } finally {
       rmSync(stubDir, { recursive: true, force: true });
+      rmSync(srcDir, { recursive: true, force: true });
     }
   }
   // 并行化：install.ps1 每次真实下载仓库 zip（网络 IO，~6s/次），串行 5 次为
