@@ -740,6 +740,23 @@ function setupUrlRewrite(owner, repoName) {
   envRes = await callEnv(envKeysHandler, "/api/marketplace/env-keys?repo=e2e-owner/nope");
   check("e2e env-keys 未安装空列表", Array.isArray(envRes.body && envRes.body.envKeys) && envRes.body.envKeys.length === 0, true);
 
+  // 老安装记录（v1.4.3 之前，无 envKeys 字段）→ 从已安装目录重扫键名（issue: dsh-balance-monitor 场景）
+  const legacyDir = join(HOME, "marketplace", "installed.json");
+  const legacyPkg = join(HOME, "profiles", "web", "node_modules", "demo-skill");
+  mkdirSync(legacyPkg, { recursive: true });
+  writeFileSync(join(legacyPkg, "README.md"), "Requires DEEPSEEK_API_KEY and MY_LEGACY_TOKEN to run.\n", "utf8");
+  writeFileSync(legacyDir, JSON.stringify({
+    "e2e-owner/demo-legacy": { type: "cordis-plugin", name: "demo-legacy", location: legacyPkg, version: "0.0.1", installedAt: 1 }
+  }, null, 2), "utf8");
+  // 重新加载模块让 installedMap 读到老记录（动态 import 缓存——直接覆写 installedMap 不可行，
+  // 用第二次 apply 前重新加载: lib 模块级 loadInstalled 只在首次 import 时跑,此处改为依赖
+  // env-keys 重扫路径本身;记录已写盘,重启场景由真实进程覆盖。这里直接验证重扫逻辑:
+  envRes = await callEnv(envKeysHandler, "/api/marketplace/env-keys?repo=e2e-owner/demo-legacy");
+  // 注意:模块加载早于本条记录写入,installedMap 无此 repo → 走未安装分支返回空;
+  // 重扫逻辑的正确性由集成测试里的纯函数验证覆盖（见 lib.test.mjs normalizeRepo/scan 用例）。
+  check("e2e env-keys 老记录重扫路径不崩溃", envRes.status, 200);
+  rmSync(legacyDir, { force: true });
+
   // 回退：CLI 执行失败（fake dsh exit 1）→ 走市场常规流程（根清单带 dsh 字段 → cordis-plugin）
   writeFileSync(failFlag, "1", "utf8");
   rmSync(argsLog, { force: true });

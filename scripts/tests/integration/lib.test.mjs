@@ -52,6 +52,10 @@ function mockFetch(payload, status = 200) {
   check("normalizeRepo dsh 无 has_skill", "has_skill" in lib.normalizeRepo({ full_name: "a/b", has_skill: null }), false);
   check("normalizeRepo skills 保留三态", lib.normalizeRepo({ full_name: "a/b", has_skill: null }, "skills").has_skill, null);
   check("normalizeRepo skills true", lib.normalizeRepo({ full_name: "a/b", has_skill: true }, "skills").has_skill, true);
+  // 回归:构建期盖章字段必须透传(否则徽章永不显示——market_tags/installable 被 normalizeRepo 丢掉)
+  check("normalizeRepo 透传 market_tags", JSON.stringify(lib.normalizeRepo({ full_name: "a/b", market_tags: ["verified-install"] }).market_tags), JSON.stringify(["verified-install"]));
+  check("normalizeRepo 透传 installable", lib.normalizeRepo({ full_name: "a/b", installable: "manual" }).installable, "manual");
+  check("normalizeRepo 忽略无关 installable", lib.normalizeRepo({ full_name: "a/b", installable: "cordis-plugin" }).installable, undefined);
   check("compareVersions 基础", lib.compareVersions("1.0.0", "1.0.1"), -1);
   check("isTrustedHost 本地", lib.isTrustedHost("127.0.0.1:3080"), true);
   check("isTrustedHost 外网", lib.isTrustedHost("evil.com:3080"), false);
