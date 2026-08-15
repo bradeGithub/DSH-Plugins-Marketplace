@@ -3,14 +3,16 @@
 本仓库的版本迭代记录。**v1.0.0 之前的版本均为 beta 系列**（开发期迭代，未单独打 tag）。/ Version history of this repository. **All versions before v1.0.0 are part of the beta series** (development iterations, not individually tagged).
 ---
 
-## v1.4.4 — 2026-08-15（修复:插件市场满屏「未验证」+ git 网络错误分类 / Fixes: unverified badges everywhere & git network error classification）
+## v1.4.4 — 2026-08-15（修复:满屏「未验证」+ 徽章不显示 + git 网络错误分类 / Fixes: unverified badges everywhere, missing badges & git network error classification）
 
-**修复批次（issue #19/#20/#21 反馈闭环产出）**：市场本体更新到 v1.4.3 后的三个问题一次修复 / a fix batch from the feedback loop: three issues found after the v1.4.3 release
+**修复批次（issue #19/#20/#21 反馈闭环产出 + 实测回归）**：市场本体更新到 v1.4.3 后的五个问题一次修复 / a fix batch from the feedback loop and real-world regression: five issues found after the v1.4.3 release
 
 - **修复插件市场满屏「未验证」（issue #21 截图确认）**：`normalizeRepo` 把插件市场（registry.json）条目也归一化出 `has_skill: null`——该字段本只属于 Skills 栏目（探测未知的弱化提示），导致整个插件市场 tab 每条都显示「未验证」徽章。现在仅 skills 模式输出三态（true/false/null），插件市场不再显示；实测插件市场 3283 条 0 条带该字段，Skills 栏目 null 仅 8 条不变 / the plugin-marketplace tab showed "unverified" on every card because `normalizeRepo` stamped `has_skill: null` onto registry entries that never had the field (it belongs only to the Skills tab's unknown-probe hint); now only skills mode carries the tri-state field — 0/3283 marketplace entries affected, Skills tab unchanged
+- **修复「已验证安装」等徽章不显示（实测回归）**：`normalizeRepo` 未透传构建期盖章字段 `market_tags` / `installable`——列表接口把它们丢掉，前端「✓ 已验证安装」「仅手动安装」「非 DSH 插件」徽章从未显示。补透传后 dsh-market / dsh-web-ui / dsh-anchored-standard / 市场本体 / archify / dsh-deep-whale / dsh-tdai-memory 全部显示徽章 / `normalizeRepo` dropped the build-time stamp fields `market_tags` and `installable`, so the "verified install", "manual only" and "not a plugin" badges never rendered; now passed through — all seven verified repos show their badge
+- **修复老安装记录「编辑」无 env 键（实测回归）**：v1.4.3 之前安装的记录没有 `envKeys` 字段，编辑弹窗无键可配；现在从已安装的包目录重新扫描 API KEY 形态键名（dsh-balance-monitor 实测重扫出 `DEEPSEEK_API_KEY`）/ install records created before v1.4.3 lack `envKeys`, leaving the edit dialog empty; the env-keys endpoint now rescans the installed package directory (dsh-balance-monitor resurfaces `DEEPSEEK_API_KEY`)
 - **修复 git clone 网络失败误报「构建失败」（issue #21）**：用户无法直连 github.com 时（`Failed to connect to github.com port 443`）错误被归类为「构建/包管理命令失败」，误导排查；新增 git 网络错误识别（置于 Command failed 之前），提示检查网络 / 配置 git 代理（附 Windows 示例）/ git clone network failures (no direct github.com access) were misreported as build failures; a dedicated network rule now fires first with proxy configuration guidance
 - **人工验证徽章 +2（反馈闭环）**：dsh-deep-whale（issue #19）、dsh-tdai-memory（issue #20）加入「✓ 已验证安装」/ two more verified-install badges from user feedback
-- **回归测试**：smoke 191 / 单元+集成 118 / e2e 151 全绿 / full suite green
+- **回归测试**：smoke 191 / 单元+集成 121 / e2e 152 全绿 / full suite green
 
 ## v1.4.3 — 2026-08-15（已安装插件环境变量编辑 / Edit env vars of installed plugins）
 
