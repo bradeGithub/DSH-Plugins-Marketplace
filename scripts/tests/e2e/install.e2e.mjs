@@ -236,6 +236,63 @@ function setupUrlRewrite(owner, repoName) {
   }
   rmSync(join(cacheDir2, "skills.json"), { force: true });
 
+  // ---- #14：skills 服务端分页 + 搜索下推（真实内置索引）----
+  if (skillsHandler) {
+    let paged = null, pagedStatus = 0;
+    await skillsHandler({ method: "GET", headers: { "x-dsh-marketplace": "1", host: "127.0.0.1:3080" }, url: "/api/marketplace/skills?page=1&pageSize=5" }, { writeHead: (s) => { pagedStatus = s; }, end: (b) => { try { paged = JSON.parse(b); } catch { paged = null; } } });
+    check("e2e skills 分页 200", pagedStatus, 200);
+    check("e2e skills 分页每页≤5", paged && Array.isArray(paged.repos) && paged.repos.length <= 5, true);
+    check("e2e skills 分页 total>0", paged && paged.total > 0, true);
+    check("e2e skills 分页 page 字段", paged && paged.page, 1);
+    let qr = null;
+    await skillsHandler({ method: "GET", headers: { "x-dsh-marketplace": "1", host: "127.0.0.1:3080" }, url: "/api/marketplace/skills?page=1&pageSize=10&q=pdf" }, { writeHead: () => {}, end: (b) => { try { qr = JSON.parse(b); } catch { qr = null; } } });
+    check("e2e skills 搜索下推过滤", qr && Array.isArray(qr.repos) && qr.repos.length > 0 && qr.repos.every((r) => (r.name + " " + r.full_name + " " + (r.topics || []).join(" ") + " " + (r.description || "")).toLowerCase().includes("pdf")), true);
+  }
+
+  // ---- #15：备份 / 恢复 ----
+  const backupHandler = handlers.find((h) => h.path === "/api/marketplace/backup")?.handler;
+  const diffHandler = handlers.find((h) => h.path === "/api/marketplace/restore/diff")?.handler;
+  const wdBackupHandler = handlers.find((h) => h.path === "/api/marketplace/backup/webdav")?.handler;
+  check("e2e backup handler 注册", backupHandler !== null, true);
+  check("e2e restore/diff handler 注册", diffHandler !== null, true);
+  let bk = null, bkStatus = 0;
+  await backupHandler({ method: "GET", headers: { "x-dsh-marketplace": "1", host: "127.0.0.1:3080" }, url: "/api/marketplace/backup" }, { writeHead: (s) => { bkStatus = s; }, end: (b) => { try { bk = JSON.parse(b); } catch { bk = null; } } });
+  check("e2e backup 200", bkStatus, 200);
+  check("e2e backup 含安装记录", bk && bk.backup && Array.isArray(bk.backup.repos) && bk.backup.repos.length >= 1, true);
+  check("e2e backup 键已规范化小写", bk && bk.backup.repos.some((r) => r.repo === "small-owner/demo-case-skill"), true);
+  let df = null, dfStatus = 0;
+  const fakeBackup = {
+    repos: [
+      { repo: "small-owner/demo-case-skill", type: "skill", name: "demo-case-skill" },
+      { repo: "zzz-none/not-installed", type: "skill", name: "x" }
+    ]
+  };
+  const dfReq = {
+    method: "POST",
+    headers: { "x-dsh-marketplace": "1", host: "127.0.0.1:3080" },
+    url: "/api/marketplace/restore/diff",
+    [Symbol.asyncIterator]() {
+      let sent = false;
+      return { next: async () => sent ? { value: undefined, done: true } : (sent = true, { value: Buffer.from(JSON.stringify({ backup: fakeBackup })), done: false }) };
+    },
+  };
+  await diffHandler(dfReq, { writeHead: (s) => { dfStatus = s; }, end: (b) => { try { df = JSON.parse(b); } catch { df = null; } } });
+  check("e2e restore/diff 200", dfStatus, 200);
+  check("e2e restore/diff missing 只含未安装", df && df.missing, ["zzz-none/not-installed"]);
+  check("e2e restore/diff already 含已安装", df && df.already, ["small-owner/demo-case-skill"]);
+  let wdStatus = 0;
+  const wdReq = {
+    method: "POST",
+    headers: { "x-dsh-marketplace": "1", host: "127.0.0.1:3080" },
+    url: "/api/marketplace/backup/webdav",
+    [Symbol.asyncIterator]() {
+      let sent = false;
+      return { next: async () => sent ? { value: undefined, done: true } : (sent = true, { value: Buffer.from(JSON.stringify({ url: "file:///etc/passwd" })), done: false }) };
+    },
+  };
+  await wdBackupHandler(wdReq, { writeHead: (s) => { wdStatus = s; }, end: () => {} });
+  check("e2e webdav 非 http 地址 400", wdStatus, 400);
+
   // install handler 错误分支：非法 repo → 400
   const badReq = {
     method: "POST",

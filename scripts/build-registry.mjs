@@ -38,6 +38,7 @@
  *   Search 分段        冷启动 ~100+ 段 × 10 页 ≈ 1.5 小时（30/min 限额）；稳态增量少 ✓
  */
 import { readFile, writeFile, mkdir, rm } from "node:fs/promises";
+import { gzipSync } from "node:zlib";
 import { join, dirname } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
@@ -763,7 +764,17 @@ async function main() {
     repos
   };
   await mkdir(dirname(OUT_FILE), { recursive: true });
-  await writeFile(OUT_FILE, JSON.stringify(out, null, 2) + "\n", "utf8");
+  const raw = JSON.stringify(out, null, 2) + "\n";
+  await writeFile(OUT_FILE, raw, "utf8");
+  // #14（issue #14）：同时产出 .json.gz——12MB 索引 gzip 后约 1.5MB，
+  // 运行时网络刷新优先拉压缩版（jsDelivr/raw 均按原样提供 .gz 文件）。
+  try {
+    const gz = gzipSync(raw);
+    await writeFile(`${OUT_FILE}.gz`, gz);
+    log(`已写入 ${OUT_FILE}.gz（${(gz.length / 1024 / 1024).toFixed(2)} MB）`);
+  } catch (error) {
+    log(`gzip 产物写入失败（不影响主索引）：${error.message}`);
+  }
   if (MODE === "skills") await rm(PROBE_FILE, { force: true }).catch(() => {});
   log(`已写入 ${OUT_FILE}：${repos.length} 个仓库（${out.source}${stars ? "，stars 分段全量" : ""}）`);
 }

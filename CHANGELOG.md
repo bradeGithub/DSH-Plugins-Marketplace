@@ -3,6 +3,13 @@
 本仓库的版本迭代记录。**v1.0.0 之前的版本均为 beta 系列**（开发期迭代，未单独打 tag）。/ Version history of this repository. **All versions before v1.0.0 are part of the beta series** (development iterations, not individually tagged).
 ---
 
+## v1.3.14 — 2026-08-15（索引 gzip 分页 + 备份恢复 / Gzip indexes, server-side paging & backup/restore）
+
+- **索引 gzip 产物（#14）**：构建期同步产出 `registry.json.gz` / `skills.json.gz`（11.3MB → 2.0MB、1.8MB → 0.3MB）；运行时所有网络源优先拉 `.gz`（下载后解压），registry.json.gz 回落到 1MB 以内使 GitHub Contents API 的 api 源对两个索引都重新可用；CI 提交步骤纳入 `.gz` / the build now emits gzipped indexes (11.3MB→2.0MB); all runtime sources prefer `.json.gz` and gunzip after download; the api source works again for both indexes since the gz files fit under the 1MB Contents API limit; CI commits the `.gz` artifacts
+- **skills 服务端分页 + 搜索下推（#14）**：`/api/marketplace/skills` 支持 `?page=&pageSize=&q=`（分页模式只标注当前页，≤200 项/页；搜索下推到服务端过滤名称/全名/标签/简介）；不带参数保持全量返回（旧客户端兼容）；Skills tab 改为服务端分页——每页 100、触底加载下一页、搜索即查即得，不再把上万条索引一次性灌进浏览器 / `/api/marketplace/skills` now supports server-side paging and search (`page`/`pageSize`/`q`); the Skills tab fetches pages on demand (100/page, infinite scroll) and search queries the server instead of filtering a full in-memory copy; legacy full-list responses are unchanged
+- **备份与恢复（#15）**：新增「备份与恢复」面板——导出备份（JSON 下载）/ 导入备份恢复（差异计算后逐个走正常安装流程，材料/构建确认照常弹出）；可选 WebDAV（http(s) + Basic 认证）推送/拉取备份；备份只含安装记录（仓库/类型/版本），环境变量从不持久化故天然无密钥；WebDAV 地址协议校验防 SSRF / new Backup & Restore panel: export a JSON snapshot of install records, import & restore by diffing then re-installing missing repos through the normal install flow; optional WebDAV push/pull with Basic auth; snapshots contain no secrets (env answers are never persisted); WebDAV URLs are protocol-checked against SSRF
+- **回归测试**：e2e 新增 14 条（分页/搜索过滤、backup 记录与键规范化、restore diff 缺失/已装、WebDAV 非 http 地址 400）；smoke 187、单元+集成 75、e2e 102 全绿 / 14 new e2e cases; full suite green (smoke 187 / unit+integration 75 / e2e 102)
+
 ## v1.3.13 — 2026-08-15（子模块安装 + 类型识别分层 + Skills 内置索引 / Submodule install + layered type detection + bundled skills index）
 
 - **git submodule 插件安装修复（#10）**：克隆后检测 `.gitmodules`，存在即递归拉取子模块（`--depth 1`），修复 oh-dsh 等以子模块组织源码的插件构建失败（`Could not resolve upstream/*/src/index.ts`）；子模块地址做安全校验——仅放行 https 与相对路径，`file://` 等协议直接拒绝安装（本地文件泄露防护），并显式禁用 file 协议兜底 / clone now detects `.gitmodules` and initializes submodules recursively, fixing build failures for submodule-based plugins like oh-dsh; submodule URLs are validated (https / relative only, `file://` rejected) with the file protocol explicitly disabled
