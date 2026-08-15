@@ -17,8 +17,14 @@ process.env.DSH_HOME = mkdtempSync(join(tmpdir(), "dsh-libtest-")).replace(/\\/g
 // 键名与全部现有断言解耦（无测试引用该仓库名）。
 mkdirSync(join(process.env.DSH_HOME, "marketplace"), { recursive: true });
 writeFileSync(join(process.env.DSH_HOME, "marketplace", "installed.json"), JSON.stringify({
-  "none/already-installed": { type: "skill", name: "already-installed", location: join(process.env.DSH_HOME, "skills", "already-installed"), installedAt: Date.now() }
+  "none/already-installed": { type: "skill", name: "already-installed", location: join(process.env.DSH_HOME, "skills", "already-installed"), installedAt: Date.now() },
+  // check-update 场景：npm 型 cli 安装记录（name 为 npm 包名，非 owner/repo）
+  "none/cli-pkg": { type: "cli", name: "demo-npm-pkg", location: join(process.env.DSH_HOME, "profiles", "web", "node_modules", "demo-npm-pkg"), installedAt: Date.now() }
 }, null, 2), "utf8");
+// check-update 的已装版本读取：PROFILE_NM/<pkgName>/package.json（v1.4.10 起 npm 型 cli
+// 版本检测改手动触发）——预写 1.0.0，npm registry mock 返回 2.0.0 → updateAvailable
+mkdirSync(join(process.env.DSH_HOME, "profiles", "web", "node_modules", "demo-npm-pkg"), { recursive: true });
+writeFileSync(join(process.env.DSH_HOME, "profiles", "web", "node_modules", "demo-npm-pkg", "package.json"), JSON.stringify({ name: "demo-npm-pkg", version: "1.0.0" }), "utf8");
 // 预写 feedback.json（apply 时 loadFeedback 异步读入）：注入一条 pending 反馈，
 // 供 feedback 提交 handler 的 GitHub 自动建 issue 分支（doCreate）判定。
 writeFileSync(join(process.env.DSH_HOME, "marketplace", "feedback.json"), JSON.stringify({
@@ -464,6 +470,61 @@ function mockFetch(payload, status = 200) {
     check("self-update DELETE 405", r.s, 405);
   } else {
     check("self-update handler 存在", false, true);
+  }
+
+  // ---- check-update handler：npm 型 cli 安装的版本检测（v1.4.10/1.4.11 自更新根治）----
+  // 覆盖 fetchNpmLatest（npmmirror→npmjs 双源）与 handler 各分支。
+  const cuHandler = registered.find((h) => h.path === "/api/marketplace/check-update")?.handler;
+  if (cuHandler) {
+    const cuCall = async (method, bodyObj) => {
+      const bodyStr = JSON.stringify(bodyObj ?? {});
+      let sent = false;
+      const req = {
+        method,
+        headers: { "x-dsh-marketplace": "1", host: "127.0.0.1:3080" },
+        url: "/api/marketplace/check-update",
+        [Symbol.asyncIterator]() {
+          return { next: async () => sent ? { value: undefined, done: true } : (sent = true, { value: Buffer.from(bodyStr), done: false }) };
+        },
+      };
+      let s = 0, b = null;
+      await cuHandler(req, { writeHead: (x) => { s = x; }, end: (x) => { try { b = JSON.parse(x); } catch { b = null; } } });
+      return { s, b };
+    };
+    // 405 / 400 badRepo / 404 无记录
+    let r = await cuCall("GET");
+    check("check-update 非 POST 405", r.s, 405);
+    r = await cuCall("POST", { repo: "not-a-repo" });
+    check("check-update badRepo 400", r.s, 400);
+    r = await cuCall("POST", { repo: "none/not-installed" });
+    check("check-update 无记录 404", r.s, 404);
+    // 成功：已装 1.0.0（预写 PROFILE_NM）vs npm latest 2.0.0 → updateAvailable true
+    const origOk = mockFetch({ "dist-tags": { latest: "2.0.0" } });
+    r = await cuCall("POST", { repo: "none/cli-pkg" });
+    globalThis.fetch = origOk;
+    check("check-update 成功 200", r.s, 200);
+    check("check-update latest 2.0.0", r.b && r.b.latestVersion, "2.0.0");
+    check("check-update updateAvailable", r.b && r.b.updateAvailable, true);
+    // npm 源全失败 → checkUpdateNpmFail（200 + updateAvailable false）
+    const origFail = mockFetch({}, 500);
+    r = await cuCall("POST", { repo: "none/cli-pkg" });
+    globalThis.fetch = origFail;
+    check("check-update npm 失败 status=done", r.b && r.b.status, "done");
+    check("check-update npm 失败 updateAvailable false", r.b && r.b.updateAvailable, false);
+    // fetchNpmLatest 兜底：npmmirror 失败 → npmjs 命中（顺序 mock 分派）
+    const origSeq = globalThis.fetch;
+    let seq = 0;
+    globalThis.fetch = async () => {
+      seq++;
+      return seq === 1
+        ? { ok: false, status: 500, json: async () => ({}), text: async () => "{}" }
+        : { ok: true, status: 200, json: async () => ({ "dist-tags": { latest: "3.0.0" } }), text: async () => "{}" };
+    };
+    r = await cuCall("POST", { repo: "none/cli-pkg" });
+    globalThis.fetch = origSeq;
+    check("check-update npmmirror 失败 npmjs 兜底", r.b && r.b.latestVersion, "3.0.0");
+  } else {
+    check("check-update handler 存在", false, true);
   }
 
   // ---- list handler：触发并发 worker 闭包 + pkg 冲突消解 + 已安装置顶排序 ----
