@@ -103,15 +103,19 @@ check("injectStyles 覆写式（标签存在时更新内容）", /if \(el\) \{ e
 check("injectStyles 无 return 跳过旧逻辑", !/document\.getElementById\("dshm-styles"\)\) return;/.test(client), true);
 
 // ---- 契约 3：次要文本元素统一带 .dshm-dim ----
+// v1.4.9 演进：上游将 tabBtn/btnInstalled/badge/meta 的淡化改为样式内置
+// label-tertiary（显式主题 token，皮肤包不覆盖——对比度由 DSH 主题保证），
+// dim class 从这些点移除；其余元素（badge/tags/sub/count/empty/loading/disclaimer）
+// 仍带 dim class（双保险）。契约断言同步：样式内置点查显式颜色，class 点查 class。
 const dimUsage = (client.match(/className: "dshm-dim"/g) ?? []).length;
-check("dshm-dim 使用点 ≥8（badge×3/meta×2/sub/loading×2/empty×3/count×2/tabBtn×2/disclaimer/btnInstalled）",
+check("dshm-dim 使用点 ≥8（badge×2/tags/sub/loading×2/empty×3/count×2/disclaimer）",
   dimUsage >= 8, true);
 check("badge 带 dshm-dim", /className: "dshm-dim", style: s\.badge/.test(client), true);
 check("meta 带 dshm-dim", /className: "dshm-dim", style: s\.meta/.test(client), true);
 check("pageSub 带 dshm-dim", /className: "dshm-dim", style: s\.sub/.test(client), true);
-check("tab 未选中带 dshm-dim", /className: activeTab === "plugins" \? "" : "dshm-dim"/.test(client), true);
+check("tab 未选中显式 tertiary 颜色", /tabBtn: \{ padding: "7px 16px"[^}]*color: "var\(--dsw-alias-label-tertiary\)"/.test(client), true);
 check("disclaimer 带 dshm-dim", /className: "dshm-dim", style: \{ fontSize: 11, color: "var\(--dsw-alias-label-tertiary\)", marginTop: 16/.test(client), true);
-check("已安装按钮带 dshm-dim", /className: "dshm-btn" \+ \(done \? " dshm-dim" : " dshm-btn-primary"\)/.test(client), true);
+check("已安装按钮显式 tertiary 颜色", /btnInstalled: \{ padding: "5px 14px"[^}]*color: "var\(--dsw-alias-label-tertiary\)"/.test(client), true);
 
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail === 0 ? 0 : 1);
