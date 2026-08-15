@@ -53,6 +53,12 @@ const EXEMPT_LIB_MARKERS = [
   "task.catch((error) => { taskError = error; })",
   // uninstall 中 removePatchEntry 调用点的异常吞掉闭包（removePatchEntry 正常时永不触发）
   "removePatchEntry(pkgName).catch(() => {})",
+  // 克隆后 .gitmodules 读取的失败兜底（exists 刚确认后 readFile 失败为极小概率 IO 事件，
+  // 且失败时 gm 为空串、安全校验照常执行——防御死代码）
+  "join(cacheDir, \".gitmodules\")",
+  // 安装后 entryOk 校验的 readdir 失败兜底（dest 刚 cp 成功，readdir 失败为极小概率 IO 事件，
+  // 失败时按「无顶层 js」处理——防御死代码；.some 回调本身由 e2e demo-js-top 覆盖）
+  "await readdir(dest).catch(() => [])",
   // selfLatestFromCache 的 find 回调：真实触发条件为「启动预热完成后 >30 分钟再次打开页面
   // 且直连失败」——apply 预热已更新 checkedAt，测试无法模拟 30 分钟等待，豁免（真实路径可达）
   "repos.find((r) => r.full_name === SELF_UPDATE_REPO)",
@@ -159,7 +165,17 @@ for (const f of files) {
     totalFuncs += funcs.length;
     coveredFuncs += covered;
     const pct = funcs.length ? Math.round((covered / funcs.length) * 100) : 100;
-    const uncovered = [...agg.funcs.entries()].filter(([, c]) => c === 0).map(([k]) => k.split("@")[0]);
+    const uncovered = [...agg.funcs.entries()].filter(([, c]) => c === 0).map(([k]) => {
+      const [name, offStr] = k.split("@");
+      const off = Number(offStr);
+      // 附带源码行号（定位未覆盖函数用——匿名函数没有名字，只有 offset）
+      let line = null;
+      const localPath = url.startsWith("file://") ? fileURLToPath(url) : url;
+      if (Number.isFinite(off) && existsSync(localPath)) {
+        line = readFileSync(localPath, "utf8").slice(0, off).split("\n").length;
+      }
+      return line !== null ? `${name}@L${line}` : k;
+    });
     // 从 file:///D:/.../scripts/... 提取仓库相对路径
     const rel = url.replace(/^file:\/\/\//, "").split(/[/\\]/).slice(-3).join("/");
     report.push({

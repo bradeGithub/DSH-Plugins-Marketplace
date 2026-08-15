@@ -12,6 +12,13 @@ import { tmpdir } from "node:os";
 
 // ---- mock 基建：临时 DSH_HOME（必须在 import lib 之前设置）----
 process.env.DSH_HOME = mkdtempSync(join(tmpdir(), "dsh-libtest-")).replace(/\\/g, "/");
+// 预写 installed.json（loadInstalled 在模块加载时执行）：注入一条已安装记录，
+// 供 restore/webdav 的 already 分支判定（installedMap 由该文件填充）。
+// 键名与全部现有断言解耦（无测试引用该仓库名）。
+mkdirSync(join(process.env.DSH_HOME, "marketplace"), { recursive: true });
+writeFileSync(join(process.env.DSH_HOME, "marketplace", "installed.json"), JSON.stringify({
+  "none/already-installed": { type: "skill", name: "already-installed", location: join(process.env.DSH_HOME, "skills", "already-installed"), installedAt: Date.now() }
+}, null, 2), "utf8");
 
 let pass = 0, fail = 0;
 function check(name, actual, expected) {
@@ -181,6 +188,8 @@ function mockFetch(payload, status = 200) {
   // 必须命中网络类而非笼统的「构建/包管理命令失败」
   check("分类 git clone 网络", lib.classifyInstallFailure("Command failed: git clone --depth 1 https://github.com/a/b.git\nfatal: unable to access 'https://github.com/a/b.git/': Failed to connect to github.com port 443: Couldn't connect to server").includes("网络"), true);
   check("分类 git clone 网络 en", lib.classifyInstallFailure("fatal: unable to access: Couldn't connect to server", "en").includes("proxy"), true);
+  check("分类 缺少模块", lib.classifyInstallFailure("internal/modules/cjs/loader: Cannot find module 'foo'", "zh").includes("缺少模块"), true);
+  check("分类 构建命令失败", lib.classifyInstallFailure("ERR_PNPM_LOCKFILE_UP_TO_DATE Command failed with exit code 1", "zh").includes("构建"), true);
   check("分类 无匹配返回 null", lib.classifyInstallFailure("just a normal error"), null);
   check("分类 en 语言", lib.classifyInstallFailure("integrity checksum failed", "en").includes("integrity"), true);
 
@@ -325,6 +334,60 @@ function mockFetch(payload, status = 200) {
   check("apply 注册路由", registered.length > 0, true);
   check("apply 注册 install 路由", registered.some((r) => r.path === "/api/marketplace/install"), true);
   check("apply 注册 skills 路由", registered.some((r) => r.path === "/api/marketplace/skills"), true);
+
+  // ---- restore/webdav handler：WebDAV 拉取备份 → 恢复差异 ----
+  // 整条 handler 补测（此前无任何测试触发）：405 / 非法 URL / fetch 失败 / 成功 diff / 非法 backup。
+  const restoreWdHandler = registered.find((h) => h.path === "/api/marketplace/restore/webdav")?.handler;
+  if (restoreWdHandler) {
+    const mkPostReq = (bodyObj) => {
+      const bodyStr = JSON.stringify(bodyObj);
+      let sent = false;
+      return {
+        method: "POST",
+        headers: { "x-dsh-marketplace": "1", host: "127.0.0.1:3080" },
+        url: "/api/marketplace/restore/webdav",
+        [Symbol.asyncIterator]() {
+          return {
+            next: async () => sent ? { value: undefined, done: true } : (sent = true, { value: Buffer.from(bodyStr), done: false }),
+          };
+        },
+      };
+    };
+    const call = async (req) => {
+      let s = 0, b = null;
+      await restoreWdHandler(req, { writeHead: (x) => { s = x; }, end: (x) => { try { b = JSON.parse(x); } catch { b = null; } } });
+      return { s, b };
+    };
+    // 方法非 POST → 405
+    let r = await call({ method: "GET", headers: { "x-dsh-marketplace": "1", host: "127.0.0.1:3080" } });
+    check("restore/webdav 非 POST 405", r.s, 405);
+    // 非法协议 URL（非 http/https，防 SSRF）→ 400
+    r = await call(mkPostReq({ url: "ftp://evil.example.com/bk.json" }));
+    check("restore/webdav 非法 URL 400", r.s, 400);
+    // 远端 fetch 失败（HTTP 500）→ 200 failed + webdavFail 日志
+    const origFail = mockFetch({}, 500);
+    r = await call(mkPostReq({ url: "https://example.com/bk.json" }));
+    globalThis.fetch = origFail;
+    check("restore/webdav fetch 失败 failed", r.s, 200);
+    check("restore/webdav fetch 失败 status=failed", r.b && r.b.status, "failed");
+    // 成功：合法 backup（1 条未装 + 1 条已装，触发 missing/already 两个 map 回调）→ 200 done
+    const origOk = mockFetch({ repos: [
+      { repo: "none/not-installed", type: "skill", name: "x" },
+      { repo: "none/already-installed", type: "skill", name: "y" },
+    ] });
+    r = await call(mkPostReq({ url: "https://example.com/bk.json", username: "u", password: "p" }));
+    globalThis.fetch = origOk;
+    check("restore/webdav 成功 200", r.s, 200);
+    check("restore/webdav missing 未装项", r.b && r.b.missing, ["none/not-installed"]);
+    check("restore/webdav already 已装项", r.b && r.b.already, ["none/already-installed"]);
+    // 远端返回非法 backup 结构 → 400 badBackup
+    const origBad = mockFetch({ repos: "nope" });
+    r = await call(mkPostReq({ url: "https://example.com/bk.json" }));
+    globalThis.fetch = origBad;
+    check("restore/webdav badBackup 400", r.s, 400);
+  } else {
+    check("restore/webdav handler 存在", false, true);
+  }
 
   // ---- list handler：触发并发 worker 闭包 + pkg 冲突消解 + 已安装置顶排序 ----
   // 造一个 skills/<slug> 目录让 o/a 命中 detectInstalled 目录启发式（已安装）。
