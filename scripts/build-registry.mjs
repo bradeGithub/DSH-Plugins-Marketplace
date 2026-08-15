@@ -286,6 +286,8 @@ const MARKET_TAGS = new Map([
   ["tt-a1i/archify", ["verified-install"]],
   ["small-tailqwq/dsh-deep-whale", ["verified-install"]], // issue #19 用户反馈正常 + 修复相对路径指令后实测可装
   ["scorp1o117/dsh-tdai-memory", ["verified-install"]], // issue #20 用户反馈正常（cordis-plugin 0.2.8）
+  ["titanwings/colleague-skill", ["verified-install"]], // issue #22 用户反馈正常（skill）
+  ["wx-yss/dsh-message-rail", ["verified-install"]], // issue #23 用户反馈正常（cli）
   ["nexu-io/open-design", ["prereq"]],
 ]);
 

@@ -3,6 +3,12 @@
 本仓库的版本迭代记录。**v1.0.0 之前的版本均为 beta 系列**（开发期迭代，未单独打 tag）。/ Version history of this repository. **All versions before v1.0.0 are part of the beta series** (development iterations, not individually tagged).
 ---
 
+## v1.4.6 — 2026-08-15（反馈开关 + 人工验证徽章 +2 / Feedback toggle & verified-install badges +2）
+
+- **反馈开关（新）**：市场右上角新增「是否发送反馈」小开关，默认开启；关闭后不再弹出「插件是否正常安装并运行」确认弹窗（安装反馈队列仍保留在服务端，重新打开开关后恢复提示）；偏好保存在本机 localStorage / a new "send feedback" toggle in the top-right of the marketplace, on by default; turning it off suppresses the install-feedback dialog (the pending queue is kept server-side and resumes when re-enabled); the preference is stored in localStorage
+- **人工验证徽章 +2（反馈闭环）**：titanwings/colleague-skill（issue #22）、wx-yss/dsh-message-rail（issue #23）用户反馈正常，加入「✓ 已验证安装」徽章 / two more verified-install badges from user feedback (issues #22/#23)
+- **回归测试**：smoke 191 / 单元 169 全绿 / full suite green
+
 ## v1.4.5 — 2026-08-15（dsh 索引改增量构建 + 移除手动刷新脚本 / Incremental dsh-index builds & remove manual refresh scripts）
 
 - **dsh 索引改增量构建**：插件市场索引（registry.json）与 skills 索引对称——每 2 小时只拉最近 3 天 pushed 的仓库并与旧索引合并（几分钟完成），每天 04:00 UTC 全量重建刷新 star 数；修复增量构建所有段恰好收敛时 dsh 模式不加载旧索引、索引被整体替换成残缺子集的隐患（`loadExisting` 条件补 `incremental`）/ the marketplace index now builds incrementally like the skills index (2h runs fetch only repos pushed in the last 3 days and merge with the old index; a full rebuild at 04:00 UTC daily refreshes stars); fixes dsh mode replacing the whole index with a partial subset when an incremental run happened to converge
