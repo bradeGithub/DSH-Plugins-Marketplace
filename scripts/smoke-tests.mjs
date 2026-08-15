@@ -1,7 +1,7 @@
 // 冒烟测试：验证安全加固与纯函数修复（R1 Host 白名单 / R2 env 最小化 / n3 版本比较等）。
 // 运行：node scripts/smoke-tests.mjs（CI 的 syntax check 步骤同步执行）
 import { compareVersions, isTrustedRequest, isTrustedHost, isSensitiveEnvKey, buildMinimalEnv, buildFilteredEnv, looksLikeDshPlugin } from "../lib/index.js";
-import { classifyTree, shouldInheritProbe } from "./build-registry.mjs";
+import { classifyTree, shouldInheritProbe, applyMarketTags } from "./build-registry.mjs";
 import { inject as marketInject, name as marketName } from "../lib/index.js";
 import { extractSubject, validateSubject, COMMIT_TYPES, SYNTAX_CHECK_FILES, hasEmoji, parseHookConfig, LEVELS, DEFAULT_HOOK_CONFIG, loadHookConfigFromText, detectSecret } from "./hooks/validate.mjs";
 import { extractHeadings, slugify, generateToc, applyToc, tocIsValid, normalizeEol, isMain, tocInsertIndex, discoverMarkdownFiles, DEFAULT_TOC_EXCLUDES } from "./toc.mjs";
@@ -299,6 +299,19 @@ check("isMain 无 argv1 false", (() => {
   process.argv[1] = orig;
   return r;
 })(), false);
+
+// ---- build-registry: applyMarketTags（人工验证标注注入）----
+const tagInput = [
+  { full_name: "dsh-market/dsh-market" },
+  { full_name: "NEXU-IO/Open-Design" },       // 大小写不敏感
+  { full_name: "someone/else", market_tags: ["verified-install"] }, // 未命中 → 清旧字段
+  { full_name: "no-tags-here" },
+];
+const tagged = applyMarketTags(tagInput.map((r) => ({ ...r })));
+check("market_tags 命中 verified-install", JSON.stringify(tagged[0].market_tags), JSON.stringify(["verified-install"]));
+check("market_tags 大小写不敏感", JSON.stringify(tagged[1].market_tags), JSON.stringify(["prereq"]));
+check("market_tags 未命中清旧字段", tagged[2].market_tags, undefined);
+check("market_tags 未命中不加字段", tagged[3].market_tags, undefined);
 
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail === 0 ? 0 : 1);

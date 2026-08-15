@@ -272,17 +272,54 @@ const CATEGORY_OVERRIDES = new Map([
 export { CATEGORY_RULES, CATEGORY_OVERRIDES, TOPIC_STOP_WORDS, CATEGORY_OTHER };
 
 /**
+ * 人工验证标注（v1.4.1）：市场维护者实测过安装行为的仓库 → market_tags。
+ *  - "verified-install"：实测可正常一键安装（官方 CLI 或市场流程均可）
+ *  - "prereq"：可安装但需要前置条件（如 open-design 需先装官方 dsh CLI 并用其自带
+ *    od CLI 接入，市场无法代执行，仅作提示）
+ * 随 build-registry 每次构建注入索引，避免被 CI 重建覆盖。
+ */
+const MARKET_TAGS = new Map([
+  ["dsh-market/dsh-market", ["verified-install"]],
+  ["zhu1090093659/dsh-web-ui", ["verified-install"]],
+  ["xiaobright/dsh-anchored-standard", ["verified-install"]],
+  ["bradegithub/dsh-plugins-marketplace", ["verified-install"]],
+  ["tt-a1i/archify", ["verified-install"]],
+  ["nexu-io/open-design", ["prereq"]],
+]);
+
+/**
+ * 注入人工验证标注（纯函数）：命中 MARKET_TAGS 的仓库写入 market_tags 数组，
+ * 未命中删除旧字段（标注随表刷新，避免过期误导）。full_name 大小写不敏感。
+ * @param {Array} repos registry 条目数组
+ */
+export function applyMarketTags(repos) {
+  for (const repo of repos) {
+    const tags = MARKET_TAGS.get(String(repo.full_name ?? "").toLowerCase());
+    if (tags && tags.length > 0) repo.market_tags = [...tags];
+    else delete repo.market_tags;
+  }
+  return repos;
+}
+
+/**
  * 可安装性徽标盖章（纯函数）：从 verify-installability.mjs 的探测报告（full_name → verdict）映射为
  * 面向客户端的精简字段 `installable`，只标注两类需要提示的仓库：
  *   "pkg-plain" → "non-plugin"（有 package.json 但非 DSH 插件，装了不可用）
  *   "manual"    → "manual"（无可自动安装内容，只能按 README 手动装）
  * 其余（cordis-plugin/skill/script/multi-plugin/agent-preset/unknown）不写字段 → 客户端默认无徽标。
  * 报告缺失或条目缺失 → 删除旧盖章（徽标随报告刷新，避免过期误导）。
+ * 人工验证标注优先：market_tags 含 "verified-install" 的仓库跳过机器盖章——
+ * 探测器对「根目录非插件但 README 提供官方聚合包」的仓库会误判 pkg-plain
+ * （如 dsh-web-ui，实测走官方 CLI 安装正常），人工实测应覆盖机器探测。
  * @param {Array} repos registry 条目数组
  * @param {Map<string,string>} verdictMap full_name → 探测 verdict
  */
 export function applyInstallability(repos, verdictMap) {
   for (const repo of repos) {
+    if (Array.isArray(repo.market_tags) && repo.market_tags.includes("verified-install")) {
+      delete repo.installable;
+      continue;
+    }
     const v = verdictMap.get(String(repo.full_name ?? ""));
     if (v === "pkg-plain") repo.installable = "non-plugin";
     else if (v === "manual") repo.installable = "manual";
@@ -692,6 +729,9 @@ async function main() {
       }
     }
   }
+
+  // 人工验证标注（market_tags）：随构建注入，两种模式都打（skills 栏目同样展示）。
+  applyMarketTags(repos);
 
   // skills 模式：增量继承（控额度的命根子）+ Trees 探测
   if (MODE === "skills") {
