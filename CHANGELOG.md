@@ -3,6 +3,13 @@
 本仓库的版本迭代记录。**v1.0.0 之前的版本均为 beta 系列**（开发期迭代，未单独打 tag）。/ Version history of this repository. **All versions before v1.0.0 are part of the beta series** (development iterations, not individually tagged).
 ---
 
+## v1.4.2 — 2026-08-15（hotfix：修复安装反馈弹窗导致市场白屏 / hotfix: fix marketplace blank screen from the feedback dialog）
+
+**紧急修复**：v1.4.1 引入的安装反馈弹窗在部分环境下使插件市场整页空白——`fbDismissed`（「稍后再说」会话标记）的模块级声明在编辑时未落盘，`useEffect` 读取未声明变量抛 `ReferenceError`，React 组件树崩溃。本版补上声明并回归验证。 / v1.4.1's install-feedback dialog could blank out the whole marketplace: the module-level declaration of `fbDismissed` (the "later" session flag) was lost during editing, so the effect read an undeclared variable and React crashed. Declaration restored and the full suite re-verified.
+
+- **修复**：补回 `fbDismissed` 模块级声明（`lib/client.js`），mock 浏览器环境执行 client 工厂无运行时异常；新增引用的 25 个标识符逐一核对均有声明 / restored the missing module-level declaration; the client factory runs clean in a mocked browser environment and every new identifier was verified declared
+- **回归测试**：smoke 191 / 单元+集成 111 / e2e 140 全绿 / full suite green
+
 ## v1.4.1 — 2026-08-15（安装反馈闭环 + 人工验证标注 + 第三方 CLI 接入提示 / Install-feedback loop, curated verification tags & third-party CLI integration hints）
 
 **小版本迭代**：安装体验闭环——装完问用户、反馈进 GitHub issue；市场列表新增人工验证徽章；扫描器补上第三方 CLI 的 DSH 接入指令识别 / a minor release closing the install-feedback loop (ask after install, file results as GitHub issues), adding curated verification badges to the listing and recognizing third-party CLI integration commands in READMEs
