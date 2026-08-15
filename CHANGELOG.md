@@ -3,6 +3,12 @@
 本仓库的版本迭代记录。**v1.0.0 之前的版本均为 beta 系列**（开发期迭代，未单独打 tag）。/ Version history of this repository. **All versions before v1.0.0 are part of the beta series** (development iterations, not individually tagged).
 ---
 
+## v1.3.16 — 2026-08-15（CLI 指令识别兼容 flags+包名写法 / CLI hint: flags & package-name forms）
+
+- **识别器兼容两种新写法**（dsh-market 实测反馈）：`dsh plugin --profile web add dshmarket`（flags 在动词前）与指令使用 npm 包名而非仓库名（如 `add dshmarket` ← package.json 的 name）；返回整条指令含 flags / the README CLI hint now recognizes `dsh plugin --profile web add <pkg>` forms: flags before the verb and package-name targets (from the repo's own package.json), returning the full command including flags
+- **实测验证**：真实克隆 dsh-market/dsh-market → `detectType = cordis-plugin`、`scanCliInstallHint = "dsh plugin --profile web add dshmarket"` / verified against a real clone of dsh-market
+- **回归测试**：集成 +2（flags+包名命中、指令指向他包不命中）；smoke 187 / 单元+集成 82 / e2e 103 全绿 / +2 integration cases; suite green
+
 ## v1.3.15 — 2026-08-15（README 官方 CLI 安装指令提示 / README CLI install hint）
 
 - **安装时检查 README 的 `dsh plugin install <repo>` 指令**：克隆完成后扫描 README（含 README.en.md 等变体），发现指向当前仓库的官方 CLI 安装指令时——安装日志首行提示「README 提供官方 CLI 安装指令」（与市场安装等效，二选一）；完成/手动响应携带 `cliCommand`，安装面板显示**可一键复制**的指令块（clipboard API 失败自动降级 execCommand）/ the installer now scans the cloned README for a `dsh plugin install <repo>` command targeting the current repo: a hint line is logged and the done/manual response carries `cliCommand`, rendered in the install panel as a copyable snippet with clipboard fallback

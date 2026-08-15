@@ -73,6 +73,18 @@ function mockFetch(payload, status = 200) {
   check("cliHint 命中 install 指令", await lib.scanCliInstallHint(cliDir, "owner/demo-plugin"), "dsh plugin install owner/demo-plugin");
   check("cliHint 大小写不敏感", await lib.scanCliInstallHint(cliDir, "OWNER/Demo-Plugin"), "dsh plugin install owner/demo-plugin");
   check("cliHint 其他仓库不命中", await lib.scanCliInstallHint(cliDir, "other/repo"), null);
+  // dsh-market 实测写法：flags 在动词前 + 用 npm 包名（`dsh plugin --profile web add dshmarket`）
+  const cliFlagsDir = join(process.env.DSH_HOME, "cli-flags");
+  mkdirSync(cliFlagsDir, { recursive: true });
+  writeFileSync(join(cliFlagsDir, "package.json"), JSON.stringify({ name: "dshmarket", version: "1.0.0", dsh: {} }), "utf8");
+  writeFileSync(join(cliFlagsDir, "README.md"), "Install:\n```bash\ndsh plugin --profile web add dshmarket\n```\n", "utf8");
+  check("cliHint flags+包名 写法", await lib.scanCliInstallHint(cliFlagsDir, "dsh-market/dsh-market"), "dsh plugin --profile web add dshmarket");
+  // 负例：README 指令指向别的包/仓库时不提示（候选 = 仓库全名/仓库名/本包 package.json 的 name）
+  const cliOtherDir = join(process.env.DSH_HOME, "cli-other");
+  mkdirSync(cliOtherDir, { recursive: true });
+  writeFileSync(join(cliOtherDir, "package.json"), JSON.stringify({ name: "dshmarket", version: "1.0.0", dsh: {} }), "utf8");
+  writeFileSync(join(cliOtherDir, "README.md"), "Install with:\n```bash\ndsh plugin add somebody-else/another-market\n```\n", "utf8");
+  check("cliHint 指令指向他包不命中", await lib.scanCliInstallHint(cliOtherDir, "dsh-market/dsh-market"), null);
   const cliNoHintDir = join(process.env.DSH_HOME, "cli-no-hint");
   mkdirSync(cliNoHintDir, { recursive: true });
   writeFileSync(join(cliNoHintDir, "README.md"), "# No command here\nInstall via marketplace.\n", "utf8");
