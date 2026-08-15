@@ -27,20 +27,23 @@ function check(name, actual, expected) {
 }
 
 // ---- 契约 1：4 皮肤亮色模式 .dshm-dim → label-secondary ----
-const cssRule = /body\[data-dsh-qq98\]:not\(\[data-ds-dark-theme\]\) \.dshm-dim[\s\S]{0,60}body\[data-dsh-trading\][\s\S]{0,60}body\[data-dsh-xp\][\s\S]{0,60}body\[data-dsh-miku\]/;
+const cssRule = /body\[data-dsh-retro\]:not\(\[data-ds-dark-theme\]\) \.dshm-dim[\s\S]{0,60}body\[data-dsh-trading\][\s\S]{0,60}body\[data-dsh-xp\][\s\S]{0,60}body\[data-dsh-miku\]/;
 check("对比度 CSS：4 皮肤选择器存在", cssRule.test(client), true);
 check("对比度 CSS：.dshm-dim 提升为 label-secondary", /\.dshm-dim\{color:var\(--dsw-alias-label-secondary\)!important\}/.test(client), true);
 
 // ---- 契约 2：仅亮色模式（深色不受影响）----
 check("对比度 CSS：带亮色限定 :not([data-ds-dark-theme])",
-  /body\[data-dsh-qq98\]:not\(\[data-ds-dark-theme\]\)/.test(client), true);
+  /body\[data-dsh-retro\]:not\(\[data-ds-dark-theme\]\)/.test(client), true);
 
 // ---- 契约 4：皮肤包原生 UI 白字浅底修正（页面级变量覆盖）----
 // 4 皮肤亮色模式 label-primary-foreground = #fff 配浅 bg-layer → 原生设置面板文字
 // 不可读（皮肤包 bug）；页面级覆盖为 var(--dsw-alias-label-primary)（亮色下深色系）。
-const pagePatch = /body\[data-dsh-qq98\]:not\(\[data-ds-dark-theme\]\),body\[data-dsh-trading\]:not\(\[data-ds-dark-theme\]\),body\[data-dsh-xp\]:not\(\[data-ds-dark-theme\]\),body\[data-dsh-miku\]:not\(\[data-ds-dark-theme\]\)\{--dsw-alias-label-primary-foreground:var\(--dsw-alias-label-primary\)\}/;
+// 注意：data 属性名以皮肤包 CSS 实际声明为准（qq98 皮肤激活属性是 data-dsh-retro，
+// 皮肤 id ui-skin-qq98 ≠ 属性名——曾因此选择器全失效、设置页完全无变化，实测暴露）；
+// !important 防皮肤 CSS 晚于本注入时按加载顺序覆盖（变量层叠中 !important 稳定胜出）。
+const pagePatch = /body\[data-dsh-retro\]:not\(\[data-ds-dark-theme\]\),body\[data-dsh-trading\]:not\(\[data-ds-dark-theme\]\),body\[data-dsh-xp\]:not\(\[data-ds-dark-theme\]\),body\[data-dsh-miku\]:not\(\[data-ds-dark-theme\]\)\{--dsw-alias-label-primary-foreground:var\(--dsw-alias-label-primary\)!important\}/;
 check("页面级覆盖：4 皮肤亮色 body 选择器", pagePatch.test(client), true);
-check("页面级覆盖：foreground 重绑为 label-primary", /--dsw-alias-label-primary-foreground:var\(--dsw-alias-label-primary\)/.test(client), true);
+check("页面级覆盖：foreground 重绑为 label-primary", /--dsw-alias-label-primary-foreground:var\(--dsw-alias-label-primary\)!important/.test(client), true);
 
 // ---- 契约 3：次要文本元素统一带 .dshm-dim ----
 const dimUsage = (client.match(/className: "dshm-dim"/g) ?? []).length;
