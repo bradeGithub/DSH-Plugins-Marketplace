@@ -79,6 +79,7 @@ const dshRepos = [
   mkRepo("t1/official", { pkg_name: "@deepseek-ai/dsh-web" }), // 官方排除 → false
   mkRepo("t1/trap", { pkg_name: "otherpkg" }),            // ④ repository 撞名 → false
   mkRepo("t1/manual"),                                    // 未安装（A2 手动安装场景用）
+  mkRepo("t1/newpkg", { pkg_name: "newpkg" }),            // 未安装（A2b 手动装包场景用）
   mkRepo("t1/clean"),                                     // 未安装 → false
 ];
 const skillsRepos = [
@@ -191,6 +192,21 @@ const fpOf = (body) => body?.fp;
   check("skills has_skill=false 被过滤", map["t1/hidden"], undefined);
   check("skills 过滤后进栏目 3 条", r.body?.repos?.length, 3);
   check("skills fp 存在且为字符串", typeof fpOf(r.body), "string");
+}
+
+// ==================== A2b 排查：force refresh 须同时失效 profileScanCache ====================
+// A2 修复只置 installedIndex = null；索引重建时 scanProfilePackages() 命中旧缓存
+// → 用户手动 npm install 新包（node_modules 新目录）后点刷新，包名映射仍 miss。
+{
+  const r = mkRes();
+  await listHandler(mkReq("/api/marketplace/list"), r.res);
+  check("A2b 前置：t1/newpkg 初始未安装", installedMapOf(r.body)["t1/newpkg"], false);
+  // 手动装包：直接在 profile node_modules 建目录（无 package.json，目录名兜底命中）
+  mkdirSync(join(profileNm, "newpkg"), { recursive: true });
+  const r2 = mkRes();
+  await listHandler(mkReq("/api/marketplace/list?refresh=1"), r2.res);
+  // 期望：包名映射命中（profile 重扫含 newpkg）→ 标注 true
+  check("A2b force refresh 后包名映射命中（profile 缓存已失效）", installedMapOf(r2.body)["t1/newpkg"], true);
 }
 
 // ==================== B2 验证：卸载事件失效 → 普通 list 懒重建 ====================
