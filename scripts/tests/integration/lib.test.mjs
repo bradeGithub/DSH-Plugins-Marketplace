@@ -104,6 +104,28 @@ function mockFetch(payload, status = 200) {
   const cliNone = await lib.findCliInstall(join(process.env.DSH_HOME, "cli-none-dir"), "owner/demo-plugin");
   check("findCliInstall 无指令 null", cliNone, null);
 
+  // ---- scanExternalCliHint（第三方 CLI 官方 DSH 接入指令识别，open-design 场景：
+  // README 提供 `od agent setup deepseek-harness`，但市场无法代执行——只作展示提示）----
+  const extCliDir = join(process.env.DSH_HOME, "cli-external");
+  mkdirSync(extCliDir, { recursive: true });
+  writeFileSync(join(extCliDir, "package.json"), JSON.stringify({ name: "open-design", version: "1.0.0" }), "utf8");
+  writeFileSync(join(extCliDir, "README.md"), [
+    "| [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) | ✅ Native runtime | `od agent setup deepseek-harness` |",
+    "For DeepSeek Harness, install the official `dsh` CLI first, then select it in Open Design or run `od agent setup deepseek-harness` to install/repair OD's connection component.",
+  ].join("\n"), "utf8");
+  const extHint = await lib.scanExternalCliHint(extCliDir);
+  check("externalCliHint 识别 od 指令", extHint && extHint.cli, "od");
+  check("externalCliHint 命令完整", extHint && extHint.command, "od agent setup deepseek-harness");
+  // 第三方 CLI 接入指令不应被当成 dsh plugin 安装指令（不执行、不提示为等效安装）
+  check("externalCliHint 不影响 scanCliInstallHint", await lib.scanCliInstallHint(extCliDir, "nexu-io/open-design"), null);
+  check("externalCliHint 不影响 findCliInstall", await lib.findCliInstall(extCliDir, "nexu-io/open-design"), null);
+  // dsh 自身的 setup 指令不落入第三方扫描
+  const extDshDir = join(process.env.DSH_HOME, "cli-external-dsh");
+  mkdirSync(extDshDir, { recursive: true });
+  writeFileSync(join(extDshDir, "README.md"), "```bash\ndsh agent setup deepseek-harness\n```\n", "utf8");
+  check("externalCliHint 忽略 dsh 自身", await lib.scanExternalCliHint(extDshDir), null);
+  check("externalCliHint 无指令目录 null", await lib.scanExternalCliHint(join(process.env.DSH_HOME, "nope")), null);
+
   // ---- findPresetRoots / 嵌套预设识别（dsh-anchored-standard 场景）----
   const presetNestedDir = join(process.env.DSH_HOME, "preset-nested");
   mkdirSync(join(presetNestedDir, "preset"), { recursive: true });

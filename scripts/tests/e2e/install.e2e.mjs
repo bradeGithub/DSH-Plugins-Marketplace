@@ -34,6 +34,17 @@ try {
   npmAvailable = false;
 }
 
+// 检查 pnpm（pnpm 分支需要真实 pnpm；缺失时该分支断言为失败路径）。
+// Windows 上 pnpm 是 .cmd 垫片——与 lib 的 runPnpm 同款（cmd.exe /c pnpm）。
+let pnpmAvailable = true;
+try {
+  execFileSync(process.platform === "win32" ? "cmd.exe" : "pnpm",
+    process.platform === "win32" ? ["/d", "/s", "/c", "pnpm", "--version"] : ["--version"],
+    { stdio: "pipe" });
+} catch {
+  pnpmAvailable = false;
+}
+
 // 临时 DSH_HOME + fixture 目录（必须在 lib 加载前设置——用动态 import 控制顺序）
 process.env.DSH_HOME = mkdtempSync(join(tmpdir(), "dsh-e2e-")).replace(/\\/g, "/");
 const HOME = process.env.DSH_HOME;
@@ -590,11 +601,8 @@ function setupUrlRewrite(owner, repoName) {
     });
 
     r = await postInstall("e2e-owner/demo-build-pnpm", { __confirm_build__: "allow" });
-    if (process.platform === "win32") {
-      check("e2e build pnpm 路径 win32 runPnpm EINVAL → failed", r.body && r.body.status, "failed");
-    } else {
-      check("e2e build pnpm 路径（done 或 failed，取决于 pnpm 可用性）", r.body && ["done", "failed"].includes(r.body.status), true);
-    }
+    // pnpm 可用（本机已全局安装，如 11.x）→ 构建成功 done；缺失 → 失败 failed。
+    check("e2e build pnpm 路径 " + (pnpmAvailable ? "（pnpm 可用）done" : "（pnpm 缺失）failed"), r.body && r.body.status, pnpmAvailable ? "done" : "failed");
   }
 
   // ---- README 官方 CLI 安装：README 有 dsh plugin 指令时直接执行官方 CLI（fake dsh 垫片）----
