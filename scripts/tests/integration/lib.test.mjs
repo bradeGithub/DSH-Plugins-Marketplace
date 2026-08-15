@@ -104,6 +104,25 @@ function mockFetch(payload, status = 200) {
   const cliNone = await lib.findCliInstall(join(process.env.DSH_HOME, "cli-none-dir"), "owner/demo-plugin");
   check("findCliInstall 无指令 null", cliNone, null);
 
+  // 相对路径/本地路径指令拒绝（dsh-deep-whale 场景：README 的 `add ../dsh-deep-whale/maid-atelier`
+  // 是作者本地开发用法，依赖 cwd——市场代执行只会装出死链接，必须跳过）
+  const cliRelDir = join(process.env.DSH_HOME, "cli-relpath");
+  mkdirSync(cliRelDir, { recursive: true });
+  writeFileSync(join(cliRelDir, "package.json"), JSON.stringify({ name: "demo-rel", version: "1.0.0", dsh: {} }), "utf8");
+  writeFileSync(join(cliRelDir, "README.md"), [
+    "# demo-rel",
+    "## 安装",
+    "```bash",
+    "dsh plugin --profile web add ../demo-rel/maid-atelier",
+    "```",
+    "或本地绝对路径:",
+    "```bash",
+    "dsh plugin add C:\\work\\demo-rel\\maid-atelier",
+    "```",
+  ].join("\n"), "utf8");
+  check("findCliInstall 相对路径不采用", await lib.findCliInstall(cliRelDir, "owner/demo-rel"), null);
+  check("scanCliInstallHint 相对路径不提示", await lib.scanCliInstallHint(cliRelDir, "owner/demo-rel"), null);
+
   // ---- scanExternalCliHint（第三方 CLI 官方 DSH 接入指令识别，open-design 场景：
   // README 提供 `od agent setup deepseek-harness`，但市场无法代执行——只作展示提示）----
   const extCliDir = join(process.env.DSH_HOME, "cli-external");
