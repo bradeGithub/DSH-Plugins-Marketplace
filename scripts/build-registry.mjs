@@ -829,10 +829,12 @@ async function main() {
   }
 
   // dsh 模式：可安装性徽标盖章（installability-report.json，由 scripts/verify-installability.mjs 刷新）。
-  // 报告缺失/损坏 → 不标注（不阻断构建）；条目不在报告内 → 视为可一键安装（无徽标）。
+  // v1.4.9：修复 ROOT 路径少一层 `..`——build-registry.mjs 的 ROOT 是 scripts/ 目录，
+  // 报告在仓库根，旧代码读 scripts/installability-report.json 永远 ENOENT，
+  // 导致「非 DSH 插件 / 仅手动安装」徽章自 v1.4.1 起从未在构建产物里盖章。
   if (MODE === "dsh") {
     try {
-      const report = JSON.parse(await readFile(join(ROOT, "installability-report.json"), "utf8"));
+      const report = JSON.parse(await readFile(join(ROOT, "..", "installability-report.json"), "utf8"));
       const verdictMap = new Map(
         Array.isArray(report.repos) ? report.repos.map((r) => [String(r.full_name), r.verdict]) : []
       );

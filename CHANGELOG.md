@@ -3,6 +3,12 @@
 本仓库的版本迭代记录。**v1.0.0 之前的版本均为 beta 系列**（开发期迭代，未单独打 tag）。/ Version history of this repository. **All versions before v1.0.0 are part of the beta series** (development iterations, not individually tagged).
 ---
 
+## v1.4.9 — 2026-08-15（修复：非插件徽章盖章从未生效 / Fix: non-plugin badge stamping never worked）
+
+- **修复可安装性盖章路径 bug（重要）**：`build-registry.mjs` 的 `ROOT` 指向 `scripts/` 目录，读 `installability-report.json` 时少了一层 `..`——报告实际在仓库根，旧代码永远读到不存在的 `scripts/installability-report.json` 并静默降级（log「缺失或损坏」），导致「非 DSH 插件 / 仅手动安装」徽章**自 v1.4.1 起从未在构建产物里盖章**（138 个 pkg-plain 非插件仓库一直无标记）；修复后盖章恢复，实测本地构建 non-plugin 138 / manual 111 / critical: `ROOT` in build-registry.mjs points at `scripts/`, but the installability report lives at the repo root — the missing `..` made every build read a non-existent `scripts/installability-report.json` and silently degrade, so "not a DSH plugin / manual only" badges were never stamped since v1.4.1 (138 pkg-plain repos went unmarked); now fixed — local build stamps 138 non-plugin + 111 manual
+- **非 DSH 插件安装按钮禁用（新）**：`installable=non-plugin` 的卡片安装按钮变灰不可点击（悬停提示「非 DSH 插件，无法一键安装」），卡片保留展示并带「非 DSH 插件」徽章；已手动安装的不受影响 / install buttons on non-plugin cards are now disabled (greyed out with a hover explanation); cards stay visible with the "not a DSH plugin" badge; manually installed ones keep their installed state
+- **回归测试**：smoke 191 / 单元 180 全绿 / full suite green
+
 ## v1.4.8 — 2026-08-15（社区收录徽章 + 0-star 长尾截断修复 / Community-listed badges & 0-star tail truncation fix）
 
 - **社区收录徽章（新）**：构建期抓取 awesome 聚合页（默认 [awesome-dsh-plugin/awesome-dsh-plugin](https://github.com/awesome-dsh-plugin/awesome-dsh-plugin)，社区人工筛选）收录的仓库，与索引交集打「社区收录」蓝色徽章（悬停提示「此项目已被 awesome-dsh-plugin 等聚合页收录」）；随每次构建统一重算（聚合页更新后增量构建也能同步），机器探测明确非插件的仓库不打标；聚合页源可配置扩展（`COMMUNITY_PICK_SOURCES`）/ the build now fetches community-curated awesome lists (default: awesome-dsh-plugin/awesome-dsh-plugin), marks intersecting repos with a blue "Community listed" badge (hover tooltip explains the source), recomputes on every build (incremental builds track list updates), skips machine-flagged non-plugins, and supports adding more list sources
