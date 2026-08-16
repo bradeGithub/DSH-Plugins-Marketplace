@@ -12,6 +12,9 @@
   完成后需重启 DSH（重新运行 dsh web）再刷新页面。
 #>
 $ErrorActionPreference = "Stop"
+# PowerShell 7.3+ 默认不把外部命令非零退出视为异常（即使 ErrorActionPreference=Stop）——
+# 不开启则下方 catch 回退分支永远不可达：dsh 官方安装失败时会「假成功」。旧版 PS 无此变量，忽略即可。
+$PSNativeCommandUseErrorActionPreference = $true
 
 $RepoUrl = "https://github.com/bradeGithub/DSH-Plugins-Marketplace"
 
@@ -55,12 +58,23 @@ Remove-Item (Join-Path $dest ".ca-bundle.crt") -Force -ErrorAction SilentlyConti
 # 注册到 web profile 补丁（幂等；行级精确匹配，避免前缀子串误判）。
 # 注意：patch 条目是 `- insert:` 块内的缩进行（`      name: ...`），
 # 行首锚定必须允许前导空白，否则永远匹配不到 → 每次运行都会追加重复条目（KIMI 审阅 H1）。
+# v1.4.12（issue #39）：若本体已通过 profile bundles（package.json dsh.profile.bundles）加载，
+# 再注册 patch 会双加载 → webserver 重复路由崩溃——此时跳过注册。
+$profilePkg = Join-Path $env:USERPROFILE ".dsh\profiles\web\package.json"
+$bundled = $false
+if (Test-Path $profilePkg) {
+  try {
+    $bundled = [bool]((Get-Content $profilePkg -Raw | ConvertFrom-Json).dsh.profile.bundles -contains "dsh-plugin-marketplace")
+  } catch { $bundled = $false }
+}
 $patch = Join-Path $env:USERPROFILE ".dsh\profiles\web\cordis.patch.yml"
 $registered = $false
 if (Test-Path $patch) {
   $registered = [bool](Select-String -Path $patch -Pattern "^\s*name:\s+dsh-plugin-marketplace\s*$" -Quiet)
 }
-if (-not $registered) {
+if ($bundled) {
+  Write-Host "Marketplace already loaded via profile bundles (skipped patch registration)"
+} elseif (-not $registered) {
   $entry = "`n- insert:`n    - id: dsh-plugin-marketplace`n      name: dsh-plugin-marketplace`n"
   $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
   [System.IO.File]::AppendAllText($patch, $entry, $utf8NoBom)
