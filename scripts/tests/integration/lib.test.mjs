@@ -278,6 +278,20 @@ function mockFetch(payload, status = 200) {
   writeFileSync(join(noBuild, "package.json"), JSON.stringify({ name: "no-build", version: "1.0.0", main: "index.js" }));
   check("needsPluginBuild 无 build 脚本", await lib.needsPluginBuild(noBuild), false);
 
+  // scanProfilePackages：隐藏目录（.xxx）不抢包名映射 key（v1.5.1 升级事故回归——
+  // node_modules 里的 .backup 目录含同包名旧版，readdir 点开头排序在前 + 「只补缺不覆盖」
+  // 会让旧版抢走 key，列表持续显示旧已装版本）
+  {
+    const nm = join(process.env.DSH_HOME, "profiles", "web", "node_modules");
+    mkdirSync(join(nm, ".backup-old"), { recursive: true });
+    mkdirSync(join(nm, "shadow-pkg"), { recursive: true });
+    writeFileSync(join(nm, ".backup-old", "package.json"), JSON.stringify({ name: "shadow-pkg", version: "1.4.12" }));
+    writeFileSync(join(nm, "shadow-pkg", "package.json"), JSON.stringify({ name: "shadow-pkg", version: "1.5.1" }));
+    const scannedMap = await lib.scanProfilePackages();
+    check("隐藏备份目录不抢包名映射 key", scannedMap.get("shadow-pkg")?.version, "1.5.1");
+    check("隐藏备份目录自身不进映射", scannedMap.has(".backup-old"), false);
+  }
+
   // scanProfilePackages（Map 类型）
   const scanned = await lib.scanProfilePackages();
   check("scanProfilePackages 是 Map", scanned instanceof Map, true);
