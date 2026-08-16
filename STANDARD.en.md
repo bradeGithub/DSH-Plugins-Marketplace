@@ -13,6 +13,21 @@
 - The marketplace CI scans this topic every 2 hours and ingests repos automatically — **no application, no human review**.
 - Suggested extra topics (help search & categorization): `dsh`, `deepseek-harness`, `agent-preset`, `cordis-plugin`, `dsh-skill`, etc.
 
+### 0.1 Minimal definition of a real plugin (anti topic-squatting)
+
+The `dsh-plugin` topic is the ingestion gate, **not** sufficient proof of being a real plugin — non-DSH repos squatting the topic is a known ecosystem problem (real cases: the ★40k resume builder `amruthpillai/reactive-resume` and ★28k `volcengine/OpenViking` once slipped into the index).
+
+Minimum hard signals of a "real plugin" (any one suffices for installable content):
+
+| Hard signal | Detected type |
+|---|---|
+| Root/nested `package.json` declaring DSH plugin capability (`dsh` field / `@deepseek-ai/*` deps) | cordis-plugin |
+| Root `SKILL.md` (the skill body) | skill |
+| Root `preset.yml` + `agent.cordis.yml` | agent-preset |
+| Root `install.ps1` / `install.sh` | script (minimum bar) |
+
+None of the above → the build flags the repo as "not a DSH plugin" with a red badge (high-star repos get a dedicated fallback check); the full order is the 10-step table in §1. This definition is source-aligned with other community directories' gates (public repo + bundle manifest + `dsh-plugin` topic, e.g. dshbase).
+
 ## 1. Type detection overview (must-read for authors)
 
 The marketplace scans feature files in the repo root in a **fixed order** — **the first match wins**:

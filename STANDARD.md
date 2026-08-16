@@ -14,6 +14,23 @@
 - 市场 CI 每 2 小时扫描一次该 topic，自动收录；无需任何人工申请。
 - 其余 topic 建议（帮助用户搜索与分类）：`dsh`、`deepseek-harness`、`agent-preset`、`cordis-plugin`、`dsh-skill` 等。
 
+### 0.1 真插件最小定义（防 topic 蹭标签）
+
+`dsh-plugin` topic 是收录入口，**不是**「真插件」的充分条件——非 DSH 仓库打标刷榜是生态已知问题
+（实测案例：★40k 简历项目 `amruthpillai/reactive-resume`、★28k 的 `volcengine/OpenViking` 曾混入索引）。
+
+「真插件」的最小硬信号（满足任一即可被识别为可安装内容）：
+
+| 硬信号 | 判定类型 |
+|---|---|
+| 根/子目录 `package.json` 声明 DSH 插件能力（`dsh` 字段 / `@deepseek-ai/*` 依赖） | cordis-plugin |
+| 根 `SKILL.md`（技能本体） | skill |
+| 根 `preset.yml` + `agent.cordis.yml` | agent-preset |
+| 根 `install.ps1` / `install.sh` | script（最低门槛） |
+
+一个都没有 → 市场构建期判定为「非 DSH 插件」并盖红标（高 star 仓库有专项兜底判定）；完整判定顺序即 §1 的 10 步表。
+该定义与 dshbase 等社区目录的收录门槛（仓库公开存在 + bundle 清单 + `dsh-plugin` topic）互认同源。
+
 ## 1. 类型判定总览（作者必读）
 
 市场按**固定顺序**扫描仓库根目录特征文件，**先命中者生效**：
