@@ -36,11 +36,20 @@ function readPatch(home) {
 
 // ---- install.sh：bash 沙箱（场景 A/B/D）----
 function runSh(home) {
-  execFileSync("bash", [join(ROOT, "install.sh")], {
-    env: { ...process.env, HOME: home },
-    cwd: ROOT,
-    stdio: "pipe"
-  });
+  // PATH 前置必然失败的 stub dsh：环境若装过 dsh CLI（维护者本机），install.sh 的
+  // command -v dsh 检测会走「官方安装」分支（真实网络 + 真实 profile），沙箱断言
+  // 必失败。stub exit 1 → 官方分支失败 → 回退手动分支（与 ps1 的 stub 语义一致）。
+  const stubDir = mkdtempSync(join(tmpdir(), "dsh-sh-stub-"));
+  writeFileSync(join(stubDir, "dsh"), "#!/bin/sh\nexit 1\n", "utf8");
+  try {
+    execFileSync("bash", [join(ROOT, "install.sh")], {
+      env: { ...process.env, HOME: home, PATH: `${stubDir}:${process.env.PATH ?? ""}` },
+      cwd: ROOT,
+      stdio: "pipe"
+    });
+  } finally {
+    rmSync(stubDir, { recursive: true, force: true });
+  }
 }
 
 // A：全新环境
@@ -100,9 +109,8 @@ if (process.platform === "win32") {
       rmSync(srcDir, { recursive: true, force: true });
     }
   }
-  // 并行化：install.ps1 每次真实下载仓库 zip（网络 IO，~6s/次），串行 5 次为
-  // integration 层主要耗时（~50s）。A/B/D 的 HOME 彼此独立，可并行执行；
-  // D 的 3 次连跑必须串行（同一 HOME 的幂等语义测试）。
+  // 并行化：fixture 化后 install.ps1 走本地分支（无网络下载，秒级）；A/B/D 的
+  // HOME 彼此独立，可并行执行；D 的 3 次连跑必须串行（同一 HOME 的幂等语义测试）。
   const psA = mkdtempSync(join(tmpdir(), "dsh-inst-ps-a-"));
   const psB = mkdtempSync(join(tmpdir(), "dsh-inst-ps-b-"));
   const psD = mkdtempSync(join(tmpdir(), "dsh-inst-ps-d-"));
