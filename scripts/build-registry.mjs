@@ -270,6 +270,7 @@ const CATEGORY_OVERRIDES = new Map([
   ["wink-run/tokenbank", "model"], // Token 记账/模型路由网关，"P2P network" 命中 tool
   // → coding：开发工作流类（"knowledge" 主题命中 memory 属误伤）
   ["btspoony/mstar-harness", "coding"], // Loop Engineering 工作流插件
+  ["ccch1mneyyy/dsh-TUI", "coding"], // 终端 TUI 插件（Claude Code 风格全屏交互终端），description 含 "WeChat featured"（公众号收录）命中 notify 的 /wechat/ 属误伤
   // → conversation：对话/输入框类（特征词在规则之外）
   ["huiliyi37/dsh-tianshu-tui", "conversation"], // 终端 UI 对话插件，"terminal" 命中 coding
   ["omdsh-dev/dsh-at-file", "conversation"] // @file 输入框功能，"search workspace" 命中 tool
@@ -298,6 +299,9 @@ const MARKET_TAGS = new Map([
   ["liustack/modlens", ["verified-install"]], // issue #25 用户反馈正常（cli）
   ["mnemon-dev/mnemon", ["verified-install"]], // issue #31 用户反馈正常（cordis-plugin 0.1.0）
   ["taxueseek/dsh-files", ["verified-install"]], // issue #35 用户反馈正常（cordis-plugin 0.2.0）
+  ["lx2000wasd/dsh-web-plugin-manager", ["verified-install"]], // issue #43 用户反馈正常（cli）
+  ["csyangwen/dsh-memory-evolve", ["verified-install"]], // issue #42 用户反馈正常（cordis-plugin 0.1.0）
+  ["anionex/agent-vision-toolkit", ["verified-install"]], // issue #41 用户反馈正常（cordis-plugin 0.1.2）
   ["nexu-io/open-design", ["prereq"]],
 ]);
 

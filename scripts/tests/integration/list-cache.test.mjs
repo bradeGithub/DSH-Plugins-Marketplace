@@ -100,12 +100,13 @@ const OLD = new Date(Date.now() - 7 * 24 * 3600 * 1000).toISOString(); // 7 天�
 
 // ==================== 修复 1：search 兜底不写盘 ====================
 
-// 场景 A：list-cache 目录不存在 → registry 全挂 + search 成功 → 返回 search 结果，且目录不被创建
+// 场景 A：list-cache 目录不存在 → registry 全挂 + search 成功 → 返回 search 结果，且目录不被创建。
+// 两条结果（≥2 元素触发 fetchAllRepos 的 sort 回调，覆盖 search 路径的排序分支）。
 {
-  const orig = mockFetch(null, searchItems(["s1/skill-a"]));
+  const orig = mockFetch(null, searchItems(["s1/skill-a", "s1/skill-b"]));
   const list = await lib.fetchAllRepos("dsh");
   globalThis.fetch = orig;
-  check("search 兜底返回当次结果", list.map((r) => r.full_name), ["s1/skill-a"]);
+  check("search 兜底返回当次结果", list.map((r) => r.full_name), ["s1/skill-a", "s1/skill-b"]);
   check("search 兜底不创建 list-cache 目录", listCacheFiles(), null);
 }
 
