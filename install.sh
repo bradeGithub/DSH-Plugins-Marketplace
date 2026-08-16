@@ -63,7 +63,10 @@ rm -f "$DEST/install.ps1" "$DEST/install.sh" "$DEST/.ca-bundle.crt"
 PATCH="$HOME/.dsh/profiles/web/cordis.patch.yml"
 BUNDLED=false
 PROFILE_PKG="$HOME/.dsh/profiles/web/package.json"
-if [[ -f "$PROFILE_PKG" ]] && grep -q 'dsh-plugin-marketplace' "$PROFILE_PKG"; then
+# 精确 JSON 判定（与 install.ps1 的 -contains 语义一致）：必须落在 dsh.profile.bundles 数组内才算
+# bundles 加载——裸 grep 子串会误判 dependencies 里同名字符串为 bundles，导致「已通过 bundles 加载」
+# 的假阳性而跳过 patch 注册，市场装了却不加载（审查 C2）。
+if [[ -f "$PROFILE_PKG" ]] && node -e 'try{const p=require(process.argv[1]);process.exit(Array.isArray(p.dsh&&p.dsh.profile&&p.dsh.profile.bundles)&&p.dsh.profile.bundles.includes("dsh-plugin-marketplace")?0:1)}catch(e){process.exit(1)}' "$PROFILE_PKG"; then
   BUNDLED=true
 fi
 if $BUNDLED; then

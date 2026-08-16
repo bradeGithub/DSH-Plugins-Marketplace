@@ -21,10 +21,10 @@
 | 顺序 | 特征 | 判定类型 | 安装行为 |
 |---|---|---|---|
 | 1 | 根目录同时有 `preset.yml` + `agent.cordis.yml` | agent-preset | 复制到 `~/.dsh/.agent-presets/<id>` |
-| 2 | 根目录有 **`install.ps1`** | script | 执行该脚本（安全确认弹窗） |
-| 3 | 根目录有 **`install.sh`** | script | 执行该脚本（安全确认弹窗） |
-| 4 | 子目录含完整预设（`preset.yml`+`agent.cordis.yml`） | agent-preset | 逐个复制 |
-| 5 | 根 `package.json` 声明 DSH 插件能力 | cordis-plugin | 构建/装依赖 → 复制到 profile node_modules → 注册 patch |
+| 2 | 根 `package.json` 声明 DSH 插件能力（`dsh` 字段 / `@deepseek-ai/*` 依赖） | cordis-plugin | 构建/装依赖 → 复制到 profile node_modules → 注册 patch |
+| 3 | 根目录有 **`install.ps1`**（未声明插件能力） | script | 执行该脚本（安全确认弹窗） |
+| 4 | 根目录有 **`install.sh`**（未声明插件能力） | script | 执行该脚本（安全确认弹窗） |
+| 5 | 子目录含完整预设（`preset.yml`+`agent.cordis.yml`） | agent-preset | 逐个复制 |
 | 6 | 根 `package.json`（未声明 DSH 能力）+ 根 `SKILL.md` | skill | 复制到 `~/.dsh/skills/` |
 | 7 | 根目录 `SKILL.md`（无 package.json） | skill | 同上 |
 | 8 | 子目录含插件清单（皮肤/多包仓库） | cordis-plugin | 逐个子包安装 |
@@ -32,8 +32,8 @@
 | 10 | 无任何特征 | instructions | 展示 README 手动安装指引 |
 
 > ⚠️ **最重要的两条规则**：
-> 1. **第 2/3 条先于第 5 条**——根目录放 install 脚本会让市场把 cordis 插件误判为「脚本型」，
->    绕过完整的插件安装管线（构建/依赖/注册/更新/卸载全部失效）。**cordis 插件不要在根目录放 install.ps1/install.sh**（真实案例见 §6.1）。
+> 1. **第 2 条先于第 3/4 条（显式声明优先，机制兜底）**——声明过 `dsh` 插件能力的仓库即使根目录带 install 脚本也不会被判为脚本型，
+>    cordis 插件附分发脚本是合法形态。但脚本留在根目录仍会**误导用户手动执行**，建议移入 `scripts/` 子目录（见 §6.1）。
 > 2. `package.json` 的 `dsh` 字段（或 `@deepseek-ai/*` 依赖）是「插件能力声明」——有它才算 cordis 插件，
 >    否则根 package.json 会被当成普通 npm 项目处理。
 
@@ -129,14 +129,13 @@
 
 ## 6. 反模式与真实案例
 
-### 6.1 根目录 install 脚本劫持 cordis 判定（dsh-paper-tutor 案例）
+### 6.1 根目录 install 脚本与 cordis 声明并存（dsh-paper-tutor 案例）
 
 作者把 cordis 插件（`dsh.plugin=true` 声明齐全）的便捷安装脚本 `install.ps1`/`install.sh` 放在**仓库根**：
-- 市场判定顺序命中第 2 条 → script 型，跳过 cordis 管线；
+- 旧版判定顺序命中脚本特征 → script 型，跳过 cordis 管线；
 - 脚本本地模式又依赖构建产物 `lib/index.js`（仓库未提交）→ 直接报错，**用户点安装必然失败**。
 
-**正确做法**：把安装脚本移入 `scripts/` 子目录（或改名）。根目录只留 `package.json` → 市场正确判定 cordis-plugin，
-自动完成「构建确认 → 装依赖 → 复制 → 注册 patch」。
+**现状（机制兜底）**：判定顺序已改为「`dsh` 声明优先于 install 脚本」——声明过插件能力的仓库即使脚本留在根目录也会正确按 cordis-plugin 安装（自动完成「构建确认 → 装依赖 → 复制 → 注册 patch」）。**但脚本仍建议移入 `scripts/` 子目录**：留在根目录会误导用户手动执行，且对「未声明 dsh 的脚本型仓库」而言根目录脚本仍是判定特征。
 
 ### 6.2 描述漂移导致分类跳变（dsh-TUI 案例）
 

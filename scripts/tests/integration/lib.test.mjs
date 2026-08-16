@@ -360,6 +360,8 @@ function mockFetch(payload, status = 200) {
       return {
         method: "POST",
         headers: { "x-dsh-marketplace": "1", host: "127.0.0.1:3080" },
+        // 审查 S1：写端点升级 isWriteAllowed 后，mock req 需回环 socket 地址（连接层判定）
+        socket: { remoteAddress: "127.0.0.1" },
         url: "/api/marketplace/restore/webdav",
         [Symbol.asyncIterator]() {
           return {
@@ -416,6 +418,8 @@ function mockFetch(payload, status = 200) {
       const req = {
         method: "POST",
         headers: { "x-dsh-marketplace": "1", host: "127.0.0.1:3080" },
+        // 审查 S1：feedback/token 等写端点升级 isWriteAllowed 后需回环 socket
+        socket: { remoteAddress: "127.0.0.1" },
         url: "/api/marketplace/feedback",
         [Symbol.asyncIterator]() {
           return { next: async () => sent ? { value: undefined, done: true } : (sent = true, { value: Buffer.from(bodyStr), done: false }) };
@@ -455,7 +459,7 @@ function mockFetch(payload, status = 200) {
     const ownVersion = JSON.parse(readFileSync(join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..", "package.json"), "utf8")).version;
     const suCall = async (method) => {
       let s = 0, b = null;
-      await selfUpdateHandler({ method, headers: { "x-dsh-marketplace": "1", host: "127.0.0.1:3080" }, url: "/api/marketplace/self-update" },
+      await selfUpdateHandler({ method, headers: { "x-dsh-marketplace": "1", host: "127.0.0.1:3080" }, socket: { remoteAddress: "127.0.0.1" }, url: "/api/marketplace/self-update" },
         { writeHead: (x) => { s = x; }, end: (x) => { try { b = JSON.parse(x); } catch { b = null; } } });
       return { s, b };
     };
@@ -468,6 +472,14 @@ function mockFetch(payload, status = 200) {
     // 非 GET/POST → 405
     r = await suCall("DELETE");
     check("self-update DELETE 405", r.s, 405);
+    // 审查 T1：mock 远端更高版本 → 走真实 doSelfUpdate 执行路径（CLI 安装）——
+    // 测试环境无 dsh CLI（Linux ENOENT / Windows 无 APPDATA 的 dsh.cmd），
+    // CLI 失败或版本未变都会如实上报 500 failed，而非静默成功。
+    const origSuHigh = mockFetch({ version: "999.0.0" });
+    r = await suCall("POST");
+    globalThis.fetch = origSuHigh;
+    check("self-update POST 更高版本走执行路径", r.s, 500);
+    check("self-update POST 执行失败如实上报", r.b && r.b.status, "failed");
   } else {
     check("self-update handler 存在", false, true);
   }

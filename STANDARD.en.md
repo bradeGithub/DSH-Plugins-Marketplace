@@ -20,10 +20,10 @@ The marketplace scans feature files in the repo root in a **fixed order** — **
 | # | Feature | Detected type | Install behavior |
 |---|---|---|---|
 | 1 | Root has both `preset.yml` + `agent.cordis.yml` | agent-preset | Copy to `~/.dsh/.agent-presets/<id>` |
-| 2 | Root has **`install.ps1`** | script | Execute the script (risk-confirmation dialog) |
-| 3 | Root has **`install.sh`** | script | Execute the script (risk-confirmation dialog) |
-| 4 | Subdirectory contains a full preset (`preset.yml` + `agent.cordis.yml`) | agent-preset | Copy each one |
-| 5 | Root `package.json` declares DSH plugin capability | cordis-plugin | Build/install deps → copy into profile node_modules → register patch |
+| 2 | Root `package.json` declares DSH plugin capability (`dsh` field / `@deepseek-ai/*` deps) | cordis-plugin | Build/install deps → copy into profile node_modules → register patch |
+| 3 | Root has **`install.ps1`** (no plugin capability declared) | script | Execute the script (risk-confirmation dialog) |
+| 4 | Root has **`install.sh`** (no plugin capability declared) | script | Execute the script (risk-confirmation dialog) |
+| 5 | Subdirectory contains a full preset (`preset.yml` + `agent.cordis.yml`) | agent-preset | Copy each one |
 | 6 | Root `package.json` (no DSH capability) + root `SKILL.md` | skill | Copy to `~/.dsh/skills/` |
 | 7 | Root `SKILL.md` (no package.json) | skill | Same as above |
 | 8 | Subdirectory contains plugin manifests (skins / multi-package repos) | cordis-plugin | Install each sub-package |
@@ -31,7 +31,7 @@ The marketplace scans feature files in the repo root in a **fixed order** — **
 | 10 | No feature files at all | instructions | Show the README manual-install guide |
 
 > ⚠️ **The two most important rules**:
-> 1. **Rule #2/#3 come before rule #5** — an install script in the repo root makes the marketplace treat a cordis plugin as a «script type», bypassing the full plugin pipeline (build / dependencies / registration / update / uninstall all stop working). **Cordis plugins must NOT put install.ps1/install.sh in the repo root** (real case in §6.1).
+> 1. **Rule #2 precedes #3/#4 (explicit declaration wins, enforced mechanically)** — a repo declaring `dsh` plugin capability is never treated as script type even with install scripts at the root; shipping convenience scripts alongside a cordis plugin is a legitimate shape. Still, scripts at the root mislead manual execution — move them into a `scripts/` subdirectory (see §6.1).
 > 2. The `dsh` field in `package.json` (or `@deepseek-ai/*` dependencies) is the **plugin capability declaration** — without it, a root package.json is treated as a plain npm project.
 
 ---
@@ -124,13 +124,13 @@ Script contract (the marketplace clones the repo and runs the script from the re
 
 ## 6. Anti-patterns & real cases
 
-### 6.1 Root install script hijacks cordis detection (dsh-paper-tutor case)
+### 6.1 Root install scripts coexisting with a cordis declaration (dsh-paper-tutor case)
 
 The author placed the convenience install scripts `install.ps1`/`install.sh` of a cordis plugin (with a complete `dsh.plugin=true` declaration) in the **repo root**:
-- The detection order hit rule #2 → script type, skipping the cordis pipeline;
+- The old detection order hit the script feature → script type, skipping the cordis pipeline;
 - The script's local mode then required the build artifact `lib/index.js` (not committed) → hard error, **users clicking install always failed**.
 
-**Correct shape**: move the install scripts into a `scripts/` subdirectory (or rename them). Leave only `package.json` at the root → the marketplace correctly detects cordis-plugin and performs «build confirmation → install deps → copy → register patch» automatically.
+**Current state (mechanical fallback)**: the detection order is now «`dsh` declaration precedes install scripts» — repos declaring plugin capability are correctly installed as cordis-plugin even with scripts at the root (the marketplace performs «build confirmation → install deps → copy → register patch» automatically). **Scripts are still recommended to live in a `scripts/` subdirectory**: root-level scripts mislead manual execution, and for repos without a `dsh` declaration the root script remains the script-type feature.
 
 ### 6.2 Description drift flips the category (dsh-TUI case)
 

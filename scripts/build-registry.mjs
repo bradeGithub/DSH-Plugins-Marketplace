@@ -762,9 +762,12 @@ async function main() {
   // skills 模式即使完整拉取也必须加载旧索引——探测继承依赖旧探测结果（探测远比 Search 贵）。
   // incremental 也必须加载旧索引：增量只拉最近 N 天 pushed 的仓库，若所有段恰好都收敛
   // （complete=true），不合并会把旧索引整体替换成残缺子集（v1.4.5 修复）。
+  // 审查 C3：dsh 全量构建同样必须加载旧索引——分类漂移检测（oldMap 比对旧 category）依赖它；
+  // 此前全量分支 existing=[] 导致漂移检测空跑且 0 漂移时误删 drift-report.json。
+  // 合并循环对 existing 本就安全（fresh 优先 + stale 剔除），无条件加载无副作用。
   const STALE_DAYS = 14;
   const now = Date.now();
-  const existing = (MODE === "skills" || !complete || incremental) ? await loadExisting() : [];
+  const existing = await loadExisting();
   const oldMap = new Map(existing.map((r) => [r.full_name, r]));
   const freshNames = new Set(fresh.map((r) => r.full_name));
   const merged = new Map();
