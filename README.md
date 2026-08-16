@@ -256,6 +256,7 @@ GitHub Actions（每 2 小时，仓库自带 token）
 - 修改服务端逻辑：编辑 `lib/index.js`（语法检查：`node --check`）
 - 修改页面 UI：编辑 `lib/client.js`（浏览器 bundle，`window.__ModuleLoader__.load` 格式，`require` 可解析 DSH 平台模块）
 - 修改后重启 DSH 生效；客户端 bundle 的版本号（rev）按内容哈希生成，重启后浏览器自动拉取新版本
+- **插件作者请看 [STANDARD.md](STANDARD.md)**：市场识别层开发规范——每种插件（cordis 插件 / 技能 / agent 预设 / 脚本型）应该怎么写才能被市场正确收录、正确安装、正确更新，含类型判定规则与常见反模式。
 
 ---
 
