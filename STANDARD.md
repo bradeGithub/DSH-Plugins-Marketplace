@@ -213,17 +213,28 @@ node -e "const p=require('/tmp/x/package.json');console.log(p.dsh, p.main, requi
 ## 9. 发布披露清单（合规层最小契约）
 
 > 识别层管「怎么装」，验证层管「装了能不能信」，**披露层管「装之前该不该装、数据去了哪」**。
-> 以下披露项是作者契约的一部分——在 README 或仓库根 `DISCLOSURE.md` 中如实声明即可（机器可读的
-> `disclosure` 索引字段仍设计中，验证字段 `verdict/verifiedBy/reportUrl` 已落地，见 §10）。
+> 以下披露项是作者契约的一部分——在 SKILL.md frontmatter（snake_case）或 package.json `disclosure`
+> 字段（camelCase）中如实声明即可；市场通过**披露开放数据层**（`wwumit/skills-catalog` 的
+> `catalog.json`，讨论 #2269 三方对齐的「方案 B」）构建期抓取盖章，客户端卡片显示「披露 ✓」徽章
+> （悬停可见 云端/本地、端点、凭据、法域、保留策略摘要）。
 
-| 披露项 | 要求 | 示例 |
-|---|---|---|
-| **云端依赖** | 数据是否外发到第三方服务（评分/翻译/存储等）——必须明示目的地与用途；description 首段建议带警示行 | `⚠️ Cloud scoring sends your answers to compliancehub.cn; use --non-interactive for a fully offline preview.` |
-| **数据外发** | 外发哪些数据（回答全文/文件名/元数据）、是否可离线模式 | 见上方模板 |
-| **API key 存储** | key 存哪（环境变量 / `~/.config/xxx.key` 明文 / 系统凭据库）、文件权限、是否落日志 | `API key is read from DSH env (MY_API_KEY), never written to disk` |
-| **法域/地域** | 合规功能的地域适用性（PIPL 面向中国、CCPA 面向加州、GDPR 面向欧盟等） | `Applies to: PIPL (CN)` |
+### 字段契约（DISCLOSURE v0.2，与 wwumit 三方对齐）
 
-参考实现：`skill-compliance`（规则库 JSON → 检查 → 评分 → 报告，含金融敏感词/免责声明/安全红线/广告法极限词）。
+| 披露项（必填分级） | frontmatter 声明形态 | 市场索引形态（catalog.json 输出） | 要求 |
+|---|---|---|---|
+| **D1 云端依赖**（必填） | `cloud: false` | `cloud` (bool) | 是否发数据到云端；端点列在 `network` |
+| **D1 网络端点** | `network: []` | `network` (string[]) | 数据目的地，如 `["https://compliancehub.cn"]` |
+| **D2 离线模式**（建议） | `offline_mode: true` | `offlineMode` (bool) | 是否存在完全离线路径 |
+| **D3 凭据处理**（必填） | `api_keys: [{env, storage}]` | `apiKeys` ({env, storage}[]) | key 获取方式/存储位置（`file-0600` 等枚举）/是否落日志 |
+| **D4 权限声明**（必填） | `permissions:` frontmatter | — | 网络/文件系统/环境变量读写范围 |
+| **D5 法域标签**（建议） | `jurisdiction: []` | `jurisdiction` (string[]) | PIPL(CN)/CCPA(US-CA)/GDPR(EU) 等 |
+| **D6 数据保留**（建议） | `retention: "session"` | `retention` (string) | none / session / server |
+
+- 版本化：开放数据层顶层 `disclosureSchemaVersion`（当前 `"0.2"`）独立于验证层 `schemaVersion`；不匹配时市场**整体跳过不盖章**（fail-closed）
+- 映射键：`fullName`（发布仓 `owner/name`），与验证层 verified.json 同款匹配逻辑；同一发布仓多个技能披露不一致时按仓库盖章取 **cloud:true 优先**（警示从严）
+- 示例见 [DISCLOSURE_PROPOSAL.md](https://github.com/wwumit/skills-catalog/blob/main/docs/DISCLOSURE_PROPOSAL.md)（wwumit v0.2 提案）
+
+参考实现：`skill-compliance`（规则库 JSON → 检查 → 评分 → 报告，含金融敏感词/免责声明/安全红线/广告法极限词 + 披露完整性检查）。
 
 ---
 

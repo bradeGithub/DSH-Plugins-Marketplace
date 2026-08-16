@@ -202,16 +202,25 @@ node -e "const p=require('/tmp/x/package.json');console.log(p.dsh, p.main, requi
 ## 9. Publication disclosure checklist (minimal compliance contract)
 
 > The recognition layer governs «how it installs», the verification layer «whether it can be trusted», and the **disclosure layer governs «whether you should install it, and where the data goes»**.
-> The following disclosures are part of the author contract — state them honestly in the README or a root `DISCLOSURE.md` (a machine-readable `disclosure` index field is still being designed; the verification fields `verdict`/`verifiedBy`/`reportUrl` have landed — see §10).
+> The following disclosures are part of the author contract — state them honestly in the SKILL.md frontmatter (snake_case) or a package.json `disclosure` field (camelCase). The marketplace consumes the **disclosure open-data layer** (`catalog.json` in `wwumit/skills-catalog`, the three-party "plan B" aligned in discussion #2269) at build time and shows a «disclosed ✓» badge (hover for cloud/local, endpoints, keys, jurisdiction, retention summary).
 
-| Item | Requirement | Example |
-|---|---|---|
-| **Cloud dependency** | Whether data is sent to third-party services (scoring / translation / storage) — destination and purpose must be stated; a warning line in the first description paragraph is recommended | `⚠️ Cloud scoring sends your answers to compliancehub.cn; use --non-interactive for a fully offline preview.` |
-| **Data egress** | What data is sent (full answers / file names / metadata), and whether an offline mode exists | See template above |
-| **API key storage** | Where keys live (env var / plaintext `~/.config/xxx.key` / system keychain), file permissions, whether they appear in logs | `API key is read from DSH env (MY_API_KEY), never written to disk` |
-| **Jurisdiction / region** | Regional applicability of compliance features (PIPL for China, CCPA for California, GDPR for the EU, etc.) | `Applies to: PIPL (CN)` |
+### Field contract (DISCLOSURE v0.2, aligned with wwumit)
 
-Reference implementation: `skill-compliance` (rule-library JSON → check → score → report; covers financial sensitive words, disclaimers, safety red lines, ad-law superlatives).
+| Item (required level) | frontmatter declaration form | marketplace index form (catalog.json) | Requirement |
+|---|---|---|---|
+| **D1 Cloud dependency** (required) | `cloud: false` | `cloud` (bool) | whether data is sent to the cloud; endpoints go in `network` |
+| **D1 Network endpoints** | `network: []` | `network` (string[]) | destinations, e.g. `["https://compliancehub.cn"]` |
+| **D2 Offline mode** (suggested) | `offline_mode: true` | `offlineMode` (bool) | whether a fully offline path exists |
+| **D3 Credential handling** (required) | `api_keys: [{env, storage}]` | `apiKeys` ({env, storage}[]) | how keys are obtained/stored (`file-0600` etc.) / logged |
+| **D4 Permissions** (required) | `permissions:` frontmatter | — | network / filesystem / env read-write scope |
+| **D5 Jurisdiction** (suggested) | `jurisdiction: []` | `jurisdiction` (string[]) | PIPL(CN) / CCPA(US-CA) / GDPR(EU) etc. |
+| **D6 Retention** (suggested) | `retention: "session"` | `retention` (string) | none / session / server |
+
+- Versioned: the data layer's top-level `disclosureSchemaVersion` (currently `"0.2"`) is independent of the verification layer's `schemaVersion`; on mismatch the marketplace **skips stamping entirely** (fail-closed)
+- Mapping key: `fullName` (publishing repo `owner/name`), the same matching logic as the verification layer's verified.json; when one repo has mixed disclosures across skills, the repo-level stamp takes **cloud:true first** (fail-safe, stricter warning)
+- See [DISCLOSURE_PROPOSAL.md](https://github.com/wwumit/skills-catalog/blob/main/docs/DISCLOSURE_PROPOSAL.md) for the full v0.2 proposal
+
+Reference implementation: `skill-compliance` (rule-library JSON → check → score → report; covers financial sensitive words, disclaimers, safety red lines, ad-law superlatives, plus disclosure-completeness checks).
 
 ---
 

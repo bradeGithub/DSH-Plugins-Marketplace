@@ -481,6 +481,87 @@ async function fetchVerificationMap() {
 }
 
 /**
+ * ── 披露徽章（discussion #2269 合规层对接：wwumit/skills-catalog 开放数据层）──
+ * 数据源：catalog.json（wwumit 2026-08-16 确认的「方案 B」聚合形态，21 个精选技能全部带
+ * disclosure）。字段契约：
+ *   - fullName（发布仓 owner/name）为稳定映射键，与验证层同款匹配逻辑
+ *   - disclosure 对象（camelCase）：cloud / network / offlineMode / apiKeys[] / jurisdiction / retention
+ *   - disclosureSchemaVersion（"0.2"）独立于验证层 schemaVersion；≠0.2 整体跳过不盖章（fail-closed）
+ * 盖章语义与验证徽章一致：每轮构建统一重算，抓取失败时增量模式保留旧字段，下次构建恢复。
+ */
+const DISCLOSURE_SOURCE = {
+  repo: "wwumit/skills-catalog",
+  branch: "main",
+  file: "catalog.json",
+  schemaVersion: 1,
+  disclosureSchemaVersion: "0.2"
+};
+
+/** 解析 catalog.json 为 小写 fullName → { disclosure, disclosureSchemaVersion } Map（纯函数）。
+ *  顶层 schemaVersion / disclosureSchemaVersion 任一不匹配返回 null（fail-closed）。
+ *  缺 fullName 或缺 disclosure 对象的条目跳过（不盖章）。 */
+export function parseDisclosureData(json) {
+  if (!json || typeof json !== "object") return null;
+  if (json.schemaVersion !== DISCLOSURE_SOURCE.schemaVersion) return null;
+  if (String(json.disclosureSchemaVersion) !== DISCLOSURE_SOURCE.disclosureSchemaVersion) return null;
+  const entries = Array.isArray(json.skills) ? json.skills : [];
+  const map = new Map();
+  for (const e of entries) {
+    const fullName = typeof e?.fullName === "string" ? e.fullName : "";
+    if (!fullName.includes("/")) continue;
+    if (!e.disclosure || typeof e.disclosure !== "object") continue;
+    const key = fullName.toLowerCase();
+    const value = {
+      disclosure: e.disclosure,
+      disclosureSchemaVersion: String(json.disclosureSchemaVersion)
+    };
+    const existing = map.get(key);
+    // 同一发布仓多个技能的 disclosure 可能不同（如 compliance-intl 混有云端/本地技能）：
+    // 市场按仓库盖章 → 取风险最严的条目（cloud:true 优先），警示从严不丢失。
+    if (!existing || (existing.disclosure.cloud !== true && e.disclosure.cloud === true)) {
+      map.set(key, value);
+    }
+  }
+  return map;
+}
+
+/** 披露徽章盖章（纯函数）：命中 map 的条目平铺写 disclosure + disclosureSchemaVersion；
+ *  未命中删除旧字段（证据随每轮构建刷新，防过期误导）。full_name 大小写不敏感。 */
+export function applyDisclosure(repos, disclosureMap) {
+  for (const repo of repos) {
+    const d = disclosureMap.get(String(repo.full_name ?? "").toLowerCase());
+    if (d) Object.assign(repo, d);
+    else {
+      delete repo.disclosure;
+      delete repo.disclosureSchemaVersion;
+    }
+  }
+  return repos;
+}
+
+/** 抓取 catalog.json 并解析为盖章 Map；抓取失败 / 版本不符返回 null
+ *  （本次构建不盖章，增量模式旧字段保留，下次构建恢复）。 */
+async function fetchDisclosureMap() {
+  try {
+    const url = `https://raw.githubusercontent.com/${DISCLOSURE_SOURCE.repo}/${DISCLOSURE_SOURCE.branch}/${DISCLOSURE_SOURCE.file}`;
+    const res = await fetch(url, { headers: ghHeaders(), signal: AbortSignal.timeout(20000) });
+    if (!res.ok) {
+      log(`披露数据源 ${DISCLOSURE_SOURCE.repo} 抓取失败：HTTP ${res.status}`);
+      return null;
+    }
+    const map = parseDisclosureData(JSON.parse(await res.text()));
+    if (map === null) {
+      log(`披露数据源 schema 不匹配（期望 disclosureSchemaVersion ${DISCLOSURE_SOURCE.disclosureSchemaVersion}）：本次不盖章（fail-closed）`);
+      return null;
+    }
+    return map;
+  } catch (error) {
+    log(`披露数据源 ${DISCLOSURE_SOURCE.repo} 抓取失败：${error.message}`);
+    return null;
+  }
+}
+
+/**
  * DSH 插件能力判定（与 lib/index.js、verify-installability.mjs 同款标准，本文件为唯一脚本侧来源）：
  * package.json 有 dsh 字段，或依赖 @deepseek-ai/cordis、@deepseek-ai/dsh、@deepseek-ai/dsh-* 任一。
  */
@@ -1061,6 +1142,20 @@ async function main() {
       }
       applyVerification(repos, verificationMap);
       log(`验证徽章盖章完成：${stamped}/${repos.length} 个仓库（${VERIFY_SOURCE.repo}）`);
+    }
+  }
+
+  // 披露徽章（discussion #2269 合规层对接：wwumit/skills-catalog 开放数据层）。
+  // 抓取失败 / disclosureSchemaVersion 不符 → 本次不盖章（fail-closed，增量模式旧字段保留）。
+  if (MODE === "dsh") {
+    const disclosureMap = await fetchDisclosureMap();
+    if (disclosureMap) {
+      let stamped = 0;
+      for (const repo of repos) {
+        if (disclosureMap.has(String(repo.full_name ?? "").toLowerCase())) stamped++;
+      }
+      applyDisclosure(repos, disclosureMap);
+      log(`披露徽章盖章完成：${stamped}/${repos.length} 个仓库（${DISCLOSURE_SOURCE.repo}）`);
     }
   }
 
