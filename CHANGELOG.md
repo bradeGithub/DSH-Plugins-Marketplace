@@ -3,6 +3,11 @@
 本仓库的版本迭代记录。**v1.0.0 之前的版本均为 beta 系列**（开发期迭代，未单独打 tag）。/ Version history of this repository. **All versions before v1.0.0 are part of the beta series** (development iterations, not individually tagged).
 ---
 
+## v1.4.12 — 2026-08-16（修复：市场本体双加载崩溃 / Fix: marketplace double-load crash）
+
+- **修复市场本体双加载导致启动崩溃（issue #39，重要）**：市场安装管线（cordis 分支）无条件写 `cordis.patch.yml`——当用户通过市场流程安装/更新**本体自己**时（cli 分支失败回退常规流程），patch 与 profile bundles 双注册 → webserver 重复路由 `duplicate exact route "/api/marketplace/self-update"` → 插件树加载失败；修复：①安装自己时跳过 patch 注册；②启动自愈——patch 残留本体条目自动移除；③install.ps1/sh 检测 bundles 已有则跳过注册 / important: installing the marketplace itself through the marketplace flow wrote a cordis.patch.yml entry on top of the profile-bundles load, causing double registration and the `duplicate exact route "/api/marketplace/self-update"` startup crash (issue #39); fixed by skipping patch registration when installing self, auto-removing any stale self entry at startup, and making the install scripts bundles-aware
+- **回归测试**：smoke 191 / 单元+集成 301 全绿 / full suite green
+
 ## v1.4.11 — 2026-08-15（npm 型 cli 完整版本检测 + 自更新根治 + 升级提示数据源 / Complete npm-cli version detection & self-update fix）
 
 - **cli 类型按指令目标区分版本检测**：`owner/repo` 形态（`dsh plugin install <repo>`）= 本质仓库安装 → **恢复自动检测**；npm 包名形态（`dsh plugin add <pkg>`）= npm 生态 → 以 npm 版本同源对比 / cli-type installs are now split by their command target: `owner/repo` targets (repo-based installs) get automatic version detection back; npm-package targets compare npm versions against npm versions
