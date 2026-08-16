@@ -30,7 +30,8 @@ const SNAPSHOT_EVERY = 100;
 function tokenOf() {
   if (process.env.GITHUB_TOKEN) return process.env.GITHUB_TOKEN;
   if (process.env.GH_TOKEN) return process.env.GH_TOKEN;
-  return execFileSync("gh", ["auth", "token"], { encoding: "utf8" }).trim();
+  // CI 无 gh CLI：模块被测试 import 时（Syntax check 步骤无 token env）不抛异常
+  try { return execFileSync("gh", ["auth", "token"], { encoding: "utf8" }).trim(); } catch { return ""; }
 }
 const TOKEN = tokenOf();
 const headers = { Authorization: `Bearer ${TOKEN}`, "User-Agent": "dsh-marketplace-installability-probe", "X-GitHub-Api-Version": "2022-11-28" };
