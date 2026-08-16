@@ -67,12 +67,20 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      # 可安装性探测（增量续跑）：对新收录/未判定条目两阶段探测（trees → package.json 内容），
+      # 产 installability-report.json（non-plugin/manual 徽章数据源）。基线 = 仓库已提交报告，
+      # 每轮只补未判定/pending 条目；RATE_FLOOR 护栏防超 Core 额度（5000/h），多轮收敛。
+      - name: Probe installability (incremental)
+        run: node scripts/verify-installability.mjs
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Commit registry.json
         run: |
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add registry.json registry.json.gz skills.json skills.json.gz drift-report.json
+          git add registry.json registry.json.gz skills.json skills.json.gz drift-report.json installability-report.json
           if git diff --cached --quiet; then
             echo "索引无变化，跳过提交"
             exit 0

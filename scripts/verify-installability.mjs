@@ -12,9 +12,10 @@
 
 import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { join, dirname } from "node:path";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 import { execFileSync } from "node:child_process";
 import { tmpdir } from "node:os";
+import { looksLikeDshPlugin } from "./build-registry.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const limitArg = process.argv.find((a) => a.startsWith("--limit="));
@@ -53,15 +54,6 @@ function visiblePaths(paths) {
   return paths.filter((p) => !String(p).split("/").some((seg) => seg.startsWith(".")));
 }
 
-/** 与 lib/index.js looksLikeDshPlugin 同款标准。 */
-function looksLikeDshPlugin(pkg) {
-  if (!pkg || typeof pkg !== "object") return false;
-  if (pkg.dsh && typeof pkg.dsh === "object") return true;
-  const deps = { ...(pkg.dependencies ?? {}), ...(pkg.peerDependencies ?? {}) };
-  const names = Object.keys(deps);
-  return names.includes("@deepseek-ai/cordis") || names.includes("@deepseek-ai/dsh") || names.some((n) => n.startsWith("@deepseek-ai/dsh-"));
-}
-
 /** Phase A：单仓库 trees 探测 → 信号集。返回 null 表示不可判定（网络失败）。 */
 async function probeTree(repo) {
   const branches = [repo.default_branch || "main", "main", "master"].filter((v, i, a) => v && a.indexOf(v) === i);
@@ -84,10 +76,22 @@ async function probeTree(repo) {
     const paths = visiblePaths(allPaths);
     const rootPkg = paths.includes("package.json");
     const nestedPkgs = paths.filter((p) => PKG_RE.test(p) && p !== "package.json").slice(0, 5);
-    const hasSkill = paths.some((p) => SKILL_RE.test(p));
+    const skillPaths = paths.filter((p) => SKILL_RE.test(p)).slice(0, 20);
+    const hasSkill = skillPaths.length > 0;
+    // 只有**根目录** SKILL.md 才算 skill 形态（对齐 lib/index.js detectType 分层判定）——
+    // 深层埋的 SKILL.md 是大项目内部内容，不是市场可安装的技能本体
+    // （教训：amruthpillai/reactive-resume 的 skills/resume-builder/SKILL.md、
+    //  volcengine/OpenViking 的 bot/workspace/skills/*/SKILL.md 曾让两者被误判为 skill）。
+    const rootSkill = skillPaths.some((p) => /^SKILL\.md$/i.test(p));
+    // 技能集合形态 = SKILL.md 位于 skills/<name>/SKILL.md 等 ≤2 级路径；
+    // 更深（bot/workspace/skills/*/SKILL.md 4 级）是大项目内部工具链内容 → 不算技能集合。
+    const minSkillDepth = hasSkill ? Math.min(...skillPaths.map((p) => p.split("/").length)) : Infinity;
     const hasScript = paths.some((p) => SCRIPT_RE.test(p));
+    // 同款：只有根 install 脚本才算 script 型（detectType 只认根目录 install.ps1/install.sh；
+    // OpenViking 深层 install.sh 曾触发 script 判定）
+    const rootScript = paths.some((p) => /^install\.(sh|ps1|bat)$/i.test(p));
     const isPreset = paths.includes("preset.yml") && paths.includes("agent.cordis.yml");
-    return { rootPkg, nestedPkgs, hasSkill, hasScript, isPreset, truncated, remaining: res.remaining };
+    return { rootPkg, nestedPkgs, hasSkill, rootSkill, minSkillDepth, hasScript, rootScript, isPreset, truncated, remaining: res.remaining };
   }
   return null;
 }
@@ -106,15 +110,33 @@ async function fetchPkg(repo, path) {
   }
 }
 
-/** 判定（与 detectType 优先级一致：skill > preset > script > cordis > multi）。 */
-function verdictOf(sig, pkgLooks, nestedLooks) {
+/** 判定（对齐 detectType 分层：preset > cordis 声明 > 根 install 脚本 > 根 skill > 嵌套包 > 嵌套 skill）。
+ *  与旧版的关键差异（蹭 topic 案例修复）：
+ *  - 根清单 dsh 声明优先于 install 脚本（审查 B1，防「插件+分发脚本」被劫持为 script 型）；
+ *  - 只有**根目录** SKILL.md 才算 skill（skill-with-tooling 合法形态），深层 SKILL.md 是大项目
+ *    内部内容 → pkg-plain（reactive-resume/OpenViking 曾因此漏过 non-plugin 徽章）；
+ *  - 只有**根目录** install 脚本才算 script 型（深层 install.sh 同理）。 */
+export function verdictOf(sig, pkgLooks, nestedLooks) {
   if (!sig) return "unknown";
   if (sig.gone) return "gone";
-  if (sig.hasSkill) return "skill";
   if (sig.isPreset) return "agent-preset";
-  if (sig.hasScript) return "script";
-  if (sig.rootPkg) return pkgLooks === true ? "cordis-plugin" : "pkg-plain";
-  if (sig.nestedPkgs.length > 0) return nestedLooks === true ? "multi-plugin" : "pkg-plain";
+  if (sig.rootPkg && pkgLooks === true) return "cordis-plugin";
+  if (sig.rootScript === true) return "script";
+  if (sig.rootPkg) {
+    if (sig.rootSkill === true) return "skill";
+    // truncated：路径集不完整，根 SKILL.md 可能缺失——有 skill 信号时保守判 skill
+    if (sig.truncated) return sig.hasSkill ? "skill" : "pkg-plain";
+    return "pkg-plain";
+  }
+  if (sig.hasSkill) {
+    // 无根清单：≤2 级的 SKILL.md 是技能集合形态（skills/<name>/SKILL.md）；
+    // 更深埋的是大项目内部工具链内容（OpenViking 的 bot/workspace/skills/*/SKILL.md 4 级）
+    // → 不可自动安装，走 manual（README 手动安装徽章）。
+    // truncated 时路径集不完整，minSkillDepth 可能偏大 → 保守判 skill。
+    if (sig.truncated) return "skill";
+    return sig.minSkillDepth <= 2 ? "skill" : "manual";
+  }
+  if ((sig.nestedPkgs?.length ?? 0) > 0) return nestedLooks === true ? "multi-plugin" : "pkg-plain";
   if (sig.truncated) return "unknown"; // truncated 且无任何信号：不能断定没有
   return "manual";
 }
@@ -124,12 +146,19 @@ async function main() {
   let repos = registry.repos;
   if (LIMIT > 0) repos = repos.slice(0, LIMIT);
 
-  // 断点续跑：已有**非 pending** 结论的仓库跳过（pending=unknown 的条目下次重试）
+  // 断点续跑：已有非 pending 结论的仓库跳过（pending=unknown 的条目下次重试）。
+  // 基线 = 临时断点快照（本机续跑）+ 仓库内已提交的报告（CI 每轮环境全新，靠报告文件续跑收敛）。
   let results = {};
-  try {
-    const prev = JSON.parse(await readFile(SNAPSHOT, "utf8"));
-    if (Array.isArray(prev.repos)) for (const r of prev.repos) results[r.full_name] = r;
-  } catch { /* 首次运行 */ }
+  for (const src of [SNAPSHOT, OUT]) {
+    try {
+      const prev = JSON.parse(await readFile(src, "utf8"));
+      if (Array.isArray(prev.repos)) for (const r of prev.repos) {
+        if (!results[r.full_name] || (results[r.full_name].pending === true && r.pending !== true)) {
+          results[r.full_name] = r;
+        }
+      }
+    } catch { /* 首次运行 / 报告不存在 */ }
+  }
 
   const todo = repos.filter((r) => {
     const e = results[r.full_name];
@@ -230,4 +259,7 @@ async function main() {
   console.log(`\n报告已写入 ${OUT}`);
 }
 
-main().catch((e) => { console.error(`失败：${e.message}`); process.exit(1); });
+// 直接运行才执行 main（被测试 import 时只暴露纯函数，无副作用）
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  main().catch((e) => { console.error(`失败：${e.message}`); process.exit(1); });
+}

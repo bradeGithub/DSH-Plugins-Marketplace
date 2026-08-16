@@ -14,7 +14,7 @@
 import { readFileSync, writeFileSync, rmSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import { classifyRepo, applyInstallability } from "../../build-registry.mjs";
+import { classifyRepo, applyInstallability, applyPlainPkgFallback } from "../../build-registry.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
 const registry = JSON.parse(readFileSync(join(ROOT, "registry.json"), "utf8"));
@@ -128,4 +128,35 @@ console.log(`PASS 分类审计: ${pass}/${entries.length} 命中（${skipped} �
     process.exit(1);
   }
   console.log("PASS verified-install 跳过机器盖章（人工实测优先）");
+}
+
+// 高 star 蹭 topic 兜底盖章（reactive-resume ★40k / OpenViking ★28k 教训）：
+// 仅「根清单无 DSH 声明 + 无探测结论 + 无人工标注 + 无 DSH 生态 topic + star≥3000」盖章；
+// 已有结论不动、低 star 不动、白名单 topic 不动。
+{
+  const repos = [
+    { full_name: "amruthpillai/reactive-resume", stargazers_count: 40467, topics: ["dsh-plugin"], __plainPkg: true },
+    { full_name: "volcengine/OpenViking", stargazers_count: 28548, topics: ["agent-memory", "dsh-plugin"], __plainPkg: true },
+    { full_name: "low/small", stargazers_count: 1200, topics: ["dsh-plugin"], __plainPkg: true },
+    { full_name: "eco/skill-collection", stargazers_count: 8000, topics: ["dsh-plugin", "dsh-skill"], __plainPkg: true },
+    { full_name: "human/verified", stargazers_count: 9000, topics: ["dsh-plugin"], __plainPkg: true, market_tags: ["verified-install"] },
+    { full_name: "report/concluded", stargazers_count: 9000, topics: ["dsh-plugin"], __plainPkg: true, installable: "manual" },
+    { full_name: "real/dsh-declared", stargazers_count: 12000, topics: ["dsh-plugin"], __plainPkg: false }
+  ];
+  applyPlainPkgFallback(repos);
+  const expect = {
+    "amruthpillai/reactive-resume": "non-plugin",
+    "volcengine/OpenViking": "non-plugin",
+    "low/small": undefined,
+    "eco/skill-collection": undefined,
+    "human/verified": undefined,
+    "report/concluded": "manual",
+    "real/dsh-declared": undefined
+  };
+  const bad = repos.filter((r) => r.installable !== expect[r.full_name]);
+  if (bad.length > 0) {
+    console.error(`高 star 兜底盖章失败: ${JSON.stringify(bad)}`);
+    process.exit(1);
+  }
+  console.log("PASS 高 star 兜底盖章: 蹭 topic 大项目盖 non-plugin，低 star/白名单/已有结论/真插件不动");
 }

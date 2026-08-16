@@ -481,6 +481,43 @@ async function fetchVerificationMap() {
 }
 
 /**
+ * DSH 插件能力判定（与 lib/index.js、verify-installability.mjs 同款标准，本文件为唯一脚本侧来源）：
+ * package.json 有 dsh 字段，或依赖 @deepseek-ai/cordis、@deepseek-ai/dsh、@deepseek-ai/dsh-* 任一。
+ */
+export function looksLikeDshPlugin(pkg) {
+  if (!pkg || typeof pkg !== "object") return false;
+  if (pkg.dsh && typeof pkg.dsh === "object") return true;
+  const deps = { ...(pkg.dependencies ?? {}), ...(pkg.peerDependencies ?? {}) };
+  const names = Object.keys(deps);
+  return names.includes("@deepseek-ai/cordis") || names.includes("@deepseek-ai/dsh") || names.some((n) => n.startsWith("@deepseek-ai/dsh-"));
+}
+
+/** DSH 生态 topics 白名单：含这些主题的仓库即使根清单无 dsh 声明也不盖
+ *  「非 DSH 插件」（技能/预设/多包形态的根清单判定不适用，避免误伤）。 */
+const DSH_TOPIC_HINTS = new Set(["cordis-plugin", "cordis", "dsh-skill", "agent-skills", "dsh-preset", "agent-preset"]);
+
+/**
+ * 高 star 蹭 topic 兜底盖章（纯函数，build-registry 内 applyPlainPkgFallback 的文档见调用处）：
+ * 根 package.json 明确无 DSH 能力声明（__plainPkg 标记，enrichPkgNames 抓取时记录）+
+ * 无探测结论 + 无 verified-install 人工标注 + topics 无 DSH 生态信号 + star ≥ minStars
+ * → installable = "non-plugin"（客户端显示「非 DSH 插件」红标）。
+ * 教训案例：amruthpillai/reactive-resume（★40k 简历项目）、volcengine/OpenViking（★28k）
+ * 打 dsh-plugin topic 蹭收录，installability 探测未覆盖时卡片无任何警示。
+ * 已有 installable 结论的条目不动——探测报告（verify-installability.mjs）是权威刷新源。
+ */
+export function applyPlainPkgFallback(repos, minStars = 3000) {
+  for (const repo of repos) {
+    if (repo.__plainPkg !== true) continue;
+    if (repo.installable !== void 0) continue;
+    if (Array.isArray(repo.market_tags) && repo.market_tags.includes("verified-install")) continue;
+    if ((repo.stargazers_count ?? 0) < minStars) continue;
+    if (Array.isArray(repo.topics) && repo.topics.some((t) => DSH_TOPIC_HINTS.has(String(t)))) continue;
+    repo.installable = "non-plugin";
+  }
+  return repos;
+}
+
+/**
  * 插件分类（纯函数）：扫描 description + name + 过滤后的 topics，按规则优先级匹配。
  * 返回分类 id；无匹配返回 "other"。
  */
@@ -919,6 +956,14 @@ async function main() {
     log("SKIP_ENRICH=1：跳过 pkg_name 富化");
   } else {
     await enrichPkgNames(repos, MODE === "dsh");
+    // 高 star 蹭 topic 兜底（reactive-resume / OpenViking 教训）：根清单无 DSH 能力声明的
+    // 大项目在无探测结论时直接盖「非 DSH 插件」——enrich 阶段顺带判定，零额外请求。
+    if (MODE === "dsh") {
+      const before = repos.filter((r) => r.installable === "non-plugin").length;
+      applyPlainPkgFallback(repos);
+      const after = repos.filter((r) => r.installable === "non-plugin").length;
+      if (after > before) log(`高 star 兜底盖章：${after - before} 个条目 → non-plugin`);
+    }
     // v1.4.11：npm 版本富化（issue #26）——npm 发布型插件的升级提示数据源
     if (MODE === "dsh") await enrichNpmVersions(repos);
   }
@@ -1019,6 +1064,9 @@ async function main() {
     }
   }
 
+  // 清理内部判定标记（不进索引产物）
+  for (const repo of repos) delete repo.__plainPkg;
+
   const out = {
     generated_at: new Date().toISOString(),
     ...(MODE === "skills" ? { schema_version: 1, ...(stars ? { index_mode: incremental ? "incremental" : "stars" } : {}) } : {}), // dsh 模式输出与历史版本逐字段一致（回归）
@@ -1044,9 +1092,17 @@ async function main() {
 
 /** 并发抓取仓库 package.json 的 name 字段写入 pkg_name；includeVersion 时顺带抓 version
  *  （dsh 模式启用——市场「更新」检测用 registry 版本号对比已装版本，不再依赖本地缓存）。
- *  已存在且无需刷新的仓库跳过（skills 模式保持只补缺，避免每次增量全量重抓 12000+ 仓库）。 */
+ *  已存在且无需刷新的仓库跳过（skills 模式保持只补缺，避免每次增量全量重抓 12000+ 仓库）。
+ *  dsh 模式额外做「根清单 DSH 能力判定」：抓取成功时记录 __plainPkg（无 dsh 能力声明），
+ *  供 applyPlainPkgFallback 给高 star 蹭 topic 条目盖章（reactive-resume/OpenViking 教训）。
+ *  高 star（≥3000）且无 installable 结论且无 verified-install 标注的条目**每轮重抓**
+ *  （数量级几十个，raw 请求无 Core 额度）——真插件补 dsh 声明后兜底徽章自动消失。 */
 async function enrichPkgNames(repos, includeVersion = false) {
-  const todo = repos.filter((r) => (includeVersion ? !r.pkg_name || !r.version : !r.pkg_name));
+  const highStarSuspect = (r) => includeVersion
+    && (r.stargazers_count ?? 0) >= 3000
+    && r.installable === void 0
+    && !(Array.isArray(r.market_tags) && r.market_tags.includes("verified-install"));
+  const todo = repos.filter((r) => (includeVersion ? !r.pkg_name || !r.version : !r.pkg_name) || highStarSuspect(r));
   if (todo.length === 0) return;
   let cursor = 0;
   const worker = async () => {
@@ -1066,6 +1122,7 @@ async function enrichPkgNames(repos, includeVersion = false) {
           if (includeVersion && typeof pkg.version === "string" && pkg.version.length > 0) {
             r.version = pkg.version;
           }
+          if (includeVersion) r.__plainPkg = looksLikeDshPlugin(pkg) !== true;
         }
       } catch { /* 网络失败：保持 null */ }
     }
