@@ -299,6 +299,9 @@ const MARKET_TAGS = new Map([
   ["liustack/modlens", ["verified-install"]], // issue #25 用户反馈正常（cli）
   ["mnemon-dev/mnemon", ["verified-install"]], // issue #31 用户反馈正常（cordis-plugin 0.1.0）
   ["taxueseek/dsh-files", ["verified-install"]], // issue #35 用户反馈正常（cordis-plugin 0.2.0）
+  ["lx2000wasd/dsh-web-plugin-manager", ["verified-install"]], // issue #43 用户反馈正常（cli）
+  ["csyangwen/dsh-memory-evolve", ["verified-install"]], // issue #42 用户反馈正常（cordis-plugin 0.1.0）
+  ["anionex/agent-vision-toolkit", ["verified-install"]], // issue #41 用户反馈正常（cordis-plugin 0.1.2）
   ["nexu-io/open-design", ["prereq"]],
 ]);
 
