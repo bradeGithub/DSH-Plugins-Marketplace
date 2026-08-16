@@ -1,76 +1,83 @@
 {
-  "generated_at": "2026-08-16T16:46:59.088Z",
-  "count": 10,
+  "generated_at": "2026-08-16T19:00:40.030Z",
+  "count": 11,
   "items": [
     {
-      "full_name": "bowenliang123/dsh-context",
-      "previous": "memory",
-      "current": "model",
-      "desc_now": "A DeepSeek Harness plugin for  Context dashboard and command — showing what the model's context window is made of and how it evolves.",
-      "desc_prev": "A DeepSeek Harness plugin for  Context insight dashboard — showing what the model's context window is made of and how it evolves."
-    },
-    {
-      "full_name": "NanmiCoder/dsh-auto-mode",
-      "previous": "web-ui",
-      "current": "other",
-      "desc_now": "Safe automatic permissions for DeepSeek Harness.",
-      "desc_prev": "Safe automatic permissions for DeepSeek Harness."
-    },
-    {
-      "full_name": "kinoward/dsh-plugin-subhub",
-      "previous": "web-ui",
-      "current": "conversation",
-      "desc_now": "Bring third-party subscription accounts into DeepSeek Harness - 为 DeepSeek Harness 接入第三方订阅账户(当前支持 OpenAI / ChatGPT 订阅,更多订阅服务规划中)",
-      "desc_prev": "Bring third-party subscription accounts into DeepSeek Harness - 为 DeepSeek Harness 接入第三方订阅账户(当前支持 OpenAI / ChatGPT 订阅,更多订阅服务规划中)"
-    },
-    {
-      "full_name": "PerryLink/dsh-github",
-      "previous": "other",
-      "current": "tool",
-      "desc_now": "Official-grade GitHub CI for DeepSeek Harness: composite action.yml, PR review bot with idempotent inline comments and a status-check gate, plus PR/issues tools with every write gated by human approval (Apache-2.0, dsh-plugin).",
-      "desc_prev": "GitHub integration for DeepSeek Harness: create PRs, review PRs in background jobs, read issues - every write gated by human approval"
-    },
-    {
-      "full_name": "Fayelin12/dsh-office",
-      "previous": "document",
-      "current": "notify",
-      "desc_now": "Agent-office dashboard for DeepSeek Harness (DSH): workspaces, sessions, token usage & subagents in one sprite-filled office — plus a built-in Agent Mail inbox to read, send & reply right in the panel. DeepSeek Harness「办公室」：工作区/会话/子代理一屏总览 + 内置 Agent 邮箱收发，一眼看穿每个 Agent 在忙什么。",
-      "desc_prev": "Office workspace & session dashboard plugin for DeepSeek Harness (DSH). 给 DeepSeek Harness 的办公室工作区/会话/子代理可视化插件。"
-    },
-    {
-      "full_name": "AFAP/dsh-input-file-ref",
+      "full_name": "kelai141/dsh-mobile-apk",
       "previous": "tool",
-      "current": "web-ui",
-      "desc_now": "输入框文件引用插件：在 DeepSeek Harness Web GUI 输入框里像 Kimicode/Cursor 那样，输入 @ 弹出可搜索、可逐级下钻的文件选择面板，选中后把 @相对路径 回填进输入框（保留 @、末尾一空格），让模型按路径读取该文件。",
-      "desc_prev": "Typing '@' in the DeepSeek Harness web GUI lists the session working directory's files and inserts a <file>...path</file> reference the model can read."
+      "current": "resource",
+      "desc_now": "dsh 安卓壳 APK——WebView UI + 内嵌 Termux 运行时快照（解压即跑）、SAF 目录桥、保活服务、看门狗、运行时在线更新。",
+      "desc_prev": "dsh 安卓壳 APK——WebView UI + 内嵌 Termux 运行时快照（解压即跑）、SAF 目录桥、保活服务、看门狗、运行时在线更新。"
     },
     {
-      "full_name": "TommyFang2077/dsh-easy-desktop",
-      "previous": "other",
+      "full_name": "kanghelyu/dsh-deepseek-flow",
+      "previous": "notify",
       "current": "coding",
-      "desc_now": "官方 DeepSeek Harness（dsh）原生桌面壳：Tauri 2 把官方 WebUI 变成原生桌面窗口，保留会话/工作区/插件/技能。内置 SenseVoice 离线语音输入、插件市场、视觉模型配置；锚定模式解决 DeepSeek 思考模式问题",
-      "desc_prev": "官方 dsh 桌面壳。自带视图给 DeepSeek 带上眼睛；内置锚定模式相对 Standard 约 +8%（Project2 Ability 91→98/99）。"
+      "desc_now": null,
+      "desc_prev": null
     },
     {
-      "full_name": "Memory455/dsh-jump-rail",
-      "previous": "conversation",
+      "full_name": "Nyasers/dsh-hanako",
+      "previous": "notify",
+      "current": "other",
+      "desc_now": "DSH for Hanako",
+      "desc_prev": "DSH for Hanako"
+    },
+    {
+      "full_name": "runzhliu/deepseek-harness-docker",
+      "previous": "coding",
       "current": "web-ui",
-      "desc_now": "DSH Web GUI conversation jump rail plugin",
-      "desc_prev": "DSH Web GUI conversation jump rail plugin"
+      "desc_now": "Community Docker and Kubernetes packaging for DeepSeek Harness (@deepseek-ai/dsh), with a hardened image, Compose stack, Helm chart, Web UI, and headless CLI.",
+      "desc_prev": "Community Docker and Kubernetes packaging for DeepSeek Harness (@deepseek-ai/dsh), with a hardened image, Compose stack, Helm chart, Web UI, and headless CLI."
     },
     {
-      "full_name": "JohnXu22786/task-board",
-      "previous": "conversation",
-      "current": "tool",
-      "desc_now": "Cross-session event-sourced work ledger for DeepSeek Harness: task tracking, audit history, kanban export, dsh bundle plugin.",
-      "desc_prev": "跨会话工作石板（Cross-session work ledger for agent harnesses）：事件溯源任务台账，状态流转/审计/看板/会话摘要注入，以 DeepSeek Harness (dsh) bundle 分发"
+      "full_name": "seed-forge/harness-ai-kit",
+      "previous": "agent",
+      "current": "web-ui",
+      "desc_now": "Package manager for AI agent assets — 42 skills, 5 CLIs, 1 plugin. Skills for AI/LLM agent engineering, eval-driven dev, spec-driven dev, database (MySQL/PG/Redis/Kafka/Mongo/Oracle/NL2SQL), K8s/Docker diagnostics, infra ops (Dify/Nexus/Harbor/SonarQube) & docs/patent. Runtimes: Codex, Claude Code, Cursor, Kiro, DSH.",
+      "desc_prev": "Package manager for AI agent assets (skills / CLIs / MCPs / loops) across Codex, Claude Code, Cursor and Kiro."
     },
     {
-      "full_name": "sjh9714/dsh-lean",
+      "full_name": "YLingHao/dsh-codeui",
+      "previous": "coding",
+      "current": "conversation",
+      "desc_now": "A code-review workbench for DeepSeek Harness and  jump from an always-on turn rail straight back to that turn in the conversation.",
+      "desc_prev": "A VSCode-style code-change viewer that turns DeepSeek Harness into an IDE-like workbench."
+    },
+    {
+      "full_name": "1052326311/dsh-plan-lattice",
+      "previous": "agent",
+      "current": "memory",
+      "desc_now": "Stop long-task agent drift at the first stale mutation. DeepSeek Harness plugin; reproducible stress test: native 8/8 unsafe mutations, Plan Lattice 0/8.",
+      "desc_prev": "Adaptive execution contracts that stop long-horizon AI agents from mutating stale plans, context, files, or external state. DeepSeek Harness plugin."
+    },
+    {
+      "full_name": "mlosun/dsh-docs-panel",
+      "previous": "web-ui",
+      "current": "memory",
+      "desc_now": "DSH WebUI 里的「随身手册」：全局 Markdown 笔记，任何工作区随时可读。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "ZYar-er/dsh-notify-bell",
+      "previous": "web-ui",
+      "current": "notify",
+      "desc_now": "Semantic notification sounds for DeepSeek Harness: complete/approval/question/block/error via BEL or WAV, with Web UI bell toggle ｜ DeepSeek Harness 语义化通知声音：完成/审批/提问/受阻/错误，经 BEL 或 WAV 播放，带 Web 铃铛开关",
+      "desc_prev": "Semantic notification sounds for DeepSeek Harness: complete/approval/question/block/error via BEL or WAV, with Web UI bell toggle"
+    },
+    {
+      "full_name": "lingruan28-boop/dsh-balance-float",
       "previous": "model",
-      "current": "tool",
-      "desc_now": "dsh sends 8,246 tokens before it reads your prompt. 3,700 of them are tools your session never calls. Audit your own session, then cut the prefix 53%. 付这段前缀的那一次约占一场会话账单的 46%。",
-      "desc_prev": "Same answer, smaller bill. Cuts the DeepSeek Harness (DSH) prompt prefix by 53% and session cost by 18-42%, measured. 同样的结果，更小的账单。"
+      "current": "web-ui",
+      "desc_now": "DeepSeek API 余额悬浮窗：打开 Harness 即显示，可拖动缩放，放大查看官方用量 | A floating DeepSeek balance & usage widget for DeepSeek Harness (DSH)",
+      "desc_prev": null
+    },
+    {
+      "full_name": "fazhu4/dsh-activity-report",
+      "previous": "model",
+      "current": "web-ui",
+      "desc_now": "dsh的本地用量面板，统计 Token、请求、Agent 活动、工具调用和性能",
+      "desc_prev": null
     }
   ]
 }
