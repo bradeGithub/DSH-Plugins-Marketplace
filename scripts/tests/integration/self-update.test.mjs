@@ -4,9 +4,10 @@
 // mock 网络全失败 → checkSelfUpdate 走 selfLatestFromCache（读启动预热缓存）→ find 回调触发
 // （覆盖率：find/sort 回调只在数组非空/长度 >1 时被调用，见 coverage.mjs 审计记录）。
 
-import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from "node:fs";
-import { join } from "node:path";
+import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, rmSync } from "node:fs";
+import { join, dirname } from "node:path";
 import { tmpdir } from "node:os";
+import { fileURLToPath } from "node:url";
 
 // 必须在 import lib 之前设置临时 DSH_HOME
 process.env.DSH_HOME = mkdtempSync(join(tmpdir(), "dsh-selfupdate-")).replace(/\\/g, "/");
@@ -87,6 +88,21 @@ if (handler) {
 // 等 checkSelfUpdate 异步完成（mock fetch 立即失败 → catch → selfLatestFromCache 同步调用）
 await new Promise((r) => setTimeout(r, 100));
 globalThis.fetch = origFetch;
+
+// ---- 静态契约：doSelfUpdate 的 CLI 启动不得直接 execFile .cmd（issue #46）----
+// Windows 上 execFile 无法启动 .cmd/.bat（无条件 spawn EINVAL），必须经 cmd.exe /d /s /c 包装；
+// runNpm 的 npm.cmd fallback 同理。静态断言锁死模式，防止修复被未来改动回归。
+{
+  const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
+  const src = readFileSync(join(ROOT, "lib", "index.js"), "utf8").replace(/\r\n/g, "\n");
+  const selfUpdateBody = src.match(/async function doSelfUpdate\(\) \{[\s\S]*?\n\}/)?.[0] ?? "";
+  const runNpmBody = src.match(/async function runNpm\(args, opts\) \{[\s\S]*?\n\}/)?.[0] ?? "";
+  check("doSelfUpdate win32 分支经 cmd.exe 包装", selfUpdateBody.includes('execFileAsync("cmd.exe", ["/d", "/s", "/c", cmdLine]'), true);
+  check("doSelfUpdate 非 win32 分支直接 execFile dsh", selfUpdateBody.includes('execFileAsync("dsh", dshArgs'), true);
+  check("doSelfUpdate 不再直接 execFile dsh.cmd 路径", !selfUpdateBody.includes('execFileAsync(dshCli, dshArgs'), true);
+  check("runNpm npm.cmd fallback 经 cmd.exe 包装", runNpmBody.includes('execFileAsync("cmd.exe", ["/d", "/s", "/c", cmdLine], opts)'), true);
+}
+
 rmSync(home, { recursive: true, force: true });
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail === 0 ? 0 : 1);
