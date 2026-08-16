@@ -217,7 +217,7 @@ function setupUrlRewrite(owner, repoName) {
   // 2) 内置索引缺失（临时移开）→ 磁盘缓存兜底
   renameSync(bundledDsh, bundledDsh + ".bak");
   try {
-    writeFileSync(join(cacheDir2, "dsh.json"), JSON.stringify({ saved_at: new Date().toISOString(), kind: "dsh", count: 1, repos: [cachedRepo] }), "utf8");
+    writeFileSync(join(cacheDir2, "dsh.json"), JSON.stringify({ saved_at: new Date().toISOString(), generated_at: new Date().toISOString(), kind: "dsh", count: 1, repos: [cachedRepo] }), "utf8");
     const cachedList = await lib.fetchAllRepos("dsh");
     check("e2e 磁盘缓存兜底返回缓存条目", cachedList.some((r) => r.full_name === "cached-owner/demo-cached"), true);
 
@@ -239,7 +239,7 @@ function setupUrlRewrite(owner, repoName) {
   // 5) skills 内置缺失（临时移开）→ 磁盘缓存兜底
   renameSync(bundledSkills, bundledSkills + ".bak");
   try {
-    writeFileSync(join(cacheDir2, "skills.json"), JSON.stringify({ saved_at: new Date().toISOString(), kind: "skills", count: 2, repos: [cachedRepo, { ...cachedRepo, full_name: "cached-owner/demo-cached-2", name: "demo-cached-2" }] }), "utf8");
+    writeFileSync(join(cacheDir2, "skills.json"), JSON.stringify({ saved_at: new Date().toISOString(), generated_at: new Date().toISOString(), kind: "skills", count: 2, repos: [cachedRepo, { ...cachedRepo, full_name: "cached-owner/demo-cached-2", name: "demo-cached-2" }] }), "utf8");
     const cachedSkills = await lib.fetchAllRepos("skills");
     check("e2e skills 磁盘缓存兜底 2 条", cachedSkills.length, 2);
   } finally {

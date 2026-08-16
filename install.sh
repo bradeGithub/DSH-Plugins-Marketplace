@@ -56,9 +56,6 @@ cp -r "$SRC" "$DEST"
 rm -rf "$DEST/.git"
 rm -f "$DEST/install.ps1" "$DEST/install.sh" "$DEST/.ca-bundle.crt"
 
-# 注册到 web profile 补丁（幂等；行级精确匹配，避免前缀子串误判）。
-# 注意：patch 条目是 `- insert:` 块内的缩进行（`      name: ...`），
-# 行首锚定必须允许前导空白，否则永远匹配不到 → 每次运行都会追加重复条目（KIMI 审阅 H1）。
 PATCH="$HOME/.dsh/profiles/web/cordis.patch.yml"
 if [[ -f "$PATCH" ]] && grep -qE '^[[:space:]]*name:[[:space:]]+dsh-plugin-marketplace[[:space:]]*$' "$PATCH"; then
   echo "Already registered in cordis.patch.yml (skipped)"
