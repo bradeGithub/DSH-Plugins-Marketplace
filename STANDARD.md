@@ -207,9 +207,12 @@ node -e "const p=require('/tmp/x/package.json');console.log(p.dsh, p.main, requi
 
 # 6. version 已 bump（与上次发版不同）
 
-# 7. 披露自查：云端依赖 / 数据外发 / API key 存储 / 法域已在 README 或 DISCLOSURE.md 如实声明（见 §9）
+# 7. 披露自查：云端依赖 / 数据外发 / API key 存储 / 法域已在 SKILL.md frontmatter 或 package.json disclosure 字段如实声明（见 §9 字段契约）。
+#    完整命令块见 skill-compliance 的 docs/disclosure-selfcheck.md（7a 云端依赖 / 7b 凭据 / 7c 权限 /
+#    7d 端点一致性 / 7e 法域保留 / 7f 宿主依赖硬规则）；机器可读规则集
+#    disclosure-selfcheck-rules.json（DISCL-001~006 + DEP-001）可由 skill-compliance v1.4.0 自动执行。
 
-# 8.（可选）已跑过发布合规检查（如 skill-compliance：金融敏感词/免责声明/安全红线/广告法极限词）
+# 8.（可选）已跑过发布合规检查（如 skill-compliance：金融敏感词/免责声明/安全红线/广告法极限词 + 披露规则集）
 ```
 
 ---
@@ -248,8 +251,15 @@ node -e "const p=require('/tmp/x/package.json');console.log(p.dsh, p.main, requi
 | **D6 数据保留**（建议） | `retention: "session"` | `retention` (string) | none / session / server |
 
 - 版本化：开放数据层顶层 `disclosureSchemaVersion`（当前 `"0.2"`）独立于验证层 `schemaVersion`；不匹配时市场**整体跳过不盖章**（fail-closed）
-- 映射键：`fullName`（发布仓 `owner/name`），与验证层 verified.json 同款匹配逻辑；同一发布仓多个技能披露不一致时按仓库盖章取 **cloud:true 优先**（警示从严）
+- 映射键：`fullName`（发布仓 `owner/name`），与验证层 verified.json 同款匹配逻辑；数据层另提供仓级 `repos[].cloudSkills` 索引与技能级 `skillFullName`——市场按仓库盖章时聚合云端技能详情（端点/凭据/法域去重合并、retention 取最严），同仓混合披露不再失真
 - 示例见 [DISCLOSURE_PROPOSAL.md](https://github.com/wwumit/skills-catalog/blob/main/docs/DISCLOSURE_PROPOSAL.md)（wwumit v0.2 提案）
+
+### 自测与检查（机器可读）
+
+- **规则集**：[disclosure-selfcheck-rules.json](https://github.com/wwumit/skills-tools/blob/main/skills/skill-compliance/docs/disclosure-selfcheck-rules.json)（schema v1）——7 条规则（DISCL-001~006 + DEP-001）：id / 严重级 / 必填标记（D1/D3/D4 与 DEP-001 宿主依赖为必填）/ check_command / 判定说明，供检查器与 CI 直接消费
+- **命令块**：[disclosure-selfcheck.md](https://github.com/wwumit/skills-tools/blob/main/skills/skill-compliance/docs/disclosure-selfcheck.md)（7a~7f）——作者提收录前手动跑
+- **自动执行**：`skill-compliance` v1.4.0（`comply.py check`）全自动跑同一套规则，JSON 输出含 disclosure 摘要
+- **三态衔接**：规则集的「缺必填」判定 = 市场卡片「⚠️ 缺必填项」态的机器依据；「无 disclosure 但有网络调用」=「❓ 未声明」态的依据（市场侧消费端已备好，接入时即用）
 
 参考实现：`skill-compliance`（规则库 JSON → 检查 → 评分 → 报告，含金融敏感词/免责声明/安全红线/广告法极限词 + 披露完整性检查）。
 

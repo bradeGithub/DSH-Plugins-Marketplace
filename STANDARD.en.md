@@ -194,7 +194,10 @@ node -e "const p=require('/tmp/x/package.json');console.log(p.dsh, p.main, requi
 
 # 6. version has been bumped (differs from the last release)
 
-# 7. Disclosure self-check: cloud dependency / data egress / API key storage / jurisdiction are honestly stated in the README or DISCLOSURE.md (see §9)
+# 7. Disclosure self-check: cloud dependency / data egress / API key storage / jurisdiction are honestly stated in the SKILL.md frontmatter or a package.json disclosure field (see the §9 field contract).
+#    Full command block: skill-compliance docs/disclosure-selfcheck.md (7a cloud / 7b credentials / 7c permissions /
+#    7d endpoint consistency / 7e jurisdiction-retention / 7f host-dependency hard rule); the machine-readable ruleset
+#    disclosure-selfcheck-rules.json (DISCL-001~006 + DEP-001) is auto-executed by skill-compliance v1.4.0.
 
 # 8. (Optional) ran a publication compliance check (e.g. skill-compliance: financial sensitive words / disclaimers / safety red lines / ad-law superlatives)
 ```
@@ -232,8 +235,15 @@ node -e "const p=require('/tmp/x/package.json');console.log(p.dsh, p.main, requi
 | **D6 Retention** (suggested) | `retention: "session"` | `retention` (string) | none / session / server |
 
 - Versioned: the data layer's top-level `disclosureSchemaVersion` (currently `"0.2"`) is independent of the verification layer's `schemaVersion`; on mismatch the marketplace **skips stamping entirely** (fail-closed)
-- Mapping key: `fullName` (publishing repo `owner/name`), the same matching logic as the verification layer's verified.json; when one repo has mixed disclosures across skills, the repo-level stamp takes **cloud:true first** (fail-safe, stricter warning)
+- Mapping key: `fullName` (publishing repo `owner/name`), the same matching logic as the verification layer's verified.json; the data layer also ships a repo-level `repos[].cloudSkills` index and per-skill `skillFullName`, and the marketplace aggregates cloud-skill details at repo level (deduped endpoints/keys/jurisdictions, strictest retention) — mixed repos no longer lose cloud warnings
 - See [DISCLOSURE_PROPOSAL.md](https://github.com/wwumit/skills-catalog/blob/main/docs/DISCLOSURE_PROPOSAL.md) for the full v0.2 proposal
+
+### Self-check & checking (machine-readable)
+
+- **Ruleset**: [disclosure-selfcheck-rules.json](https://github.com/wwumit/skills-tools/blob/main/skills/skill-compliance/docs/disclosure-selfcheck-rules.json) (schema v1) — 7 rules (DISCL-001~006 + DEP-001) with id / severity / mandatory flags (D1/D3/D4 and the DEP-001 host-dependency rule are mandatory) / check_command / rationale, consumable by checkers and CI directly
+- **Command block**: [disclosure-selfcheck.md](https://github.com/wwumit/skills-tools/blob/main/skills/skill-compliance/docs/disclosure-selfcheck.md) (7a~7f) — run by authors before submitting
+- **Automation**: `skill-compliance` v1.4.0 (`comply.py check`) executes the same ruleset end to end and emits a disclosure summary in JSON
+- **Three-state hookup**: the ruleset's "missing required" verdict backs the card "⚠️ missing required" state; "no disclosure but network calls" backs "❓ undeclared" (the marketplace consumer side is ready to wire them up)
 
 Reference implementation: `skill-compliance` (rule-library JSON → check → score → report; covers financial sensitive words, disclaimers, safety red lines, ad-law superlatives, plus disclosure-completeness checks).
 
