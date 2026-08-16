@@ -126,12 +126,14 @@
   },
   "huiliyi37/dsh-tianshu-tui": {
     "expected": "conversation",
-    "desc": "dsh-tianshu-tui — DeepSeek Harness terminal UI +harness workflow。是官方 DeepSeek Harness 上的交互式终端 UI 插件。渲染核心从本仓库自研的harness agent  Tianshu-Tui 演进而来，在官方的基础上增加了TDD、证据门、视觉图像模块等工作流。",
+    "desc": "dsh-tianshu-tui — 是官方 Dsh web端的交互式终端极简风格 UI 插件。以自研ansi为渲染核心，极度丝滑流畅，在官方的基础上增加了TDD、证据门、视觉图像模块等工作流。",
     "topics": [
+      "coding",
       "dsh",
       "dsh-plugin",
       "harness",
-      "harness-engineering"
+      "harness-engineering",
+      "tui"
     ]
   },
   "drewnekota/cetus": {
@@ -815,7 +817,7 @@
   },
   "anywhere-labs/deepseek-harness-desktop": {
     "expected": "other",
-    "desc": "为 DeepSeek Harness (DSH) 生态打造的现代化桌面端体验",
+    "desc": "为 DeepSeek Harness (DSH) 插件生态打造的现代化桌面端解决方案",
     "topics": [
       "deepseek",
       "deepseek-harness",
