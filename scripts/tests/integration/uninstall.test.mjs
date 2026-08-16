@@ -127,11 +127,13 @@ if (uninstallHandler) {
   check("uninstall 多 skill（location=SKILLS_DIR 本身）→ 200", r5.status, 200);
   check("uninstall 多 skill 目录已删（含其他子技能）", existsSync(skillsDir), false);
 
-  // 场景 6：多 agent 预设（location = PRESETS_DIR 本身）→ 目录被删除（L1 修复）
+  // 场景 6：多 agent 预设（location = PRESETS_DIR 本身）→ 按 names 逐个删子目录，
+  // PRESETS_DIR 本身保留（防误删其他仓库的预设——上游 #36 合并版语义，比整体删除更安全）
   const r6 = mkRes();
   await uninstallHandler(mkReq("owner/multipreset"), r6.res);
   check("uninstall 多预设（location=PRESETS_DIR 本身）→ 200", r6.status, 200);
-  check("uninstall 多预设目录已删", existsSync(presetsDir), false);
+  check("uninstall 多预设 names 子目录已删", !existsSync(join(presetsDir, "p1")) && !existsSync(join(presetsDir, "p2")), true);
+  check("uninstall 多预设 PRESETS_DIR 保留", existsSync(presetsDir), true);
 
   // 场景 7：skill 型 location 在受管目录外 → 校验拦截，目录保留（无越界）
   const r7 = mkRes();
