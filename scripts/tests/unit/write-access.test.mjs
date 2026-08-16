@@ -48,14 +48,17 @@ check("token 头名 x-dsh-marketplace-token", /const WRITE_TOKEN_HEADER = "x-dsh
 const lanBody = lib.match(/async function isLanWriteEnabled\(\) \{[\s\S]*?\n\}/)?.[0] ?? "";
 check("isLanWriteEnabled 存在", lanBody.length > 0, true);
 check("lanWrite === true 才开启", lanBody.includes('cfg.lanWrite === true'), true);
-check("读取失败视为未开启（默认安全）", lanBody.includes("} catch {\n    return false;"), true);
+check("读取失败视为未开启（默认安全）", /\} catch \{\r?\n    return false;/.test(lanBody), true);
 
 // ---- 契约 4：tapIndex 注入（防御性 typeof 检查）----
 check("tapIndex 注入存在", /typeof webServer\.tapIndex === "function"/.test(lib), true);
 check("注入 __DSH_MP_TOKEN__ 脚本", /window\.__DSH_MP_TOKEN__="\$\{writeToken\}"/.test(lib), true);
 
-// ---- 契约 5：两个写 handler 都走 isWriteAllowed ----
-check("install 走 isWriteAllowed", (lib.match(/await isWriteAllowed\(req\)\)\) return json\(res, 403/g) ?? []).length, 2);
+// ---- 契约 5：全部写操作端点都走 isWriteAllowed（审查 S1 鉴权统一）----
+// install / uninstall / self-update POST / feedback / feedback-token POST /
+// env-edit / backup-webdav / restore-webdav = 8 处。
+// 新增写端点时必须同步此处计数——漏一处即 LAN 内任意设备可无 token 写。
+check("全部写端点走 isWriteAllowed（8 处）", (lib.match(/await isWriteAllowed\(req\)\)\) return json\(res, 403/g) ?? []).length, 8);
 
 // ---- 契约 6：客户端写操作带 token 头 ----
 check("client mpHeaders 存在", /function mpHeaders\(extra\) \{[\s\S]{0,200}window\.__DSH_MP_TOKEN__/.test(client), true);
