@@ -1,20 +1,20 @@
 {
-  "generated_at": "2026-08-16T20:52:35.638Z",
+  "generated_at": "2026-08-16T22:51:49.581Z",
   "count": 2,
   "items": [
     {
-      "full_name": "Mooling0602/dsh-web-file-uploader",
-      "previous": "tool",
-      "current": "web-ui",
-      "desc_now": "A file-upload plugin for the DeepSeek Harness web UI.",
-      "desc_prev": null
+      "full_name": "1052326311/dsh-plan-lattice",
+      "previous": "memory",
+      "current": "tool",
+      "desc_now": "Execution-time drift control for long-running DeepSeek Harness agents. Hand-designed test: native executed 12/12 unsafe stale-basis mutations; Plan Lattice 0/12; both executed 7/7 valid controls.",
+      "desc_prev": "Stale-mutation firewall for long-running agents. Real DeepSeek Harness stress test: native 9/9 unsafe mutations, Plan Lattice 0/9. Reproducible benchmark + frozen V13 eval."
     },
     {
-      "full_name": "qinyre/dsh-plugin-capabilities",
+      "full_name": "monotykamary/dsh-fovea",
       "previous": "web-ui",
       "current": "tool",
-      "desc_now": "在 dsh 设置页管理技能与 MCP 服务器，支持从 Claude Code、Codex 导入。",
-      "desc_prev": "Manage skills and MCP servers from the Web UI Settings. 在设置页管理 dsh 的技能与 MCP 服务器。"
+      "desc_now": "Foveated repository intelligence for DeepSeek Harness: token-budgeted code graphs, focus, impact, and continuous sync.",
+      "desc_prev": "Design-stage DSH-native adaptation of pi-fovea: token-budgeted repository graphs, focused context, impact, and continuous sync."
     }
   ]
 }
