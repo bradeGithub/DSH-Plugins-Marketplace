@@ -747,6 +747,14 @@ function mockFetch(payload, status = 200) {
   check("scanScriptHazards 干净脚本无命中",
     (await lib.scanScriptHazards(mkHaz("clean.ps1", "Write-Host 'hi'\nNew-Item -Path ./out\n"))).length, 0);
   check("scanScriptHazards 文件缺失返回空", (await lib.scanScriptHazards(join(hazDir, "nope.sh"))).length, 0);
+  // 9. CLI 指令 npm 等价回退纯函数（issue #54 archify 教训）
+  check("isNpmCliTarget scope 包带版本", lib.isNpmCliTarget("@tt-a1i/archify-dsh@0.1.0"), true);
+  check("isNpmCliTarget 裸包名", lib.isNpmCliTarget("dsh-web-ui-all"), true);
+  check("isNpmCliTarget owner/name 仓库形态", lib.isNpmCliTarget("tt-a1i/archify"), false);
+  check("isNpmCliTarget 空/非法", lib.isNpmCliTarget(""), false);
+  check("npmTargetName scope 包剥版本", lib.npmTargetName("@tt-a1i/archify-dsh@0.1.0"), "@tt-a1i/archify-dsh");
+  check("npmTargetName 裸包剥版本", lib.npmTargetName("dsh-web-ui-all@1.2.3"), "dsh-web-ui-all");
+  check("npmTargetName 无版本原样", lib.npmTargetName("@a/b"), "@a/b");
 
   console.log(`\n${pass} passed, ${fail} failed`);
   process.exit(fail === 0 ? 0 : 1);
