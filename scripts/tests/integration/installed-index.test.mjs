@@ -44,14 +44,26 @@ writeFileSync(join(cacheDir, "t1__cacheclone", "install.ps1"), "# x", "utf8");
 mkdirSync(join(profileNm, "pkghit"), { recursive: true });
 // ④ pkg_name 索引字段映射：目录名与仓库名不同，靠 registry 索引的 pkg_name 命中
 mkdirSync(join(profileNm, "the-real-pkg"), { recursive: true });
-// 官方包排除：@deepseek-ai 官方包永远不算用户安装的市场插件
+// 官方包排除：@deepseek-ai 官方包永远不算用户安装的市场插件。
+// package.json 带 repository 指向市场 repo（t1/fromofficial）——同时覆盖
+// profile.get 分支（pkg_name 命中）与 repoIndex 反向索引分支（repository 命中），
+// 两分支都必须排除官方包（detectInstalled 的 matchProfileEntry 反向查找同样排除）。
+// 包名取 OFFICIAL_FALLBACK 基线内的 @deepseek-ai/dsh-web（测试环境无真实 @deepseek-ai
+// 目录，loadOfficialPackages 回退基线——不在基线的包名会被误判为非官方）。
 mkdirSync(join(profileNm, "@deepseek-ai", "dsh-web"), { recursive: true });
 writeFileSync(join(profileNm, "@deepseek-ai", "dsh-web", "package.json"),
-  JSON.stringify({ name: "@deepseek-ai/dsh-web", version: "1.0.0" }), "utf8");
+  JSON.stringify({ name: "@deepseek-ai/dsh-web", version: "1.0.0", repository: { url: "https://github.com/t1/fromofficial" } }), "utf8");
 // ④ repository 撞名拦截：otherpkg 的 package.json 指向别的仓库 → 带该 pkg_name 的 repo 不判已安装
 mkdirSync(join(profileNm, "otherpkg"), { recursive: true });
 writeFileSync(join(profileNm, "otherpkg", "package.json"),
   JSON.stringify({ name: "otherpkg", version: "1.0.0", repository: { url: "https://github.com/other/real" } }), "utf8");
+// ④ repoIndex 边界固化：package.json 无 name 但带 repository（name=null）——扫描层
+// 语义（scanProfilePackages 的 key=String(name) 为空 → 不入 map，detectInstalled 同源）
+// 是「name-null 包不索引」，索引化与旧实现一致：该 repo 不判已安装。
+// 此场景同时固化「官方包排除逻辑不会把 name-null 条目误判为官方/非官方而改变行为」。
+mkdirSync(join(profileNm, "noname-pkg"), { recursive: true });
+writeFileSync(join(profileNm, "noname-pkg", "package.json"),
+  JSON.stringify({ repository: { url: "https://github.com/t1/fromnoname" } }), "utf8");
 // 本体识别（③）：repo.full_name 命中本插件 package.json 的 repository
 const ownPkg = JSON.parse(readFileSync(join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..", "package.json"), "utf8"));
 const OWN_REPO = String(ownPkg.repository?.url ?? "").replace(/^https?:\/\/github\.com\//i, "").replace(/\.git$/i, "");
@@ -77,6 +89,8 @@ const dshRepos = [
   mkRepo("t1/pkgnamed", { pkg_name: "the-real-pkg" }),    // ④ pkg_name 索引 → true
   mkRepo(OWN_REPO),                                       // ③ 本体 → true
   mkRepo("t1/official", { pkg_name: "@deepseek-ai/dsh-web" }), // 官方排除 → false
+  mkRepo("t1/fromofficial"),                              // 官方包 repository 反向索引 → false（repoIndex 排除）
+  mkRepo("t1/fromnoname"),                                // ④ name-null 非官方条目 reverse 命中 → true
   mkRepo("t1/trap", { pkg_name: "otherpkg" }),            // ④ repository 撞名 → false
   mkRepo("t1/manual"),                                    // 未安装（A2 手动安装场景用）
   mkRepo("t1/newpkg", { pkg_name: "newpkg" }),            // 未安装（A2b 手动装包场景用）
@@ -105,6 +119,16 @@ const bundledPath = join(dirname(fileURLToPath(import.meta.url)), "..", "..", ".
 const bundledSkillsPath = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..", "skills.json");
 const bundledBackup = existsSync(bundledPath) ? readFileSync(bundledPath) : null;
 const bundledSkillsBackup = existsSync(bundledSkillsPath) ? readFileSync(bundledSkillsPath) : null;
+// 备份有效性校验（fail-fast）：若 bundled 文件已是坏 JSON（上次测试 kill/崩溃的残留，
+// exit 钩子未触发），备份坏内容会在恢复时「写回坏内容」自增强残留——直接报错并给
+// 恢复命令，不再静默污染（残留根因排查见 _todo.md：uncaughtException 恢复加固）。
+for (const [label, content] of [["registry.json", bundledBackup], ["skills.json", bundledSkillsBackup]]) {
+  if (content !== null) {
+    try { JSON.parse(content); } catch {
+      throw new Error(`${label} 已是损坏状态（bundled 隔离残留）——请运行 git checkout -- registry.json skills.json 恢复后重跑`);
+    }
+  }
+}
 writeFileSync(bundledPath, "{broken", "utf8");
 writeFileSync(bundledSkillsPath, "{broken", "utf8");
 process.on("exit", () => {
@@ -160,6 +184,8 @@ const fpOf = (body) => body?.fp;
   check("list ④ pkg_name 索引 → installed", map["t1/pkgnamed"], true);
   check("list ③ 本体识别 → installed", map[OWN_REPO], true);
   check("list 官方包排除 → 未安装", map["t1/official"], false);
+  check("list 官方包 repository 反向索引排除 → 未安装", map["t1/fromofficial"], false);
+  check("list name-null 包不判已安装（扫描层语义，与 detectInstalled 一致）", map["t1/fromnoname"], false);
   check("list 未安装 → false", map["t1/clean"], false);
   // 适配层会补入 adaptor.json 中不在列表里的 to 端仓库——8 条预置全部在且都被标注即可
   check("list 预置仓库全部在列表中", dshRepos.every((r) => Object.hasOwn(map, r.full_name)), true);
@@ -237,6 +263,7 @@ const fpOf = (body) => body?.fp;
     method: "POST",
     headers: { "x-dsh-marketplace": "1", host: "127.0.0.1:3080" },
     socket: { remoteAddress: "127.0.0.1" },
+
     [Symbol.asyncIterator]: function* () { yield Buffer.from(JSON.stringify({ repo })); },
   });
   const r = mkRes();

@@ -32,6 +32,12 @@ const bundledMoved = []; // [原路径, 备份路径]
 for (const name of ["registry.json", "skills.json"]) {
   const src = join(repoRoot, name);
   if (existsSync(src)) {
+    // 备份有效性校验（fail-fast）：若文件已是坏 JSON（上次测试 kill/崩溃残留），
+    // 备份坏内容会在 exit 恢复时「写回坏内容」自增强残留——直接报错并给恢复命令。
+    const content = readFileSync(src);
+    try { JSON.parse(content); } catch {
+      throw new Error(`${name} 已是损坏状态（bundled 隔离残留）——请运行 git checkout -- registry.json skills.json 恢复后重跑`);
+    }
     const dst = join(bundledBackupDir, name);
     copyFileSync(src, dst); // 跨盘（仓库 D: vs tmp C:）不能用 renameSync，复制后删原
     unlinkSync(src);
@@ -59,9 +65,11 @@ function check(name, actual, expected) {
 function mockFetch(registryPayload, searchPayload) {
   const orig = globalThis.fetch;
   const respond = (payload) => (payload === null
-    ? { ok: false, status: 403, json: async () => ({}), text: async () => "" }
+    ? { ok: false, status: 403, headers: { get: () => null }, json: async () => ({}), text: async () => "" }
     : {
         ok: true, status: 200,
+        // content-length 缺失（fetchJson 的 readBodyLimited 流式兜底路径）
+        headers: { get: () => null },
         json: async () => payload,
         // fetchRegistryRepos 非 .gz 源走 res.text()（JSON.parse(text)）——必须返回序列化内容
         text: async () => JSON.stringify(payload),

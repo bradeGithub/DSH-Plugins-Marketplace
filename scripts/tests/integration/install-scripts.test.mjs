@@ -10,7 +10,7 @@
 //       install.ps1 用 pwsh（Windows 本机执行，其他平台跳过）。
 // 契约的静态断言见 unit/install-scripts.test.mjs（跨平台必跑）。
 
-import { execFileSync } from "node:child_process";
+import { execFileSync, spawnSync } from "node:child_process";
 import { mkdtempSync, mkdirSync, writeFileSync, copyFileSync, readFileSync, rmSync, existsSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { tmpdir } from "node:os";
@@ -35,11 +35,30 @@ function readPatch(home) {
   return existsSync(p) ? readFileSync(p, "utf8") : "";
 }
 
-// ---- install.sh：bash 沙箱（场景 A/B/D）----
-function hasBash() {
-  try { execFileSync("bash", ["--version"], { stdio: "ignore" }); return true; } catch { return false; }
+// ---- bash 探测 ----
+// Windows 上 `bash` 可能解析到 WSL（C:\Windows\system32\bash.exe）——WSL 吞
+// 反斜杠路径（127 找不到文件），且 HOME 为 Linux 语义（沙箱隔离被破坏：
+// install.sh 会写 WSL 里真实 ~/.dsh，污染宿主 profile）。必须用 Git Bash
+// （MSYS runtime，argv 层自动路径转换）或 CI Linux 原生 bash。探测不到 → SKIP
+// sh 场景（ps1 场景仍验证核心契约，sh 契约由 CI 覆盖）。
+function detectShBash() {
+  if (process.platform !== "win32") return "bash";
+  const candidates = ["bash", "C:\\Program Files\\Git\\bin\\bash.exe"];
+  for (const cand of candidates) {
+    try {
+      const r = spawnSync(cand, ["--version"], { encoding: "utf8" });
+      if (r.status === 0 && /msys|MINGW/i.test(`${r.stdout}${r.stderr}`)) return cand;
+    } catch { /* 下一个候选 */ }
+  }
+  return null;
 }
-if (hasBash()) {
+const shBash = detectShBash();
+
+// ---- install.sh：bash 沙箱（场景 A/B/D）----
+// 合并说明：上游 hasBash 简单存在检查被 detectShBash 取代（WSL 的 bash 存在但吞
+// 反斜杠路径 + HOME 语义破坏沙箱隔离——必须 Git Bash/MSYS 或 CI Linux）；sh 场景
+// 包在 if (shBash) 内（与上游 if(hasBash()) 结构一致），ps1 侧保留上游 hasPwsh 探测。
+if (shBash) {
   function runSh(home) {
     // PATH 前置必然失败的 stub dsh：环境若装过 dsh CLI（维护者本机），install.sh 的
     // command -v dsh 检测会走「官方安装」分支（真实网络 + 真实 profile），沙箱断言
@@ -47,7 +66,7 @@ if (hasBash()) {
     const stubDir = mkdtempSync(join(tmpdir(), "dsh-sh-stub-"));
     writeFileSync(join(stubDir, "dsh"), "#!/bin/sh\nexit 1\n", "utf8");
     try {
-      execFileSync("bash", [join(ROOT, "install.sh")], {
+      execFileSync(shBash, [join(ROOT, "install.sh")], {
         env: { ...process.env, HOME: home, PATH: `${stubDir}:${process.env.PATH ?? ""}` },
         cwd: ROOT,
         stdio: "pipe"

@@ -36,6 +36,7 @@ check("先过 isTrustedRequest（CSRF+Host+Origin）", fnBody.includes("if (!isT
 check("回环 socket 地址直接放行（不可伪造）", fnBody.includes('remote === "127.0.0.1" || remote === "localhost" || remote === "::1"'), true);
 check("回环判定用 socket 而非 Host 头", fnBody.includes("req.socket?.remoteAddress"), true);
 check("IPv4-mapped IPv6 归一", fnBody.includes("::ffff:"), true);
+
 check("LAN 需 lanWrite 配置", fnBody.includes("if (!(await isLanWriteEnabled())) return false;"), true);
 check("token 长度不同先拒绝（防泄露）", fnBody.includes("if (got.length !== writeToken.length) return false;"), true);
 check("timing-safe 比较", fnBody.includes("timingSafeEqual(Buffer.from(got), Buffer.from(writeToken))"), true);

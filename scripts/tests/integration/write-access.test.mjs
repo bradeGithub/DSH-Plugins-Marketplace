@@ -62,6 +62,7 @@ const mkReq = (host, extraHeaders, socketAddr = "192.168.1.50") => ({
   method: "POST",
   headers: { "x-dsh-marketplace": "1", host, ...(extraHeaders ?? {}) },
   socket: { remoteAddress: socketAddr },
+
   [Symbol.asyncIterator]: function* () { yield Buffer.from(JSON.stringify({ repo: "w/inside" })); },
 });
 const mkRes = () => {
@@ -116,6 +117,7 @@ if (uninstallHandler) {
   const r7 = mkRes();
   await uninstallHandler(mkReq("127.0.0.1:3080"), r7.res);
   check("LAN socket + 伪回环 Host → 403", r7.status, 403);
+
 }
 
 rmSync(home, { recursive: true, force: true });
