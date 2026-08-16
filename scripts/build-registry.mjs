@@ -270,6 +270,7 @@ const CATEGORY_OVERRIDES = new Map([
   ["wink-run/tokenbank", "model"], // Token 记账/模型路由网关，"P2P network" 命中 tool
   // → coding：开发工作流类（"knowledge" 主题命中 memory 属误伤）
   ["btspoony/mstar-harness", "coding"], // Loop Engineering 工作流插件
+  ["ccch1mneyyy/dsh-TUI", "coding"], // TUI 终端补位插件，"WeChat featured"（公众号收录字样）命中 notify 属误伤
   // → conversation：对话/输入框类（特征词在规则之外）
   ["huiliyi37/dsh-tianshu-tui", "conversation"], // 终端 UI 对话插件，"terminal" 命中 coding
   ["omdsh-dev/dsh-at-file", "conversation"] // @file 输入框功能，"search workspace" 命中 tool
@@ -296,6 +297,8 @@ const MARKET_TAGS = new Map([
   ["wx-yss/dsh-message-rail", ["verified-install"]], // issue #23 用户反馈正常（cli）
   ["weijiafu14/pi2dsh", ["verified-install"]], // issue #24 用户反馈正常（cli，npm 生态桥）
   ["liustack/modlens", ["verified-install"]], // issue #25 用户反馈正常（cli）
+  ["mnemon-dev/mnemon", ["verified-install"]], // issue #31 用户反馈正常（cordis-plugin 0.1.0）
+  ["taxueseek/dsh-files", ["verified-install"]], // issue #35 用户反馈正常（cordis-plugin 0.2.0）
   ["nexu-io/open-design", ["prereq"]],
 ]);
 
