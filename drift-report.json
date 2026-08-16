@@ -1,41 +1,30 @@
 {
-  "generated_at": "2026-08-16T10:52:48.337Z",
-  "count": 5,
+  "generated_at": "2026-08-16T12:37:03.193Z",
+  "count": 3,
   "items": [
     {
-      "full_name": "Jamailar/beav-deepseek-harness",
-      "previous": "memory",
-      "current": "vision",
-      "desc_now": "Beav Creator for Xiaohongshu/RED, social-media AI operations, research, copywriting, images and video in DeepSeek Harness｜小红书与社媒AI运营",
-      "desc_prev": "Beav Creator AI workflows for social-media content, knowledge, images, audio, and video in DeepSeek Harness"
+      "full_name": "Lum1104/dsh-browser",
+      "expected": "vision",
+      "actual": "vision",
+      "note": "元数据漂移（简介已变）",
+      "desc_now": "dsh plugin: Chrome sidebar extension that lets DSH operate your browser directly, no vision capabilities required. 一款 Chrome 侧边栏扩展程序，可让 DSH 直接操控您的浏览器，无需视觉能力。",
+      "desc_snapshot": "dsh plugin: Chrome sidebar extension that lets DSH operate your browser directly—no vision capabilities required. dsh 插件：一款 Chrome 侧边栏扩展程序，可让 DSH 直接操控您的浏览器——无需视觉能力。"
     },
     {
-      "full_name": "Britneycode/dsh-update-center",
-      "previous": "other",
-      "current": "resource",
-      "desc_now": "dsh (DeepSeek Harness) 更新中心与插件市场：自托管 plugins.json 注册表（GitHub dsh-plugin 主题自动聚合 + npm 包名映射秒级安装），一键安装/更新/卸载/禁用插件与更新 dsh 本体。Update center & plugin marketplace for DeepSeek Harness.",
-      "desc_prev": null
+      "full_name": "bruc3van/awesome-dsh-plugin",
+      "expected": "resource",
+      "actual": "resource",
+      "note": "元数据漂移（简介+主题已变）",
+      "desc_now": "用 30 秒为你的 DeepSeek Harness（DSH）找到合适的插件。 这不是又一个仓库清单：GitHub 上所有打着 dsh-plugin 标签的仓库由脚本每天自动抓取，再经人工逐个核实——真插件进目录，蹭热度的进黑名单，每条剔除理由公开可查。并告诉你每个插件适合谁、从哪里开始。",
+      "desc_snapshot": "用 30 秒找到适合你的 DeepSeek Harness 插件。 不只是仓库列表：这里告诉你插件解决什么问题、适合谁，以及从哪里开始。"
     },
     {
-      "full_name": "mojiexuan/dsh-git",
-      "previous": "other",
-      "current": "coding",
-      "desc_now": "A VS Code-style Git source control panel plugin for DeepSeek Harness.为 DeepSeek Harness 开发的一个类似 VS Code 的 Git 源代码管理面板插件。",
-      "desc_prev": "Git plugin developed for DeepSeek Harness"
-    },
-    {
-      "full_name": "2768651338/dsh-effort-slider",
-      "previous": "web-ui",
-      "current": "model",
-      "desc_now": "仿 Claude Code 推理等级滑块 DSH 插件",
-      "desc_prev": "仿 Claude Code 推理等级滑块 DSH 插件：无极拖动、松手吸附、WebGL 火焰跟随、OFF/MAX 刻度。剥离自 CAPTAIN1275/dsh-ui-web"
-    },
-    {
-      "full_name": "Motuo24/dsh-thinking-slider",
-      "previous": "coding",
-      "current": "model",
-      "desc_now": "让 DSH 的思考强度调节像音量一样顺滑——把模型推理等级按钮列表换成带档位吸附的滑条。",
-      "desc_prev": "为DeepSeek Harness开发的思考强度修改优化插件，通过滑条调节。"
+      "full_name": "omdsh-dev/dsh-data-agent",
+      "expected": "agent",
+      "actual": "conversation",
+      "note": "元数据漂移（简介已变）",
+      "desc_now": "Connect DSH to your database for conversational data analysis and actionable business insights.",
+      "desc_snapshot": "Data Agent for DeepSeek Harness: session-scoped database connections with a dedicated agent preset that lets AI write SQL and iterate against live execution feedback."
     }
   ]
 }
