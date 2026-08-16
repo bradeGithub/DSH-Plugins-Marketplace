@@ -3,6 +3,12 @@
 本仓库的版本迭代记录。**v1.0.0 之前的版本均为 beta 系列**（开发期迭代，未单独打 tag）。/ Version history of this repository. **All versions before v1.0.0 are part of the beta series** (development iterations, not individually tagged).
 ---
 
+## v1.5.1 — 2026-08-16（修复：Windows 自更新 spawn EINVAL 失败 / Fix: Windows self-update spawn EINVAL）
+
+- **自更新 CLI 失败回退目录替换（重要）**：v1.4.11 起自更新走官方 CLI（`dsh plugin install`），但官方 CLI 内部 spawn `pnpm` 在 Windows 上撞 .cmd 垫片 **spawn EINVAL**（官方 plugin.ts 自述已知问题）——更新红弹窗、无法升级。现在 CLI 路径失败（EINVAL / 缺失 pnpm / 拦截 git 依赖 build 等）自动回退 v1.4.10 目录替换式更新（clone → staging 校验 → 原子 rename + 回滚）；CLI 超时 600s 收紧到 180s（快速失败进入回退），前端 900s 兜底，「运行中」不再长挂 / the official CLI path now falls back to the directory-swap update (clone → staging verification → atomic rename with rollback) when it fails — e.g. spawn EINVAL on Windows where the official CLI spawns the pnpm .cmd shim; CLI timeout tightened 600s→180s with a 900s client cap so "running" never hangs
+- **install 管线 CLI 分支超时同步收紧**（180s，失败进入既有 npm 等价回退/常规流程）
+- **回归测试**：unit 18 文件全绿 / lib 集成 172 断言全绿 / full suite green
+
 ## v1.5.0 — 2026-08-16（社区治理三层落地 + 识别层加固 / Community governance: recognition, verification & compliance layers）
 
 - **验证徽章（新，discussion #2269 验证层对接）**：构建期抓取 [dsh-plugin-verify](https://github.com/qing3a/dsh-plugin-verify) 开放数据层 `verified.json`，按 `fullName` 映射键（旧版回退 repo URL 解析）给索引条目盖章 `verdict`/`verifiedBy`/`verifiedAt`/`reportUrl`/`schemaVersion` + `waterfall`/`toolsResult` 摘要证据；`schemaVersion` 不匹配整体跳过不盖章（fail-closed）；客户端 `verdict=pass` 卡片显示「✓ 已验证」绿徽章，悬停可见验证方/时间/证据摘要，点击直达报告 / the build now fetches the dsh-plugin-verify open-data layer (verified.json), stamps entries by fullName (legacy fallback: repo URL) with verdict/verifiedBy/verifiedAt/reportUrl/schemaVersion plus waterfall/toolsResult evidence; schemaVersion mismatch skips stamping entirely (fail-closed); client shows a "✓ verified" green badge with hover summary and report link
