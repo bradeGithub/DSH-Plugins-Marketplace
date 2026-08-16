@@ -1,83 +1,20 @@
 {
-  "generated_at": "2026-08-16T19:00:40.030Z",
-  "count": 11,
+  "generated_at": "2026-08-16T20:52:35.638Z",
+  "count": 2,
   "items": [
     {
-      "full_name": "kelai141/dsh-mobile-apk",
+      "full_name": "Mooling0602/dsh-web-file-uploader",
       "previous": "tool",
-      "current": "resource",
-      "desc_now": "dsh 安卓壳 APK——WebView UI + 内嵌 Termux 运行时快照（解压即跑）、SAF 目录桥、保活服务、看门狗、运行时在线更新。",
-      "desc_prev": "dsh 安卓壳 APK——WebView UI + 内嵌 Termux 运行时快照（解压即跑）、SAF 目录桥、保活服务、看门狗、运行时在线更新。"
-    },
-    {
-      "full_name": "kanghelyu/dsh-deepseek-flow",
-      "previous": "notify",
-      "current": "coding",
-      "desc_now": null,
+      "current": "web-ui",
+      "desc_now": "A file-upload plugin for the DeepSeek Harness web UI.",
       "desc_prev": null
     },
     {
-      "full_name": "Nyasers/dsh-hanako",
-      "previous": "notify",
-      "current": "other",
-      "desc_now": "DSH for Hanako",
-      "desc_prev": "DSH for Hanako"
-    },
-    {
-      "full_name": "runzhliu/deepseek-harness-docker",
-      "previous": "coding",
-      "current": "web-ui",
-      "desc_now": "Community Docker and Kubernetes packaging for DeepSeek Harness (@deepseek-ai/dsh), with a hardened image, Compose stack, Helm chart, Web UI, and headless CLI.",
-      "desc_prev": "Community Docker and Kubernetes packaging for DeepSeek Harness (@deepseek-ai/dsh), with a hardened image, Compose stack, Helm chart, Web UI, and headless CLI."
-    },
-    {
-      "full_name": "seed-forge/harness-ai-kit",
-      "previous": "agent",
-      "current": "web-ui",
-      "desc_now": "Package manager for AI agent assets — 42 skills, 5 CLIs, 1 plugin. Skills for AI/LLM agent engineering, eval-driven dev, spec-driven dev, database (MySQL/PG/Redis/Kafka/Mongo/Oracle/NL2SQL), K8s/Docker diagnostics, infra ops (Dify/Nexus/Harbor/SonarQube) & docs/patent. Runtimes: Codex, Claude Code, Cursor, Kiro, DSH.",
-      "desc_prev": "Package manager for AI agent assets (skills / CLIs / MCPs / loops) across Codex, Claude Code, Cursor and Kiro."
-    },
-    {
-      "full_name": "YLingHao/dsh-codeui",
-      "previous": "coding",
-      "current": "conversation",
-      "desc_now": "A code-review workbench for DeepSeek Harness and  jump from an always-on turn rail straight back to that turn in the conversation.",
-      "desc_prev": "A VSCode-style code-change viewer that turns DeepSeek Harness into an IDE-like workbench."
-    },
-    {
-      "full_name": "1052326311/dsh-plan-lattice",
-      "previous": "agent",
-      "current": "memory",
-      "desc_now": "Stop long-task agent drift at the first stale mutation. DeepSeek Harness plugin; reproducible stress test: native 8/8 unsafe mutations, Plan Lattice 0/8.",
-      "desc_prev": "Adaptive execution contracts that stop long-horizon AI agents from mutating stale plans, context, files, or external state. DeepSeek Harness plugin."
-    },
-    {
-      "full_name": "mlosun/dsh-docs-panel",
+      "full_name": "qinyre/dsh-plugin-capabilities",
       "previous": "web-ui",
-      "current": "memory",
-      "desc_now": "DSH WebUI 里的「随身手册」：全局 Markdown 笔记，任何工作区随时可读。",
-      "desc_prev": null
-    },
-    {
-      "full_name": "ZYar-er/dsh-notify-bell",
-      "previous": "web-ui",
-      "current": "notify",
-      "desc_now": "Semantic notification sounds for DeepSeek Harness: complete/approval/question/block/error via BEL or WAV, with Web UI bell toggle ｜ DeepSeek Harness 语义化通知声音：完成/审批/提问/受阻/错误，经 BEL 或 WAV 播放，带 Web 铃铛开关",
-      "desc_prev": "Semantic notification sounds for DeepSeek Harness: complete/approval/question/block/error via BEL or WAV, with Web UI bell toggle"
-    },
-    {
-      "full_name": "lingruan28-boop/dsh-balance-float",
-      "previous": "model",
-      "current": "web-ui",
-      "desc_now": "DeepSeek API 余额悬浮窗：打开 Harness 即显示，可拖动缩放，放大查看官方用量 | A floating DeepSeek balance & usage widget for DeepSeek Harness (DSH)",
-      "desc_prev": null
-    },
-    {
-      "full_name": "fazhu4/dsh-activity-report",
-      "previous": "model",
-      "current": "web-ui",
-      "desc_now": "dsh的本地用量面板，统计 Token、请求、Agent 活动、工具调用和性能",
-      "desc_prev": null
+      "current": "tool",
+      "desc_now": "在 dsh 设置页管理技能与 MCP 服务器，支持从 Claude Code、Codex 导入。",
+      "desc_prev": "Manage skills and MCP servers from the Web UI Settings. 在设置页管理 dsh 的技能与 MCP 服务器。"
     }
   ]
 }
