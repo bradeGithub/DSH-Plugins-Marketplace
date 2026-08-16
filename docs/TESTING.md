@@ -20,15 +20,16 @@
 - [3. 断言框架](#3-断言框架)
 - [4. 覆盖率要求](#4-覆盖率要求)
   - [豁免原则](#豁免原则)
+- [5.5 机械化质量检查（行覆盖之外）](#55-机械化质量检查行覆盖之外)
 - [5. 端到端（e2e）策略](#5-端到端e2e策略)
 - [6. 编写清单](#6-编写清单)
 - [7. 已知 lib API 问题](#7-已知-lib-api-问题)
 <!-- /TOC -->
-| **unit** | `scripts/tests/unit/` | 纯函数、无 IO、毫秒级 | 550+ 项（15 文件） |
-| **integration** | `scripts/tests/integration/` | 临时 DSH_HOME、mock fetch | 230+ 项（7 文件） |
-| **e2e** | `scripts/tests/e2e/` | 真实 git 流程、fixture 仓库 | 见 install.e2e.mjs |
+| **unit** | `scripts/tests/unit/` | 纯函数、无 IO、毫秒级 | 678 项（17 文件） |
+| **integration** | `scripts/tests/integration/` | 临时 DSH_HOME、mock fetch | 176+ 项（7 文件） |
+| **e2e** | `scripts/tests/e2e/` | 真实 git 流程、fixture 仓库 | 见 install.e2e.mjs（160 项） |
 
-统一运行器：`node scripts/tests/run.mjs`（`--level=unit|integration|e2e`、`--json`）。
+统一运行器：`node scripts/tests/run.mjs`（`--level=unit|integration|e2e`、`--json`）。当前合计约 **1014+ 项**断言（678+176+160）。
 ⚠️ 上表数量为 2026-08-16 快照，**精确数量以 `run.mjs` 输出为准**（每文件末尾 `N passed`），勿手工维护此数字；新增测试后如数字偏差大再更新一次即可。
 
 ## 2. 命名与位置
@@ -60,10 +61,11 @@ process.exit(fail === 0 ? 0 : 1);
 ## 4. 覆盖率要求
 
 - 目标：**hook 校验逻辑（validate.mjs、toc.mjs）100%**
-- lib/index.js：尽量高，深集成（npm 子进程）可豁免
+- lib/index.js：**非豁免行 100%**（222/222），豁免仅限深集成与防御性闭包（下表）
 - 检查：`node scripts/coverage.mjs`（NODE_V8_COVERAGE 零依赖）
-- **当前**：validate/toc 100%、lib/index.js 83%、overall 87%（99/114 函数）
+- **当前**：lib/index.js 非豁免 100%（222/222）
 - pre-commit 自动检查 coverage（`--only=coverage`）
+- **行覆盖 ≠ 健壮**：语义正确性由机械化检查族补充（见 §5.5）
 
 ### 豁免原则
 
@@ -74,9 +76,23 @@ process.exit(fail === 0 ? 0 : 1);
 | `runNpm`、`npmInstallWithFallback` | 依赖真实 npm 二进制，mock 不稳定 |
 | `readJsonBody`、`exists`、`json` 等内部辅助 | 通过 handler 间接触发 |
 | `readPackageVersion`、`readPackageName`、`readPackageJsonObject`、`copyFilter` | 深集成依赖解析路径，经调用链间接覆盖 |
+| 防御性死代码闭包（`rm(...).catch(`、启动预热 `getList().catch(`） | 仅 fs 权限/占用等异常态触发（markers 见 coverage.mjs） |
 | toc.mjs `isMain` 主循环 | 仅 CLI 运行时执行 |
 
 **不豁免**：纯函数、可 mock 的 IO、可通过调用链触发的逻辑——必须覆盖。
+豁免登记与 coverage.mjs 的 `EXEMPT_LIB_FUNCS` / `EXEMPT_LIB_MARKERS` 保持一致（新增豁免必须同时登记两处）。
+
+## 5.5 机械化质量检查（行覆盖之外）
+
+行覆盖只回答「代码被执行了多少」——语义正确性由三个机械化工具补充：
+
+| 工具 | 命令 | 度量 |
+|---|---|---|
+| 突变测试 | `node scripts/mutation-test.mjs` | 测试敏感度（24 个语义突变点；存活 = 语义未锁定；当前存活 3 个全部评估为接受） |
+| 性质测试 | `node scripts/tests/unit/property-based.test.mjs` | 不变式（幂等/反对称/传递性/边界/差分 `annotateInstalled ≡ detectInstalled`；8/8） |
+| i18n 完整性 | `node scripts/tests/unit/i18n-completeness.test.mjs` | 字典覆盖 + 占位符一致性（5/5，进金字塔自动跑） |
+
+改 lib 后三件套复跑顺序：`coverage → mutation → property → smoke`。
 
 ## 5. 端到端（e2e）策略
 
@@ -104,6 +120,9 @@ e2e 用**本地 fixture 替代真实网络**，保证 CI 可复现：
 3. 跨模块真实流程 → e2e（fixture）
 4. 跑 `node scripts/tests/run.mjs` 全绿
 5. 跑 `node scripts/coverage.mjs` 确认无回退
+6. 新增语义 → 突变复跑（`node scripts/mutation-test.mjs`——新增行为应有红用例锁定）
+7. 改纯函数 → 性质复跑（`node scripts/tests/unit/property-based.test.mjs`）
+8. 改文案/字典 → i18n 检查（进金字塔自动跑）
 
 ## 7. 已知 lib API 问题
 
