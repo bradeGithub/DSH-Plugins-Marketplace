@@ -54,6 +54,31 @@ const MIXED = {
 const mixed = parseDisclosureData(MIXED);
 check("同仓混合披露 → cloud:true 优先", mixed.get("mix/repo")?.disclosure.cloud, true);
 check("cloud:true 条目不被后续 cloud:false 覆盖", mixed.get("mix/repo")?.disclosure.network[0], "https://x.cn");
+
+// 双颗粒度形态（wwumit 新增 repos[].cloudSkills）：仓级 cloud 由 cloudSkills 定，
+// 云端技能详情从 skills 聚合合并（端点/凭据去重，不丢任一云端技能）
+const DUAL = {
+  schemaVersion: 1,
+  disclosureSchemaVersion: "0.2",
+  skills: [
+    { name: "ccpa-check", fullName: "wwumit/skills-compliance-intl", disclosure: { cloud: true, network: ["https://compliancehub.cn"], offlineMode: true, apiKeys: [{ env: "COMPLIANCEHUB_API_KEY", storage: "file-0600" }], jurisdiction: ["US-CA"], retention: "session" } },
+    { name: "gdpr-check", fullName: "wwumit/skills-compliance-intl", disclosure: { cloud: true, network: ["https://compliancehub.cn", "https://gdpr.cn"], offlineMode: false, apiKeys: [{ env: "GDPR_API_KEY", storage: "file-0600" }], jurisdiction: ["EU"], retention: "server" } },
+    { name: "local-guard", fullName: "wwumit/skills-compliance-intl", disclosure: { cloud: false, network: [], offlineMode: true, apiKeys: [], jurisdiction: [], retention: "none" } },
+    { name: "stock-a", fullName: "wwumit/skills-stock", disclosure: { cloud: false, network: [], offlineMode: true, apiKeys: [], jurisdiction: [], retention: "none" } }
+  ],
+  repos: [
+    { fullName: "wwumit/skills-compliance-intl", skillCount: 3, cloudSkills: ["ccpa-check", "gdpr-check"] },
+    { fullName: "wwumit/skills-stock", skillCount: 1, cloudSkills: [] }
+  ]
+};
+const dual = parseDisclosureData(DUAL);
+check("双颗粒度：云端仓 cloud=true", dual.get("wwumit/skills-compliance-intl")?.disclosure.cloud, true);
+check("双颗粒度：云端技能端点合并去重", dual.get("wwumit/skills-compliance-intl")?.disclosure.network,
+  ["https://compliancehub.cn", "https://gdpr.cn"]);
+check("双颗粒度：云端技能凭据合并", dual.get("wwumit/skills-compliance-intl")?.disclosure.apiKeys.length, 2);
+check("双颗粒度：retention 取最严（server）", dual.get("wwumit/skills-compliance-intl")?.disclosure.retention, "server");
+check("双颗粒度：offlineMode 任一 false → false", dual.get("wwumit/skills-compliance-intl")?.disclosure.offlineMode, false);
+check("双颗粒度：本地仓 cloud=false", dual.get("wwumit/skills-stock")?.disclosure.cloud, false);
 check("disclosureSchemaVersion 不符 → null（fail-closed）",
   parseDisclosureData({ schemaVersion: 1, disclosureSchemaVersion: "0.3", skills: [] }), null);
 check("schemaVersion 不符 → null",

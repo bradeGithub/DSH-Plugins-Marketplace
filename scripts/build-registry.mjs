@@ -500,26 +500,72 @@ const DISCLOSURE_SOURCE = {
 /** 解析 catalog.json 为 小写 fullName → { disclosure, disclosureSchemaVersion } Map（纯函数）。
  *  顶层 schemaVersion / disclosureSchemaVersion 任一不匹配返回 null（fail-closed）。
  *  缺 fullName 或缺 disclosure 对象的条目跳过（不盖章）。 */
+/** 聚合多个技能条目的披露为仓级披露（纯函数）：network/apiKeys/jurisdiction 去重合并，
+ *  retention 取最严等级（none < session < server），offlineMode 全为 true 才 true。
+ *  供双颗粒度形态（repos[].cloudSkills）聚合云端技能详情用。 */
+function aggregateDisclosure(entries, isCloud) {
+  if (entries.length === 0) return null;
+  const retentionRank = { none: 0, session: 1, server: 2 };
+  const out = {
+    cloud: isCloud,
+    network: [],
+    offlineMode: true,
+    apiKeys: [],
+    jurisdiction: [],
+    retention: "none"
+  };
+  for (const e of entries) {
+    const d = e.disclosure;
+    if (!d || typeof d !== "object") continue;
+    for (const n of Array.isArray(d.network) ? d.network : []) if (!out.network.includes(n)) out.network.push(n);
+    if (d.offlineMode === false) out.offlineMode = false;
+    for (const k of Array.isArray(d.apiKeys) ? d.apiKeys : []) {
+      if (!out.apiKeys.some((x) => x && x.env === (k && k.env))) out.apiKeys.push(k);
+    }
+    for (const j of Array.isArray(d.jurisdiction) ? d.jurisdiction : []) if (!out.jurisdiction.includes(j)) out.jurisdiction.push(j);
+    if (typeof d.retention === "string" && (retentionRank[d.retention] ?? -1) > (retentionRank[out.retention] ?? -1)) out.retention = d.retention;
+  }
+  return out;
+}
+
+/** 解析 catalog.json 为 小写 fullName → { disclosure, disclosureSchemaVersion } Map（纯函数）。
+ *  顶层 schemaVersion / disclosureSchemaVersion 任一不匹配返回 null（fail-closed）。
+ *  双颗粒度形态（wwumit 2026-08-16 新增）：`repos[].cloudSkills` 定仓级 cloud，
+ *  云端技能详情从 `skills[]` 聚合合并（端点/凭据/法域全量，不丢任一技能）；
+ *  旧形态（无 repos 数组）回退：技能条目按 fullName 聚合，cloud:true 优先（fail-safe）。 */
 export function parseDisclosureData(json) {
   if (!json || typeof json !== "object") return null;
   if (json.schemaVersion !== DISCLOSURE_SOURCE.schemaVersion) return null;
   if (String(json.disclosureSchemaVersion) !== DISCLOSURE_SOURCE.disclosureSchemaVersion) return null;
-  const entries = Array.isArray(json.skills) ? json.skills : [];
+  const skills = Array.isArray(json.skills) ? json.skills : [];
+  const repos = Array.isArray(json.repos) ? json.repos : [];
   const map = new Map();
-  for (const e of entries) {
-    const fullName = typeof e?.fullName === "string" ? e.fullName : "";
-    if (!fullName.includes("/")) continue;
-    if (!e.disclosure || typeof e.disclosure !== "object") continue;
-    const key = fullName.toLowerCase();
-    const value = {
-      disclosure: e.disclosure,
-      disclosureSchemaVersion: String(json.disclosureSchemaVersion)
-    };
-    const existing = map.get(key);
-    // 同一发布仓多个技能的 disclosure 可能不同（如 compliance-intl 混有云端/本地技能）：
-    // 市场按仓库盖章 → 取风险最严的条目（cloud:true 优先），警示从严不丢失。
-    if (!existing || (existing.disclosure.cloud !== true && e.disclosure.cloud === true)) {
-      map.set(key, value);
+
+  // 技能级条目索引（小写 fullName → 条目数组）
+  const skillsByRepo = new Map();
+  for (const s of skills) {
+    const repoKey = String(s?.fullName ?? "").toLowerCase();
+    if (!repoKey.includes("/")) continue;
+    if (!s.disclosure || typeof s.disclosure !== "object") continue;
+    if (!skillsByRepo.has(repoKey)) skillsByRepo.set(repoKey, []);
+    skillsByRepo.get(repoKey).push(s);
+  }
+
+  if (repos.length > 0) {
+    for (const r of repos) {
+      const key = String(r?.fullName ?? "").toLowerCase();
+      if (!key.includes("/")) continue;
+      const cloudNames = new Set(Array.isArray(r.cloudSkills) ? r.cloudSkills : []);
+      const repoSkills = skillsByRepo.get(key) ?? [];
+      const cloudSkills = repoSkills.filter((s) => cloudNames.has(s.name));
+      const disclosure = aggregateDisclosure(cloudSkills.length > 0 ? cloudSkills : repoSkills.slice(0, 1), cloudSkills.length > 0);
+      if (!disclosure) continue;
+      map.set(key, { disclosure, disclosureSchemaVersion: String(json.disclosureSchemaVersion) });
+    }
+  } else {
+    for (const [key, entries] of skillsByRepo) {
+      const pick = entries.find((s) => s.disclosure.cloud === true) ?? entries[0];
+      map.set(key, { disclosure: pick.disclosure, disclosureSchemaVersion: String(json.disclosureSchemaVersion) });
     }
   }
   return map;
