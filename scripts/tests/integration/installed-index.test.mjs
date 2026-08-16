@@ -236,6 +236,7 @@ const fpOf = (body) => body?.fp;
   const mkUninstallReq = (repo) => ({
     method: "POST",
     headers: { "x-dsh-marketplace": "1", host: "127.0.0.1:3080" },
+    socket: { remoteAddress: "127.0.0.1" },
     [Symbol.asyncIterator]: function* () { yield Buffer.from(JSON.stringify({ repo })); },
   });
   const r = mkRes();

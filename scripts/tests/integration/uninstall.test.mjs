@@ -75,10 +75,12 @@ const uninstallHandler = registered.find((h) => h.path === "/api/marketplace/uni
 check("uninstall 路由已注册", !!uninstallHandler, true);
 
 if (uninstallHandler) {
-  // mock req：async iterable body（readJsonBody 用 for await 消费）+ 可信头
+  // mock req：async iterable body（readJsonBody 用 for await 消费）+ 可信头 + 回环 socket
+  // （isWriteAllowed 的回环判定基于 socket.remoteAddress，见 write-access.test.mjs）
   const mkReq = (repo) => ({
     method: "POST",
     headers: { "x-dsh-marketplace": "1", host: "127.0.0.1:3080" },
+    socket: { remoteAddress: "127.0.0.1" },
     [Symbol.asyncIterator]: function* () {
       yield Buffer.from(JSON.stringify({ repo }));
     },

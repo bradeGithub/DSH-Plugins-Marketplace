@@ -56,9 +56,12 @@ const tokenMatch = /__DSH_MP_TOKEN__="([0-9a-f]{64})"/.exec(injected);
 check("注入脚本含 64 位 hex token", !!tokenMatch, true);
 const token = tokenMatch ? tokenMatch[1] : "";
 
-const mkReq = (host, extraHeaders) => ({
+// socketAddr 模拟连接层远端地址（回环判定依据，不可伪造）：默认 LAN 地址，
+// 回环场景显式传 127.0.0.1；Host 头与 socket 地址分离——验证 Host 伪造不再放行。
+const mkReq = (host, extraHeaders, socketAddr = "192.168.1.50") => ({
   method: "POST",
   headers: { "x-dsh-marketplace": "1", host, ...(extraHeaders ?? {}) },
+  socket: { remoteAddress: socketAddr },
   [Symbol.asyncIterator]: function* () { yield Buffer.from(JSON.stringify({ repo: "w/inside" })); },
 });
 const mkRes = () => {
@@ -104,10 +107,15 @@ if (uninstallHandler) {
   await uninstallHandler(mkReq("192.168.1.50:3080", { "x-dsh-marketplace-token": "a".repeat(63) }), r5.res);
   check("LAN 模式 + 长度不符 token → 403", r5.status, 403);
 
-  // 场景 6：回环 Host → 放行（默认模式，无 token；无记录时卸载提示无记录但 200）
+  // 场景 6：回环 socket → 放行（默认模式，无 token；无记录时卸载提示无记录但 200）
   const r6 = mkRes();
-  await uninstallHandler(mkReq("127.0.0.1:3080"), r6.res);
-  check("回环 Host 写操作 → 200", r6.status, 200);
+  await uninstallHandler(mkReq("127.0.0.1:3080", undefined, "127.0.0.1"), r6.res);
+  check("回环 socket 写操作 → 200", r6.status, 200);
+
+  // 场景 7：LAN socket 自报回环 Host → 仍 403（Host 头可伪造，不得绕过 token）
+  const r7 = mkRes();
+  await uninstallHandler(mkReq("127.0.0.1:3080"), r7.res);
+  check("LAN socket + 伪回环 Host → 403", r7.status, 403);
 }
 
 rmSync(home, { recursive: true, force: true });
