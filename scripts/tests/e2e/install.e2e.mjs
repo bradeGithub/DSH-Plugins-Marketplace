@@ -143,6 +143,7 @@ function setupUrlRewrite(owner, repoName) {
     const req = {
       method: "POST",
       headers: { "x-dsh-marketplace": "1", host: "127.0.0.1:3080" },
+      socket: { remoteAddress: "127.0.0.1" },
       url: "/api/marketplace/install",
       [Symbol.asyncIterator]() {
         let sent = false;
@@ -169,6 +170,7 @@ function setupUrlRewrite(owner, repoName) {
     const req = {
       method: "POST",
       headers: { "x-dsh-marketplace": "1", host: "127.0.0.1:3080" },
+      socket: { remoteAddress: "127.0.0.1" },
       url: "/api/marketplace/uninstall",
       [Symbol.asyncIterator]() {
         let sent = false;
@@ -312,6 +314,7 @@ function setupUrlRewrite(owner, repoName) {
     method: "POST",
     headers: { "x-dsh-marketplace": "1", host: "127.0.0.1:3080" },
     url: "/api/marketplace/install",
+    socket: { remoteAddress: "127.0.0.1" },
     [Symbol.asyncIterator]() {
       let sent = false;
       return { next: async () => sent ? { value: undefined, done: true } : (sent = true, { value: Buffer.from(JSON.stringify({ repo: "bad!" })), done: false }) };
@@ -341,6 +344,7 @@ function setupUrlRewrite(owner, repoName) {
     method: "POST",
     headers: { "x-dsh-marketplace": "1", host: "127.0.0.1:3080" },
     url: "/api/marketplace/install",
+    socket: { remoteAddress: "127.0.0.1" },
     [Symbol.asyncIterator]() {
       let sent = false;
       return {
@@ -444,6 +448,7 @@ function setupUrlRewrite(owner, repoName) {
     method: "GET",
     headers: { "x-dsh-marketplace": "1", host: "127.0.0.1:3080" },
     url: "/api/marketplace/install",
+    socket: { remoteAddress: "127.0.0.1" },
     [Symbol.asyncIterator]() { return { next: async () => ({ value: undefined, done: true }) }; },
   };
   let mStatus = 0;
@@ -456,6 +461,7 @@ function setupUrlRewrite(owner, repoName) {
     method: "POST",
     headers: { "x-dsh-marketplace": "1", host: "127.0.0.1:3080" },
     url: "/api/marketplace/install",
+    socket: { remoteAddress: "127.0.0.1" },
     [Symbol.asyncIterator]() {
       let sent = false;
       return { next: async () => sent ? { value: undefined, done: true } : (sent = true, { value: Buffer.from(bigBody), done: false }) };
@@ -471,6 +477,7 @@ function setupUrlRewrite(owner, repoName) {
     method: "POST",
     headers: { "x-dsh-marketplace": "1", host: "127.0.0.1:3080" },
     url: "/api/marketplace/install",
+    socket: { remoteAddress: "127.0.0.1" },
     [Symbol.asyncIterator]() {
       let sent = false;
       return { next: async () => sent ? { value: undefined, done: true } : (sent = true, { value: Buffer.from(bodyStr), done: false }) };
