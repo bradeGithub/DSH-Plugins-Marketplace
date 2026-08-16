@@ -78,10 +78,34 @@ check("annotateSkillInstalled 走 ensure 入口", /await ensureInstalledIndex\(\
 
 // ---- 契约 5：内容指纹 fp ----
 const fpCount = (lib.match(/fp: listFingerprint\(deduped\)/g) ?? []).length;
-check("list + skills 两处响应都带 fp", fpCount, 2);
+// 上游 1.4.0（#14）skills 改服务端分页后响应不再带 fp——指纹门控被 fetchPage seq 竞态
+// 保护替代（client.js skillsFetchSeq）；仅插件列表（全量返回）保留 fp。
+check("插件列表响应带 fp（skills 分页化后仅一处）", fpCount, 1);
 check("listFingerprint 实现存在", /function listFingerprint\(repos\) \{[\s\S]*?\n\}/.test(lib), true);
 check("client.js fingerprintOf 优先 data.fp", /if \(typeof data\.fp === "string"\) return data\.fp;/.test(client), true);
-check("client.js 回退 source+total", /return JSON\.stringify\(\[data\.source \|\| "", data\.total \|\| 0\]\);/.test(client), true);
+// 回退必须含 cached_at（见 A3：只按 source+total 门控会在内容一进一出时漏更新）——A3 断言同一契约
+
+// ---- A1：构建中事件失效的竞态保护（代际计数）----
+// 单飞构建在飞时 save/remove 把 installedIndex 置 null，构建完成会无条件写回旧快照
+// （构建开始时扫描的目录/记录）→ 新安装/卸载在下次事件前标注 miss（静默陈旧）。
+// 契约：save/remove 递增代际计数；构建完成写入前校验代际，变了则丢弃结果（保持 null）。
+check("A1 save/remove 递增代际计数（≥2 处）", (lib.match(/installedIndexGen\+\+/g) ?? []).length, 2);
+check("A1 构建完成写入前校验代际", /installedIndexGen !== buildGen/.test(lib), true);
+
+// ---- A3：无 fp 回退必须含 cached_at（防漏更新）----
+// 旧服务端（无 fp）下回退 [source, total]：内容一进一出时两者不变 → 门控错误跳过
+// → 列表漏更新。契约：无 fp 时回退串含 cached_at（退化到旧行为：每次重渲染）。
+check("A3 无 fp 回退串含 cached_at", /return JSON\.stringify\(\[data\.source \|\| "", data\.cached_at \|\| "", data\.total \|\| 0\]\);/.test(client), true);
+
+// ---- A4：指纹必须含列表长度（防 32 位哈希碰撞静默漏更新）----
+// FNV-1a 32 位对 ~2262 条列表内容变化碰撞概率约 0.06%；碰撞后果 = 内容变了但 fp
+// 相同 → 客户端跳过重渲染 → 列表不更新（静默）。契约：fp 串附带 repos.length。
+check("A4 listFingerprint 串含列表长度", /function listFingerprint\(repos\) \{[\s\S]{0,400}repos\.length/.test(lib), true);
+
+// ---- C1：pkg_name 冲突日志须汇总计数（不拼接全量明细刷屏）----
+// 每次列表请求 console.warn 一长串被隐藏仓库名（几十个），dsh+skills 双列表请求
+// 时刷屏（用户实测日志可见）。契约：冲突日志改为计数汇总，明细不拼进 warn 消息。
+check("C1 冲突日志不再拼接全量 dropped 明细", !/pkg_name 冲突，列表已隐藏：\$\{dropped\.join/.test(lib), true);
 
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail === 0 ? 0 : 1);
