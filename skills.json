@@ -825,8 +825,8 @@
       "name": "notebooklm-py",
       "description": "Unofficial Python API and agentic skill for Google Gemini Notebook. Full programmatic access to NotebookLM's features—including capabilities the web UI doesn't expose—via Python, CLI, and AI agents like Claude Code, Codex, and OpenClaw.",
       "html_url": "https://github.com/teng-lin/notebooklm-py",
-      "stargazers_count": 18732,
-      "updated_at": "2026-08-16T14:00:52Z",
+      "stargazers_count": 18733,
+      "updated_at": "2026-08-16T16:55:45Z",
       "default_branch": "main",
       "topics": [
         "agentic-skill",
@@ -899,7 +899,8 @@
       "license": "MIT",
       "registry_seen_at": "2026-08-16T16:53:58.059Z",
       "has_skill": true,
-      "has_install_script": true
+      "has_install_script": true,
+      "pkg_name": null
     },
     {
       "full_name": "alibaba/zvec",
@@ -1472,8 +1473,8 @@
       "name": "Product-Manager-Skills",
       "description": "Product Management skills framework built on battle-tested methods for Claude Code, Cowork, Codex, and AI agents.",
       "html_url": "https://github.com/deanpeters/Product-Manager-Skills",
-      "stargazers_count": 6490,
-      "updated_at": "2026-08-16T15:39:43Z",
+      "stargazers_count": 6491,
+      "updated_at": "2026-08-16T16:58:57Z",
       "default_branch": "main",
       "topics": [
         "ai-agents",
@@ -1740,9 +1741,10 @@
         "skills"
       ],
       "license": null,
-      "registry_seen_at": "2026-08-16T16:18:40.420Z",
+      "registry_seen_at": "2026-08-16T17:29:38.223Z",
       "has_skill": true,
-      "has_install_script": false
+      "has_install_script": false,
+      "pkg_name": null
     },
     {
       "full_name": "breaking-brake/cc-wf-studio",
@@ -1833,7 +1835,7 @@
       "description": "Run any process, on your machine or in an AI agent's environment, as if it were a pod in your Kubernetes cluster: real env vars, DNS, network, traffic.",
       "html_url": "https://github.com/metalbear-co/mirrord",
       "stargazers_count": 5263,
-      "updated_at": "2026-08-16T14:44:36Z",
+      "updated_at": "2026-08-16T16:53:50Z",
       "default_branch": "main",
       "topics": [
         "agent-skills",
@@ -2850,8 +2852,8 @@
       "name": "skills",
       "description": "Skills, MCP servers, Custom Agents, Agents.md for SDKs to ground Coding Agents",
       "html_url": "https://github.com/microsoft/skills",
-      "stargazers_count": 2906,
-      "updated_at": "2026-08-15T18:43:54Z",
+      "stargazers_count": 2907,
+      "updated_at": "2026-08-16T16:52:27Z",
       "default_branch": "main",
       "topics": [
         "agent-skills",
@@ -2865,8 +2867,7 @@
       "license": "MIT",
       "registry_seen_at": "2026-08-16T16:53:58.059Z",
       "has_skill": true,
-      "has_install_script": false,
-      "pkg_name": null
+      "has_install_script": false
     },
     {
       "full_name": "MARKTECHPOST-AI-MEDIA-INC/AI-Agents-Projects-Tutorials",
@@ -2892,7 +2893,8 @@
       "license": null,
       "registry_seen_at": "2026-08-16T16:53:58.059Z",
       "has_skill": false,
-      "has_install_script": false
+      "has_install_script": false,
+      "pkg_name": null
     },
     {
       "full_name": "KhazP/vibe-coding-prompt-template",
@@ -3454,6 +3456,45 @@
       "pkg_name": "portaljs"
     },
     {
+      "full_name": "liustack/modlens",
+      "name": "modlens",
+      "description": "The first vision plugin for DeepSeek Harness, and the vision bridge for every text-only coding agent. Paste an image, get structured JSON evidence (OCR, layout, semantics). | 全网最强 DeepSeek Harness 外挂视觉插件，为 DeepSeek、GLM 等纯文本模型外挂视觉能力，粘贴图片即得结构化 JSON 证据（OCR、版面、语义）。",
+      "html_url": "https://github.com/liustack/modlens",
+      "stargazers_count": 2338,
+      "updated_at": "2026-08-16T17:16:04Z",
+      "default_branch": "main",
+      "topics": [
+        "agent-skills",
+        "claude-code",
+        "claude-skills",
+        "codex",
+        "cordis",
+        "deepseek",
+        "dsh",
+        "dsh-plugin",
+        "glm",
+        "harness",
+        "harness-engineering",
+        "hermes-agent",
+        "image-to-text",
+        "multimodal",
+        "ocr",
+        "openclaw",
+        "pi-agent",
+        "text-only-llm",
+        "vision",
+        "vision-transformer"
+      ],
+      "license": "MIT",
+      "registry_seen_at": "2026-08-16T17:29:38.213Z",
+      "market_tags": [
+        "verified-install"
+      ],
+      "has_skill": true,
+      "has_install_script": false,
+      "pkg_name": "@liustack/modlens"
+    },
+    {
       "full_name": "softaworks/agent-toolkit",
       "name": "agent-toolkit",
       "description": "A curated collection of skills for AI coding agents. Skills are packaged instructions and scripts that extend agent capabilities across development, documentation, planning, and professional workflows.",
@@ -3728,8 +3769,8 @@
       "name": "pilot-shell",
       "description": "How real engineers run Claude Code and Codex: spec-driven planning, enforced TDD, persistent memory, and quality enforcement on all levels. Make your agents production-ready.",
       "html_url": "https://github.com/maxritter/pilot-shell",
-      "stargazers_count": 1994,
-      "updated_at": "2026-08-16T13:58:02Z",
+      "stargazers_count": 1995,
+      "updated_at": "2026-08-16T17:27:31Z",
       "default_branch": "main",
       "topics": [
         "ai-agents",
@@ -4213,6 +4254,26 @@
       "has_skill": true,
       "has_install_script": true,
       "pkg_name": "@deeplake/hivemind"
+    },
+    {
+      "full_name": "dmmulroy/anti-slop",
+      "name": "anti-slop",
+      "description": "Opinionated Oxlint rules for rejecting low-evidence TypeScript and JavaScript patterns",
+      "html_url": "https://github.com/dmmulroy/anti-slop",
+      "stargazers_count": 1552,
+      "updated_at": "2026-08-16T17:22:01Z",
+      "default_branch": "main",
+      "topics": [
+        "agent-skills",
+        "linting",
+        "oxlint",
+        "typescript"
+      ],
+      "license": "MIT",
+      "registry_seen_at": "2026-08-16T17:29:38.213Z",
+      "has_skill": true,
+      "has_install_script": false,
+      "pkg_name": "oxlint-plugin-anti-slop"
     },
     {
       "full_name": "Kaelio/ktx",
@@ -4910,8 +4971,8 @@
       "name": "OpenChatCut",
       "description": "Open-source, local-first conversational AI video editor with a professional multi-track timeline, Agent Skills, MCP integration, and Remotion rendering.",
       "html_url": "https://github.com/0xsline/OpenChatCut",
-      "stargazers_count": 1161,
-      "updated_at": "2026-08-16T16:08:04Z",
+      "stargazers_count": 1162,
+      "updated_at": "2026-08-16T16:48:08Z",
       "default_branch": "main",
       "topics": [
         "agent-skills",
@@ -4936,7 +4997,7 @@
         "video-editor"
       ],
       "license": "AGPL-3.0",
-      "registry_seen_at": "2026-08-16T16:18:40.415Z",
+      "registry_seen_at": "2026-08-16T17:29:38.213Z",
       "has_skill": true,
       "has_install_script": false,
       "pkg_name": "openchatcut"
@@ -4946,8 +5007,8 @@
       "name": "Agentlas-OS",
       "description": "Agent OS: keep specialist agents in a hub, spin up a temporary orchestrator per task. Local-first, works with any model.",
       "html_url": "https://github.com/agentlas-ai/Agentlas-OS",
-      "stargazers_count": 1158,
-      "updated_at": "2026-08-16T13:52:59Z",
+      "stargazers_count": 1157,
+      "updated_at": "2026-08-16T16:16:40Z",
       "default_branch": "main",
       "topics": [
         "a2a",
@@ -5070,29 +5131,6 @@
       "pkg_name": "goose-skills"
     },
     {
-      "full_name": "itsmostafa/aws-agent-skills",
-      "name": "aws-agent-skills",
-      "description": "AWS Skills for Agents",
-      "html_url": "https://github.com/itsmostafa/aws-agent-skills",
-      "stargazers_count": 1145,
-      "updated_at": "2026-08-13T06:56:31Z",
-      "default_branch": "main",
-      "topics": [
-        "agent-skills",
-        "agentic-ai",
-        "aws",
-        "claude-code",
-        "claude-skills",
-        "codex",
-        "coding-agents"
-      ],
-      "license": "MIT",
-      "registry_seen_at": "2026-08-15T05:26:00.857Z",
-      "has_skill": true,
-      "has_install_script": false,
-      "pkg_name": null
-    },
-    {
       "full_name": "Leutenegger/book-to-skill",
       "name": "book-to-skill",
       "description": "Turn any technical book PDF into a Claude Code skill — ready to study, reference, and use while you work.",
@@ -5126,6 +5164,29 @@
       "registry_seen_at": "2026-08-16T16:53:58.059Z",
       "has_skill": true,
       "has_install_script": false
+    },
+    {
+      "full_name": "itsmostafa/aws-agent-skills",
+      "name": "aws-agent-skills",
+      "description": "AWS Skills for Agents",
+      "html_url": "https://github.com/itsmostafa/aws-agent-skills",
+      "stargazers_count": 1145,
+      "updated_at": "2026-08-13T06:56:31Z",
+      "default_branch": "main",
+      "topics": [
+        "agent-skills",
+        "agentic-ai",
+        "aws",
+        "claude-code",
+        "claude-skills",
+        "codex",
+        "coding-agents"
+      ],
+      "license": "MIT",
+      "registry_seen_at": "2026-08-15T05:26:00.857Z",
+      "has_skill": true,
+      "has_install_script": false,
+      "pkg_name": null
     },
     {
       "full_name": "MoizIbnYousaf/Ai-Agent-Skills",
@@ -5388,7 +5449,7 @@
       "description": "Instant recall for coding agents. Search the history already on your machine. Git blame, but for agent sessions.",
       "html_url": "https://github.com/ctxrs/ctx",
       "stargazers_count": 1031,
-      "updated_at": "2026-08-16T15:18:11Z",
+      "updated_at": "2026-08-16T16:59:00Z",
       "default_branch": "main",
       "topics": [
         "agent",
@@ -5839,7 +5900,7 @@
       "description": "Synthadoc: An open-source LLM knowledge compilation engine that turns raw documents into structured, local-first wikis. A transparent, human-readable alternative to traditional RAG, which can be self-managed and self-improved without the use of any tools.",
       "html_url": "https://github.com/axoviq-ai/synthadoc",
       "stargazers_count": 979,
-      "updated_at": "2026-08-16T16:09:34Z",
+      "updated_at": "2026-08-16T16:31:48Z",
       "default_branch": "main",
       "topics": [
         "agent-skills",
@@ -6573,31 +6634,6 @@
       "pkg_name": null
     },
     {
-      "full_name": "Raymondhou0917/speak-human-tw",
-      "name": "speak-human-tw",
-      "description": "「說人話」：繁體中文的去 AI 味改寫 skill。抓 38 種 AI 寫作痕跡，順手校正中國用語與半形標點，給 Claude Code / Codex / Cursor 用。",
-      "html_url": "https://github.com/Raymondhou0917/speak-human-tw",
-      "stargazers_count": 831,
-      "updated_at": "2026-08-16T16:04:38Z",
-      "default_branch": "master",
-      "topics": [
-        "agent-skills",
-        "ai-writing",
-        "claude-code",
-        "codex",
-        "cursor",
-        "humanizer",
-        "prompt-engineering",
-        "traditional-chinese",
-        "writing-tools",
-        "zh-tw"
-      ],
-      "license": "MIT",
-      "registry_seen_at": "2026-08-16T16:18:40.415Z",
-      "has_skill": true,
-      "has_install_script": false
-    },
-    {
       "full_name": "TheGreenCedar/codex-autoresearch",
       "name": "codex-autoresearch",
       "description": "A codex plugin for running optimization loops inside a codebase. It is useful when you have a measurable target and many possible changes to try: test runtime, build speed, bundle size, model loss, Lighthouse scores, memory use, query latency, or any other metric you can print from a script.",
@@ -6718,7 +6754,7 @@
       "description": "Real time communication for agents. Wake on message, channels, DMs and actions. Useful for orchestrating agents.",
       "html_url": "https://github.com/AgentWorkforce/relay",
       "stargazers_count": 792,
-      "updated_at": "2026-08-16T15:44:49Z",
+      "updated_at": "2026-08-16T16:22:45Z",
       "default_branch": "main",
       "topics": [
         "agent",
@@ -7122,7 +7158,7 @@
         "skills"
       ],
       "license": "CC-BY-4.0",
-      "registry_seen_at": "2026-08-16T16:18:40.415Z",
+      "registry_seen_at": "2026-08-16T17:29:38.213Z",
       "has_skill": true,
       "has_install_script": false,
       "pkg_name": null
@@ -7343,7 +7379,7 @@
         "subagents"
       ],
       "license": "MIT",
-      "registry_seen_at": "2026-08-16T16:18:40.415Z",
+      "registry_seen_at": "2026-08-16T17:29:38.213Z",
       "has_skill": true,
       "has_install_script": false,
       "pkg_name": "claude-code-workflows"
@@ -7424,7 +7460,7 @@
       "description": "Agent Skills that turn novels into source-grounded, fully playable games for Claude Code, Codex, and Kimi Code(K3).",
       "html_url": "https://github.com/worldwonderer/novel-to-game",
       "stargazers_count": 660,
-      "updated_at": "2026-08-16T15:19:45Z",
+      "updated_at": "2026-08-16T16:57:07Z",
       "default_branch": "main",
       "topics": [
         "agent-skills",
@@ -8101,6 +8137,27 @@
       "pkg_name": "claude-brain"
     },
     {
+      "full_name": "alibaba/skill-up",
+      "name": "skill-up",
+      "description": "An evaluation and evolution tool for Agent Skills.",
+      "html_url": "https://github.com/alibaba/skill-up",
+      "stargazers_count": 566,
+      "updated_at": "2026-08-16T16:54:57Z",
+      "default_branch": "main",
+      "topics": [
+        "agent-skills",
+        "ai",
+        "ai-agents",
+        "alibaba",
+        "skills"
+      ],
+      "license": "Apache-2.0",
+      "registry_seen_at": "2026-08-16T17:29:38.213Z",
+      "has_skill": true,
+      "has_install_script": true,
+      "pkg_name": "skill-up-docs"
+    },
+    {
       "full_name": "24kchengYe/human-skill-tree",
       "name": "human-skill-tree",
       "description": "🌳 AI-Powered Skill Tree for Lifelong Human Learning. 30+ skills from K-12 to career & social intelligence, built on cognitive science. | 人类养成记：AI 驱动的终身学习技能树",
@@ -8462,7 +8519,7 @@
       "description": "68 plug-and-play, best-practice product management skills for AI agents: 30 Triple Diamond phase + 11 foundation + 12 utility + 15 tool (Foundation Sprint + Design Sprint). Plus 6 sub-agents, workflows, 200+ output samples, guides, and CI-enforced contracts. Apache 2.0.",
       "html_url": "https://github.com/product-on-purpose/pm-skills",
       "stargazers_count": 538,
-      "updated_at": "2026-08-16T15:55:41Z",
+      "updated_at": "2026-08-16T17:09:33Z",
       "default_branch": "main",
       "topics": [
         "agent-skills",
@@ -8479,7 +8536,7 @@
         "triple-diamond"
       ],
       "license": "Apache-2.0",
-      "registry_seen_at": "2026-08-16T16:18:40.416Z",
+      "registry_seen_at": "2026-08-16T17:29:38.213Z",
       "has_skill": true,
       "has_install_script": false,
       "pkg_name": "pm-skills-tooling"
@@ -8778,7 +8835,8 @@
       "license": "NOASSERTION",
       "registry_seen_at": "2026-08-16T16:53:58.063Z",
       "has_skill": false,
-      "has_install_script": false
+      "has_install_script": false,
+      "pkg_name": null
     },
     {
       "full_name": "gamedev-skills/awesome-gamedev-agent-skills",
@@ -8959,39 +9017,6 @@
       "has_skill": false,
       "has_install_script": false,
       "pkg_name": null
-    },
-    {
-      "full_name": "Anionex/dsh-vision-toolkit",
-      "name": "dsh-vision-toolkit",
-      "description": "让纯文本模型更好地做视觉任务的DeepSeek Harness插件：带意图的图片问答、长截图 OCR、UI 还原等｜DeepSeek Harness-native integration for agent-vision-toolkit: image Q&A, long-screenshot OCR, UI restoration, grounding, pixel diff, Artifacts, and Web UI.",
-      "html_url": "https://github.com/Anionex/dsh-vision-toolkit",
-      "stargazers_count": 508,
-      "updated_at": "2026-08-16T16:01:47Z",
-      "default_branch": "main",
-      "topics": [
-        "agent-skills",
-        "agent-vision-toolkit",
-        "computer-vision",
-        "deepseek",
-        "deepseek-harness",
-        "dsh",
-        "dsh-plugin",
-        "gui-automation",
-        "ocr",
-        "plugin",
-        "python",
-        "screenshot-testing",
-        "text-only-llm",
-        "typescript",
-        "ui-restoration",
-        "vision-language-model",
-        "vision-tools"
-      ],
-      "license": "MIT",
-      "registry_seen_at": "2026-08-16T16:18:40.416Z",
-      "has_skill": false,
-      "has_install_script": false,
-      "pkg_name": "@anionex/dsh-vision-toolkit"
     },
     {
       "full_name": "ancoleman/ai-design-components",
@@ -10028,6 +10053,30 @@
       "pkg_name": null
     },
     {
+      "full_name": "xyiqq/skilldoctor",
+      "name": "skilldoctor",
+      "description": "Quality gate for Agent Skills: lint, security audit, and Claude/Cursor/Codex/OpenCode compatibility.",
+      "html_url": "https://github.com/xyiqq/skilldoctor",
+      "stargazers_count": 424,
+      "updated_at": "2026-08-16T17:22:31Z",
+      "default_branch": "main",
+      "topics": [
+        "agent-skills",
+        "claude-code",
+        "cli",
+        "codex",
+        "cursor",
+        "linter",
+        "opencode",
+        "security"
+      ],
+      "license": "MIT",
+      "registry_seen_at": "2026-08-16T17:29:38.213Z",
+      "has_skill": true,
+      "has_install_script": false,
+      "pkg_name": "skilldoctor"
+    },
+    {
       "full_name": "ratel-ai/ratel",
       "name": "ratel",
       "description": "Context engineering for AI agents. ~80% fewer tokens. Fix tool overload. Skills and memory with in-process BM25 and semantic retrieval. Progressive Disclosure. No vector DB.",
@@ -10506,30 +10555,6 @@
       "has_skill": false,
       "has_install_script": false,
       "pkg_name": null
-    },
-    {
-      "full_name": "xyiqq/skilldoctor",
-      "name": "skilldoctor",
-      "description": "Quality gate for Agent Skills: lint, security audit, and Claude/Cursor/Codex/OpenCode compatibility.",
-      "html_url": "https://github.com/xyiqq/skilldoctor",
-      "stargazers_count": 399,
-      "updated_at": "2026-08-16T16:11:16Z",
-      "default_branch": "main",
-      "topics": [
-        "agent-skills",
-        "claude-code",
-        "cli",
-        "codex",
-        "cursor",
-        "linter",
-        "opencode",
-        "security"
-      ],
-      "license": "MIT",
-      "registry_seen_at": "2026-08-16T16:18:40.416Z",
-      "has_skill": true,
-      "has_install_script": false,
-      "pkg_name": "skilldoctor"
     },
     {
       "full_name": "sanjay3290/ai-skills",
@@ -11524,8 +11549,8 @@
       "name": "high-stakes-analytics-decision-lab",
       "description": "A platform-neutral analytical Skill that profiles messy data, selects case-adaptive methods, and produces source-backed visual reports for high-stakes decisions.",
       "html_url": "https://github.com/limingrui679-design/high-stakes-analytics-decision-lab",
-      "stargazers_count": 346,
-      "updated_at": "2026-08-16T15:59:52Z",
+      "stargazers_count": 347,
+      "updated_at": "2026-08-16T16:29:45Z",
       "default_branch": "main",
       "topics": [
         "agent-skills",
@@ -11538,7 +11563,7 @@
         "risk-analysis"
       ],
       "license": "MIT",
-      "registry_seen_at": "2026-08-16T16:18:40.416Z",
+      "registry_seen_at": "2026-08-16T17:29:38.213Z",
       "has_skill": true,
       "has_install_script": false
     },
@@ -11950,6 +11975,41 @@
       "pkg_name": null
     },
     {
+      "full_name": "askimo-ai/askimo",
+      "name": "askimo",
+      "description": "AI Client for chat, RAG, plans, MCP tools, and agents. Support multiple LLMs (Anthropic, OpenAI, VertexAI, vLLM, Nvidia NIM, Gemini, OpenRouter)",
+      "html_url": "https://github.com/askimo-ai/askimo",
+      "stargazers_count": 330,
+      "updated_at": "2026-08-16T17:04:09Z",
+      "default_branch": "main",
+      "topics": [
+        "agentic-workflow",
+        "ai",
+        "ai-assistant",
+        "artificial-intelligence",
+        "chat-client",
+        "chatgpt",
+        "claude",
+        "claude-skills",
+        "codex-cli",
+        "gemini",
+        "gemini-client",
+        "grok",
+        "llm",
+        "local-llm",
+        "modelcontextprotocol",
+        "ollama-gui",
+        "openai-gui",
+        "openrouter",
+        "rag",
+        "retrieval-augmented-generation"
+      ],
+      "license": "AGPL-3.0",
+      "registry_seen_at": "2026-08-16T17:29:38.223Z",
+      "has_skill": false,
+      "has_install_script": true
+    },
+    {
       "full_name": "giuseppe-trisciuoglio/developer-kit",
       "name": "developer-kit",
       "description": " Modular plugin marketplace for Claude Code and agentic CLIs, with validated, spec-driven skills, agents, commands, and workflows for Java, TypeScript, Python, PHP, AWS, and AI.",
@@ -12204,7 +12264,7 @@
         "self-hosted"
       ],
       "license": "MIT",
-      "registry_seen_at": "2026-08-16T16:18:40.420Z",
+      "registry_seen_at": "2026-08-16T17:29:38.223Z",
       "has_skill": true,
       "has_install_script": false,
       "pkg_name": "daily-brief"
@@ -12284,7 +12344,7 @@
         "skill"
       ],
       "license": "MIT",
-      "registry_seen_at": "2026-08-16T15:42:25.469Z",
+      "registry_seen_at": "2026-08-16T17:29:38.214Z",
       "has_skill": true,
       "has_install_script": false,
       "pkg_name": null
@@ -12314,36 +12374,7 @@
         "yaml"
       ],
       "license": "MIT",
-      "registry_seen_at": "2026-08-16T16:18:40.416Z",
-      "has_skill": true,
-      "has_install_script": false
-    },
-    {
-      "full_name": "scaccogatto/okf-skills",
-      "name": "okf-skills",
-      "description": "The OKF toolkit for Claude Code — author, maintain, validate & visualize Open Knowledge Format bundles. Plugin, agent skills, and a GitHub Action.",
-      "html_url": "https://github.com/scaccogatto/okf-skills",
-      "stargazers_count": 312,
-      "updated_at": "2026-08-16T12:08:56Z",
-      "default_branch": "main",
-      "topics": [
-        "agent-skills",
-        "ai-agents",
-        "claude-code",
-        "claude-code-plugin",
-        "developer-tools",
-        "knowledge-graph",
-        "knowledge-management",
-        "llm-tools",
-        "markdown",
-        "mcp",
-        "okf",
-        "open-knowledge-format",
-        "structured-knowledge",
-        "yaml"
-      ],
-      "license": "MIT",
-      "registry_seen_at": "2026-08-16T15:42:25.469Z",
+      "registry_seen_at": "2026-08-16T17:29:38.214Z",
       "has_skill": true,
       "has_install_script": false,
       "pkg_name": null
@@ -12751,6 +12782,31 @@
       "has_skill": true,
       "has_install_script": false,
       "pkg_name": "heyclaude"
+    },
+    {
+      "full_name": "uvwt/agentdock",
+      "name": "agentdock",
+      "description": "Secure MCP runtime for AI agents to operate local machines, servers, and containers with multi-device orchestration.",
+      "html_url": "https://github.com/uvwt/agentdock",
+      "stargazers_count": 291,
+      "updated_at": "2026-08-16T17:21:05Z",
+      "default_branch": "main",
+      "topics": [
+        "agent-skills",
+        "ai-agents",
+        "automation",
+        "devops",
+        "docker",
+        "mcp",
+        "model-context-protocol",
+        "remote-control",
+        "self-hosted",
+        "tool-calling"
+      ],
+      "license": "Apache-2.0",
+      "registry_seen_at": "2026-08-16T17:29:38.214Z",
+      "has_skill": true,
+      "has_install_script": true
     },
     {
       "full_name": "BeamusWayne/simp-skill",
@@ -13791,7 +13847,7 @@
         "agent-skills"
       ],
       "license": "NOASSERTION",
-      "registry_seen_at": "2026-08-16T16:18:40.416Z",
+      "registry_seen_at": "2026-08-16T17:29:38.214Z",
       "has_skill": true,
       "has_install_script": false
     },
@@ -14447,7 +14503,7 @@
         "technical-founders"
       ],
       "license": "MIT",
-      "registry_seen_at": "2026-08-16T16:18:40.416Z",
+      "registry_seen_at": "2026-08-16T17:29:38.214Z",
       "has_skill": true,
       "has_install_script": false,
       "pkg_name": null
@@ -14547,6 +14603,31 @@
       "has_skill": true,
       "has_install_script": false,
       "pkg_name": null
+    },
+    {
+      "full_name": "Zhen-Bo/smell-check",
+      "name": "smell-check",
+      "description": "Agent Skill for code and test smell audits. Evidence-ranked findings from Refactoring, Clean Code, and the test-smell literature. Formerly pragmatic-code-review.",
+      "html_url": "https://github.com/Zhen-Bo/smell-check",
+      "stargazers_count": 220,
+      "updated_at": "2026-08-16T17:03:45Z",
+      "default_branch": "main",
+      "topics": [
+        "agent-skills",
+        "ai-agents",
+        "claude-code",
+        "code-quality",
+        "code-smells",
+        "maintainability",
+        "opencode",
+        "refactoring",
+        "static-analysis",
+        "test-smells"
+      ],
+      "license": "MIT",
+      "registry_seen_at": "2026-08-16T17:29:38.214Z",
+      "has_skill": true,
+      "has_install_script": false
     },
     {
       "full_name": "serejaris/personal-corp-os",
@@ -17060,9 +17141,10 @@
         "skills"
       ],
       "license": "NOASSERTION",
-      "registry_seen_at": "2026-08-16T16:18:40.416Z",
+      "registry_seen_at": "2026-08-16T17:29:38.214Z",
       "has_skill": true,
-      "has_install_script": false
+      "has_install_script": false,
+      "pkg_name": null
     },
     {
       "full_name": "smnandre/symfony-ux-skills",
@@ -18659,6 +18741,24 @@
       "pkg_name": null
     },
     {
+      "full_name": "oaustegard/claude-skills",
+      "name": "claude-skills",
+      "description": "My collection of Claude skills",
+      "html_url": "https://github.com/oaustegard/claude-skills",
+      "stargazers_count": 140,
+      "updated_at": "2026-08-16T17:11:08Z",
+      "default_branch": "main",
+      "topics": [
+        "claude",
+        "claude-skill",
+        "claude-skills"
+      ],
+      "license": "MIT",
+      "registry_seen_at": "2026-08-16T17:29:38.223Z",
+      "has_skill": true,
+      "has_install_script": true
+    },
+    {
       "full_name": "Cassette-Editor/oh-my-cassette",
       "name": "oh-my-cassette",
       "description": "你的随身 AI 剪辑搭档 | Pocket AI co-editor for video montage — AI video editing plugin & MCP server for Claude Code, Codex, Hermes & OpenCode",
@@ -18806,7 +18906,7 @@
         "wiki"
       ],
       "license": "MIT",
-      "registry_seen_at": "2026-08-16T16:18:40.420Z",
+      "registry_seen_at": "2026-08-16T17:29:38.223Z",
       "has_skill": true,
       "has_install_script": true,
       "pkg_name": null
@@ -19423,9 +19523,10 @@
         "token-optimization"
       ],
       "license": "NOASSERTION",
-      "registry_seen_at": "2026-08-16T16:18:40.416Z",
+      "registry_seen_at": "2026-08-16T17:29:38.214Z",
       "has_skill": true,
-      "has_install_script": false
+      "has_install_script": false,
+      "pkg_name": null
     },
     {
       "full_name": "tikalk/adlc-team-skills",
@@ -19452,9 +19553,10 @@
         "universal-orchestration"
       ],
       "license": "MIT",
-      "registry_seen_at": "2026-08-16T16:18:40.416Z",
+      "registry_seen_at": "2026-08-16T17:29:38.214Z",
       "has_skill": true,
-      "has_install_script": false
+      "has_install_script": false,
+      "pkg_name": null
     },
     {
       "full_name": "openfate-ai/openfate-mcp",
@@ -19800,25 +19902,6 @@
       "pkg_name": "lagune"
     },
     {
-      "full_name": "Nagi-ovo/dsh-find-plugins",
-      "name": "dsh-find-plugins",
-      "description": "帮 DSH 搜索、安装并验证插件的 Skill｜A DSH skill that finds, installs, and verifies GitHub plugins",
-      "html_url": "https://github.com/Nagi-ovo/dsh-find-plugins",
-      "stargazers_count": 125,
-      "updated_at": "2026-08-16T16:03:52Z",
-      "default_branch": "main",
-      "topics": [
-        "agent-skills",
-        "deepseek-harness",
-        "dsh-plugin",
-        "plugin-discovery"
-      ],
-      "license": "BSD-3-Clause",
-      "registry_seen_at": "2026-08-16T16:18:40.416Z",
-      "has_skill": true,
-      "has_install_script": false
-    },
-    {
       "full_name": "lilialla/awesome-legal-ai-zh",
       "name": "awesome-legal-ai-zh",
       "description": "📚 给中国律师/法务的一站式开源 AI 工具地图｜200+ 个 gh 核验开源仓·按工作场景分类·能否商用标注｜awesome list",
@@ -19920,7 +20003,7 @@
       "description": "Agent skills for Spec Kit",
       "html_url": "https://github.com/dceoy/speckit-agent-skills",
       "stargazers_count": 123,
-      "updated_at": "2026-08-14T10:01:32Z",
+      "updated_at": "2026-08-16T16:58:04Z",
       "default_branch": "main",
       "topics": [
         "agent-skills",
@@ -19936,10 +20019,9 @@
         "workflow-automation"
       ],
       "license": "AGPL-3.0",
-      "registry_seen_at": "2026-08-15T22:48:10.548Z",
+      "registry_seen_at": "2026-08-16T17:29:38.214Z",
       "has_skill": true,
-      "has_install_script": false,
-      "pkg_name": null
+      "has_install_script": false
     },
     {
       "full_name": "imbue-ai/latchkey",
@@ -20599,33 +20681,6 @@
       "has_skill": true,
       "has_install_script": false,
       "pkg_name": "open-dashboard"
-    },
-    {
-      "full_name": "bonigarcia/context-engineering",
-      "name": "context-engineering",
-      "description": "Context Engineering: Build Consistent, Accurate, Predictable AI Systems",
-      "html_url": "https://github.com/bonigarcia/context-engineering",
-      "stargazers_count": 119,
-      "updated_at": "2026-08-16T15:56:55Z",
-      "default_branch": "main",
-      "topics": [
-        "agent-skills",
-        "agentic-ai",
-        "context-engineering",
-        "generative-ai",
-        "llm",
-        "mcp",
-        "mcp-server",
-        "memory-management",
-        "multi-agent-systems",
-        "prompting",
-        "rag",
-        "spec-driven-development"
-      ],
-      "license": "Apache-2.0",
-      "registry_seen_at": "2026-08-16T16:18:40.416Z",
-      "has_skill": true,
-      "has_install_script": false
     },
     {
       "full_name": "AltimateAI/data-engineering-skills",
@@ -21387,7 +21442,7 @@
         "web-search"
       ],
       "license": "MIT",
-      "registry_seen_at": "2026-08-16T16:18:40.416Z",
+      "registry_seen_at": "2026-08-16T17:29:38.214Z",
       "has_skill": true,
       "has_install_script": false,
       "pkg_name": "@liustack/modsearch"
@@ -21861,6 +21916,29 @@
       "pkg_name": null
     },
     {
+      "full_name": "danyuchn/iso-24495-skill",
+      "name": "iso-24495-skill",
+      "description": "ISO 24495-1 plain language rules as a Claude Code skill — bilingual: English + Traditional Chinese (繁體中文淺白改寫). Reader-outcome rewriting: relevant, findable, understandable, usable.",
+      "html_url": "https://github.com/danyuchn/iso-24495-skill",
+      "stargazers_count": 105,
+      "updated_at": "2026-08-16T17:06:08Z",
+      "default_branch": "master",
+      "topics": [
+        "agent-skills",
+        "chinese",
+        "claude-code",
+        "claude-skill",
+        "iso-24495",
+        "plain-language",
+        "technical-writing",
+        "traditional-chinese"
+      ],
+      "license": "MIT",
+      "registry_seen_at": "2026-08-16T17:29:38.214Z",
+      "has_skill": true,
+      "has_install_script": false
+    },
+    {
       "full_name": "robertguss/claude-code-toolkit",
       "name": "claude-code-toolkit",
       "description": "A collection of custom skills that extend Claude's capabilities with specialized workflows, methods, and domain knowledge.",
@@ -22026,29 +22104,6 @@
       "has_skill": true,
       "has_install_script": false,
       "pkg_name": "zhigui"
-    },
-    {
-      "full_name": "danyuchn/iso-24495-skill",
-      "name": "iso-24495-skill",
-      "description": "ISO 24495-1 plain language rules as a Claude Code skill — bilingual: English + Traditional Chinese (繁體中文淺白改寫). Reader-outcome rewriting: relevant, findable, understandable, usable.",
-      "html_url": "https://github.com/danyuchn/iso-24495-skill",
-      "stargazers_count": 104,
-      "updated_at": "2026-08-16T16:10:26Z",
-      "default_branch": "master",
-      "topics": [
-        "agent-skills",
-        "chinese",
-        "claude-code",
-        "claude-skill",
-        "iso-24495",
-        "plain-language",
-        "technical-writing",
-        "traditional-chinese"
-      ],
-      "license": "MIT",
-      "registry_seen_at": "2026-08-16T16:18:40.416Z",
-      "has_skill": true,
-      "has_install_script": false
     },
     {
       "full_name": "roman-rr/trading-skills",
@@ -23420,9 +23475,10 @@
         "paper-reading"
       ],
       "license": "MIT",
-      "registry_seen_at": "2026-08-16T16:18:40.416Z",
+      "registry_seen_at": "2026-08-16T17:29:38.214Z",
       "has_skill": true,
-      "has_install_script": false
+      "has_install_script": false,
+      "pkg_name": null
     },
     {
       "full_name": "lc198707/anti-lie",
@@ -24578,7 +24634,7 @@
       "description": "HitKeep is privacy-first analytics for humans and AI agents, self-hosted or in managed EU/US cloud regions.",
       "html_url": "https://github.com/PascaleBeier/hitkeep",
       "stargazers_count": 81,
-      "updated_at": "2026-08-16T04:53:09Z",
+      "updated_at": "2026-08-16T17:15:19Z",
       "default_branch": "main",
       "topics": [
         "agent-skills",
@@ -24591,8 +24647,7 @@
       "license": "MIT",
       "registry_seen_at": "2026-08-16T16:53:58.059Z",
       "has_skill": true,
-      "has_install_script": false,
-      "pkg_name": null
+      "has_install_script": false
     },
     {
       "full_name": "risingwavelabs/box0",
@@ -25124,7 +25179,7 @@
         "wiki"
       ],
       "license": "MIT",
-      "registry_seen_at": "2026-08-16T16:18:40.420Z",
+      "registry_seen_at": "2026-08-16T17:29:38.223Z",
       "has_skill": true,
       "has_install_script": false
     },
@@ -25277,6 +25332,27 @@
       "has_skill": false,
       "has_install_script": false,
       "pkg_name": null
+    },
+    {
+      "full_name": "mblode/agent-skills",
+      "name": "agent-skills",
+      "description": "Skills for shipping better software.",
+      "html_url": "https://github.com/mblode/agent-skills",
+      "stargazers_count": 77,
+      "updated_at": "2026-08-16T17:13:40Z",
+      "default_branch": "main",
+      "topics": [
+        "agent-skills",
+        "ai-agents",
+        "anthropic",
+        "claude-code",
+        "developer-tools",
+        "llm"
+      ],
+      "license": "MIT",
+      "registry_seen_at": "2026-08-16T17:29:38.214Z",
+      "has_skill": true,
+      "has_install_script": false
     },
     {
       "full_name": "geekjourneyx/travel-guidebook",
@@ -25975,39 +26051,6 @@
       "has_skill": true,
       "has_install_script": false,
       "pkg_name": "@opensec/secbot"
-    },
-    {
-      "full_name": "fy-agent/fyagent",
-      "name": "fyagent",
-      "description": "For You Agent——AI 时代的个人随身数字人格。把你的模型、AI 账号、技能、提示词和工作方式，带到每一个 AI 工具里。",
-      "html_url": "https://github.com/fy-agent/fyagent",
-      "stargazers_count": 73,
-      "updated_at": "2026-08-16T13:42:12Z",
-      "default_branch": "main",
-      "topics": [
-        "agent-management",
-        "agent-skills",
-        "ai-agent",
-        "ai-assistant",
-        "ai-worker",
-        "cross-platform",
-        "desktop-app",
-        "digital-persona",
-        "llm",
-        "mcp",
-        "model-management",
-        "openclaw",
-        "personal-ai",
-        "prompt-management",
-        "rust",
-        "source-available",
-        "tauri"
-      ],
-      "license": "NOASSERTION",
-      "registry_seen_at": "2026-08-16T16:18:40.416Z",
-      "has_skill": true,
-      "has_install_script": false,
-      "pkg_name": "fyagent"
     },
     {
       "full_name": "a-pavithraa/springboot-skills-marketplace",
@@ -28612,7 +28655,7 @@
       "description": "Vibe first. Then FastAgent — turn a local agent directory into a live service: in your app, on GitHub, in Telegram, or any channel.",
       "html_url": "https://github.com/fastagent-sh/fastagent",
       "stargazers_count": 58,
-      "updated_at": "2026-08-16T14:21:24Z",
+      "updated_at": "2026-08-16T17:12:02Z",
       "default_branch": "main",
       "topics": [
         "agent-serving",
@@ -31719,7 +31762,7 @@
         "task-manager"
       ],
       "license": "Apache-2.0",
-      "registry_seen_at": "2026-08-16T16:18:40.416Z",
+      "registry_seen_at": "2026-08-16T17:29:38.214Z",
       "has_skill": true,
       "has_install_script": true,
       "pkg_name": "sibyl-workspace"
@@ -33735,6 +33778,29 @@
       "pkg_name": null
     },
     {
+      "full_name": "musoyangrigor/gitx-skill",
+      "name": "gitx-skill",
+      "description": "GitX is a portable AI-agent skill for creating clean Git commits, tagged branches, and safe pushes across Codex, Claude Code, Cursor, and other skills-compatible agents.",
+      "html_url": "https://github.com/musoyangrigor/gitx-skill",
+      "stargazers_count": 43,
+      "updated_at": "2026-08-16T16:47:53Z",
+      "default_branch": "main",
+      "topics": [
+        "agent-skills",
+        "ai-agents",
+        "claude-code",
+        "codex",
+        "developer-tools",
+        "git",
+        "git-automation",
+        "skills-sh"
+      ],
+      "license": "MIT",
+      "registry_seen_at": "2026-08-16T17:29:38.214Z",
+      "has_skill": true,
+      "has_install_script": false
+    },
+    {
       "full_name": "kgelster/awesome-ecom-skills",
       "name": "awesome-ecom-skills",
       "description": "Shopify's AI toolkit gives your agent the API. These 9 skills give it the judgment: the Matrixify blank-cell trap, category IDs you never guess, SEO backfill that won't clobber human copy.",
@@ -34213,7 +34279,7 @@
       "description": "112 скилов и 35 правил для Claude Code: агент собирает исходники 1С (метаданные, формы, расширения, роли, СКД, обработки) из компактного JSON и разбирает обратно. Базовые операции - без Конфигуратора.",
       "html_url": "https://github.com/Desko77/claude-code-skills-1c",
       "stargazers_count": 42,
-      "updated_at": "2026-08-16T14:23:46Z",
+      "updated_at": "2026-08-16T17:28:20Z",
       "default_branch": "main",
       "topics": [
         "1c",
@@ -38576,7 +38642,7 @@
         "skills"
       ],
       "license": "MIT",
-      "registry_seen_at": "2026-08-16T16:18:40.416Z",
+      "registry_seen_at": "2026-08-16T17:29:38.214Z",
       "has_skill": true,
       "has_install_script": false,
       "pkg_name": null
@@ -41648,7 +41714,7 @@
         "retrieval-augmented-generation"
       ],
       "license": null,
-      "registry_seen_at": "2026-08-16T16:18:40.416Z",
+      "registry_seen_at": "2026-08-16T17:29:38.214Z",
       "has_skill": true,
       "has_install_script": false,
       "pkg_name": null
@@ -43784,7 +43850,8 @@
       "license": null,
       "registry_seen_at": "2026-08-16T16:53:58.059Z",
       "has_skill": true,
-      "has_install_script": false
+      "has_install_script": false,
+      "pkg_name": null
     },
     {
       "full_name": "lpigeon/ros-skill",
@@ -47016,7 +47083,7 @@
       "description": "An open-source editorial production system that researches, verifies, drafts, and delivers publication-ready long-form content with human review and provenance built in.",
       "html_url": "https://github.com/indranilbanerjee/contentforge",
       "stargazers_count": 21,
-      "updated_at": "2026-08-16T15:43:09Z",
+      "updated_at": "2026-08-16T16:31:19Z",
       "default_branch": "master",
       "topics": [
         "aeo",
@@ -47683,36 +47750,12 @@
       "pkg_name": "@anionex/dsh-computer-use"
     },
     {
-      "full_name": "danielLublinsky/Skill-Atlas",
-      "name": "Skill-Atlas",
-      "description": "Skill-Atlas",
-      "html_url": "https://github.com/danielLublinsky/Skill-Atlas",
-      "stargazers_count": 21,
-      "updated_at": "2026-08-16T16:11:10Z",
-      "default_branch": "main",
-      "topics": [
-        "ai-agents",
-        "ai-tools",
-        "claude-code",
-        "claude-code-plugin",
-        "claude-skills",
-        "python",
-        "skill-development",
-        "skill-management",
-        "skills"
-      ],
-      "license": "Apache-2.0",
-      "registry_seen_at": "2026-08-16T16:18:40.420Z",
-      "has_skill": true,
-      "has_install_script": false
-    },
-    {
       "full_name": "Turki-Sh/Foreman",
       "name": "Foreman",
       "description": "A build playbook that turns your coding agent into the foreman of a website build. It interviews you, forces the design and scope decisions, locks a visual system, writes the build brief, then verifies, ships, and indexes the site. Claude Code plugin and Agent Skill. Markdown only, no scripts.",
       "html_url": "https://github.com/Turki-Sh/Foreman",
-      "stargazers_count": 20,
-      "updated_at": "2026-08-16T08:32:17Z",
+      "stargazers_count": 21,
+      "updated_at": "2026-08-16T16:58:08Z",
       "default_branch": "main",
       "topics": [
         "accessibility",
@@ -47739,8 +47782,7 @@
       "license": "MIT",
       "registry_seen_at": "2026-08-16T16:53:58.059Z",
       "has_skill": true,
-      "has_install_script": false,
-      "pkg_name": null
+      "has_install_script": false
     },
     {
       "full_name": "waittim/MemoryCustodian",
@@ -52298,7 +52340,7 @@
       "description": "Open-source, self-hostable delivery platform for Claude Code style agents. Connect Slack today, with more channels next. Run the same bundle locally and on Kubernetes, and ship it with git push.",
       "html_url": "https://github.com/curie-eng/curie",
       "stargazers_count": 17,
-      "updated_at": "2026-08-16T15:35:56Z",
+      "updated_at": "2026-08-16T16:54:32Z",
       "default_branch": "main",
       "topics": [
         "ai-agents",
@@ -53441,7 +53483,8 @@
       "license": "Apache-2.0",
       "registry_seen_at": "2026-08-16T16:53:58.060Z",
       "has_skill": true,
-      "has_install_script": false
+      "has_install_script": false,
+      "pkg_name": null
     },
     {
       "full_name": "jaaaaaaaaaaack/custom-skills",
@@ -57304,6 +57347,26 @@
       "pkg_name": "dsh-blender"
     },
     {
+      "full_name": "machina-exm/film-studio-skills",
+      "name": "film-studio-skills",
+      "description": "7 installable agent skills that run the pipeline behind $2M AI video productions — script to locked, generation-ready shot prompts. Claude Code · Codex · Hermes · OpenCode",
+      "html_url": "https://github.com/machina-exm/film-studio-skills",
+      "stargazers_count": 15,
+      "updated_at": "2026-08-16T17:01:41Z",
+      "default_branch": "main",
+      "topics": [
+        "agent-skills",
+        "ai-video",
+        "claude-code",
+        "higgsfield",
+        "seedance"
+      ],
+      "license": null,
+      "registry_seen_at": "2026-08-16T17:29:38.214Z",
+      "has_skill": true,
+      "has_install_script": false
+    },
+    {
       "full_name": "geekjourneyx/industry-research",
       "name": "industry-research",
       "description": "专业的行业调研Skill，用于把行业、赛道和公司问题转成可复核的研究工作区、证据台账、置信度报告和最终研究报告。",
@@ -60823,7 +60886,8 @@
       "license": "NOASSERTION",
       "registry_seen_at": "2026-08-16T16:53:58.060Z",
       "has_skill": false,
-      "has_install_script": true
+      "has_install_script": true,
+      "pkg_name": null
     },
     {
       "full_name": "BenedictKing/benedictking-skills",
@@ -61603,7 +61667,7 @@
         "writing"
       ],
       "license": "MIT",
-      "registry_seen_at": "2026-08-16T16:18:40.416Z",
+      "registry_seen_at": "2026-08-16T17:29:38.214Z",
       "has_skill": true,
       "has_install_script": false,
       "pkg_name": "open-press-monorepo"
@@ -64076,7 +64140,8 @@
       "license": "MIT",
       "registry_seen_at": "2026-08-16T16:53:58.060Z",
       "has_skill": false,
-      "has_install_script": false
+      "has_install_script": false,
+      "pkg_name": null
     },
     {
       "full_name": "XTSoftwareLabs/neatcontext-plugins",
@@ -64109,30 +64174,10 @@
         "session-management"
       ],
       "license": "MIT",
-      "registry_seen_at": "2026-08-16T16:18:40.420Z",
+      "registry_seen_at": "2026-08-16T17:29:38.223Z",
       "has_skill": true,
       "has_install_script": false,
       "pkg_name": "neatcontext-plugins"
-    },
-    {
-      "full_name": "machina-exm/film-studio-skills",
-      "name": "film-studio-skills",
-      "description": "7 installable agent skills that run the pipeline behind $2M AI video productions — script to locked, generation-ready shot prompts. Claude Code · Codex · Hermes · OpenCode",
-      "html_url": "https://github.com/machina-exm/film-studio-skills",
-      "stargazers_count": 12,
-      "updated_at": "2026-08-16T15:55:20Z",
-      "default_branch": "main",
-      "topics": [
-        "agent-skills",
-        "ai-video",
-        "claude-code",
-        "higgsfield",
-        "seedance"
-      ],
-      "license": null,
-      "registry_seen_at": "2026-08-16T16:18:40.416Z",
-      "has_skill": true,
-      "has_install_script": false
     },
     {
       "full_name": "nonlooped/roblox-suite",
@@ -67713,7 +67758,7 @@
       "description": "모바일 웹/앱 UX/UI 수석 기획자 스킬 — Claude Code · Codex · Antigravity 에서 IA 와 PPT 스타일 화면설계서(HTML)를 생성합니다",
       "html_url": "https://github.com/LeeYudok/doksam-skills",
       "stargazers_count": 10,
-      "updated_at": "2026-08-16T15:17:20Z",
+      "updated_at": "2026-08-16T17:22:32Z",
       "default_branch": "main",
       "topics": [
         "agent-skills",
@@ -69682,7 +69727,8 @@
       "license": null,
       "registry_seen_at": "2026-08-16T16:53:58.064Z",
       "has_skill": false,
-      "has_install_script": false
+      "has_install_script": false,
+      "pkg_name": null
     },
     {
       "full_name": "kanfu-panda/pdlc-skills",
@@ -73796,34 +73842,27 @@
       "pkg_name": "dsh-plugin-development"
     },
     {
-      "full_name": "Neeeophytee/ai-watermarks-reality-check",
-      "name": "ai-watermarks-reality-check",
-      "description": "Test what AI watermark and provenance evidence exists, whether it verifies, and what survives publishing.",
-      "html_url": "https://github.com/Neeeophytee/ai-watermarks-reality-check",
+      "full_name": "CocoSgt/dsh-skills",
+      "name": "dsh-skills",
+      "description": null,
+      "html_url": "https://github.com/CocoSgt/dsh-skills",
       "stargazers_count": 9,
-      "updated_at": "2026-08-16T14:58:14Z",
+      "updated_at": "2026-08-16T16:51:00Z",
       "default_branch": "main",
       "topics": [
-        "agent-skills",
-        "ai-provenance",
-        "ai-transparency",
-        "ai-watermarks",
-        "c2pa",
-        "claude",
-        "codex",
-        "content-authenticity",
-        "content-credentials",
-        "content-verification",
-        "digital-forensics",
-        "digital-provenance",
-        "gemini",
-        "llm-watermarking",
-        "mcp",
-        "media-forensics",
-        "metadata",
-        "provenance",
-        "python",
-        "watermark-detection"
+        "ai-agent",
+        "claude-skills",
+        "coding-agent",
+        "cordis",
+        "deepseek",
+        "deepseek-ai",
+        "deepseek-harness",
+        "dsh",
+        "dsh-plugin",
+        "plugin",
+        "skill-hub",
+        "skills",
+        "slash-commands"
       ],
       "license": "AGPL-3.0",
       "registry_seen_at": "2026-08-16T16:53:58.060Z",
@@ -76484,7 +76523,7 @@
       "description": "Skills SDK for Codex/AI coding agents: author, validate, evaluate, and sync runtime projections through ask.",
       "html_url": "https://github.com/jscraik/Agent-Skills",
       "stargazers_count": 8,
-      "updated_at": "2026-08-16T13:43:36Z",
+      "updated_at": "2026-08-16T17:20:31Z",
       "default_branch": "main",
       "topics": [
         "agent-skills",
@@ -77491,7 +77530,7 @@
       "description": "🍣 Hand-rolled AI Skills distilled from my everyday experience. Git & Mise (...and others).",
       "html_url": "https://github.com/sherifabdlnaby/skills",
       "stargazers_count": 8,
-      "updated_at": "2026-08-09T22:17:01Z",
+      "updated_at": "2026-08-16T17:15:38Z",
       "default_branch": "main",
       "topics": [
         "claude-skills",
@@ -77500,10 +77539,9 @@
         "skills"
       ],
       "license": null,
-      "registry_seen_at": "2026-08-15T05:26:00.876Z",
+      "registry_seen_at": "2026-08-16T17:29:38.223Z",
       "has_skill": true,
-      "has_install_script": false,
-      "pkg_name": null
+      "has_install_script": false
     },
     {
       "full_name": "black-yt/structai",
@@ -78530,7 +78568,7 @@
       "description": "AI argues. Code settles. The losses stay on the page. A real HK + US brokerage account run by agents that must debate every call, settled by code the model never touches. Install the same decision workflow into your own agent: OpenClaw, Claude Code, Codex, or DeepSeek Harness.",
       "html_url": "https://github.com/KCNyu/clawock",
       "stargazers_count": 8,
-      "updated_at": "2026-08-16T15:51:03Z",
+      "updated_at": "2026-08-16T17:19:04Z",
       "default_branch": "master",
       "topics": [
         "agent-skills",
@@ -78555,38 +78593,9 @@
         "trading-bot"
       ],
       "license": "MIT",
-      "registry_seen_at": "2026-08-16T16:18:40.416Z",
+      "registry_seen_at": "2026-08-16T17:29:38.214Z",
       "has_skill": true,
       "has_install_script": false
-    },
-    {
-      "full_name": "CocoSgt/dsh-skills",
-      "name": "dsh-skills",
-      "description": null,
-      "html_url": "https://github.com/CocoSgt/dsh-skills",
-      "stargazers_count": 8,
-      "updated_at": "2026-08-16T15:34:04Z",
-      "default_branch": "main",
-      "topics": [
-        "ai-agent",
-        "claude-skills",
-        "coding-agent",
-        "cordis",
-        "deepseek",
-        "deepseek-ai",
-        "deepseek-harness",
-        "dsh",
-        "dsh-plugin",
-        "plugin",
-        "skill-hub",
-        "skills",
-        "slash-commands"
-      ],
-      "license": "NOASSERTION",
-      "registry_seen_at": "2026-08-16T16:18:40.420Z",
-      "has_skill": false,
-      "has_install_script": false,
-      "pkg_name": "dsh-skills"
     },
     {
       "full_name": "CodeSoul-co/agent-native-skills",
@@ -80644,7 +80653,7 @@
       "description": "Complete agent stack for Jaz. Plugins, Skills, MCP tools, and CLI for Claude Code, Cowork, Codex, Copilot, Cursor, and more.",
       "html_url": "https://github.com/teamtinvio/jaz-ai",
       "stargazers_count": 7,
-      "updated_at": "2026-08-16T15:41:21Z",
+      "updated_at": "2026-08-16T16:46:11Z",
       "default_branch": "main",
       "topics": [
         "accounting",
@@ -80666,7 +80675,7 @@
         "tax"
       ],
       "license": "MIT",
-      "registry_seen_at": "2026-08-16T16:18:40.416Z",
+      "registry_seen_at": "2026-08-16T17:29:38.214Z",
       "has_skill": true,
       "has_install_script": false,
       "pkg_name": "jaz-clio"
@@ -81922,7 +81931,7 @@
         "workflow-engine"
       ],
       "license": "MIT",
-      "registry_seen_at": "2026-08-16T16:18:40.416Z",
+      "registry_seen_at": "2026-08-16T17:29:38.214Z",
       "has_skill": true,
       "has_install_script": false,
       "pkg_name": "@c4a/agent-graph"
@@ -82690,7 +82699,7 @@
       "description": "Gives coding agents the real source of your dependencies, not a guess.",
       "html_url": "https://github.com/kaisers-io/refs",
       "stargazers_count": 7,
-      "updated_at": "2026-08-13T19:32:34Z",
+      "updated_at": "2026-08-16T17:07:24Z",
       "default_branch": "main",
       "topics": [
         "agent-skills",
@@ -84470,7 +84479,7 @@
       "description": "Package manager for AI agent assets (skills / CLIs / MCPs / loops) across Codex, Claude Code, Cursor and Kiro.",
       "html_url": "https://github.com/seed-forge/harness-ai-kit",
       "stargazers_count": 7,
-      "updated_at": "2026-08-16T11:19:38Z",
+      "updated_at": "2026-08-16T17:20:05Z",
       "default_branch": "main",
       "topics": [
         "agent-skills",
@@ -84491,8 +84500,7 @@
       "license": "Apache-2.0",
       "registry_seen_at": "2026-08-16T16:53:58.060Z",
       "has_skill": true,
-      "has_install_script": false,
-      "pkg_name": null
+      "has_install_script": false
     },
     {
       "full_name": "ting-hong-shieh/polish-open-source-prose",
@@ -89904,7 +89912,7 @@
       "description": "The installation hub for Neel's open-source marketing systems: Digital Marketing Pro, ContentForge, and SocialForge - portable across major agent environments.",
       "html_url": "https://github.com/indranilbanerjee/neels-plugins",
       "stargazers_count": 6,
-      "updated_at": "2026-08-16T15:44:18Z",
+      "updated_at": "2026-08-16T16:31:32Z",
       "default_branch": "master",
       "topics": [
         "aeo",
@@ -92028,7 +92036,8 @@
       "license": "MIT",
       "registry_seen_at": "2026-08-16T16:53:58.060Z",
       "has_skill": true,
-      "has_install_script": false
+      "has_install_script": false,
+      "pkg_name": null
     },
     {
       "full_name": "feO2x/guided-coding",
@@ -92443,7 +92452,7 @@
         "vision"
       ],
       "license": "MIT",
-      "registry_seen_at": "2026-08-16T16:18:40.416Z",
+      "registry_seen_at": "2026-08-16T17:29:38.214Z",
       "has_skill": true,
       "has_install_script": false,
       "pkg_name": "dsh-media-skills"
@@ -92471,7 +92480,7 @@
         "mcp-tools"
       ],
       "license": "MIT",
-      "registry_seen_at": "2026-08-16T16:18:40.416Z",
+      "registry_seen_at": "2026-08-16T17:29:38.214Z",
       "has_skill": true,
       "has_install_script": false,
       "pkg_name": "weshop-dsh-plugin"
@@ -92512,35 +92521,65 @@
       "registry_seen_at": "2026-08-16T16:53:58.060Z",
       "has_skill": true,
       "has_install_script": false,
-      "pkg_name": "dsh-media-skills"
+      "pkg_name": null
     },
     {
-      "full_name": "weshopai/weshop-dsh-plugin",
-      "name": "weshop-dsh-plugin",
-      "description": "Native WeShop Cordis plugin for DeepSeek Harness. Allow you to use infinite canvas with infinite creative skills.",
-      "html_url": "https://github.com/weshopai/weshop-dsh-plugin",
+      "full_name": "abubakarsiddik31/skill-manager",
+      "name": "skill-manager",
+      "description": "Your Claude, Codex, Cursor, and OpenCode skills pile up across 4+ config folders with no way to see or manage them. Skill Manager is the one desktop app that shows you all of it — enable, disable, edit, and delete skills from a single dashboard.",
+      "html_url": "https://github.com/abubakarsiddik31/skill-manager",
       "stargazers_count": 6,
-      "updated_at": "2026-08-16T14:49:24Z",
+      "updated_at": "2026-08-16T16:23:55Z",
       "default_branch": "main",
       "topics": [
-        "agent",
         "agent-skills",
-        "agentic-ai",
-        "agentic-workflow",
-        "agents",
-        "canvas",
-        "dsh",
-        "dsh-plugin",
-        "dsh-plugins",
-        "dsh-skill",
+        "ai-agents",
+        "claude",
+        "claude-code",
+        "desktop-app",
+        "developer-tools",
+        "react",
+        "rust",
+        "tauri",
+        "typescript"
+      ],
+      "license": "MIT",
+      "registry_seen_at": "2026-08-16T17:29:38.214Z",
+      "has_skill": false,
+      "has_install_script": false,
+      "pkg_name": "skill-manager"
+    },
+    {
+      "full_name": "surendranb/writing-skills",
+      "name": "writing-skills",
+      "description": "Procedural writing-style skills for AI agents: official frameworks (plain language, business writing, GOV.UK, AP style, STE-100, developer docs) + character voices. Agent Plugins 1.0.0, works in opencode, Claude Code, Codex.",
+      "html_url": "https://github.com/surendranb/writing-skills",
+      "stargazers_count": 6,
+      "updated_at": "2026-08-16T17:07:53Z",
+      "default_branch": "main",
+      "topics": [
+        "agent-skills",
+        "ai-agents",
+        "business-writing",
+        "claude",
+        "claude-code",
+        "copywriting",
+        "cursor",
+        "language-model",
         "mcp",
-        "mcp-tools"
+        "mcp-server",
+        "model-context-protocol",
+        "opencode",
+        "plain-language",
+        "prompt-engineering",
+        "technical-writing",
+        "writing"
       ],
       "license": "MIT",
       "registry_seen_at": "2026-08-16T16:53:58.060Z",
       "has_skill": true,
       "has_install_script": false,
-      "pkg_name": "weshop-dsh-plugin"
+      "pkg_name": "writing-skills"
     },
     {
       "full_name": "abubakarsiddik31/skill-manager",
@@ -94652,7 +94691,7 @@
       "description": "Agent Skills & DeepSeek Harness (DSH) 扩展库：通用智能体技能（General_skills）+ DSH 标准插件（dsh-plugin），开箱即用的 AI Agent 能力增强集合。",
       "html_url": "https://github.com/DDDFXYqiming/Agent_Extensions",
       "stargazers_count": 5,
-      "updated_at": "2026-08-16T15:39:45Z",
+      "updated_at": "2026-08-16T17:08:39Z",
       "default_branch": "main",
       "topics": [
         "agent-skills",
@@ -98881,7 +98920,7 @@
         "vlm"
       ],
       "license": "MIT",
-      "registry_seen_at": "2026-08-16T16:18:40.416Z",
+      "registry_seen_at": "2026-08-16T17:29:38.214Z",
       "has_skill": true,
       "has_install_script": false,
       "pkg_name": null
@@ -99019,7 +99058,7 @@
       "description": "REST API for MetaTrader 5 with agent skills",
       "html_url": "https://github.com/dceoy/mt5api",
       "stargazers_count": 5,
-      "updated_at": "2026-08-14T02:59:20Z",
+      "updated_at": "2026-08-16T16:58:30Z",
       "default_branch": "main",
       "topics": [
         "agent-skills",
@@ -99039,8 +99078,7 @@
       "license": "MIT",
       "registry_seen_at": "2026-08-16T16:53:58.060Z",
       "has_skill": true,
-      "has_install_script": false,
-      "pkg_name": null
+      "has_install_script": false
     },
     {
       "full_name": "nicolocurioni96/withnico-skills",
@@ -99902,16 +99940,15 @@
       "description": "Agent skills",
       "html_url": "https://github.com/ahgraber/skills",
       "stargazers_count": 5,
-      "updated_at": "2026-08-09T21:17:49Z",
+      "updated_at": "2026-08-16T17:16:03Z",
       "default_branch": "main",
       "topics": [
         "agent-skills"
       ],
       "license": "CC0-1.0",
-      "registry_seen_at": "2026-08-15T05:26:00.861Z",
+      "registry_seen_at": "2026-08-16T17:29:38.214Z",
       "has_skill": true,
-      "has_install_script": false,
-      "pkg_name": null
+      "has_install_script": false
     },
     {
       "full_name": "dimonier/skills",
@@ -103570,36 +103607,28 @@
       "pkg_name": null
     },
     {
-      "full_name": "surendranb/writing-skills",
-      "name": "writing-skills",
-      "description": "Procedural writing-style skills for AI agents: official frameworks (plain language, business writing, GOV.UK, AP style, STE-100, developer docs) + character voices. Agent Plugins 1.0.0, works in opencode, Claude Code, Codex.",
-      "html_url": "https://github.com/surendranb/writing-skills",
+      "full_name": "sanshengai/sansheng-write",
+      "name": "sansheng-write",
+      "description": "Claude Code skill for Chinese long-form & WeChat article production · 中文长文与公众号内容生产",
+      "html_url": "https://github.com/sanshengai/sansheng-write",
       "stargazers_count": 5,
-      "updated_at": "2026-08-16T15:30:06Z",
+      "updated_at": "2026-08-16T15:38:39Z",
       "default_branch": "main",
       "topics": [
         "agent-skills",
-        "ai-agents",
-        "business-writing",
-        "claude",
+        "ai-writing",
+        "chinese-writing",
         "claude-code",
+        "claude-skill",
+        "content-creation",
         "copywriting",
-        "cursor",
-        "language-model",
-        "mcp",
-        "mcp-server",
-        "model-context-protocol",
-        "opencode",
-        "plain-language",
-        "prompt-engineering",
-        "technical-writing",
-        "writing"
+        "llm",
+        "wechat"
       ],
       "license": "MIT",
       "registry_seen_at": "2026-08-16T16:53:58.060Z",
       "has_skill": true,
-      "has_install_script": false,
-      "pkg_name": "writing-skills"
+      "has_install_script": false
     },
     {
       "full_name": "sanshengai/sansheng-write",
@@ -103894,7 +103923,7 @@
       "description": "Production-ready OpenAI Codex agent skills, specialist agents, instructions, and configuration with safe merge or full-install scripts.",
       "html_url": "https://github.com/dayfinggg/openai-codex-agent-skills",
       "stargazers_count": 4,
-      "updated_at": "2026-08-16T15:22:23Z",
+      "updated_at": "2026-08-16T17:17:00Z",
       "default_branch": "main",
       "topics": [
         "agent-skills",
@@ -112217,7 +112246,7 @@
       "description": "DeckForge is a multi-agent skills repository for planning, designing, implementing, auditing, and publishing professional presentation applications that run directly in the browser.",
       "html_url": "https://github.com/tph-kds/deckforge",
       "stargazers_count": 4,
-      "updated_at": "2026-08-16T14:41:02Z",
+      "updated_at": "2026-08-16T17:22:31Z",
       "default_branch": "main",
       "topics": [
         "agent",
@@ -115678,7 +115707,8 @@
       "license": "MIT",
       "registry_seen_at": "2026-08-16T16:53:58.064Z",
       "has_skill": true,
-      "has_install_script": false
+      "has_install_script": false,
+      "pkg_name": null
     },
     {
       "full_name": "tuliosousapro/SaaS-blueprint",
@@ -117264,7 +117294,7 @@
         "xiaohongshu"
       ],
       "license": "MIT",
-      "registry_seen_at": "2026-08-16T16:18:40.417Z",
+      "registry_seen_at": "2026-08-16T17:29:38.214Z",
       "has_skill": true,
       "has_install_script": false,
       "pkg_name": null
@@ -117284,7 +117314,7 @@
         "loop-engineering"
       ],
       "license": "MIT",
-      "registry_seen_at": "2026-08-16T16:18:40.417Z",
+      "registry_seen_at": "2026-08-16T17:29:38.214Z",
       "has_skill": true,
       "has_install_script": false,
       "pkg_name": "@raphael-liu/raphael-loop"
@@ -117312,32 +117342,33 @@
         "technical-specification"
       ],
       "license": "MIT",
-      "registry_seen_at": "2026-08-16T16:18:40.417Z",
+      "registry_seen_at": "2026-08-16T17:29:38.214Z",
       "has_skill": true,
-      "has_install_script": false
+      "has_install_script": false,
+      "pkg_name": null
     },
     {
       "full_name": "uizze/uizze",
       "name": "uizze",
-      "description": "Stop coding agents from shipping generic UI with 800,000+ real web and iOS screens and a hard finish gate.",
+      "description": "Stop AI coding agents from shipping generic UI with 800,000+ real web and iOS screens, anti-ui-slop skills, and a hard finish gate for Codex, Claude Code, Cursor, and Copilot.",
       "html_url": "https://github.com/uizze/uizze",
       "stargazers_count": 4,
-      "updated_at": "2026-08-16T14:44:11Z",
+      "updated_at": "2026-08-16T17:02:33Z",
       "default_branch": "main",
       "topics": [
         "agent-skills",
+        "agentic-workflows",
         "ai-agents",
         "anti-slop",
         "anti-ui-slop",
         "claude-code",
-        "claude-code-ui-design",
+        "claude-plugins",
         "codex",
-        "codex-ui-design",
         "cursor",
-        "cursor-ui-design",
         "design-systems",
         "developer-tools",
         "frontend",
+        "github-actions",
         "github-copilot",
         "ios-design",
         "mcp",
@@ -117347,7 +117378,63 @@
         "web-design"
       ],
       "license": "MIT",
-      "registry_seen_at": "2026-08-16T16:18:40.416Z",
+      "registry_seen_at": "2026-08-16T17:29:38.214Z",
+      "has_skill": true,
+      "has_install_script": false
+    },
+    {
+      "full_name": "mdsohaib/screenshot-time-machine",
+      "name": "screenshot-time-machine",
+      "description": "Screenshot Time Machine is like a Wayback Machine for your own website, a visual archive of every page over time. One command screenshots every page into dated folders on your machine, and shows which pages changed since your last run. Works with Claude Code, Cursor and Codex. Free and open source.",
+      "html_url": "https://github.com/mdsohaib/screenshot-time-machine",
+      "stargazers_count": 4,
+      "updated_at": "2026-08-16T16:55:16Z",
+      "default_branch": "main",
+      "topics": [
+        "agent-skills",
+        "ai-agents",
+        "claude-code",
+        "cli",
+        "codex",
+        "cursor",
+        "developer-tools",
+        "full-page-screenshot",
+        "localhost",
+        "playwright",
+        "screenshot",
+        "screenshot-cli",
+        "screenshots",
+        "time-machine",
+        "vibe-coding",
+        "visual-history",
+        "visual-regression",
+        "visual-testing",
+        "web-development",
+        "website-screenshot"
+      ],
+      "license": "MIT",
+      "registry_seen_at": "2026-08-16T17:29:38.214Z",
+      "has_skill": true,
+      "has_install_script": false,
+      "pkg_name": "screenshot-time-machine"
+    },
+    {
+      "full_name": "MNICKZ/docs-driven-workflow",
+      "name": "docs-driven-workflow",
+      "description": "Stop AI coding agents from shipping undocumented changes — declare scope before editing, log every change after. Claude Skill / SKILL.md, Chinese instructions with EN+中文 triggers.",
+      "html_url": "https://github.com/MNICKZ/docs-driven-workflow",
+      "stargazers_count": 4,
+      "updated_at": "2026-08-16T16:40:56Z",
+      "default_branch": "main",
+      "topics": [
+        "agent-skills",
+        "ai-workflows",
+        "claude-code",
+        "claude-skills",
+        "skill-md"
+      ],
+      "license": "MIT",
+      "registry_seen_at": "2026-08-16T17:29:38.214Z",
       "has_skill": true,
       "has_install_script": false
     },
@@ -118796,9 +118883,10 @@
         "self-hosted"
       ],
       "license": null,
-      "registry_seen_at": "2026-08-16T16:18:40.417Z",
+      "registry_seen_at": "2026-08-16T17:29:38.214Z",
       "has_skill": true,
-      "has_install_script": true
+      "has_install_script": true,
+      "pkg_name": null
     },
     {
       "full_name": "LevNas/ccmemo",
@@ -121600,7 +121688,7 @@
       "description": "Zillow skills for AI agents — Zestimates, comps, listings & price history for 160M+ US homes. One-command install, free tier.",
       "html_url": "https://github.com/ZeroPointRepo/zillow-skills",
       "stargazers_count": 3,
-      "updated_at": "2026-08-16T16:13:54Z",
+      "updated_at": "2026-08-16T16:47:26Z",
       "default_branch": "main",
       "topics": [
         "agent-skills",
@@ -121613,7 +121701,7 @@
         "zillow-skills"
       ],
       "license": "MIT-0",
-      "registry_seen_at": "2026-08-16T16:18:40.419Z",
+      "registry_seen_at": "2026-08-16T17:29:38.214Z",
       "has_skill": true,
       "has_install_script": false,
       "pkg_name": "zillow-skills"
@@ -121923,7 +122011,7 @@
         "skills"
       ],
       "license": "Apache-2.0",
-      "registry_seen_at": "2026-08-16T16:18:40.417Z",
+      "registry_seen_at": "2026-08-16T17:29:38.214Z",
       "has_skill": true,
       "has_install_script": true,
       "pkg_name": null
@@ -126002,9 +126090,10 @@
         "agent-skills"
       ],
       "license": "MIT",
-      "registry_seen_at": "2026-08-16T16:18:40.417Z",
+      "registry_seen_at": "2026-08-16T17:29:38.214Z",
       "has_skill": true,
-      "has_install_script": false
+      "has_install_script": false,
+      "pkg_name": null
     },
     {
       "full_name": "idea2go2go/smartfolder-skill",
@@ -132234,7 +132323,7 @@
         "tradovate"
       ],
       "license": "Apache-2.0",
-      "registry_seen_at": "2026-08-16T16:18:40.417Z",
+      "registry_seen_at": "2026-08-16T17:29:38.214Z",
       "has_skill": true,
       "has_install_script": false,
       "pkg_name": null
@@ -140519,7 +140608,7 @@
       "description": "Text radar map for agents — live weather and a character radar map for any place on earth, in one HTTP request. Installable as an Agent Skill.",
       "html_url": "https://github.com/eirik-rune/runemap",
       "stargazers_count": 3,
-      "updated_at": "2026-08-16T14:37:14Z",
+      "updated_at": "2026-08-16T16:57:02Z",
       "default_branch": "main",
       "topics": [
         "agent-skills",
@@ -140883,67 +140972,10 @@
         "quiz"
       ],
       "license": "MIT",
-      "registry_seen_at": "2026-08-16T16:18:40.417Z",
+      "registry_seen_at": "2026-08-16T17:29:38.214Z",
       "has_skill": true,
       "has_install_script": false,
       "pkg_name": "dsh-tizhuang-question-bank"
-    },
-    {
-      "full_name": "mdsohaib/screenshot-time-machine",
-      "name": "screenshot-time-machine",
-      "description": "Screenshot Time Machine is like a Wayback Machine for your own website, a visual archive of every page over time. One command screenshots every page into dated folders on your machine, and shows which pages changed since your last run. Works with Claude Code, Cursor and Codex. Free and open source.",
-      "html_url": "https://github.com/mdsohaib/screenshot-time-machine",
-      "stargazers_count": 3,
-      "updated_at": "2026-08-16T15:31:55Z",
-      "default_branch": "main",
-      "topics": [
-        "agent-skills",
-        "ai-agents",
-        "claude-code",
-        "cli",
-        "codex",
-        "cursor",
-        "developer-tools",
-        "full-page-screenshot",
-        "localhost",
-        "playwright",
-        "screenshot",
-        "screenshot-cli",
-        "screenshots",
-        "time-machine",
-        "vibe-coding",
-        "visual-history",
-        "visual-regression",
-        "visual-testing",
-        "web-development",
-        "website-screenshot"
-      ],
-      "license": "MIT",
-      "registry_seen_at": "2026-08-16T16:18:40.417Z",
-      "has_skill": true,
-      "has_install_script": false,
-      "pkg_name": "screenshot-time-machine"
-    },
-    {
-      "full_name": "Sdinzsh/PowerHou53",
-      "name": "PowerHou53",
-      "description": "A self-improving, memory-bounded multi-agent AI architecture for OpenCode. Turn static prompts into an autonomous, context-efficient learning loop.",
-      "html_url": "https://github.com/Sdinzsh/PowerHou53",
-      "stargazers_count": 3,
-      "updated_at": "2026-08-16T15:01:42Z",
-      "default_branch": "main",
-      "topics": [
-        "agent-skills",
-        "opencode",
-        "opencode-ai",
-        "opencode-skills",
-        "powerhouse",
-        "self-improvement"
-      ],
-      "license": null,
-      "registry_seen_at": "2026-08-16T16:18:40.417Z",
-      "has_skill": true,
-      "has_install_script": false
     },
     {
       "full_name": "xiehuan123/dsh-deepread",
@@ -140973,10 +141005,119 @@
         "reading-assistant"
       ],
       "license": "MIT",
-      "registry_seen_at": "2026-08-16T16:18:40.417Z",
+      "registry_seen_at": "2026-08-16T17:29:38.214Z",
       "has_skill": true,
       "has_install_script": false,
       "pkg_name": "dsh-deepread"
+    },
+    {
+      "full_name": "OrinVoss/dsh-math-team",
+      "name": "dsh-math-team",
+      "description": "DSH Math Modeling Team Plugin Pack: 2 role agent presets (modeling-coding / paper) for DeepSeek Harness, multi-folder Git collaboration + vision sub-agent; includes a full run on 2023 CUMCM-C. ｜ DeepSeek Harness 数学建模团队插件包：2 套岗位Agent预设(建模编程+论文)、多文件夹协同+识图子代理，含2023国赛C题全流程跑通示例。",
+      "html_url": "https://github.com/OrinVoss/dsh-math-team",
+      "stargazers_count": 3,
+      "updated_at": "2026-08-16T16:41:37Z",
+      "default_branch": "main",
+      "topics": [
+        "agent-presets",
+        "agent-skills",
+        "agent-tools",
+        "agent-workflow",
+        "ai-coding",
+        "claude-code",
+        "claude-skills",
+        "codex",
+        "codex-skills",
+        "cumcm",
+        "deepseek-harness",
+        "dsh-plugin",
+        "llm-agents",
+        "math-competition",
+        "math-contest",
+        "math-modeling",
+        "mathematical-modeling",
+        "mcm-icm",
+        "prompt-engineering",
+        "skills"
+      ],
+      "license": "MIT",
+      "registry_seen_at": "2026-08-16T17:29:38.214Z",
+      "has_skill": true,
+      "has_install_script": false
+    },
+    {
+      "full_name": "KiWi233333/dsh-creator",
+      "name": "dsh-creator",
+      "description": "Build verified extensions for DeepSeek Harness with an installable agent skill.",
+      "html_url": "https://github.com/KiWi233333/dsh-creator",
+      "stargazers_count": 3,
+      "updated_at": "2026-08-16T16:48:33Z",
+      "default_branch": "main",
+      "topics": [
+        "agent-skills",
+        "claude-code",
+        "codex",
+        "deepseek",
+        "deepseek-harness",
+        "dsh",
+        "dsh-plugin",
+        "mcp"
+      ],
+      "license": "MIT",
+      "registry_seen_at": "2026-08-16T17:29:38.214Z",
+      "has_skill": true,
+      "has_install_script": false
+    },
+    {
+      "full_name": "rundesk-ai/rundesk-cli",
+      "name": "rundesk-cli",
+      "description": "Persistent proactive self-improving AI teammates with memory, skills, and schedules.",
+      "html_url": "https://github.com/rundesk-ai/rundesk-cli",
+      "stargazers_count": 3,
+      "updated_at": "2026-08-16T16:55:06Z",
+      "default_branch": "main",
+      "topics": [
+        "agent-framework",
+        "agent-skills",
+        "agentic-workflow",
+        "ai-agents",
+        "anthropic",
+        "claude-code",
+        "codex",
+        "grok",
+        "openai",
+        "openclaw",
+        "python"
+      ],
+      "license": "MIT",
+      "registry_seen_at": "2026-08-16T17:29:38.214Z",
+      "has_skill": true,
+      "has_install_script": true
+    },
+    {
+      "full_name": "zj-ai-lab/shuanglv-legal-skills",
+      "name": "shuanglv-legal-skills",
+      "description": "爽律 Skill｜律师专业工作流系统 — 面向中国律师实务的 Agent Skills 工作流：刑事 / 民商事 / 合同 / 法律顾问 / 尽调 / 法律研究 / 文书质控，内建对抗性审查、全链路溯源与人工复核边界。发起及主导：蔡诗爽律师。公开共创，文本 CC BY-SA 4.0 / 代码 Apache-2.0。ShuangLaw: Agent Skills workflow system for PRC lawyers.",
+      "html_url": "https://github.com/zj-ai-lab/shuanglv-legal-skills",
+      "stargazers_count": 3,
+      "updated_at": "2026-08-16T17:20:48Z",
+      "default_branch": "main",
+      "topics": [
+        "agent-skills",
+        "chinese-law",
+        "claude-code",
+        "codex",
+        "lawyer",
+        "legal",
+        "legal-ai",
+        "legal-workflow",
+        "llm-agents",
+        "skills"
+      ],
+      "license": "NOASSERTION",
+      "registry_seen_at": "2026-08-16T17:29:38.214Z",
+      "has_skill": true,
+      "has_install_script": false
     },
     {
       "full_name": "Pexeso/ai-agents",
@@ -149255,7 +149396,8 @@
       "license": "MIT",
       "registry_seen_at": "2026-08-16T16:53:58.060Z",
       "has_skill": true,
-      "has_install_script": false
+      "has_install_script": false,
+      "pkg_name": null
     },
     {
       "full_name": "shripadk1999/EVOKORE-MCP",
@@ -153745,7 +153887,8 @@
       "license": "MIT",
       "registry_seen_at": "2026-08-16T16:53:58.061Z",
       "has_skill": true,
-      "has_install_script": false
+      "has_install_script": false,
+      "pkg_name": null
     },
     {
       "full_name": "Fodhol/skills",
@@ -162558,7 +162701,8 @@
       "license": null,
       "registry_seen_at": "2026-08-16T16:53:58.061Z",
       "has_skill": false,
-      "has_install_script": false
+      "has_install_script": false,
+      "pkg_name": null
     },
     {
       "full_name": "ShenyuanNext/wepr-growth-skills",
@@ -172826,7 +172970,8 @@
       "license": null,
       "registry_seen_at": "2026-08-16T16:53:58.064Z",
       "has_skill": true,
-      "has_install_script": false
+      "has_install_script": false,
+      "pkg_name": null
     },
     {
       "full_name": "webmilmind1/claude-plugins",
@@ -183071,32 +183216,6 @@
       "pkg_name": null
     },
     {
-      "full_name": "rundesk-ai/rundesk-cli",
-      "name": "rundesk-cli",
-      "description": "Persistent proactive self-improving AI teammates with memory, skills, and schedules.",
-      "html_url": "https://github.com/rundesk-ai/rundesk-cli",
-      "stargazers_count": 2,
-      "updated_at": "2026-08-16T15:51:17Z",
-      "default_branch": "main",
-      "topics": [
-        "agent-framework",
-        "agent-skills",
-        "agentic-workflow",
-        "ai-agents",
-        "anthropic",
-        "claude-code",
-        "codex",
-        "grok",
-        "openai",
-        "openclaw",
-        "python"
-      ],
-      "license": "MIT",
-      "registry_seen_at": "2026-08-16T15:42:25.470Z",
-      "has_skill": true,
-      "has_install_script": true
-    },
-    {
       "full_name": "KaruroChori/mcpp",
       "name": "mcpp",
       "description": "Automatic MCP building using C++26 reflections",
@@ -183358,7 +183477,7 @@
       "description": "Frontend Agent Skill that helps AI plan, build, and review production Next.js and TypeScript frontends, with a typed Django/DRF backend contract and blocking accessibility, security, and performance gates.",
       "html_url": "https://github.com/n-shadloo/frontend-production-engineer",
       "stargazers_count": 2,
-      "updated_at": "2026-08-16T14:42:10Z",
+      "updated_at": "2026-08-16T17:15:00Z",
       "default_branch": "main",
       "topics": [
         "accessibility",
@@ -195834,7 +195953,8 @@
       "license": "MIT",
       "registry_seen_at": "2026-08-16T16:53:58.061Z",
       "has_skill": false,
-      "has_install_script": false
+      "has_install_script": false,
+      "pkg_name": null
     },
     {
       "full_name": "Paldom/mobile-app-inspector",
@@ -202702,7 +202822,7 @@
       "description": "Another personal AI agent. Supports your existing projects and their agents+skills, and the usual stuff.",
       "html_url": "https://github.com/Vironnimo/vbot",
       "stargazers_count": 1,
-      "updated_at": "2026-08-16T15:27:36Z",
+      "updated_at": "2026-08-16T16:57:47Z",
       "default_branch": "main",
       "topics": [
         "agent",
@@ -220302,7 +220422,7 @@
         "reasoning"
       ],
       "license": "MIT",
-      "registry_seen_at": "2026-08-16T16:18:40.418Z",
+      "registry_seen_at": "2026-08-16T17:29:38.215Z",
       "has_skill": true,
       "has_install_script": false,
       "pkg_name": null
@@ -241347,7 +241467,7 @@
       "description": "Human-led, evidence-gated full-cycle research execution for Codex and Claude Code · 人类主导的科研全流程辅助工具",
       "html_url": "https://github.com/bsq415/research-rigor-skill",
       "stargazers_count": 1,
-      "updated_at": "2026-07-24T00:44:45Z",
+      "updated_at": "2026-08-16T17:20:56Z",
       "default_branch": "main",
       "topics": [
         "agent-skills",
@@ -241361,10 +241481,9 @@
         "scientific-workflow"
       ],
       "license": "MIT",
-      "registry_seen_at": "2026-08-15T05:26:00.874Z",
+      "registry_seen_at": "2026-08-16T17:29:38.215Z",
       "has_skill": true,
-      "has_install_script": false,
-      "pkg_name": null
+      "has_install_script": false
     },
     {
       "full_name": "gdevenyi/openwebui-tool-skill",
@@ -245040,9 +245159,10 @@
         "research-protocol"
       ],
       "license": "MIT",
-      "registry_seen_at": "2026-08-16T16:18:40.418Z",
+      "registry_seen_at": "2026-08-16T17:29:38.215Z",
       "has_skill": true,
-      "has_install_script": false
+      "has_install_script": false,
+      "pkg_name": null
     },
     {
       "full_name": "shimo4228/learn-eval",
@@ -249856,9 +249976,10 @@
         "prompt-engineering"
       ],
       "license": "Apache-2.0",
-      "registry_seen_at": "2026-08-16T16:18:40.420Z",
+      "registry_seen_at": "2026-08-16T17:29:38.217Z",
       "has_skill": false,
-      "has_install_script": true
+      "has_install_script": true,
+      "pkg_name": null
     },
     {
       "full_name": "jerryshell/skills",
@@ -251252,7 +251373,7 @@
         "agent-skills"
       ],
       "license": null,
-      "registry_seen_at": "2026-08-16T16:18:40.418Z",
+      "registry_seen_at": "2026-08-16T17:29:38.216Z",
       "has_skill": true,
       "has_install_script": false,
       "pkg_name": null
@@ -253102,7 +253223,7 @@
         "rube"
       ],
       "license": "NOASSERTION",
-      "registry_seen_at": "2026-08-16T15:42:25.473Z",
+      "registry_seen_at": "2026-08-16T17:29:38.223Z",
       "has_skill": true,
       "has_install_script": false,
       "pkg_name": null
@@ -253443,7 +253564,8 @@
       "license": "MIT",
       "registry_seen_at": "2026-08-16T16:53:58.064Z",
       "has_skill": true,
-      "has_install_script": false
+      "has_install_script": false,
+      "pkg_name": null
     },
     {
       "full_name": "Consultora-AMDT/claude-github-security-audit",
@@ -253813,7 +253935,8 @@
       "license": "Apache-2.0",
       "registry_seen_at": "2026-08-16T16:53:58.064Z",
       "has_skill": false,
-      "has_install_script": false
+      "has_install_script": false,
+      "pkg_name": null
     },
     {
       "full_name": "consolascionw/prompt-to-pattern-design",
@@ -257959,9 +258082,10 @@
         "verification"
       ],
       "license": "MIT",
-      "registry_seen_at": "2026-08-16T16:18:40.417Z",
+      "registry_seen_at": "2026-08-16T17:29:38.215Z",
       "has_skill": false,
-      "has_install_script": false
+      "has_install_script": false,
+      "pkg_name": null
     },
     {
       "full_name": "seansmithworks/design-proof",
@@ -278625,7 +278749,8 @@
       "license": "MIT",
       "registry_seen_at": "2026-08-16T16:53:58.061Z",
       "has_skill": true,
-      "has_install_script": false
+      "has_install_script": false,
+      "pkg_name": null
     },
     {
       "full_name": "rawrkit/skills-radar",
@@ -279257,7 +279382,7 @@
       "description": "The Prompt Boot skill. An AI-native installer skill for applications.",
       "html_url": "https://github.com/pkozanian/promptboot",
       "stargazers_count": 1,
-      "updated_at": "2026-08-16T16:08:29Z",
+      "updated_at": "2026-08-16T16:23:10Z",
       "default_branch": "main",
       "topics": [
         "agent-skills",
@@ -279704,7 +279829,8 @@
       "license": "Apache-2.0",
       "registry_seen_at": "2026-08-16T16:53:58.061Z",
       "has_skill": true,
-      "has_install_script": false
+      "has_install_script": false,
+      "pkg_name": null
     },
     {
       "full_name": "oddradiocircle/conductor-portable",
@@ -280330,7 +280456,8 @@
       "license": "MIT",
       "registry_seen_at": "2026-08-16T16:53:58.063Z",
       "has_skill": true,
-      "has_install_script": true
+      "has_install_script": true,
+      "pkg_name": null
     },
     {
       "full_name": "sinancan34/nano-banana-json-prompt",
@@ -280812,7 +280939,7 @@
       "description": "Discipline skills for agents doing long-running real work — freeze scope, preserve decisions, hand off state, gate human judgment, and close out with evidence.",
       "html_url": "https://github.com/3xachris/3xa-harness",
       "stargazers_count": 1,
-      "updated_at": "2026-08-16T13:55:56Z",
+      "updated_at": "2026-08-16T17:05:57Z",
       "default_branch": "main",
       "topics": [
         "agent-skills",
@@ -280972,7 +281099,8 @@
       "license": "MIT",
       "registry_seen_at": "2026-08-16T16:53:58.063Z",
       "has_skill": true,
-      "has_install_script": false
+      "has_install_script": false,
+      "pkg_name": null
     },
     {
       "full_name": "hackerFish/awesome-dsh-skills",
@@ -281020,52 +281148,8 @@
       "license": null,
       "registry_seen_at": "2026-08-16T16:53:58.061Z",
       "has_skill": true,
-      "has_install_script": false
-    },
-    {
-      "full_name": "chrisduvillard/codex-engineering-skills",
-      "name": "codex-engineering-skills",
-      "description": "Five rigorous Codex skills for planning, brownfield stewardship, branch recovery, data provenance, and adversarial review.",
-      "html_url": "https://github.com/chrisduvillard/codex-engineering-skills",
-      "stargazers_count": 1,
-      "updated_at": "2026-08-16T14:35:14Z",
-      "default_branch": "main",
-      "topics": [
-        "agent-skills",
-        "ai-agents",
-        "codex",
-        "developer-tools",
-        "software-engineering"
-      ],
-      "license": "MIT",
-      "registry_seen_at": "2026-08-16T16:18:40.417Z",
-      "has_skill": true,
-      "has_install_script": false
-    },
-    {
-      "full_name": "socramsea/cine-director",
-      "name": "cine-director",
-      "description": "AI film director skill for Claude Code — turns a song, product or idea into a complete cinematic pre-production package: shot-by-shot decupage, generation prompts, character bible, ffmpeg audio cuts and honest cost estimates. Dry-run first, zero API cost.",
-      "html_url": "https://github.com/socramsea/cine-director",
-      "stargazers_count": 1,
-      "updated_at": "2026-08-16T13:35:22Z",
-      "default_branch": "main",
-      "topics": [
-        "agent-skills",
-        "ai-skills",
-        "ai-video",
-        "cinematography",
-        "claude-code",
-        "ffmpeg",
-        "generative-video",
-        "lipsync",
-        "music-video",
-        "pre-production"
-      ],
-      "license": "Apache-2.0",
-      "registry_seen_at": "2026-08-16T16:18:40.420Z",
-      "has_skill": true,
-      "has_install_script": false
+      "has_install_script": false,
+      "pkg_name": null
     },
     {
       "full_name": "gongyijie85/mattpocock-skills-dsh",
@@ -281086,7 +281170,7 @@
         "skills"
       ],
       "license": "MIT",
-      "registry_seen_at": "2026-08-16T16:18:40.418Z",
+      "registry_seen_at": "2026-08-16T17:29:38.215Z",
       "has_skill": true,
       "has_install_script": false,
       "pkg_name": "mattpocock-skills-dsh"
@@ -281112,7 +281196,7 @@
         "yagni"
       ],
       "license": "MIT",
-      "registry_seen_at": "2026-08-16T16:18:40.417Z",
+      "registry_seen_at": "2026-08-16T17:29:38.215Z",
       "has_skill": true,
       "has_install_script": false,
       "pkg_name": "dsh-ponytail-skills"
@@ -281137,75 +281221,10 @@
         "skills"
       ],
       "license": "MIT",
-      "registry_seen_at": "2026-08-16T16:18:40.417Z",
+      "registry_seen_at": "2026-08-16T17:29:38.215Z",
       "has_skill": true,
       "has_install_script": false,
       "pkg_name": "dsh-ecc-skills"
-    },
-    {
-      "full_name": "chengyi-ai/native-subtitle-quote-image",
-      "name": "native-subtitle-quote-image",
-      "description": "保留视频内嵌字幕，精确取帧并生成 3:4 社交长图的 Agent Skill",
-      "html_url": "https://github.com/chengyi-ai/native-subtitle-quote-image",
-      "stargazers_count": 1,
-      "updated_at": "2026-08-16T15:18:22Z",
-      "default_branch": "main",
-      "topics": [
-        "agent-skills",
-        "codex",
-        "social-media",
-        "subtitles",
-        "video-processing"
-      ],
-      "license": "MIT",
-      "registry_seen_at": "2026-08-16T16:18:40.417Z",
-      "has_skill": true,
-      "has_install_script": false
-    },
-    {
-      "full_name": "oglofus/skills",
-      "name": "skills",
-      "description": "Open agent skills from Oglofus, compatible with skills.sh",
-      "html_url": "https://github.com/oglofus/skills",
-      "stargazers_count": 1,
-      "updated_at": "2026-08-16T13:45:58Z",
-      "default_branch": "main",
-      "topics": [
-        "agent-skills",
-        "ai-agents",
-        "github-issues",
-        "skills-sh"
-      ],
-      "license": "MIT",
-      "registry_seen_at": "2026-08-16T16:18:40.418Z",
-      "has_skill": true,
-      "has_install_script": true
-    },
-    {
-      "full_name": "IDjinn/navigation-tools",
-      "name": "navigation-tools",
-      "description": "Agent skill enforcing redundant secondary navigation on every platform - web keyboard/hotkeys, Android back handling, iOS swipe gestures + always-visible close buttons, desktop mouse back/forward",
-      "html_url": "https://github.com/IDjinn/navigation-tools",
-      "stargazers_count": 1,
-      "updated_at": "2026-08-16T14:34:34Z",
-      "default_branch": "main",
-      "topics": [
-        "accessibility",
-        "agent-skills",
-        "ai-agents",
-        "android",
-        "claude",
-        "electron",
-        "flutter",
-        "ios",
-        "keyboard-navigation",
-        "navigation",
-        "react-native"
-      ],
-      "license": "MIT",
-      "registry_seen_at": "2026-08-16T16:18:40.420Z",
-      "has_skill": true,
-      "has_install_script": false
     },
     {
       "full_name": "Justinjchen-Cornell/Maos-Redbook",
@@ -281236,132 +281255,10 @@
         "thinking"
       ],
       "license": "NOASSERTION",
-      "registry_seen_at": "2026-08-16T16:18:40.417Z",
-      "has_skill": true,
-      "has_install_script": false
-    },
-    {
-      "full_name": "asdc163/pm-signal-lab",
-      "name": "pm-signal-lab",
-      "description": "An English-first, local-first PM worksheet that keeps product signals next to their sources and turns them into a smallest test.",
-      "html_url": "https://github.com/asdc163/pm-signal-lab",
-      "stargazers_count": 1,
-      "updated_at": "2026-08-16T16:04:25Z",
-      "default_branch": "main",
-      "topics": [
-        "agent-skills",
-        "ai-product-management",
-        "decision-making",
-        "developer-tools",
-        "experimentation",
-        "local-first",
-        "open-source",
-        "product-analytics",
-        "product-discovery",
-        "product-management",
-        "react",
-        "typescript",
-        "vite"
-      ],
-      "license": "MIT",
-      "registry_seen_at": "2026-08-16T16:18:40.417Z",
+      "registry_seen_at": "2026-08-16T17:29:38.215Z",
       "has_skill": true,
       "has_install_script": false,
-      "pkg_name": "pm-signal-lab"
-    },
-    {
-      "full_name": "juju-w/safa-runtime",
-      "name": "safa-runtime",
-      "description": "Cross-platform native runtimes for SAFA; Swift macOS authority boundary today, Rust Linux and Windows runtimes next.",
-      "html_url": "https://github.com/juju-w/safa-runtime",
-      "stargazers_count": 1,
-      "updated_at": "2026-08-16T15:15:35Z",
-      "default_branch": "main",
-      "topics": [
-        "agent-skills",
-        "ai-agents",
-        "devops",
-        "keychain",
-        "macos",
-        "security",
-        "ssh",
-        "swift"
-      ],
-      "license": "MIT",
-      "registry_seen_at": "2026-08-16T16:18:40.417Z",
-      "has_skill": true,
-      "has_install_script": false
-    },
-    {
-      "full_name": "Openly-Useful/agent-workflow-swarms",
-      "name": "agent-workflow-swarms",
-      "description": "Model-agnostic recovery, orchestration, and cross-tool continuity for verified agent workflows.",
-      "html_url": "https://github.com/Openly-Useful/agent-workflow-swarms",
-      "stargazers_count": 1,
-      "updated_at": "2026-08-16T15:27:13Z",
-      "default_branch": "main",
-      "topics": [
-        "agent-skills",
-        "ai-agents",
-        "codex",
-        "model-routing",
-        "multi-agent",
-        "orchestration",
-        "workflow-automation",
-        "workflow-recovery"
-      ],
-      "license": "MIT",
-      "registry_seen_at": "2026-08-16T16:18:40.418Z",
-      "has_skill": true,
-      "has_install_script": false
-    },
-    {
-      "full_name": "3xachris/3xa-harness",
-      "name": "3xa-harness",
-      "description": "Discipline skills for agents doing long-running real work — freeze scope, preserve decisions, hand off state, gate human judgment, and close out with evidence.",
-      "html_url": "https://github.com/3xachris/3xa-harness",
-      "stargazers_count": 1,
-      "updated_at": "2026-08-16T13:55:56Z",
-      "default_branch": "main",
-      "topics": [
-        "agent-skills",
-        "ai-agents",
-        "claude-code",
-        "codex",
-        "developer-tools",
-        "opencode",
-        "python",
-        "workflow"
-      ],
-      "license": "MIT",
-      "registry_seen_at": "2026-08-16T16:18:40.420Z",
-      "has_skill": true,
-      "has_install_script": false
-    },
-    {
-      "full_name": "hackerFish/awesome-dsh-skills",
-      "name": "awesome-dsh-skills",
-      "description": "实测可用的 DeepSeek Harness 技能库：每个 SKILL.md 都通过格式校验与加载冒烟，复制即用（中文优先）",
-      "html_url": "https://github.com/hackerFish/awesome-dsh-skills",
-      "stargazers_count": 1,
-      "updated_at": "2026-08-16T15:37:15Z",
-      "default_branch": "main",
-      "topics": [
-        "agent-skills",
-        "ai-agents",
-        "awesome-list",
-        "chinese",
-        "curated-list",
-        "deepseek",
-        "deepseek-harness",
-        "dsh",
-        "dsh-skill",
-        "skills"
-      ],
-      "license": "MIT",
-      "registry_seen_at": "2026-08-16T16:18:40.420Z",
-      "has_skill": true,
-      "has_install_script": false
+      "pkg_name": null
     },
     {
       "full_name": "JayDong9130/dsh-evolution-lab",
@@ -281380,7 +281277,7 @@
         "self-evolving"
       ],
       "license": "MIT",
-      "registry_seen_at": "2026-08-16T16:18:40.420Z",
+      "registry_seen_at": "2026-08-16T17:29:38.223Z",
       "has_skill": false,
       "has_install_script": false,
       "pkg_name": "dsh-evolution-lab"
@@ -281391,7 +281288,7 @@
       "description": "Claude Code records what you work on into Jira, Linear, GitHub Issues, Trello or Vikunja, automatically",
       "html_url": "https://github.com/oliverjueguen/workingon-claude-skill",
       "stargazers_count": 1,
-      "updated_at": "2026-08-16T16:16:56Z",
+      "updated_at": "2026-08-16T17:19:30Z",
       "default_branch": "main",
       "topics": [
         "agent-skills",
@@ -281414,10 +281311,197 @@
         "vikunja"
       ],
       "license": "MIT",
-      "registry_seen_at": "2026-08-16T16:18:40.420Z",
+      "registry_seen_at": "2026-08-16T17:29:38.217Z",
       "has_skill": true,
       "has_install_script": false,
       "pkg_name": "workingon"
+    },
+    {
+      "full_name": "Culeot/bianzheng-siwei",
+      "name": "bianzheng-siwei",
+      "description": "Jian Lu Bu Zou thinking OS - unified thinking framework distilled from Ye Zinong + Ding Yuanying + Mao Zedong dialectical materialism",
+      "html_url": "https://github.com/Culeot/bianzheng-siwei",
+      "stargazers_count": 1,
+      "updated_at": "2026-08-16T17:04:04Z",
+      "default_branch": "main",
+      "topics": [
+        "ai-agents",
+        "chinese-philosophy",
+        "claude-skills",
+        "decision-making",
+        "dialectical-materialism",
+        "seek-truth-from-facts",
+        "skill",
+        "strategy",
+        "thinking"
+      ],
+      "license": "MIT",
+      "registry_seen_at": "2026-08-16T17:29:38.223Z",
+      "has_skill": true,
+      "has_install_script": false
+    },
+    {
+      "full_name": "joehaddad2000/schematics",
+      "name": "schematics",
+      "description": "Visual engineering skills for planning and explaining technical work.",
+      "html_url": "https://github.com/joehaddad2000/schematics",
+      "stargazers_count": 1,
+      "updated_at": "2026-08-16T15:38:59Z",
+      "default_branch": "main",
+      "topics": [
+        "agent-skills",
+        "architecture",
+        "claude-code",
+        "codex",
+        "diagrams",
+        "erd",
+        "planning"
+      ],
+      "license": null,
+      "registry_seen_at": "2026-08-16T17:29:38.215Z",
+      "has_skill": true,
+      "has_install_script": false
+    },
+    {
+      "full_name": "zjcdkj/dsh-plugins",
+      "name": "dsh-plugins",
+      "description": "DeepSeek Harness (DSH) plugins. qwen-image gives a text-only coding model eyes: an image goes to a Qwen-VL route through ctx.llm and comes back as text, so DeepSeek keeps coding while Qwen looks. Pure ESM, no build permission at install. | DSH 插件集：qwen-image 让纯文本模型借千问 VL 读图，返回文本；纯 ESM，安装无需构建授权。",
+      "html_url": "https://github.com/zjcdkj/dsh-plugins",
+      "stargazers_count": 1,
+      "updated_at": "2026-08-16T17:10:37Z",
+      "default_branch": "main",
+      "topics": [
+        "agent-skills",
+        "claude-code",
+        "codex",
+        "coding-agent",
+        "cordis",
+        "dashscope",
+        "deepseek-harness",
+        "dsh",
+        "dsh-plugin",
+        "image-to-text",
+        "multimodal",
+        "ocr",
+        "qwen",
+        "qwen-vl",
+        "text-only-llm",
+        "vision"
+      ],
+      "license": "MIT",
+      "registry_seen_at": "2026-08-16T17:29:38.215Z",
+      "has_skill": false,
+      "has_install_script": false,
+      "pkg_name": "dsh-plugins"
+    },
+    {
+      "full_name": "napstergold/hook-writer",
+      "name": "hook-writer",
+      "description": "Write hooks people want to keep reading — for Claude Code, Codex, and AI agents.",
+      "html_url": "https://github.com/napstergold/hook-writer",
+      "stargazers_count": 1,
+      "updated_at": "2026-08-16T17:04:51Z",
+      "default_branch": "main",
+      "topics": [
+        "agent-skills",
+        "ai-agents",
+        "claude-code",
+        "codex",
+        "content-marketing",
+        "copywriting",
+        "hooks",
+        "marketing",
+        "social-media"
+      ],
+      "license": "MIT",
+      "registry_seen_at": "2026-08-16T17:29:38.215Z",
+      "has_skill": true,
+      "has_install_script": false
+    },
+    {
+      "full_name": "grgy078033/tugboat",
+      "name": "tugboat",
+      "description": "An Agent Skill for ChatGPT and Codex that turns anxiety-aware empathy into persistent, evidence-driven problem solving—without lowering the user's goal.",
+      "html_url": "https://github.com/grgy078033/tugboat",
+      "stargazers_count": 1,
+      "updated_at": "2026-08-16T16:59:47Z",
+      "default_branch": "main",
+      "topics": [
+        "agent-skills",
+        "anxiety-aware",
+        "chatgpt",
+        "codex",
+        "open-source",
+        "problem-solving"
+      ],
+      "license": "MIT",
+      "registry_seen_at": "2026-08-16T17:29:38.215Z",
+      "has_skill": true,
+      "has_install_script": false
+    },
+    {
+      "full_name": "62656456/ai-film-skills",
+      "name": "ai-film-skills",
+      "description": "19 standalone, cross-Agent Skills for AI filmmaking—directing, storyboards, assets, visual design, production, and research.",
+      "html_url": "https://github.com/62656456/ai-film-skills",
+      "stargazers_count": 1,
+      "updated_at": "2026-08-16T16:21:49Z",
+      "default_branch": "main",
+      "topics": [
+        "agent-skills",
+        "ai",
+        "ai-filmmaking",
+        "ai-video",
+        "claude-code",
+        "codebuddy",
+        "codex",
+        "directing",
+        "filmmaking",
+        "prompt-engineering",
+        "skills",
+        "storyboard",
+        "trae",
+        "workbuddy"
+      ],
+      "license": "Apache-2.0",
+      "registry_seen_at": "2026-08-16T17:29:38.215Z",
+      "has_skill": true,
+      "has_install_script": false
+    },
+    {
+      "full_name": "K-Dense-AI/drug-discovery-agent-skills",
+      "name": "drug-discovery-agent-skills",
+      "description": "Agent Skills for small-molecule and protein therapeutics: cheminformatics, molecular ML, docking and dynamics, protein design platforms, and target-discovery knowledge graphs.",
+      "html_url": "https://github.com/K-Dense-AI/drug-discovery-agent-skills",
+      "stargazers_count": 1,
+      "updated_at": "2026-08-16T17:03:16Z",
+      "default_branch": "main",
+      "topics": [
+        "agent-plugins",
+        "agent-skills",
+        "ai-agents",
+        "bioinformatics",
+        "cheminformatics",
+        "claude-code",
+        "computational-chemistry",
+        "deep-learning",
+        "deepchem",
+        "drug-discovery",
+        "knowledge-graph",
+        "llm",
+        "machine-learning",
+        "molecular-docking",
+        "molecular-dynamics",
+        "protein-design",
+        "python",
+        "rdkit",
+        "skills",
+        "structural-biology"
+      ],
+      "license": "MIT",
+      "registry_seen_at": "2026-08-16T17:29:38.216Z",
+      "has_skill": true,
+      "has_install_script": false
     },
     {
       "full_name": "vst93/vision-fallback-skill",
@@ -292927,7 +293011,7 @@
         "opencode-skill"
       ],
       "license": null,
-      "registry_seen_at": "2026-08-16T16:18:40.419Z",
+      "registry_seen_at": "2026-08-16T17:29:38.216Z",
       "has_skill": true,
       "has_install_script": false,
       "pkg_name": null
@@ -299028,7 +299112,7 @@
       "description": "Evidence-driven skills that turn customer signals into measurable growth.",
       "html_url": "https://github.com/kimsanguine/signal-to-growth",
       "stargazers_count": 0,
-      "updated_at": "2026-08-16T16:04:43Z",
+      "updated_at": "2026-08-16T16:48:47Z",
       "default_branch": "main",
       "topics": [
         "agent-skills",
@@ -301868,7 +301952,8 @@
       "license": null,
       "registry_seen_at": "2026-08-16T16:53:58.062Z",
       "has_skill": false,
-      "has_install_script": false
+      "has_install_script": false,
+      "pkg_name": null
     },
     {
       "full_name": "manazoid4/maz-works-knowledge-vault",
@@ -308598,7 +308683,7 @@
       "description": "Standalone plugins and skills for the AI domain.",
       "html_url": "https://github.com/vslipchenko/ai",
       "stargazers_count": 0,
-      "updated_at": "2026-08-13T15:12:12Z",
+      "updated_at": "2026-08-16T17:04:17Z",
       "default_branch": "main",
       "topics": [
         "claude-code-plugin",
@@ -330891,7 +330976,7 @@
       "description": "Seu harness de agente preferido!",
       "html_url": "https://github.com/siliconfps/siliconflower",
       "stargazers_count": 0,
-      "updated_at": "2026-08-14T20:47:34Z",
+      "updated_at": "2026-08-16T16:53:52Z",
       "default_branch": "main",
       "topics": [
         "agent",
@@ -331459,7 +331544,7 @@
       "description": "Numeric is an AI close-automation platform that unifies close management, financial reporting, and cash operations for complex, high-volume accounting teams (customers include Brex, Plaid, and Stash).",
       "html_url": "https://github.com/api-evangelist/numeric",
       "stargazers_count": 0,
-      "updated_at": "2026-08-14T01:25:58Z",
+      "updated_at": "2026-08-16T16:48:30Z",
       "default_branch": "main",
       "topics": [
         "accounting",
@@ -331475,8 +331560,7 @@
       "license": null,
       "registry_seen_at": "2026-08-16T16:53:58.062Z",
       "has_skill": false,
-      "has_install_script": false,
-      "pkg_name": null
+      "has_install_script": false
     },
     {
       "full_name": "cucumberhawk/pre-execution-confirmation-yct",
@@ -332045,7 +332129,7 @@
       "description": "个人 Agent Skills 集合 —— 架构师 + 内容输出双 track（文档/画图/写作/视频）。支持 npx skills add xiaoshuai1024/skills 安装，兼容 Claude Code/Cursor/Codex/Gemini CLI。",
       "html_url": "https://github.com/xiaoshuai1024/skills",
       "stargazers_count": 0,
-      "updated_at": "2026-08-16T03:38:07Z",
+      "updated_at": "2026-08-16T16:57:01Z",
       "default_branch": "master",
       "topics": [
         "agent-skills",
@@ -335613,7 +335697,7 @@
       "description": "Create online laser cutting quotes for sheet metal and tube parts from STEP files through the Fabworks MCP server",
       "html_url": "https://github.com/FabworksHQ/fabworks-plugin",
       "stargazers_count": 0,
-      "updated_at": "2026-08-12T19:13:19Z",
+      "updated_at": "2026-08-16T17:14:40Z",
       "default_branch": "main",
       "topics": [
         "agent-skills",
@@ -335630,10 +335714,9 @@
         "tube-laser-cutting"
       ],
       "license": "MIT",
-      "registry_seen_at": "2026-08-15T22:48:10.551Z",
+      "registry_seen_at": "2026-08-16T17:29:38.216Z",
       "has_skill": true,
-      "has_install_script": false,
-      "pkg_name": null
+      "has_install_script": false
     },
     {
       "full_name": "MuziGeek/mz-minimal-zine-reconstruction",
@@ -337995,7 +338078,8 @@
       "license": null,
       "registry_seen_at": "2026-08-16T16:53:58.062Z",
       "has_skill": false,
-      "has_install_script": false
+      "has_install_script": false,
+      "pkg_name": null
     },
     {
       "full_name": "silentbuilds/seedance-prompt-forge",
@@ -338169,7 +338253,7 @@
       "description": "Claude Code extension engineering: pick the right mechanism, then build it.",
       "html_url": "https://github.com/TranDenyDFW/claude-code-extension-engineering",
       "stargazers_count": 0,
-      "updated_at": "2026-08-16T10:08:30Z",
+      "updated_at": "2026-08-16T17:17:09Z",
       "default_branch": "main",
       "topics": [
         "agent-skills",
@@ -340717,7 +340801,7 @@
       "description": "A prokaryotic architecture for LLM agent ecosystems: horizontal capability transfer with an immune system, dormancy that costs nothing, and epidemiological measurement of how agent capabilities actually spread.",
       "html_url": "https://github.com/sammyghe/pangenome",
       "stargazers_count": 0,
-      "updated_at": "2026-08-16T05:44:38Z",
+      "updated_at": "2026-08-16T17:09:00Z",
       "default_branch": "master",
       "topics": [
         "agent-skills",
@@ -340732,8 +340816,7 @@
       "license": "MIT",
       "registry_seen_at": "2026-08-16T16:53:58.062Z",
       "has_skill": false,
-      "has_install_script": false,
-      "pkg_name": null
+      "has_install_script": false
     },
     {
       "full_name": "seroneyemmanuel4-afk/fullstack-forge-skill",
@@ -342739,7 +342822,7 @@
       "description": "Perseus (legal name Efficient Systems Inc.) is an applied AI lab focused on semantic search in latent spaces, founded by Samrath Chadha and backed by Y Combinator (Fall 2025 batch). Its first product is a retrieval engine that grounds coding agents in real code: developers and agents describe the code they are looking for in plain English and…",
       "html_url": "https://github.com/api-evangelist/perseus",
       "stargazers_count": 0,
-      "updated_at": "2026-08-14T01:31:44Z",
+      "updated_at": "2026-08-16T16:53:11Z",
       "default_branch": "main",
       "topics": [
         "agent-skills",
@@ -342758,8 +342841,7 @@
       "license": null,
       "registry_seen_at": "2026-08-16T16:53:58.063Z",
       "has_skill": false,
-      "has_install_script": false,
-      "pkg_name": null
+      "has_install_script": false
     },
     {
       "full_name": "api-evangelist/nord-security",
@@ -343023,7 +343105,7 @@
       "description": "A Hermes-native AI workshop for crafted, human-approved work through specialist agents and skills.",
       "html_url": "https://github.com/forgegod/daidala",
       "stargazers_count": 0,
-      "updated_at": "2026-08-16T10:40:23Z",
+      "updated_at": "2026-08-16T17:05:50Z",
       "default_branch": "main",
       "topics": [
         "agent-skills",
@@ -343036,8 +343118,7 @@
       "license": "MIT",
       "registry_seen_at": "2026-08-16T16:53:58.063Z",
       "has_skill": true,
-      "has_install_script": false,
-      "pkg_name": null
+      "has_install_script": false
     },
     {
       "full_name": "luckyrjain/software-builder",
@@ -343099,7 +343180,7 @@
         "grok"
       ],
       "license": "MIT",
-      "registry_seen_at": "2026-08-16T16:18:40.419Z",
+      "registry_seen_at": "2026-08-16T17:29:38.216Z",
       "has_skill": true,
       "has_install_script": false,
       "pkg_name": "@crayonlu/agent-man"
@@ -343156,7 +343237,7 @@
         "mcp"
       ],
       "license": "MIT",
-      "registry_seen_at": "2026-08-16T16:18:40.419Z",
+      "registry_seen_at": "2026-08-16T17:29:38.216Z",
       "has_skill": false,
       "has_install_script": false,
       "pkg_name": "clauderef-content"
@@ -343179,7 +343260,7 @@
         "social-media-automation"
       ],
       "license": "MIT",
-      "registry_seen_at": "2026-08-16T16:18:40.419Z",
+      "registry_seen_at": "2026-08-16T17:29:38.216Z",
       "has_skill": true,
       "has_install_script": false,
       "pkg_name": null
@@ -343231,7 +343312,7 @@
         "testing"
       ],
       "license": "MIT",
-      "registry_seen_at": "2026-08-16T16:18:40.419Z",
+      "registry_seen_at": "2026-08-16T17:29:38.216Z",
       "has_skill": true,
       "has_install_script": false,
       "pkg_name": null
@@ -343367,7 +343448,7 @@
         "web-scraping"
       ],
       "license": "MIT",
-      "registry_seen_at": "2026-08-16T16:18:40.419Z",
+      "registry_seen_at": "2026-08-16T17:29:38.216Z",
       "has_skill": true,
       "has_install_script": false,
       "pkg_name": null
@@ -343392,7 +343473,7 @@
         "static-analysis"
       ],
       "license": "MIT",
-      "registry_seen_at": "2026-08-16T16:18:40.419Z",
+      "registry_seen_at": "2026-08-16T17:29:38.216Z",
       "has_skill": true,
       "has_install_script": false,
       "pkg_name": "skillsonar"
@@ -343512,7 +343593,7 @@
         "decision-making"
       ],
       "license": "MIT",
-      "registry_seen_at": "2026-08-16T16:18:40.419Z",
+      "registry_seen_at": "2026-08-16T17:29:38.216Z",
       "has_skill": true,
       "has_install_script": false,
       "pkg_name": null
@@ -343530,7 +343611,7 @@
         "renovate"
       ],
       "license": "MIT",
-      "registry_seen_at": "2026-08-16T16:18:40.419Z",
+      "registry_seen_at": "2026-08-16T17:29:38.216Z",
       "has_skill": true,
       "has_install_script": false,
       "pkg_name": null
@@ -343551,7 +343632,7 @@
         "developer-tools"
       ],
       "license": "MIT",
-      "registry_seen_at": "2026-08-16T16:18:40.419Z",
+      "registry_seen_at": "2026-08-16T17:29:38.216Z",
       "has_skill": true,
       "has_install_script": false,
       "pkg_name": null
@@ -343648,7 +343729,7 @@
         "website-design"
       ],
       "license": null,
-      "registry_seen_at": "2026-08-16T16:18:40.419Z",
+      "registry_seen_at": "2026-08-16T17:29:38.216Z",
       "has_skill": false,
       "has_install_script": false
     },
@@ -343690,7 +343771,7 @@
         "workflow"
       ],
       "license": null,
-      "registry_seen_at": "2026-08-16T16:18:40.419Z",
+      "registry_seen_at": "2026-08-16T17:29:38.216Z",
       "has_skill": true,
       "has_install_script": false,
       "pkg_name": null
@@ -343701,7 +343782,7 @@
       "description": "Ultimate AI Static Site Generator 2026 – Free No-Lock-in Build Tool for Claude & Cursor",
       "html_url": "https://github.com/gurutersesat24/ai-site-forge",
       "stargazers_count": 0,
-      "updated_at": "2026-08-16T15:28:18Z",
+      "updated_at": "2026-08-16T16:33:12Z",
       "default_branch": "main",
       "topics": [
         "agent-skills",
@@ -343721,7 +343802,7 @@
         "website-builder"
       ],
       "license": null,
-      "registry_seen_at": "2026-08-16T16:18:40.419Z",
+      "registry_seen_at": "2026-08-16T17:29:38.216Z",
       "has_skill": false,
       "has_install_script": false
     },
@@ -343750,7 +343831,7 @@
       "description": "2026 Full-Stack AI Dev Kit: 23 Skills, 8 Agents, 5 Hooks, 7 MCP Servers",
       "html_url": "https://github.com/saturrrrrrr/hugin-v0-omnibus",
       "stargazers_count": 0,
-      "updated_at": "2026-08-16T15:41:42Z",
+      "updated_at": "2026-08-16T16:45:28Z",
       "default_branch": "main",
       "topics": [
         "agent-skills",
@@ -343760,7 +343841,7 @@
         "skills"
       ],
       "license": null,
-      "registry_seen_at": "2026-08-16T16:18:40.419Z",
+      "registry_seen_at": "2026-08-16T17:29:38.216Z",
       "has_skill": false,
       "has_install_script": false
     },
@@ -348258,7 +348339,7 @@
       "description": "Frameworks, templates, rubrics, and Claude Code skills for product managers; covers problem framing, value hypothesis, MVP, prioritization, metrics, launch, PMF, AI integration; 23 skills for daily PM workflows",
       "html_url": "https://github.com/kalyvask/pm-evaluation-framework",
       "stargazers_count": 0,
-      "updated_at": "2026-08-13T06:29:25Z",
+      "updated_at": "2026-08-16T17:11:47Z",
       "default_branch": "main",
       "topics": [
         "ai-pm",
@@ -348279,8 +348360,7 @@
       "license": "MIT",
       "registry_seen_at": "2026-08-16T16:53:58.064Z",
       "has_skill": true,
-      "has_install_script": false,
-      "pkg_name": null
+      "has_install_script": false
     },
     {
       "full_name": "bokyostudio/pg-practice-knowledgebase",
@@ -349515,7 +349595,8 @@
       "license": null,
       "registry_seen_at": "2026-08-16T16:53:58.064Z",
       "has_skill": false,
-      "has_install_script": false
+      "has_install_script": false,
+      "pkg_name": null
     },
     {
       "full_name": "kaydenplayZ/agent-skills-guide",
@@ -350199,7 +350280,7 @@
       "description": "Claude plugin \"marketplace\"",
       "html_url": "https://github.com/chris-peterson/claude-marketplace",
       "stargazers_count": 0,
-      "updated_at": "2026-08-15T19:27:25Z",
+      "updated_at": "2026-08-16T17:14:54Z",
       "default_branch": "main",
       "topics": [
         "ai",
@@ -350212,8 +350293,7 @@
       "license": "MIT",
       "registry_seen_at": "2026-08-16T16:53:58.064Z",
       "has_skill": false,
-      "has_install_script": false,
-      "pkg_name": null
+      "has_install_script": false
     },
     {
       "full_name": "runapi-ai/sdk-skill",
@@ -355596,7 +355676,7 @@
       "description": "Скилл для Claude Code и Codex: проводит не-инженера через установку личного ИИ-агента Hermes на свой VPS за восемь проверяемых этапов",
       "html_url": "https://github.com/AslanMazhidov/hermes-vps-onboarding",
       "stargazers_count": 0,
-      "updated_at": "2026-08-16T15:57:19Z",
+      "updated_at": "2026-08-16T16:41:57Z",
       "default_branch": "main",
       "topics": [
         "agent-skills",
@@ -355607,7 +355687,7 @@
         "vps"
       ],
       "license": null,
-      "registry_seen_at": "2026-08-16T16:18:40.419Z",
+      "registry_seen_at": "2026-08-16T17:29:38.216Z",
       "has_skill": true,
       "has_install_script": false
     },
@@ -358057,7 +358137,7 @@
       "description": "Agent skills that make a model report what it cannot do. root-cause forbids a causal claim without evidence; sitrep puts the finding first, bad news above good, and names every gap. Ships clarity.py so the rules are a check, not advice.",
       "html_url": "https://github.com/openhonest/honest-skills",
       "stargazers_count": 0,
-      "updated_at": "2026-08-16T16:17:45Z",
+      "updated_at": "2026-08-16T17:26:52Z",
       "default_branch": "main",
       "topics": [
         "agent-skills",
@@ -360049,17 +360129,16 @@
       "description": "Agent skill — psychology-driven UX principles for UI",
       "html_url": "https://github.com/semeikhan-t/skills",
       "stargazers_count": 0,
-      "updated_at": "2026-08-16T13:13:42Z",
+      "updated_at": "2026-08-16T17:24:40Z",
       "default_branch": "main",
       "topics": [
         "agent-skills",
         "skills"
       ],
       "license": "MIT",
-      "registry_seen_at": "2026-08-16T16:18:40.419Z",
+      "registry_seen_at": "2026-08-16T17:29:38.216Z",
       "has_skill": true,
-      "has_install_script": false,
-      "pkg_name": null
+      "has_install_script": false
     },
     {
       "full_name": "ChloeVPin/remove-redundant-comments",
@@ -360081,7 +360160,7 @@
         "skills"
       ],
       "license": "MIT",
-      "registry_seen_at": "2026-08-16T16:18:40.419Z",
+      "registry_seen_at": "2026-08-16T17:29:38.216Z",
       "has_skill": true,
       "has_install_script": false,
       "pkg_name": null
@@ -360102,7 +360181,7 @@
         "workbuddy"
       ],
       "license": null,
-      "registry_seen_at": "2026-08-16T16:18:40.419Z",
+      "registry_seen_at": "2026-08-16T17:29:38.216Z",
       "has_skill": true,
       "has_install_script": true,
       "pkg_name": null
@@ -360406,7 +360485,7 @@
         "workbuddy-skill"
       ],
       "license": "MIT",
-      "registry_seen_at": "2026-08-16T16:18:40.419Z",
+      "registry_seen_at": "2026-08-16T17:29:38.216Z",
       "has_skill": true,
       "has_install_script": false,
       "pkg_name": null
@@ -360768,7 +360847,7 @@
         "code"
       ],
       "license": "MIT",
-      "registry_seen_at": "2026-08-16T16:18:40.419Z",
+      "registry_seen_at": "2026-08-16T17:29:38.216Z",
       "has_skill": true,
       "has_install_script": false,
       "pkg_name": "wukong-code"
@@ -361858,7 +361937,7 @@
         "resume"
       ],
       "license": "MIT",
-      "registry_seen_at": "2026-08-16T16:18:40.419Z",
+      "registry_seen_at": "2026-08-16T17:29:38.216Z",
       "has_skill": true,
       "has_install_script": false,
       "pkg_name": null
@@ -361880,7 +361959,7 @@
         "research-automation"
       ],
       "license": "MIT",
-      "registry_seen_at": "2026-08-16T16:18:40.419Z",
+      "registry_seen_at": "2026-08-16T17:29:38.216Z",
       "has_skill": true,
       "has_install_script": false,
       "pkg_name": null
@@ -361900,7 +361979,7 @@
         "mcp-servers"
       ],
       "license": "NOASSERTION",
-      "registry_seen_at": "2026-08-16T16:18:40.419Z",
+      "registry_seen_at": "2026-08-16T17:29:38.216Z",
       "has_skill": false,
       "has_install_script": false,
       "pkg_name": "agent-files"
@@ -363388,7 +363467,7 @@
       "description": "Agent skill that scaffolds a repository so coding agents navigate it from committed docs — AGENTS.md doc index, docs/ standards, and commit-time gates.",
       "html_url": "https://github.com/PubCyBerry/repo-scaffold",
       "stargazers_count": 0,
-      "updated_at": "2026-08-16T15:26:56Z",
+      "updated_at": "2026-08-16T16:44:38Z",
       "default_branch": "main",
       "topics": [
         "agent-skills",
@@ -364660,7 +364739,7 @@
         "ai"
       ],
       "license": "MIT",
-      "registry_seen_at": "2026-08-16T16:18:40.419Z",
+      "registry_seen_at": "2026-08-16T17:29:38.216Z",
       "has_skill": true,
       "has_install_script": false,
       "pkg_name": "skills-site"
@@ -364681,7 +364760,7 @@
         "memory-management"
       ],
       "license": "MIT",
-      "registry_seen_at": "2026-08-16T16:18:40.419Z",
+      "registry_seen_at": "2026-08-16T17:29:38.216Z",
       "has_skill": true,
       "has_install_script": false,
       "pkg_name": "@dsh-external/dsh-auto-memory"
@@ -364703,7 +364782,7 @@
         "maintenance"
       ],
       "license": "MIT",
-      "registry_seen_at": "2026-08-16T16:18:40.419Z",
+      "registry_seen_at": "2026-08-16T17:29:38.216Z",
       "has_skill": true,
       "has_install_script": false,
       "pkg_name": null
@@ -364728,7 +364807,7 @@
         "web-development"
       ],
       "license": "MIT",
-      "registry_seen_at": "2026-08-16T16:18:40.419Z",
+      "registry_seen_at": "2026-08-16T17:29:38.216Z",
       "has_skill": true,
       "has_install_script": false,
       "pkg_name": "ui-done-showcase"
@@ -364747,7 +364826,7 @@
         "image-generation"
       ],
       "license": "NOASSERTION",
-      "registry_seen_at": "2026-08-16T16:18:40.419Z",
+      "registry_seen_at": "2026-08-16T17:29:38.216Z",
       "has_skill": true,
       "has_install_script": false,
       "pkg_name": "@wangjs-jacky/image-effects"
@@ -365805,7 +365884,7 @@
       "description": "A 股市场分析技能（情绪/选股/回测/资金流）",
       "html_url": "https://github.com/wwumit/skills-stock",
       "stargazers_count": 0,
-      "updated_at": "2026-08-16T12:21:21Z",
+      "updated_at": "2026-08-16T17:08:03Z",
       "default_branch": "main",
       "topics": [
         "agent-skills",
@@ -365816,8 +365895,7 @@
       "license": null,
       "registry_seen_at": "2026-08-16T16:53:58.062Z",
       "has_skill": true,
-      "has_install_script": false,
-      "pkg_name": null
+      "has_install_script": false
     },
     {
       "full_name": "kuailexiaozixin/tkinter-desktop",
@@ -365863,7 +365941,7 @@
       "description": "CCPA/GDPR/COPPA/HIPAA 国际隐私合规技能，纯本地运行",
       "html_url": "https://github.com/wwumit/skills-compliance-intl",
       "stargazers_count": 0,
-      "updated_at": "2026-08-16T12:21:09Z",
+      "updated_at": "2026-08-16T17:06:28Z",
       "default_branch": "main",
       "topics": [
         "agent-skills",
@@ -365874,8 +365952,7 @@
       "license": null,
       "registry_seen_at": "2026-08-16T16:53:58.063Z",
       "has_skill": true,
-      "has_install_script": false,
-      "pkg_name": null
+      "has_install_script": false
     },
     {
       "full_name": "MoonCoder-HAPPY/SpecWorkflow",
@@ -366356,7 +366433,7 @@
       "description": "Maintainability-focused skills for agent-engineered systems.",
       "html_url": "https://github.com/zixun/agent-systems-skills",
       "stargazers_count": 0,
-      "updated_at": "2026-08-16T08:15:51Z",
+      "updated_at": "2026-08-16T16:55:38Z",
       "default_branch": "main",
       "topics": [
         "agent-skills",
@@ -366368,8 +366445,7 @@
       "license": "MIT",
       "registry_seen_at": "2026-08-16T16:53:58.063Z",
       "has_skill": true,
-      "has_install_script": false,
-      "pkg_name": null
+      "has_install_script": false
     },
     {
       "full_name": "allen-studio/feishu-talk-deck",
@@ -367040,7 +367116,7 @@
       "description": "Cursor Agent Skill — evidence-backed whole-repo architecture and maintainability audit (macOS/Linux/Windows).",
       "html_url": "https://github.com/batu3384/codebase-audit",
       "stargazers_count": 0,
-      "updated_at": "2026-08-16T15:26:00Z",
+      "updated_at": "2026-08-16T17:01:08Z",
       "default_branch": "main",
       "topics": [
         "agent-skills",
@@ -367239,7 +367315,8 @@
       "license": "MIT",
       "registry_seen_at": "2026-08-16T16:53:58.063Z",
       "has_skill": true,
-      "has_install_script": false
+      "has_install_script": false,
+      "pkg_name": null
     },
     {
       "full_name": "tohuw/igbo-skill",
@@ -367484,9 +367561,10 @@
         "resume-analysis"
       ],
       "license": null,
-      "registry_seen_at": "2026-08-16T16:18:40.418Z",
+      "registry_seen_at": "2026-08-16T17:29:38.215Z",
       "has_skill": true,
-      "has_install_script": false
+      "has_install_script": false,
+      "pkg_name": null
     },
     {
       "full_name": "OmarBenje/whichskill",
@@ -367505,7 +367583,7 @@
         "skill"
       ],
       "license": "NOASSERTION",
-      "registry_seen_at": "2026-08-16T16:18:40.419Z",
+      "registry_seen_at": "2026-08-16T17:29:38.216Z",
       "has_skill": true,
       "has_install_script": false,
       "pkg_name": null
@@ -367526,7 +367604,7 @@
         "vibe-coding"
       ],
       "license": "NOASSERTION",
-      "registry_seen_at": "2026-08-16T16:18:40.419Z",
+      "registry_seen_at": "2026-08-16T17:29:38.216Z",
       "has_skill": true,
       "has_install_script": false,
       "pkg_name": null
@@ -367548,7 +367626,7 @@
         "learning"
       ],
       "license": "MIT",
-      "registry_seen_at": "2026-08-16T16:18:40.419Z",
+      "registry_seen_at": "2026-08-16T17:29:38.216Z",
       "has_skill": false,
       "has_install_script": false,
       "pkg_name": null
@@ -367565,7 +367643,7 @@
         "agent-skills"
       ],
       "license": "MIT",
-      "registry_seen_at": "2026-08-16T16:18:40.419Z",
+      "registry_seen_at": "2026-08-16T17:29:38.216Z",
       "has_skill": true,
       "has_install_script": false,
       "pkg_name": null
@@ -367595,7 +367673,7 @@
         "skills"
       ],
       "license": "MIT",
-      "registry_seen_at": "2026-08-16T16:18:40.419Z",
+      "registry_seen_at": "2026-08-16T17:29:38.216Z",
       "has_skill": true,
       "has_install_script": false,
       "pkg_name": "dsh-dual-plugin-guide"
@@ -367623,7 +367701,7 @@
         "video-generation"
       ],
       "license": "MIT",
-      "registry_seen_at": "2026-08-16T16:18:40.421Z",
+      "registry_seen_at": "2026-08-16T17:29:38.224Z",
       "has_skill": true,
       "has_install_script": false,
       "pkg_name": "claude-drives-gemini"
@@ -367634,7 +367712,7 @@
       "description": "An Expense tracking application in this i learn how to use coding tools such as Claude Code properly or mistral vibe",
       "html_url": "https://github.com/salik702/Expense-Tracker",
       "stargazers_count": 0,
-      "updated_at": "2026-08-16T14:01:07Z",
+      "updated_at": "2026-08-16T17:20:13Z",
       "default_branch": "main",
       "topics": [
         "claude-code",
@@ -367642,10 +367720,9 @@
         "vibe-coding"
       ],
       "license": null,
-      "registry_seen_at": "2026-08-16T16:18:40.421Z",
+      "registry_seen_at": "2026-08-16T17:29:38.224Z",
       "has_skill": false,
-      "has_install_script": false,
-      "pkg_name": null
+      "has_install_script": false
     },
     {
       "full_name": "ohyesiamy/bu-pwa",
@@ -367666,9 +367743,10 @@
         "web-push"
       ],
       "license": "MIT",
-      "registry_seen_at": "2026-08-16T16:18:40.421Z",
+      "registry_seen_at": "2026-08-16T17:29:38.224Z",
       "has_skill": true,
-      "has_install_script": true
+      "has_install_script": true,
+      "pkg_name": null
     },
     {
       "full_name": "Nana7mi0721/anima-prompt-caption",
@@ -367685,9 +367763,10 @@
         "prompt-engineering"
       ],
       "license": null,
-      "registry_seen_at": "2026-08-16T16:18:40.418Z",
+      "registry_seen_at": "2026-08-16T17:29:38.215Z",
       "has_skill": true,
-      "has_install_script": false
+      "has_install_script": false,
+      "pkg_name": null
     },
     {
       "full_name": "mashimashica/alps",
@@ -367707,9 +367786,10 @@
         "specification"
       ],
       "license": "Apache-2.0",
-      "registry_seen_at": "2026-08-16T16:18:40.418Z",
+      "registry_seen_at": "2026-08-16T17:29:38.215Z",
       "has_skill": true,
-      "has_install_script": false
+      "has_install_script": false,
+      "pkg_name": null
     },
     {
       "full_name": "lyzhu86/emotional-guide-skill",
@@ -367723,9 +367803,10 @@
         "agent-skills"
       ],
       "license": null,
-      "registry_seen_at": "2026-08-16T16:18:40.418Z",
+      "registry_seen_at": "2026-08-16T17:29:38.216Z",
       "has_skill": true,
-      "has_install_script": false
+      "has_install_script": false,
+      "pkg_name": null
     },
     {
       "full_name": "CoderAndyLee/amz-review-analysis-skill",
@@ -367733,7 +367814,7 @@
       "description": "亚马逊评论分析 Agent Skill：卖家精灵 Review 表 → 一/二/三级分类树（格子里是买家原话）→ HTML 看板 + 交付 Excel",
       "html_url": "https://github.com/CoderAndyLee/amz-review-analysis-skill",
       "stargazers_count": 0,
-      "updated_at": "2026-08-16T16:08:33Z",
+      "updated_at": "2026-08-16T16:14:01Z",
       "default_branch": "main",
       "topics": [
         "agent-skills",
@@ -367744,7 +367825,7 @@
         "review-analysis"
       ],
       "license": "NOASSERTION",
-      "registry_seen_at": "2026-08-16T16:18:40.419Z",
+      "registry_seen_at": "2026-08-16T17:29:38.216Z",
       "has_skill": true,
       "has_install_script": false
     },
@@ -367754,7 +367835,7 @@
       "description": "Let Claude Code read your Outlook / Microsoft 365 mailbox: on-demand, read-only CLI via Microsoft Graph — no admin tickets, skill included",
       "html_url": "https://github.com/crux/outlook-scan",
       "stargazers_count": 0,
-      "updated_at": "2026-08-16T15:48:50Z",
+      "updated_at": "2026-08-16T17:07:11Z",
       "default_branch": "main",
       "topics": [
         "agent-skills",
@@ -367769,7 +367850,7 @@
         "outlook"
       ],
       "license": "MIT",
-      "registry_seen_at": "2026-08-16T16:18:40.419Z",
+      "registry_seen_at": "2026-08-16T17:29:38.216Z",
       "has_skill": true,
       "has_install_script": false
     },
@@ -367794,9 +367875,10 @@
         "skills"
       ],
       "license": null,
-      "registry_seen_at": "2026-08-16T16:18:40.419Z",
+      "registry_seen_at": "2026-08-16T17:29:38.216Z",
       "has_skill": false,
-      "has_install_script": false
+      "has_install_script": false,
+      "pkg_name": null
     },
     {
       "full_name": "ninggele/implement-one-scope",
@@ -367804,7 +367886,7 @@
       "description": "让 Codex 用最小完整上下文闭环完成单一任务。Complete one bounded task with focused verification and a clear stop rule.",
       "html_url": "https://github.com/ninggele/implement-one-scope",
       "stargazers_count": 0,
-      "updated_at": "2026-08-16T16:05:58Z",
+      "updated_at": "2026-08-16T16:22:52Z",
       "default_branch": "main",
       "topics": [
         "agent-skills",
@@ -367815,7 +367897,7 @@
         "workflow"
       ],
       "license": null,
-      "registry_seen_at": "2026-08-16T16:18:40.419Z",
+      "registry_seen_at": "2026-08-16T17:29:38.216Z",
       "has_skill": true,
       "has_install_script": false
     },
@@ -367840,17 +367922,18 @@
         "subagents"
       ],
       "license": "MIT",
-      "registry_seen_at": "2026-08-16T16:18:40.419Z",
+      "registry_seen_at": "2026-08-16T17:29:38.216Z",
       "has_skill": true,
-      "has_install_script": false
+      "has_install_script": false,
+      "pkg_name": null
     },
     {
       "full_name": "hraness/atet",
       "name": "atet",
-      "description": "Agentic creative coding toolkit. At the beginning of time, when there was nothing but chaos, Atum existed alone in the watery mass of Nun. A pyramid mound called Benben emerged. When the lotus flower bloomed, Atum dawned and became Ra. Every night Ra sails in the underworld on the solar barque Atet.",
+      "description": "Atet gives Codex, Claude, and other coding agents tools to create images, editable diagrams, animated loops, and video inside a project.",
       "html_url": "https://github.com/hraness/atet",
       "stargazers_count": 0,
-      "updated_at": "2026-08-16T15:57:59Z",
+      "updated_at": "2026-08-16T17:02:14Z",
       "default_branch": "main",
       "topics": [
         "agent-skills",
@@ -367875,7 +367958,7 @@
         "video-editing"
       ],
       "license": "MIT",
-      "registry_seen_at": "2026-08-16T16:18:40.419Z",
+      "registry_seen_at": "2026-08-16T17:29:38.216Z",
       "has_skill": true,
       "has_install_script": false,
       "pkg_name": "@hraness/atet"
@@ -367901,9 +367984,10 @@
         "static-analysis"
       ],
       "license": "NOASSERTION",
-      "registry_seen_at": "2026-08-16T16:18:40.419Z",
+      "registry_seen_at": "2026-08-16T17:29:38.216Z",
       "has_skill": true,
-      "has_install_script": false
+      "has_install_script": false,
+      "pkg_name": null
     },
     {
       "full_name": "darkstar1227/bridge",
@@ -367929,9 +368013,10 @@
         "workflow-automation"
       ],
       "license": "MIT",
-      "registry_seen_at": "2026-08-16T16:18:40.419Z",
+      "registry_seen_at": "2026-08-16T17:29:38.216Z",
       "has_skill": true,
-      "has_install_script": false
+      "has_install_script": false,
+      "pkg_name": null
     },
     {
       "full_name": "baytcho/spider-dead-code-skill",
@@ -367939,7 +368024,7 @@
       "description": "Agent skill that finds the code your project does not need - statement-level reachability across Python, TypeScript, JavaScript and CSS, with a third state for what it cannot yet prove.",
       "html_url": "https://github.com/baytcho/spider-dead-code-skill",
       "stargazers_count": 0,
-      "updated_at": "2026-08-16T15:49:10Z",
+      "updated_at": "2026-08-16T16:43:05Z",
       "default_branch": "main",
       "topics": [
         "agent-skills",
@@ -367955,7 +368040,7 @@
         "unused-code"
       ],
       "license": "MIT",
-      "registry_seen_at": "2026-08-16T16:18:40.419Z",
+      "registry_seen_at": "2026-08-16T17:29:38.216Z",
       "has_skill": true,
       "has_install_script": false,
       "pkg_name": "spider-dead-code-skill"
@@ -367966,7 +368051,7 @@
       "description": "Governance-oriented planning with verifiable checkpoints, recoverable handoffs, and cross-platform continuity for long-running AI tasks.",
       "html_url": "https://github.com/xueleihu-labs/planning-with-files-governed",
       "stargazers_count": 0,
-      "updated_at": "2026-08-16T15:56:19Z",
+      "updated_at": "2026-08-16T16:50:23Z",
       "default_branch": "main",
       "topics": [
         "agent-skills",
@@ -367978,7 +368063,7 @@
         "task-management"
       ],
       "license": "MIT",
-      "registry_seen_at": "2026-08-16T16:18:40.419Z",
+      "registry_seen_at": "2026-08-16T17:29:38.216Z",
       "has_skill": true,
       "has_install_script": false
     },
@@ -368002,9 +368087,10 @@
         "harness-framework"
       ],
       "license": "MPL-2.0",
-      "registry_seen_at": "2026-08-16T16:18:40.420Z",
+      "registry_seen_at": "2026-08-16T17:29:38.223Z",
       "has_skill": true,
-      "has_install_script": true
+      "has_install_script": true,
+      "pkg_name": null
     },
     {
       "full_name": "jameswu881102/video-keyword-breakdown",
@@ -368024,7 +368110,173 @@
         "video-editing"
       ],
       "license": "MIT",
-      "registry_seen_at": "2026-08-16T16:18:40.420Z",
+      "registry_seen_at": "2026-08-16T17:29:38.223Z",
+      "has_skill": true,
+      "has_install_script": true,
+      "pkg_name": null
+    },
+    {
+      "full_name": "rewrite-rs/skills",
+      "name": "skills",
+      "description": "The most comprehensive agent skills for writing real, idiomatic Rust: ownership, errors, async, unsafe, performance, and API design, plus disciplined porting into Rust from other languages.",
+      "html_url": "https://github.com/rewrite-rs/skills",
+      "stargazers_count": 0,
+      "updated_at": "2026-08-16T16:55:29Z",
+      "default_branch": "main",
+      "topics": [
+        "agent-skills",
+        "ai-agents",
+        "ai-coding",
+        "ai-coding-skills",
+        "anthropic",
+        "async-rust",
+        "claude-code",
+        "claude-code-plugin",
+        "claude-skills",
+        "coding-agent",
+        "developer-tools",
+        "idiomatic-rust",
+        "migration",
+        "porting",
+        "rewrite",
+        "rust",
+        "rust-lang",
+        "rustlang",
+        "skills",
+        "unsafe-rust"
+      ],
+      "license": "BSD-3-Clause",
+      "registry_seen_at": "2026-08-16T17:29:38.215Z",
+      "has_skill": true,
+      "has_install_script": false,
+      "pkg_name": "rewrite-rs-skills"
+    },
+    {
+      "full_name": "Bhanu1776/credential-exposure-audit",
+      "name": "credential-exposure-audit",
+      "description": "Agent skill for auditing coding-agent sessions for exposed credentials with safe masked reporting",
+      "html_url": "https://github.com/Bhanu1776/credential-exposure-audit",
+      "stargazers_count": 0,
+      "updated_at": "2026-08-16T17:11:55Z",
+      "default_branch": "main",
+      "topics": [
+        "agent-skills"
+      ],
+      "license": null,
+      "registry_seen_at": "2026-08-16T17:29:38.215Z",
+      "has_skill": true,
+      "has_install_script": false
+    },
+    {
+      "full_name": "CodeSigils/skill-discovery",
+      "name": "skill-discovery",
+      "description": "A portable discovery methodology for agent skills. Teaches agents how to find skills from catalogs, marketplaces, and GitHub.",
+      "html_url": "https://github.com/CodeSigils/skill-discovery",
+      "stargazers_count": 0,
+      "updated_at": "2026-08-16T16:59:49Z",
+      "default_branch": "main",
+      "topics": [
+        "agent-skills",
+        "agent-tools",
+        "agentskills",
+        "agentskills-io",
+        "ai-agents",
+        "claude-code",
+        "codex-cli",
+        "discovery",
+        "gemini-cli",
+        "methodology",
+        "portable",
+        "skill-discovery",
+        "skill-management"
+      ],
+      "license": "MIT",
+      "registry_seen_at": "2026-08-16T17:29:38.216Z",
+      "has_skill": true,
+      "has_install_script": false
+    },
+    {
+      "full_name": "wwumit/dsh-compliancehub",
+      "name": "dsh-compliancehub",
+      "description": "Remote skill provider for DeepSeek Harness: install skills from a JSON catalog via ctx.skills",
+      "html_url": "https://github.com/wwumit/dsh-compliancehub",
+      "stargazers_count": 0,
+      "updated_at": "2026-08-16T17:06:53Z",
+      "default_branch": "main",
+      "topics": [
+        "agent-skills",
+        "cordis",
+        "deepseek-harness",
+        "dsh-plugin"
+      ],
+      "license": "MIT",
+      "registry_seen_at": "2026-08-16T17:29:38.216Z",
+      "has_skill": false,
+      "has_install_script": false,
+      "pkg_name": "@wwumit/dsh-compliancehub"
+    },
+    {
+      "full_name": "agrimsingh/build-client-from-har",
+      "name": "build-client-from-har",
+      "description": "Portable Agent Skill for turning HAR captures into safe, tested API clients",
+      "html_url": "https://github.com/agrimsingh/build-client-from-har",
+      "stargazers_count": 0,
+      "updated_at": "2026-08-16T16:35:54Z",
+      "default_branch": "main",
+      "topics": [
+        "agent-skills",
+        "api-client",
+        "har",
+        "reverse-engineering"
+      ],
+      "license": "MIT",
+      "registry_seen_at": "2026-08-16T17:29:38.216Z",
+      "has_skill": true,
+      "has_install_script": false
+    },
+    {
+      "full_name": "round/anew.page",
+      "name": "anew.page",
+      "description": "anew.page — encode a self-contained HTML document into a shareable URL. Plugin, extension and skill manifests for the hosted MCP server.",
+      "html_url": "https://github.com/round/anew.page",
+      "stargazers_count": 0,
+      "updated_at": "2026-08-16T17:09:26Z",
+      "default_branch": "main",
+      "topics": [
+        "agent-skills",
+        "claude-code",
+        "cursor",
+        "gemini-cli-extension",
+        "html",
+        "mcp",
+        "mcp-server",
+        "model-context-protocol",
+        "remote-mcp"
+      ],
+      "license": "ISC",
+      "registry_seen_at": "2026-08-16T17:29:38.216Z",
+      "has_skill": true,
+      "has_install_script": false
+    },
+    {
+      "full_name": "Qidianyan/dshctl",
+      "name": "dshctl",
+      "description": "Command DeepSeek Harness (dsh) from the terminal — sessions, tasks, models, modes, workspaces, approvals over its HTTP API. No web UI needed. Claude Code skill included.",
+      "html_url": "https://github.com/Qidianyan/dshctl",
+      "stargazers_count": 0,
+      "updated_at": "2026-08-16T16:25:53Z",
+      "default_branch": "main",
+      "topics": [
+        "agent-tools",
+        "claude-skills",
+        "cli",
+        "deepseek",
+        "deepseek-harness",
+        "dsh",
+        "dsh-plugin"
+      ],
+      "license": "MIT",
+      "registry_seen_at": "2026-08-16T17:29:38.223Z",
       "has_skill": true,
       "has_install_script": true
     },
