@@ -70,7 +70,7 @@
 | `main` / `exports` | 指向真实存在的入口文件。**入口缺失 + 有 `scripts.build` → 市场视为源码型，弹构建确认** |
 | `dsh` | **插件能力声明**（有 `dsh` 对象即视为插件）。`dsh.bundle.patch` 指向 cordis patch 清单时，市场安装后自动注册到 profile 的 cordis.patch.yml |
 | `repository` | 强烈建议填写——已安装识别（同仓库匹配）与市场卡片展示依赖它 |
-| `dependencies` / `peerDependencies` | 市场安装时执行 `npm install --omit=dev --ignore-scripts`（用户确认后才放开脚本）；peer 冲突自动回退 `--legacy-peer-deps` |
+| `dependencies` / `peerDependencies` | 市场安装时执行 `npm install --omit=dev --ignore-scripts`（用户确认后才放开脚本）；peer 冲突自动回退 `--legacy-peer-deps`。**DSH 宿主接口包（`@deepseek-ai/dsh-tools`、`dsh-llm`、`dsh-system-prompt`、`dsh-attachment`、`dsh-scope`、`dsh-schema`）只能进 `peerDependencies`，禁止进普通 `dependencies`/`bundledDependencies`**（构建期版本放 `devDependencies`）——否则旧版副本遮蔽宿主，工具调用全挂、内置预设失效（真实案例见 §6.6） |
 
 ### 2.2 源码型 vs 产物型
 
@@ -159,6 +159,16 @@
 
 同名 npm 包在 node_modules 里互斥（互相覆盖）。市场对 pkg_name 冲突的仓库**只显示 star 高的一个**。
 取名时请查一下 npm/registry 是否已被占用。
+
+### 6.6 宿主接口包打成普通依赖 → 遮蔽宿主（dsh-excel-chat 案例）
+
+某插件把 `@deepseek-ai/dsh-tools` / `dsh-llm` / `dsh-system-prompt` / `dsh-attachment` 声明为普通 `dependencies`——
+安装「成功」、插件也能加载，但这些**旧版副本被提升到 profile 顶层并优先于宿主加载**，导致：
+- 所有工具调用失败（`Cannot read properties of undefined (reading 'prepare')`）
+- DSH 内置 `minimal` 预设无法挂载（`ctx.systemPrompt.suppressRuntimeContext is not a function`）
+
+**正确做法**：宿主接口包一律 `peerDependencies`（版本范围对齐当前 DSH），构建所需放 `devDependencies`。
+市场安装时会静态检出普通依赖中的宿主包并弹确认警示（可拒绝）；但**市场警示不能替代平台修复**——同版本独立副本仍可能模块身份冲突，需要 DSH 宿主优先解析机制。
 
 ---
 

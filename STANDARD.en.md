@@ -67,7 +67,7 @@ Field requirements:
 | `main` / `exports` | Point at an entry file that actually exists. **Missing entry + `scripts.build` present → the marketplace treats it as source-built and asks for a build confirmation** |
 | `dsh` | **Plugin capability declaration** (any `dsh` object counts as a plugin). When `dsh.bundle.patch` points at a cordis patch manifest, the marketplace auto-registers it into the profile's cordis.patch.yml after install |
 | `repository` | Strongly recommended — used by installed-recognition (same-repo matching) and the marketplace card display |
-| `dependencies` / `peerDependencies` | The marketplace runs `npm install --omit=dev --ignore-scripts` (scripts only released after user confirmation); peer conflicts fall back to `--legacy-peer-deps` automatically |
+| `dependencies` / `peerDependencies` | The marketplace runs `npm install --omit=dev --ignore-scripts` (scripts only released after user confirmation); peer conflicts fall back to `--legacy-peer-deps` automatically. **DSH host interface packages (`@deepseek-ai/dsh-tools`, `dsh-llm`, `dsh-system-prompt`, `dsh-attachment`, `dsh-scope`, `dsh-schema`) must be `peerDependencies` only — never regular `dependencies`/`bundledDependencies`** (build-time versions go in `devDependencies`) — otherwise outdated copies shadow the host, breaking tool calls and built-in presets (real case in §6.6) |
 
 ### 2.2 Source-built vs pre-built
 
@@ -149,6 +149,15 @@ The marketplace **automatically** registers cordis.patch.yml on install. Plugins
 ### 6.5 pkg_name collision → hidden from the list
 
 Same-named npm packages are mutually exclusive in node_modules (they overwrite each other). The marketplace shows **only the higher-star repo** among `pkg_name` conflicts. Check npm/registry before choosing a name.
+
+### 6.6 Host interface packages as regular deps → host shadowing (dsh-excel-chat case)
+
+A plugin declared `@deepseek-ai/dsh-tools` / `dsh-llm` / `dsh-system-prompt` / `dsh-attachment` as regular `dependencies` —
+the install «succeeded» and the plugin loaded, but these **outdated copies were hoisted to the top of the profile and loaded before the host versions**, causing:
+- every tool call to fail (`Cannot read properties of undefined (reading 'prepare')`)
+- the built-in `minimal` preset to fail mounting (`ctx.systemPrompt.suppressRuntimeContext is not a function`)
+
+**Correct shape**: host interface packages go in `peerDependencies` (aligned with the current DSH version range); build-time needs go in `devDependencies`. The marketplace now statically detects host packages in regular deps and shows a confirmation warning (deniable); **the marketplace warning cannot replace a platform fix** — even same-version duplicate copies can cause module identity conflicts, which needs host-priority resolution in DSH itself.
 
 ---
 
