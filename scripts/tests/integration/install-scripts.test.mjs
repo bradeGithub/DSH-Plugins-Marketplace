@@ -10,7 +10,7 @@
 // 契约的静态断言见 unit/install-scripts.test.mjs（跨平台必跑）。
 
 import { execFileSync } from "node:child_process";
-import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, rmSync, existsSync } from "node:fs";
+import { mkdtempSync, mkdirSync, writeFileSync, copyFileSync, readFileSync, rmSync, existsSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { tmpdir } from "node:os";
 import { fileURLToPath } from "node:url";
@@ -73,35 +73,67 @@ try {
 // ---- install.ps1：pwsh 沙箱（仅 Windows 本机）----
 if (process.platform === "win32") {
   function runPs1(userProfile) {
-    execFileSync("pwsh", ["-NoProfile", "-File", join(ROOT, "install.ps1")], {
-      env: { ...process.env, USERPROFILE: userProfile },
-      cwd: ROOT,
-      stdio: "pipe"
-    });
+    // 沙箱隔离：宿主 dsh CLI 会令脚本走「官方安装」分支（写真实 profile 而非
+    // USERPROFILE，且每次 60s+）——PATH 前置必然失败的 stub dsh：脚本
+    // $ErrorActionPreference=Stop 下外部命令非零退出即抛异常 → catch 回退手动分支，
+    // 沙箱断言才成立（install.ps1 顶部的 dsh 检测本意是真实用户环境的优化）。
+    // 不直接跑仓库根 install.ps1：$PSScriptRoot=仓库根 → Copy-Item 复制整个仓库
+    // （含 .git，~60MB 逐文件 + Defender 扫描 ~90s/次）——复制脚本到最小 fixture
+    // 目录（占位 package.json 满足 PSScriptRoot 检查），$src 只复制 KB 级内容。
+    const stubDir = mkdtempSync(join(tmpdir(), "dsh-stub-"));
+    const srcDir = mkdtempSync(join(tmpdir(), "dsh-ps1-src-"));
+    copyFileSync(join(ROOT, "install.ps1"), join(srcDir, "install.ps1"));
+    writeFileSync(join(srcDir, "package.json"), JSON.stringify({ name: "fixture-market", version: "1.0.0" }), "utf8");
+    writeFileSync(join(stubDir, "dsh.cmd"), "@echo off\r\nexit /b 1\r\n", "utf8");
+    writeFileSync(join(stubDir, "dsh"), "#!/bin/sh\nexit 1\n", "utf8");
+    const env = { ...process.env, USERPROFILE: userProfile, PATH: `${stubDir};${process.env.PATH ?? ""}` };
+    try {
+      // 超时兜底：网络/复制异常挂起时防止整个测试文件无限阻塞（超时抛 ETIMEDOUT 明确失败）
+      execFileSync("pwsh", ["-NoProfile", "-File", join(srcDir, "install.ps1")], {
+        env,
+        cwd: srcDir,
+        stdio: "pipe",
+        timeout: 100_000
+      });
+    } finally {
+      rmSync(stubDir, { recursive: true, force: true });
+      rmSync(srcDir, { recursive: true, force: true });
+    }
   }
-  // A：全新环境
+  // 并行化：install.ps1 每次真实下载仓库 zip（网络 IO，~6s/次），串行 5 次为
+  // integration 层主要耗时（~50s）。A/B/D 的 HOME 彼此独立，可并行执行；
+  // D 的 3 次连跑必须串行（同一 HOME 的幂等语义测试）。
   const psA = mkdtempSync(join(tmpdir(), "dsh-inst-ps-a-"));
-  try {
-    runPs1(psA);
-    const patch = readPatch(psA);
-    check("ps1-A: 全新环境注册一次", (patch.match(/name: dsh-plugin-marketplace/g) || []).length, 1);
-    check("ps1-A: 追加 id 为 dsh-plugin-marketplace", /- id: dsh-plugin-marketplace/.test(patch), true);
-  } finally { rmSync(psA, { recursive: true, force: true }); }
-  // B：嵌套条目跳过
   const psB = mkdtempSync(join(tmpdir(), "dsh-inst-ps-b-"));
-  try {
-    mkdirSync(join(psB, ".dsh", "profiles", "web"), { recursive: true });
-    writeFileSync(patchPath(psB), INDENTED_ENTRY, "utf8");
-    runPs1(psB);
-    check("ps1-B: 嵌套条目已注册 → 跳过不追加", readPatch(psB), INDENTED_ENTRY);
-  } finally { rmSync(psB, { recursive: true, force: true }); }
-  // D：连跑 3 次
   const psD = mkdtempSync(join(tmpdir(), "dsh-inst-ps-d-"));
-  try {
-    for (let i = 0; i < 3; i++) runPs1(psD);
-    const patch = readPatch(psD);
-    check("ps1-D: 连跑 3 次只注册一次", (patch.match(/name: dsh-plugin-marketplace/g) || []).length, 1);
-  } finally { rmSync(psD, { recursive: true, force: true }); }
+  await Promise.all([
+    (async () => {
+      // A：全新环境
+      try {
+        runPs1(psA);
+        const patch = readPatch(psA);
+        check("ps1-A: 全新环境注册一次", (patch.match(/name: dsh-plugin-marketplace/g) || []).length, 1);
+        check("ps1-A: 追加 id 为 dsh-plugin-marketplace", /- id: dsh-plugin-marketplace/.test(patch), true);
+      } finally { rmSync(psA, { recursive: true, force: true }); }
+    })(),
+    (async () => {
+      // B：嵌套条目跳过
+      try {
+        mkdirSync(join(psB, ".dsh", "profiles", "web"), { recursive: true });
+        writeFileSync(patchPath(psB), INDENTED_ENTRY, "utf8");
+        runPs1(psB);
+        check("ps1-B: 嵌套条目已注册 → 跳过不追加", readPatch(psB), INDENTED_ENTRY);
+      } finally { rmSync(psB, { recursive: true, force: true }); }
+    })(),
+    (async () => {
+      // D：连跑 3 次（同一 HOME 串行）
+      try {
+        for (let i = 0; i < 3; i++) runPs1(psD);
+        const patch = readPatch(psD);
+        check("ps1-D: 连跑 3 次只注册一次", (patch.match(/name: dsh-plugin-marketplace/g) || []).length, 1);
+      } finally { rmSync(psD, { recursive: true, force: true }); }
+    })(),
+  ]);
 } else {
   console.log("SKIP ps1 沙箱（非 Windows 平台，需 pwsh）");
 }
