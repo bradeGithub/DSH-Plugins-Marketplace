@@ -7,6 +7,36 @@
 
 ---
 
+<!-- TOC -->
+- [0. Ingestion prerequisites](#0-ingestion-prerequisites)
+  - [0.1 Minimal definition of a real plugin (anti topic-squatting)](#01-minimal-definition-of-a-real-plugin-anti-topic-squatting)
+- [1. Type detection overview (must-read for authors)](#1-type-detection-overview-must-read-for-authors)
+- [2. Type A: cordis plugin (recommended primary form)](#2-type-a-cordis-plugin-recommended-primary-form)
+  - [2.1 Minimal package.json](#21-minimal-packagejson)
+  - [2.2 Source-built vs pre-built](#22-source-built-vs-pre-built)
+  - [2.3 Install pipeline (performed automatically by the marketplace)](#23-install-pipeline-performed-automatically-by-the-marketplace)
+  - [2.4 Multi-package repos (skin collections, etc.)](#24-multi-package-repos-skin-collections-etc)
+- [3. Type B: skill](#3-type-b-skill)
+- [4. Type C: agent preset](#4-type-c-agent-preset)
+- [5. Type D: install script (install.ps1 / install.sh)](#5-type-d-install-script-installps1-installsh)
+- [6. Anti-patterns & real cases](#6-anti-patterns-real-cases)
+  - [6.1 Root install scripts coexisting with a cordis declaration (dsh-paper-tutor case)](#61-root-install-scripts-coexisting-with-a-cordis-declaration-dsh-paper-tutor-case)
+  - [6.2 Description drift flips the category (dsh-TUI case)](#62-description-drift-flips-the-category-dsh-tui-case)
+  - [6.3 No version bump → update detection never fires](#63-no-version-bump-update-detection-never-fires)
+  - [6.4 Self-registering a patch → double-load crash (issue #39)](#64-self-registering-a-patch-double-load-crash-issue-39)
+  - [6.5 pkg_name collision → hidden from the list](#65-pkg_name-collision-hidden-from-the-list)
+  - [6.6 Host interface packages as regular deps → host shadowing (dsh-excel-chat case)](#66-host-interface-packages-as-regular-deps-host-shadowing-dsh-excel-chat-case)
+- [7. Self-check list (run before submitting for ingestion)](#7-self-check-list-run-before-submitting-for-ingestion)
+- [8. Marketplace behavior quick reference](#8-marketplace-behavior-quick-reference)
+- [9. Publication disclosure checklist (minimal compliance contract)](#9-publication-disclosure-checklist-minimal-compliance-contract)
+  - [Field contract (DISCLOSURE v0.2, aligned with wwumit)](#field-contract-disclosure-v02-aligned-with-wwumit)
+  - [Self-check & checking (machine-readable)](#self-check-checking-machine-readable)
+- [10. Verification-layer integration (verification field contract)](#10-verification-layer-integration-verification-field-contract)
+  - [Field contract (registry.json entry, flat)](#field-contract-registryjson-entry-flat)
+  - [Data flow](#data-flow)
+- [11. External references (division of labor with official/community docs)](#11-external-references-division-of-labor-with-officialcommunity-docs)
+<!-- /TOC -->
+
 ## 0. Ingestion prerequisites
 
 - Add the topic **`dsh-plugin`** to the repository (GitHub repo page → Settings → Topics).
