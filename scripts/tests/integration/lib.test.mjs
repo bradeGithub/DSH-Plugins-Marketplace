@@ -699,6 +699,26 @@ function mockFetch(payload, status = 200) {
       "README.md": "# readme"
     })), "instructions");
   check("findSkillRoots 跳过 upstream/", (await lib.findSkillRoots(join(dtBase, "vendored-only"))).length, 0);
+  // 7. 判定报告（detectTypeDetail）：命中特征 + 理由键随类型返回（discussion #2269 承诺项）
+  const dtDeclared = await lib.detectTypeDetail(mkFixture("dt-declared", {
+    "package.json": DSH_PLUGIN_PKG,
+    "install.sh": "#!/bin/sh\necho hi\n"
+  }));
+  check("detectTypeDetail dsh 声明优先于脚本 → cordis-plugin + dshDeclared",
+    [dtDeclared.type, dtDeclared.reasonKey, dtDeclared.hintKey],
+    ["cordis-plugin", "detectReason.dshDeclared", "detectHint.dshDeclared"]);
+  const dtPlain = await lib.detectTypeDetail(mkFixture("dt-plain-npm", {
+    "package.json": JSON.stringify({ name: "plain-project" })
+  }));
+  check("detectTypeDetail 非插件 package.json → pkgOnly 理由",
+    [dtPlain.type, dtPlain.reasonKey, dtPlain.hintKey],
+    ["cordis-plugin", "detectReason.pkgOnly", "detectHint.pkgOnly"]);
+  const dtNone = await lib.detectTypeDetail(mkFixture("dt-empty", {
+    "README.md": "# hi"
+  }));
+  check("detectTypeDetail 无特征 → instructions + none 理由",
+    [dtNone.type, dtNone.reasonKey, dtNone.hintKey],
+    ["instructions", "detectReason.none", "detectHint.none"]);
 
   console.log(`\n${pass} passed, ${fail} failed`);
   process.exit(fail === 0 ? 0 : 1);
