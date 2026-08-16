@@ -214,7 +214,7 @@ node -e "const p=require('/tmp/x/package.json');console.log(p.dsh, p.main, requi
 
 > 识别层管「怎么装」，验证层管「装了能不能信」，**披露层管「装之前该不该装、数据去了哪」**。
 > 以下披露项是作者契约的一部分——在 README 或仓库根 `DISCLOSURE.md` 中如实声明即可（机器可读的
-> `disclosure` 索引字段正在设计，与验证字段 `verdict/verifiedBy/reportUrl` 同批推出）。
+> `disclosure` 索引字段仍设计中，验证字段 `verdict/verifiedBy/reportUrl` 已落地，见 §10）。
 
 | 披露项 | 要求 | 示例 |
 |---|---|---|
@@ -227,7 +227,35 @@ node -e "const p=require('/tmp/x/package.json');console.log(p.dsh, p.main, requi
 
 ---
 
-## 10. 外部参考（与官方/社区文档的分工）
+## 10. 验证层对接（verification 字段契约）
+
+> 「识别层管怎么装」之后是「**验证层管装了能不能信**」——运行时验证结论由社区验证工具产出，
+> 市场在构建期抓取开放数据层并盖章到索引条目，客户端卡片显示「✓ 已验证」徽章（悬停可见
+> 验证方/时间/证据摘要，点击直达逐条判定明细）。
+
+### 字段契约（registry.json 条目，平铺）
+
+| 字段 | 含义 | 来源 |
+|---|---|---|
+| `verdict` | `pass`（开放数据层只收录通过验证的条目；fail 结论由报告本体承载） | 开放数据层条目 |
+| `verifiedBy` | 验证工具与版本（如 `dsh-plugin-verify@0.1.2`） | 开放数据层条目 |
+| `verifiedAt` | 验证时间（时效判断依据） | 开放数据层条目 |
+| `reportUrl` | 验证报告链接（逐条规则判定明细） | 开放数据层条目 |
+| `schemaVersion` | 契约版本；不匹配时市场**整体跳过不盖章**（fail-closed，防演进破坏解析） | 开放数据层顶层 |
+| `waterfall` / `toolsResult` | 摘要证据：waterfall 命中数（如 `7/7`）/ 工具真实执行是否成功 | 开放数据层条目 |
+
+### 数据流
+
+1. [dsh-plugin-verify](https://github.com/qing3a/dsh-plugin-verify)（社区验证工具，deepseek-harness discussion #2269 对接）产出 `reports/*.json`——报告以 **`fullName`**（插件仓库 `owner/name`）为稳定映射键；
+2. 验证仓库根 `verified.json`（开放数据层）聚合全部已验证条目；
+3. 市场 CI 每次构建抓取 `verified.json` → 按 `fullName` 匹配索引条目盖章（旧版条目回退从 `repo` URL 解析 owner/name）；
+4. 客户端卡片显示「✓ 已验证」徽章，点击直达报告。
+
+作者须知：验证是**第三方中立证据**，盖章 ≠ 市场背书；`verifiedAt` 决定时效——报告随插件演进过期，新版本需重新验证。
+
+---
+
+## 11. 外部参考（与官方/社区文档的分工）
 
 本规范只覆盖**「市场识别层」**：仓库怎么写才能被市场正确收录/安装/更新。
 更深层的「DSH 框架插件怎么写」（bundle manifest、patch 行、Service/客户端 API）请看：

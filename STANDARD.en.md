@@ -202,7 +202,7 @@ node -e "const p=require('/tmp/x/package.json');console.log(p.dsh, p.main, requi
 ## 9. Publication disclosure checklist (minimal compliance contract)
 
 > The recognition layer governs «how it installs», the verification layer «whether it can be trusted», and the **disclosure layer governs «whether you should install it, and where the data goes»**.
-> The following disclosures are part of the author contract — state them honestly in the README or a root `DISCLOSURE.md` (a machine-readable `disclosure` index field is being designed alongside the verification fields `verdict`/`verifiedBy`/`reportUrl`).
+> The following disclosures are part of the author contract — state them honestly in the README or a root `DISCLOSURE.md` (a machine-readable `disclosure` index field is still being designed; the verification fields `verdict`/`verifiedBy`/`reportUrl` have landed — see §10).
 
 | Item | Requirement | Example |
 |---|---|---|
@@ -215,7 +215,33 @@ Reference implementation: `skill-compliance` (rule-library JSON → check → sc
 
 ---
 
-## 10. External references (division of labor with official/community docs)
+## 10. Verification-layer integration (verification field contract)
+
+> After «how it installs» comes «**can it be trusted**» — runtime verification conclusions are produced by community verification tooling; the marketplace fetches the open-data layer at build time, stamps index entries, and the client shows a «✓ verified» badge (hover for verifier/date/evidence summary, click through to the per-rule detail).
+
+### Field contract (registry.json entry, flat)
+
+| Field | Meaning | Source |
+|---|---|---|
+| `verdict` | `pass` (the open-data layer only lists passing entries; fail conclusions live in the report itself) | data-layer entry |
+| `verifiedBy` | Verifier tool and version (e.g. `dsh-plugin-verify@0.1.2`) | data-layer entry |
+| `verifiedAt` | Verification time (staleness signal) | data-layer entry |
+| `reportUrl` | Link to the verification report (per-rule detail) | data-layer entry |
+| `schemaVersion` | Contract version; on mismatch the marketplace **skips stamping entirely** (fail-closed against format evolution) | data-layer top level |
+| `waterfall` / `toolsResult` | Summary evidence: waterfall hits (e.g. `7/7`) / whether a tool really executed successfully | data-layer entry |
+
+### Data flow
+
+1. [dsh-plugin-verify](https://github.com/qing3a/dsh-plugin-verify) (community verification tool, deepseek-harness discussion #2269) produces `reports/*.json` — reports use **`fullName`** (plugin repo `owner/name`) as the stable mapping key;
+2. The verifier repo's root `verified.json` (open-data layer) aggregates all verified entries;
+3. Each marketplace CI build fetches `verified.json` → matches index entries by `fullName` (legacy entries fall back to parsing owner/name from the `repo` URL);
+4. The client card shows the «✓ verified» badge, click-through to the report.
+
+Author notes: verification is **third-party neutral evidence** — the stamp is not an endorsement by this marketplace; `verifiedAt` determines staleness — reports age out as the plugin evolves and a new version needs re-verification.
+
+---
+
+## 11. External references (division of labor with official/community docs)
 
 This spec only covers the **marketplace-recognition layer**: how to shape a repo so the marketplace ingests/installs/updates it correctly.
 For the deeper «how to write a DSH framework plugin» (bundle manifest, patch rows, Service/client APIs), see:
