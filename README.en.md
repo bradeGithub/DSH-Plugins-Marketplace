@@ -2,25 +2,27 @@
 
 🌐 **Language / 语言:** **English** | [中文](README.md)
 
-A plugin marketplace for [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) (DSH): it pulls **every** repository tagged with the [`dsh-plugin` topic](https://github.com/topics/dsh-plugin) on GitHub and shows them as cards in the Settings page of the DSH Web GUI — **one-click install / auto-update / version detection / installed recognition**, with no command line required.
+A plugin marketplace for [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) (DSH): it auto-discovers **every** repository tagged with the [`dsh-plugin` topic](https://github.com/topics/dsh-plugin) on GitHub and shows them as cards in the Settings page of the DSH Web GUI — **one-click install / version detection / auto-update / installed recognition**, with no command line required.
 
-![DeepSeek Harness](https://img.shields.io/badge/DeepSeek%20Harness-ecosystem%20plugin-4D6BFE?logo=deepseek&logoColor=white)
-![GitHub Stars](https://img.shields.io/github/stars/bradeGithub/DSH-Plugins-Marketplace?logo=github)
-![License](https://img.shields.io/github/license/bradeGithub/DSH-Plugins-Marketplace)
-![Registry CI](https://img.shields.io/github/actions/workflow/status/bradeGithub/DSH-Plugins-Marketplace/registry.yml?label=registry%20CI)
-![Last Commit](https://img.shields.io/github/last-commit/bradeGithub/DSH-Plugins-Marketplace)
-![Type](https://img.shields.io/badge/Type-client%2Bserver%20plugin-blue)
-![Platform](https://img.shields.io/badge/Platform-Web%20GUI-lightgrey)
-![i18n](https://img.shields.io/badge/i18n-zh%20%7C%20en-important)
+<p align="center">
+  <img src="https://img.shields.io/badge/DeepSeek%20Harness-ecosystem%20plugin-4D6BFE?logo=deepseek&logoColor=white" alt="DeepSeek Harness">
+  <img src="https://img.shields.io/github/stars/bradeGithub/DSH-Plugins-Marketplace?logo=github" alt="GitHub Stars">
+  <img src="https://img.shields.io/github/license/bradeGithub/DSH-Plugins-Marketplace" alt="License">
+  <img src="https://img.shields.io/github/actions/workflow/status/bradeGithub/DSH-Plugins-Marketplace/registry.yml?label=registry%20CI" alt="Registry CI">
+  <img src="https://img.shields.io/github/last-commit/bradeGithub/DSH-Plugins-Marketplace" alt="Last Commit">
+  <img src="https://img.shields.io/badge/Type-client%2Bserver%20plugin-blue" alt="Type">
+  <img src="https://img.shields.io/badge/Platform-Web%20GUI-lightgrey" alt="Platform">
+  <img src="https://img.shields.io/badge/i18n-zh%20%7C%20en-important" alt="i18n">
+</p>
 
 ---
 
-
 <!-- TOC -->
+- [✨ Why this marketplace](#why-this-marketplace)
 - [⚡ Quick install (copy & run)](#quick-install-copy-run)
-- [✨ Features](#features)
-- [📦 Installing this plugin](#installing-this-plugin)
 - [🚀 Usage](#usage)
+- [✨ Features](#features)
+- [📦 Manual install](#manual-install)
 - [🔧 How it works](#how-it-works)
   - [Data source (registry first, search API fallback)](#data-source-registry-first-search-api-fallback)
   - [Install pipeline (5 steps)](#install-pipeline-5-steps)
@@ -30,29 +32,78 @@ A plugin marketplace for [DeepSeek Harness](https://github.com/deepseek-ai/deeps
 - [📡 HTTP API](#http-api)
 - [⚠️ Security notes](#security-notes)
 - [⚖️ Disclaimer](#disclaimer)
-- [🔄 Known limitations](#known-limitations)
+- [🧱 Known limitations](#known-limitations)
 - [🌱 Third-party ecosystem](#third-party-ecosystem)
 - [🛠️ Development & maintenance](#development-maintenance)
 - [📝 Changelog](#changelog)
 - [📄 License](#license)
 <!-- /TOC -->
 
+---
+
+## ✨ Why this marketplace
+
+<p align="center">
+  <b>3900+</b> DSH plugins &nbsp;·&nbsp; <b>14000+</b> general Skills &nbsp;·&nbsp; <b>2 h</b> auto-ingestion &nbsp;·&nbsp; <b>0</b> API rate limits
+</p>
+
+| | Strength | Details |
+|---|---|---|
+| 🔍 | **Complete coverage** | Auto-discovers **every** repo under the GitHub `dsh-plugin` topic (**3900+** and counting), plus a dedicated **14000+** general Skills column (`agent-skills` ∪ `claude-skills`) |
+| 🤖 | **Auto-ingestion, zero paperwork** | CI incrementally scans the topic every 2 hours — tag your repo with `dsh-plugin` and it enters the marketplace within **2 hours at most**, no issue, no review queue |
+| ⚡ | **Instant, rate-limit-free** | The list is served from a static registry via the jsDelivr CDN — thousands of plugins load instantly, end users make **zero GitHub API calls** |
+| 🎯 | **Smart type detection** | Automatically detects and installs 4 repo types: cordis plugin / skill (SKILL.md) / agent preset / install script — source-built plugins get a build-confirmation prompt; plugins needing API keys pause and ask for material |
+| 🔄 | **Version detection & one-click updates** | Installed version vs. latest repo version compared automatically — the button flips to «Update» when they differ; npm-published plugins compare against npm dist-tags (same-source, no false positives) |
+| 🔒 | **Safety guardrails** | Risk confirmation before running third-party scripts; provided material is env-only and never persisted; minimal environment isolation; Host allowlist + CSRF header against cross-site forgery |
+| 🏷️ | **Categories + community badges** | Build-time auto-categorization (12 filter chips); repos curated by awesome lists get a blue «Community listed» badge |
+| 🌍 | **Bilingual** | UI and install logs follow DSH's language setting — 中文 / English |
+
+> **Plugin authors, read [STANDARD.md](STANDARD.md)** ([English](STANDARD.en.md)): the marketplace-recognition spec — how to shape each plugin type (cordis plugin / skill / agent preset / script) so the marketplace detects, installs and updates it correctly, including the type-detection rules and known anti-patterns.
+
+---
+
 ## ⚡ Quick install (copy & run)
 
-**One sentence to hand to an AI** (any AI with command execution works — no further explanation needed):
+**Option 1 (recommended): official dsh CLI** — installation and registration are handled by Harness's official mechanism (requires the `dsh` CLI and `pnpm`; `dsh web` users usually have both):
 
-> Install the DSH plugin marketplace (dsh-plugin-marketplace): clone https://github.com/bradeGithub/DSH-Plugins-Marketplace into ~/.dsh/profiles/web/node_modules/dsh-plugin-marketplace, register it in ~/.dsh/profiles/web/cordis.patch.yml (id: plugin-marketplace, name: dsh-plugin-marketplace), then restart dsh web.
+```bash
+dsh plugin --profile web install bradeGithub/DSH-Plugins-Marketplace
+```
 
-**Or just copy & run a command:**
+Uninstall / update use the same official commands:
+
+```bash
+dsh plugin --profile web remove bradeGithub/DSH-Plugins-Marketplace
+dsh plugin --profile web install bradeGithub/DSH-Plugins-Marketplace   # reinstall = update
+```
+
+**Option 2: install script** (for environments without the dsh CLI; the script automatically switches to the official method when it detects the CLI):
 
 | Platform | Command |
 |---|---|
 | Windows (PowerShell) | `irm https://raw.githubusercontent.com/bradeGithub/DSH-Plugins-Marketplace/main/install.ps1 \| iex` |
 | macOS / Linux | `curl -sL https://raw.githubusercontent.com/bradeGithub/DSH-Plugins-Marketplace/main/install.sh \| bash` |
 
-> ⚠️ The commands above download and run the install script from this repo (copies the plugin and registers it in `cordis.patch.yml`) — trust-to-execute. Alternatively, clone the repo and run `install.ps1` / `install.sh` manually, or install this repo directly from the plugin marketplace (it contains `install.ps1`, so the marketplace asks for your confirmation first).
-> It is recommended to **review the script first** before executing it (`irm <url> | iex` / `curl <url> | bash` is a well-known remote-code-execution pattern).
+**One sentence to hand to an AI** (any AI with command execution works — no further explanation needed):
+
+> Install the DSH plugin marketplace (dsh-plugin-marketplace): run `dsh plugin --profile web install bradeGithub/DSH-Plugins-Marketplace`; if there is no dsh CLI, clone https://github.com/bradeGithub/DSH-Plugins-Marketplace into ~/.dsh/profiles/web/node_modules/dsh-plugin-marketplace and register it in ~/.dsh/profiles/web/cordis.patch.yml (id: plugin-marketplace, name: dsh-plugin-marketplace), then restart dsh web.
+
+> ⚠️ The script commands download and run the install script from this repo (copies the plugin and registers it in `cordis.patch.yml`) — trust-to-execute. It is recommended to **review the script first** before executing it (`irm <url> | iex` / `curl <url> | bash` is a well-known remote-code-execution pattern). The official CLI method performs the installation inside Harness itself, without running third-party scripts.
 > After installing, **restart DSH** (re-run `dsh web`) and refresh the page.
+
+---
+
+## 🚀 Usage
+
+1. Restart DSH, open the Web GUI and go to **Settings → DSH Plugin Marketplace**
+2. The page auto-loads all plugins (installed first, then sorted by stars); click «Refresh» to force a re-fetch
+3. Use the search box to filter plugins by name; category chips filter by column
+4. Click the button on a plugin card:
+   - **Install** → starts installation with a live-scrolling log
+   - Material needed → an input dialog appears; provide the API key etc. and click «Submit and continue install»
+   - **Update** → overwrite-upgrade when a newer version is detected
+   - **Installed** (grey) → nothing to do
+5. Switch to the **General Skills** tab to browse 14000+ skills with search / infinite-scroll pagination / one-click install
 
 ---
 
@@ -72,7 +123,9 @@ A plugin marketplace for [DeepSeek Harness](https://github.com/deepseek-ai/deeps
 - **Bilingual**: the UI and install logs follow DSH's language setting — 中文 / English (Settings → General → Language)
 - **Version detection & updates**: cordis plugins compare the installed version against the latest version of the repo (read from the local cache, zero extra network requests); when they differ the button turns into «Update» — click to overwrite-upgrade
 - **Search**: real-time filtering by plugin name / full repo name / tags
-- **General Skills column**: switch to the «General Skills» tab in Settings — browse the CI-built skills index (`agent-skills` ∪ `claude-skills`, 1800+ repos) with search / paginated infinite scroll / one-click install to `~/.dsh/skills/` / installed recognition; repos with install scripts carry a 🛡 badge, unverified probes show a weak «unverified» hint
+- **Category**: build-time auto-categorization from description/tags (12 categories: vision / document / memory / model / notify / coding / conversation / web-ui / agent / tool / resource / other), filter chips in the UI + category badges on cards
+- **Community badge**: the build fetches awesome lists (default: [awesome-dsh-plugin](https://github.com/awesome-dsh-plugin/awesome-dsh-plugin), community-curated) and stamps a blue «Community listed» badge on intersecting repos (tooltip explains the source) — quick recognition of community-recognized plugins (listing ≠ endorsement by this marketplace)
+- **General Skills column**: switch to the «General Skills» tab in Settings — browse the CI-built skills index (`agent-skills` ∪ `claude-skills`, 14000+ repos) with search / paginated infinite scroll / one-click install to `~/.dsh/skills/` / installed recognition; repos with install scripts carry a 🛡 badge, unverified probes show a weak «unverified» hint
 - **Refresh feedback**: click «Refresh» to force a re-fetch, with a toast confirming «refresh succeeded / refresh failed»
 - **GitHub link**: every card links to the original repo (opens in a new tab)
 - **Dark/light themes**: built entirely on DSH theme tokens (`--dsw-alias-*`), adapting automatically
@@ -80,7 +133,7 @@ A plugin marketplace for [DeepSeek Harness](https://github.com/deepseek-ai/deeps
 
 ---
 
-## 📦 Installing this plugin
+## 📦 Manual install
 
 > 💡 Prefer no manual steps? Use the [⚡ Quick install](#-quick-install-copy--run) section above (a single command, or the one-liner handed to an AI).
 
@@ -96,19 +149,6 @@ The plugin lives at `~/.dsh/profiles/web/node_modules/dsh-plugin-marketplace/` a
 
 ---
 
-## 🚀 Usage
-
-1. Restart DSH, open the Web GUI and go to **Settings → DSH Plugin Marketplace**
-2. The page auto-loads all plugins (sorted by stars); click «Refresh» to force a re-fetch
-3. Use the search box to filter plugins by name
-4. Click the button on a plugin card:
-   - **Install** → starts installation with a live-scrolling log
-   - Material needed → an input dialog appears; provide the API key etc. and click «Submit and continue install»
-   - **Update** → overwrite-upgrade when a newer version is detected
-   - **Installed** (grey) → nothing to do
-
----
-
 ## 🔧 How it works
 
 ### Data source (registry first, search API fallback)
@@ -116,7 +156,7 @@ The plugin lives at `~/.dsh/profiles/web/node_modules/dsh-plugin-marketplace/` a
 ```
 GitHub Actions (every 2 hours, repo's own token)
    └─ scripts/build-registry.mjs: pages topic:dsh-plugin, incremental merge, dedupe/self-exclude
-        └─ commits registry.json back to main (460+ plugins, sorted by stars)
+        └─ commits registry.json back to main (3900+ plugins, sorted by stars)
              └─ plugin reads: jsDelivr CDN (fast in CN) → raw.githubusercontent (fallback)
                   └─ only if all sources fail: GitHub search API (paged, 10-min cache)
 ```
@@ -180,9 +220,13 @@ When both exist and differ → the card shows an «Update» button plus `install
 
 | Endpoint | Method | Description |
 |---|---|---|
-| `/api/marketplace/list` | GET | Plugin list (star-descending, with `installed` / `installedVersion` / `latestVersion` / `updateAvailable`); `?refresh=1` forces a re-fetch |
+| `/api/marketplace/list` | GET | Plugin list (star-descending, with `installed` / `installedVersion` / `latestVersion` / `updateAvailable`, `source` data source, `dropped` hidden-duplicate count); `?refresh=1` forces a re-fetch |
 | `/api/marketplace/skills` | GET | General skills list (from `skills.json`, filtered to `has_skill !== false`, with `installed` / `installedAt`); `?refresh=1` forces a re-fetch |
-| `/api/marketplace/install` | POST | Install / update, body: `{ "repo": "owner/name", "answers": { "ENV_NAME": "value" } }`; returns `done` / `awaiting-input` / `aborted` / `failed` status + step-by-step log |
+| `/api/marketplace/install` | POST | Install / update, body: `{ "repo": "owner/name", "answers": { "ENV_NAME": "value" } }`; returns `done` / `awaiting-input` / `aborted` / `failed` / `manual` status + step-by-step log |
+| `/api/marketplace/uninstall` | POST | Uninstall, body: `{ "repo": "owner/name" }`; removes the install dir / package dir + `cordis.patch.yml` entry + install record; returns `done` (with `removed` count and log) |
+| `/api/marketplace/self-update` | GET | Marketplace self-update check (`{ installedVersion, latestVersion, updateAvailable, checkedAt }`) |
+
+> Note: uninstall relies on the `installed.json` record — plugins **installed via this marketplace** can be fully uninstalled; plugins pre-installed manually (outside the marketplace) are only recognized as «installed», with no uninstall button.
 
 ---
 
@@ -205,13 +249,17 @@ When both exist and differ → the card shows an «Update» button plus `install
 
 ---
 
-## 🔄 Known limitations
+## 🧱 Known limitations
 
 - **Security model**: the install endpoint has no user authentication; protection relies on **local-network isolation plus a CSRF header check, a Host allowlist (loopback / LAN / configurable) and an Origin check** — do not expose the DSH web port to untrusted networks. Installing means executing third-party code on your machine (npm dependencies and install scripts); only install repos you trust and have reviewed
-- Version detection only works for plugins with `package.json`; skills / presets / script types have no version concept
+- The whole install task is attached to a single POST request (clone + npm install + build + material-confirmation loops); a short-timeout reverse proxy in front of DSH (default 60 s) may cut the connection — the backend task keeps running, refresh the page to confirm the result
+- Version detection only works for plugins with `package.json`; skills / presets / script types have no version concept; authors who never bump `version` won't trigger update hints
 - The plugin list is served from the static registry (CDN) by default; the GitHub search API is used only when both registry sources are unreachable, and its unauthenticated limit is **10 requests/minute** — clicking «Refresh» too often during fallback may hit the limit (the UI will report refresh failure — wait and retry)
-- **Skills index scope**: full index since v1.3 — Search API «stars segments + time-window bisection» breaks the 1000-results-per-query cap, covering all repos of `agent-skills` ∪ `claude-skills` (11,000+ currently); `has_skill` probing fills in batches under the Core API quota (CI resumes incrementally every 2 hours; unprobed repos show a «unverified» hint)
+- **Skills index scope**: full index since v1.3 — Search API «stars segments + time-window bisection» breaks the 1000-results-per-query cap, covering all repos of `agent-skills` ∪ `claude-skills` (14000+ currently); `has_skill` probing fills in batches under the Core API quota (CI resumes incrementally every 2 hours; unprobed repos show a «unverified» hint)
+- **Index update cadence**: both indexes are incrementally rebuilt by CI every 2 hours (repos pushed in the last 3 days, capturing new repos / stars / updated_at instantly) and merged with the old index; a full rebuild at 04:00 UTC daily refreshes star counts
 - «Installed» recognition for script-type plugins is based on cache-dir existence; after deleting the cache it will show as installable again
+- The «Community listed» badge comes from a third-party awesome list (default [awesome-dsh-plugin](https://github.com/awesome-dsh-plugin/awesome-dsh-plugin)); if the list fetch fails, that build doesn't update the badge (incremental builds keep the old stamp, the next build recovers); listing does not represent this marketplace's endorsement
+- Temp-dir / supply-chain notes for the install script are in the `install.sh` header (unsigned tarballs are an inherent limitation of the curl|bash pattern)
 - Plugin code changes require a **DSH restart** to take effect (the web profile's HMR is disabled)
 
 ---
@@ -229,7 +277,7 @@ This entry was submitted by the Harness Desktop author, who also maintains the D
 - Server-side logic: edit `lib/index.js` (syntax check: `node --check`)
 - Page UI: edit `lib/client.js` (browser bundle, `window.__ModuleLoader__.load` format; `require` resolves DSH platform modules)
 - Restart DSH for changes to take effect; the client bundle's revision (`rev`) is content-hashed, and the browser fetches the new version automatically after a restart
-- Localization: dictionaries live at the top of `lib/client.js` (UI) and in `MESSAGES` in `lib/index.js` (server logs); the plugin registers its namespace into DSH's locale service and follows the DSH language setting (fallback: browser language)
+- **Plugin authors, read [STANDARD.md](STANDARD.md)** ([English](STANDARD.en.md)): the marketplace-recognition spec — how to shape each plugin type (cordis plugin / skill / agent preset / script) so the marketplace detects, installs and updates it correctly, including the type-detection rules and known anti-patterns.
 
 ---
 
