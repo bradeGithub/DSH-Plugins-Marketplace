@@ -7,7 +7,7 @@
 
 import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, existsSync, renameSync, rmSync } from "node:fs";
 import { fileURLToPath } from "node:url";
-import { join, dirname } from "node:path";
+import { join, dirname, sep } from "node:path";
 import { tmpdir } from "node:os";
 
 // ---- mock 基建：临时 DSH_HOME（必须在 import lib 之前设置）----
@@ -19,7 +19,10 @@ mkdirSync(join(process.env.DSH_HOME, "marketplace"), { recursive: true });
 writeFileSync(join(process.env.DSH_HOME, "marketplace", "installed.json"), JSON.stringify({
   "none/already-installed": { type: "skill", name: "already-installed", location: join(process.env.DSH_HOME, "skills", "already-installed"), installedAt: Date.now() },
   // check-update 场景：npm 型 cli 安装记录（name 为 npm 包名，非 owner/repo）
-  "none/cli-pkg": { type: "cli", name: "demo-npm-pkg", location: join(process.env.DSH_HOME, "profiles", "web", "node_modules", "demo-npm-pkg"), installedAt: Date.now() }
+  "none/cli-pkg": { type: "cli", name: "demo-npm-pkg", location: join(process.env.DSH_HOME, "profiles", "web", "node_modules", "demo-npm-pkg"), installedAt: Date.now() },
+  // list handler cliNpmForm 穿越防御场景：name 为非法形态（../ 穿越）——篡改 installed.json
+  // 时 split("/") 拼 node_modules 会读任意目录；防御分支应拒绝（installedVersion null）
+  "none/cli-evil": { type: "cli", name: "../evil-pkg", location: join(process.env.DSH_HOME, "profiles", "web", "node_modules", "evil-pkg"), installedAt: Date.now() }
 }, null, 2), "utf8");
 // check-update 的已装版本读取：PROFILE_NM/<pkgName>/package.json（v1.4.10 起 npm 型 cli
 // 版本检测改手动触发）——预写 1.0.0，npm registry mock 返回 2.0.0 → updateAvailable
@@ -53,6 +56,8 @@ function mockFetch(payload, status = 200) {
     status,
     json: async () => payload,
     text: async () => (typeof payload === "string" ? payload : JSON.stringify(payload)),
+    // readBodyLimited 无 body.reader 时的回退（mock 无流式 body）
+    arrayBuffer: async () => Buffer.from(typeof payload === "string" ? payload : JSON.stringify(payload)),
   });
   return orig;
 }
@@ -318,6 +323,41 @@ function mockFetch(payload, status = 200) {
   globalThis.fetch = orig3;
   check("fetchRegistryRepos 数组", Array.isArray(reg), true);
 
+  // ---- L6 流式计数：chunked（无 content-length）时 32MB 上限不被绕过 ----
+  // json()/arrayBuffer()/text() 会把整个 body 读入内存——修复前 chunked 响应
+  // 直接信任读取（安全守卫契约见 unit/security-guards.test.mjs 的 L6 段）。
+  // mock 响应只有 body 流（headers.get 恒 null = 无 content-length）：
+  // 正常 chunk 读完 → .gz 源解析成功；超 32MB → 流式拦截 → 换下一源 → 全超限 null。
+  {
+    const { gzipSync } = await import("node:zlib");
+    const gzBuf = gzipSync(Buffer.from(JSON.stringify(registryPayload)));
+    const chunkedRes = (chunks) => ({
+      ok: true, status: 200,
+      headers: { get: () => null },
+      body: {
+        getReader: () => {
+          let i = 0;
+          return {
+            read: async () => (i < chunks.length ? { done: false, value: Buffer.from(chunks[i++]) } : { done: true, value: undefined }),
+            cancel: async () => {},
+          };
+        },
+      },
+    });
+    const orig4 = globalThis.fetch;
+    const half = Math.ceil(gzBuf.length / 2);
+    globalThis.fetch = async () => chunkedRes([gzBuf.subarray(0, half), gzBuf.subarray(half)]);
+    const gzReg = await lib.fetchRegistryRepos("dsh");
+    globalThis.fetch = orig4;
+    check("chunked .gz 流式读取正常解析", Array.isArray(gzReg) && gzReg.length > 0, true);
+    const orig6 = globalThis.fetch;
+    const big = Buffer.alloc(33 * 1024 * 1024, 0x61);
+    globalThis.fetch = async () => chunkedRes([big]);
+    const over = await lib.fetchRegistryRepos("dsh");
+    globalThis.fetch = orig6;
+    check("chunked 超 32MB 流式拦截（换源后 null）", over === null, true);
+  }
+
   // fetchJson 错误路径（fetchJson 未导出，经 fetchAllRepos 内部触发）：
   // 所有 registry 源返回 403 → （内置索引存在会先兜底，#12——临时移开以覆盖
   // 更深层路径）→ 磁盘缓存（清空）→ 搜索 API → fetchJson 抛错被捕获（含
@@ -349,6 +389,20 @@ function mockFetch(payload, status = 200) {
   check("apply 注册路由", registered.length > 0, true);
   check("apply 注册 install 路由", registered.some((r) => r.path === "/api/marketplace/install"), true);
   check("apply 注册 skills 路由", registered.some((r) => r.path === "/api/marketplace/skills"), true);
+
+  // ---- 执行边界行为验证：MAX_EXEC_BUFFER（32MB）vs execFile 默认 1MB ----
+  // 安装/更新链的 execFile 输出上限：2MB 输出在默认 maxBuffer(1MB) 下必炸
+  // （ERR_CHILD_PROCESS_STDIO_MAXBUFFER——npm install 常见触发），32MB 下正常。
+  // 证明常量选择的行为依据（契约断言见 unit/security-guards.test.mjs）。
+  const { execFile } = await import("node:child_process");
+  const execFileP = (await import("node:util")).promisify(execFile);
+  const boomScript = "process.stdout.write('x'.repeat(2 * 1024 * 1024))";
+  const defaultFails = await execFileP(process.execPath, ["-e", boomScript], { maxBuffer: 1024 * 1024 })
+    .then(() => false).catch((e) => /MAXBUFFER/i.test(String(e?.code ?? "")));
+  check("2MB 输出在默认 1MB maxBuffer 下炸（行为前提）", defaultFails, true);
+  const bigOk = await execFileP(process.execPath, ["-e", boomScript], { maxBuffer: 32 * 1024 * 1024 })
+    .then(() => true).catch(() => false);
+  check("2MB 输出在 32MB maxBuffer 下正常（MAX_EXEC_BUFFER 依据）", bigOk, true);
 
   // ---- restore/webdav handler：WebDAV 拉取备份 → 恢复差异 ----
   // 整条 handler 补测（此前无任何测试触发）：405 / 非法 URL / fetch 失败 / 成功 diff / 非法 backup。
@@ -472,7 +526,60 @@ function mockFetch(payload, status = 200) {
     // 非 GET/POST → 405
     r = await suCall("DELETE");
     check("self-update DELETE 405", r.s, 405);
-    // 审查 T1：mock 远端更高版本 → 走真实 doSelfUpdate 执行路径（CLI 安装）——
+
+    // ---- Issue #46 复现：Windows 上 dshCli(.cmd) 存在时 execFile 直接启动 → spawn EINVAL ----
+    // 标准 npm 全局布局（%APPDATA%\npm\dsh.cmd）存在 → 走 execFileAsync(dshCli)——
+    // Node 的 execFile 无法直接启动 .cmd 批处理（无 shell 参与，spawn EINVAL）。
+    // 修复：.cmd 经 cmd.exe /c 启动（路径独立参数，Node 自动引号——兼容含空格路径；
+    // 不能用 /d /s 修饰符，/s 引号剥离会把路径引号剥掉）。执行成功后才走到版本验证
+    // （无真实更新 → verification failed），错误消息不再是 EINVAL。
+    if (process.platform === "win32") {
+      const savedAppData = process.env.APPDATA;
+      // 目录名含空格（模拟 APPDATA 含空格用户名的 Windows 布局）
+      const fakeAppData = mkdtempSync(join(tmpdir(), "dsh supd appdata-"));
+      try {
+        mkdirSync(join(fakeAppData, "npm"), { recursive: true });
+        writeFileSync(join(fakeAppData, "npm", "dsh.cmd"), "@echo off\r\nexit /b 0\r\n", "utf8");
+        process.env.APPDATA = fakeAppData;
+        const origSu2 = mockFetch({ version: "99.0.0" }); // 远高于本地 → 走执行更新路径
+        let r2 = await suCall("POST");
+        globalThis.fetch = origSu2;
+        check("self-update Windows dsh.cmd 经 cmd.exe 启动（无 EINVAL，含空格路径）",
+          r2.b?.status === "failed" && !/EINVAL/.test(r2.b?.error ?? ""), true);
+        check("self-update Windows 执行路径走到版本验证", /verification failed/.test(r2.b?.error ?? ""), true);
+      } finally {
+        if (savedAppData !== undefined) process.env.APPDATA = savedAppData; else delete process.env.APPDATA;
+        rmSync(fakeAppData, { recursive: true, force: true });
+      }
+    }
+
+    // ---- else-if 分支：Windows 自定义 npm prefix（APPDATA 无 dsh.cmd）→ cmd /c 解析 PATH ----
+    // 与 #46 场景互斥（dshCli 不存在）；PATH 前置 stub dsh（exit 0）→ 执行成功走到
+    // 版本验证（verification failed），错误不再是 ENOENT/命令不存在。
+    if (process.platform === "win32") {
+      const savedAppData = process.env.APPDATA;
+      const savedPath = process.env.PATH;
+      const fakeAppData = mkdtempSync(join(tmpdir(), "dsh-supd-nopath-"));
+      const stubDir = mkdtempSync(join(tmpdir(), "dsh-supd-stub-"));
+      try {
+        process.env.APPDATA = fakeAppData; // 不含 npm/dsh.cmd
+        writeFileSync(join(stubDir, "dsh.cmd"), "@echo off\r\nexit /b 0\r\n", "utf8");
+        process.env.PATH = `${stubDir};${savedPath ?? ""}`;
+        const origSu3 = mockFetch({ version: "99.0.0" });
+        let r3 = await suCall("POST");
+        globalThis.fetch = origSu3;
+        check("self-update PATH 回退分支经 cmd /c 启动（无 ENOENT）",
+          r3.b?.status === "failed" && !/ENOENT|不是内部或外部命令/.test(r3.b?.error ?? ""), true);
+        check("self-update PATH 回退分支走到版本验证", /verification failed/.test(r3.b?.error ?? ""), true);
+      } finally {
+        if (savedAppData !== undefined) process.env.APPDATA = savedAppData; else delete process.env.APPDATA;
+        if (savedPath !== undefined) process.env.PATH = savedPath; else delete process.env.PATH;
+        rmSync(fakeAppData, { recursive: true, force: true });
+        rmSync(stubDir, { recursive: true, force: true });
+      }
+    }
+
+    // 审查 T1（上游）：mock 远端更高版本 → 走真实 doSelfUpdate 执行路径（CLI 安装）——
     // 测试环境无 dsh CLI（Linux ENOENT / Windows 无 APPDATA 的 dsh.cmd），
     // CLI 失败或版本未变都会如实上报 500 failed，而非静默成功。
     const origSuHigh = mockFetch({ version: "999.0.0" });
@@ -523,18 +630,28 @@ function mockFetch(payload, status = 200) {
     globalThis.fetch = origFail;
     check("check-update npm 失败 status=done", r.b && r.b.status, "done");
     check("check-update npm 失败 updateAvailable false", r.b && r.b.updateAvailable, false);
-    // fetchNpmLatest 兜底：npmmirror 失败 → npmjs 命中（顺序 mock 分派）
-    const origSeq = globalThis.fetch;
-    let seq = 0;
-    globalThis.fetch = async () => {
-      seq++;
-      return seq === 1
-        ? { ok: false, status: 500, json: async () => ({}), text: async () => "{}" }
-        : { ok: true, status: 200, json: async () => ({ "dist-tags": { latest: "3.0.0" } }), text: async () => "{}" };
+    // fetchNpmLatest：按 URL 分派（双查取新——npmjs 官方优先，npmmirror 兜底）
+    const npmRes = (latest) => ({
+      ok: true, status: 200, headers: { get: () => null },
+      json: async () => ({ "dist-tags": { latest } }), text: async () => "{}",
+      arrayBuffer: async () => Buffer.from(JSON.stringify({ "dist-tags": { latest } })),
+    });
+    const npmFail = () => ({ ok: false, status: 500, headers: { get: () => null }, json: async () => ({}), text: async () => "{}" });
+    const mockNpmByUrl = (npmjs, mirror) => {
+      const orig = globalThis.fetch;
+      globalThis.fetch = async (url) => (String(url).includes("npmjs.org") ? npmjs() : mirror());
+      return orig;
     };
+    // 官方失败 → 镜像兜底（可达性）
+    let origSeq = mockNpmByUrl(npmFail, () => npmRes("3.0.0"));
     r = await cuCall("POST", { repo: "none/cli-pkg" });
     globalThis.fetch = origSeq;
-    check("check-update npmmirror 失败 npmjs 兜底", r.b && r.b.latestVersion, "3.0.0");
+    check("check-update 官方失败镜像兜底", r.b && r.b.latestVersion, "3.0.0");
+    // 镜像滞后（npmmirror 同步滞后/大包卡同步）→ 取官方新版（2.0.0 > 1.0.0）
+    origSeq = mockNpmByUrl(() => npmRes("2.0.0"), () => npmRes("1.0.0"));
+    r = await cuCall("POST", { repo: "none/cli-pkg" });
+    globalThis.fetch = origSeq;
+    check("check-update 镜像滞后取官方新版（双查取新）", r.b && r.b.latestVersion, "2.0.0");
   } else {
     check("check-update handler 存在", false, true);
   }
@@ -552,6 +669,11 @@ function mockFetch(payload, status = 200) {
     mkRepo("o/b", "b", { pkg_name: "shared-pkg", stargazers_count: 50, has_skill: true }),
     mkRepo("o/c", "c", { pkg_name: "shared-pkg2", stargazers_count: 3, has_skill: null }),
     mkRepo("o/d", "d", { pkg_name: "shared-pkg2", stargazers_count: 30, has_skill: true }),
+    // cliNpmForm 场景：合法 npm 包名（读 demo-npm-pkg/package.json → 1.0.0）与
+    // 非法形态（../ 穿越 → 防御分支拒绝，installedVersion null）；has_skill:false
+    // 让它们不进 skills 栏目（skills 断言按 has_skill!==false 过滤，互不干扰）
+    mkRepo("none/cli-pkg", "cli-pkg", { npm_version: "2.0.0", has_skill: false }),
+    mkRepo("none/cli-evil", "cli-evil", { has_skill: false }),
   ];
   const listHandler = registered.find((h) => h.path === "/api/marketplace/list")?.handler;
   if (listHandler) {
@@ -568,6 +690,12 @@ function mockFetch(payload, status = 200) {
     check("list worker 已安装置顶 + 冲突保留", mockRepos && mockRepos.map((r) => r.full_name), ["o/a", "o/d"]);
     check("list worker installed 标注", mockRepos && mockRepos.map((r) => r.installed), [true, false]);
     check("list worker updateAvailable 布尔", listBody && typeof listBody.repos[0].updateAvailable, "boolean");
+    // cliNpmForm 防御分支行为：合法 npm 包名读已装版本；../ 穿越形态拒绝（null）
+    const cliPkg = listBody && listBody.repos.find((r) => r.full_name === "none/cli-pkg");
+    check("cliNpmForm 合法形态读已装版本", cliPkg && cliPkg.installedVersion, "1.0.0");
+    check("cliNpmForm 合法形态标记 cliNpm", cliPkg && cliPkg.cliNpm, true);
+    const cliEvil = listBody && listBody.repos.find((r) => r.full_name === "none/cli-evil");
+    check("cliNpmForm 非法形态拒绝（穿越防御）", cliEvil && cliEvil.installedVersion, null);
   } else {
     check("list handler 存在", false, true);
   }
@@ -755,6 +883,36 @@ function mockFetch(payload, status = 200) {
   check("npmTargetName scope 包剥版本", lib.npmTargetName("@tt-a1i/archify-dsh@0.1.0"), "@tt-a1i/archify-dsh");
   check("npmTargetName 裸包剥版本", lib.npmTargetName("dsh-web-ui-all@1.2.3"), "dsh-web-ui-all");
   check("npmTargetName 无版本原样", lib.npmTargetName("@a/b"), "@a/b");
+
+  // ---- findPluginRoots（覆盖矩阵审计：50 个导出中唯一零测试引用）----
+  // 皮肤/多包仓库的插件根识别：只收 looksLikeDshPlugin===true 的清单目录，
+  // 普通 npm 子包/点目录/node_modules 不被误收；插件根内不再深入子目录。
+  const prRoot = mkFixture("pluginroots", {
+    "README.md": "# multi",
+    "skins/dark/package.json": DSH_PLUGIN_PKG,
+    "skins/light/package.json": DSH_PLUGIN_PKG,
+    "utils/plain/package.json": JSON.stringify({ name: "plain-helper" }),
+    "skins/dark/nested/package.json": DSH_PLUGIN_PKG, // 插件根内嵌套：不深入
+    ".hidden/package.json": DSH_PLUGIN_PKG,
+    "node_modules/vendor/package.json": DSH_PLUGIN_PKG
+  });
+  const prRoots = await lib.findPluginRoots(prRoot);
+  check("findPluginRoots 多包仓库只收插件根", prRoots.length, 2);
+  check("findPluginRoots 含 skins/dark", prRoots.some((r) => r.endsWith("skins" + sep + "dark")), true);
+  check("findPluginRoots 含 skins/light", prRoots.some((r) => r.endsWith("skins" + sep + "light")), true);
+  check("findPluginRoots 不收普通 npm 子包", prRoots.some((r) => r.endsWith("utils" + sep + "plain")), false);
+  check("findPluginRoots 不收插件根内嵌套", prRoots.some((r) => r.endsWith("nested")), false);
+  check("findPluginRoots 不收点目录", prRoots.some((r) => r.includes(".hidden")), false);
+  check("findPluginRoots 不收 node_modules", prRoots.some((r) => r.includes("node_modules")), false);
+  // 单插件根：根目录本身是插件 → 返回根且不深入
+  const prSingle = mkFixture("pluginroots-single", {
+    "package.json": DSH_PLUGIN_PKG,
+    "lib/index.js": "export default {};",
+    "lib/extra/package.json": DSH_PLUGIN_PKG
+  });
+  const prSingleRoots = await lib.findPluginRoots(prSingle);
+  check("findPluginRoots 单插件根返回根", prSingleRoots.length, 1);
+  check("findPluginRoots 单插件根为根目录", prSingleRoots[0] === prSingle, true);
 
   console.log(`\n${pass} passed, ${fail} failed`);
   process.exit(fail === 0 ? 0 : 1);
