@@ -284,6 +284,8 @@ GitHub Actions（每 2 小时，仓库自带 token）
 
 此条目由 Harness Desktop 作者提交；该作者同时维护桌面端使用的 DSH-Plugins-Marketplace 分支。Harness Desktop 与本仓库及 DeepSeek 官方均无官方关联。
 
+另外，[awesome-dsh-plugin](https://github.com/awesome-dsh-plugin/awesome-dsh-plugin) 是社区维护的 DSH 插件精选聚合页，本市场的「社区收录」徽章来源于它；市场本身也已向该列表提交收录（互链 PR），两个生态入口互相引用。
+
 ---
 
 ## 🛠️ 开发与维护

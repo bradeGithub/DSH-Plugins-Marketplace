@@ -284,6 +284,8 @@ When both exist and differ → the card shows an «Update» button plus `install
 
 This entry was submitted by the Harness Desktop author, who also maintains the DSH-Plugins-Marketplace fork used by the desktop app. Harness Desktop has no official affiliation with this repository or DeepSeek.
 
+Also, [awesome-dsh-plugin](https://github.com/awesome-dsh-plugin/awesome-dsh-plugin) is the community-maintained curated list of DSH plugins that powers this marketplace's "community curated" badge; the marketplace has likewise submitted a mutual-link listing PR to that list.
+
 ---
 
 ## 🛠️ Development & maintenance
