@@ -2,25 +2,27 @@
 
 🌐 **语言 / Language:** **中文** | [English](README.en.md)
 
-一个为 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness)（DSH）打造的插件市场插件：从 GitHub 的 [`dsh-plugin` topic](https://github.com/topics/dsh-plugin) 拉取全部插件，在 DSH Web GUI 的设置页中以卡片列表展示，支持**一键安装 / 自动更新 / 版本检测 / 已安装识别**，全程无需命令行。
+一个为 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness)（DSH）打造的插件市场插件：自动嗅探 GitHub 生态全部插件，在 DSH Web GUI 设置页中以卡片列表展示，支持**一键安装 / 版本检测 / 自动更新 / 已安装识别**，全程无需命令行。
 
-![DeepSeek Harness](https://img.shields.io/badge/DeepSeek%20Harness-生态插件-4D6BFE?logo=deepseek&logoColor=white)
-![GitHub Stars](https://img.shields.io/github/stars/bradeGithub/DSH-Plugins-Marketplace?logo=github)
-![License](https://img.shields.io/github/license/bradeGithub/DSH-Plugins-Marketplace)
-![Registry CI](https://img.shields.io/github/actions/workflow/status/bradeGithub/DSH-Plugins-Marketplace/registry.yml?label=registry%20CI)
-![Last Commit](https://img.shields.io/github/last-commit/bradeGithub/DSH-Plugins-Marketplace)
-![类型](https://img.shields.io/badge/类型-客户端%2B服务端插件-blue)
-![平台](https://img.shields.io/badge/平台-Web%20GUI-lightgrey)
-![i18n](https://img.shields.io/badge/i18n-中文%20%7C%20English-important)
+<p align="center">
+  <img src="https://img.shields.io/badge/DeepSeek%20Harness-生态插件-4D6BFE?logo=deepseek&logoColor=white" alt="DeepSeek Harness">
+  <img src="https://img.shields.io/github/stars/bradeGithub/DSH-Plugins-Marketplace?logo=github" alt="GitHub Stars">
+  <img src="https://img.shields.io/github/license/bradeGithub/DSH-Plugins-Marketplace" alt="License">
+  <img src="https://img.shields.io/github/actions/workflow/status/bradeGithub/DSH-Plugins-Marketplace/registry.yml?label=registry%20CI" alt="Registry CI">
+  <img src="https://img.shields.io/github/last-commit/bradeGithub/DSH-Plugins-Marketplace" alt="Last Commit">
+  <img src="https://img.shields.io/badge/类型-客户端%2B服务端插件-blue" alt="类型">
+  <img src="https://img.shields.io/badge/平台-Web%20GUI-lightgrey" alt="平台">
+  <img src="https://img.shields.io/badge/i18n-中文%20%7C%20English-important" alt="i18n">
+</p>
 
 ---
 
-
 <!-- TOC -->
+- [✨ 核心优势](#核心优势)
 - [⚡ 一键安装（复制即用）](#一键安装复制即用)
-- [✨ 功能特性](#功能特性)
-- [📦 安装本插件](#安装本插件)
 - [🚀 使用方法](#使用方法)
+- [✨ 功能特性](#功能特性)
+- [📦 手动安装](#手动安装)
 - [🔧 工作原理](#工作原理)
   - [数据源（registry 优先，搜索 API 兜底）](#数据源registry-优先搜索-api-兜底)
   - [安装流程（5 步）](#安装流程5-步)
@@ -28,15 +30,37 @@
   - [已安装判定（五重，打开市场即自动比对）](#已安装判定五重打开市场即自动比对)
 - [📁 文件结构](#文件结构)
 - [📡 HTTP 接口](#http-接口)
-- [🧱 已知限制](#已知限制)
 - [⚠️ 安全说明](#安全说明)
 - [⚖️ 免责声明](#免责声明)
-- [🔄 已知限制](#已知限制)
+- [🧱 已知限制](#已知限制)
 - [🌱 第三方生态](#第三方生态)
 - [🛠️ 开发与维护](#开发与维护)
 - [📝 更新日志](#更新日志)
 - [📄 许可](#许可)
 <!-- /TOC -->
+
+---
+
+## ✨ 核心优势
+
+<p align="center">
+  <b>3900+</b> DSH 插件 &nbsp;·&nbsp; <b>14000+</b> 通用 Skills &nbsp;·&nbsp; <b>2 小时</b> 自动收录新插件 &nbsp;·&nbsp; <b>0</b> API 限流
+</p>
+
+| | 优势 | 说明 |
+|---|---|---|
+| 🔍 | **插件全** | 自动嗅探 GitHub `dsh-plugin` topic 的**全部**仓库（当前 **3900+**），另有 **14000+** 通用 Skills（`agent-skills` ∪ `claude-skills`）独立栏目 |
+| 🤖 | **自动收录，零申请** | CI 每 2 小时增量扫描 topic，作者打上 `dsh-plugin` 标签后**最迟 2 小时自动进市场**——无需提 issue、无需人工审核 |
+| ⚡ | **秒开，零限流** | 列表走静态索引（jsDelivr CDN 分发）——几千个插件秒开，终端用户**零 GitHub API 调用、零限流** |
+| 🎯 | **智能类型识别** | 自动识别并安装 4 种类型：cordis 插件 / 技能（SKILL.md）/ agent 预设 / 安装脚本——源码型插件自动弹构建确认，需要 API Key 时自动暂停索取材料 |
+| 🔄 | **版本检测与一键更新** | 已装版本 vs 仓库最新版本自动对比，不一致时按钮变「更新」，一键覆盖升级；npm 发布型插件按 npm dist-tags 对比（同源不误报） |
+| 🔒 | **安全护栏** | 第三方脚本执行前弹风险确认；安装材料只作环境变量传入不落盘；环境变量最小化隔离；Host 白名单 + CSRF 头防跨站伪造 |
+| 🏷️ | **分类 + 社区徽章** | 构建期自动分类（12 类筛选 chips）；awesome 聚合页收录的仓库打「社区收录」蓝色徽章 |
+| 🌍 | **中英双语** | 界面与安装日志跟随 DSH 语言设置自动切换 |
+
+> **给插件作者的规范**：[STANDARD.md](STANDARD.md)——每种插件形态应该怎么写才能被市场正确收录、正确安装、正确更新（含类型判定规则与常见反模式）。
+
+---
 
 ## ⚡ 一键安装（复制即用）
 
@@ -69,6 +93,20 @@ dsh plugin --profile web install bradeGithub/DSH-Plugins-Marketplace   # 重装�
 
 ---
 
+## 🚀 使用方法
+
+1. 重启 DSH 后打开 Web GUI，进入 **设置 → DSH插件市场**
+2. 页面自动加载全部插件（已安装置顶，其余按 Star 排序），也可点击「刷新」强制重新拉取
+3. 使用搜索框按名字过滤插件；分类 chips 按栏目筛选
+4. 点击插件卡片上的按钮：
+   - **安装** → 开始安装，日志实时滚动
+   - 需要材料时 → 页面弹出输入框，提供 API Key 等后点「提交材料并继续安装」
+   - **更新** → 检测到新版本时覆盖升级
+   - **已安装**（灰色）→ 无需操作
+5. 切换到 **通用 Skills** tab 浏览 14000+ 技能，支持搜索 / 触底分页 / 一键安装
+
+---
+
 ## ✨ 功能特性
 
 - **全量拉取**：插件列表优先从**静态索引**（`registry.json`，jsDelivr CDN 分发，GitHub Actions 每 2 小时自动生成）加载——零 API 调用、零限流，几千个插件也能秒开；索引不可用时自动回退 GitHub 搜索 API 分页拉取（缓存 10 分钟）。列表排序：**已安装的插件置顶**，其余按 Star 数从高到低
@@ -87,7 +125,7 @@ dsh plugin --profile web install bradeGithub/DSH-Plugins-Marketplace   # 重装�
 - **搜索**：按插件名 / 仓库全名 / 标签实时过滤
 - **插件分类**：构建时按简介/标签自动分类（12 类：视觉多模态 / 文档办公 / 记忆知识 / 模型用量 / 通知通讯 / 开发编码 / 对话会话 / 界面美化 / Agent 自动化 / 通用工具 / 聚合资源 / 其他），前端分类 chips 筛选 + 卡片分类徽章
 - **社区收录徽章**：构建期抓取 awesome 聚合页（[awesome-dsh-plugin](https://github.com/awesome-dsh-plugin/awesome-dsh-plugin)，社区人工筛选）收录的仓库，自动打「社区收录」蓝色徽章（悬停可见来源说明）——快速识别社区认可的插件（聚合页收录 ≠ 本市场背书）
-- **通用 Skills 栏目**：设置页 tab 切换到「通用 Skills」——浏览 CI 构建的全量 skills 索引（`agent-skills` ∪ `claude-skills`，12000+ 仓库），支持搜索 / 分页触底加载 / 一键安装到 `~/.dsh/skills/` / 已安装识别；含安装脚本的仓库带 🛡 标识，探测未知的仓库带「未验证」弱提示
+- **通用 Skills 栏目**：设置页 tab 切换到「通用 Skills」——浏览 CI 构建的全量 skills 索引（`agent-skills` ∪ `claude-skills`，14000+ 仓库），支持搜索 / 分页触底加载 / 一键安装到 `~/.dsh/skills/` / 已安装识别；含安装脚本的仓库带 🛡 标识，探测未知的仓库带「未验证」弱提示
 - **刷新反馈**：点「刷新」强制重新拉取，并以弹窗提示「刷新成功 / 刷新失败」
 - **Github原链**：每个卡片提供跳转到原仓库的链接（新标签页打开）
 - **深浅色适配**：全部使用 DSH 主题令牌（`--dsw-alias-*`），自动适配深色 / 浅色模式
@@ -95,7 +133,7 @@ dsh plugin --profile web install bradeGithub/DSH-Plugins-Marketplace   # 重装�
 
 ---
 
-## 📦 安装本插件
+## 📦 手动安装
 
 > 💡 不想手动操作？用上面的 [⚡ 一键安装](#-一键安装复制即用)（一条命令或一句话交给 AI）。
 
@@ -111,19 +149,6 @@ dsh plugin --profile web install bradeGithub/DSH-Plugins-Marketplace   # 重装�
 
 ---
 
-## 🚀 使用方法
-
-1. 重启 DSH 后打开 Web GUI，进入 **设置 → DSH插件市场**
-2. 页面自动加载全部插件（按 Star 排序），也可点击「刷新」强制重新拉取
-3. 使用搜索框按名字过滤插件
-4. 点击插件卡片上的按钮：
-   - **安装** → 开始安装，日志实时滚动
-   - 需要材料时 → 页面弹出输入框，提供 API Key 等后点「提交材料并继续安装」
-   - **更新** → 检测到新版本时覆盖升级
-   - **已安装**（灰色）→ 无需操作
-
----
-
 ## 🔧 工作原理
 
 ### 数据源（registry 优先，搜索 API 兜底）
@@ -131,7 +156,7 @@ dsh plugin --profile web install bradeGithub/DSH-Plugins-Marketplace   # 重装�
 ```
 GitHub Actions（每 2 小时，仓库自带 token）
    └─ scripts/build-registry.mjs：分页拉取 topic:dsh-plugin，增量合并，去重/排除本体
-        └─ 提交 registry.json 回 main（全量 460+ 个插件，按 Star 排序）
+        └─ 提交 registry.json 回 main（全量 3900+ 个插件，按 Star 排序）
              └─ 插件读取：jsDelivr CDN（国内快）→ raw.githubusercontent（兜底）
                   └─ 全部失败才回退 GitHub 搜索 API（分页翻到底，缓存 10 分钟）
 ```
@@ -203,12 +228,6 @@ GitHub Actions（每 2 小时，仓库自带 token）
 
 > 说明：卸载依赖 `installed.json` 安装记录——**通过本市场安装**的插件可完整卸载；手动（非市场）预装的插件仅能被识别为「已安装」，不提供卸载按钮。
 
-## 🧱 已知限制
-
-- 安装任务整体同步挂在单个 POST 请求上（克隆 + npm 安装 + 构建 + 材料确认多轮回环），若在 DSH 前套了短超时的反向代理（默认 60s），连接可能被切断——后端任务仍会继续执行，前端需刷新状态确认结果
-- 「更新」检测基于 `package.json` 的 `version` 字段对比 registry 索引版本；作者发版不 bump version 时不会提示更新
-- 安装脚本的临时目录 / 供应链校验说明见 `install.sh` 头部注释（tarball 无签名校验是 curl|bash 模式的固有限制）
-
 ---
 
 ## ⚠️ 安全说明
@@ -230,15 +249,17 @@ GitHub Actions（每 2 小时，仓库自带 token）
 
 ---
 
-## 🔄 已知限制
+## 🧱 已知限制
 
 - **安全模型**：安装端点无用户认证，防护依赖「本地网络隔离 + CSRF 头 + Host 白名单（本机/局域网/可配置）+ Origin 校验」——请勿将 DSH web 端口暴露到不可信网络；安装即意味着在机器上执行第三方代码（npm 依赖与安装脚本），请只安装你信任并已核验的仓库
-- 版本检测仅对含 `package.json` 的插件生效；skill / 预设 / 脚本类无版本概念
+- 安装任务整体同步挂在单个 POST 请求上（克隆 + npm 安装 + 构建 + 材料确认多轮回环），若在 DSH 前套了短超时的反向代理（默认 60s），连接可能被切断——后端任务仍会继续执行，前端需刷新状态确认结果
+- 版本检测仅对含 `package.json` 的插件生效；skill / 预设 / 脚本类无版本概念；作者发版不 bump version 时不会提示更新
 - 插件列表默认走静态索引（CDN）；仅当索引的两个源都不可用时才回退 GitHub 搜索 API，此时未认证限流 **10 次/分钟**，频繁点「刷新」可能触发限流（会提示刷新失败，稍等再试）
-- **Skills 索引范围**：v1.3 起为**全量索引**——通过 Search API「stars 分段 + 时间窗口二分」突破单 query 1000 条上限，收录 `agent-skills` ∪ `claude-skills` 全部仓库（当前 12000+）；`has_skill` 探测按 Core API 额度分批补齐（CI 每 2 小时增量续跑，未探测的仓库显示「未验证」）
+- **Skills 索引范围**：v1.3 起为**全量索引**——通过 Search API「stars 分段 + 时间窗口二分」突破单 query 1000 条上限，收录 `agent-skills` ∪ `claude-skills` 全部仓库（当前 14000+）；`has_skill` 探测按 Core API 额度分批补齐（CI 每 2 小时增量续跑，未探测的仓库显示「未验证」）
 - **索引更新节奏**：两个索引均为 CI 每 2 小时增量拉取（最近 3 天 pushed 的仓库，新仓库/star/更新时间即时捕获）并与旧索引合并，每天 04:00 UTC 全量重建刷新 star 数
 - 安装脚本类插件的「已安装」判定基于缓存目录存在性，卸载（删除缓存）后会重新显示为可安装
 - 「社区收录」徽章来自第三方 awesome 聚合页（默认 [awesome-dsh-plugin](https://github.com/awesome-dsh-plugin/awesome-dsh-plugin)），聚合页抓取失败时本轮构建不更新徽章（增量构建保留旧标，下次构建恢复）；收录与否不代表本市场对插件的质量背书
+- 安装脚本的临时目录 / 供应链校验说明见 `install.sh` 头部注释（tarball 无签名校验是 curl|bash 模式的固有限制）
 - 插件代码修改后需**重启 DSH** 才能生效（Web profile 的 HMR 处于禁用状态）
 
 ---
