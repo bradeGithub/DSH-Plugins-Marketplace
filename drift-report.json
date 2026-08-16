@@ -1,90 +1,41 @@
 {
-  "generated_at": "2026-08-16T09:34:41.826Z",
-  "count": 12,
+  "generated_at": "2026-08-16T10:52:48.337Z",
+  "count": 5,
   "items": [
     {
-      "full_name": "omdsh-dev/dsh-data-agent",
-      "previous": "agent",
-      "current": "conversation",
-      "desc_now": "Connect DSH to your database for conversational data analysis and actionable business insights.",
-      "desc_prev": "Data Agent for DeepSeek Harness: session-scoped database connections with a dedicated agent preset that lets AI write SQL and iterate against live execution feedback."
-    },
-    {
-      "full_name": "2672243194/dsh-read-url",
-      "previous": "other",
-      "current": "model",
-      "desc_now": "DeepSeek Harness URL reader: fetch any page and return clean main-content text/Markdown. Auto charset (GBK/GB2312/UTF-8/Big5), token-efficient (6000-char cap, cache, offset), zero deps, no API key. 网页一键读全文 → 干净正文 / 结构化 Markdown",
-      "desc_prev": null
-    },
-    {
-      "full_name": "better-er/dsh-tool-autoexpand",
-      "previous": "web-ui",
-      "current": "tool",
-      "desc_now": "dsh·工具结果自动展开插件",
-      "desc_prev": "自动展开 DSH 界面中新增的工具调用结果卡片，带侧栏开关。标准 dsh 客户端插件"
-    },
-    {
-      "full_name": "Qiongkura/dsh-usage-plugin",
-      "previous": "other",
-      "current": "model",
-      "desc_now": "DeepSeek Harness（DSH）的 Token 用量统计 附属插件",
-      "desc_prev": null
-    },
-    {
-      "full_name": "2672243194/dsh-tally",
-      "previous": "other",
-      "current": "notify",
-      "desc_now": "Personal bookkeeping for DeepSeek Harness: record expenses/income (single or batch), list, monthly/annual stats with trends, budgets with progress/over-limit alerts, soft-delete restore, CSV & self-contained HTML report. Zero deps, local JSON. 个人记账插件",
-      "desc_prev": null
-    },
-    {
-      "full_name": "spacexun2/dsh-worktime-board",
-      "previous": "web-ui",
-      "current": "other",
-      "desc_now": "🐂🐴 牛马修仙看板：DeepSeek Harness 工时统计 × 修仙养成——把每一分钟劳动，都修成境界（日/周/月 + 学年年历，炼气→宇宙洪荒）",
-      "desc_prev": "🐂🐴 牛马修仙看板：DeepSeek Harness 工时统计 + 十二境界修仙面板（日/周/月 + 学年年历，炼气→宇宙洪荒）"
-    },
-    {
-      "full_name": "GTC2080/dsh-APEX_Plugin",
-      "previous": "other",
-      "current": "tool",
-      "desc_now": "Experimental APEX plugin for DeepSeek Harness: Minimal-anchored bootstrap with on-demand Standard tools. Current baseline: Minimal Max v0.2.",
-      "desc_prev": null
-    },
-    {
-      "full_name": "kirigayakazima/dsh-usage-vendor-stats",
-      "previous": "model",
-      "current": "tool",
-      "desc_now": "DeepSeek Harness usage stats by vendor (subscription / official API) × KPI: 53-week heatmap, trend chart, model drilldown, CSV export, and health cards.",
-      "desc_prev": null
-    },
-    {
-      "full_name": "Cheyeah/dsh-drop-preview",
-      "previous": "tool",
+      "full_name": "Jamailar/beav-deepseek-harness",
+      "previous": "memory",
       "current": "vision",
-      "desc_now": "DeepSeek Harness (DSH) Web 插件：拖放文件预览 / Markdown 渲染 / 文件盒 / 智能桌面截图（全屏·区域·窗口）/ 外挂识图与识别文本入库。完整开发历史含 21 个快照标签。",
-      "desc_prev": "DeepSeek Harness 拖拽文件预览插件：全屏预览图片/Markdown/文本，图片放大旋转，文件盒持久化，一键附带给 AI | DSH drag-and-drop file preview plugin"
+      "desc_now": "Beav Creator for Xiaohongshu/RED, social-media AI operations, research, copywriting, images and video in DeepSeek Harness｜小红书与社媒AI运营",
+      "desc_prev": "Beav Creator AI workflows for social-media content, knowledge, images, audio, and video in DeepSeek Harness"
     },
     {
-      "full_name": "Salbt/my-dsh-desktop",
-      "previous": "tool",
-      "current": "other",
-      "desc_now": "Zero-setup Windows desktop app for DeepSeek Harness — built-in runtime, no Node install required",
-      "desc_prev": "DeepSeek Harness 的 Windows 桌面客户端：开箱即用，6.7MB 单文件 exe，内置 Node 24 运行时，复用系统 WebView2，托盘一键更新"
+      "full_name": "Britneycode/dsh-update-center",
+      "previous": "other",
+      "current": "resource",
+      "desc_now": "dsh (DeepSeek Harness) 更新中心与插件市场：自托管 plugins.json 注册表（GitHub dsh-plugin 主题自动聚合 + npm 包名映射秒级安装），一键安装/更新/卸载/禁用插件与更新 dsh 本体。Update center & plugin marketplace for DeepSeek Harness.",
+      "desc_prev": null
     },
     {
-      "full_name": "Paraso42/dsh-bioinfo",
+      "full_name": "mojiexuan/dsh-git",
       "previous": "other",
       "current": "coding",
-      "desc_now": "生信模式 (Bioinformatics Mode) — research-grade protein structure & interaction agent preset for DeepSeek Harness: AF2-Multimer, ESMFold, AutoDock Vina, MM-GBSA/MD, structure QA, virtual screening.",
-      "desc_prev": null
+      "desc_now": "A VS Code-style Git source control panel plugin for DeepSeek Harness.为 DeepSeek Harness 开发的一个类似 VS Code 的 Git 源代码管理面板插件。",
+      "desc_prev": "Git plugin developed for DeepSeek Harness"
     },
     {
-      "full_name": "yefei124/superpowers-workflow",
-      "previous": "agent",
-      "current": "coding",
-      "desc_now": "⚡ Superpowers 风格的 DSH 开发工作流插件:头脑风暴 → 计划 → TDD → 调试,8 个引导工具 + Markdown 总结导出。| Superpowers-style dev workflow plugin for DeepSeek Harness: brainstorm → plan → TDD → debug, 8 guided tools + Markdown export.",
-      "desc_prev": null
+      "full_name": "2768651338/dsh-effort-slider",
+      "previous": "web-ui",
+      "current": "model",
+      "desc_now": "仿 Claude Code 推理等级滑块 DSH 插件",
+      "desc_prev": "仿 Claude Code 推理等级滑块 DSH 插件：无极拖动、松手吸附、WebGL 火焰跟随、OFF/MAX 刻度。剥离自 CAPTAIN1275/dsh-ui-web"
+    },
+    {
+      "full_name": "Motuo24/dsh-thinking-slider",
+      "previous": "coding",
+      "current": "model",
+      "desc_now": "让 DSH 的思考强度调节像音量一样顺滑——把模型推理等级按钮列表换成带档位吸附的滑条。",
+      "desc_prev": "为DeepSeek Harness开发的思考强度修改优化插件，通过滑条调节。"
     }
   ]
 }
