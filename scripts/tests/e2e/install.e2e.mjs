@@ -143,6 +143,7 @@ function setupUrlRewrite(owner, repoName) {
     const req = {
       method: "POST",
       headers: { "x-dsh-marketplace": "1", host: "127.0.0.1:3080" },
+      socket: { remoteAddress: "127.0.0.1" },
       url: "/api/marketplace/install",
       [Symbol.asyncIterator]() {
         let sent = false;
@@ -169,6 +170,7 @@ function setupUrlRewrite(owner, repoName) {
     const req = {
       method: "POST",
       headers: { "x-dsh-marketplace": "1", host: "127.0.0.1:3080" },
+      socket: { remoteAddress: "127.0.0.1" },
       url: "/api/marketplace/uninstall",
       [Symbol.asyncIterator]() {
         let sent = false;
@@ -201,6 +203,9 @@ function setupUrlRewrite(owner, repoName) {
   //      内置索引（随包分发，真实 registry.json/skills.json）→ 磁盘缓存 → 搜索兜底。
   //      磁盘缓存用例需临时移开内置文件才能覆盖该层；fire-and-forget 的缓存落盘
   //      用短暂等待规避竞态。----
+  // 注：缓存兜底用例由上游 1.4.0 的重写版本覆盖（下方 1-5 步，用 renameSync 临时
+  // 移开内置索引文件）——合并时删除旧版重复场景（无内置文件隔离，bundled 源
+  // 会先兜底返回真实索引，缓存断言必然失败）。
   const cacheDir2 = join(HOME, "marketplace", "list-cache");
   mkdirSync(cacheDir2, { recursive: true });
   const cachedRepo = { full_name: "cached-owner/demo-cached", name: "demo-cached", description: "cached", html_url: "https://github.com/cached-owner/demo-cached", stargazers_count: 5, updated_at: "2026-01-01T00:00:00Z", default_branch: "main", topics: [], license: null, pkg_name: null, version: null, category: null, has_skill: false, has_install_script: false };
@@ -309,6 +314,7 @@ function setupUrlRewrite(owner, repoName) {
     method: "POST",
     headers: { "x-dsh-marketplace": "1", host: "127.0.0.1:3080" },
     url: "/api/marketplace/install",
+    socket: { remoteAddress: "127.0.0.1" },
     [Symbol.asyncIterator]() {
       let sent = false;
       return { next: async () => sent ? { value: undefined, done: true } : (sent = true, { value: Buffer.from(JSON.stringify({ repo: "bad!" })), done: false }) };
@@ -338,6 +344,7 @@ function setupUrlRewrite(owner, repoName) {
     method: "POST",
     headers: { "x-dsh-marketplace": "1", host: "127.0.0.1:3080" },
     url: "/api/marketplace/install",
+    socket: { remoteAddress: "127.0.0.1" },
     [Symbol.asyncIterator]() {
       let sent = false;
       return {
@@ -402,6 +409,17 @@ function setupUrlRewrite(owner, repoName) {
   r = await postInstall("e2e-owner/demo-skill-env", { OPENAI_API_KEY: "" });
   check("e2e env 空串跳过安装 done", r.body && r.body.status, "done");
 
+  // ---- 备份排序：多条安装记录时 installedAt 升序（buildBackup 的 sort 回调）----
+  // 此时 installedMap 已有 ≥2 条记录（legacy 遗留 + demo-skill + demo-skill-env），
+  // 触发 sort 比较回调（空/单条时 V8 不会调用比较器，覆盖不到该分支）。
+  let bkSorted = null, bkSortStatus = 0;
+  await backupHandler({ method: "GET", headers: { "x-dsh-marketplace": "1", host: "127.0.0.1:3080" }, url: "/api/marketplace/backup" },
+    { writeHead: (s) => { bkSortStatus = s; }, end: (b) => { try { bkSorted = JSON.parse(b); } catch { bkSorted = null; } } });
+  const reposSorted = bkSorted && bkSorted.backup && bkSorted.backup.repos;
+  check("e2e backup 多记录 200", bkSortStatus, 200);
+  check("e2e backup 多记录 installedAt 升序", Array.isArray(reposSorted) && reposSorted.length >= 2
+    && reposSorted.every((x, i) => i === 0 || (reposSorted[i - 1].installedAt ?? 0) <= (x.installedAt ?? 0)), true);
+
   // ---- instructions 手动安装流（无可自动安装内容）----
   setupUrlRewrite(owner, "demo-manual");
   makeFixtureRepo("demo-manual", { "notes.txt": "nothing auto-installable here\n" });
@@ -430,6 +448,7 @@ function setupUrlRewrite(owner, repoName) {
     method: "GET",
     headers: { "x-dsh-marketplace": "1", host: "127.0.0.1:3080" },
     url: "/api/marketplace/install",
+    socket: { remoteAddress: "127.0.0.1" },
     [Symbol.asyncIterator]() { return { next: async () => ({ value: undefined, done: true }) }; },
   };
   let mStatus = 0;
@@ -442,6 +461,7 @@ function setupUrlRewrite(owner, repoName) {
     method: "POST",
     headers: { "x-dsh-marketplace": "1", host: "127.0.0.1:3080" },
     url: "/api/marketplace/install",
+    socket: { remoteAddress: "127.0.0.1" },
     [Symbol.asyncIterator]() {
       let sent = false;
       return { next: async () => sent ? { value: undefined, done: true } : (sent = true, { value: Buffer.from(bigBody), done: false }) };
@@ -457,6 +477,7 @@ function setupUrlRewrite(owner, repoName) {
     method: "POST",
     headers: { "x-dsh-marketplace": "1", host: "127.0.0.1:3080" },
     url: "/api/marketplace/install",
+    socket: { remoteAddress: "127.0.0.1" },
     [Symbol.asyncIterator]() {
       let sent = false;
       return { next: async () => sent ? { value: undefined, done: true } : (sent = true, { value: Buffer.from(bodyStr), done: false }) };
@@ -598,6 +619,10 @@ function setupUrlRewrite(owner, repoName) {
       }),
       "build.js": "require('fs').mkdirSync('dist', { recursive: true }); require('fs').writeFileSync('dist/index.js', 'module.exports = {}')\n",
       "pnpm-lock.yaml": "lockfileVersion: '9.0'\n",
+      // 空 workspace 文件阻断 pnpm 向上解析用户机器的全局 pnpm-workspace.yaml
+      // （本机 C:/Users/Lenovo/pnpm-workspace.yaml 是 DSH 开发 workspace）——否则
+      // pnpm install 会拉入全局 workspace 依赖并因 ignored builds 报错退出（ERR_PNPM_IGNORED_BUILDS）。
+      "pnpm-workspace.yaml": "",
     });
 
     r = await postInstall("e2e-owner/demo-build-pnpm", { __confirm_build__: "allow" });
@@ -807,6 +832,18 @@ function setupUrlRewrite(owner, repoName) {
   check("e2e 入口缺失 done", r.body && r.body.status, "done");
   check("e2e 入口缺失 warnings 含包名", Array.isArray(r.body && r.body.warnings) && r.body.warnings.includes("demo-no-entry"), true);
   check("e2e 入口缺失日志提示", Array.isArray(r.body && r.body.log) && r.body.log.some((l) => l.includes("demo-no-entry")), true);
+
+  // ---- 安装后有效性验证：无 main/无 lib/index.js/无 dsh client 声明但顶层有 js 文件 → readdir 检测 ----
+  // demo-no-entry 的 readdir 返回空（顶层无 js），.some() 比较器不执行；本 fixture 顶层放
+  // index.js 触发该分支：entryOk 由「任意顶层 js」判定为 true，无 entryMissing 警告。
+  setupUrlRewrite(owner, "demo-js-top");
+  makeFixtureRepo("demo-js-top", {
+    "package.json": JSON.stringify({ name: "demo-js-top", version: "1.0.0", dsh: {} }),
+    "index.js": "module.exports = {};\n",
+  });
+  r = await postInstall("e2e-owner/demo-js-top", {});
+  check("e2e 顶层 js 入口 done", r.body && r.body.status, "done");
+  check("e2e 顶层 js 入口无 entryMissing 警告", !(Array.isArray(r.body && r.body.warnings) && r.body.warnings.includes("demo-js-top")), true);
 
   // ---- 导出脱敏日志：含安装记录、路径已打码 ----
   const logsHandler = handlers.find((h) => h.path === "/api/marketplace/logs")?.handler;

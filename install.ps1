@@ -12,6 +12,9 @@
   完成后需重启 DSH（重新运行 dsh web）再刷新页面。
 #>
 $ErrorActionPreference = "Stop"
+# PowerShell 7.3+ 默认不把外部命令非零退出视为异常（即使 ErrorActionPreference=Stop）——
+# 不开启则下方 catch 回退分支永远不可达：dsh 官方安装失败时会「假成功」。旧版 PS 无此变量，忽略即可。
+$PSNativeCommandUseErrorActionPreference = $true
 
 $RepoUrl = "https://github.com/bradeGithub/DSH-Plugins-Marketplace"
 

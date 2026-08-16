@@ -91,6 +91,27 @@ function checkTests() {
   } catch {
     fail("tests", "unit+integration 存在失败项");
   }
+  healBundledIndex();
+}
+
+/** bundled 索引完整性自愈：list-cache/installed-index 的测试隔离会临时把
+ * registry.json/skills.json 替换为坏 JSON；若测试进程被超时强杀（SIGKILL 不触发
+ * exit 恢复钩子）会残留损坏文件污染后续运行。校验 JSON 可解析，损坏则 git 恢复。 */
+function healBundledIndex() {
+  for (const f of ["registry.json", "skills.json"]) {
+    const p = join(ROOT, f);
+    if (!existsSync(p)) continue;
+    try {
+      JSON.parse(readFileSync(p, "utf8"));
+    } catch {
+      try {
+        execFileSync("git", ["checkout", "--", f], { cwd: ROOT, stdio: "pipe" });
+        console.log(`[WARN] ${f} 残留损坏（测试隔离未恢复），已从 git 恢复`);
+      } catch {
+        fail("tests", `${f} 损坏且 git 恢复失败`);
+      }
+    }
+  }
 }
 
 // ---- 3. TOC 检测（tocLevel: error 阻断 / warn 仅提示 / off 跳过，默认 warn）----
