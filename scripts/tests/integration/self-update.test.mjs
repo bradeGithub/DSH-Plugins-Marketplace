@@ -62,24 +62,29 @@ if (handler) {
   const listHandler = registered.find((h) => h.path === "/api/marketplace/list")?.handler;
   if (listHandler) {
     const lr = mkRes();
-    await listHandler({ method: "GET", url: "/api/marketplace/list" }, lr.res);
+    // v1.4.x：self-update/list 等 handler 增加 isTrustedRequest（CSRF 头 + 本地 host）校验
+    await listHandler({ method: "GET", headers: { "x-dsh-marketplace": "1", host: "127.0.0.1:3080" }, url: "/api/marketplace/list" }, lr.res);
+
     check("self-update 前置：list 预热成功", lr.status, 200);
   }
 
   // GET：返回自检状态结构（字段存在；版本可能为 null——测试环境无安装记录）。
   // checkedAt 初始为 0 → 触发 checkSelfUpdate（mock 网络失败 → selfLatestFromCache → find 回调）
   const r = mkRes();
-  await handler({ method: "GET", url: "/api/marketplace/self-update" }, r.res);
+  await handler({ method: "GET", headers: { "x-dsh-marketplace": "1", host: "127.0.0.1:3080" }, url: "/api/marketplace/self-update" }, r.res);
+
   check("self-update GET 状态", r.status, 200);
   check("self-update 响应含 installedVersion 字段", Object.hasOwn(r.body ?? {}, "installedVersion"), true);
   check("self-update 响应含 latestVersion 字段", Object.hasOwn(r.body ?? {}, "latestVersion"), true);
   check("self-update 响应含 updateAvailable 字段", Object.hasOwn(r.body ?? {}, "updateAvailable"), true);
   check("self-update 响应含 checkedAt 字段", Object.hasOwn(r.body ?? {}, "checkedAt"), true);
 
-  // 非 GET → 405
+  // v1.4.7：POST 改为「执行更新」（真实克隆 + 原子替换本体——测试环境不触发，
+  // 避免污染工作区文件）；其余非 GET 方法仍 405。
   const r2 = mkRes();
-  await handler({ method: "POST", url: "/api/marketplace/self-update" }, r2.res);
-  check("self-update POST → 405", r2.status, 405);
+  await handler({ method: "PUT", headers: { "x-dsh-marketplace": "1", host: "127.0.0.1:3080" }, url: "/api/marketplace/self-update" }, r2.res);
+  check("self-update PUT → 405", r2.status, 405);
+
 }
 
 // 等 checkSelfUpdate 异步完成（mock fetch 立即失败 → catch → selfLatestFromCache 同步调用）

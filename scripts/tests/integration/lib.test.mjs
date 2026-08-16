@@ -17,8 +17,15 @@ process.env.DSH_HOME = mkdtempSync(join(tmpdir(), "dsh-libtest-")).replace(/\\/g
 // 键名与全部现有断言解耦（无测试引用该仓库名）。
 mkdirSync(join(process.env.DSH_HOME, "marketplace"), { recursive: true });
 writeFileSync(join(process.env.DSH_HOME, "marketplace", "installed.json"), JSON.stringify({
-  "none/already-installed": { type: "skill", name: "already-installed", location: join(process.env.DSH_HOME, "skills", "already-installed"), installedAt: Date.now() }
+  "none/already-installed": { type: "skill", name: "already-installed", location: join(process.env.DSH_HOME, "skills", "already-installed"), installedAt: Date.now() },
+  // check-update 场景：npm 型 cli 安装记录（name 为 npm 包名，非 owner/repo）
+  "none/cli-pkg": { type: "cli", name: "demo-npm-pkg", location: join(process.env.DSH_HOME, "profiles", "web", "node_modules", "demo-npm-pkg"), installedAt: Date.now() }
 }, null, 2), "utf8");
+// check-update 的已装版本读取：PROFILE_NM/<pkgName>/package.json（v1.4.10 起 npm 型 cli
+// 版本检测改手动触发）——预写 1.0.0，npm registry mock 返回 2.0.0 → updateAvailable
+mkdirSync(join(process.env.DSH_HOME, "profiles", "web", "node_modules", "demo-npm-pkg"), { recursive: true });
+writeFileSync(join(process.env.DSH_HOME, "profiles", "web", "node_modules", "demo-npm-pkg", "package.json"), JSON.stringify({ name: "demo-npm-pkg", version: "1.0.0" }), "utf8");
+
 // 预写 feedback.json（apply 时 loadFeedback 异步读入）：注入一条 pending 反馈，
 // 供 feedback 提交 handler 的 GitHub 自动建 issue 分支（doCreate）判定。
 writeFileSync(join(process.env.DSH_HOME, "marketplace", "feedback.json"), JSON.stringify({
@@ -193,6 +200,8 @@ function mockFetch(payload, status = 200) {
   check("分类 node-gyp", lib.classifyInstallFailure("gyp ERR! stack Error: not found: python3").includes("node-gyp"), true);
   check("分类 网络", lib.classifyInstallFailure("fetch failed: ENOTFOUND registry.npmjs.org", "zh").includes("网络"), true);
   check("分类 版本不存在", lib.classifyInstallFailure("No matching version found for dep@9.9.9").includes("版本不存在"), true);
+  check("分类 缺少模块", lib.classifyInstallFailure("internal/modules/cjs/loader: Cannot find module 'foo'", "zh").includes("缺少模块"), true);
+  check("分类 构建命令失败", lib.classifyInstallFailure("ERR_PNPM_LOCKFILE_UP_TO_DATE Command failed with exit code 1", "zh").includes("构建"), true);
   // issue #21：git clone 网络失败（`Command failed: git clone ... unable to access ... Couldn't connect`）
   // 必须命中网络类而非笼统的「构建/包管理命令失败」
   check("分类 git clone 网络", lib.classifyInstallFailure("Command failed: git clone --depth 1 https://github.com/a/b.git\nfatal: unable to access 'https://github.com/a/b.git/': Failed to connect to github.com port 443: Couldn't connect to server").includes("网络"), true);
@@ -466,6 +475,62 @@ function mockFetch(payload, status = 200) {
     check("self-update handler 存在", false, true);
   }
 
+  // ---- check-update handler：npm 型 cli 安装的版本检测（v1.4.10/1.4.11 自更新根治）----
+  // 覆盖 fetchNpmLatest（npmmirror→npmjs 双源）与 handler 各分支。
+  const cuHandler = registered.find((h) => h.path === "/api/marketplace/check-update")?.handler;
+  if (cuHandler) {
+    const cuCall = async (method, bodyObj) => {
+      const bodyStr = JSON.stringify(bodyObj ?? {});
+      let sent = false;
+      const req = {
+        method,
+        headers: { "x-dsh-marketplace": "1", host: "127.0.0.1:3080" },
+        url: "/api/marketplace/check-update",
+        [Symbol.asyncIterator]() {
+          return { next: async () => sent ? { value: undefined, done: true } : (sent = true, { value: Buffer.from(bodyStr), done: false }) };
+        },
+      };
+      let s = 0, b = null;
+      await cuHandler(req, { writeHead: (x) => { s = x; }, end: (x) => { try { b = JSON.parse(x); } catch { b = null; } } });
+      return { s, b };
+    };
+    // 405 / 400 badRepo / 404 无记录
+    let r = await cuCall("GET");
+    check("check-update 非 POST 405", r.s, 405);
+    r = await cuCall("POST", { repo: "not-a-repo" });
+    check("check-update badRepo 400", r.s, 400);
+    r = await cuCall("POST", { repo: "none/not-installed" });
+    check("check-update 无记录 404", r.s, 404);
+    // 成功：已装 1.0.0（预写 PROFILE_NM）vs npm latest 2.0.0 → updateAvailable true
+    const origOk = mockFetch({ "dist-tags": { latest: "2.0.0" } });
+    r = await cuCall("POST", { repo: "none/cli-pkg" });
+    globalThis.fetch = origOk;
+    check("check-update 成功 200", r.s, 200);
+    check("check-update latest 2.0.0", r.b && r.b.latestVersion, "2.0.0");
+    check("check-update updateAvailable", r.b && r.b.updateAvailable, true);
+    // npm 源全失败 → checkUpdateNpmFail（200 + updateAvailable false）
+    const origFail = mockFetch({}, 500);
+    r = await cuCall("POST", { repo: "none/cli-pkg" });
+    globalThis.fetch = origFail;
+    check("check-update npm 失败 status=done", r.b && r.b.status, "done");
+    check("check-update npm 失败 updateAvailable false", r.b && r.b.updateAvailable, false);
+    // fetchNpmLatest 兜底：npmmirror 失败 → npmjs 命中（顺序 mock 分派）
+    const origSeq = globalThis.fetch;
+    let seq = 0;
+    globalThis.fetch = async () => {
+      seq++;
+      return seq === 1
+        ? { ok: false, status: 500, json: async () => ({}), text: async () => "{}" }
+        : { ok: true, status: 200, json: async () => ({ "dist-tags": { latest: "3.0.0" } }), text: async () => "{}" };
+    };
+    r = await cuCall("POST", { repo: "none/cli-pkg" });
+    globalThis.fetch = origSeq;
+    check("check-update npmmirror 失败 npmjs 兜底", r.b && r.b.latestVersion, "3.0.0");
+  } else {
+    check("check-update handler 存在", false, true);
+  }
+
+
   // ---- list handler：触发并发 worker 闭包 + pkg 冲突消解 + 已安装置顶排序 ----
   // 造一个 skills/<slug> 目录让 o/a 命中 detectInstalled 目录启发式（已安装）。
   mkdirSync(join(process.env.DSH_HOME, "skills", "a"), { recursive: true });
@@ -513,6 +578,30 @@ function mockFetch(payload, status = 200) {
     check("skills filtered 计数", skillsBody && skillsBody.filtered, 3);
   } else {
     check("skills handler 存在", false, true);
+  }
+
+  // ---- L7：safeAssign 防原型污染（执行行为）----
+  const polluted = JSON.parse('{"__proto__": {"polluted": true}, "a": 1}');
+  const merged = lib.safeAssign({}, polluted, { b: 2 });
+  check("safeAssign 剔除 __proto__ 键", Object.prototype.polluted, undefined);
+  check("safeAssign 保留正常字段", merged.a, 1);
+  check("safeAssign 合并后续源", merged.b, 2);
+  // 注意：用 Object.hasOwn（own property）——`in` 会命中继承的 Object.prototype.constructor
+  check("safeAssign 剔除 constructor（own 检查）", Object.hasOwn(lib.safeAssign({}, JSON.parse('{"constructor": {"x": 1}}')), "constructor"), false);
+  check("safeAssign 剔除 prototype（own 检查）", Object.hasOwn(lib.safeAssign({}, JSON.parse('{"prototype": {"x": 1}}')), "prototype"), false);
+
+  // ---- L6：fetchRegistryRepos 对超大 Content-Length 弃用该源 ----
+  {
+    const orig6 = globalThis.fetch;
+    globalThis.fetch = async () => ({
+      ok: true, status: 200,
+      headers: { get: (k) => (k === "content-length" ? String(64 * 1024 * 1024) : null) },
+      json: async () => ({ repos: [{ full_name: "huge/source", name: "source" }] }),
+      text: async () => "",
+    });
+    const registry = await lib.fetchRegistryRepos("dsh");
+    globalThis.fetch = orig6;
+    check("registry 超限响应弃用（返回 null 走下一级）", registry, null);
   }
 
   // ---- 适配层（adaptor.json 硬编码重定向）----

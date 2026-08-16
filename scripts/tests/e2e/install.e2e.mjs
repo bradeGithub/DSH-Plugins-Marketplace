@@ -201,6 +201,9 @@ function setupUrlRewrite(owner, repoName) {
   //      内置索引（随包分发，真实 registry.json/skills.json）→ 磁盘缓存 → 搜索兜底。
   //      磁盘缓存用例需临时移开内置文件才能覆盖该层；fire-and-forget 的缓存落盘
   //      用短暂等待规避竞态。----
+  // 注：缓存兜底用例由上游 1.4.0 的重写版本覆盖（下方 1-5 步，用 renameSync 临时
+  // 移开内置索引文件）——合并时删除旧版重复场景（无内置文件隔离，bundled 源
+  // 会先兜底返回真实索引，缓存断言必然失败）。
   const cacheDir2 = join(HOME, "marketplace", "list-cache");
   mkdirSync(cacheDir2, { recursive: true });
   const cachedRepo = { full_name: "cached-owner/demo-cached", name: "demo-cached", description: "cached", html_url: "https://github.com/cached-owner/demo-cached", stargazers_count: 5, updated_at: "2026-01-01T00:00:00Z", default_branch: "main", topics: [], license: null, pkg_name: null, version: null, category: null, has_skill: false, has_install_script: false };
@@ -217,7 +220,7 @@ function setupUrlRewrite(owner, repoName) {
   // 2) 内置索引缺失（临时移开）→ 磁盘缓存兜底
   renameSync(bundledDsh, bundledDsh + ".bak");
   try {
-    writeFileSync(join(cacheDir2, "dsh.json"), JSON.stringify({ saved_at: new Date().toISOString(), kind: "dsh", count: 1, repos: [cachedRepo] }), "utf8");
+    writeFileSync(join(cacheDir2, "dsh.json"), JSON.stringify({ saved_at: new Date().toISOString(), generated_at: new Date().toISOString(), kind: "dsh", count: 1, repos: [cachedRepo] }), "utf8");
     const cachedList = await lib.fetchAllRepos("dsh");
     check("e2e 磁盘缓存兜底返回缓存条目", cachedList.some((r) => r.full_name === "cached-owner/demo-cached"), true);
 
@@ -239,7 +242,7 @@ function setupUrlRewrite(owner, repoName) {
   // 5) skills 内置缺失（临时移开）→ 磁盘缓存兜底
   renameSync(bundledSkills, bundledSkills + ".bak");
   try {
-    writeFileSync(join(cacheDir2, "skills.json"), JSON.stringify({ saved_at: new Date().toISOString(), kind: "skills", count: 2, repos: [cachedRepo, { ...cachedRepo, full_name: "cached-owner/demo-cached-2", name: "demo-cached-2" }] }), "utf8");
+    writeFileSync(join(cacheDir2, "skills.json"), JSON.stringify({ saved_at: new Date().toISOString(), generated_at: new Date().toISOString(), kind: "skills", count: 2, repos: [cachedRepo, { ...cachedRepo, full_name: "cached-owner/demo-cached-2", name: "demo-cached-2" }] }), "utf8");
     const cachedSkills = await lib.fetchAllRepos("skills");
     check("e2e skills 磁盘缓存兜底 2 条", cachedSkills.length, 2);
   } finally {
@@ -609,6 +612,10 @@ function setupUrlRewrite(owner, repoName) {
       }),
       "build.js": "require('fs').mkdirSync('dist', { recursive: true }); require('fs').writeFileSync('dist/index.js', 'module.exports = {}')\n",
       "pnpm-lock.yaml": "lockfileVersion: '9.0'\n",
+      // 空 workspace 文件阻断 pnpm 向上解析用户机器的全局 pnpm-workspace.yaml
+      // （本机 C:/Users/Lenovo/pnpm-workspace.yaml 是 DSH 开发 workspace）——否则
+      // pnpm install 会拉入全局 workspace 依赖并因 ignored builds 报错退出（ERR_PNPM_IGNORED_BUILDS）。
+      "pnpm-workspace.yaml": "",
     });
 
     r = await postInstall("e2e-owner/demo-build-pnpm", { __confirm_build__: "allow" });
