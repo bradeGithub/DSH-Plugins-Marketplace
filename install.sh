@@ -59,8 +59,16 @@ rm -f "$DEST/install.ps1" "$DEST/install.sh" "$DEST/.ca-bundle.crt"
 # 注册到 web profile 补丁（幂等；行级精确匹配，避免前缀子串误判）。
 # 注意：patch 条目是 `- insert:` 块内的缩进行（`      name: ...`），
 # 行首锚定必须允许前导空白，否则永远匹配不到 → 每次运行都会追加重复条目（KIMI 审阅 H1）。
+# v1.4.12（issue #39）：若本体已通过 profile bundles 加载，再注册 patch 会双加载 → 跳过。
 PATCH="$HOME/.dsh/profiles/web/cordis.patch.yml"
-if [[ -f "$PATCH" ]] && grep -qE '^[[:space:]]*name:[[:space:]]+dsh-plugin-marketplace[[:space:]]*$' "$PATCH"; then
+BUNDLED=false
+PROFILE_PKG="$HOME/.dsh/profiles/web/package.json"
+if [[ -f "$PROFILE_PKG" ]] && grep -q 'dsh-plugin-marketplace' "$PROFILE_PKG"; then
+  BUNDLED=true
+fi
+if $BUNDLED; then
+  echo "Marketplace already loaded via profile bundles (skipped patch registration)"
+elif [[ -f "$PATCH" ]] && grep -qE '^[[:space:]]*name:[[:space:]]+dsh-plugin-marketplace[[:space:]]*$' "$PATCH"; then
   echo "Already registered in cordis.patch.yml (skipped)"
 else
   printf '\n- insert:\n    - id: dsh-plugin-marketplace\n      name: dsh-plugin-marketplace\n' >> "$PATCH"

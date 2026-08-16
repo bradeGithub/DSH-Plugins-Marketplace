@@ -8,10 +8,10 @@
 // 必须在本文件内先构造临时 DSH_HOME 再动态 import；且本文件独占控制 list-cache 目录
 // 状态（构造/清空/断言），避免与其他测试的缓存写入互相干扰。
 
-import { mkdtempSync, mkdirSync, writeFileSync, readdirSync, readFileSync, rmSync, existsSync } from "node:fs";
-import { join, dirname } from "node:path";
-import { fileURLToPath } from "node:url";
+import { mkdtempSync, mkdirSync, writeFileSync, readdirSync, readFileSync, rmSync, existsSync, copyFileSync, unlinkSync } from "node:fs";
+import { join, dirname, basename } from "node:path";
 import { tmpdir } from "node:os";
+import { fileURLToPath } from "node:url";
 
 // 必须在 import lib 之前设置临时 DSH_HOME
 process.env.DSH_HOME = mkdtempSync(join(tmpdir(), "dsh-listcache-")).replace(/\\/g, "/");
@@ -22,13 +22,28 @@ const listCacheFiles = () => { try { return readdirSync(listCacheDir); } catch {
 
 const lib = await import("../../../lib/index.js");
 
-// bundled 源（readBundledIndex）读仓库根 registry.json——固定路径、不走 fetch、不可被
-// DSH_HOME 隔离。registry mock 失败时 bundled 会兜底成功并写盘，破坏本文件全部
-// 「registry 失败 → search/缓存」场景的断言（上游 1.4.0 #14 新增）。统一临时替换为
-// 坏 JSON 使 bundled 失败，测试结束恢复。
-const bundledPath = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..", "registry.json");
-const bundledBackup = existsSync(bundledPath) ? readFileSync(bundledPath) : null;
-writeFileSync(bundledPath, "{broken", "utf8");
+// ---- 隔离：内置索引（随包 registry.json / skills.json，readBundledIndex 直接读仓库根）----
+// mockFetch 只拦网络 fetch，而 bundled 索引是本地文件读取——不隔离的话 registry 全挂时
+// 兜底链命中真实内置索引（数千条），永远走不到 search/磁盘缓存分支，断言必然失败。
+// 测试期间把两个 bundled 文件临时移出仓库根（同名备份到临时目录），exit 时恢复。
+const repoRoot = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
+const bundledBackupDir = mkdtempSync(join(tmpdir(), "dsh-listcache-bundled-"));
+const bundledMoved = []; // [原路径, 备份路径]
+for (const name of ["registry.json", "skills.json"]) {
+  const src = join(repoRoot, name);
+  if (existsSync(src)) {
+    const dst = join(bundledBackupDir, name);
+    copyFileSync(src, dst); // 跨盘（仓库 D: vs tmp C:）不能用 renameSync，复制后删原
+    unlinkSync(src);
+    bundledMoved.push([src, dst]);
+  }
+}
+process.on("exit", () => {
+  for (const [src, dst] of bundledMoved) {
+    try { if (existsSync(dst)) copyFileSync(dst, src); } catch { /* 尽力恢复 */ }
+  }
+  try { rmSync(bundledBackupDir, { recursive: true, force: true }); } catch { /* 尽力清理 */ }
+});
 
 let pass = 0, fail = 0;
 function check(name, actual, expected) {
@@ -43,22 +58,21 @@ function check(name, actual, expected) {
 // ---- mock：按 URL 分派——registry 源 vs 搜索 API；payload 传 null 表示该路失败（403）----
 function mockFetch(registryPayload, searchPayload) {
   const orig = globalThis.fetch;
-  // headers.get 返回 null：lib 的 L6 响应上限检查（responseTooLarge）只读
-  // content-length——null 视为未声明长度，通过检查（真实响应必有 headers 对象）。
-  // arrayBuffer：registry 多源含 .gz 源（上游 #14），fetchRegistryRepos 对 .gz URL
-  // 调 res.arrayBuffer() 解压——缺它该源 TypeError 后整链失败。
-  const mockRes = (payload, ok) => ({
-    ok, status: ok ? 200 : 403, json: async () => payload, headers: { get: () => null },
-    // text/arrayBuffer 都返回 payload 的 JSON 文本：registry 多源里非 gz 源走 text() 解析
-    // （返回空串会 JSON.parse 抛错）、gz 源走 arrayBuffer() 解压（返回未压缩数据同样抛错）——
-    // 上游 1.4.0 的 registry 成功路径需要两者都可用。
-    text: async () => JSON.stringify(payload),
-    arrayBuffer: async () => Buffer.from(JSON.stringify(payload)),
-  });
+  const respond = (payload) => (payload === null
+    ? { ok: false, status: 403, json: async () => ({}), text: async () => "" }
+    : {
+        ok: true, status: 200,
+        json: async () => payload,
+        // fetchRegistryRepos 非 .gz 源走 res.text()（JSON.parse(text)）——必须返回序列化内容
+        text: async () => JSON.stringify(payload),
+        // .gz 源走 res.arrayBuffer()：mock 下返回非 gzip 数据 → gunzipSync 抛错 → 尝试下一源，
+        // 恰好验证「gz 源坏 → json 源兜底成功」的源链；不需要真实 gzip 产物。
+        arrayBuffer: async () => Buffer.from(JSON.stringify(payload)),
+      });
   globalThis.fetch = async (url) => {
     const u = String(url);
-    if (u.includes("/search/repositories")) return mockRes(searchPayload, searchPayload !== null);
-    return mockRes(registryPayload, registryPayload !== null);
+    if (u.includes("/search/repositories")) return respond(searchPayload);
+    return respond(registryPayload);
   };
   return orig;
 }
@@ -87,13 +101,11 @@ const OLD = new Date(Date.now() - 7 * 24 * 3600 * 1000).toISOString(); // 7 天�
 // ==================== 修复 1：search 兜底不写盘 ====================
 
 // 场景 A：list-cache 目录不存在 → registry 全挂 + search 成功 → 返回 search 结果，且目录不被创建
-// 注：search payload 给 2 条——V8 覆盖率里 sort 比较回调只在数组长度 >1 时被调用，
-// 单条数组 sort 回调 count=0（覆盖率伪未覆盖，见 coverage.mjs 审计记录）。
 {
-  const orig = mockFetch(null, searchItems(["s1/skill-a", "s1/skill-b"]));
+  const orig = mockFetch(null, searchItems(["s1/skill-a"]));
   const list = await lib.fetchAllRepos("dsh");
   globalThis.fetch = orig;
-  check("search 兜底返回当次结果", list.map((r) => r.full_name), ["s1/skill-a", "s1/skill-b"]);
+  check("search 兜底返回当次结果", list.map((r) => r.full_name), ["s1/skill-a"]);
   check("search 兜底不创建 list-cache 目录", listCacheFiles(), null);
 }
 
@@ -102,10 +114,10 @@ const OLD = new Date(Date.now() - 7 * 24 * 3600 * 1000).toISOString(); // 7 天�
   const staleContent = JSON.stringify({ saved_at: OLD, generated_at: OLD, kind: "dsh", count: 1, repos: [cacheRepo("c1/stale")] }, null, 2);
   mkdirSync(listCacheDir, { recursive: true });
   writeFileSync(cacheFile("dsh"), staleContent, "utf8");
-  const orig = mockFetch(null, searchItems(["s2/skill-b", "s2/skill-c"]));
+  const orig = mockFetch(null, searchItems(["s2/skill-b"]));
   const list = await lib.fetchAllRepos("dsh");
   globalThis.fetch = orig;
-  check("过期缓存 + search 兜底返回 search 结果", list.map((r) => r.full_name), ["s2/skill-b", "s2/skill-c"]);
+  check("过期缓存 + search 兜底返回 search 结果", list.map((r) => r.full_name), ["s2/skill-b"]);
   check("search 兜底不改写缓存文件", readFileSync(cacheFile("dsh"), "utf8"), staleContent);
   check("search 兜底不新增缓存文件", listCacheFiles(), ["dsh.json"]);
 }
@@ -182,11 +194,6 @@ const OLD = new Date(Date.now() - 7 * 24 * 3600 * 1000).toISOString(); // 7 天�
   check("全挂时新鲜缓存兜底生效", fromDisk.map((r) => r.full_name), ["r1/good"]);
 }
 
-// 恢复 bundled 源（exit 钩子：断言失败 process.exit 与未捕获异常都走这里，不留坏文件）
-process.on("exit", () => {
-  if (bundledBackup !== null) writeFileSync(bundledPath, bundledBackup, "utf8");
-  else rmSync(bundledPath, { force: true });
-});
 rmSync(home, { recursive: true, force: true });
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail === 0 ? 0 : 1);

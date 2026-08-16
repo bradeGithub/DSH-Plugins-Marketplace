@@ -296,6 +296,8 @@ const MARKET_TAGS = new Map([
   ["wx-yss/dsh-message-rail", ["verified-install"]], // issue #23 用户反馈正常（cli）
   ["weijiafu14/pi2dsh", ["verified-install"]], // issue #24 用户反馈正常（cli，npm 生态桥）
   ["liustack/modlens", ["verified-install"]], // issue #25 用户反馈正常（cli）
+  ["mnemon-dev/mnemon", ["verified-install"]], // issue #31 用户反馈正常（cordis-plugin 0.1.0）
+  ["taxueseek/dsh-files", ["verified-install"]], // issue #35 用户反馈正常（cordis-plugin 0.2.0）
   ["nexu-io/open-design", ["prereq"]],
 ]);
 
