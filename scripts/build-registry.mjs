@@ -833,9 +833,36 @@ async function main() {
     if (MODE === "dsh") await enrichNpmVersions(repos);
   }
 
-  // dsh 模式：按简介/标签关键词分类（skills 模式本期不分类）
+  // dsh 模式：按简介/标签关键词分类（skills 模式本期不分类）。
+  // 漂移比对（分类漂移检测）：对旧索引里已有 category 的条目，比较旧盖章 vs 本次重分类输出，
+  // 不一致 → 元数据漂移（作者改了简介/主题）或人工覆写修正（CATEGORY_OVERRIDES 生效），
+  // 写入 drift-report.json（随构建提交）供维护者定期复审——**不阻塞构建**。
+  // 增量构建只比对近 N 天新拉取的仓库（旧条目元数据未更新，输出不变）；全量构建比对全索引。
   if (MODE === "dsh") {
-    for (const repo of repos) repo.category = classifyRepo(repo);
+    const driftItems = [];
+    for (const repo of repos) {
+      const prev = oldMap.get(repo.full_name);
+      const cat = classifyRepo(repo);
+      repo.category = cat;
+      if (prev && typeof prev.category === "string" && prev.category !== cat) {
+        driftItems.push({
+          full_name: repo.full_name,
+          previous: prev.category,
+          current: cat,
+          desc_now: repo.description ?? null,
+          desc_prev: prev.description ?? null
+        });
+      }
+    }
+    try {
+      const reportPath = join(ROOT, "..", "drift-report.json");
+      if (driftItems.length > 0) {
+        await writeFile(reportPath, JSON.stringify({ generated_at: new Date().toISOString(), count: driftItems.length, items: driftItems }, null, 2) + "\n", "utf8");
+        log(`分类漂移 ${driftItems.length} 条（drift-report.json）：${driftItems.map((d) => `${d.full_name} ${d.previous}→${d.current}`).join("、")}`);
+      } else {
+        await rm(reportPath, { force: true });
+      }
+    } catch { /* 报告写入失败不阻塞构建 */ }
   }
 
   // dsh 模式：可安装性徽标盖章（installability-report.json，由 scripts/verify-installability.mjs 刷新）。

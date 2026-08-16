@@ -1,121 +1,1572 @@
 {
-  "nexu-io/open-design": "web-ui",
-  "liustack/modlens": "vision",
-  "PicGo/PicGo-Core": "tool",
-  "Anionex/agent-vision-toolkit": "vision",
-  "Anionex/dsh-vision-toolkit": "vision",
-  "zhaoolee/notes": "tool",
-  "humblebanana/open-record-replay": "vision",
-  "huiliyi37/dsh-tianshu-tui": "conversation",
-  "drewnekota/cetus": "tool",
-  "Lum1104/dsh-browser": "vision",
-  "titanwings/colleague-skill": "memory",
-  "mnemon-dev/mnemon": "memory",
-  "text2future/flowix": "memory",
-  "Ariestar/sivtr": "memory",
-  "btspoony/mstar-harness": "coding",
-  "csyangwen/dsh-memory-evolve": "memory",
-  "pingfanfan/hello-dsh": "coding",
-  "yuukiLike/zeromd": "memory",
-  "huiliyi37/dsh-tianshu-build": "agent",
-  "LoserFox/distill": "other",
-  "tt-a1i/archify": "tool",
-  "Devin-AXIS/iPolloWork": "tool",
-  "alaliqing/claude-paper": "tool",
-  "Electricitysheep/dsh-handbook": "resource",
-  "omdsh-dev/dsh-genui": "web-ui",
-  "Jayden-X-L/forkprobe": "tool",
-  "omdsh-dev/dsh-notification": "notify",
-  "Dominic789654/awesome-deepseek-harness": "resource",
-  "vibeinging/dsh-work": "tool",
-  "omdsh-dev/dsh-plugin-dev": "resource",
-  "crafter-station/petdex": "tool",
-  "foryourhealth111-pixel/Vibe-Skills": "agent",
-  "paean-ai/deeptide": "coding",
-  "xyTom/coding-tools-mcp": "coding",
-  "omdsh-dev/DSH-better-sidebar": "coding",
-  "0xsline/awesome-deepseek-harness": "resource",
-  "linhay/harmony-next.skills": "coding",
-  "morluto/rea": "tool",
-  "cofy-x/axern": "tool",
-  "hust-open-atom-club/oh-dsh": "coding",
-  "imsai-sh/zhuzhiliao": "other",
-  "sandbaseai/sandbase-harness": "agent",
-  "SepineTam/mcp-for-stata": "tool",
-  "TencentCloud/tencentmeeting-cli": "tool",
-  "Nagi-ovo/dsh-visualize": "conversation",
-  "morluto/jacobian": "tool",
-  "openguardrails/openguardrails": "tool",
-  "Chinesezjc/dsh-interconnect": "notify",
-  "omdsh-dev/dsh-toolkit": "tool",
-  "c3ll256/dsh-toy": "other",
-  "whiteguo233/OpenBiliClaw": "agent",
-  "nutshellai-tech/mobius": "agent",
-  "anywhere-labs/deepseek-harness-desktop": "other",
-  "awesome-dsh-plugin/awesome-dsh-plugin": "resource",
-  "hellowind777/helloagents": "agent",
-  "PM-Shawn/Abu-Cowork": "agent",
-  "zhoushoujianwork/easyeda-agent": "agent",
-  "NanmiCoder/dsh-agent-teams": "agent",
-  "liustack/modsearch": "tool",
-  "bruc3van/awesome-dsh-plugin": "resource",
-  "zhu1090093659/dsh-web-ui": "web-ui",
-  "ccch1mneyyy/dsh-TUI": "coding",
-  "pulseaiclub/phi": "coding",
-  "wink-run/tokenbank": "model",
-  "kuangre123/codex-switch": "tool",
-  "morluto/flameox": "tool",
-  "bowenliang123/dsh-context": "memory",
-  "anysearch-team/anysearch-dsh": "tool",
-  "morluto/leantoken": "tool",
-  "Ychris12138/dsh-usage-stats": "model",
-  "AdamPlatin123/awesome-dsh-plugins": "resource",
-  "ZASENJC/dsh-plugins-store": "resource",
-  "zp-home/dsh-recommend": "resource",
-  "omdsh-dev/dsh-hub": "resource",
-  "Tokimorphling/tokilake-ai-gateway": "other",
-  "coderPerseus/dsh-hub": "resource",
-  "tc206107/dsh-open-ecosystem": "tool",
-  "6kongbai/dsh-plugin-market": "tool",
-  "cogine-ai/marketplace": "other",
-  "Small-tailqwq/dsh-deep-whale": "web-ui",
-  "openma-ai/open-managed-agents": "tool",
-  "vlln/whale-girl": "web-ui",
-  "alingalingling/ui-status-label": "web-ui",
-  "dancingmemory/dskin": "web-ui",
-  "HeiGeAi/deepseek-harness-skin": "web-ui",
-  "147228/dsh-xiaoyao-skins": "web-ui",
-  "Fishquito7/dsh-skill-viewer": "tool",
-  "LX2000WASD/dsh-web-plugin-manager": "tool",
-  "Nagi-ovo/dsh-ads": "web-ui",
-  "omdsh-dev/dsh-at-file": "conversation",
-  "omdsh-dev/dsh-annotation": "conversation",
-  "lhh010/dsh-ui-whale": "web-ui",
-  "whiteguo233/dsh-openbiliclaw": "agent",
-  "Moeblack/dsh-message-edit": "conversation",
-  "hellodigua/dsh-share": "conversation",
-  "omdsh-dev/dsh-data-agent": "agent",
-  "vlln/dsh-navbar": "web-ui",
-  "CanglongCl/dsh-web-review": "coding",
-  "omdsh-dev/dsh-lark": "notify",
-  "huawolf/news-agent": "resource",
-  "HsiangNianian/dsh-auto-continue": "web-ui",
-  "bill9109/dsh-web-ui-notify": "notify",
-  "LoserFox/telegram": "notify",
-  "wssfk12138/dsh-wechat-notify": "notify",
-  "MuziIsabel/dsh-win-notify": "notify",
-  "congchuanling-dot/DSH-Telegram-Relay": "notify",
-  "hi-wenw/dsh-telegram-channel": "notify",
-  "dingyi222666/dsh-session-notification": "notify",
-  "Nagi-ovo/dsh-find-plugins": "tool",
-  "ZSeven-W/dsh-openpencil": "tool",
-  "multica-ai/dsh-multica-runtime": "other",
-  "unitarylab/quantum-practices": "tool",
-  "PivotStackIntelligence/dsh-github": "tool",
-  "SenmuuuuW/dsh-group-photo": "other",
-  "omdsh-dev/dsh-gomoku": "other",
-  "lzszq/dsh-scholar": "tool",
-  "bobleer/dsh-acp-for-bitfun": "tool",
-  "bruc3van/dsh-desktop": "other",
-  "JustGenius-s/DSH-Desktop": "other"
+  "nexu-io/open-design": {
+    "expected": "web-ui",
+    "desc": "🎨 Best DeepSeek Harness Design Plugin. The open-source Claude Design alternative. 🖥️ Local-first desktop app. 🖼️ Your coding agent becomes the design engine: prototypes, landing pages, dashboards, slides, images & video — real files, HTML/PDF/PPTX/MP4 export. 🤖 Claude Code / Codex / Cursor / DeepSeek Harness / OpenCode & 20+ CLIs via BYOK.",
+    "topics": [
+      "agent-skills",
+      "ai-agents",
+      "ai-design",
+      "byok",
+      "claude-code-for-design",
+      "claude-design",
+      "codex-design",
+      "coding-agents",
+      "cursor-design",
+      "deepseek-harness",
+      "design-systems",
+      "desktop-app",
+      "dsh",
+      "dsh-plugin",
+      "figma-alternative",
+      "hermes-agent",
+      "local-first",
+      "prototyping",
+      "ui-generator",
+      "vibe-coding"
+    ]
+  },
+  "liustack/modlens": {
+    "expected": "vision",
+    "desc": "The first vision plugin for DeepSeek Harness, and the vision bridge for every text-only coding agent. Paste an image, get structured JSON evidence (OCR, layout, semantics). | 全网第一个 DeepSeek Harness 视觉插件，为 DeepSeek、GLM 等纯文本模型外挂视觉能力，粘贴图片即得结构化 JSON 证据（OCR、版面、语义）。",
+    "topics": [
+      "agent-skills",
+      "claude-code",
+      "claude-skills",
+      "codex",
+      "cordis",
+      "deepseek",
+      "dsh",
+      "dsh-plugin",
+      "glm",
+      "harness",
+      "harness-engineering",
+      "hermes-agent",
+      "image-to-text",
+      "multimodal",
+      "ocr",
+      "openclaw",
+      "pi-agent",
+      "text-only-llm",
+      "vision",
+      "vision-transformer"
+    ]
+  },
+  "PicGo/PicGo-Core": {
+    "expected": "tool",
+    "desc": ":zap:The ultimate image uploading engine. Both CLI & API supports.",
+    "topics": [
+      "dsh-plugin",
+      "picgo",
+      "picture-upload",
+      "upload-pictures"
+    ]
+  },
+  "Anionex/agent-vision-toolkit": {
+    "expected": "vision",
+    "desc": "为纯文本模型\"看图“设计更好的视觉工具箱和技能，支持多图理解，图片问答，前端UI还原、GUI 自动化等，并可选无缝接入多个主流agent，直接识别粘贴图片｜ A vision toolkit and skill designed for text-only llms — image Q&A, long-screenshot OCR, frontend UI restoration, and GUI automation, with optional seamless integration for Codex, Claude Code, Pi, Oh My Pi, and OpenCode",
+    "topics": [
+      "agent",
+      "agent-skills",
+      "claude-code",
+      "codex",
+      "computer-use",
+      "deepseek",
+      "dsh-plugin",
+      "glm",
+      "harness-engineering",
+      "multimodal",
+      "opencode",
+      "text-only-llm",
+      "vision",
+      "vision-language-model"
+    ]
+  },
+  "Anionex/dsh-vision-toolkit": {
+    "expected": "vision",
+    "desc": "让纯文本模型更好地做视觉任务的DeepSeek Harness插件：带意图的图片问答、长截图 OCR、UI 还原等｜DeepSeek Harness-native integration for agent-vision-toolkit: image Q&A, long-screenshot OCR, UI restoration, grounding, pixel diff, Artifacts, and Web UI.",
+    "topics": [
+      "agent-skills",
+      "agent-vision-toolkit",
+      "computer-vision",
+      "deepseek",
+      "deepseek-harness",
+      "dsh",
+      "dsh-plugin",
+      "gui-automation",
+      "ocr",
+      "plugin",
+      "python",
+      "screenshot-testing",
+      "text-only-llm",
+      "typescript",
+      "ui-restoration",
+      "vision-language-model",
+      "vision-tools"
+    ]
+  },
+  "zhaoolee/notes": {
+    "expected": "tool",
+    "desc": "开源版锤子便签，复刻锤科美学，一键Docker私有化部署，支持skill调用，支持dsh plugin，支持多租户，一键生成公众号格式，支持导出便签为图片",
+    "topics": [
+      "dsh-plugin",
+      "notes",
+      "smartisan"
+    ]
+  },
+  "humblebanana/open-record-replay": {
+    "expected": "vision",
+    "desc": "Open-source macOS record-and-replay workflow recorder for computer use agents. Captures mouse, keyboard, and UI events as structured traces so agents can learn, replay, and automate real desktop tasks.",
+    "topics": [
+      "agent",
+      "codex",
+      "computer-use-agent",
+      "dsh-plugin",
+      "skills"
+    ]
+  },
+  "huiliyi37/dsh-tianshu-tui": {
+    "expected": "conversation",
+    "desc": "dsh-tianshu-tui — DeepSeek Harness terminal UI +harness workflow。是官方 DeepSeek Harness 上的交互式终端 UI 插件。渲染核心从本仓库自研的harness agent  Tianshu-Tui 演进而来，在官方的基础上增加了TDD、证据门、视觉图像模块等工作流。",
+    "topics": [
+      "dsh",
+      "dsh-plugin",
+      "harness",
+      "harness-engineering"
+    ]
+  },
+  "drewnekota/cetus": {
+    "expected": "tool",
+    "desc": "One macOS app for Claude Code, Codex, and every agent runtime you use — scheduled runs, global hotkey launcher, per-run git worktrees, one review board.",
+    "topics": [
+      "ai-agent",
+      "automation",
+      "claude-code",
+      "codex",
+      "computer-use",
+      "deepseek-harness",
+      "desktop-agent",
+      "dsh",
+      "dsh-plugin",
+      "local-first",
+      "macos",
+      "rust",
+      "tauri"
+    ]
+  },
+  "Lum1104/dsh-browser": {
+    "expected": "vision",
+    "desc": "dsh plugin: Chrome sidebar extension that lets DSH operate your browser directly—no vision capabilities required. dsh 插件：一款 Chrome 侧边栏扩展程序，可让 DSH 直接操控您的浏览器——无需视觉能力。",
+    "topics": [
+      "chrome-extension",
+      "cordis",
+      "deepseek",
+      "deepseek-harness",
+      "dsh",
+      "dsh-plugin"
+    ]
+  },
+  "titanwings/colleague-skill": {
+    "expected": "memory",
+    "desc": "将冰冷的离别化为温暖的 Skill，欢迎加入数字生命1.0！Transforming cold farewells into warm skills? It's giving rebirth era. Welcome to Digital Life 1.0. 🫶",
+    "topics": [
+      "agent-skills",
+      "ai-agent",
+      "claude-code",
+      "codex",
+      "dsh-plugin",
+      "hermes-agent",
+      "knowledge-distillation",
+      "meta-skill",
+      "openclaw",
+      "skill-generator"
+    ]
+  },
+  "mnemon-dev/mnemon": {
+    "expected": "memory",
+    "desc": "LLM-supervised persistent memory for AI agents — graph-based recall, cross-session knowledge, single binary. Works with DeepSeek Harness, Claude Code, OpenClaw, and any agent runtime.",
+    "topics": [
+      "agent-framework",
+      "agent-memory",
+      "ai-agent",
+      "ai-tools",
+      "claude",
+      "claude-code",
+      "cli",
+      "context-window",
+      "dsh",
+      "dsh-plugin",
+      "knowledge-graph",
+      "llm-agent",
+      "llm-memory",
+      "llm-supervised",
+      "memory",
+      "openclaw",
+      "persistent-memory"
+    ]
+  },
+  "text2future/flowix": {
+    "expected": "memory",
+    "desc": "Notes for you, Memory for your agents.",
+    "topics": [
+      "claude-code",
+      "codex-cli",
+      "dsh",
+      "dsh-plugin",
+      "hermes-agent",
+      "markdown-editor",
+      "memory-system",
+      "note-taking",
+      "open-code"
+    ]
+  },
+  "Ariestar/sivtr": {
+    "expected": "memory",
+    "desc": "A unified agent memory workspace for human and agent",
+    "topics": [
+      "agent",
+      "cli",
+      "dsh-plugin",
+      "dsh-plugins",
+      "output",
+      "rust",
+      "search",
+      "sivtr",
+      "workspace"
+    ]
+  },
+  "btspoony/mstar-harness": {
+    "expected": "coding",
+    "desc": "A Skill-driven Harness/Loop Engineering Workflow Agent Plugin",
+    "topics": [
+      "cursor-plugin",
+      "dsh-plugin",
+      "harness-engineering",
+      "knowledge-management",
+      "omp-plugin",
+      "opencode-plugin",
+      "sdd",
+      "spec-driven",
+      "subagents"
+    ]
+  },
+  "csyangwen/dsh-memory-evolve": {
+    "expected": "memory",
+    "desc": "为 DeepSeek Harness 带来「跨会话长期记忆 + 后台自我进化」能力的纯插件实现：五轨记忆 · git 分支感知 · 回合内自我审查 · 技能自我进化与技能管理器 · 四轨待办 · COI 调度 · 会话广播 · 会话搜索 · 提示词管理器 · 临时信息便签——零核心修改、零运行时依赖，随装随用、卸载即净。",
+    "topics": [
+      "deepseek-harness",
+      "dsh",
+      "dsh-plugin"
+    ]
+  },
+  "pingfanfan/hello-dsh": {
+    "expected": "coding",
+    "desc": "从零开始，看懂 DeepSeek Harness 的「万物皆可插件」— 零基础插件开发教程（含 22 个中文技能实例）| Zero-to-plugin tutorial for DeepSeek Harness",
+    "topics": [
+      "ai-agent",
+      "chinese",
+      "cordis",
+      "deepseek",
+      "deepseek-harness",
+      "dsh",
+      "dsh-plugin",
+      "tutorial"
+    ]
+  },
+  "yuukiLike/zeromd": {
+    "expected": "memory",
+    "desc": "Obsidian 零成本同步：iPhone ↔ Mac，GitHub 自动备份。本地优先 + 长期积累。｜Local First. Zero-cost Obsidian sync across iPhone, Mac & GitHub. Let knowledge grow over time.",
+    "topics": [
+      "dsh-plugin",
+      "git-backup",
+      "local-first",
+      "macos",
+      "markdown",
+      "obsidian"
+    ]
+  },
+  "huiliyi37/dsh-tianshu-build": {
+    "expected": "agent",
+    "desc": "DeepSeek X Tianshu  Harness build 是一款完全体开源 coding agent:在 dsh harness 基础之上带视觉、跨会话记忆、验证门、agent 路由、语义 + 图谱代码检索、文件回滚和全屏终端 UI——全部以插件组合。  它是 DeepSeek Harness(dsh)的友好 MIT fork, 它保留了上游一切皆插件的架构，并将以harness最佳形态和架构往下演进。",
+    "topics": [
+      "agent",
+      "coding-agent",
+      "dsh",
+      "dsh-harness",
+      "dsh-plugin"
+    ]
+  },
+  "LoserFox/distill": {
+    "expected": "other",
+    "desc": "自动对话蒸馏：后台 subagent 反省 + 技能 create/update",
+    "topics": [
+      "dsh-plugin"
+    ]
+  },
+  "tt-a1i/archify": {
+    "expected": "tool",
+    "desc": "Agent skill for beautiful, verifiable architecture, workflow, sequence, data-flow, and lifecycle diagrams—self-contained HTML with motion and crisp export.",
+    "topics": [
+      "agent-skills",
+      "anthropic",
+      "architecture-diagram",
+      "claude-skill",
+      "codex",
+      "dark-mode",
+      "data-flow-diagram",
+      "deepseek-harness",
+      "developer-tools",
+      "diagram-as-code",
+      "dsh-plugin",
+      "html-diagram",
+      "lifecycle-diagram",
+      "mermaid-alternative",
+      "opencode",
+      "sequence-diagram",
+      "svg",
+      "system-design",
+      "workflow-diagram"
+    ]
+  },
+  "Devin-AXIS/iPolloWork": {
+    "expected": "tool",
+    "desc": "A next-generation, source-available AI workspace with a self-evolving agent runtime for editable code, design, presentations, websites, and video—a Codex alternative that integrates DeepSeek Harness for subagent delegation, combining iPolloWork’s complete AI workbench with DSH’s specialized agents and both plugin ecosystems in one workflow.",
+    "topics": [
+      "agent-collaboration",
+      "agent-skills",
+      "ai-agents",
+      "ai-work",
+      "claude-code",
+      "codex",
+      "deepseek-harness",
+      "dsh-plugin",
+      "enterprise-agent-workspace",
+      "hermes-agent",
+      "openclaw",
+      "opencode",
+      "opencode-plugin",
+      "self-evolving-ai",
+      "visual-editor"
+    ]
+  },
+  "alaliqing/claude-paper": {
+    "expected": "tool",
+    "desc": "📖 Cross-agent research paper toolkit for Claude Code, Codex, OpenCode, and DeepSeek Harness—quick summaries, deep study materials, code demos, and a local web viewer.",
+    "topics": [
+      "academic-tools",
+      "agent-skills",
+      "claude-code",
+      "code-generation",
+      "codex",
+      "deepseek-harness",
+      "dsh-plugin",
+      "learning-management",
+      "npm-package",
+      "opencode",
+      "pdf-parser",
+      "research-papers",
+      "vue",
+      "web-viewer"
+    ]
+  },
+  "Electricitysheep/dsh-handbook": {
+    "expected": "resource",
+    "desc": "DeepSeek Harness (dsh) 从 0 到 1 深度手册：安装/插件开发/性能调优/实测案例/同模型多 Agent 实测对比（中文 + 英文 PDF）",
+    "topics": [
+      "agent",
+      "agent-framework",
+      "ai-agents",
+      "beginners",
+      "deepseek",
+      "deepseek-ai",
+      "dsh-plugin",
+      "getting-started",
+      "guide",
+      "harness",
+      "llm",
+      "tutorial"
+    ]
+  },
+  "omdsh-dev/dsh-genui": {
+    "expected": "web-ui",
+    "desc": "GenUI for DeepSeek Harness: interactive UI components rendered inline in assistant replies via the dsh-ui fence — layout, charts, plots, forms, quizzes, mermaid, 3D scenes, and an action event loop back to the model. Ships the fence-teaching host plugin, the browser renderer (client half), and the genui skill.",
+    "topics": [
+      "dsh",
+      "dsh-plugin"
+    ]
+  },
+  "Jayden-X-L/forkprobe": {
+    "expected": "tool",
+    "desc": "Compare multiple skills on the same task and pick the winner.",
+    "topics": [
+      "agent-workflow",
+      "ai-agents",
+      "claude-code",
+      "codex",
+      "deepseek-harness",
+      "dsh-plugin",
+      "pptx",
+      "research-writing",
+      "skill-comparison",
+      "skills"
+    ]
+  },
+  "omdsh-dev/dsh-notification": {
+    "expected": "notify",
+    "desc": "Desktop notifications for DeepSeek Harness turn completions, with per-outcome controls and include/exclude keyword rules.",
+    "topics": [
+      "dsh",
+      "dsh-plugin"
+    ]
+  },
+  "Dominic789654/awesome-deepseek-harness": {
+    "expected": "resource",
+    "desc": "A curated list of plugins, skills, MCP servers, patch/profile layers, orchestrators & UIs for DeepSeek Harness (DSH). Visualization · PPT · Coding · Agents · Loops (auto-research) and more. #dsh",
+    "topics": [
+      "agent",
+      "agent-framework",
+      "ai-agent",
+      "ai-agents",
+      "awesome",
+      "awesome-list",
+      "coding-agent",
+      "deepseek",
+      "deepseek-ai",
+      "deepseek-harness",
+      "deepseek-harness-plugin",
+      "deepseek-harness-plugins",
+      "dsh",
+      "dsh-patch",
+      "dsh-plugin",
+      "dsh-plugins",
+      "llm",
+      "llm-agent",
+      "mcp",
+      "plugins"
+    ]
+  },
+  "vibeinging/dsh-work": {
+    "expected": "tool"
+  },
+  "omdsh-dev/dsh-plugin-dev": {
+    "expected": "resource",
+    "desc": "DSH 插件开发踩坑与做法档案（skill + 文档）：cordis 双副本、tsconfig 三件套、Windows junction、多帧 zstd 等实测记录",
+    "topics": [
+      "best-practices",
+      "documentation",
+      "dsh",
+      "dsh-plugin",
+      "skill"
+    ]
+  },
+  "crafter-station/petdex": {
+    "expected": "tool",
+    "desc": "A public gallery of animated pets for Codex, Claude Code, DeepSeek Harness, Hermes, OpenCode, Gemini CLI, and more.",
+    "topics": [
+      "claude-code",
+      "clerk",
+      "cli",
+      "codex",
+      "developer-tools",
+      "drizzle-orm",
+      "dsh-plugin",
+      "mascot",
+      "neon",
+      "nextjs",
+      "pixel-art",
+      "postgres",
+      "react",
+      "sprites",
+      "tailwindcss",
+      "vercel"
+    ]
+  },
+  "foryourhealth111-pixel/Vibe-Skills": {
+    "expected": "agent",
+    "desc": "VibeSkills is a general-purpose Skill that automatically routes local Skills and intelligently orchestrates harness workflows.",
+    "topics": [
+      "agent-framework",
+      "agent-skills",
+      "agentic-coding",
+      "ai-agents",
+      "ai-scientist",
+      "ai-skills",
+      "ai-workflow",
+      "automation",
+      "claude-code",
+      "codex",
+      "context-engineering",
+      "developer-tools",
+      "dsh-plugin",
+      "llm",
+      "multi-agent",
+      "prompt-engineering",
+      "skills",
+      "vibe-coding",
+      "vibecoding",
+      "workflow-automation"
+    ]
+  },
+  "paean-ai/deeptide": {
+    "expected": "coding",
+    "desc": "Built by DeepSeek, for DeepSeek — a Swift-native macOS coding agent",
+    "topics": [
+      "coding-agent",
+      "deepseek",
+      "deepseek-harness",
+      "dsh-plugin",
+      "macos",
+      "swift"
+    ]
+  },
+  "xyTom/coding-tools-mcp": {
+    "expected": "coding",
+    "desc": "Give any AI agent the ability to code",
+    "topics": [
+      "dsh-plugin",
+      "mcp",
+      "mcp-server"
+    ]
+  },
+  "omdsh-dev/DSH-better-sidebar": {
+    "expected": "coding",
+    "desc": "一个侧边栏的完整工作台，支持三方拓展注册新侧边栏页面。内置文件渲染编辑/终端/Git/子代理",
+    "topics": [
+      "deepseek",
+      "deepseek-harness",
+      "dsh",
+      "dsh-better-sidebar",
+      "dsh-plugin",
+      "sidebar"
+    ]
+  },
+  "0xsline/awesome-deepseek-harness": {
+    "expected": "resource",
+    "desc": "DeepSeek Harness (DSH) ecosystem: curated plugins, tools, and infrastructure from dsh-external/hub and the public dsh-plugin topic.",
+    "topics": [
+      "agent",
+      "ai",
+      "ai-agents",
+      "ai-tools",
+      "awesome",
+      "awesome-list",
+      "coding-assistant",
+      "curated-list",
+      "deepseek",
+      "deepseek-harness",
+      "developer-tools",
+      "dsh",
+      "dsh-plugin",
+      "dsh-plugins",
+      "harness",
+      "llm",
+      "mcp",
+      "plugins"
+    ]
+  },
+  "linhay/harmony-next.skills": {
+    "expected": "coding",
+    "desc": "🚀 Expert guidance for HarmonyOS NEXT (API 12+) development. Covers IDE operations, performance tuning, architecture (HAP/HAR/HSP), and automation testing.",
+    "topics": [
+      "arkts",
+      "automation-testing",
+      "deveco-studio",
+      "dsh-plugin",
+      "harmonyos",
+      "harmonyos-next",
+      "openharmony",
+      "performance-tuning"
+    ]
+  },
+  "morluto/rea": {
+    "expected": "tool",
+    "desc": "Reverse engineer anything with agents, from app behavior down to native binaries.",
+    "topics": [
+      "agent-skills",
+      "ai-agent-tools",
+      "ai-agents",
+      "binary-analysis",
+      "cli",
+      "coding-agent",
+      "coding-agents",
+      "cordis",
+      "decompiler",
+      "disassembler",
+      "dsh",
+      "dsh-plugin",
+      "hopper-disassembler",
+      "mcp",
+      "mcp-server",
+      "model-context-protocol",
+      "reverse-engineering",
+      "reverse-engineering-tools",
+      "static-analysis"
+    ]
+  },
+  "cofy-x/axern": {
+    "expected": "tool",
+    "desc": "Open-source sandboxes for AI agents, untrusted code execution, and durable services.",
+    "topics": [
+      "agent-sandbox",
+      "agentic-infrastructure",
+      "ai-agents",
+      "cloud-native",
+      "code-execution",
+      "deepseek",
+      "deepseek-harness",
+      "dsh-plugin",
+      "kubernetes",
+      "remote-execution",
+      "sandbox",
+      "self-hosted"
+    ]
+  },
+  "hust-open-atom-club/oh-dsh": {
+    "expected": "coding",
+    "desc": " 一套 DSH runtime，Desktop、Web 与 TUI 三种开发体验。",
+    "topics": [
+      "ai-agent",
+      "cordis",
+      "dsh",
+      "dsh-plugin",
+      "dsh-plugins"
+    ]
+  },
+  "imsai-sh/zhuzhiliao": {
+    "expected": "other",
+    "desc": "竹知了 —— 一转就哇哇叫的传统玩具，Web 模拟版。零依赖单文件，真实录音采样，移动端优先。",
+    "topics": [
+      "deepseek-harness",
+      "dsh",
+      "dsh-plugin"
+    ]
+  },
+  "sandbaseai/sandbase-harness": {
+    "expected": "agent",
+    "desc": "Open-source CMA-compatible agent runtime for any model, with MCP tools, sandboxed sessions, audit, replay, and a local console. Includes a native DeepSeek Harness bundle over stdio MCP.",
+    "topics": [
+      "agent-framework",
+      "agent-observability",
+      "agent-runtime",
+      "agent-sandbox",
+      "ai-agents",
+      "ai-infrastructure",
+      "deepseek",
+      "deepseek-harness",
+      "deepseek-v4",
+      "docker",
+      "dsh",
+      "dsh-plugin",
+      "local-first",
+      "mcp-server",
+      "model-context-protocol",
+      "openai-compatible",
+      "sandbox",
+      "self-hosted",
+      "typescript",
+      "workflow-automation"
+    ]
+  },
+  "SepineTam/mcp-for-stata": {
+    "expected": "tool",
+    "desc": "A MCP server for Stata to integrate Stata into your agent. ",
+    "topics": [
+      "claude-code",
+      "claude-code-plugin",
+      "claude-code-skill",
+      "codex",
+      "codex-plugin",
+      "dsh-plugin",
+      "dsh-plugins",
+      "econometrics",
+      "empirical",
+      "empirical-research",
+      "llm",
+      "mcp",
+      "social-science",
+      "social-science-research",
+      "stata",
+      "stata-mcp",
+      "statistical-analysis"
+    ]
+  },
+  "TencentCloud/tencentmeeting-cli": {
+    "expected": "tool",
+    "desc": "腾讯会议命令行工具（CLI），基于腾讯会议开放平台 OAuth2 授权，支持会议管理、录制管理、参会报告等功能。",
+    "topics": [
+      "codebuddy",
+      "codebuddy-skill",
+      "dsh-plugin",
+      "workbuddy",
+      "workbuddy-skill"
+    ]
+  },
+  "Nagi-ovo/dsh-visualize": {
+    "expected": "conversation",
+    "desc": "在 DSH 对话中生成交互式可视化｜Render model-generated interactive cards inside DSH conversations",
+    "topics": [
+      "data-visualization",
+      "deepseek-harness",
+      "dsh-plugin",
+      "interactive-visualization"
+    ]
+  },
+  "morluto/jacobian": {
+    "expected": "tool",
+    "desc": "Pure mathematics for agents: search for examples and counterexamples, compute exactly, and independently check what a result proves.",
+    "topics": [
+      "ai-agents",
+      "automated-theorem-proving",
+      "computer-algebra",
+      "cordis",
+      "dsh",
+      "dsh-plugin",
+      "formal-methods",
+      "formal-verification",
+      "lean4",
+      "math",
+      "mcp",
+      "mcp-server",
+      "model-context-protocol",
+      "proof-assistant",
+      "python",
+      "smt-solver",
+      "symbolic-math",
+      "sympy",
+      "theorem-proving",
+      "z3"
+    ]
+  },
+  "openguardrails/openguardrails": {
+    "expected": "tool",
+    "desc": "The vendor-neutral protocol for AI agent safety & security — and the neutral benchmark that ranks the vendors.",
+    "topics": [
+      "agents",
+      "ai-safety",
+      "ai-security",
+      "dsh-plugin",
+      "guardrails",
+      "llm",
+      "prompt-injection",
+      "protocol",
+      "specification"
+    ]
+  },
+  "Chinesezjc/dsh-interconnect": {
+    "expected": "notify",
+    "desc": "Cross-instance message/event handoff plugins for DSH (interconnect service + tools)",
+    "topics": [
+      "deepseek-harness",
+      "dsh",
+      "dsh-plugin",
+      "interconnect"
+    ]
+  },
+  "omdsh-dev/dsh-toolkit": {
+    "expected": "tool",
+    "desc": "DSH 零依赖工具包 collection —— time / encoding / json / calculator / csv / regex / markdown / diff / stat / schema 十个确定性工具，统一入口一键安装",
+    "topics": [
+      "collection",
+      "dsh",
+      "dsh-plugin",
+      "toolkit",
+      "zero-dependency"
+    ]
+  },
+  "c3ll256/dsh-toy": {
+    "expected": "other",
+    "desc": "Toy Control Protocol for DSH",
+    "topics": [
+      "dsh-plugin"
+    ]
+  },
+  "whiteguo233/OpenBiliClaw": {
+    "expected": "agent",
+    "desc": "本地私有、开源的自进化跨平台 AI 内容发现 Agent：先理解你，再主动从 B站、小红书、抖音、YouTube、X、知乎、Reddit、微博等平台与开放 Web 寻找内容。（支持 deepseek harness 插件） | Local-first open-source cross-platform AI content discovery agent: understands you, then proactively finds content across Bilibili, Xiaohongshu, Douyin, YouTube, X, Zhihu, Reddit, Weibo and the open web.（support deepseek harness plugin）",
+    "topics": [
+      "ai-agent",
+      "bilibili",
+      "chrome-extension",
+      "content-discovery",
+      "cross-platform",
+      "deepseek-harness",
+      "douyin",
+      "dsh",
+      "dsh-plugin",
+      "llm",
+      "local-first",
+      "personal-ai",
+      "privacy-first",
+      "python",
+      "recommendation-system",
+      "self-hosted",
+      "typescript",
+      "xiaohongshu",
+      "youtube",
+      "zhihu"
+    ]
+  },
+  "nutshellai-tech/mobius": {
+    "expected": "agent",
+    "desc": "The first self-evolving open-source Agent OS, connecting your team, AI agents, devices, and compute",
+    "topics": [
+      "dsh-plugin",
+      "dsh-plugins"
+    ]
+  },
+  "anywhere-labs/deepseek-harness-desktop": {
+    "expected": "other",
+    "desc": "为 DeepSeek Harness (DSH) 生态打造的现代化桌面端体验",
+    "topics": [
+      "deepseek",
+      "deepseek-harness",
+      "desktop",
+      "dsh",
+      "dsh-plugin",
+      "dsh-plugin-desktop"
+    ]
+  },
+  "awesome-dsh-plugin/awesome-dsh-plugin": {
+    "expected": "resource",
+    "desc": "A curated list of plugins for DeepSeek Harness (dsh) · DeepSeek Harness 插件精选列表",
+    "topics": [
+      "awesome",
+      "awesome-list",
+      "deepseek-harness",
+      "dsh",
+      "dsh-plugin"
+    ]
+  },
+  "hellowind777/helloagents": {
+    "expected": "agent",
+    "desc": "一个自主的高级智能伙伴，不仅分析问题，更持续工作直到完成实现和验证。",
+    "topics": [
+      "dsh",
+      "dsh-plugin"
+    ]
+  },
+  "PM-Shawn/Abu-Cowork": {
+    "expected": "agent",
+    "desc": "Open-source alternative to Claude Cowork — a local-first AI agent desktop app · multi-model · self-evolving skills · privacy-first · multi-Harness roadmap · DeepSeek Harness integration in progress",
+    "topics": [
+      "ai-agent",
+      "ai-assistant",
+      "automation",
+      "desktop-app",
+      "dsh-plugin",
+      "dsh-plugins",
+      "llm",
+      "local-first",
+      "mcp",
+      "privacy",
+      "productivity",
+      "react",
+      "tauri",
+      "typescript"
+    ]
+  },
+  "zhoushoujianwork/easyeda-agent": {
+    "expected": "agent"
+  },
+  "NanmiCoder/dsh-agent-teams": {
+    "expected": "agent",
+    "desc": "AgentTeams plugin for DeepSeek Harness",
+    "topics": [
+      "agentteams",
+      "deepseekharness",
+      "dsh",
+      "dsh-agent-teams",
+      "dsh-plugin"
+    ]
+  },
+  "liustack/modsearch": {
+    "expected": "tool",
+    "desc": "The web plugin for DeepSeek Harness, and the search bridge for every model without native web access. Ask the web or X, get structured JSON evidence. | DeepSeek Harness 的 web 插件，为不能联网的模型补上搜索。问网页或 X，拿回结构化 JSON 证据（搜索、抓取、引用）。",
+    "topics": [
+      "agent-skills",
+      "agentic-workflow",
+      "claude-code",
+      "claude-skills",
+      "codex",
+      "cordis",
+      "deepseek",
+      "deepseek-harness",
+      "dsh",
+      "dsh-plugin",
+      "glm",
+      "harness",
+      "harness-engineering",
+      "hermes-agent",
+      "openclaw",
+      "opencode",
+      "pi-agent",
+      "web-fetch",
+      "web-search"
+    ]
+  },
+  "bruc3van/awesome-dsh-plugin": {
+    "expected": "resource",
+    "desc": "用 30 秒找到适合你的 DeepSeek Harness 插件。 不只是仓库列表：这里告诉你插件解决什么问题、适合谁，以及从哪里开始。",
+    "topics": [
+      "awesome-list",
+      "deepseek-harness",
+      "dsh",
+      "dsh-plugin",
+      "plugins"
+    ]
+  },
+  "zhu1090093659/dsh-web-ui": {
+    "expected": "web-ui",
+    "desc": "Plugin and skin collection for DeepSeek Harness (DSH) Web UI - task board, git graph, right-side panel, remote mobile UI, pet, live token stats, and skin center.",
+    "topics": [
+      "deepseek-harness",
+      "dsh",
+      "dsh-plugin",
+      "web-ui"
+    ]
+  },
+  "ccch1mneyyy/dsh-TUI": {
+    "expected": "coding",
+    "desc": "DSH 官方公众号收录的 TUI 补位插件：Claude Code 风，鲸鱼顶栏/实时状态/流式思考/双击 Esc 回滚/上下文进度+TPS。npm 一键装。  DSH official WeChat featured TUI plugin — Claude Code style: whale bar, live status, streaming thoughts, double-Esc rollback, context bar + TPS. npm one-click.",
+    "topics": [
+      "claude-code",
+      "coding-agent",
+      "deepseek",
+      "deepseek-harness",
+      "dsh-plugin",
+      "ink",
+      "react",
+      "terminal",
+      "tui"
+    ]
+  },
+  "pulseaiclub/phi": {
+    "expected": "coding",
+    "desc": "a coding Agent from pi. ∞ providers, sub-agents, hashline edits, and a permission gate",
+    "topics": [
+      "ai",
+      "ai-agent",
+      "cli",
+      "coding-agent",
+      "deepseek",
+      "deepseek-harness",
+      "dsh-plugin",
+      "go",
+      "openai",
+      "pi",
+      "terminal",
+      "tui"
+    ]
+  },
+  "wink-run/tokenbank": {
+    "expected": "model",
+    "desc": "Token Bank — the local LLM gateway that sits between your AI agents and every provider.  Know where tokens go · Spend less with smart routing to Ollama, Groq, GitHub Models · Earn by sharing idle quota on a community P2P network.  One-click onboarding for Cursor, Claude Code, Codex CLI, Gemini CLI — no agent changes. Full trace, seamless model swap",
+    "topics": [
+      "agent",
+      "anthropic",
+      "claudecode",
+      "codex",
+      "cursor",
+      "dsh",
+      "dsh-plugin",
+      "llm",
+      "llm-gateway",
+      "llm-gateway-system",
+      "llm-proxy",
+      "llm-router",
+      "local",
+      "local-first",
+      "observability",
+      "openai",
+      "openclaw",
+      "token",
+      "token-usage",
+      "tokenhub"
+    ]
+  },
+  "kuangre123/codex-switch": {
+    "expected": "tool",
+    "desc": "Codex Switch 是一个 macOS 工具，一键配置 Codex 的自定义 API，同时保留官方 OpenAI 登录。保存后 Codex 的模型选择器里只会出现你选的那个 provider 的模型。也支持 Claude Code 的官方 / 自定义 API 切换。Codex Switch is a lightweight helper for configuring multiple coding-agent API routes. For Codex, it keeps Official OpenAI and a custom API provider configured in parallel, registers the custom model in Codex's mod",
+    "topics": [
+      "codex",
+      "codex-app",
+      "codex-cli",
+      "codex-desktop",
+      "codex-github",
+      "codex-pet",
+      "codex-plugin",
+      "codex-project",
+      "codex-skill",
+      "codex-skills",
+      "dsh-plugin",
+      "dsh-plugins"
+    ]
+  },
+  "morluto/flameox": {
+    "expected": "tool",
+    "desc": "Runtime evidence that helps agents trace, profile, and burn down hotspots in application and native code, GPU kernels, and inference stacks.",
+    "topics": [
+      "benchmarking",
+      "coding-agents",
+      "cordis",
+      "debugging",
+      "developer-tools",
+      "dsh",
+      "dsh-plugin",
+      "gpu-profiling",
+      "local-first",
+      "mcp",
+      "mcp-server",
+      "model-context-protocol",
+      "performance",
+      "performance-analysis",
+      "performance-engineering",
+      "performance-regression",
+      "profiler",
+      "profiling",
+      "python",
+      "runtime-analysis"
+    ]
+  },
+  "bowenliang123/dsh-context": {
+    "expected": "memory",
+    "desc": "A DeepSeek Harness plugin for  Context insight dashboard — showing what the model's context window is made of and how it evolves.",
+    "topics": [
+      "dsh-external",
+      "dsh-plugin",
+      "dsh-plugins"
+    ]
+  },
+  "anysearch-team/anysearch-dsh": {
+    "expected": "tool",
+    "desc": "AnySearch web search provider and advanced search tools for DeepSeek Harness (DSH)",
+    "topics": [
+      "agent-tools",
+      "anysearch",
+      "deepseek-harness",
+      "dsh",
+      "dsh-plugin",
+      "typescript",
+      "web-search"
+    ]
+  },
+  "morluto/leantoken": {
+    "expected": "tool",
+    "desc": "Code intelligence for agents: find the code that matters and keep your context window and tokens lean.",
+    "topics": [
+      "ai-coding",
+      "code-intelligence",
+      "code-navigation",
+      "code-retrieval",
+      "code-search",
+      "codebase-indexing",
+      "coding-agents",
+      "context-engineering",
+      "context-window",
+      "cordis",
+      "dsh",
+      "dsh-plugin",
+      "mcp",
+      "mcp-server",
+      "model-context-protocol",
+      "rust",
+      "token-budget",
+      "token-counting",
+      "token-efficient",
+      "tree-sitter"
+    ]
+  },
+  "Ychris12138/dsh-usage-stats": {
+    "expected": "model",
+    "desc": "Token usage heatmap, per-model breakdowns, and DeepSeek account balance for the DeepSeek Harness Web GUI (dsh web).",
+    "topics": [
+      "deepseek",
+      "deepseek-harness",
+      "deepseek-harness-plugin",
+      "deepseek-harness-plugin-dev",
+      "deepseek-harness-plugins",
+      "dsh",
+      "dsh-plugin",
+      "dsh-plugins"
+    ]
+  },
+  "AdamPlatin123/awesome-dsh-plugins": {
+    "expected": "resource",
+    "desc": "前部索引仓库（Radar）：自动扫描发现的所有 dsh 插件候选；经测试合格的将移入后序精选目录仓库",
+    "topics": [
+      "dsh-plugin"
+    ]
+  },
+  "ZASENJC/dsh-plugins-store": {
+    "expected": "resource",
+    "desc": "自动分类、收录和验证 DeepSeek-Harness 社区插件市场。 Automatically categorize, curate, and validate the DeepSeek-Harness community plugin marketplace.",
+    "topics": [
+      "agent-tools",
+      "awesome-list",
+      "community-project",
+      "deepseek-harness",
+      "dsh",
+      "dsh-plugin"
+    ]
+  },
+  "zp-home/dsh-recommend": {
+    "expected": "resource",
+    "desc": "DSH 插件生态透明排行与推荐：每日自动抓取 dsh-plugin 话题 + 公开评分模型 + 排行/推荐插件与静态站",
+    "topics": [
+      "deepseek-harness",
+      "dsh-plugin",
+      "plugin",
+      "rankings",
+      "recommendations"
+    ]
+  },
+  "omdsh-dev/dsh-hub": {
+    "expected": "resource"
+  },
+  "Tokimorphling/tokilake-ai-gateway": {
+    "expected": "other",
+    "desc": "Self-hosted AI gateway for distributed local LLM GPUs. OpenAI-compatible API with NAT traversal, WebSocket/QUIC tunnels, Ollama/vLLM/SGLang workers.",
+    "topics": [
+      "deepeseek",
+      "dsh",
+      "dsh-plugin",
+      "dsh-plugins"
+    ]
+  },
+  "coderPerseus/dsh-hub": {
+    "expected": "resource",
+    "desc": "Discover The Best DSH plugins",
+    "topics": [
+      "awesome",
+      "awesome-list",
+      "deepseek",
+      "dsh",
+      "dsh-plugin"
+    ]
+  },
+  "tc206107/dsh-open-ecosystem": {
+    "expected": "tool"
+  },
+  "6kongbai/dsh-plugin-market": {
+    "expected": "tool",
+    "desc": "A dsh plugin marketplace CLI: browse, install, and uninstall community plugins from the dsh-plugin GitHub topic",
+    "topics": [
+      "cli",
+      "deepseek-harness",
+      "dsh",
+      "dsh-bundle",
+      "dsh-plugin",
+      "plugin-marketplace"
+    ]
+  },
+  "cogine-ai/marketplace": {
+    "expected": "other"
+  },
+  "Small-tailqwq/dsh-deep-whale": {
+    "expected": "web-ui",
+    "desc": "DSH Web 鲸鱼娘皮肤系列(深海女仆工坊 maid-atelier)——CC BY-NC-SA 4.0",
+    "topics": [
+      "dsh",
+      "dsh-plugin"
+    ]
+  },
+  "openma-ai/open-managed-agents": {
+    "expected": "tool",
+    "desc": "Open-source Claude Managed Agents API implementation and self-hosted Claude Tag-style agent runtime. Drop-in compatible; runs on Cloudflare Workers/Durable Objects or Node.js. Apache 2.0.",
+    "topics": [
+      "agent-framework",
+      "agent-infrastructure",
+      "agent-platform",
+      "ai-agents",
+      "anthropic-api",
+      "anthropic-managed-agents",
+      "byok",
+      "claude-api",
+      "claude-code",
+      "claude-managed-agents",
+      "claude-tag",
+      "claude-tag-alternative",
+      "cloudflare",
+      "dsh-plugin",
+      "dsh-plugins",
+      "durable-objects",
+      "managed-agents",
+      "open-managed-agents",
+      "open-source-agents",
+      "self-hosted-agents"
+    ]
+  },
+  "vlln/whale-girl": {
+    "expected": "web-ui",
+    "desc": "DSH Web GUI 桌面宠物插件（QQ 宠物形态）：右下角悬浮、可拖拽/投喂/玩耍的积累型伙伴。",
+    "topics": [
+      "deepseek-harness",
+      "dsh",
+      "dsh-plugin",
+      "dsh-repository-plugin",
+      "pet"
+    ]
+  },
+  "alingalingling/ui-status-label": {
+    "expected": "web-ui",
+    "desc": "把你鲸鱼娘思考时的 deep diving 自定义成任意你想要的样子",
+    "topics": [
+      "dsh",
+      "dsh-plugin"
+    ]
+  },
+  "dancingmemory/dskin": {
+    "expected": "web-ui",
+    "desc": "DSKIN · DeepSeek Harness（DSH）卡通像素皮肤插件 / Cartoon pixel skin plugin for DSH Web GUI — 原始界面不动，像素宠物会散步、眨眼、跳跃 / living pixel pets that stroll, blink and hop",
+    "topics": [
+      "cartoon",
+      "deepseek-harness",
+      "dsh",
+      "dsh-plugin",
+      "pixel-art",
+      "skin",
+      "theme",
+      "ui-skin"
+    ]
+  },
+  "HeiGeAi/deepseek-harness-skin": {
+    "expected": "web-ui",
+    "desc": "DeepSeek Harness 换肤系统：21 套内置皮肤 + 一张图生成整套配色的自定义皮肤。数据源驱动，保对比度推导，构建期校验可读性。",
+    "topics": [
+      "css",
+      "dark-mode",
+      "deepseek-harness",
+      "dsh-plugin",
+      "skin",
+      "theme",
+      "ui-theme"
+    ]
+  },
+  "147228/dsh-xiaoyao-skins": {
+    "expected": "web-ui",
+    "desc": "夕小瑶 × DeepSeek Harness Web 皮肤合集、安装器与社区创作工具链",
+    "topics": [
+      "ai-agent",
+      "community",
+      "deepseek-harness",
+      "dsh-plugin",
+      "skin",
+      "theme",
+      "xiaoyao"
+    ]
+  },
+  "Fishquito7/dsh-skill-viewer": {
+    "expected": "tool",
+    "desc": "DSH Web UI plugin: Skills settings section with hot enable/disable, delete and add（Web界面的skill管理工具）",
+    "topics": [
+      "deepseek",
+      "dsh",
+      "dsh-plugin",
+      "plugin",
+      "skills"
+    ]
+  },
+  "LX2000WASD/dsh-web-plugin-manager": {
+    "expected": "tool",
+    "desc": "在 Web UI 中一键管理 DeepSeek Harness (DSH) 插件：查看、实时启停、安装/卸载、更新检测、健康检查（依赖/冲突/兼容性分析）、环境管理、插件市场。bundle 与非 bundle 插件全覆盖",
+    "topics": [
+      "dsh",
+      "dsh-plugin"
+    ]
+  },
+  "Nagi-ovo/dsh-ads": {
+    "expected": "web-ui",
+    "desc": "把 DSH 变成 2005 年门户网站｜Parody ads, fake games, and popups for the DSH Web UI",
+    "topics": [
+      "deepseek-harness",
+      "dsh-plugin",
+      "trolling",
+      "web-ui"
+    ]
+  },
+  "omdsh-dev/dsh-at-file": {
+    "expected": "conversation",
+    "desc": "Codex-style @file mentions for DeepSeek Harness: search workspace files in the composer and attach their contents to prompts.",
+    "topics": [
+      "dsh",
+      "dsh-plugin"
+    ]
+  },
+  "omdsh-dev/dsh-annotation": {
+    "expected": "conversation",
+    "desc": "DSH Web 选中批注插件：选文字→批注→回车随消息发送；气泡隐藏批注块（零闪烁）；回复按 Annotation N 逐条对照（可悬浮芯片）。官方 bundle，零核心改动",
+    "topics": [
+      "dsh",
+      "dsh-plugin"
+    ]
+  },
+  "lhh010/dsh-ui-whale": {
+    "expected": "web-ui",
+    "desc": "【求⭐】🐋DSH Web UI 全手绘像素鲸鱼伙伴插件：会话标题栏常驻，平时眨眼/偶尔摆尾/动胸鳍，思考运行时持续动起来，回合完成头顶喷水，点击还会冒爱心，不工作时还会偷懒睡觉，零核心改动。 【喜欢的话就点点star⭐吧~】",
+    "topics": [
+      "dsh",
+      "dsh-plugin"
+    ]
+  },
+  "whiteguo233/dsh-openbiliclaw": {
+    "expected": "agent",
+    "desc": "OpenBiliClaw 是本地运行的跨平台个性化内容推荐 Agent，持续理解你的兴趣并主动找内容。本仓库是它的 DeepSeek Harness 插件：DSH 界面常驻第四栏（推荐/内容库/对话/画像/设置），注册 22 个 Agent Bridge 工具，让 Agent 也能读推荐、答探测、闭环学习。",
+    "topics": [
+      "agent-bridge",
+      "deepseek-harness",
+      "dsh",
+      "dsh-plugin",
+      "openbiliclaw"
+    ]
+  },
+  "Moeblack/dsh-message-edit": {
+    "expected": "conversation",
+    "desc": "DSH 插件：分支式消息编辑、重掷、重试与版本时间线 | DSH plugin: branch-based message editing, reroll, retry, version timeline",
+    "topics": [
+      "dsh",
+      "dsh-plugin"
+    ]
+  },
+  "hellodigua/dsh-share": {
+    "expected": "conversation",
+    "desc": "DSH 对话分享插件，分享单轮或多轮对话，可导出为图片或 Markdown。Share DSH Q&As or selected conversation groups as PNG or Markdown.",
+    "topics": [
+      "dsh",
+      "dsh-plugin"
+    ]
+  },
+  "omdsh-dev/dsh-data-agent": {
+    "expected": "agent",
+    "desc": "Data Agent for DeepSeek Harness: session-scoped database connections with a dedicated agent preset that lets AI write SQL and iterate against live execution feedback.",
+    "topics": [
+      "data-agent",
+      "deepseek-harness",
+      "dsh",
+      "dsh-plugin"
+    ]
+  },
+  "vlln/dsh-navbar": {
+    "expected": "web-ui",
+    "desc": "DSH 插件：对话节点导航条（右缘节点串快速跳转 user 消息）。官方 bundle 插件，dsh plugin --profile web add 安装",
+    "topics": [
+      "dsh",
+      "dsh-plugin",
+      "plugin",
+      "ui"
+    ]
+  },
+  "CanglongCl/dsh-web-review": {
+    "expected": "coding",
+    "desc": "DeepSeek Harness Web GUI 的网页预览与元素批注插件，让 AI 根据可视化反馈直接修改前端源码。",
+    "topics": [
+      "ai-agents",
+      "dsh",
+      "dsh-plugin",
+      "human-in-the-loop"
+    ]
+  },
+  "omdsh-dev/dsh-lark": {
+    "expected": "notify",
+    "desc": "Lark/Feishu IM bot channel for DeepSeek Harness | 飞书 DeepSeek Harness （DSH）插件",
+    "topics": [
+      "cordis",
+      "deepseek-harness",
+      "dsh",
+      "dsh-plugin",
+      "feishu",
+      "lark"
+    ]
+  },
+  "huawolf/news-agent": {
+    "expected": "resource",
+    "desc": "AI-powered personal news aggregator with LLM scoring, Web console, and push notifications to Feishu/Discord.",
+    "topics": [
+      "dsh-plugin",
+      "news-aggregator",
+      "news-worker",
+      "rss-reader",
+      "vaneworker"
+    ]
+  },
+  "HsiangNianian/dsh-auto-continue": {
+    "expected": "web-ui",
+    "desc": "DSH Web UI plugin: auto-sends 「继续」 to resume requests interrupted by network errors or other non-human causes — error classification, adaptive backoff, templated continue text, browser notifications, all configurable from the settings card",
+    "topics": [
+      "auto-contiune",
+      "automatic",
+      "cordis",
+      "deepseek-harness",
+      "dsh",
+      "dsh-plugin",
+      "plugin",
+      "web-ui"
+    ]
+  },
+  "bill9109/dsh-web-ui-notify": {
+    "expected": "notify",
+    "desc": "为 DSH 增加桌面通知提醒",
+    "topics": [
+      "dsh",
+      "dsh-plugin"
+    ]
+  },
+  "LoserFox/telegram": {
+    "expected": "notify",
+    "desc": "Telegram Bot API 桥接插件：长轮询、per-chat 会话、HTML 格式化",
+    "topics": [
+      "dsh-plugin"
+    ]
+  },
+  "wssfk12138/dsh-wechat-notify": {
+    "expected": "notify",
+    "desc": "DeepSeek Harness 插件：为 agent 新增 wechat_notify 工具，让 AI 通过本机 ClawBot 微信通道主动给你发通知（任务完成 / 需决策时），中文可靠、掉线自提示。",
+    "topics": [
+      "clawbot",
+      "deepseek-harness",
+      "dsh",
+      "dsh-plugin",
+      "notify",
+      "wechat",
+      "wechat-notify"
+    ]
+  },
+  "MuziIsabel/dsh-win-notify": {
+    "expected": "notify",
+    "desc": "DSH 插件：代理任务完成时弹出带声音的 Windows Toast 通知，点击通知即可直接切回并前台显示 DSH 标签页",
+    "topics": [
+      "dsh-plugin"
+    ]
+  },
+  "congchuanling-dot/DSH-Telegram-Relay": {
+    "expected": "notify",
+    "desc": "DSH Relay 让你可以通过 Telegram 远程与 DeepSeek Harness 对话，并接收通知。DSH Relay turns Telegram into a remote conversation and notification channel for DeepSeek Harness.",
+    "topics": [
+      "agent",
+      "automation",
+      "automation-highway",
+      "automotive",
+      "autonomous-agents",
+      "deepseek-harness",
+      "deepseek-harness-plugin",
+      "deepseek-harness-plugins",
+      "dsh",
+      "dsh-plugin",
+      "text-only-llm",
+      "typescript"
+    ]
+  },
+  "hi-wenw/dsh-telegram-channel": {
+    "expected": "notify",
+    "desc": "DeepSeek Harness Telegram mobile remote: bind live Web sessions (Codex-style). Install: dsh plugin add github:hi-wenw/dsh-telegram-channel",
+    "topics": [
+      "agent",
+      "bot",
+      "channel",
+      "cordis",
+      "deepseek-harness",
+      "dsh",
+      "dsh-plugin",
+      "dsh-plugins",
+      "mobile",
+      "remote",
+      "sessions",
+      "telegram"
+    ]
+  },
+  "dingyi222666/dsh-session-notification": {
+    "expected": "notify",
+    "desc": "提供会话完成等四种状态的通知响应，支持浏览器提示和提示词",
+    "topics": [
+      "dsh-plugin"
+    ]
+  },
+  "Nagi-ovo/dsh-find-plugins": {
+    "expected": "tool",
+    "desc": "帮 DSH 搜索、安装并验证插件的 Skill｜A DSH skill that finds, installs, and verifies GitHub plugins",
+    "topics": [
+      "agent-skills",
+      "deepseek-harness",
+      "dsh-plugin",
+      "plugin-discovery"
+    ]
+  },
+  "ZSeven-W/dsh-openpencil": {
+    "expected": "tool",
+    "desc": "The DeepSeek Harness plugin for OpenPencil — preview, inspect, and edit real .op documents inside a conversation.",
+    "topics": [
+      "deepseek-harness",
+      "design",
+      "dsh",
+      "dsh-plugin",
+      "openpencil",
+      "ppt",
+      "ui",
+      "ui-design"
+    ]
+  },
+  "multica-ai/dsh-multica-runtime": {
+    "expected": "other",
+    "desc": "Support dsh runtime on Multica.",
+    "topics": [
+      "dsh",
+      "dsh-plugin"
+    ]
+  },
+  "unitarylab/quantum-practices": {
+    "expected": "tool",
+    "desc": "Quantum Algorithms Best Practices",
+    "topics": [
+      "agent-skills",
+      "best-practices",
+      "deepseek-harness",
+      "dsh",
+      "dsh-plugin",
+      "dsh-plugins",
+      "quantum-algorithms",
+      "quantum-computing"
+    ]
+  },
+  "PivotStackIntelligence/dsh-github": {
+    "expected": "tool"
+  },
+  "SenmuuuuW/dsh-group-photo": {
+    "expected": "other",
+    "desc": "DSH 内测收官合影墙：GitHub OAuth 零权限登录 + 冻结白名单校验的拍立得合影站（含 DSH Skill 包装）",
+    "topics": [
+      "deepseek-harness",
+      "dsh",
+      "dsh-plugin"
+    ]
+  },
+  "omdsh-dev/dsh-gomoku": {
+    "expected": "other",
+    "desc": "在DSH中与AI下五子棋，也可以让AI对局，看哪个AI棋力更强",
+    "topics": [
+      "deepseek-harness",
+      "dsh",
+      "dsh-plugin"
+    ]
+  },
+  "lzszq/dsh-scholar": {
+    "expected": "tool",
+    "desc": "dsh-scholar",
+    "topics": [
+      "dsh",
+      "dsh-plugin"
+    ]
+  },
+  "bobleer/dsh-acp-for-bitfun": {
+    "expected": "tool",
+    "desc": "BitFun 与 DSH ACP 交互对接 插件",
+    "topics": [
+      "bitfun",
+      "dsh",
+      "dsh-plugin"
+    ]
+  },
+  "bruc3van/dsh-desktop": {
+    "expected": "other"
+  },
+  "JustGenius-s/DSH-Desktop": {
+    "expected": "other"
+  }
 }
