@@ -5,7 +5,8 @@
 //   B 已含真实嵌套条目（`- insert:` 块内缩进 name 行）：跳过，不追加
 //   D 全新环境连跑 3 次：只注册一次（幂等）
 //
-// 依赖：install.sh 用 bash（Git Bash / CI Linux 均可用）；
+// 依赖：install.sh 用 bash（Git Bash / CI Linux 均可用；环境无 bash 时跳过 sh 沙箱，
+//       契约静态断言见 unit/install-scripts.test.mjs，跨平台必跑）；
 //       install.ps1 用 pwsh（Windows 本机执行，其他平台跳过）。
 // 契约的静态断言见 unit/install-scripts.test.mjs（跨平台必跑）。
 
@@ -35,52 +36,62 @@ function readPatch(home) {
 }
 
 // ---- install.sh：bash 沙箱（场景 A/B/D）----
-function runSh(home) {
-  // PATH 前置必然失败的 stub dsh：环境若装过 dsh CLI（维护者本机），install.sh 的
-  // command -v dsh 检测会走「官方安装」分支（真实网络 + 真实 profile），沙箱断言
-  // 必失败。stub exit 1 → 官方分支失败 → 回退手动分支（与 ps1 的 stub 语义一致）。
-  const stubDir = mkdtempSync(join(tmpdir(), "dsh-sh-stub-"));
-  writeFileSync(join(stubDir, "dsh"), "#!/bin/sh\nexit 1\n", "utf8");
-  try {
-    execFileSync("bash", [join(ROOT, "install.sh")], {
-      env: { ...process.env, HOME: home, PATH: `${stubDir}:${process.env.PATH ?? ""}` },
-      cwd: ROOT,
-      stdio: "pipe"
-    });
-  } finally {
-    rmSync(stubDir, { recursive: true, force: true });
+function hasBash() {
+  try { execFileSync("bash", ["--version"], { stdio: "ignore" }); return true; } catch { return false; }
+}
+if (hasBash()) {
+  function runSh(home) {
+    // PATH 前置必然失败的 stub dsh：环境若装过 dsh CLI（维护者本机），install.sh 的
+    // command -v dsh 检测会走「官方安装」分支（真实网络 + 真实 profile），沙箱断言
+    // 必失败。stub exit 1 → 官方分支失败 → 回退手动分支（与 ps1 的 stub 语义一致）。
+    const stubDir = mkdtempSync(join(tmpdir(), "dsh-sh-stub-"));
+    writeFileSync(join(stubDir, "dsh"), "#!/bin/sh\nexit 1\n", "utf8");
+    try {
+      execFileSync("bash", [join(ROOT, "install.sh")], {
+        env: { ...process.env, HOME: home, PATH: `${stubDir}:${process.env.PATH ?? ""}` },
+        cwd: ROOT,
+        stdio: "pipe"
+      });
+    } finally {
+      rmSync(stubDir, { recursive: true, force: true });
+    }
   }
+
+  // A：全新环境
+  const homeA = mkdtempSync(join(tmpdir(), "dsh-inst-sh-a-"));
+  try {
+    runSh(homeA);
+    const patch = readPatch(homeA);
+    check("sh-A: 全新环境注册一次", (patch.match(/name: dsh-plugin-marketplace/g) || []).length, 1);
+    check("sh-A: 追加 id 为 dsh-plugin-marketplace", /- id: dsh-plugin-marketplace/.test(patch), true);
+    check("sh-A: 非独立 plugin-marketplace id", !/- id: plugin-marketplace(?![-\w])/.test(patch), true);
+  } finally { rmSync(homeA, { recursive: true, force: true }); }
+
+  // B：已含真实嵌套条目（缩进 name 行）→ 跳过
+  const homeB = mkdtempSync(join(tmpdir(), "dsh-inst-sh-b-"));
+  try {
+    mkdirSync(join(homeB, ".dsh", "profiles", "web"), { recursive: true });
+    writeFileSync(patchPath(homeB), INDENTED_ENTRY, "utf8");
+    runSh(homeB);
+    check("sh-B: 嵌套条目已注册 → 跳过不追加", readPatch(homeB), INDENTED_ENTRY);
+  } finally { rmSync(homeB, { recursive: true, force: true }); }
+
+  // D：全新环境连跑 3 次 → 只注册一次
+  const homeD = mkdtempSync(join(tmpdir(), "dsh-inst-sh-d-"));
+  try {
+    for (let i = 0; i < 3; i++) runSh(homeD);
+    const patch = readPatch(homeD);
+    check("sh-D: 连跑 3 次只注册一次", (patch.match(/name: dsh-plugin-marketplace/g) || []).length, 1);
+  } finally { rmSync(homeD, { recursive: true, force: true }); }
+} else {
+  console.log("SKIP sh 沙箱（环境无 bash，Git Bash / CI Linux 下运行）");
 }
 
-// A：全新环境
-const homeA = mkdtempSync(join(tmpdir(), "dsh-inst-sh-a-"));
-try {
-  runSh(homeA);
-  const patch = readPatch(homeA);
-  check("sh-A: 全新环境注册一次", (patch.match(/name: dsh-plugin-marketplace/g) || []).length, 1);
-  check("sh-A: 追加 id 为 dsh-plugin-marketplace", /- id: dsh-plugin-marketplace/.test(patch), true);
-  check("sh-A: 非独立 plugin-marketplace id", !/- id: plugin-marketplace(?![-\w])/.test(patch), true);
-} finally { rmSync(homeA, { recursive: true, force: true }); }
-
-// B：已含真实嵌套条目（缩进 name 行）→ 跳过
-const homeB = mkdtempSync(join(tmpdir(), "dsh-inst-sh-b-"));
-try {
-  mkdirSync(join(homeB, ".dsh", "profiles", "web"), { recursive: true });
-  writeFileSync(patchPath(homeB), INDENTED_ENTRY, "utf8");
-  runSh(homeB);
-  check("sh-B: 嵌套条目已注册 → 跳过不追加", readPatch(homeB), INDENTED_ENTRY);
-} finally { rmSync(homeB, { recursive: true, force: true }); }
-
-// D：全新环境连跑 3 次 → 只注册一次
-const homeD = mkdtempSync(join(tmpdir(), "dsh-inst-sh-d-"));
-try {
-  for (let i = 0; i < 3; i++) runSh(homeD);
-  const patch = readPatch(homeD);
-  check("sh-D: 连跑 3 次只注册一次", (patch.match(/name: dsh-plugin-marketplace/g) || []).length, 1);
-} finally { rmSync(homeD, { recursive: true, force: true }); }
-
-// ---- install.ps1：pwsh 沙箱（仅 Windows 本机）----
-if (process.platform === "win32") {
+// ---- install.ps1：pwsh 沙箱（仅 Windows 本机；环境无 pwsh 时跳过，与 sh 侧对称）----
+function hasPwsh() {
+  try { execFileSync("pwsh", ["-NoProfile", "-Command", "exit 0"], { stdio: "ignore" }); return true; } catch { return false; }
+}
+if (process.platform === "win32" && hasPwsh()) {
   function runPs1(userProfile) {
     // 沙箱隔离：宿主 dsh CLI 会令脚本走「官方安装」分支（写真实 profile 而非
     // USERPROFILE，且每次 60s+）——PATH 前置必然失败的 stub dsh：脚本
@@ -142,6 +153,8 @@ if (process.platform === "win32") {
       } finally { rmSync(psD, { recursive: true, force: true }); }
     })(),
   ]);
+} else if (process.platform === "win32") {
+  console.log("SKIP ps1 沙箱（环境无 pwsh，Windows 本机 / CI Windows 下运行）");
 } else {
   console.log("SKIP ps1 沙箱（非 Windows 平台，需 pwsh）");
 }
