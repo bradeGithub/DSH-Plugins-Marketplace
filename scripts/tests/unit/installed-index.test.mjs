@@ -83,6 +83,10 @@ const fpCount = (lib.match(/fp: listFingerprint\(deduped\)/g) ?? []).length;
 check("插件列表响应带 fp（skills 分页化后仅一处）", fpCount, 1);
 check("listFingerprint 实现存在", /function listFingerprint\(repos\) \{[\s\S]*?\n\}/.test(lib), true);
 check("client.js fingerprintOf 优先 data.fp", /if \(typeof data\.fp === "string"\) return data\.fp;/.test(client), true);
+// SkillsTab 是独立顶层函数，refreshing 必须在自身作用域声明（二轮审查：
+// 引用 PluginTab 内的 refreshing → 渲染即 ReferenceError；且 doRefresh 需 finally 复位）
+check("SkillsTab 独立声明 refreshing state", /function SkillsTab\(props\) \{[\s\S]{0,1200}var state9 = useState\(false\); var refreshing = state9\[0\]; var setRefreshing = state9\[1\];/.test(client), true);
+check("SkillsTab doRefresh finally 复位", /fetchPage\(1, query, true\)\.finally\(function \(\) \{ setRefreshing\(false\); \}\)/.test(client), true);
 // 回退必须含 cached_at（见 A3：只按 source+total 门控会在内容一进一出时漏更新）——A3 断言同一契约
 
 // ---- A1：构建中事件失效的竞态保护（代际计数）----
