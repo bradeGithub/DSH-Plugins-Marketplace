@@ -89,10 +89,15 @@
 - **测试残留自动清理（新）**：新增 `scripts/tests/cleanup.mjs` 并接入测试运行器——每次测试后自动删除 %TEMP% 下测试/验证产生的临时目录与文件（保留运行中 DSH harness 的近 7 天临时文件） / a cleanup script hooked into the test runner removes test leftovers from %TEMP% after every run (running harness temp files are kept)
 - **回归测试**：smoke 191 / 单元+集成 111 / e2e 140 全绿 / full suite green
 
+## v1.3.16 — 2026-08-15（CLI 指令识别兼容 flags+包名写法 / CLI command recognition for flags & package names）
+
+- **CLI 指令识别兼容 flags+包名写法**：`dsh plugin --profile web add dshmarket`（flags 在动词前、目标为 npm 包名）也能识别，返回整条指令 / the README scanner recognizes flags-before-verb and package-name forms
+- **真实克隆验证**：dsh-market 实测 clone 后 detectType 命中 cordis-plugin / verified against a real clone (dsh-market)
+- **回归测试**：集成 +2 / +2 integration cases
+
 ## v1.4.0 — 2026-08-15（官方 CLI 安装优先 + 嵌套预设 + 安装体验 / Official CLI-first install, nested presets & install experience）**里程碑版本**：1.3 系列 12 个迭代后的一次功能集结——安装方式、识别能力、排障体验三个方向同时升级 / a milestone release bundling the post-1.3 feature batch: install method, type detection and troubleshooting experience
 
 - **README 官方 CLI 安装优先（新安装方式）**：克隆后解析 README 的 `dsh plugin install/add` 指令——存在则**直接执行官方 CLI 安装**（`dsh plugin --profile web <install|add> <目标>`，目标两级策略：本仓库包优先，否则采用 README 首条指令如聚合包），成功即完成、失败自动回退市场流程；`cli` 类型记录可正常卸载 / when the README offers an official `dsh plugin install/add` command, the installer now executes it directly (repo/package target preferred, otherwise the README's first command such as an aggregate package), falling back to the marketplace flow on failure; `cli`-type records are uninstallable
-- **CLI 指令识别兼容 flags+包名写法**：`dsh plugin --profile web add dshmarket`（flags 在动词前、目标为 npm 包名）也能识别，返回整条指令 / the README scanner recognizes flags-before-verb and package-name forms
 - **嵌套 agent 预设识别**：`findPresetRoots` 扫描子目录中的 `preset.yml + agent.cordis.yml`——预设目录在子目录的仓库（如 dsh-anchored-standard 的 preset/）从「非插件拦截」变为一键安装；多预设按目录名逐个装到 `~/.dsh/.agent-presets/`（`preset` 惯例目录用仓库名作 id），卸载按 names 逐个删防误删 / presets living in subdirectories are now detected and installed one-click (multi-preset repos install each variant; the conventional `preset/` dir takes the repo name as its id); uninstall removes per-name only
 - **安装后有效性验证**：cordis 插件安装后检查可加载入口（main/lib/index.js/顶层 JS/纯 client 清单），缺失则明示「已安装但可能未生效」并随响应返回 warnings / post-install verification checks for a loadable entry and warns explicitly when missing
 - **安装失败分类提示**：常见 npm/pnpm 错误（网络/EINTEGRITY/版本缺失/node-gyp/模块缺失/权限）翻译成双语排查建议，接入失败日志与响应 / common npm/pnpm failures are classified into actionable bilingual hints

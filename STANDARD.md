@@ -189,6 +189,10 @@ node -e "const p=require('/tmp/x/package.json');console.log(p.dsh, p.main, requi
 # 5. 描述自查：无与插件本质无关的分类敏感词（微信/通知/商店/榜单…）
 
 # 6. version 已 bump（与上次发版不同）
+
+# 7. 披露自查：云端依赖 / 数据外发 / API key 存储 / 法域已在 README 或 DISCLOSURE.md 如实声明（见 §9）
+
+# 8.（可选）已跑过发布合规检查（如 skill-compliance：金融敏感词/免责声明/安全红线/广告法极限词）
 ```
 
 ---
@@ -206,7 +210,24 @@ node -e "const p=require('/tmp/x/package.json');console.log(p.dsh, p.main, requi
 
 ---
 
-## 9. 外部参考（与官方/社区文档的分工）
+## 9. 发布披露清单（合规层最小契约）
+
+> 识别层管「怎么装」，验证层管「装了能不能信」，**披露层管「装之前该不该装、数据去了哪」**。
+> 以下披露项是作者契约的一部分——在 README 或仓库根 `DISCLOSURE.md` 中如实声明即可（机器可读的
+> `disclosure` 索引字段正在设计，与验证字段 `verdict/verifiedBy/reportUrl` 同批推出）。
+
+| 披露项 | 要求 | 示例 |
+|---|---|---|
+| **云端依赖** | 数据是否外发到第三方服务（评分/翻译/存储等）——必须明示目的地与用途；description 首段建议带警示行 | `⚠️ Cloud scoring sends your answers to compliancehub.cn; use --non-interactive for a fully offline preview.` |
+| **数据外发** | 外发哪些数据（回答全文/文件名/元数据）、是否可离线模式 | 见上方模板 |
+| **API key 存储** | key 存哪（环境变量 / `~/.config/xxx.key` 明文 / 系统凭据库）、文件权限、是否落日志 | `API key is read from DSH env (MY_API_KEY), never written to disk` |
+| **法域/地域** | 合规功能的地域适用性（PIPL 面向中国、CCPA 面向加州、GDPR 面向欧盟等） | `Applies to: PIPL (CN)` |
+
+参考实现：`skill-compliance`（规则库 JSON → 检查 → 评分 → 报告，含金融敏感词/免责声明/安全红线/广告法极限词）。
+
+---
+
+## 10. 外部参考（与官方/社区文档的分工）
 
 本规范只覆盖**「市场识别层」**：仓库怎么写才能被市场正确收录/安装/更新。
 更深层的「DSH 框架插件怎么写」（bundle manifest、patch 行、Service/客户端 API）请看：

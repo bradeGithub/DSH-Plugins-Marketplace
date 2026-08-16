@@ -1,4 +1,4 @@
-﻿# 测试规范（Testing Standards）
+# 测试规范（Testing Standards）
 
 本文件定义本仓库的**测试金字塔架构**、覆盖率要求、测试编写规范与端到端策略。
 执行规范见 [GIT_HOOKS.md](GIT_HOOKS.md)，代码规范见 [CODING_STANDARDS.md](CODING_STANDARDS.md)。
@@ -24,11 +24,12 @@
 - [6. 编写清单](#6-编写清单)
 - [7. 已知 lib API 问题](#7-已知-lib-api-问题)
 <!-- /TOC -->
-| **unit** | `scripts/tests/unit/` | 纯函数、无 IO、毫秒级 | 160 项 |
-| **integration** | `scripts/tests/integration/` | 临时 DSH_HOME、mock fetch | 37 项 |
-| **e2e** | `scripts/tests/e2e/` | 真实 git 流程、fixture 仓库 | 26 项 |
+| **unit** | `scripts/tests/unit/` | 纯函数、无 IO、毫秒级 | 550+ 项（15 文件） |
+| **integration** | `scripts/tests/integration/` | 临时 DSH_HOME、mock fetch | 230+ 项（7 文件） |
+| **e2e** | `scripts/tests/e2e/` | 真实 git 流程、fixture 仓库 | 见 install.e2e.mjs |
 
-统一运行器：`node scripts/tests/run.mjs`（`--level=unit|integration|e2e`、`--json`）。当前合计 **223 项**断言（160+37+26）。
+统一运行器：`node scripts/tests/run.mjs`（`--level=unit|integration|e2e`、`--json`）。
+⚠️ 上表数量为 2026-08-16 快照，**精确数量以 `run.mjs` 输出为准**（每文件末尾 `N passed`），勿手工维护此数字；新增测试后如数字偏差大再更新一次即可。
 
 ## 2. 命名与位置
 

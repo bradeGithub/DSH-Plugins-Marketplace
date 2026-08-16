@@ -119,7 +119,7 @@ dsh plugin --profile web install bradeGithub/DSH-Plugins-Marketplace   # reinsta
   - install script (`install.sh` / `install.ps1`) → executes the script
 - **User input interception**: when a plugin needs env vars like `API_KEY` / `TOKEN` / `SECRET`, **installation pauses automatically** and an in-page dialog asks you for the material (or you can skip) — never installs blind
 - **Script execution confirmation**: when a third-party install script (`install.sh` / `install.ps1`) or an npm lifecycle script (`prepare` / `install` / `postinstall`, etc.) is detected, asks for your confirmation first — declining cancels the install and **cleans up all traces**
-- **Installed recognition**: four-way detection — install manifest (`installed.json`) + directory heuristic probing + package-name mapping scan + self-identification via the plugin's own `repository` field; installed plugins show a disabled grey «Installed» button
+- **Installed recognition**: five-way detection — install manifest (`installed.json`) + directory heuristic probing + package-name mapping scan + self-identification via the plugin's own `repository` field + clone-cache pre-read; installed plugins show a disabled grey «Installed» button
 - **Bilingual**: the UI and install logs follow DSH's language setting — 中文 / English (Settings → General → Language)
 - **Version detection & updates**: cordis plugins compare the installed version against the latest version of the repo (read from the local cache, zero extra network requests); when they differ the button turns into «Update» — click to overwrite-upgrade
 - **Search**: real-time filtering by plugin name / full repo name / tags
@@ -181,7 +181,7 @@ GitHub Actions (every 2 hours, repo's own token)
 | Data | Source |
 |---|---|
 | Installed version | `installed.json` record; for legacy installs without a record, read the install dir's `package.json` |
-| Latest version | the market cache clone `~/.dsh/marketplace/cache/<owner>__<name>/package.json` |
+| Latest version | the registry index `version` field first (refreshed by CI every 2 hours); falls back to the market cache clone's `package.json` when the index lacks it; npm-published plugins (cli) compare against npm dist-tags (`npm_version`) same-source |
 
 When both exist and differ → the card shows an «Update» button plus `installed vX → vY`.
 (Only applies to cordis plugins containing `package.json`; skills / presets / script types have no version concept.)
@@ -225,8 +225,22 @@ When both exist and differ → the card shows an «Update» button plus `install
 | `/api/marketplace/install` | POST | Install / update, body: `{ "repo": "owner/name", "answers": { "ENV_NAME": "value" } }`; returns `done` / `awaiting-input` / `aborted` / `failed` / `manual` status + step-by-step log |
 | `/api/marketplace/uninstall` | POST | Uninstall, body: `{ "repo": "owner/name" }`; removes the install dir / package dir + `cordis.patch.yml` entry + install record; returns `done` (with `removed` count and log) |
 | `/api/marketplace/self-update` | GET | Marketplace self-update check (`{ installedVersion, latestVersion, updateAvailable, checkedAt }`) |
+| `/api/marketplace/self-update` | POST | Perform the marketplace self-update (official CLI install + post-install version verification); returns `no-update` / `done` / `failed` |
+| `/api/marketplace/check-update` | POST | Manual version check for npm-type cli plugins (body `{ repo }`; queries the npm registry, npmmirror first); returns `done` + `updateAvailable` / `latestVersion` |
+| `/api/marketplace/feedback` | POST | Submit install feedback (body `{ repo, ok, note }`) → dequeued and synced into a GitHub issue; returns `done` (with `issueUrl` / `manualUrl`) |
+| `/api/marketplace/feedback/pending` | GET | Pending feedback queue (`{ pending: [...] }`) |
+| `/api/marketplace/feedback/token` | GET / POST | Read / write the GitHub token config (write body `{ token }`, empty string clears; returns `hasToken`) |
+| `/api/marketplace/env-keys` | GET | Configurable env-var key names of an installed plugin (values never echoed); query `?repo=` |
+| `/api/marketplace/env-edit` | POST | Write plugin env vars (body `{ repo, values }`, persisted to `~/.dsh/.env` + `envs.json`); returns `done` + `applied` |
+| `/api/marketplace/backup` | GET | Export install-record backup (`{ backup: { repos: [...] } }`) |
+| `/api/marketplace/restore/diff` | POST | Compute the restore diff for a given backup (body `{ backup }`; returns `missing` / `already`) |
+| `/api/marketplace/backup/webdav` | POST | Push backup to WebDAV (body `{ url, username?, password? }`) |
+| `/api/marketplace/restore/webdav` | POST | Pull backup from WebDAV and return the restore diff |
+| `/api/marketplace/logs` | GET | Export sanitized install logs (`{ text, count }`) |
 
-> Note: uninstall relies on the `installed.json` record — plugins **installed via this marketplace** can be fully uninstalled; plugins pre-installed manually (outside the marketplace) are only recognized as «installed», with no uninstall button.
+> Notes:
+> - Uninstall relies on the `installed.json` record — plugins **installed via this marketplace** can be fully uninstalled; plugins pre-installed manually (outside the marketplace) are only recognized as «installed», with no uninstall button.
+> - All write operations (install / uninstall / self-update POST / feedback / feedback-token POST / env-edit / webdav push & pull) share the same auth: loopback requests pass directly; LAN requests require `lanWrite: true` config + the session token (`x-dsh-marketplace-token` header).
 
 ---
 

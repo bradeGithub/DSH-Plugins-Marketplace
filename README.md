@@ -119,7 +119,7 @@ dsh plugin --profile web install bradeGithub/DSH-Plugins-Marketplace   # 重装�
   - 安装脚本（`install.sh` / `install.ps1`）→ 执行脚本
 - **用户材料介入**：当插件需要 `API_KEY` / `TOKEN` / `SECRET` 等环境变量时，**安装自动暂停**，在页面内弹窗请你提供材料（或跳过），不会盲装
 - **脚本执行确认**：检测到第三方安装脚本（`install.sh` / `install.ps1`）或 npm 生命周期脚本（`prepare` / `install` / `postinstall` 等）时，先弹窗征求你的确认——拒绝即取消安装并**清理全部痕迹**
-- **已安装识别**：四重判定——安装清单（`installed.json`）+ 目录启发式探测 + 包名映射扫描 + 本体 `repository` 自识别，已安装的插件按钮变为不可点击的灰色「已安装」
+- **已安装识别**：五重判定——安装清单（`installed.json`）+ 目录启发式探测 + 包名映射扫描 + 本体 `repository` 自识别 + 缓存克隆预读，已安装的插件按钮变为不可点击的灰色「已安装」
 - **中英双语**：界面与安装日志跟随 DSH 的语言设置自动切换 中文 / English（设置 → 常规 → Language）
 - **版本检测与更新**：cordis 插件自动对比已装版本与仓库最新版本（从本地缓存读取，零额外网络请求），不一致时按钮变为「更新」，点击即可覆盖升级
 - **搜索**：按插件名 / 仓库全名 / 标签实时过滤
@@ -181,7 +181,7 @@ GitHub Actions（每 2 小时，仓库自带 token）
 | 数据 | 来源 |
 |---|---|
 | 已装版本 | `installed.json` 记录；历史安装无记录时读取安装目录 `package.json` |
-| 最新版本 | 市场缓存克隆目录 `~/.dsh/marketplace/cache/<owner>__<name>/package.json` |
+| 最新版本 | 优先 registry 索引的 `version` 字段（CI 每 2 小时刷新）；索引缺失时回退市场缓存克隆目录的 `package.json`；npm 发布型插件（cli）按 npm dist-tags 的 `npm_version` 同源对比 |
 
 两者都存在且不一致 → 卡片显示「更新」按钮 + `已装 vX → vY` 提示。
 （仅对含 `package.json` 的 cordis 插件生效；skill / 预设 / 脚本类无版本概念。）
@@ -225,8 +225,22 @@ GitHub Actions（每 2 小时，仓库自带 token）
 | `/api/marketplace/install` | POST | 安装 / 更新，body：`{ "repo": "owner/name", "answers": { "ENV_NAME": "值" } }`；返回 `done` / `awaiting-input` / `aborted` / `failed` / `manual` 状态 + 逐步日志 |
 | `/api/marketplace/uninstall` | POST | 卸载，body：`{ "repo": "owner/name" }`；删除安装目录 / 包目录 + `cordis.patch.yml` 注册条目 + 安装记录；返回 `done`（含 `removed` 计数与日志） |
 | `/api/marketplace/self-update` | GET | 市场本体自更新检测（`{ installedVersion, latestVersion, updateAvailable, checkedAt }`） |
+| `/api/marketplace/self-update` | POST | 执行市场本体更新（官方 CLI 安装 + 装后版本校验）；返回 `no-update` / `done` / `failed` |
+| `/api/marketplace/check-update` | POST | npm 型 cli 插件手动版本检测（body `{ repo }`；查 npm registry，npmmirror 优先）；返回 `done` + `updateAvailable` / `latestVersion` |
+| `/api/marketplace/feedback` | POST | 提交安装反馈（body `{ repo, ok, note }`）→ 移除队列并同步创建 GitHub issue；返回 `done`（含 `issueUrl` / `manualUrl`） |
+| `/api/marketplace/feedback/pending` | GET | 待确认反馈队列（`{ pending: [...] }`） |
+| `/api/marketplace/feedback/token` | GET / POST | 读 / 写 GitHub token 配置（写为 `{ token }`，空串清除；返回 `hasToken`） |
+| `/api/marketplace/env-keys` | GET | 已安装插件的可配置环境变量键名（值不回显）；`?repo=` 查询 |
+| `/api/marketplace/env-edit` | POST | 写入插件环境变量（body `{ repo, values }`，落盘 `~/.dsh/.env` + `envs.json`）；返回 `done` + `applied` |
+| `/api/marketplace/backup` | GET | 导出安装记录备份（`{ backup: { repos: [...] } }`） |
+| `/api/marketplace/restore/diff` | POST | 给定备份计算恢复差异（body `{ backup }`；返回 `missing` / `already`） |
+| `/api/marketplace/backup/webdav` | POST | 备份推送到 WebDAV（body `{ url, username?, password? }`） |
+| `/api/marketplace/restore/webdav` | POST | 从 WebDAV 拉取备份并返回恢复差异 |
+| `/api/marketplace/logs` | GET | 导出脱敏安装日志（`{ text, count }`） |
 
-> 说明：卸载依赖 `installed.json` 安装记录——**通过本市场安装**的插件可完整卸载；手动（非市场）预装的插件仅能被识别为「已安装」，不提供卸载按钮。
+> 说明：
+> - 卸载依赖 `installed.json` 安装记录——**通过本市场安装**的插件可完整卸载；手动（非市场）预装的插件仅能被识别为「已安装」，不提供卸载按钮。
+> - 所有写操作（install / uninstall / self-update POST / feedback / feedback-token POST / env-edit / webdav 推拉）鉴权一致：回环请求直接放行，LAN 请求需 `lanWrite: true` 配置 + 会话 token（`x-dsh-marketplace-token` 头）。
 
 ---
 

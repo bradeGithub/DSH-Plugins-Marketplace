@@ -1,4 +1,4 @@
-﻿# Git Hook 规范（Git Hooks）
+# Git Hook 规范（Git Hooks）
 
 本文件定义本仓库 Git Hook 体系的完整规范：Hook 清单、检查内容、安装方式、跳过策略、测试要求与跨平台兼容性约束。
 
@@ -30,7 +30,7 @@
 ### 1.1 pre-commit 检查项
 
 1. **语法检查**：对 `lib/index.js`、`lib/client.js`、`scripts/*.mjs`、`scripts/hooks/*.mjs` 执行 `node --check`
-2. **测试金字塔**：执行 `node scripts/tests/run.mjs`（当前 unit 160 + integration 37 + e2e 26 = 223 项断言），失败即拒绝
+2. **测试金字塔**：执行 `node scripts/tests/run.mjs`（unit 550+ / integration 230+ / e2e；精确数量以 run.mjs 输出为准），失败即拒绝
 3. **TOC 检测**：执行 `node scripts/toc.mjs --check`
 4. **敏感密钥扫描**：检测暂存文件中的高危密钥格式（sk-/ghp_/AKIA 等），默认 error 拦截
 5. **覆盖率**：执行 `node scripts/coverage.mjs`（validate/toc 100%、lib/index.js 83%、overall 87%），未达 100% 即拒绝

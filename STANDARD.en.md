@@ -178,6 +178,10 @@ node -e "const p=require('/tmp/x/package.json');console.log(p.dsh, p.main, requi
 # 5. Description self-check: no category-sensitive words unrelated to the plugin's nature (WeChat / notify / store / ranking…)
 
 # 6. version has been bumped (differs from the last release)
+
+# 7. Disclosure self-check: cloud dependency / data egress / API key storage / jurisdiction are honestly stated in the README or DISCLOSURE.md (see §9)
+
+# 8. (Optional) ran a publication compliance check (e.g. skill-compliance: financial sensitive words / disclaimers / safety red lines / ad-law superlatives)
 ```
 
 ---
@@ -195,7 +199,23 @@ node -e "const p=require('/tmp/x/package.json');console.log(p.dsh, p.main, requi
 
 ---
 
-## 9. External references (division of labor with official/community docs)
+## 9. Publication disclosure checklist (minimal compliance contract)
+
+> The recognition layer governs «how it installs», the verification layer «whether it can be trusted», and the **disclosure layer governs «whether you should install it, and where the data goes»**.
+> The following disclosures are part of the author contract — state them honestly in the README or a root `DISCLOSURE.md` (a machine-readable `disclosure` index field is being designed alongside the verification fields `verdict`/`verifiedBy`/`reportUrl`).
+
+| Item | Requirement | Example |
+|---|---|---|
+| **Cloud dependency** | Whether data is sent to third-party services (scoring / translation / storage) — destination and purpose must be stated; a warning line in the first description paragraph is recommended | `⚠️ Cloud scoring sends your answers to compliancehub.cn; use --non-interactive for a fully offline preview.` |
+| **Data egress** | What data is sent (full answers / file names / metadata), and whether an offline mode exists | See template above |
+| **API key storage** | Where keys live (env var / plaintext `~/.config/xxx.key` / system keychain), file permissions, whether they appear in logs | `API key is read from DSH env (MY_API_KEY), never written to disk` |
+| **Jurisdiction / region** | Regional applicability of compliance features (PIPL for China, CCPA for California, GDPR for the EU, etc.) | `Applies to: PIPL (CN)` |
+
+Reference implementation: `skill-compliance` (rule-library JSON → check → score → report; covers financial sensitive words, disclaimers, safety red lines, ad-law superlatives).
+
+---
+
+## 10. External references (division of labor with official/community docs)
 
 This spec only covers the **marketplace-recognition layer**: how to shape a repo so the marketplace ingests/installs/updates it correctly.
 For the deeper «how to write a DSH framework plugin» (bundle manifest, patch rows, Service/client APIs), see:
