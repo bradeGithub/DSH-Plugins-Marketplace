@@ -394,6 +394,93 @@ async function fetchCommunityPicks() {
 }
 
 /**
+ * ── 验证徽章（discussion deepseek-harness#2269 对接契约：qing3a/dsh-plugin-verify）──
+ * 数据源：验证仓库根目录 verified.json 开放数据层（聚合形态，比逐个重抓 reports/ 省请求）。
+ * 字段契约（qing3a 2026-08-16 确认）：
+ *   - 报告新增 fullName（插件仓库 owner/name）为稳定映射键；旧版条目以 repo URL 解析兜底
+ *   - 条目含 verifiedBy（带版本）/ verifiedAt / reportUrl / waterfall / toolsResult / security
+ *   - 顶层 schemaVersion 不匹配 → 整体跳过不盖章（fail-closed，防演进破坏解析）
+ * 盖章语义与 installability / community picks 一致：每轮构建统一重算，抓取失败或
+ * schemaVersion 不符时增量模式保留旧字段，下次构建恢复。
+ */
+const VERIFY_SOURCE = {
+  repo: "qing3a/dsh-plugin-verify",
+  branch: "main",
+  file: "verified.json",
+  schemaVersion: 1
+};
+
+/** 从 verified.json 条目解析插件仓库 full_name（纯函数）：
+ *  优先契约字段 `fullName`；旧版条目回退从 `repo` URL 解析 owner/name。 */
+export function parseVerificationFullName(entry) {
+  if (typeof entry?.fullName === "string" && entry.fullName.includes("/")) return entry.fullName;
+  const m = String(entry?.repo ?? "").match(/github\.com\/([\w.-]+\/[\w.-]+)/);
+  if (m) return m[1].replace(/\.git$/i, "").replace(/\/+$/, "");
+  return "";
+}
+
+/** 解析 verified.json 为 小写 full_name → 验证证据 Map（纯函数，便于单测）。
+ *  顶层 schemaVersion 不匹配返回 null（fail-closed）。 */
+export function parseVerificationData(json) {
+  if (!json || typeof json !== "object" || json.schemaVersion !== VERIFY_SOURCE.schemaVersion) return null;
+  const entries = Array.isArray(json.plugins) ? json.plugins : [];
+  const map = new Map();
+  for (const e of entries) {
+    const fullName = parseVerificationFullName(e);
+    if (!fullName) continue;
+    const v = {
+      // 开放数据层只收录通过验证的插件；fail 结论由报告本体承载（reportUrl 直达明细）
+      verdict: "pass",
+      verifiedBy: typeof e.verifiedBy === "string" && e.verifiedBy ? e.verifiedBy : "dsh-plugin-verify",
+      verifiedAt: typeof e.verifiedAt === "string" ? e.verifiedAt : "",
+      reportUrl: typeof e.reportUrl === "string" ? e.reportUrl : "",
+      schemaVersion: json.schemaVersion
+    };
+    if (typeof e.waterfall === "string") v.waterfall = e.waterfall;
+    if (typeof e.toolsResult === "boolean") v.toolsResult = e.toolsResult;
+    map.set(fullName.toLowerCase(), v);
+  }
+  return map;
+}
+
+/** 验证徽标盖章（纯函数）：命中 map 的条目平铺写 verdict/verifiedBy/verifiedAt/
+ *  reportUrl/schemaVersion（+waterfall/toolsResult 摘要证据）；未命中删除全部旧字段
+ *  （证据随每轮构建刷新，防过期误导）。full_name 大小写不敏感。
+ * @param {Array} repos registry 条目数组
+ * @param {Map<string,Object>} verificationMap 小写 full_name → 验证证据 */
+export function applyVerification(repos, verificationMap) {
+  const KEYS = ["verdict", "verifiedBy", "verifiedAt", "reportUrl", "schemaVersion", "waterfall", "toolsResult"];
+  for (const repo of repos) {
+    const v = verificationMap.get(String(repo.full_name ?? "").toLowerCase());
+    if (v) Object.assign(repo, v);
+    else for (const k of KEYS) delete repo[k];
+  }
+  return repos;
+}
+
+/** 抓取 verified.json 并解析为盖章 Map；抓取失败 / 格式不符返回 null
+ *  （本次构建不盖章，增量模式旧字段保留，下次构建恢复）。 */
+async function fetchVerificationMap() {
+  try {
+    const url = `https://raw.githubusercontent.com/${VERIFY_SOURCE.repo}/${VERIFY_SOURCE.branch}/${VERIFY_SOURCE.file}`;
+    const res = await fetch(url, { headers: ghHeaders(), signal: AbortSignal.timeout(20000) });
+    if (!res.ok) {
+      log(`验证数据源 ${VERIFY_SOURCE.repo} 抓取失败：HTTP ${res.status}`);
+      return null;
+    }
+    const map = parseVerificationData(JSON.parse(await res.text()));
+    if (map === null) {
+      log(`验证数据源 schemaVersion 不匹配（期望 ${VERIFY_SOURCE.schemaVersion}）：本次不盖章（fail-closed）`);
+      return null;
+    }
+    return map;
+  } catch (error) {
+    log(`验证数据源 ${VERIFY_SOURCE.repo} 抓取失败：${error.message}`);
+    return null;
+  }
+}
+
+/**
  * 插件分类（纯函数）：扫描 description + name + 过滤后的 topics，按规则优先级匹配。
  * 返回分类 id；无匹配返回 "other"。
  */
@@ -915,6 +1002,20 @@ async function main() {
       log(`社区精选打标完成：${picked}/${repos.length} 个仓库`);
     } else {
       log("社区精选列表抓取失败：本次不更新徽章（增量模式旧字段保留，下次构建恢复）");
+    }
+  }
+
+  // 验证徽章（discussion #2269 对接契约：qing3a/dsh-plugin-verify 开放数据层）。
+  // 抓取失败 / schemaVersion 不符 → 本次不盖章（增量模式旧字段保留，下次构建恢复）。
+  if (MODE === "dsh") {
+    const verificationMap = await fetchVerificationMap();
+    if (verificationMap) {
+      let stamped = 0;
+      for (const repo of repos) {
+        if (verificationMap.has(String(repo.full_name ?? "").toLowerCase())) stamped++;
+      }
+      applyVerification(repos, verificationMap);
+      log(`验证徽章盖章完成：${stamped}/${repos.length} 个仓库（${VERIFY_SOURCE.repo}）`);
     }
   }
 
