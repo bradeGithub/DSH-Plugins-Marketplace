@@ -5,7 +5,7 @@
 // 注意：必须用动态 import 控制加载顺序——静态 import 会被提升，lib/index.js
 // 求值时 process.env.DSH_HOME 尚未设置，模块级常量会回退到真实 ~/.dsh（污染主目录）。
 
-import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, existsSync, renameSync, rmSync } from "node:fs";
+import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, existsSync, renameSync, rmSync, chmodSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { join, dirname, sep } from "node:path";
 import { tmpdir } from "node:os";
@@ -596,11 +596,27 @@ function mockFetch(payload, status = 200) {
     // 审查 T1（上游）：mock 远端更高版本 → 走真实 doSelfUpdate 执行路径（CLI 安装）——
     // 测试环境无 dsh CLI（Linux ENOENT / Windows 无 APPDATA 的 dsh.cmd），
     // CLI 失败或版本未变都会如实上报 500 failed，而非静默成功。
-    const origSuHigh = mockFetch({ version: "999.0.0" });
-    r = await suCall("POST");
-    globalThis.fetch = origSuHigh;
-    check("self-update POST 更高版本走执行路径", r.s, 500);
-    check("self-update POST 执行失败如实上报", r.b && r.b.status, "failed");
+    // 前置 stub git：v1.5.1 起 CLI 失败会回退 doSelfUpdateByClone（真实 git clone +
+    // 原子替换本体目录——测试里会把开发仓库替换成克隆产物！），stub 让 clone 立即失败，
+    // 断言维持「执行失败如实上报 500」。
+    {
+      const gitStub = mkdtempSync(join(tmpdir(), "dsh-git-stub-"));
+      writeFileSync(join(gitStub, process.platform === "win32" ? "git.cmd" : "git"),
+        process.platform === "win32" ? "@echo off\r\nexit /b 1\r\n" : "#!/bin/sh\nexit 1\n", "utf8");
+      if (process.platform !== "win32") chmodSync(join(gitStub, "git"), 0o755);
+      const savedPath = process.env.PATH;
+      process.env.PATH = `${gitStub}${process.platform === "win32" ? ";" : ":"}${savedPath ?? ""}`;
+      try {
+        const origSuHigh = mockFetch({ version: "999.0.0" });
+        r = await suCall("POST");
+        globalThis.fetch = origSuHigh;
+      } finally {
+        process.env.PATH = savedPath;
+        rmSync(gitStub, { recursive: true, force: true });
+      }
+      check("self-update POST 更高版本走执行路径", r.s, 500);
+      check("self-update POST 执行失败如实上报", r.b && r.b.status, "failed");
+    }
   } else {
     check("self-update handler 存在", false, true);
   }

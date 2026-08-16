@@ -90,17 +90,20 @@ await new Promise((r) => setTimeout(r, 100));
 globalThis.fetch = origFetch;
 
 // ---- 静态契约：doSelfUpdate 的 CLI 启动不得直接 execFile .cmd（issue #46）----
-// Windows 上 execFile 无法启动 .cmd/.bat（无条件 spawn EINVAL），必须经 cmd.exe /d /s /c 包装；
-// runNpm 的 npm.cmd fallback 同理。静态断言锁死模式，防止修复被未来改动回归。
+// Windows 上 execFile 无法启动 .cmd/.bat（无条件 spawn EINVAL），必须经 cmd.exe 包装；
+// 且必须用独立参数形态（/c + 参数数组，Node 自动引号）——拼接 cmdLine + /d /s /c
+// 时 cmd 引号规则边缘可被恶意 target 逃逸（PR #63 修复）。静态断言锁死模式。
 {
   const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
   const src = readFileSync(join(ROOT, "lib", "index.js"), "utf8").replace(/\r\n/g, "\n");
   const selfUpdateBody = src.match(/async function doSelfUpdate\(\) \{[\s\S]*?\n\}/)?.[0] ?? "";
   const runNpmBody = src.match(/async function runNpm\(args, opts\) \{[\s\S]*?\n\}/)?.[0] ?? "";
-  check("doSelfUpdate win32 分支经 cmd.exe 包装", selfUpdateBody.includes('execFileAsync("cmd.exe", ["/d", "/s", "/c", cmdLine]'), true);
+  check("doSelfUpdate win32 分支经 cmd.exe /c 独立参数（无拼接 cmdLine）", selfUpdateBody.includes('execFileAsync("cmd.exe", ["/c", dshCli, ...dshArgs]'), true);
+  check("doSelfUpdate win32 无 /d /s /c 拼接残留", !selfUpdateBody.includes('"/d", "/s", "/c", cmdLine'), true);
   check("doSelfUpdate 非 win32 分支直接 execFile dsh", selfUpdateBody.includes('execFileAsync("dsh", dshArgs'), true);
   check("doSelfUpdate 不再直接 execFile dsh.cmd 路径", !selfUpdateBody.includes('execFileAsync(dshCli, dshArgs'), true);
-  check("runNpm npm.cmd fallback 经 cmd.exe 包装", runNpmBody.includes('execFileAsync("cmd.exe", ["/d", "/s", "/c", cmdLine], opts)'), true);
+  check("runNpm npm.cmd fallback 经 cmd.exe /c 独立参数", runNpmBody.includes('execFileAsync("cmd.exe", ["/c", "npm.cmd", ...args], execOpts)'), true);
+  check("runNpm 无拼接 cmdLine 残留", !runNpmBody.includes('const cmdLine = ["npm.cmd"'), true);
 }
 
 rmSync(home, { recursive: true, force: true });
