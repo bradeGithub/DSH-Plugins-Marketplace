@@ -8,9 +8,10 @@
 // 必须在本文件内先构造临时 DSH_HOME 再动态 import；且本文件独占控制 list-cache 目录
 // 状态（构造/清空/断言），避免与其他测试的缓存写入互相干扰。
 
-import { mkdtempSync, mkdirSync, writeFileSync, readdirSync, readFileSync, rmSync, existsSync } from "node:fs";
-import { join } from "node:path";
+import { mkdtempSync, mkdirSync, writeFileSync, readdirSync, readFileSync, rmSync, existsSync, copyFileSync, unlinkSync } from "node:fs";
+import { join, dirname, basename } from "node:path";
 import { tmpdir } from "node:os";
+import { fileURLToPath } from "node:url";
 
 // 必须在 import lib 之前设置临时 DSH_HOME
 process.env.DSH_HOME = mkdtempSync(join(tmpdir(), "dsh-listcache-")).replace(/\\/g, "/");
@@ -20,6 +21,29 @@ const cacheFile = (kind) => join(listCacheDir, `${kind}.json`);
 const listCacheFiles = () => { try { return readdirSync(listCacheDir); } catch { return null; } }; // null = 目录不存在
 
 const lib = await import("../../../lib/index.js");
+
+// ---- 隔离：内置索引（随包 registry.json / skills.json，readBundledIndex 直接读仓库根）----
+// mockFetch 只拦网络 fetch，而 bundled 索引是本地文件读取——不隔离的话 registry 全挂时
+// 兜底链命中真实内置索引（数千条），永远走不到 search/磁盘缓存分支，断言必然失败。
+// 测试期间把两个 bundled 文件临时移出仓库根（同名备份到临时目录），exit 时恢复。
+const repoRoot = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
+const bundledBackupDir = mkdtempSync(join(tmpdir(), "dsh-listcache-bundled-"));
+const bundledMoved = []; // [原路径, 备份路径]
+for (const name of ["registry.json", "skills.json"]) {
+  const src = join(repoRoot, name);
+  if (existsSync(src)) {
+    const dst = join(bundledBackupDir, name);
+    copyFileSync(src, dst); // 跨盘（仓库 D: vs tmp C:）不能用 renameSync，复制后删原
+    unlinkSync(src);
+    bundledMoved.push([src, dst]);
+  }
+}
+process.on("exit", () => {
+  for (const [src, dst] of bundledMoved) {
+    try { if (existsSync(dst)) copyFileSync(dst, src); } catch { /* 尽力恢复 */ }
+  }
+  try { rmSync(bundledBackupDir, { recursive: true, force: true }); } catch { /* 尽力清理 */ }
+});
 
 let pass = 0, fail = 0;
 function check(name, actual, expected) {
@@ -34,14 +58,21 @@ function check(name, actual, expected) {
 // ---- mock：按 URL 分派——registry 源 vs 搜索 API；payload 传 null 表示该路失败（403）----
 function mockFetch(registryPayload, searchPayload) {
   const orig = globalThis.fetch;
+  const respond = (payload) => (payload === null
+    ? { ok: false, status: 403, json: async () => ({}), text: async () => "" }
+    : {
+        ok: true, status: 200,
+        json: async () => payload,
+        // fetchRegistryRepos 非 .gz 源走 res.text()（JSON.parse(text)）——必须返回序列化内容
+        text: async () => JSON.stringify(payload),
+        // .gz 源走 res.arrayBuffer()：mock 下返回非 gzip 数据 → gunzipSync 抛错 → 尝试下一源，
+        // 恰好验证「gz 源坏 → json 源兜底成功」的源链；不需要真实 gzip 产物。
+        arrayBuffer: async () => Buffer.from(JSON.stringify(payload)),
+      });
   globalThis.fetch = async (url) => {
     const u = String(url);
-    if (u.includes("/search/repositories")) {
-      if (searchPayload === null) return { ok: false, status: 403, json: async () => ({}), text: async () => "" };
-      return { ok: true, status: 200, json: async () => searchPayload, text: async () => "" };
-    }
-    if (registryPayload === null) return { ok: false, status: 403, json: async () => ({}), text: async () => "" };
-    return { ok: true, status: 200, json: async () => registryPayload, text: async () => "" };
+    if (u.includes("/search/repositories")) return respond(searchPayload);
+    return respond(registryPayload);
   };
   return orig;
 }
