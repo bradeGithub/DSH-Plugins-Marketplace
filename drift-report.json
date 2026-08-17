@@ -1,13 +1,27 @@
 {
-  "generated_at": "2026-08-17T15:13:36.850Z",
-  "count": 1,
+  "generated_at": "2026-08-17T17:01:26.899Z",
+  "count": 3,
   "items": [
     {
-      "full_name": "YLingHao/dsh-codeui",
-      "previous": "conversation",
-      "current": "coding",
-      "desc_now": "A workbench for programmers to review code and track changes, featuring a conversation navigation rail for jumping to any earlier turn in the dialogue.该工作台专为程序员打造，旨在高效审阅代码并追踪变更历史。其内置的对话导航轨道可常驻显示，支持用户一键跳转至对话中的任意历史轮次，极大提升代码审查与上下文回溯的效率。",
-      "desc_prev": "A code-review workbench for DeepSeek Harness and  jump from an always-on turn rail straight back to that turn in the conversation."
+      "full_name": "Vncntvx/dsh-zotero",
+      "previous": "memory",
+      "current": "conversation",
+      "desc_now": "Turn your Zotero library into an evidence store for agents.",
+      "desc_prev": "Let agents search, read, and cite your local Zotero library: find papers, browse notes and annotations, pull evidence by question, open the source document, generate citations."
+    },
+    {
+      "full_name": "ai-thinkshare/dsh-workbench",
+      "previous": "web-ui",
+      "current": "other",
+      "desc_now": null,
+      "desc_prev": null
+    },
+    {
+      "full_name": "UsamiEru/we-need-keeper",
+      "previous": "other",
+      "current": "conversation",
+      "desc_now": "DeepSeek Harness plugins that keep the model's reasoning in the We-need style for multi-turn conversation. ",
+      "desc_prev": "DeepSeek Harness plugins that keep the model's reasoning in the We-need style"
     }
   ]
 }
