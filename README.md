@@ -288,6 +288,27 @@ GitHub Actions（每 2 小时，仓库自带 token）
 
 ---
 
+## 🙏 致谢
+
+**代码贡献者**：
+
+- [lgnorant-lu](https://github.com/lgnorant-lu)——写端点鉴权（回环 socket 判定）、安全健壮性修复（PR #63 十二处）、机械化测试体系（PR #66：突变/性质/i18n）、SkillsTab 修复等大量核心贡献
+- [baiyuscc13724-max](https://github.com/baiyuscc13724-max)——Harness Desktop 内置市场集成与安装流程简化（#1/#2）
+- any / bubble / tatakaria——早期贡献
+
+**生态协作者**（discussion #2269 识别/验证/合规三层对齐）：
+
+- [qing3a](https://github.com/qing3a)（dsh-plugin-verify）——验证层字段契约与开放数据层，驱动「✓ 已验证」徽章
+- [wwumit](https://github.com/wwumit)（skills-catalog / skill-compliance）——披露层字段契约、catalog 开放数据层与自测规则集，驱动「披露 ✓」徽章
+- [ylwl1997](https://github.com/ylwl1997)（dshbase）——目录收录门槛互认
+- awesome-dsh-plugin 维护者——互链收录（PR #994）与验证字段 RFC（#1176）讨论
+
+**所有反馈者**：通过市场自动反馈、issue 报告问题的每一位用户——你们的问题报告直接驱动了 v1.5.x 的修复节奏。
+
+想参与贡献？见 [CONTRIBUTING.md](CONTRIBUTING.md) 与 [STANDARD.md §7 自测清单](STANDARD.md)。
+
+---
+
 ## 🛠️ 开发与维护
 
 - 修改服务端逻辑：编辑 `lib/index.js`（语法检查：`node --check`）

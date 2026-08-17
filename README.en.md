@@ -288,6 +288,27 @@ Also, [awesome-dsh-plugin](https://github.com/awesome-dsh-plugin/awesome-dsh-plu
 
 ---
 
+## 🙏 Acknowledgements
+
+**Code contributors**:
+
+- [lgnorant-lu](https://github.com/lgnorant-lu) — write-endpoint auth (loopback socket check), security hardening (PR #63, twelve fixes), the mechanized testing system (PR #66: mutation/property/i18n), SkillsTab fixes, and many more core contributions
+- [baiyuscc13724-max](https://github.com/baiyuscc13724-max) — Harness Desktop marketplace integration and install-flow simplifications (#1/#2)
+- any / bubble / tatakaria — early contributions
+
+**Ecosystem collaborators** (discussion #2269, recognition/verification/compliance alignment):
+
+- [qing3a](https://github.com/qing3a) (dsh-plugin-verify) — verification-layer field contract and open-data layer, powering the "✓ verified" badge
+- [wwumit](https://github.com/wwumit) (skills-catalog / skill-compliance) — disclosure-layer field contract, catalog open-data layer and self-check ruleset, powering the "disclosed ✓" badge
+- [ylwl1997](https://github.com/ylwl1997) (dshbase) — directory-gate mutual recognition
+- the awesome-dsh-plugin maintainers — mutual listing (PR #994) and the verification-field RFC (#1176)
+
+**Every reporter**: every user who filed install feedback or issues — your reports directly drive the v1.5.x fix cadence.
+
+Want to contribute? See [CONTRIBUTING.md](CONTRIBUTING.md) and the [STANDARD.md §7 self-check list](STANDARD.en.md).
+
+---
+
 ## 🛠️ Development & maintenance
 
 - Server-side logic: edit `lib/index.js` (syntax check: `node --check`)
