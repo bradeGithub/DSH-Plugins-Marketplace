@@ -1,20 +1,62 @@
 {
-  "generated_at": "2026-08-16T22:51:49.581Z",
-  "count": 2,
+  "generated_at": "2026-08-17T01:53:53.028Z",
+  "count": 8,
   "items": [
     {
-      "full_name": "1052326311/dsh-plan-lattice",
-      "previous": "memory",
-      "current": "tool",
-      "desc_now": "Execution-time drift control for long-running DeepSeek Harness agents. Hand-designed test: native executed 12/12 unsafe stale-basis mutations; Plan Lattice 0/12; both executed 7/7 valid controls.",
-      "desc_prev": "Stale-mutation firewall for long-running agents. Real DeepSeek Harness stress test: native 9/9 unsafe mutations, Plan Lattice 0/9. Reproducible benchmark + frozen V13 eval."
+      "full_name": "wlj521/dsh-ui-tweaks",
+      "previous": "web-ui",
+      "current": "document",
+      "desc_now": "一切皆插件，可以定义自己喜欢的dsh，开关控制单项功能，字体大小，表格样式，对话框长度，timeline，git等",
+      "desc_prev": "一切皆插件，可以定义自己喜欢的dsh，开关控制单项功能"
     },
     {
-      "full_name": "monotykamary/dsh-fovea",
-      "previous": "web-ui",
+      "full_name": "mario03690/dsh-china-facts",
+      "previous": "other",
+      "current": "agent",
+      "desc_now": "China facts your agent can trust: mainland reachability tested from a real backbone (+ live README badge), statutory holidays including make-up workdays, offline ID/phone validation, lunar calendar.",
+      "desc_prev": null
+    },
+    {
+      "full_name": "mario03690/dsh-watch",
+      "previous": "other",
+      "current": "coding",
+      "desc_now": "Standing jobs for your agent: hand a recurring check (page changes, China reachability) to a hosted runner — your terminal can close, and you are notified only when the result actually changes.",
+      "desc_prev": null
+    },
+    {
+      "full_name": "mario03690/dsh-tables",
+      "previous": "other",
       "current": "tool",
-      "desc_now": "Foveated repository intelligence for DeepSeek Harness: token-budgeted code graphs, focus, impact, and continuous sync.",
-      "desc_prev": "Design-stage DSH-native adaptation of pi-fovea: token-budgeted repository graphs, focused context, impact, and continuous sync."
+      "desc_now": "Messy CSV in, checkable table out: dedupe, merge, reshape, diff two tables on a key, reconcile ledgers in integer cents — every count carries an in-code arithmetic proof.",
+      "desc_prev": null
+    },
+    {
+      "full_name": "mario03690/dsh-docflow",
+      "previous": "other",
+      "current": "document",
+      "desc_now": "Ship what humans asked for: markdown to docx/pptx/pdf/epub, and PDFs merged, split, rotated or watermarked — one hosted call each, no local toolchain.",
+      "desc_prev": null
+    },
+    {
+      "full_name": "mario03690/dsh-adversarial-review",
+      "previous": "other",
+      "current": "conversation",
+      "desc_now": "Adversarial review for code, MCP configs and system prompts: every finding carries a repro path and confidence, and anything unreproducible is marked suspected rather than presented as confirmed.",
+      "desc_prev": null
+    },
+    {
+      "full_name": "deronghe/dsh-plugin-desktop-installer",
+      "previous": "tool",
+      "current": "other",
+      "desc_now": "DSH Desktop installer",
+      "desc_prev": "DSH Desktop ??:???????(?? web/desktop profile)+ ????"
+    },
+    {
+      "full_name": "mario03690/dsh-product-planning",
+      "previous": "other",
+      "current": "web-ui",
+      "desc_now": "Interrogate a product idea instead of praising it: YC-style six forcing questions, a multi-persona panel allowed to disagree, and the narrowest two-week wedge with a numeric pass/fail test.",
+      "desc_prev": null
     }
   ]
 }
