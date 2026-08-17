@@ -428,8 +428,8 @@
       "name": "humanizer",
       "description": "Agent skill that removes signs of AI-generated writing from text",
       "html_url": "https://github.com/blader/humanizer",
-      "stargazers_count": 36009,
-      "updated_at": "2026-08-17T04:54:07Z",
+      "stargazers_count": 36043,
+      "updated_at": "2026-08-17T09:16:00Z",
       "default_branch": "main",
       "topics": [
         "agent-skills",
@@ -441,10 +441,9 @@
         "writing-tools"
       ],
       "license": "MIT",
-      "registry_seen_at": "2026-08-17T06:04:02.683Z",
+      "registry_seen_at": "2026-08-17T09:25:52.200Z",
       "has_skill": true,
-      "has_install_script": false,
-      "pkg_name": null
+      "has_install_script": false
     },
     {
       "full_name": "K-Dense-AI/scientific-agent-skills",
@@ -483,8 +482,8 @@
       "name": "nanoclaw",
       "description": "A lightweight alternative to OpenClaw that runs in containers for security. Connects to WhatsApp, Telegram, Slack, Discord, Gmail and other messaging apps,, has memory, scheduled jobs, and runs directly on Anthropic's Agents SDK",
       "html_url": "https://github.com/nanocoai/nanoclaw",
-      "stargazers_count": 30524,
-      "updated_at": "2026-08-17T04:39:52Z",
+      "stargazers_count": 30525,
+      "updated_at": "2026-08-17T09:09:07Z",
       "default_branch": "main",
       "topics": [
         "ai-agents",
@@ -1309,7 +1308,7 @@
       "description": "Ultra-high-performance, secure, all-in-one acceleration engine for developer resources",
       "html_url": "https://github.com/xixu-me/xget",
       "stargazers_count": 8201,
-      "updated_at": "2026-08-17T04:09:06Z",
+      "updated_at": "2026-08-17T09:11:43Z",
       "default_branch": "main",
       "topics": [
         "agent-skills",
@@ -1734,8 +1733,8 @@
       "name": "awesome-hermes-agent",
       "description": "Independent directory of useful skills, plugins, memory providers, tools, surfaces, and guides for Nous Research's open-source Hermes Agent.",
       "html_url": "https://github.com/0xNyk/awesome-hermes-agent",
-      "stargazers_count": 5347,
-      "updated_at": "2026-08-17T07:09:39Z",
+      "stargazers_count": 5348,
+      "updated_at": "2026-08-17T08:44:48Z",
       "default_branch": "main",
       "topics": [
         "agent-skills",
@@ -2368,8 +2367,8 @@
       "name": "open-knowledge",
       "description": "Beautiful, AI-native markdown IDE and LLM wiki",
       "html_url": "https://github.com/inkeep/open-knowledge",
-      "stargazers_count": 3479,
-      "updated_at": "2026-08-17T03:24:05Z",
+      "stargazers_count": 3480,
+      "updated_at": "2026-08-17T09:04:02Z",
       "default_branch": "main",
       "topics": [
         "2nd-brain",
@@ -2613,8 +2612,8 @@
       "name": "finance-skills",
       "description": "A collection of skills for AI financial analysis.",
       "html_url": "https://github.com/himself65/finance-skills",
-      "stargazers_count": 3178,
-      "updated_at": "2026-08-17T06:48:06Z",
+      "stargazers_count": 3177,
+      "updated_at": "2026-08-17T08:52:18Z",
       "default_branch": "main",
       "topics": [
         "agent-skills",
@@ -2773,8 +2772,8 @@
       "name": "skills",
       "description": "Agent Skills for NVIDIA products — install into Claude Code, Codex, and other coding agents to run Physical AI, robotics, simulation, CUDA, and RAG workflows end to end.",
       "html_url": "https://github.com/NVIDIA/skills",
-      "stargazers_count": 2976,
-      "updated_at": "2026-08-17T06:40:55Z",
+      "stargazers_count": 2978,
+      "updated_at": "2026-08-17T09:04:42Z",
       "default_branch": "main",
       "topics": [
         "agent-skills",
@@ -3146,6 +3145,45 @@
       "pkg_name": "claude-code-plugins-monorepo"
     },
     {
+      "full_name": "liustack/modlens",
+      "name": "modlens",
+      "description": "The first vision plugin for DeepSeek Harness, and the vision bridge for every text-only coding agent. Paste an image, get structured JSON evidence (OCR, layout, semantics). | 全网最强 DeepSeek Harness 外挂视觉插件，为 DeepSeek、GLM 等纯文本模型外挂视觉能力，粘贴图片即得结构化 JSON 证据（OCR、版面、语义）。",
+      "html_url": "https://github.com/liustack/modlens",
+      "stargazers_count": 2637,
+      "updated_at": "2026-08-17T09:17:45Z",
+      "default_branch": "main",
+      "topics": [
+        "agent-skills",
+        "claude-code",
+        "claude-skills",
+        "codex",
+        "cordis",
+        "deepseek",
+        "dsh",
+        "dsh-plugin",
+        "glm",
+        "harness",
+        "harness-engineering",
+        "hermes-agent",
+        "image-to-text",
+        "multimodal",
+        "ocr",
+        "openclaw",
+        "pi-agent",
+        "text-only-llm",
+        "vision",
+        "vision-transformer"
+      ],
+      "license": "MIT",
+      "registry_seen_at": "2026-08-17T09:25:52.200Z",
+      "market_tags": [
+        "verified-install"
+      ],
+      "has_skill": true,
+      "has_install_script": false,
+      "pkg_name": "@liustack/modlens"
+    },
+    {
       "full_name": "addyosmani/web-quality-skills",
       "name": "web-quality-skills",
       "description": "Agent Skills for optimizing web quality based on Lighthouse and Core Web Vitals.",
@@ -3434,7 +3472,7 @@
       "description": "YAO = Yielding AI Outcomes. A rigorous engineering, evaluation, governance, and portability system for reusable agent skills.",
       "html_url": "https://github.com/yaojingang/yao-meta-skill",
       "stargazers_count": 2384,
-      "updated_at": "2026-08-17T02:53:53Z",
+      "updated_at": "2026-08-17T09:06:40Z",
       "default_branch": "main",
       "topics": [
         "agent-skills",
@@ -3449,8 +3487,7 @@
       "license": "MIT",
       "registry_seen_at": "2026-08-17T08:46:44.442Z",
       "has_skill": true,
-      "has_install_script": false,
-      "pkg_name": null
+      "has_install_script": false
     },
     {
       "full_name": "apify/agent-skills",
@@ -3614,7 +3651,7 @@
       "description": "Natively — Free open-source AI meeting assistant, interview copilot, and note taker. The best alternative to Cluely, Otter, Granola, Final Round AI, Fireflies, and Interview Coder. Real-time transcription, AI meeting notes, lecture recording, local RAG, BYOK, and stealth mode. Runs locally. No subscriptions. No data breaches.",
       "html_url": "https://github.com/Natively-AI-assistant/natively-cluely-ai-assistant",
       "stargazers_count": 2259,
-      "updated_at": "2026-08-17T07:21:46Z",
+      "updated_at": "2026-08-17T08:49:03Z",
       "default_branch": "main",
       "topics": [
         "ai",
@@ -3884,6 +3921,26 @@
       "pkg_name": null
     },
     {
+      "full_name": "dmmulroy/anti-slop",
+      "name": "anti-slop",
+      "description": "Opinionated Oxlint rules for rejecting low-evidence TypeScript and JavaScript patterns",
+      "html_url": "https://github.com/dmmulroy/anti-slop",
+      "stargazers_count": 1864,
+      "updated_at": "2026-08-17T09:17:46Z",
+      "default_branch": "main",
+      "topics": [
+        "agent-skills",
+        "linting",
+        "oxlint",
+        "typescript"
+      ],
+      "license": "MIT",
+      "registry_seen_at": "2026-08-17T09:25:52.200Z",
+      "has_skill": true,
+      "has_install_script": false,
+      "pkg_name": "oxlint-plugin-anti-slop"
+    },
+    {
       "full_name": "rebelytics/one-skill-to-rule-them-all",
       "name": "one-skill-to-rule-them-all",
       "description": "The meta-skill that builds and improves all your skills, including itself. Watches your work sessions, captures corrections and judgement calls, and turns them into skill improvements automatically. Practical application of the Augmented Expertise methodology. Open-source, domain-agnostic, CC BY 4.0.",
@@ -4009,7 +4066,7 @@
       "description": "Babysitter enforces obedience on agentic workforces and enables them to manage extremely complex tasks and workflows through deterministic, hallucination-free self-orchestration",
       "html_url": "https://github.com/a5c-ai/babysitter",
       "stargazers_count": 1695,
-      "updated_at": "2026-08-17T05:53:11Z",
+      "updated_at": "2026-08-17T08:51:08Z",
       "default_branch": "main",
       "topics": [
         "agent-orchestration",
@@ -4186,8 +4243,8 @@
       "name": "opc-skills",
       "description": "Agent Skills for Solopreneurs",
       "html_url": "https://github.com/ReScienceLab/opc-skills",
-      "stargazers_count": 1572,
-      "updated_at": "2026-08-17T07:03:56Z",
+      "stargazers_count": 1573,
+      "updated_at": "2026-08-17T09:15:50Z",
       "default_branch": "main",
       "topics": [
         "agent-skills",
@@ -4362,8 +4419,8 @@
       "name": "minutes",
       "description": "Every meeting, every idea, every voice note, searchable by your AI. Open-source, privacy-first conversation memory layer.",
       "html_url": "https://github.com/silverstein/minutes",
-      "stargazers_count": 1435,
-      "updated_at": "2026-08-17T01:15:21Z",
+      "stargazers_count": 1436,
+      "updated_at": "2026-08-17T09:09:37Z",
       "default_branch": "main",
       "topics": [
         "agent-skills",
@@ -4383,8 +4440,7 @@
       "license": "MIT",
       "registry_seen_at": "2026-08-17T08:46:44.442Z",
       "has_skill": true,
-      "has_install_script": false,
-      "pkg_name": null
+      "has_install_script": false
     },
     {
       "full_name": "zanwei/design-dna",
@@ -5010,7 +5066,7 @@
       "description": "Agent OS: keep specialist agents in a hub, spin up a temporary orchestrator per task. Local-first, works with any model.",
       "html_url": "https://github.com/agentlas-ai/Agentlas-OS",
       "stargazers_count": 1158,
-      "updated_at": "2026-08-17T07:22:35Z",
+      "updated_at": "2026-08-17T09:07:03Z",
       "default_branch": "main",
       "topics": [
         "a2a",
@@ -6428,6 +6484,40 @@
       "pkg_name": null
     },
     {
+      "full_name": "Tiger3807861189/J-Space-Cognition-Suite-V3.6",
+      "name": "J-Space-Cognition-Suite-V3.6",
+      "description": "J-Space Cognition Suite V3.6 - AI cognitive-enhancement Skills based on Anthropic's J-space global workspace research.",
+      "html_url": "https://github.com/Tiger3807861189/J-Space-Cognition-Suite-V3.6",
+      "stargazers_count": 844,
+      "updated_at": "2026-08-17T09:14:13Z",
+      "default_branch": "main",
+      "topics": [
+        "agent-skills",
+        "ai",
+        "ai-agent",
+        "ai-agents",
+        "claude-code",
+        "codex",
+        "cognitive-enhancement",
+        "deepseek",
+        "deepseek-harness",
+        "developer-tools",
+        "dsh",
+        "dsh-plugin",
+        "global-workspace",
+        "hermes-agent",
+        "inference-time-control",
+        "j-space",
+        "opencode",
+        "react",
+        "tailwindcss"
+      ],
+      "license": "Apache-2.0",
+      "registry_seen_at": "2026-08-17T09:25:52.200Z",
+      "has_skill": true,
+      "has_install_script": false
+    },
+    {
       "full_name": "Bhanunamikaze/Agentic-SEO-Skill",
       "name": "Agentic-SEO-Skill",
       "description": "An LLM-first SEO analysis skill for Antigravity, Codex, Claude with 16 specialized sub-skills, 10 specialist agents, and 88 optional utility scripts used as evidence collectors.",
@@ -6937,8 +7027,8 @@
       "name": "digital-marketing-pro",
       "description": "An open-source AI marketing operating system for strategy, SEO, AEO/GEO, paid media, content, CRM, and analytics - grounded in brand context, human approval, and verifiable outputs.",
       "html_url": "https://github.com/indranilbanerjee/digital-marketing-pro",
-      "stargazers_count": 745,
-      "updated_at": "2026-08-17T05:20:03Z",
+      "stargazers_count": 744,
+      "updated_at": "2026-08-17T08:51:57Z",
       "default_branch": "main",
       "topics": [
         "aeo",
@@ -7380,6 +7470,31 @@
       "registry_seen_at": "2026-08-17T08:46:44.442Z",
       "has_skill": true,
       "has_install_script": false
+    },
+    {
+      "full_name": "LC044/TrailSnap",
+      "name": "TrailSnap",
+      "description": "TrailSnap (行影集) | AI-Powered open-source photo album for travel & life memories.（AI赋能的开源相册工具，珍藏旅行与生活点滴）",
+      "html_url": "https://github.com/LC044/TrailSnap",
+      "stargazers_count": 666,
+      "updated_at": "2026-08-17T03:38:33Z",
+      "default_branch": "master",
+      "topics": [
+        "agent",
+        "agent-skills",
+        "ai",
+        "album",
+        "clip",
+        "photo",
+        "skill-md",
+        "skills",
+        "yolo"
+      ],
+      "license": "AGPL-3.0",
+      "registry_seen_at": "2026-08-17T09:25:52.200Z",
+      "has_skill": true,
+      "has_install_script": true,
+      "pkg_name": null
     },
     {
       "full_name": "EXboys/evotown",
@@ -7966,6 +8081,39 @@
       "has_skill": true,
       "has_install_script": true,
       "pkg_name": "prd-taskmaster"
+    },
+    {
+      "full_name": "Anionex/dsh-vision-toolkit",
+      "name": "dsh-vision-toolkit",
+      "description": "让纯文本模型更好地做视觉任务的DeepSeek Harness插件：带意图的图片问答、长截图 OCR、UI 还原等｜DeepSeek Harness-native integration for agent-vision-toolkit: image Q&A, long-screenshot OCR, UI restoration, grounding, pixel diff, Artifacts, and Web UI.",
+      "html_url": "https://github.com/Anionex/dsh-vision-toolkit",
+      "stargazers_count": 585,
+      "updated_at": "2026-08-17T08:59:24Z",
+      "default_branch": "main",
+      "topics": [
+        "agent-skills",
+        "agent-vision-toolkit",
+        "computer-vision",
+        "deepseek",
+        "deepseek-harness",
+        "dsh",
+        "dsh-plugin",
+        "gui-automation",
+        "ocr",
+        "plugin",
+        "python",
+        "screenshot-testing",
+        "text-only-llm",
+        "typescript",
+        "ui-restoration",
+        "vision-language-model",
+        "vision-tools"
+      ],
+      "license": "MIT",
+      "registry_seen_at": "2026-08-17T09:25:52.200Z",
+      "has_skill": true,
+      "has_install_script": false,
+      "pkg_name": "@anionex/dsh-vision-toolkit"
     },
     {
       "full_name": "DaRL-GenAI/instructional_agents",
@@ -9851,8 +9999,8 @@
       "name": "claude-ai-music-skills",
       "description": "Human + AI music production workflow for Suno - skills, templates, and tools",
       "html_url": "https://github.com/bitwize-music-studio/claude-ai-music-skills",
-      "stargazers_count": 430,
-      "updated_at": "2026-08-17T02:49:28Z",
+      "stargazers_count": 431,
+      "updated_at": "2026-08-17T09:09:17Z",
       "default_branch": "main",
       "topics": [
         "ai-music",
@@ -9879,8 +10027,7 @@
       "license": "CC0-1.0",
       "registry_seen_at": "2026-08-17T08:46:44.446Z",
       "has_skill": true,
-      "has_install_script": true,
-      "pkg_name": null
+      "has_install_script": true
     },
     {
       "full_name": "jabrena/plinth",
@@ -9888,7 +10035,7 @@
       "description": "Plinth is an AI-native engineering toolkit for modern Java enterprise SDLC, built around reusable Commands, Agents, Skills, and MCP Servers.",
       "html_url": "https://github.com/jabrena/plinth",
       "stargazers_count": 425,
-      "updated_at": "2026-08-16T09:37:11Z",
+      "updated_at": "2026-08-17T08:57:38Z",
       "default_branch": "main",
       "topics": [
         "agent-skills",
@@ -9914,8 +10061,7 @@
       "license": "Apache-2.0",
       "registry_seen_at": "2026-08-17T08:46:44.442Z",
       "has_skill": true,
-      "has_install_script": false,
-      "pkg_name": null
+      "has_install_script": false
     },
     {
       "full_name": "boshu2/agentops",
@@ -10099,7 +10245,7 @@
       "description": "Curated, install-ready directory for the Hermes Agent ecosystem (v0.20.0). 79 built-in + 114 optional bundled skills, plus 160 community skills, plugins, agent profiles, memory providers, surfaces & tools. Cross-compatible with Claude Code, OpenClaw, Cursor and Windsurf.",
       "html_url": "https://github.com/ZeroPointRepo/awesome-hermes-skills",
       "stargazers_count": 414,
-      "updated_at": "2026-08-16T11:38:57Z",
+      "updated_at": "2026-08-17T09:15:09Z",
       "default_branch": "main",
       "topics": [
         "agent-plugins",
@@ -10113,10 +10259,9 @@
         "nous-research"
       ],
       "license": "MIT",
-      "registry_seen_at": "2026-08-17T06:04:02.683Z",
+      "registry_seen_at": "2026-08-17T09:25:52.200Z",
       "has_skill": false,
-      "has_install_script": false,
-      "pkg_name": null
+      "has_install_script": false
     },
     {
       "full_name": "pcliangx/AppGenesisForge",
@@ -11461,6 +11606,41 @@
       "pkg_name": null
     },
     {
+      "full_name": "morluto/rea",
+      "name": "rea",
+      "description": "Reverse engineer anything with agents, from app behavior down to native binaries.",
+      "html_url": "https://github.com/morluto/rea",
+      "stargazers_count": 343,
+      "updated_at": "2026-08-17T09:08:17Z",
+      "default_branch": "main",
+      "topics": [
+        "agent-skills",
+        "ai-agent-tools",
+        "ai-agents",
+        "binary-analysis",
+        "cli",
+        "coding-agent",
+        "coding-agents",
+        "cordis",
+        "decompiler",
+        "disassembler",
+        "dsh",
+        "dsh-plugin",
+        "hopper-disassembler",
+        "mcp",
+        "mcp-server",
+        "model-context-protocol",
+        "reverse-engineering",
+        "reverse-engineering-tools",
+        "static-analysis"
+      ],
+      "license": "MIT",
+      "registry_seen_at": "2026-08-17T09:25:52.200Z",
+      "has_skill": true,
+      "has_install_script": true,
+      "pkg_name": "rea-agents"
+    },
+    {
       "full_name": "DY-2026/GameDesignOS",
       "name": "GameDesignOS",
       "description": "Local-first game design OS for AI agents: turn sessions into evidence, experiments, reviewable decisions, and durable project memory—Human Gates and rollback.",
@@ -11737,28 +11917,6 @@
       "pkg_name": "open-code-review"
     },
     {
-      "full_name": "staskh/trading_skills",
-      "name": "trading_skills",
-      "description": "Claude powered advisor system for option traders",
-      "html_url": "https://github.com/staskh/trading_skills",
-      "stargazers_count": 333,
-      "updated_at": "2026-08-15T08:12:36Z",
-      "default_branch": "main",
-      "topics": [
-        "ai-trading",
-        "claude",
-        "claude-skills",
-        "mcp-server",
-        "option-trading",
-        "options-trading"
-      ],
-      "license": "MIT",
-      "registry_seen_at": "2026-08-17T06:04:02.704Z",
-      "has_skill": true,
-      "has_install_script": false,
-      "pkg_name": null
-    },
-    {
       "full_name": "aerovato/container",
       "name": "container",
       "description": "Safely run OpenCode, Codex, Claude Code with full permissions.",
@@ -11793,6 +11951,28 @@
       "has_skill": true,
       "has_install_script": true,
       "pkg_name": "@aerovato/container"
+    },
+    {
+      "full_name": "staskh/trading_skills",
+      "name": "trading_skills",
+      "description": "Claude powered advisor system for option traders",
+      "html_url": "https://github.com/staskh/trading_skills",
+      "stargazers_count": 333,
+      "updated_at": "2026-08-15T08:12:36Z",
+      "default_branch": "main",
+      "topics": [
+        "ai-trading",
+        "claude",
+        "claude-skills",
+        "mcp-server",
+        "option-trading",
+        "options-trading"
+      ],
+      "license": "MIT",
+      "registry_seen_at": "2026-08-17T06:04:02.704Z",
+      "has_skill": true,
+      "has_install_script": false,
+      "pkg_name": null
     },
     {
       "full_name": "earthtojake/step.parts",
@@ -12303,8 +12483,8 @@
       "name": "terrashark",
       "description": "Terraform Skill for Claude Code and Codex. LLMs hallucinate a lot with Terraform - TerraShark fixes this. It eliminates hallucinations, is designed for modular and secure code and grounds your IaC in the official Hashicorp Terraform best practices.",
       "html_url": "https://github.com/LukasNiessen/terrashark",
-      "stargazers_count": 310,
-      "updated_at": "2026-08-16T21:28:37Z",
+      "stargazers_count": 311,
+      "updated_at": "2026-08-17T09:15:07Z",
       "default_branch": "main",
       "topics": [
         "aws",
@@ -12326,8 +12506,7 @@
       "license": "MIT",
       "registry_seen_at": "2026-08-17T08:46:44.446Z",
       "has_skill": true,
-      "has_install_script": false,
-      "pkg_name": null
+      "has_install_script": false
     },
     {
       "full_name": "InterfaceX-co-jp/genshijin",
@@ -12697,13 +12876,13 @@
       "description": "Command-line interface for Todoist.",
       "html_url": "https://github.com/Doist/todoist-cli",
       "stargazers_count": 288,
-      "updated_at": "2026-08-16T16:25:10Z",
+      "updated_at": "2026-08-17T08:43:44Z",
       "default_branch": "main",
       "topics": [
         "agent-skills"
       ],
       "license": "MIT",
-      "registry_seen_at": "2026-08-17T06:04:02.684Z",
+      "registry_seen_at": "2026-08-17T09:25:52.200Z",
       "has_skill": true,
       "has_install_script": false,
       "pkg_name": "@doist/todoist-cli"
@@ -13086,6 +13265,29 @@
       "has_skill": false,
       "has_install_script": false,
       "pkg_name": null
+    },
+    {
+      "full_name": "coji/natural-japanese",
+      "name": "natural-japanese",
+      "description": "仕事の日本語を、読みやすくわかりやすく書く・直すための Agent Skill です。",
+      "html_url": "https://github.com/coji/natural-japanese",
+      "stargazers_count": 269,
+      "updated_at": "2026-08-17T09:18:18Z",
+      "default_branch": "main",
+      "topics": [
+        "agent-skills",
+        "claude",
+        "claude-code",
+        "japanese",
+        "lint",
+        "nlp",
+        "sudachipy",
+        "writing"
+      ],
+      "license": "MIT",
+      "registry_seen_at": "2026-08-17T09:25:52.200Z",
+      "has_skill": true,
+      "has_install_script": false
     },
     {
       "full_name": "loulanyue/awesome-claude-notes",
@@ -14027,7 +14229,7 @@
       "description": "🪢 Langfuse documentation -- Langfuse is the open source LLM Engineering Platform. Observability, evals, prompt management, playground and metrics to debug and improve LLM apps",
       "html_url": "https://github.com/langfuse/langfuse-docs",
       "stargazers_count": 233,
-      "updated_at": "2026-08-17T06:28:03Z",
+      "updated_at": "2026-08-17T08:52:52Z",
       "default_branch": "main",
       "topics": [
         "agent-skills",
@@ -14949,6 +15151,27 @@
       "has_skill": true,
       "has_install_script": false,
       "pkg_name": null
+    },
+    {
+      "full_name": "iBlinkQ/project-cairn",
+      "name": "project-cairn",
+      "description": "Turn project work into reusable knowledge — an AI-agent skill for Claude Code & Codex",
+      "html_url": "https://github.com/iBlinkQ/project-cairn",
+      "stargazers_count": 209,
+      "updated_at": "2026-08-17T08:55:09Z",
+      "default_branch": "main",
+      "topics": [
+        "agent-skills",
+        "ai-agents",
+        "claude-code",
+        "codex",
+        "knowledge-management",
+        "llm-agent"
+      ],
+      "license": "MIT",
+      "registry_seen_at": "2026-08-17T09:25:52.200Z",
+      "has_skill": true,
+      "has_install_script": false
     },
     {
       "full_name": "nathanskill/niubiskill",
@@ -18086,7 +18309,7 @@
       "description": "100+ curated Seedance 2.5 prompts with real video previews, plus an installable Agent Skill that optimizes prompts, creates storyboards, and generates videos via Seedance models.",
       "html_url": "https://github.com/AtlasCloudAI/awesome-seedance-2.5-prompts-skills",
       "stargazers_count": 148,
-      "updated_at": "2026-08-17T03:35:43Z",
+      "updated_at": "2026-08-17T08:45:38Z",
       "default_branch": "main",
       "topics": [
         "agent-skills",
@@ -18768,6 +18991,33 @@
       "has_skill": true,
       "has_install_script": false,
       "pkg_name": null
+    },
+    {
+      "full_name": "lennney/stop-that-shit",
+      "name": "stop-that-shit",
+      "description": "Keep Codex from adding unneeded modules, subagents, dependencies, and hashes to small tasks.",
+      "html_url": "https://github.com/lennney/stop-that-shit",
+      "stargazers_count": 136,
+      "updated_at": "2026-08-17T08:52:00Z",
+      "default_branch": "main",
+      "topics": [
+        "agent-skills",
+        "ai-agents",
+        "codex",
+        "codex-cli",
+        "codex-plugin",
+        "developer-tools",
+        "guardrails",
+        "local-first",
+        "overengineering",
+        "scope-control",
+        "yagni"
+      ],
+      "license": "MIT",
+      "registry_seen_at": "2026-08-17T09:25:52.200Z",
+      "has_skill": true,
+      "has_install_script": false,
+      "pkg_name": "stop-that-shit"
     },
     {
       "full_name": "rajudandigam/Ultimate-TypeScript-Real-World-AI-Projects",
@@ -19913,6 +20163,41 @@
       "pkg_name": null
     },
     {
+      "full_name": "liustack/modsearch",
+      "name": "modsearch",
+      "description": "The web search plugin for DeepSeek Harness, and the search bridge for every model without native web access. Ask the web or X, get structured JSON evidence. | 🥇 全网最强的 DeepSeek Harness 联网搜索插件🥇。为不能联网的模型补上搜索。问网页或 X，拿回结构化 JSON 证据（搜索、抓取、引用）。",
+      "html_url": "https://github.com/liustack/modsearch",
+      "stargazers_count": 124,
+      "updated_at": "2026-08-17T08:57:04Z",
+      "default_branch": "main",
+      "topics": [
+        "agent-skills",
+        "agentic-workflow",
+        "claude-code",
+        "claude-skills",
+        "codex",
+        "cordis",
+        "deepseek",
+        "deepseek-harness",
+        "dsh",
+        "dsh-plugin",
+        "glm",
+        "harness",
+        "harness-engineering",
+        "hermes-agent",
+        "openclaw",
+        "opencode",
+        "pi-agent",
+        "web-fetch",
+        "web-search"
+      ],
+      "license": "MIT",
+      "registry_seen_at": "2026-08-17T09:25:52.200Z",
+      "has_skill": true,
+      "has_install_script": false,
+      "pkg_name": "@liustack/modsearch"
+    },
+    {
       "full_name": "asimons81/hermes-field-kit",
       "name": "hermes-field-kit",
       "description": "Field-tested, open-source skills for Hermes Agent.",
@@ -20262,6 +20547,37 @@
       "has_skill": true,
       "has_install_script": false,
       "pkg_name": null
+    },
+    {
+      "full_name": "jianshuo/claude-skills",
+      "name": "claude-skills",
+      "description": "13 Claude Code skills for video production (transcribe / translate / dub / multicam / subtitles / reframe) + WeChat publishing. Compatible with Claude Code, OpenAI Codex CLI, Cursor, Gemini.",
+      "html_url": "https://github.com/jianshuo/claude-skills",
+      "stargazers_count": 121,
+      "updated_at": "2026-08-17T09:11:09Z",
+      "default_branch": "main",
+      "topics": [
+        "agent-skills",
+        "ai-agent",
+        "claude",
+        "claude-code",
+        "claude-skills",
+        "codex",
+        "codex-skills",
+        "dubbing",
+        "ffmpeg",
+        "multicam",
+        "openclaw",
+        "skill-md",
+        "subtitles",
+        "transcription",
+        "video-production",
+        "wechat"
+      ],
+      "license": "MIT",
+      "registry_seen_at": "2026-08-17T09:25:52.200Z",
+      "has_skill": true,
+      "has_install_script": false
     },
     {
       "full_name": "OmidZamani/dspy-skills",
@@ -22396,6 +22712,28 @@
       "has_skill": true,
       "has_install_script": false,
       "pkg_name": null
+    },
+    {
+      "full_name": "Tiger3807861189/DeepSeek-V4-J-Space-Capability-Realization-Report",
+      "name": "DeepSeek-V4-J-Space-Capability-Realization-Report",
+      "description": "DeepSeek V4 × J-Space capability realization report — benchmark evidence that J-Space reduces capability-realization loss on DeepSeek V4 (Flash/Pro).",
+      "html_url": "https://github.com/Tiger3807861189/DeepSeek-V4-J-Space-Capability-Realization-Report",
+      "stargazers_count": 98,
+      "updated_at": "2026-08-17T09:15:37Z",
+      "default_branch": "main",
+      "topics": [
+        "agent-skills",
+        "ai-agent",
+        "benchmark",
+        "deepseek",
+        "deepseek-harness",
+        "dsh",
+        "dsh-plugin"
+      ],
+      "license": "NOASSERTION",
+      "registry_seen_at": "2026-08-17T09:25:52.200Z",
+      "has_skill": false,
+      "has_install_script": false
     },
     {
       "full_name": "oneal2000/SR-Agents",
@@ -27009,7 +27347,7 @@
       "description": "A Python framework for modular, self-contained skill management for machines.",
       "html_url": "https://github.com/ARPAHLS/skillware",
       "stargazers_count": 67,
-      "updated_at": "2026-08-16T09:20:56Z",
+      "updated_at": "2026-08-17T09:10:53Z",
       "default_branch": "main",
       "topics": [
         "agent-skills",
@@ -27027,8 +27365,7 @@
       "license": "MIT",
       "registry_seen_at": "2026-08-17T08:46:44.442Z",
       "has_skill": false,
-      "has_install_script": false,
-      "pkg_name": null
+      "has_install_script": false
     },
     {
       "full_name": "pa1nrui1/legal-skills",
@@ -29487,7 +29824,7 @@
       "description": "Türkçe metinlerden yapay zekâ yazım imzalarını temizleyen Claude skill'i. YZ üretimi Türkçe'yi doğal, insan-sesli Türkçe'ye dönüştürür. | A Claude skill that removes AI writing signatures from Turkish text.",
       "html_url": "https://github.com/bushrabeg/turkce-humanizer",
       "stargazers_count": 56,
-      "updated_at": "2026-08-15T19:16:25Z",
+      "updated_at": "2026-08-17T09:00:30Z",
       "default_branch": "main",
       "topics": [
         "ai-humanizer",
@@ -29501,10 +29838,9 @@
         "turkish-nlp"
       ],
       "license": "MIT",
-      "registry_seen_at": "2026-08-17T06:04:02.705Z",
+      "registry_seen_at": "2026-08-17T09:25:52.215Z",
       "has_skill": true,
-      "has_install_script": false,
-      "pkg_name": null
+      "has_install_script": false
     },
     {
       "full_name": "guinacio/claude-image-gen",
@@ -29818,6 +30154,28 @@
       "has_skill": true,
       "has_install_script": false,
       "pkg_name": null
+    },
+    {
+      "full_name": "chang416/im-human",
+      "name": "im-human",
+      "description": "讓 AI 用台灣人的繁體中文講話，並把已寫好的文字清掉 AI 味。Claude Code、claude.ai、ChatGPT Codex 與一般聊天都能用。",
+      "html_url": "https://github.com/chang416/im-human",
+      "stargazers_count": 54,
+      "updated_at": "2026-08-17T08:46:31Z",
+      "default_branch": "main",
+      "topics": [
+        "aiwriting",
+        "chatgpt",
+        "claude-skills",
+        "codex",
+        "prompt-engineering",
+        "taiwan",
+        "traditional-chinese"
+      ],
+      "license": "MIT",
+      "registry_seen_at": "2026-08-17T09:25:52.215Z",
+      "has_skill": true,
+      "has_install_script": false
     },
     {
       "full_name": "appautomaton/presentation",
@@ -34894,6 +35252,26 @@
       "pkg_name": null
     },
     {
+      "full_name": "machina-exm/film-studio-skills",
+      "name": "film-studio-skills",
+      "description": "7 installable agent skills that run the pipeline behind $2M AI video productions — script to locked, generation-ready shot prompts. Claude Code · Codex · Hermes · OpenCode",
+      "html_url": "https://github.com/machina-exm/film-studio-skills",
+      "stargazers_count": 41,
+      "updated_at": "2026-08-17T09:17:08Z",
+      "default_branch": "main",
+      "topics": [
+        "agent-skills",
+        "ai-video",
+        "claude-code",
+        "higgsfield",
+        "seedance"
+      ],
+      "license": null,
+      "registry_seen_at": "2026-08-17T09:25:52.200Z",
+      "has_skill": true,
+      "has_install_script": false
+    },
+    {
       "full_name": "owainlewis/agent-skills",
       "name": "agent-skills",
       "description": "My personal agent skills",
@@ -39303,6 +39681,39 @@
       "pkg_name": null
     },
     {
+      "full_name": "aws/tools-for-devops-agent",
+      "name": "tools-for-devops-agent",
+      "description": "Open-source tools for AWS DevOps Agent - extend DevOps Agent with ready-to-use skills, custom agents, and other tools, for incident response, root cause analysis, and operational troubleshooting",
+      "html_url": "https://github.com/aws/tools-for-devops-agent",
+      "stargazers_count": 32,
+      "updated_at": "2026-08-17T08:59:45Z",
+      "default_branch": "main",
+      "topics": [
+        "agent-skills",
+        "agentic-ai",
+        "agents",
+        "ai-agents",
+        "aiops",
+        "aws",
+        "aws-devops-agent",
+        "cloud-operations",
+        "custom-agents",
+        "devops",
+        "devops-agent-skills",
+        "frontier-agent",
+        "incident-response",
+        "operational-excellence",
+        "root-cause-analysis",
+        "skills",
+        "sre",
+        "support"
+      ],
+      "license": "Apache-2.0",
+      "registry_seen_at": "2026-08-17T09:25:52.200Z",
+      "has_skill": true,
+      "has_install_script": false
+    },
+    {
       "full_name": "Nagarjuna2997/ios-agent-skill",
       "name": "ios-agent-skill",
       "description": "Production-ready iOS SwiftUI guidance for AI coding agents.",
@@ -39691,40 +40102,6 @@
       ],
       "license": "Apache-2.0",
       "registry_seen_at": "2026-08-14T20:48:10.163Z",
-      "has_skill": true,
-      "has_install_script": false,
-      "pkg_name": null
-    },
-    {
-      "full_name": "aws/tools-for-devops-agent",
-      "name": "tools-for-devops-agent",
-      "description": "Open-source tools for AWS DevOps Agent - extend DevOps Agent with ready-to-use skills, custom agents, and other tools, for incident response, root cause analysis, and operational troubleshooting",
-      "html_url": "https://github.com/aws/tools-for-devops-agent",
-      "stargazers_count": 31,
-      "updated_at": "2026-08-14T20:52:34Z",
-      "default_branch": "main",
-      "topics": [
-        "agent-skills",
-        "agentic-ai",
-        "agents",
-        "ai-agents",
-        "aiops",
-        "aws",
-        "aws-devops-agent",
-        "cloud-operations",
-        "custom-agents",
-        "devops",
-        "devops-agent-skills",
-        "frontier-agent",
-        "incident-response",
-        "operational-excellence",
-        "root-cause-analysis",
-        "skills",
-        "sre",
-        "support"
-      ],
-      "license": "Apache-2.0",
-      "registry_seen_at": "2026-08-17T06:04:02.685Z",
       "has_skill": true,
       "has_install_script": false,
       "pkg_name": null
@@ -52388,6 +52765,39 @@
       "pkg_name": null
     },
     {
+      "full_name": "fy-agent/fyagent",
+      "name": "fyagent",
+      "description": "For You Agent——AI 时代的个人随身数字人格。把你的模型、AI 账号、技能、提示词和工作方式，带到每一个 AI 工具里。",
+      "html_url": "https://github.com/fy-agent/fyagent",
+      "stargazers_count": 18,
+      "updated_at": "2026-08-17T09:00:48Z",
+      "default_branch": "main",
+      "topics": [
+        "agent-management",
+        "agent-skills",
+        "ai-agent",
+        "ai-assistant",
+        "ai-worker",
+        "cross-platform",
+        "desktop-app",
+        "digital-persona",
+        "llm",
+        "mcp",
+        "model-management",
+        "openclaw",
+        "personal-ai",
+        "prompt-management",
+        "rust",
+        "source-available",
+        "tauri"
+      ],
+      "license": "NOASSERTION",
+      "registry_seen_at": "2026-08-17T09:25:52.200Z",
+      "has_skill": true,
+      "has_install_script": false,
+      "pkg_name": "fyagent"
+    },
+    {
       "full_name": "strongeron/storybook-workbench",
       "name": "storybook-workbench",
       "description": "AI agent skill bundle for Storybook on React + Vite — audit real-vs-slop components, capture flows, write CSF3 stories, ship. Claude Code / Codex / Cursor.",
@@ -54027,7 +54437,7 @@
       "description": "Open-source skills that empower any AI agent (Claude, Cursor, Hermes, etc.) to generate end-to-end marketing campaigns - UGC videos, ad videos, product photography and more.",
       "html_url": "https://github.com/SupercmoHQ/superCMO-skills",
       "stargazers_count": 17,
-      "updated_at": "2026-08-17T06:38:07Z",
+      "updated_at": "2026-08-17T09:05:01Z",
       "default_branch": "main",
       "topics": [
         "ad-creative",
@@ -56408,7 +56818,7 @@
       "description": "Custom configuration for Claude Code that turns it into a disciplined engineering partner with structured workflows, strict guardrails, and domain-specific expertise.",
       "html_url": "https://github.com/domengabrovsek/claude",
       "stargazers_count": 15,
-      "updated_at": "2026-08-09T10:37:16Z",
+      "updated_at": "2026-08-17T08:47:27Z",
       "default_branch": "main",
       "topics": [
         "ai-agents",
@@ -56428,10 +56838,9 @@
         "subagents"
       ],
       "license": null,
-      "registry_seen_at": "2026-08-17T06:04:02.705Z",
+      "registry_seen_at": "2026-08-17T09:25:52.215Z",
       "has_skill": true,
-      "has_install_script": false,
-      "pkg_name": null
+      "has_install_script": false
     },
     {
       "full_name": "XiaoConstantine/sgrep",
@@ -61693,7 +62102,7 @@
       "description": "SkillBill packages your engineering judgment into governed skills, then uses a durable Kotlin runtime to ensure agents actually execute that process consistently, resumably, and with bounded context.",
       "html_url": "https://github.com/oila-gmbh/skill-bill",
       "stargazers_count": 13,
-      "updated_at": "2026-08-17T07:18:47Z",
+      "updated_at": "2026-08-17T09:01:21Z",
       "default_branch": "main",
       "topics": [
         "agent",
@@ -64032,7 +64441,7 @@
       "description": "Nix packages, skills, extensions for coding-agents (Claude Code, Gemini CLI, Pi Coding Agent, Codex)",
       "html_url": "https://github.com/kissgyorgy/coding-agents",
       "stargazers_count": 12,
-      "updated_at": "2026-08-15T13:56:54Z",
+      "updated_at": "2026-08-17T08:59:29Z",
       "default_branch": "master",
       "topics": [
         "agent-skills",
@@ -64043,8 +64452,7 @@
       "license": null,
       "registry_seen_at": "2026-08-17T08:46:44.442Z",
       "has_skill": true,
-      "has_install_script": false,
-      "pkg_name": null
+      "has_install_script": false
     },
     {
       "full_name": "oubakiou/md2idx",
@@ -71080,40 +71488,51 @@
       "pkg_name": null
     },
     {
-      "full_name": "sandbaseai/sandbase-skills",
-      "name": "sandbase-skills",
-      "description": "88 installable open-source Agent Skills for research, social intelligence, marketing, and business workflows—compatible with Codex, Claude Code, Cursor, Gemini CLI, and DeepSeek Harness.",
-      "html_url": "https://github.com/sandbaseai/sandbase-skills",
+      "full_name": "w2112515/dsh-plugin-development",
+      "name": "dsh-plugin-development",
+      "description": "Portable Agent Skill for developing and auditing DeepSeek Harness plugins, with an optional profile-installable DSH bundle adapter.",
+      "html_url": "https://github.com/w2112515/dsh-plugin-development",
       "stargazers_count": 10,
-      "updated_at": "2026-08-17T06:55:17Z",
+      "updated_at": "2026-08-17T09:01:32Z",
       "default_branch": "main",
       "topics": [
         "agent-skills",
-        "ai-agents",
-        "business-intelligence",
-        "claude-code",
-        "claude-code-marketplace",
-        "claude-code-plugin",
-        "codex-skills",
-        "cursor-ai",
+        "cordis",
         "deepseek",
         "deepseek-harness",
-        "dsh",
         "dsh-plugin",
-        "gemini-cli",
-        "market-research",
-        "marketing-automation",
-        "mcp",
-        "model-context-protocol",
-        "research-tools",
-        "skill-md",
-        "social-listening"
+        "plugin-development"
       ],
       "license": "Apache-2.0",
       "registry_seen_at": "2026-08-17T08:46:44.442Z",
       "has_skill": true,
       "has_install_script": false,
-      "pkg_name": "@sandbaseai/dsh-skills"
+      "pkg_name": "dsh-plugin-development"
+    },
+    {
+      "full_name": "TalissonVitorino/kmp-ios-skills",
+      "name": "kmp-ios-skills",
+      "description": "105 agent skills for Kotlin Multiplatform and iOS development — install with npx skills add TalissonVitorino/kmp-ios-skills",
+      "html_url": "https://github.com/TalissonVitorino/kmp-ios-skills",
+      "stargazers_count": 10,
+      "updated_at": "2026-08-17T09:02:33Z",
+      "default_branch": "main",
+      "topics": [
+        "agent-skills",
+        "android",
+        "claude-code",
+        "compose-multiplatform",
+        "ios",
+        "kmp",
+        "kotlin-multiplatform",
+        "skills",
+        "swift",
+        "swiftui"
+      ],
+      "license": "MIT",
+      "registry_seen_at": "2026-08-17T09:25:52.201Z",
+      "has_skill": true,
+      "has_install_script": false
     },
     {
       "full_name": "ashp15205/vibe-coding-essentials",
@@ -86053,8 +86472,8 @@
       "name": "skilldoctor",
       "description": "Quality gate for Agent Skills: lint, security audit, and Claude/Cursor/Codex/OpenCode compatibility.",
       "html_url": "https://github.com/xyiqq/skilldoctor",
-      "stargazers_count": 6,
-      "updated_at": "2026-08-17T03:20:25Z",
+      "stargazers_count": 7,
+      "updated_at": "2026-08-17T09:17:09Z",
       "default_branch": "main",
       "topics": [
         "agent-skills",
@@ -96440,7 +96859,7 @@
       "description": "PHP and Laravel Cursor rules — coding standards, testing, and conventions for the Cursor editor. Install via Composer.",
       "html_url": "https://github.com/pekral/cursor-rules",
       "stargazers_count": 5,
-      "updated_at": "2026-08-15T13:27:21Z",
+      "updated_at": "2026-08-17T08:55:13Z",
       "default_branch": "master",
       "topics": [
         "agent-skills",
@@ -96458,8 +96877,7 @@
       "license": "MIT",
       "registry_seen_at": "2026-08-17T08:46:44.443Z",
       "has_skill": true,
-      "has_install_script": false,
-      "pkg_name": null
+      "has_install_script": false
     },
     {
       "full_name": "BjornMelin/dev-skills",
@@ -120147,13 +120565,13 @@
       "description": "Command-line interface for Twist",
       "html_url": "https://github.com/Doist/twist-cli",
       "stargazers_count": 3,
-      "updated_at": "2026-08-10T07:04:19Z",
+      "updated_at": "2026-08-17T08:47:48Z",
       "default_branch": "main",
       "topics": [
         "agent-skills"
       ],
       "license": null,
-      "registry_seen_at": "2026-08-17T06:04:02.690Z",
+      "registry_seen_at": "2026-08-17T09:25:52.201Z",
       "has_skill": true,
       "has_install_script": false,
       "pkg_name": "@doist/twist-cli"
@@ -122750,7 +123168,7 @@
       "description": "Understand dense articles faster and more clearly: trace the claims, test the evidence, identify genuine novelty, and separate contribution from hype.",
       "html_url": "https://github.com/JinPLu/clear-eyed-reading-skills",
       "stargazers_count": 3,
-      "updated_at": "2026-08-11T22:09:32Z",
+      "updated_at": "2026-08-17T09:14:09Z",
       "default_branch": "main",
       "topics": [
         "agent-skills",
@@ -122762,10 +123180,9 @@
         "research-tools"
       ],
       "license": "MIT",
-      "registry_seen_at": "2026-08-17T06:04:02.690Z",
+      "registry_seen_at": "2026-08-17T09:25:52.201Z",
       "has_skill": true,
-      "has_install_script": false,
-      "pkg_name": null
+      "has_install_script": false
     },
     {
       "full_name": "unsanitary-bek/mlx-skills",
@@ -126871,10 +127288,10 @@
     {
       "full_name": "Bing-Bryan/skills-by-bing",
       "name": "skills-by-bing",
-      "description": "Personal monorepo of Agent Skills by Bing Bryan｜Bing Bryan 的个人 Agent Skills 总库",
+      "description": "Personal Agent Skills by Bing Bryan; includes a GPT-5.6 Sol V1 router for verified external subagent routes｜Bing Bryan 的个人 Agent Skills 总库，包含 GPT-5.6 Sol V1 外部子 Agent 路由 Skill",
       "html_url": "https://github.com/Bing-Bryan/skills-by-bing",
       "stargazers_count": 3,
-      "updated_at": "2026-07-24T09:44:36Z",
+      "updated_at": "2026-08-17T09:23:45Z",
       "default_branch": "main",
       "topics": [
         "agent-skills",
@@ -126883,7 +127300,10 @@
         "claude-skills",
         "codex",
         "cursor",
+        "external-agent-routing",
         "goofish",
+        "gpt-subagent-external-router",
+        "multi-agent-v1",
         "resale",
         "secondhand",
         "skill-discovery",
@@ -126892,10 +127312,9 @@
         "xianyu"
       ],
       "license": "MIT",
-      "registry_seen_at": "2026-08-17T06:04:02.690Z",
+      "registry_seen_at": "2026-08-17T09:25:52.215Z",
       "has_skill": true,
-      "has_install_script": false,
-      "pkg_name": null
+      "has_install_script": false
     },
     {
       "full_name": "tony-adamson/groundwork",
@@ -130589,7 +131008,7 @@
       "description": "Host-agnostic Skills, Tool Contracts and MCP integrations for agent-driven creative workflows.",
       "html_url": "https://github.com/zuimengyz/drama-plugin",
       "stargazers_count": 3,
-      "updated_at": "2026-08-17T07:31:09Z",
+      "updated_at": "2026-08-17T08:51:04Z",
       "default_branch": "master",
       "topics": [
         "agent-skills",
@@ -133338,7 +133757,7 @@
       "description": "AI Robotics Demos 2026 - VLM Policies, MCP Skills & HTML Reports",
       "html_url": "https://github.com/hamadou-08/roboclaw-reports",
       "stargazers_count": 3,
-      "updated_at": "2026-08-17T07:09:31Z",
+      "updated_at": "2026-08-17T08:53:25Z",
       "default_branch": "main",
       "topics": [
         "agent-skills",
@@ -133798,7 +134217,7 @@
       "description": "用小红书的方式，发现 Agent Skills。Built for non-developers. Turn GitHub skill discovery into a visual feed. ",
       "html_url": "https://github.com/aliciajia399-ops/skillbook",
       "stargazers_count": 3,
-      "updated_at": "2026-08-16T08:30:23Z",
+      "updated_at": "2026-08-17T08:44:00Z",
       "default_branch": "main",
       "topics": [
         "agent-skills",
@@ -138096,7 +138515,7 @@
       "description": "iOS Agent Skills 2026: Test 11 Tasks, 260+ Scenarios, 850+ Assertions on 3 Models",
       "html_url": "https://github.com/onlymuneeb38-glitch/ios-agent-skills-evaluator",
       "stargazers_count": 3,
-      "updated_at": "2026-08-17T07:25:51Z",
+      "updated_at": "2026-08-17T09:05:34Z",
       "default_branch": "main",
       "topics": [
         "ai-agents",
@@ -150230,7 +150649,7 @@
       "description": "Everything you need to build for the web: 100 languages, 64 frontend tools, 41 design techniques, 12 live components and 12 agent skills. Free, bilingual, no sign-up. | ES: Todo para construir en la web: 100 lenguajes, 64 herramientas, 41 técnicas, 12 componentes en vivo y 12 skills de agente. Gratis y sin registro.",
       "html_url": "https://github.com/Mun1to/Vibeset",
       "stargazers_count": 2,
-      "updated_at": "2026-08-16T17:44:51Z",
+      "updated_at": "2026-08-17T09:17:33Z",
       "default_branch": "main",
       "topics": [
         "agent-skills",
@@ -150255,8 +150674,7 @@
       "license": "MIT",
       "registry_seen_at": "2026-08-17T08:46:44.443Z",
       "has_skill": true,
-      "has_install_script": false,
-      "pkg_name": null
+      "has_install_script": false
     },
     {
       "full_name": "crimx/skills",
@@ -156382,7 +156800,7 @@
       "description": "9 Hidden Perfex CRM Module Breaking Rules 2026 – Best Developer Safety Checklist",
       "html_url": "https://github.com/adaltomatos01/perfex-crm-guardrails",
       "stargazers_count": 2,
-      "updated_at": "2026-08-17T07:08:17Z",
+      "updated_at": "2026-08-17T08:52:21Z",
       "default_branch": "main",
       "topics": [
         "agent-skills",
@@ -189254,7 +189672,7 @@
       "description": "Approval-gated, project-local guidance and reusable skills for AI coding agents.",
       "html_url": "https://github.com/HyperVon/agent-guidance-kit",
       "stargazers_count": 1,
-      "updated_at": "2026-08-16T23:40:32Z",
+      "updated_at": "2026-08-17T08:57:23Z",
       "default_branch": "main",
       "topics": [
         "agent-skills",
@@ -189270,8 +189688,7 @@
       "license": "Apache-2.0",
       "registry_seen_at": "2026-08-17T08:46:44.443Z",
       "has_skill": true,
-      "has_install_script": false,
-      "pkg_name": null
+      "has_install_script": false
     },
     {
       "full_name": "wenxueaigege/aigegebox-football-match-guide-skill",
@@ -203602,7 +204019,7 @@
       "description": "Extracting \"Structure of Knowledge\" scaffold out of any domain keyword. ",
       "html_url": "https://github.com/perhyper/SoK",
       "stargazers_count": 1,
-      "updated_at": "2026-07-28T13:38:39Z",
+      "updated_at": "2026-08-17T09:00:56Z",
       "default_branch": "main",
       "topics": [
         "agent-skills",
@@ -203616,10 +204033,9 @@
         "rust"
       ],
       "license": "MIT",
-      "registry_seen_at": "2026-08-17T06:04:02.702Z",
+      "registry_seen_at": "2026-08-17T09:25:52.202Z",
       "has_skill": true,
-      "has_install_script": true,
-      "pkg_name": null
+      "has_install_script": true
     },
     {
       "full_name": "glichtenthal/the-quorum",
@@ -245392,7 +245808,7 @@
       "description": "Coordinator-side discipline for Orca multi-agent orchestration sessions: worker briefs with read-back gate, phase/step checkpoint-rewind, evidence-based interruption recovery, acceptance & safe worktree reclamation.",
       "html_url": "https://github.com/jiwangyihao/orca-conductor",
       "stargazers_count": 1,
-      "updated_at": "2026-08-13T03:11:09Z",
+      "updated_at": "2026-08-17T09:13:06Z",
       "default_branch": "main",
       "topics": [
         "agent-skills",
@@ -245403,10 +245819,9 @@
         "orchestration"
       ],
       "license": "MPL-2.0",
-      "registry_seen_at": "2026-08-16T22:59:28.836Z",
+      "registry_seen_at": "2026-08-17T09:25:52.203Z",
       "has_skill": true,
-      "has_install_script": false,
-      "pkg_name": null
+      "has_install_script": false
     },
     {
       "full_name": "tokenhubcom/seedance-2-5-prompt-skill",
@@ -247181,7 +247596,7 @@
       "description": "Experimental library for discovering, validating, and sharing reusable Agent Skills / 用于发现、验证和共享可复用 Agent Skills 的实验仓库",
       "html_url": "https://github.com/laojin1900/365Skill",
       "stargazers_count": 1,
-      "updated_at": "2026-08-13T02:45:41Z",
+      "updated_at": "2026-08-17T09:04:15Z",
       "default_branch": "main",
       "topics": [
         "agent-skills",
@@ -247191,10 +247606,9 @@
         "skill-library"
       ],
       "license": "Apache-2.0",
-      "registry_seen_at": "2026-08-16T22:59:28.836Z",
+      "registry_seen_at": "2026-08-17T09:25:52.203Z",
       "has_skill": true,
-      "has_install_script": true,
-      "pkg_name": null
+      "has_install_script": true
     },
     {
       "full_name": "tywinlu1988/FolioPulse",
@@ -252640,17 +253054,16 @@
       "description": "一套个人使用的智能体技能集",
       "html_url": "https://github.com/jerryshell/skills",
       "stargazers_count": 1,
-      "updated_at": "2026-08-13T02:52:41Z",
+      "updated_at": "2026-08-17T09:19:03Z",
       "default_branch": "master",
       "topics": [
         "agent-skills",
         "markdown-engineering"
       ],
       "license": "MIT",
-      "registry_seen_at": "2026-08-16T22:59:28.836Z",
+      "registry_seen_at": "2026-08-17T09:25:52.215Z",
       "has_skill": true,
-      "has_install_script": false,
-      "pkg_name": null
+      "has_install_script": false
     },
     {
       "full_name": "Glad-oboedacaccia408/design.md",
@@ -255151,7 +255564,7 @@
       "description": "Best AI Agent Skill Finder 2026 – Multi-Registry Install & Security Labels",
       "html_url": "https://github.com/Edward0l1/skill-flare-discover",
       "stargazers_count": 1,
-      "updated_at": "2026-08-17T07:07:59Z",
+      "updated_at": "2026-08-17T08:52:34Z",
       "default_branch": "main",
       "topics": [
         "agent-skills",
@@ -255490,7 +255903,7 @@
       "description": "PMO as a Service - Atomic logic for decision-making. Turning abstract ideas into executable functions.",
       "html_url": "https://github.com/lemur47/logic",
       "stargazers_count": 1,
-      "updated_at": "2026-08-17T07:00:55Z",
+      "updated_at": "2026-08-17T09:00:47Z",
       "default_branch": "main",
       "topics": [
         "claude-code",
@@ -255588,7 +256001,7 @@
       "description": "Modernize VB.NET WinForms Apps with Claude Code Skills on .NET 9 in 2026",
       "html_url": "https://github.com/yngbrll/vb-winforms-toolkit",
       "stargazers_count": 1,
-      "updated_at": "2026-08-17T07:04:07Z",
+      "updated_at": "2026-08-17T08:50:06Z",
       "default_branch": "main",
       "topics": [
         "claude-code",
@@ -255825,7 +256238,7 @@
       "description": "15 Claude Code PM Skills 2026 - Generate DOCX XLSX PPTX Artifacts Instantly",
       "html_url": "https://github.com/JBSag/pm-artisan",
       "stargazers_count": 1,
-      "updated_at": "2026-08-17T07:06:19Z",
+      "updated_at": "2026-08-17T08:50:22Z",
       "default_branch": "main",
       "topics": [
         "ai",
@@ -255978,7 +256391,7 @@
       "description": "Ship Atomic Commits & Retain Workflow Knowledge: Best Free Zero-Dependency Dev Kit 2026",
       "html_url": "https://github.com/tjq001/hv-code-templates",
       "stargazers_count": 1,
-      "updated_at": "2026-08-17T07:27:42Z",
+      "updated_at": "2026-08-17T09:06:34Z",
       "default_branch": "main",
       "topics": [
         "agentic-development",
@@ -323969,7 +324382,7 @@
       "description": "SEO Superpower 2026: Bootstrap, Audit & Refresh Stale Content with Free GSC Tools",
       "html_url": "https://github.com/munexor/seo-opportunity-nexus",
       "stargazers_count": 0,
-      "updated_at": "2026-08-17T07:04:55Z",
+      "updated_at": "2026-08-17T08:50:35Z",
       "default_branch": "main",
       "topics": [
         "astro",
@@ -333567,7 +333980,7 @@
       "description": "The Art of Customer Validation: 2026’s Overlooked Startup Growth Filter",
       "html_url": "https://github.com/hieu5882/telos-customer-validator",
       "stargazers_count": 0,
-      "updated_at": "2026-08-17T07:02:06Z",
+      "updated_at": "2026-08-17T08:47:17Z",
       "default_branch": "main",
       "topics": [
         "ai-agents",
@@ -334678,7 +335091,7 @@
       "description": "26 Claude Code skills used daily on real projects: adversarial code review, shipping rituals, marketing asset pipelines, iPhone and desktop control, and multi-agent orchestration.",
       "html_url": "https://github.com/ucsandman/claude-skills",
       "stargazers_count": 0,
-      "updated_at": "2026-08-14T21:40:44Z",
+      "updated_at": "2026-08-17T09:06:28Z",
       "default_branch": "main",
       "topics": [
         "agent-skills",
@@ -334695,8 +335108,7 @@
       "license": "MIT",
       "registry_seen_at": "2026-08-17T08:46:44.445Z",
       "has_skill": true,
-      "has_install_script": false,
-      "pkg_name": null
+      "has_install_script": false
     },
     {
       "full_name": "api-evangelist/columnar",
@@ -340152,7 +340564,7 @@
         "xai"
       ],
       "license": "NOASSERTION",
-      "registry_seen_at": "2026-08-15T22:48:10.551Z",
+      "registry_seen_at": "2026-08-17T09:25:52.203Z",
       "has_skill": false,
       "has_install_script": false,
       "pkg_name": null
@@ -340160,10 +340572,10 @@
     {
       "full_name": "ZeroPointRepo/awesome-agent-plugins",
       "name": "awesome-agent-plugins",
-      "description": "A curated directory of 31+ verified Agent Plugins — the open standard from OpenAI, Amazon, Microsoft, GitHub, Cursor & Vercel that bundles Agent Skills + MCP servers into one portable package.",
+      "description": "A curated directory of 33 verified Agent Plugins — the open standard from OpenAI, Amazon, Microsoft, GitHub, Cursor & Vercel. Every entry checked for a real 1.0.0 plugin.json $schema, not just a working link.",
       "html_url": "https://github.com/ZeroPointRepo/awesome-agent-plugins",
       "stargazers_count": 0,
-      "updated_at": "2026-08-12T13:51:37Z",
+      "updated_at": "2026-08-17T09:18:35Z",
       "default_branch": "main",
       "topics": [
         "agent-plugins",
@@ -340180,10 +340592,9 @@
         "vscode"
       ],
       "license": "NOASSERTION",
-      "registry_seen_at": "2026-08-15T22:48:10.551Z",
+      "registry_seen_at": "2026-08-17T09:25:52.203Z",
       "has_skill": false,
-      "has_install_script": false,
-      "pkg_name": null
+      "has_install_script": false
     },
     {
       "full_name": "Ztsdut/ml-architecture-diagram-skill",
@@ -340723,7 +341134,7 @@
       "description": "Swift-UIKit-Pro 2026: Build Production-Ready Programmatic iOS Apps with Advanced Architecture & Data Flow Patterns",
       "html_url": "https://github.com/arnoldalberto007-sys/Swift-UIKit-Components",
       "stargazers_count": 0,
-      "updated_at": "2026-08-17T07:04:17Z",
+      "updated_at": "2026-08-17T08:51:17Z",
       "default_branch": "main",
       "topics": [
         "agent-skills",
@@ -341464,7 +341875,7 @@
       "description": "UIKit Expert Skill 2026 - Best Practices & High Performance Swift Code",
       "html_url": "https://github.com/Trentobobbi/uikit-mastery-playbook",
       "stargazers_count": 0,
-      "updated_at": "2026-08-17T07:06:23Z",
+      "updated_at": "2026-08-17T08:51:15Z",
       "default_branch": "main",
       "topics": [
         "agent-skills",
@@ -345031,7 +345442,7 @@
       "description": "Delivery conveyor for Claude Code and the OpenAI Codex CLI (investigate → decompose → deliver), plus the reproducible container it runs in — mechanical gates, worktree-per-ticket, PRs driven to green.",
       "html_url": "https://github.com/serhii-nochevnyi/shipyard",
       "stargazers_count": 0,
-      "updated_at": "2026-08-15T17:55:40Z",
+      "updated_at": "2026-08-17T09:07:53Z",
       "default_branch": "main",
       "topics": [
         "agent-orchestration",
@@ -345054,8 +345465,7 @@
       "license": "Apache-2.0",
       "registry_seen_at": "2026-08-17T08:46:44.445Z",
       "has_skill": true,
-      "has_install_script": false,
-      "pkg_name": null
+      "has_install_script": false
     },
     {
       "full_name": "50BytesOfJohn/skills",
@@ -347404,7 +347814,7 @@
       "description": "AlterLab FC 2026 AI Playbook 🚀 Ultimate Skills & Strategy Guide",
       "html_url": "https://github.com/mohamoudj6-del/AlterLab-FC-Agent-Playbook",
       "stargazers_count": 0,
-      "updated_at": "2026-08-17T07:00:57Z",
+      "updated_at": "2026-08-17T08:46:18Z",
       "default_branch": "main",
       "topics": [
         "agent-skills",
@@ -347456,7 +347866,7 @@
       "description": "Reusable framework for requirements work: BRD/NFR/ADR templates, quality rules, and agent skills that draft and review requirements against them. Templates and prompts stay in sync by design.",
       "html_url": "https://github.com/YuliaMelekhova/analyst-toolkit",
       "stargazers_count": 0,
-      "updated_at": "2026-08-14T08:29:28Z",
+      "updated_at": "2026-08-17T09:25:23Z",
       "default_branch": "main",
       "topics": [
         "agent-skills",
@@ -347470,8 +347880,7 @@
       "license": "MIT",
       "registry_seen_at": "2026-08-17T08:46:44.446Z",
       "has_skill": true,
-      "has_install_script": false,
-      "pkg_name": null
+      "has_install_script": false
     },
     {
       "full_name": "cch96/happycodex",
@@ -349948,7 +350357,7 @@
       "description": "GTM Research & Competitive AI Toolkit 2026 - Raine Soriano",
       "html_url": "https://github.com/reem-plus/quiver-compass",
       "stargazers_count": 0,
-      "updated_at": "2026-08-17T07:09:17Z",
+      "updated_at": "2026-08-17T08:53:42Z",
       "default_branch": "main",
       "topics": [
         "agent-skill",
@@ -353497,7 +353906,7 @@
       "description": "The Ultimate guide to PostgreSQL Optimization for AI Code Generation in 2026",
       "html_url": "https://github.com/bokyostudio/pg-practice-knowledgebase",
       "stargazers_count": 0,
-      "updated_at": "2026-08-17T07:01:18Z",
+      "updated_at": "2026-08-17T08:46:34Z",
       "default_branch": "main",
       "topics": [
         "ai",
@@ -356515,7 +356924,7 @@
       "description": "PostgreSQL MCP 2026 Best AI Database Access Tool for Developers",
       "html_url": "https://github.com/Ford-1/postgresql-mcp-connector",
       "stargazers_count": 0,
-      "updated_at": "2026-08-17T07:05:39Z",
+      "updated_at": "2026-08-17T08:51:49Z",
       "default_branch": "main",
       "topics": [
         "ai",
@@ -361681,7 +362090,7 @@
       "description": "面向中文 Java/Spring 生态的 Agent Skills 套装：编码规范、质量门禁、单元测试、Sa-Token/MyBatis-Plus 框架、敏捷流程。支持 Claude Code 插件与 npx skills 一键安装。",
       "html_url": "https://github.com/BaixuanZhu/skills",
       "stargazers_count": 0,
-      "updated_at": "2026-08-16T16:09:20Z",
+      "updated_at": "2026-08-17T09:16:15Z",
       "default_branch": "main",
       "topics": [
         "agent-skill",
@@ -362633,10 +363042,10 @@
     {
       "full_name": "ysz7/specrun",
       "name": "specrun",
-      "description": "Blueprints for AI coding agents — installed into your project, picked up automatically, with a visual map of what exists.",
+      "description": "Blueprints and skills that make AI coding agents follow proven patterns instead of reinventing them every time.",
       "html_url": "https://github.com/ysz7/specrun",
       "stargazers_count": 0,
-      "updated_at": "2026-08-16T20:18:57Z",
+      "updated_at": "2026-08-17T09:06:32Z",
       "default_branch": "main",
       "topics": [
         "agent-skills",
@@ -362649,8 +363058,7 @@
       "license": "MIT",
       "registry_seen_at": "2026-08-17T08:46:44.445Z",
       "has_skill": true,
-      "has_install_script": false,
-      "pkg_name": null
+      "has_install_script": false
     },
     {
       "full_name": "binarylaiba/crewai-researcher-writer",
@@ -372933,7 +373341,7 @@
       "description": "Remote skill provider for DeepSeek Harness: install skills from a JSON catalog via ctx.skills",
       "html_url": "https://github.com/wwumit/dsh-compliancehub",
       "stargazers_count": 0,
-      "updated_at": "2026-08-17T02:14:13Z",
+      "updated_at": "2026-08-17T08:44:02Z",
       "default_branch": "main",
       "topics": [
         "agent-skills",
@@ -373161,7 +373569,7 @@
       "description": "🎛️ Pure Skill & Bundle Manager for DeepSeek Harness (dsh) Web GUI.",
       "html_url": "https://github.com/TheEarlyWinter/dsh-skill-manager",
       "stargazers_count": 0,
-      "updated_at": "2026-08-16T17:56:15Z",
+      "updated_at": "2026-08-17T08:43:20Z",
       "default_branch": "main",
       "topics": [
         "agent-skills",
@@ -373247,7 +373655,7 @@
       "description": "我的 Claude Code skill 集合。技术主题→给领导培训材料、调研→文档→PPT 等可复用工作流 skill。",
       "html_url": "https://github.com/Luohao-Yan/luohao-skills",
       "stargazers_count": 0,
-      "updated_at": "2026-08-17T01:49:24Z",
+      "updated_at": "2026-08-17T08:54:59Z",
       "default_branch": "main",
       "topics": [
         "agent",
@@ -373262,8 +373670,7 @@
       "license": "MIT",
       "registry_seen_at": "2026-08-17T08:46:44.447Z",
       "has_skill": true,
-      "has_install_script": false,
-      "pkg_name": null
+      "has_install_script": false
     },
     {
       "full_name": "hnidboubker/symphony-async",
@@ -374853,7 +375260,8 @@
       "license": "MIT",
       "registry_seen_at": "2026-08-17T08:46:44.446Z",
       "has_skill": true,
-      "has_install_script": false
+      "has_install_script": false,
+      "pkg_name": null
     },
     {
       "full_name": "ejjcc/ncm2mp3",
@@ -375097,7 +375505,7 @@
       "description": "Plugin tools provider for DeepSeek Harness: expert2skill, skill-compliance, dependency-scan (dsh.bundle)",
       "html_url": "https://github.com/wwumit/dsh-plugin-tools",
       "stargazers_count": 0,
-      "updated_at": "2026-08-17T03:19:26Z",
+      "updated_at": "2026-08-17T09:06:18Z",
       "default_branch": "main",
       "topics": [
         "agent-skills",
