@@ -1,13 +1,34 @@
 {
-  "generated_at": "2026-08-17T08:39:54.662Z",
-  "count": 1,
+  "generated_at": "2026-08-17T11:04:16.617Z",
+  "count": 4,
   "items": [
     {
-      "full_name": "Mrzhailiming/deepseek-pet",
-      "previous": "other",
+      "full_name": "GHJIVHIDD/dsh-plugin-container",
+      "previous": "coding",
       "current": "web-ui",
-      "desc_now": "在 DeepSeek Harness 的 Web 界面里养一只二次元小鲸鱼 —— 你和 Agent 干活它就吃东西",
-      "desc_prev": "deepseek pet"
+      "desc_now": "Docker 容器沙箱部署级插件(与 dsh-plugin-vm-sandbox 全能力对齐,无需 OrbStack):39 个 docker_* 模型工具、快照/回滚、文件传输、端口转发、后台任务、审计、共享/配额/回收、网络策略与华丽原生 UI。",
+      "desc_prev": "DeepSeek Harness 的本地 Docker 容器管理部署级插件：在会话视图环提供「容器」页签，支持仅观察/干预双模式、18 个 docker_* 智能体工具、只读实时 Shell 观察与 /dock-api/* 路由。"
+    },
+    {
+      "full_name": "stoneface10/dsh-codex-connect-plus",
+      "previous": "tool",
+      "current": "conversation",
+      "desc_now": "Use your ChatGPT subscription in DeepSeek Harness to access Codex models and generate or edit images with gpt-image-2—no OpenAI Platform API key required.",
+      "desc_prev": "ChatGPT OAuth, Codex models, and gpt-image-2 tools for DeepSeek Harness"
+    },
+    {
+      "full_name": "duyanta123/dsh-data-insight",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "Turn CSV data into insight reports — profile datasets, run DuckDB queries, and generate charts and structured report templates.",
+      "desc_prev": null
+    },
+    {
+      "full_name": "Raphaelutumn/dsh-change-budget",
+      "previous": "tool",
+      "current": "coding",
+      "desc_now": "DeepSeek Harness file-safety guardrail that limits AI coding-agent file edits per turn and prevents too many file changes, with call and UTF-8 byte budgets. 限制 DSH Agent 每轮修改文件数量。",
+      "desc_prev": "A configurable per-turn safety budget for DeepSeek Harness file mutations."
     }
   ]
 }
