@@ -316,6 +316,17 @@ function mockFetch(payload, status = 200) {
   mkdirSync(join(process.env.DSH_HOME, "profiles", "web"), { recursive: true });
   const appended = await lib.appendPatchEntry("test-entry", "test/pkg");
   check("appendPatchEntry 返回布尔", typeof appended, "boolean");
+  // issue #71/#73 回归：官方默认「注释 + []」形态追加 insert 块后必须是合法 YAML
+  // （修复前直接追加产生「[] 后跟块序列项」→ DSH 启动解析崩溃）
+  {
+    const patchFile = join(process.env.DSH_HOME, "profiles", "web", "cordis.patch.yml");
+    writeFileSync(patchFile, "# a top-level YAML array of load overrides, disables, and inserts\n[]\n", "utf8");
+    const ok = await lib.appendPatchEntry("reg-entry", "reg/pkg");
+    const text = readFileSync(patchFile, "utf8");
+    check("appendPatchEntry 默认注释+[] 形态追加成功", ok, true);
+    check("appendPatchEntry 清掉裸 [] 行（flow 序列不残留）", !/^\s*\[\]\s*$/m.test(text), true);
+    check("appendPatchEntry 追加后是合法 YAML", /^- insert:\s*$\s*  - id: reg-entry\s*  name: reg\/pkg/m.test(text), true);
+  }
 
   // 网络类（mock fetch）
   const items = [{ full_name: "a/b", stargazers_count: 5, updated_at: "2026-01-01T00:00:00Z", description: "x", html_url: "https://github.com/a/b", clone_url: "https://github.com/a/b.git" }];

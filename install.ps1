@@ -75,6 +75,16 @@ if (Test-Path $patch) {
 if ($bundled) {
   Write-Host "Marketplace already loaded via profile bundles (skipped patch registration)"
 } elseif (-not $registered) {
+  # issue #71/#73：官方默认文件是「注释 + 空数组 []」——[] 是 flow 序列，其后追加块序列项
+  # （- insert:）是非法 YAML，DSH 启动解析即崩。追加前清掉顶层裸 [] 行。
+  if (Test-Path $patch) {
+    $lines = [System.IO.File]::ReadAllLines($patch)
+    $kept = @($lines | Where-Object { $_.Trim() -ne "[]" })
+    if ($kept.Count -ne $lines.Count) {
+      $utf8NoBom0 = New-Object System.Text.UTF8Encoding($false)
+      [System.IO.File]::WriteAllLines($patch, $kept, $utf8NoBom0)
+    }
+  }
   $entry = "`n- insert:`n    - id: dsh-plugin-marketplace`n      name: dsh-plugin-marketplace`n"
   $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
   [System.IO.File]::AppendAllText($patch, $entry, $utf8NoBom)
