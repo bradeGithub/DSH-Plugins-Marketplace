@@ -74,6 +74,11 @@ if $BUNDLED; then
 elif [[ -f "$PATCH" ]] && grep -qE '^[[:space:]]*name:[[:space:]]+dsh-plugin-marketplace[[:space:]]*$' "$PATCH"; then
   echo "Already registered in cordis.patch.yml (skipped)"
 else
+  # issue #71/#73：官方默认文件是「注释 + 空数组 []」——[] 是 flow 序列，其后追加块序列项
+  # （- insert:）是非法 YAML，DSH 启动解析即崩。追加前清掉顶层裸 [] 行。
+  if [[ -f "$PATCH" ]] && grep -qx '\[\]' "$PATCH"; then
+    sed -i '/^\[\]$/d' "$PATCH"
+  fi
   printf '\n- insert:\n    - id: dsh-plugin-marketplace\n      name: dsh-plugin-marketplace\n' >> "$PATCH"
   echo "Registered in cordis.patch.yml"
 fi
