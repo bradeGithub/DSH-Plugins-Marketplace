@@ -1,68 +1,40 @@
 {
-  "generated_at": "2026-08-17T05:08:19.012Z",
-  "count": 9,
+  "generated_at": "2026-08-17T07:30:45.441Z",
+  "count": 5,
   "items": [
     {
-      "full_name": "Luaphes/dsh-plugins-market",
-      "previous": "other",
-      "current": "resource",
-      "desc_now": "DSH的插件创意市场来啦!～～～欢迎使用&提供反馈！！DSH 插件创意市场 · DeepSeek Harness 插件发现与一键安装面板 全量嗅探官方 dsh-plugin topic（900+），过滤蹭标签噪音，保留人工精选标记； 支持总星数/最新发布/最近推送排序、即时搜索、语言过滤； 点安装先校验 dsh.bundle 声明，装不了的一律拒绝。零依赖零构建，装进 Web UI 的 Plugins 设置区。",
-      "desc_prev": "DSH的插件创意工坊来啦!"
-    },
-    {
-      "full_name": "litestartup-com/dsh-api-gateway",
-      "previous": "conversation",
-      "current": "agent",
-      "desc_now": "DeepSeek Harness's API Gateway plugin: Any third-party client can interact with your DSH Agent.",
-      "desc_prev": "DeepSeek Harness的开源 API Gateway 插件：任何第三方客户端（包括飞书/钉钉等即时通讯）都能通过REST + SSE接口与你的 Agent 会话交互。"
-    },
-    {
-      "full_name": "FeatherHunter/dsh-prompt",
-      "previous": "conversation",
-      "current": "tool",
-      "desc_now": "DeepSeek Harness 的 Prompt 工具箱：别再复制粘贴——24 条深度模板随手点，/prompt 与智能推荐主动兜底，装好即用、可自定义。 | The Prompt toolbox for DeepSeek Harness: stop copy-pasting — 24 deep templates at a click, /prompt & smart suggestions as backup; out of the box, fully customizable.",
-      "desc_prev": "DSH prompt 调色板：预制+自定义 prompt 模板，点击即插入对话（含 /prompt 触发源与智能悬浮卡）| Prompt palette for DeepSeek Harness: preset + custom prompt templates with one-click insert, /prompt trigger and a smart suggestion card"
-    },
-    {
-      "full_name": "FeatherHunter/dsh-mattpocock-skills-deck",
-      "previous": "notify",
+      "full_name": "bowenliang123/dsh-context",
+      "previous": "model",
       "current": "web-ui",
-      "desc_now": "拨开迷雾看见终点，剩下的交给任务栏。Part the fog, see the end — the task bar handles the rest. 🎮 mattpocock/skills 的 DSH 游戏任务系统：map 拨迷雾，任务栏推进一步。A game-like mission system for Matt Pocock skills in DeepSeek Harness. More by @FeatherHunter: 🎨 dsh-opencode-palette · ⚡ dsh-prompt",
-      "desc_prev": "🧠 MattSkills：Matt Pocock 的 25 个工程技能装好即用——wayfinder 决策地图、triage 分诊、grilling 拷问、handoff 交接，一条安装 Prompt 全装完。AI skills deck for agent engineers: wayfinder / triage / grilling / handoff — installed in one prompt. More by @FeatherHunter: 🎨 dsh-opencode-palette · ⚡ dsh-prompt"
+      "desc_now": "一站式 DeepSeek Harness 上下文可视化插件，Context 面板与 Context 命令，透视上下文组成、演进、压缩、剪枝等事件与动作。",
+      "desc_prev": "A DeepSeek Harness plugin for  Context dashboard and command — showing what the model's context window is made of and how it evolves."
     },
     {
-      "full_name": "uckkk/dsh-git-commit",
-      "previous": "other",
+      "full_name": "omdsh-dev/dsh-data-agent",
+      "previous": "web-ui",
+      "current": "conversation",
+      "desc_now": "Connect DSH to your database for conversational data analysis and actionable business insights.",
+      "desc_prev": "Connect DSH to your database for conversational data analysis and actionable business insights."
+    },
+    {
+      "full_name": "pazz11/Jnpz",
+      "previous": "web-ui",
       "current": "tool",
-      "desc_now": "@{name=dsh-git-commit; version=0.1.0; description=Git 提交助手：分析仓库变更生成规范化 Conventional Commits 提交信息、按提交历史生成 CHANGELOG、按语义化版本建议下一个版本号; type=module; main=lib/index.js; exports=; files=System.Object[]; dsh=; keywords=System.Object[]; author=istone <ad571@qq.com>; license=MIT; peerDependencies=}.description",
-      "desc_prev": "Git 提交助手：Conventional Commits 提交信息建议 + CHANGELOG 生成 + 语义化版本建议"
+      "desc_now": "改配置+重启才能加 MCP？DeepSeek Harness (DSH) 插件「技能配置」解决：设置页粘贴 JSON 即连 MCP 服务器、热加载免重启；上传 zip/.skill 自动识别 SKILL.md，创建/编辑/启停技能，即点即用",
+      "desc_prev": "Jnpz（技能配置）: DeepSeek Harness (DSH) web plugin for MCP server management & skill management — JSON-to-MCP hot reload (no restart), zip/.skill upload with SKILL.md auto parsing, bilingual UI."
     },
     {
-      "full_name": "GraySilver/dsh-task-modes",
-      "previous": "conversation",
-      "current": "agent",
-      "desc_now": "Independent DeepSeek Harness Web plugin with composable Execute/Plan, Standard/First principles, and Off/Adversarial/Acceptance review controls.",
-      "desc_prev": "Task modes for DeepSeek Harness Web: normal execution, first-principles prompting, and independent adversarial review."
-    },
-    {
-      "full_name": "LyaxZ/dsh-quick-toc",
+      "full_name": "a903067276-rgb/dsh-perm-guard",
       "previous": "other",
-      "current": "resource",
-      "desc_now": "DeepSeek Harness 对话大纲插件：按回合分组的 Markdown 标题目录，自动跟随高亮，平滑跳转导航。",
+      "current": "conversation",
+      "desc_now": "Auto-approval permission guard for DeepSeek Harness: a middle tier between workspace-write and danger-full-access — auto-allows safe ops in trust dirs, always prompts for destructive ones",
       "desc_prev": null
     },
     {
-      "full_name": "possible055/agentshim",
-      "previous": "tool",
-      "current": "coding",
-      "desc_now": "High-performance, capability-aware repository tools and process execution for coding agents.",
-      "desc_prev": "A small, capability-scoped toolset for Codex."
-    },
-    {
-      "full_name": "qichengxiaoqi/dsh-lancher",
+      "full_name": "Xs1KVerOA/dsh-service-manage",
       "previous": "other",
-      "current": "tool",
-      "desc_now": "dsh++ is a lightweight Windows launcher for DeepSeek Harness, combining service control, API settings, plugin management, system configuration, automatic discovery, and GitHub updates for a simpler DSH experience.  dsh++ 是面向 DeepSeek Harness 的轻量级 Windows 启动器，集成服务管理、API、插件、系统配置、自动探测与 GitHub 更新。",
+      "current": "coding",
+      "desc_now": "DeepSeek Harness service manager for SSH, FTP, databases, Docker and S3, with proxy support, SSH file transfer, remote terminals, and @server references.",
       "desc_prev": null
     }
   ]
