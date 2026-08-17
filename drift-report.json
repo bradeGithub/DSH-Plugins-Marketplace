@@ -1,132 +1,69 @@
 {
-  "generated_at": "2026-08-17T03:30:09.724Z",
-  "count": 18,
+  "generated_at": "2026-08-17T05:08:19.012Z",
+  "count": 9,
   "items": [
     {
-      "full_name": "adoresever/graph-memory",
-      "previous": "memory",
-      "current": "vision",
-      "desc_now": "Deepseek Harness、Openclaw知识图谱记忆插件。2026年4月受邀发布在清华大学讨论会。Knowledge Graph + Memory；Knowledge Graph Context Engine for OpenClaw — extracts structured triples from conversations, compresses context 75%, enables cross-session experience reuse",
-      "desc_prev": "Openclaw记忆插件Knowledge Graph + Memory；Knowledge Graph Context Engine for OpenClaw — extracts structured triples from conversations, compresses context 75%, enables cross-session experience reuse"
-    },
-    {
-      "full_name": "Simidas/dsh-compat",
-      "previous": "coding",
+      "full_name": "Luaphes/dsh-plugins-market",
+      "previous": "other",
       "current": "resource",
-      "desc_now": "Inspect and compile Claude Code and Codex plugins into auditable DeepSeek Harness bundles.",
-      "desc_prev": "Inspect and compile Claude Code and Codex plugins into auditable DeepSeek Harness bundles."
+      "desc_now": "DSH的插件创意市场来啦!～～～欢迎使用&提供反馈！！DSH 插件创意市场 · DeepSeek Harness 插件发现与一键安装面板 全量嗅探官方 dsh-plugin topic（900+），过滤蹭标签噪音，保留人工精选标记； 支持总星数/最新发布/最近推送排序、即时搜索、语言过滤； 点安装先校验 dsh.bundle 声明，装不了的一律拒绝。零依赖零构建，装进 Web UI 的 Plugins 设置区。",
+      "desc_prev": "DSH的插件创意工坊来啦!"
     },
     {
-      "full_name": "xun404/dsh-pihuo-plugins",
-      "previous": "other",
-      "current": "tool",
-      "desc_now": "PiHuo: DeepSeek Harness plugins that run local ACP processes as chat workers",
-      "desc_prev": "DeepSeek Harness out-of-tree plugins and authoring skills"
+      "full_name": "litestartup-com/dsh-api-gateway",
+      "previous": "conversation",
+      "current": "agent",
+      "desc_now": "DeepSeek Harness's API Gateway plugin: Any third-party client can interact with your DSH Agent.",
+      "desc_prev": "DeepSeek Harness的开源 API Gateway 插件：任何第三方客户端（包括飞书/钉钉等即时通讯）都能通过REST + SSE接口与你的 Agent 会话交互。"
     },
     {
-      "full_name": "dshplugin-app/deepseek-harness-plugins",
-      "previous": "resource",
-      "current": "tool",
-      "desc_now": "A maintained directory of DeepSeek Harness plugins with categories, GitHub sources, install details, security signals, and compatibility evidence.",
-      "desc_prev": "DeepSeek Harness plugins directory with categories, repository links, and source-backed details from DSH Plugin Registry."
-    },
-    {
-      "full_name": "uckkk/dsh-video-creator",
-      "previous": "other",
-      "current": "tool",
-      "desc_now": "@{name=dsh-video-creator; version=0.1.4; description=视频号创作助手：内置主流短视频创作模板，调用中国境内大模型一键生成内容包，适配抖音/视频号/B站/快手/小红书/微博/西瓜视频快速发布; type=module; main=lib/index.js; exports=; files=System.Object[]; dsh=; keywords=System.Object[]; author=istone <ad571@qq.com>; license=MIT; peerDependencies=; dependencies=}.description",
-      "desc_prev": "视频号创作助手：内置模板，调用中国境内大模型生成内容并适配主流平台发布"
-    },
-    {
-      "full_name": "uckkk/dsh-number-format",
-      "previous": "other",
-      "current": "tool",
-      "desc_now": "@{name=dsh-number-format; version=0.1.0; description=数字格式化：千分位、小数位、货币符号、百分比; type=module; main=lib/index.js; exports=; files=System.Object[]; dsh=; keywords=System.Object[]; author=istone <ad571@qq.com>; license=MIT; peerDependencies=}.description",
-      "desc_prev": "数字格式化：千分位/小数/货币/百分比"
-    },
-    {
-      "full_name": "daetz-coder/dsh-multi-chat",
+      "full_name": "FeatherHunter/dsh-prompt",
       "previous": "conversation",
       "current": "tool",
-      "desc_now": "Multi-window wall for DeepSeek Harness: run & monitor N DSH conversations side-by-side in one screen, plus an authenticated LAN gateway for phone/tablet access. npx dsh-multi-chat install",
+      "desc_now": "DeepSeek Harness 的 Prompt 工具箱：别再复制粘贴——24 条深度模板随手点，/prompt 与智能推荐主动兜底，装好即用、可自定义。 | The Prompt toolbox for DeepSeek Harness: stop copy-pasting — 24 deep templates at a click, /prompt & smart suggestions as backup; out of the box, fully customizable.",
+      "desc_prev": "DSH prompt 调色板：预制+自定义 prompt 模板，点击即插入对话（含 /prompt 触发源与智能悬浮卡）| Prompt palette for DeepSeek Harness: preset + custom prompt templates with one-click insert, /prompt trigger and a smart suggestion card"
+    },
+    {
+      "full_name": "FeatherHunter/dsh-mattpocock-skills-deck",
+      "previous": "notify",
+      "current": "web-ui",
+      "desc_now": "拨开迷雾看见终点，剩下的交给任务栏。Part the fog, see the end — the task bar handles the rest. 🎮 mattpocock/skills 的 DSH 游戏任务系统：map 拨迷雾，任务栏推进一步。A game-like mission system for Matt Pocock skills in DeepSeek Harness. More by @FeatherHunter: 🎨 dsh-opencode-palette · ⚡ dsh-prompt",
+      "desc_prev": "🧠 MattSkills：Matt Pocock 的 25 个工程技能装好即用——wayfinder 决策地图、triage 分诊、grilling 拷问、handoff 交接，一条安装 Prompt 全装完。AI skills deck for agent engineers: wayfinder / triage / grilling / handoff — installed in one prompt. More by @FeatherHunter: 🎨 dsh-opencode-palette · ⚡ dsh-prompt"
+    },
+    {
+      "full_name": "uckkk/dsh-git-commit",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "@{name=dsh-git-commit; version=0.1.0; description=Git 提交助手：分析仓库变更生成规范化 Conventional Commits 提交信息、按提交历史生成 CHANGELOG、按语义化版本建议下一个版本号; type=module; main=lib/index.js; exports=; files=System.Object[]; dsh=; keywords=System.Object[]; author=istone <ad571@qq.com>; license=MIT; peerDependencies=}.description",
+      "desc_prev": "Git 提交助手：Conventional Commits 提交信息建议 + CHANGELOG 生成 + 语义化版本建议"
+    },
+    {
+      "full_name": "GraySilver/dsh-task-modes",
+      "previous": "conversation",
+      "current": "agent",
+      "desc_now": "Independent DeepSeek Harness Web plugin with composable Execute/Plan, Standard/First principles, and Off/Adversarial/Acceptance review controls.",
+      "desc_prev": "Task modes for DeepSeek Harness Web: normal execution, first-principles prompting, and independent adversarial review."
+    },
+    {
+      "full_name": "LyaxZ/dsh-quick-toc",
+      "previous": "other",
+      "current": "resource",
+      "desc_now": "DeepSeek Harness 对话大纲插件：按回合分组的 Markdown 标题目录，自动跟随高亮，平滑跳转导航。",
       "desc_prev": null
     },
     {
-      "full_name": "uckkk/dsh-color-name",
+      "full_name": "possible055/agentshim",
+      "previous": "tool",
+      "current": "coding",
+      "desc_now": "High-performance, capability-aware repository tools and process execution for coding agents.",
+      "desc_prev": "A small, capability-scoped toolset for Codex."
+    },
+    {
+      "full_name": "qichengxiaoqi/dsh-lancher",
       "previous": "other",
       "current": "tool",
-      "desc_now": "@{name=dsh-color-name; version=0.1.0; description=颜色名称识别：输入十六进制颜色，返回常见中文/英文颜色名称（Color name lookup tool for DeepSeek Harness）; type=module; main=lib/index.js; exports=; files=System.Object[]; dsh=; keywords=System.Object[]; author=istone <ad571@qq.com>; license=MIT; peerDependencies=}.description",
-      "desc_prev": "颜色名称"
-    },
-    {
-      "full_name": "uckkk/dsh-typography",
-      "previous": "other",
-      "current": "tool",
-      "desc_now": "@{name=dsh-typography; version=0.1.0; description=字体排印与排版原则参考; type=module; main=lib/index.js; exports=; files=System.Object[]; dsh=; keywords=System.Object[]; author=istone <ad571@qq.com>; license=MIT; peerDependencies=}.description",
-      "desc_prev": "字体排印与排版原则参考"
-    },
-    {
-      "full_name": "uckkk/dsh-string-similarity",
-      "previous": "other",
-      "current": "tool",
-      "desc_now": "@{name=dsh-string-similarity; version=0.1.0; description=字符串相似度：Levenshtein/Jaccard 等算法计算文本相似度（String similarity tool for DeepSeek Harness）; type=module; main=lib/index.js; exports=; files=System.Object[]; dsh=; keywords=System.Object[]; author=istone <ad571@qq.com>; license=MIT; peerDependencies=}.description",
-      "desc_prev": "字符串相似度"
-    },
-    {
-      "full_name": "uckkk/dsh-storyboard",
-      "previous": "other",
-      "current": "memory",
-      "desc_now": "@{name=dsh-storyboard; version=0.1.0; description=分镜脚本：分镜术语、镜头类型与分镜模板知识库，辅助视频与短片创作（Storyboard reference for DeepSeek Harness）; type=module; main=lib/index.js; exports=; files=System.Object[]; dsh=; keywords=System.Object[]; author=istone <ad571@qq.com>; license=MIT; peerDependencies=}.description",
-      "desc_prev": "分镜脚本模板与术语"
-    },
-    {
-      "full_name": "uckkk/dsh-cinematography",
-      "previous": "other",
-      "current": "tool",
-      "desc_now": "@{name=dsh-cinematography; version=0.1.0; description=电影运镜与镜头语言参考; type=module; main=lib/index.js; exports=; files=System.Object[]; dsh=; keywords=System.Object[]; author=istone <ad571@qq.com>; license=MIT; peerDependencies=}.description",
-      "desc_prev": "电影运镜与镜头语言参考"
-    },
-    {
-      "full_name": "uckkk/dsh-grid-system",
-      "previous": "other",
-      "current": "memory",
-      "desc_now": "@{name=dsh-grid-system; version=0.1.0; description=栅格与间距系统参考：8 点栅格、响应式断点与间距规范知识库，指导界面布局设计（Grid & spacing system reference for DSH）; type=module; main=lib/index.js; exports=; files=System.Object[]; dsh=; keywords=System.Object[]; author=istone <ad571@qq.com>; license=MIT; peerDependencies=}.description",
-      "desc_prev": "栅格与间距系统参考"
-    },
-    {
-      "full_name": "uckkk/dsh-byte-size",
-      "previous": "other",
-      "current": "tool",
-      "desc_now": "@{name=dsh-byte-size; version=0.1.0; description=字节大小格式化：把任意字节数换算为 B/KB/MB/GB/TB 等人类可读格式，支持二进制与十进制前缀（Byte size formatting tool for DeepSeek Harness）; type=module; main=lib/index.js; exports=; files=System.Object[]; dsh=; keywords=System.Object[]; author=istone <ad571@qq.com>; license=MIT; peerDependencies=}.description",
-      "desc_prev": "字节大小格式化"
-    },
-    {
-      "full_name": "uckkk/dsh-number-words",
-      "previous": "other",
-      "current": "tool",
-      "desc_now": "@{name=dsh-number-words; version=0.1.0; description=数字转大写：阿拉伯数字转中文大写（金额/票据场景），支持小数与负数（Number to Chinese uppercase words tool for DSH）; type=module; main=lib/index.js; exports=; files=System.Object[]; dsh=; keywords=System.Object[]; author=istone <ad571@qq.com>; license=MIT; peerDependencies=}.description",
-      "desc_prev": "数字转大写"
-    },
-    {
-      "full_name": "uckkk/dsh-ux-writing",
-      "previous": "resource",
-      "current": "web-ui",
-      "desc_now": "@{name=dsh-ux-writing; version=0.1.0; description=UX 文案写作：微文案规范与按钮、错误提示文案指南，辅助界面文案撰写（UX writing guide for DeepSeek Harness）; type=module; main=lib/index.js; exports=; files=System.Object[]; dsh=; keywords=System.Object[]; author=istone <ad571@qq.com>; license=MIT; peerDependencies=}.description",
-      "desc_prev": "UX文案写作指南"
-    },
-    {
-      "full_name": "uckkk/dsh-wcag",
-      "previous": "other",
-      "current": "tool",
-      "desc_now": "@{name=dsh-wcag; version=0.1.0; description=WCAG无障碍标准查询; type=module; main=lib/index.js; exports=; files=System.Object[]; dsh=; keywords=System.Object[]; author=istone <ad571@qq.com>; license=MIT; peerDependencies=}.description",
-      "desc_prev": "WCAG无障碍标准查询"
-    },
-    {
-      "full_name": "uckkk/dsh-composition",
-      "previous": "other",
-      "current": "memory",
-      "desc_now": "@{name=dsh-composition; version=0.1.0; description=构图法则参考：摄影、绘画与界面布局通用的构图知识库（三分法、对称、引导线等），辅助画面与界面设计决策; type=module; main=lib/index.js; exports=; files=System.Object[]; dsh=; keywords=System.Object[]; author=istone <ad571@qq.com>; license=MIT; peerDependencies=}.description",
-      "desc_prev": "构图法则参考"
+      "desc_now": "dsh++ is a lightweight Windows launcher for DeepSeek Harness, combining service control, API settings, plugin management, system configuration, automatic discovery, and GitHub updates for a simpler DSH experience.  dsh++ 是面向 DeepSeek Harness 的轻量级 Windows 启动器，集成服务管理、API、插件、系统配置、自动探测与 GitHub 更新。",
+      "desc_prev": null
     }
   ]
 }
