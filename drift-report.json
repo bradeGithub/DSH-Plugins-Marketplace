@@ -1,55 +1,20 @@
 {
-  "generated_at": "2026-08-17T19:14:18.719Z",
-  "count": 7,
+  "generated_at": "2026-08-17T21:02:32.568Z",
+  "count": 2,
   "items": [
     {
-      "full_name": "isomoes/ikanban",
-      "previous": "tool",
-      "current": "coding",
-      "desc_now": "iKanban 是一个面向键盘操作、基于 DeepSeek Harness 的多智能体编码工作空间。它专为跨项目地驱动、审查和协调并行智能体工作而构建，将会话管理、差异审查和项目感知导航集于一处。",
-      "desc_prev": "Monorepo for the iKanban browser-surface fork for DeepSeek Harness."
-    },
-    {
-      "full_name": "1HelloMan1/dsh-stats-dashboard",
-      "previous": "tool",
-      "current": "model",
-      "desc_now": "Deprecated: the complete usage dashboard was merged into dsh-usage-dashboard-plus.",
-      "desc_prev": "DSH plugin: provider/model usage stats dashboard with response speed, call log, token totals, cache rate, cost estimates, CSV export"
-    },
-    {
-      "full_name": "why913/dshx",
-      "previous": "tool",
-      "current": "memory",
-      "desc_now": "DeepSeek Harness（dsh）的 MCP / Skill / 记忆管理工具：写入前先连接自检，连不上不写；从 Claude Code / Codex 一键迁移；可装成 dsh 插件，在 Web 里用 /mcp 命令和卡片操作。",
-      "desc_prev": "The missing companion CLI for DeepSeek Harness (dsh): manage MCP servers with dry-run checks, migrate from Claude Code / Codex in one command | dsh 的 MCP 管理与迁移工具"
-    },
-    {
-      "full_name": "WenhongPan/dsh-projects",
+      "full_name": "zizhongfeiyang/dsh-settings-drawer",
       "previous": "other",
-      "current": "tool",
-      "desc_now": "Project and session organization for DeepSeek Harness: multi-folder projects, searchable chats, attention summaries, and native folder picking.",
-      "desc_prev": "Codex-inspired project and session management for DeepSeek Harness."
-    },
-    {
-      "full_name": "yoza10635/dsh-argp",
-      "previous": "other",
-      "current": "memory",
-      "desc_now": "0-LLM compaction for DeepSeek Harness (dsh): deterministic atomic reference-graph pruning of agent history — exact compression ratio, selective forgetting, recall instead of rewrite. 压缩阶段零 LLM 调用的确定性上下文压缩插件：原子引用图剪枝、选择性遗忘、压缩率精确兑现，即插即用 CompactionEngine。",
+      "current": "web-ui",
+      "desc_now": "A DeepSeek Harness web UI plugin for customizing and managing the settings navigation drawer. DeepSeek Harness 设置抽屉插件，用于自定义和管理设置页左侧导航栏，可隐藏/显示各设置栏目，修改即时生效。",
       "desc_prev": null
     },
     {
-      "full_name": "GearVoid/dsh-taskify",
-      "previous": "other",
-      "current": "agent",
-      "desc_now": "A Task Compiler for DeepSeek Harness — from rough ideas to agent-ready tasks.",
-      "desc_prev": "Task refinement plugin for DeepSeek Harness Web."
-    },
-    {
-      "full_name": "xiagaogaozi/dsh-subagent-pool",
-      "previous": "tool",
-      "current": "model",
-      "desc_now": "DSH命名子代理池：在设置中配置可重用的子代理（模型/推理/预设），并按名称调用它们",
-      "desc_prev": "DSH named-subagent pool: configure reusable subagents (model/reasoning preset) in settings and call them by name"
+      "full_name": "BB-84C/deepseek-harness-mobile-solution",
+      "previous": "web-ui",
+      "current": "tool",
+      "desc_now": "dsh plugins: control a local DeepSeek Harness from your phone — tailscale point-to-point or your own VPS relay. One entry point: dsh --profile mobile",
+      "desc_prev": "Remotely control a locally resident DeepSeek Harness (dsh) instance from any device via Tailscale point-to-point or a self-hosted VPS relay, with the native dsh Web UI/UX"
     }
   ]
 }
