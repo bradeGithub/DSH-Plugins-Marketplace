@@ -1,34 +1,55 @@
 {
-  "generated_at": "2026-08-17T11:04:16.617Z",
-  "count": 4,
+  "generated_at": "2026-08-17T13:18:37.928Z",
+  "count": 7,
   "items": [
     {
-      "full_name": "GHJIVHIDD/dsh-plugin-container",
-      "previous": "coding",
-      "current": "web-ui",
-      "desc_now": "Docker 容器沙箱部署级插件(与 dsh-plugin-vm-sandbox 全能力对齐,无需 OrbStack):39 个 docker_* 模型工具、快照/回滚、文件传输、端口转发、后台任务、审计、共享/配额/回收、网络策略与华丽原生 UI。",
-      "desc_prev": "DeepSeek Harness 的本地 Docker 容器管理部署级插件：在会话视图环提供「容器」页签，支持仅观察/干预双模式、18 个 docker_* 智能体工具、只读实时 Shell 观察与 /dock-api/* 路由。"
+      "full_name": "xmutfyh/dsh-plugin-writing-guard",
+      "previous": "vision",
+      "current": "document",
+      "desc_now": "DeepSeek Harness (DSH) academic writing guard for papers — 论文去AI味 / AI-writing style detection, evidence preservation, journal-fit calibration, manuscript proofreading, writing_audit & automatic checks. Local, zero network, zero LLM.",
+      "desc_prev": "Deterministic manuscript integrity guard for AI-assisted academic revision - protects scientific facts, claim strength (causal & evidential), negation, scope and citations during polishing while flagging mechanical AI writing (Scholarship Lock + Epistemic Lock, zero LLM)"
     },
     {
-      "full_name": "stoneface10/dsh-codex-connect-plus",
-      "previous": "tool",
-      "current": "conversation",
-      "desc_now": "Use your ChatGPT subscription in DeepSeek Harness to access Codex models and generate or edit images with gpt-image-2—no OpenAI Platform API key required.",
-      "desc_prev": "ChatGPT OAuth, Codex models, and gpt-image-2 tools for DeepSeek Harness"
-    },
-    {
-      "full_name": "duyanta123/dsh-data-insight",
+      "full_name": "sjh9714/dsh-movein",
       "previous": "other",
       "current": "tool",
-      "desc_now": "Turn CSV data into insight reports — profile datasets, run DuckDB queries, and generate charts and structured report templates.",
+      "desc_now": "Migrate your whole Claude Code or Codex setup into DeepSeek Harness (DSH) with one command. Import skills, slash commands, MCP servers, hooks, subagents, permission rules. 一键迁移导入 Claude Code 配置，从 Claude Code 拎包入住 DSH",
+      "desc_prev": "Move your whole Claude Code setup into DeepSeek Harness (DSH) with one command. Skills, MCP, hooks, instructions. 从 Claude Code 拎包入住 DSH"
+    },
+    {
+      "full_name": "ztlovelsw/dsh-model-profile",
+      "previous": "resource",
+      "current": "tool",
+      "desc_now": "手动或自动配置模型思考强度、上下文窗口、最大输出token",
+      "desc_prev": "在「设置 → 模型」的模型目录编辑器行内配置每个模型的图像支持与思考等级（reasoning efforts）"
+    },
+    {
+      "full_name": "liu3734/jira-tasks-dsh-plugin",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "在 DSH 会话输入框下方展示当前 JIRA 项目指派给当前用户的「开启 / 重新开启」任务列表。JIRA 地址与令牌从凭据读取；项目 Key 与 JQL 按工作区配置并持久化。",
       "desc_prev": null
     },
     {
-      "full_name": "Raphaelutumn/dsh-change-budget",
+      "full_name": "Totoro-qaq/dsh-plugin-bridge",
       "previous": "tool",
-      "current": "coding",
-      "desc_now": "DeepSeek Harness file-safety guardrail that limits AI coding-agent file edits per turn and prevents too many file changes, with call and UTF-8 byte budgets. 限制 DSH Agent 每轮修改文件数量。",
-      "desc_prev": "A configurable per-turn safety budget for DeepSeek Harness file mutations."
+      "current": "notify",
+      "desc_now": "Cross-preset session migration for DeepSeek Harness: fixed-schema handoff summaries instead of bypassing the preset lock. 26-run benchmark + A/B evidence. 跨 preset 会话迁移插件（固定 schema 交接摘要），含实测 benchmark 与 A/B 对照。",
+      "desc_prev": "DeepSeek Harness 插件：跨 preset 会话迁移（固定 schema 交接摘要），含 26 组实测 benchmark 与测试/验证集"
+    },
+    {
+      "full_name": "ray062/dsh-obvious-grid",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": null,
+      "desc_prev": null
+    },
+    {
+      "full_name": "MlittleFriend/dsh-character-profiler",
+      "previous": "tool",
+      "current": "web-ui",
+      "desc_now": "This is a novel creation assistance tool. It can analyze the character traits or other characteristics based on the current storyline, thereby assessing the degree of deviation from the character design during the creative process.",
+      "desc_prev": null
     }
   ]
 }
