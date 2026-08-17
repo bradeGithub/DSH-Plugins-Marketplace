@@ -1,62 +1,132 @@
 {
-  "generated_at": "2026-08-17T01:53:53.028Z",
-  "count": 8,
+  "generated_at": "2026-08-17T03:30:09.724Z",
+  "count": 18,
   "items": [
     {
-      "full_name": "wlj521/dsh-ui-tweaks",
-      "previous": "web-ui",
-      "current": "document",
-      "desc_now": "一切皆插件，可以定义自己喜欢的dsh，开关控制单项功能，字体大小，表格样式，对话框长度，timeline，git等",
-      "desc_prev": "一切皆插件，可以定义自己喜欢的dsh，开关控制单项功能"
+      "full_name": "adoresever/graph-memory",
+      "previous": "memory",
+      "current": "vision",
+      "desc_now": "Deepseek Harness、Openclaw知识图谱记忆插件。2026年4月受邀发布在清华大学讨论会。Knowledge Graph + Memory；Knowledge Graph Context Engine for OpenClaw — extracts structured triples from conversations, compresses context 75%, enables cross-session experience reuse",
+      "desc_prev": "Openclaw记忆插件Knowledge Graph + Memory；Knowledge Graph Context Engine for OpenClaw — extracts structured triples from conversations, compresses context 75%, enables cross-session experience reuse"
     },
     {
-      "full_name": "mario03690/dsh-china-facts",
-      "previous": "other",
-      "current": "agent",
-      "desc_now": "China facts your agent can trust: mainland reachability tested from a real backbone (+ live README badge), statutory holidays including make-up workdays, offline ID/phone validation, lunar calendar.",
-      "desc_prev": null
+      "full_name": "Simidas/dsh-compat",
+      "previous": "coding",
+      "current": "resource",
+      "desc_now": "Inspect and compile Claude Code and Codex plugins into auditable DeepSeek Harness bundles.",
+      "desc_prev": "Inspect and compile Claude Code and Codex plugins into auditable DeepSeek Harness bundles."
     },
     {
-      "full_name": "mario03690/dsh-watch",
-      "previous": "other",
-      "current": "coding",
-      "desc_now": "Standing jobs for your agent: hand a recurring check (page changes, China reachability) to a hosted runner — your terminal can close, and you are notified only when the result actually changes.",
-      "desc_prev": null
-    },
-    {
-      "full_name": "mario03690/dsh-tables",
+      "full_name": "xun404/dsh-pihuo-plugins",
       "previous": "other",
       "current": "tool",
-      "desc_now": "Messy CSV in, checkable table out: dedupe, merge, reshape, diff two tables on a key, reconcile ledgers in integer cents — every count carries an in-code arithmetic proof.",
+      "desc_now": "PiHuo: DeepSeek Harness plugins that run local ACP processes as chat workers",
+      "desc_prev": "DeepSeek Harness out-of-tree plugins and authoring skills"
+    },
+    {
+      "full_name": "dshplugin-app/deepseek-harness-plugins",
+      "previous": "resource",
+      "current": "tool",
+      "desc_now": "A maintained directory of DeepSeek Harness plugins with categories, GitHub sources, install details, security signals, and compatibility evidence.",
+      "desc_prev": "DeepSeek Harness plugins directory with categories, repository links, and source-backed details from DSH Plugin Registry."
+    },
+    {
+      "full_name": "uckkk/dsh-video-creator",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "@{name=dsh-video-creator; version=0.1.4; description=视频号创作助手：内置主流短视频创作模板，调用中国境内大模型一键生成内容包，适配抖音/视频号/B站/快手/小红书/微博/西瓜视频快速发布; type=module; main=lib/index.js; exports=; files=System.Object[]; dsh=; keywords=System.Object[]; author=istone <ad571@qq.com>; license=MIT; peerDependencies=; dependencies=}.description",
+      "desc_prev": "视频号创作助手：内置模板，调用中国境内大模型生成内容并适配主流平台发布"
+    },
+    {
+      "full_name": "uckkk/dsh-number-format",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "@{name=dsh-number-format; version=0.1.0; description=数字格式化：千分位、小数位、货币符号、百分比; type=module; main=lib/index.js; exports=; files=System.Object[]; dsh=; keywords=System.Object[]; author=istone <ad571@qq.com>; license=MIT; peerDependencies=}.description",
+      "desc_prev": "数字格式化：千分位/小数/货币/百分比"
+    },
+    {
+      "full_name": "daetz-coder/dsh-multi-chat",
+      "previous": "conversation",
+      "current": "tool",
+      "desc_now": "Multi-window wall for DeepSeek Harness: run & monitor N DSH conversations side-by-side in one screen, plus an authenticated LAN gateway for phone/tablet access. npx dsh-multi-chat install",
       "desc_prev": null
     },
     {
-      "full_name": "mario03690/dsh-docflow",
+      "full_name": "uckkk/dsh-color-name",
       "previous": "other",
-      "current": "document",
-      "desc_now": "Ship what humans asked for: markdown to docx/pptx/pdf/epub, and PDFs merged, split, rotated or watermarked — one hosted call each, no local toolchain.",
-      "desc_prev": null
+      "current": "tool",
+      "desc_now": "@{name=dsh-color-name; version=0.1.0; description=颜色名称识别：输入十六进制颜色，返回常见中文/英文颜色名称（Color name lookup tool for DeepSeek Harness）; type=module; main=lib/index.js; exports=; files=System.Object[]; dsh=; keywords=System.Object[]; author=istone <ad571@qq.com>; license=MIT; peerDependencies=}.description",
+      "desc_prev": "颜色名称"
     },
     {
-      "full_name": "mario03690/dsh-adversarial-review",
+      "full_name": "uckkk/dsh-typography",
       "previous": "other",
-      "current": "conversation",
-      "desc_now": "Adversarial review for code, MCP configs and system prompts: every finding carries a repro path and confidence, and anything unreproducible is marked suspected rather than presented as confirmed.",
-      "desc_prev": null
+      "current": "tool",
+      "desc_now": "@{name=dsh-typography; version=0.1.0; description=字体排印与排版原则参考; type=module; main=lib/index.js; exports=; files=System.Object[]; dsh=; keywords=System.Object[]; author=istone <ad571@qq.com>; license=MIT; peerDependencies=}.description",
+      "desc_prev": "字体排印与排版原则参考"
     },
     {
-      "full_name": "deronghe/dsh-plugin-desktop-installer",
-      "previous": "tool",
-      "current": "other",
-      "desc_now": "DSH Desktop installer",
-      "desc_prev": "DSH Desktop ??:???????(?? web/desktop profile)+ ????"
+      "full_name": "uckkk/dsh-string-similarity",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "@{name=dsh-string-similarity; version=0.1.0; description=字符串相似度：Levenshtein/Jaccard 等算法计算文本相似度（String similarity tool for DeepSeek Harness）; type=module; main=lib/index.js; exports=; files=System.Object[]; dsh=; keywords=System.Object[]; author=istone <ad571@qq.com>; license=MIT; peerDependencies=}.description",
+      "desc_prev": "字符串相似度"
     },
     {
-      "full_name": "mario03690/dsh-product-planning",
+      "full_name": "uckkk/dsh-storyboard",
       "previous": "other",
+      "current": "memory",
+      "desc_now": "@{name=dsh-storyboard; version=0.1.0; description=分镜脚本：分镜术语、镜头类型与分镜模板知识库，辅助视频与短片创作（Storyboard reference for DeepSeek Harness）; type=module; main=lib/index.js; exports=; files=System.Object[]; dsh=; keywords=System.Object[]; author=istone <ad571@qq.com>; license=MIT; peerDependencies=}.description",
+      "desc_prev": "分镜脚本模板与术语"
+    },
+    {
+      "full_name": "uckkk/dsh-cinematography",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "@{name=dsh-cinematography; version=0.1.0; description=电影运镜与镜头语言参考; type=module; main=lib/index.js; exports=; files=System.Object[]; dsh=; keywords=System.Object[]; author=istone <ad571@qq.com>; license=MIT; peerDependencies=}.description",
+      "desc_prev": "电影运镜与镜头语言参考"
+    },
+    {
+      "full_name": "uckkk/dsh-grid-system",
+      "previous": "other",
+      "current": "memory",
+      "desc_now": "@{name=dsh-grid-system; version=0.1.0; description=栅格与间距系统参考：8 点栅格、响应式断点与间距规范知识库，指导界面布局设计（Grid & spacing system reference for DSH）; type=module; main=lib/index.js; exports=; files=System.Object[]; dsh=; keywords=System.Object[]; author=istone <ad571@qq.com>; license=MIT; peerDependencies=}.description",
+      "desc_prev": "栅格与间距系统参考"
+    },
+    {
+      "full_name": "uckkk/dsh-byte-size",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "@{name=dsh-byte-size; version=0.1.0; description=字节大小格式化：把任意字节数换算为 B/KB/MB/GB/TB 等人类可读格式，支持二进制与十进制前缀（Byte size formatting tool for DeepSeek Harness）; type=module; main=lib/index.js; exports=; files=System.Object[]; dsh=; keywords=System.Object[]; author=istone <ad571@qq.com>; license=MIT; peerDependencies=}.description",
+      "desc_prev": "字节大小格式化"
+    },
+    {
+      "full_name": "uckkk/dsh-number-words",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "@{name=dsh-number-words; version=0.1.0; description=数字转大写：阿拉伯数字转中文大写（金额/票据场景），支持小数与负数（Number to Chinese uppercase words tool for DSH）; type=module; main=lib/index.js; exports=; files=System.Object[]; dsh=; keywords=System.Object[]; author=istone <ad571@qq.com>; license=MIT; peerDependencies=}.description",
+      "desc_prev": "数字转大写"
+    },
+    {
+      "full_name": "uckkk/dsh-ux-writing",
+      "previous": "resource",
       "current": "web-ui",
-      "desc_now": "Interrogate a product idea instead of praising it: YC-style six forcing questions, a multi-persona panel allowed to disagree, and the narrowest two-week wedge with a numeric pass/fail test.",
-      "desc_prev": null
+      "desc_now": "@{name=dsh-ux-writing; version=0.1.0; description=UX 文案写作：微文案规范与按钮、错误提示文案指南，辅助界面文案撰写（UX writing guide for DeepSeek Harness）; type=module; main=lib/index.js; exports=; files=System.Object[]; dsh=; keywords=System.Object[]; author=istone <ad571@qq.com>; license=MIT; peerDependencies=}.description",
+      "desc_prev": "UX文案写作指南"
+    },
+    {
+      "full_name": "uckkk/dsh-wcag",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "@{name=dsh-wcag; version=0.1.0; description=WCAG无障碍标准查询; type=module; main=lib/index.js; exports=; files=System.Object[]; dsh=; keywords=System.Object[]; author=istone <ad571@qq.com>; license=MIT; peerDependencies=}.description",
+      "desc_prev": "WCAG无障碍标准查询"
+    },
+    {
+      "full_name": "uckkk/dsh-composition",
+      "previous": "other",
+      "current": "memory",
+      "desc_now": "@{name=dsh-composition; version=0.1.0; description=构图法则参考：摄影、绘画与界面布局通用的构图知识库（三分法、对称、引导线等），辅助画面与界面设计决策; type=module; main=lib/index.js; exports=; files=System.Object[]; dsh=; keywords=System.Object[]; author=istone <ad571@qq.com>; license=MIT; peerDependencies=}.description",
+      "desc_prev": "构图法则参考"
     }
   ]
 }
