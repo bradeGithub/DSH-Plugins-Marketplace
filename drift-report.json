@@ -1,55 +1,55 @@
 {
-  "generated_at": "2026-08-18T05:07:48.677Z",
+  "generated_at": "2026-08-18T07:19:03.746Z",
   "count": 7,
   "items": [
     {
-      "full_name": "dushaobindoudou/dsh-acp",
+      "full_name": "magian1127/deepseek-harness-zh_pro",
+      "previous": "other",
+      "current": "web-ui",
+      "desc_now": "DeepSeek Harness (DSH) plugin:  A comprehensive enhancement plugin with UI polish, layout tweaks, prompt injection, and more.  综合性增强插件，界面优化、布局调整与提示词注入等更多功能。",
+      "desc_prev": "DeepSeek Harness (DSH) plugin:  A comprehensive enhancement plugin with UI polish, layout tweaks, prompt injection, and more.  综合性增强插件，界面优化、布局调整与提示词注入等更多功能。"
+    },
+    {
+      "full_name": "poplarity/dsh-science-workbench",
       "previous": "tool",
       "current": "web-ui",
-      "desc_now": "Agent Client Protocol (ACP) server plugin for the DeepSeek Harness (dsh) - drive dsh agents from Zed, any ACP v1 client, or the built-in web UI over stdio / HTTP+SSE, with sessions, jobs, goals, skills and the agent tree on the wire",
-      "desc_prev": "Agent Client Protocol (ACP) server plugin for the DeepSeek Harness (dsh) - drive dsh agents from Zed and any ACP v1 client"
+      "desc_now": "A reproducible science workbench plugin for the DeepSeek Harness: agent-driven cells, inline figures with feedback/rerun, manifest provenance, and environment snapshots. 9 bio_* tools + workbench UI + publication-grade figure skills.",
+      "desc_prev": "A reproducible science workbench plugin for the DeepSeek Harness: agent-driven cells, inline figures with feedback/rerun, manifest provenance, and environment snapshots."
     },
     {
-      "full_name": "Thhoho/reSanity",
-      "previous": "memory",
-      "current": "tool",
-      "desc_now": "reSanity 散修 — 面向散户投研的证据搜索与逻辑梳理 Skill：核查一手资料，拆解题材到收入、利润和现金的传导链，标注证据与推断边界。",
-      "desc_prev": "reSanity 散修 — 散户的认知组合管理：查证、避坑、记忆、复盘。一份 SKILL.md，零依赖。"
-    },
-    {
-      "full_name": "ChrisZhangWG/dsh-codex-meter",
+      "full_name": "yyh-001/dsh-meme",
       "previous": "tool",
-      "current": "model",
-      "desc_now": "Native Settings → Usage dashboard for DeepSeek Harness: balance, official token and cost analysis, trends, context warnings, and API activity.",
-      "desc_prev": "Native Settings → Usage dashboard for DeepSeek Harness: balance, official token and cost analysis, trends, context warnings, API activity, and Tailscale remote access."
+      "current": "notify",
+      "desc_now": "DeepSeek Harness 的表情包插件——找得到、发得出、学得会，纯文本斗图、情绪主动发图、像 QQ/微信 一样发图、AI 自动学图、自定义表情包 、多种风格随意切换。",
+      "desc_prev": "DeepSeek Harness 的表情包插件——找得到、发得出、学得会"
     },
     {
-      "full_name": "tangwenhao616-netizen/dsh-anywhere",
+      "full_name": "yzlin499/dsh-yzlin499-easy-plugins",
       "previous": "tool",
-      "current": "coding",
-      "desc_now": "Put a dsh (DeepSeek Harness) workspace on ANY machine — fleet enrollment for NAT'd off-site machines + SSH execution world, two modes in one plugin",
-      "desc_prev": "Put a dsh (DeepSeek Harness) workspace on ANY machine — fleet enrollment for NAT'd off-site machines + SSH execution world, two modes in one plugin"
+      "current": "web-ui",
+      "desc_now": "非常好的小工具，毛坯房DSH可以看看。",
+      "desc_prev": "非常好的小工具，毛坯房DSH可以看看。"
     },
     {
-      "full_name": "13323232dong/dsh-tunnel-qr-plugin",
+      "full_name": "literaf/dsh-research",
+      "previous": "tool",
+      "current": "resource",
+      "desc_now": "The research plugin market for DeepSeek Harness (dsh): a Research plugins page in Settings that installs a curated, hand-read catalog into the profile you are running. Catalog at dsh-research.com.",
+      "desc_prev": "AI4Scholar research pack for DeepSeek Harness (dsh): embedded research skills, literature-first workflow guidance and workspace conventions. Pairs with dsh-ai4scholar."
+    },
+    {
+      "full_name": "huangjuhua-aigc/dsh-a2a",
       "previous": "other",
       "current": "tool",
-      "desc_now": "DSH Web 二维码公网隧道插件：右下角快速打开访问二维码，支持 Basic Auth 凭证展示与密码显隐。",
-      "desc_prev": "DSH Web plugin for a reusable public tunnel QR button and dialog"
-    },
-    {
-      "full_name": "xiyue718/dsh-ui-file-browser",
-      "previous": "web-ui",
-      "current": "resource",
-      "desc_now": "DSH 文件浏览插件：工作区目录树、会话文件视图、编辑与预览。 / DSH file browser plugin: workspace directory tree, Files conversation view, editing and preview.",
+      "desc_now": "dsh-a2a-server makes a DeepSeek Harness agent reachable over the A2A (Agent2Agent) protocol. It serves an Agent Card at a well-known URI and implements the v0.3.0 JSON-RPC binding, so any compliant peer that knows the deployment's URL can discover the agent and submit tasks to it.  ",
       "desc_prev": null
     },
     {
-      "full_name": "R-LEI2536/dsh-more-agent-presets",
-      "previous": "agent",
+      "full_name": "frozo-ai/dsh-worlds",
+      "previous": "tool",
       "current": "coding",
-      "desc_now": "More Agent Presets for DSH derived from other coding agents (e.g. qwen code, iflow)",
-      "desc_prev": "More Agent Presets for DeepSeek Harness"
+      "desc_now": "Remote execution worlds for DeepSeek Harness: run the agent's Bash, terminals, LSP and file tools inside a container. Zero dependencies.",
+      "desc_prev": "Remote execution worlds for DeepSeek Harness: run the agent's Bash, terminals, LSP and file tools inside a container. Zero dependencies."
     }
   ]
 }
