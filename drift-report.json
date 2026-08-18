@@ -1,26 +1,40 @@
 {
-  "generated_at": "2026-08-18T13:23:13.116Z",
-  "count": 3,
+  "generated_at": "2026-08-18T15:06:21.250Z",
+  "count": 5,
   "items": [
     {
-      "full_name": "lusblead/dsh-Kingdom",
-      "previous": "conversation",
-      "current": "agent",
-      "desc_now": "在dsh中建立一个独属于你的王国，构建一个真正的有组织的Agent体系",
-      "desc_prev": "独立 dsh 插件：安装后在 DSH 会话中初始化/接入本地王国（Phase 1+2 FROZEN，Claim != Fact 治理闭环）"
+      "full_name": "futrime/webdsh",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "Browser-only build of DeepSeek Harness",
+      "desc_prev": "Running DeepSeek Harness on web"
     },
     {
-      "full_name": "zhuyun017/dsh-her-companion",
+      "full_name": "a903067276-rgb/dsh-plan-switch",
+      "previous": "conversation",
+      "current": "other",
+      "desc_now": "One-click enter/exit Plan mode for the DSH web input bar, a quick-click shortcut for /plan",
+      "desc_prev": "输入框一键进/出 Plan 模式（/plan 的快捷点击），DSH web 小插件"
+    },
+    {
+      "full_name": "WJNCT55555/dsh-achievements",
       "previous": "other",
-      "current": "memory",
-      "desc_now": null,
+      "current": "web-ui",
+      "desc_now": "为了探索dsh 让vibecoding像游戏一样有趣",
       "desc_prev": null
     },
     {
-      "full_name": "uigdwunm/dsh-conversation-nav",
-      "previous": "conversation",
+      "full_name": "Yu-tao-Li/dsh-pin",
+      "previous": "other",
       "current": "web-ui",
-      "desc_now": "为 DSH Web 对话区提供回到顶部 / 上一条 / 下一条 / 回到底部的圆形导航按钮，自动处理更早历史分页。",
+      "desc_now": "Pin DSH sidebar conversations: pin to the top of a workspace, or lift the session into a global tray above ALL workspaces — multi-pin, exact restore, zero deps.",
+      "desc_prev": null
+    },
+    {
+      "full_name": "badai147/dsh-ocgo-usage",
+      "previous": "other",
+      "current": "web-ui",
+      "desc_now": "在 DeepSeek Harness Web 侧边栏左下角显示 OpenCode Go 用量的插件。",
       "desc_prev": null
     }
   ]
