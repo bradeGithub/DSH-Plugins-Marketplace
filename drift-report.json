@@ -1,20 +1,62 @@
 {
-  "generated_at": "2026-08-18T01:53:20.512Z",
-  "count": 2,
+  "generated_at": "2026-08-18T03:27:13.656Z",
+  "count": 8,
   "items": [
     {
-      "full_name": "Han-1413141/dsh-cost-meter",
+      "full_name": "pengpengyi92/dsh-quant",
       "previous": "tool",
-      "current": "resource",
-      "desc_now": "DeepSeek Harness Session Cost Statistics & OpenCode Go Quota Display, DS Official Balance Display, Codex-like Token Heatmap Plugin: Current Session Cost, Daily Cost, Budget Limit Display, History Records, Peak/off-peak pricing hours display, Synced with Official Pricing, Multi-vendor model pricing (90+ model catalog), Coding Plan quotas (6 vendors)",
-      "desc_prev": "DeepSeek Harness Session Cost Statistics & OpenCode Go Quota Display, DS Official Balance Display, Codex-like Token Heatmap Plugin: Current Session Cost, Daily Cost, Budget Limit Display, History Records, Peak/off-peak pricing hours display, Synced with Official Pricing"
+      "current": "other",
+      "desc_now": "AI-native & DSH-native: the quant version of everything-is-a-plugin — 5 pluggable modules (data/alpha/ML/risk/execution) with example use cases each. Fill your own alpha, models & execution. Methods open, secrets internal.",
+      "desc_prev": "AI-native & DSH-native quant toolkit for every quant aspect — 46 tools · 6 domains (data/alpha/ML/risk/execution/ecosystem) · one end-to-end PDAT→PET pipeline · methods open, secrets internal 🐋"
     },
     {
-      "full_name": "EternalNight996/dsh-desktop",
-      "previous": "coding",
-      "current": "other",
-      "desc_now": "dsh-desktop · DeepSeek Harness 桌面工作台 🤖 AI 打工人的快乐老家 —— 双击即用，255+ 像素专家天团（独立插件）可一键加装",
-      "desc_prev": "dsh-desktop · DeepSeek Harness 桌面工作台 🤖 AI 打工人的快乐老家 —— 双击即用，255+ 像素专家天团（独立插件）可一键加装"
+      "full_name": "wz-heng/dsh-feishu-bridge",
+      "previous": "conversation",
+      "current": "coding",
+      "desc_now": "Fail-closed Feishu (Lark) channel bridge for DeepSeek Harness (dsh) — chat with a bot, get agent turns back. Opt-in human-in-the-loop bash approval (Allow/Deny cards, fail-closed timeout), one-message /pair onboarding, webhook signature/timestamp/replay verification, daily latest-SDK canary. Community plugin, not DeepSeek-official.",
+      "desc_prev": "Feishu (Lark) channel bridge for DeepSeek Harness (dsh) — message a Feishu bot, it runs a dsh agent turn, the reply comes back. Community plugin."
+    },
+    {
+      "full_name": "ZBCs-StudioCr-CN/dsh-skill-manager",
+      "previous": "other",
+      "current": "web-ui",
+      "desc_now": "DeepSeek Harness 可视化 Skill 管理器：启用/禁用、默认加载、分类管理、智能归类、SKILL.md 可视化编辑——无需手动操作文件",
+      "desc_prev": null
+    },
+    {
+      "full_name": "XiaoMoDern/dsh-trajectory-teacher",
+      "previous": "other",
+      "current": "agent",
+      "desc_now": "/trajectory-teacher: DSH plugin that turns an agent's execution trajectory into a structured post-mortem report (decisions / pitfalls / reusable patterns)",
+      "desc_prev": null
+    },
+    {
+      "full_name": "ChrisZhangWG/dsh-codex-meter",
+      "previous": "model",
+      "current": "tool",
+      "desc_now": "Native Settings → Usage dashboard for DeepSeek Harness: balance, official token and cost analysis, trends, context warnings, API activity, and Tailscale remote access.",
+      "desc_prev": "Codex-style compact meter for the DSH web GUI: a tiny monospace pill showing live session cost, today's consumption and remaining DeepSeek API balance — click to open the platform usage page."
+    },
+    {
+      "full_name": "allentnetus/dsh-job-hunting",
+      "previous": "agent",
+      "current": "tool",
+      "desc_now": "DeepSeek Harness job hunting plugin and runtime skill for local job intelligence workflows.",
+      "desc_prev": "DeepSeek Harness job hunting plugin and runtime skill for local job intelligence workflows."
+    },
+    {
+      "full_name": "FleetingEcho/dsh-powerdesk",
+      "previous": "other",
+      "current": "memory",
+      "desc_now": "IDE workbench plugin for DSH. Fast terminal (restty/WebGPU over a Rust PTY), CodeMirror 6 editor, file explorer, markdown notes, sandboxed browser, and ripgrep search — all as tabs in dockable right and bottom panels. Extendable with your own React components.",
+      "desc_prev": null
+    },
+    {
+      "full_name": "sidleo/skill-scan",
+      "previous": "other",
+      "current": "web-ui",
+      "desc_now": "Configurable skill discovery provider for DeepSeek Harness (DSH): cwd/project/ancestors/global layers with editable parent dirs, plugin card UI, disk persistence",
+      "desc_prev": null
     }
   ]
 }
