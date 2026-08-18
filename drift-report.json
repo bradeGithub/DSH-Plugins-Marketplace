@@ -1,40 +1,68 @@
 {
-  "generated_at": "2026-08-18T15:06:21.250Z",
-  "count": 5,
+  "generated_at": "2026-08-18T17:04:23.712Z",
+  "count": 9,
   "items": [
     {
-      "full_name": "futrime/webdsh",
+      "full_name": "hytime/dsh-thinking-effort",
       "previous": "other",
-      "current": "tool",
-      "desc_now": "Browser-only build of DeepSeek Harness",
-      "desc_prev": "Running DeepSeek Harness on web"
+      "current": "agent",
+      "desc_now": "Configurable reasoning levels for hand-declared DSH llm-pi-ai models, with bilingual settings and subagent defaults.",
+      "desc_prev": null
     },
     {
-      "full_name": "a903067276-rgb/dsh-plan-switch",
+      "full_name": "wxxb789/dsh-legion",
+      "previous": "model",
+      "current": "coding",
+      "desc_now": "DeepSeek Harness (DSH) plugin for multi-agent orchestration: semantic agent Profiles, exact LLM model routing, declarative Teams and Strategies, and bounded subagent delegation in TypeScript.",
+      "desc_prev": "Multi-agent teams, model routing, and declarative orchestration for DeepSeek Harness"
+    },
+    {
+      "full_name": "drscrewdriver/dsh-input-traffic",
       "previous": "conversation",
       "current": "other",
-      "desc_now": "One-click enter/exit Plan mode for the DSH web input bar, a quick-click shortcut for /plan",
-      "desc_prev": "输入框一键进/出 Plan 模式（/plan 的快捷点击），DSH web 小插件"
+      "desc_now": "Busy-time input queue for the DeepSeek Harness web GUI: three-tier (now/next/later) planning, queue editing with drag-to-reorder and concurrency protection, interject (steer) and interrupt, batch clear with confirm, session freeze. A cordis client plugin, no dsh source changes, no PR required.",
+      "desc_prev": "打断并输入和下一轮插入不再二选一 支持红色打断插入 黄色下一自然轮插入和绿色待整个逻辑执行完成后输入 并支持邻近高峰期冻结会话在非工作高价时间再继续会话 traffic policy of woring session stream cut in slide in inputs"
     },
     {
-      "full_name": "WJNCT55555/dsh-achievements",
+      "full_name": "MariNanari/dsh-vulnsec-bridge",
+      "previous": "web-ui",
+      "current": "tool",
+      "desc_now": "v0.2.1: VulnClaw + DeepSec bridge for DeepSeek Harness (dsh) — 安全工具台",
+      "desc_prev": "dsh-vulnsec-bridge: VulnClaw + DeepSec bridge for DeepSeek Harness (dsh) — authorized pentest / Shield code audit tools + Web UI workbench (MIT)"
+    },
+    {
+      "full_name": "szx-a/ds",
       "previous": "other",
-      "current": "web-ui",
-      "desc_now": "为了探索dsh 让vibecoding像游戏一样有趣",
+      "current": "memory",
+      "desc_now": "LMA (Layered Memory Architecture) 是一个为 DeepSeek Harness 设计的地基插件（Foundation Plugin）。它定义了 “记忆体（Memory Body）” 这一抽象概念及其挂载/卸载协议。  它与其他记忆插件的本质区别在于：LMA 是一个容器和载体，让 dsh-memory-evolve、EchoCore 等“能力性插件”可以挂载其上，它本身也内置了一套可开关的基础记忆流程，作为可选能力。LMA结束记忆功能的“一锅乱炖”，实现跨会话的结构化记忆机制。(目前功能还在持续完善以及测试，对于其他插件的接口在构想完整后逐步推动)",
       "desc_prev": null
     },
     {
-      "full_name": "Yu-tao-Li/dsh-pin",
+      "full_name": "muyangplus/dsh-oi-workbench",
+      "previous": "coding",
+      "current": "memory",
+      "desc_now": "OI 出题工作台：知识点锁定、数据构造、本地评测，Hydro/HOJ 打包与管理，Python 外部管理 UI，DeepSeek Harness 插件。",
+      "desc_prev": "OI 出题工作台：OI风格出题、数据构造、本地评测、Hydro/HOJ 打包与管理的 DeepSeek Harness 插件"
+    },
+    {
+      "full_name": "piaohua/dsh-plugin-archive-manager",
       "previous": "other",
-      "current": "web-ui",
-      "desc_now": "Pin DSH sidebar conversations: pin to the top of a workspace, or lift the session into a global tray above ALL workspaces — multi-pin, exact restore, zero deps.",
+      "current": "conversation",
+      "desc_now": "DSH Web plugin: bring archived sessions back — see them in the workspace, filter by archived/not, unarchive with one click.让归档会话可见、可筛选、可恢复——工作区原位查看已归档会话、按已归档/未归档筛选、一键取消归档。",
+      "desc_prev": "(DSH) Web plugin that makes session archiving reversible and visible"
+    },
+    {
+      "full_name": "qianshe/dsh-assistant-optimization",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "DSH plugin: fold mis-rendered thinking/reasoning content into collapsible blocks and render mermaid diagrams inline.",
       "desc_prev": null
     },
     {
-      "full_name": "badai147/dsh-ocgo-usage",
+      "full_name": "imchenmin/dsh-auth-lock",
       "previous": "other",
-      "current": "web-ui",
-      "desc_now": "在 DeepSeek Harness Web 侧边栏左下角显示 OpenCode Go 用量的插件。",
+      "current": "tool",
+      "desc_now": "在将 DeepSeek Harness Web 开放给局域网、远程设备、反向代理或共享环境之前，为它增加密码保护。Add password protection to DeepSeek Harness Web before exposing it to your LAN, remote devices, reverse proxies, or shared environments.",
       "desc_prev": null
     }
   ]
