@@ -66,7 +66,17 @@ check("writeListCache 原子写（tmp + rename）", /const tmp = listCacheFile\(
 // 深集成豁免（真实 npm 二进制）——但存在性必须被测试感知：win32 经 cmd.exe 启动 npm
 //（.cmd 垫片 execFile 直接启动会 EINVAL，issue #46 同族），不直接 execFile npm.cmd。
 check("installNpmTargetToTemp win32 经 cmd.exe 包装", /async function installNpmTargetToTemp[\s\S]*?execFileAsync\("cmd\.exe", \["\/d", "\/s", "\/c", "npm", \.\.\.args\]/.test(lib), true);
-check("installNpmTargetToTemp 非 win32 直接 npm", /async function installNpmTargetToTemp[\s\S]*?execFileAsync\("npm", args, \{ cwd: tmp, timeout: 300000 \}\)/.test(lib), true);
+check("installNpmTargetToTemp 非 win32 直接 npm", /async function installNpmTargetToTemp[\s\S]*?execFileAsync\("npm", args, \{ cwd: tmp, timeout: 300000, windowsHide: true \}\)/.test(lib), true);
+
+// ---- issue #125：Windows 黑窗口闪烁 ----
+// 市场从无控制台父进程（DSH web 服务）execFile cmd.exe/pwsh/git 等控制台子进程时，
+// Windows 为每个子进程新开一个黑窗口（每次调 cmd /c pnpm 闪一次，安装/自更新高频触发）。
+// 契约：所有 execFileAsync 调用点带 windowsHide: true（或经 runNpm/runPnpm 的 execOpts
+// 传递），bash 版本探测 spawnSync 同样覆盖。
+const execCallCount = (lib.match(/execFileAsync\(/g) ?? []).length;
+const hiddenOrViaExecOpts = (lib.match(/execFileAsync\([\s\S]{0,600}?(?:windowsHide: true\s*\}|execOpts\s*\))/g) ?? []).length;
+check("全部 execFileAsync 调用点带 windowsHide（或经 execOpts 传递）", execCallCount === hiddenOrViaExecOpts, true);
+check("spawnSync bash 探测带 windowsHide", /spawnSync\("bash", \["--version"\], \{ encoding: "utf8", windowsHide: true \}\)/.test(lib), true);
 
 // ---- 扫描边界：symlink 不跟随（扫描范围必须限于 cacheDir 内）----
 // Dirent.isDirectory() 对 symlink 恒 false——若只有 isDirectory 分支判断，symlink 会落

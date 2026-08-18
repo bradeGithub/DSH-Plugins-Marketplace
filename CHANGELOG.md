@@ -3,6 +3,15 @@
 本仓库的版本迭代记录。**v1.0.0 之前的版本均为 beta 系列**（开发期迭代，未单独打 tag）。/ Version history of this repository. **All versions before v1.0.0 are part of the beta series** (development iterations, not individually tagged).
 ---
 
+## v1.5.3 — 2026-08-18（修复：Windows 安装/自更新黑窗口闪烁 / Fix: Windows console-window flash）
+
+- **修复 Windows 子进程黑窗口闪烁（issue #125）**：市场从无控制台父进程（DSH web 服务）拉起 `cmd.exe /c pnpm`、`dsh`、`pwsh`、`git`、`npm`、`bash` 等控制台子进程时，Windows 每次都会新开一个黑窗口（安装/自更新高频触发，用户报告「每次调 cmd /c pnpm 都新开一个黑窗口」）；现在所有 `execFileAsync` 调用点统一带 `windowsHide: true`（`runNpm`/`runPnpm` 经 `execOpts` 传递，bash 版本探测 `spawnSync` 同样覆盖），非 Windows 平台该选项无副作用 / every execFileAsync call site (cmd.exe/pnpm/dsh/pwsh/git/npm/bash) now passes `windowsHide: true` — spawning console children from the console-less DSH web process no longer flashes a black window per call on Windows; ignored on other platforms
+- **回归测试**：security-guards 新增 windowsHide 全覆盖契约（全部 execFileAsync 调用点 + spawnSync 探测）/ security-guards gains a windowsHide coverage contract locking all call sites
+
+## v1.5.2 — 2026-08-17（修复：cordis.patch.yml 非法 YAML 启动崩溃 / Fix: invalid cordis.patch.yml crash）
+
+- **修复 patch 注册写坏 cordis.patch.yml 导致 DSH 启动崩溃（issue #71/#73，重要）**：官方默认 `cordis.patch.yml` 顶层是空数组 `[]`，旧版 `appendPatchEntry` 把 `- insert:` 块追加到 `[]` 之后产生非法 YAML → DSH 启动即崩；现在写入前先剥离顶层裸 `[]` 行再追加 insert 块，install.sh / install.ps1 同步修复；已损坏用户修复方式：删除 patch 文件中裸 `[]` 那一行后重启 / appending `- insert:` after the official default empty array `[]` produced invalid YAML and crashed DSH at startup; the top-level bare `[]` line is now stripped before appending in both appendPatchEntry and the install scripts; affected users can recover by deleting the bare `[]` line
+
 ## v1.5.1 — 2026-08-16（修复：Windows 自更新 spawn EINVAL 失败 / Fix: Windows self-update spawn EINVAL）
 
 - **自更新 CLI 失败回退目录替换（重要）**：v1.4.11 起自更新走官方 CLI（`dsh plugin install`），但官方 CLI 内部 spawn `pnpm` 在 Windows 上撞 .cmd 垫片 **spawn EINVAL**（官方 plugin.ts 自述已知问题）——更新红弹窗、无法升级。现在 CLI 路径失败（EINVAL / 缺失 pnpm / 拦截 git 依赖 build 等）自动回退 v1.4.10 目录替换式更新（clone → staging 校验 → 原子 rename + 回滚）；CLI 超时 600s 收紧到 180s（快速失败进入回退），前端 900s 兜底，「运行中」不再长挂 / the official CLI path now falls back to the directory-swap update (clone → staging verification → atomic rename with rollback) when it fails — e.g. spawn EINVAL on Windows where the official CLI spawns the pnpm .cmd shim; CLI timeout tightened 600s→180s with a 900s client cap so "running" never hangs
