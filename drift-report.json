@@ -1,62 +1,55 @@
 {
-  "generated_at": "2026-08-18T03:27:13.656Z",
-  "count": 8,
+  "generated_at": "2026-08-18T05:07:48.677Z",
+  "count": 7,
   "items": [
     {
-      "full_name": "pengpengyi92/dsh-quant",
+      "full_name": "dushaobindoudou/dsh-acp",
       "previous": "tool",
-      "current": "other",
-      "desc_now": "AI-native & DSH-native: the quant version of everything-is-a-plugin — 5 pluggable modules (data/alpha/ML/risk/execution) with example use cases each. Fill your own alpha, models & execution. Methods open, secrets internal.",
-      "desc_prev": "AI-native & DSH-native quant toolkit for every quant aspect — 46 tools · 6 domains (data/alpha/ML/risk/execution/ecosystem) · one end-to-end PDAT→PET pipeline · methods open, secrets internal 🐋"
-    },
-    {
-      "full_name": "wz-heng/dsh-feishu-bridge",
-      "previous": "conversation",
-      "current": "coding",
-      "desc_now": "Fail-closed Feishu (Lark) channel bridge for DeepSeek Harness (dsh) — chat with a bot, get agent turns back. Opt-in human-in-the-loop bash approval (Allow/Deny cards, fail-closed timeout), one-message /pair onboarding, webhook signature/timestamp/replay verification, daily latest-SDK canary. Community plugin, not DeepSeek-official.",
-      "desc_prev": "Feishu (Lark) channel bridge for DeepSeek Harness (dsh) — message a Feishu bot, it runs a dsh agent turn, the reply comes back. Community plugin."
-    },
-    {
-      "full_name": "ZBCs-StudioCr-CN/dsh-skill-manager",
-      "previous": "other",
       "current": "web-ui",
-      "desc_now": "DeepSeek Harness 可视化 Skill 管理器：启用/禁用、默认加载、分类管理、智能归类、SKILL.md 可视化编辑——无需手动操作文件",
-      "desc_prev": null
+      "desc_now": "Agent Client Protocol (ACP) server plugin for the DeepSeek Harness (dsh) - drive dsh agents from Zed, any ACP v1 client, or the built-in web UI over stdio / HTTP+SSE, with sessions, jobs, goals, skills and the agent tree on the wire",
+      "desc_prev": "Agent Client Protocol (ACP) server plugin for the DeepSeek Harness (dsh) - drive dsh agents from Zed and any ACP v1 client"
     },
     {
-      "full_name": "XiaoMoDern/dsh-trajectory-teacher",
-      "previous": "other",
-      "current": "agent",
-      "desc_now": "/trajectory-teacher: DSH plugin that turns an agent's execution trajectory into a structured post-mortem report (decisions / pitfalls / reusable patterns)",
-      "desc_prev": null
+      "full_name": "Thhoho/reSanity",
+      "previous": "memory",
+      "current": "tool",
+      "desc_now": "reSanity 散修 — 面向散户投研的证据搜索与逻辑梳理 Skill：核查一手资料，拆解题材到收入、利润和现金的传导链，标注证据与推断边界。",
+      "desc_prev": "reSanity 散修 — 散户的认知组合管理：查证、避坑、记忆、复盘。一份 SKILL.md，零依赖。"
     },
     {
       "full_name": "ChrisZhangWG/dsh-codex-meter",
-      "previous": "model",
-      "current": "tool",
-      "desc_now": "Native Settings → Usage dashboard for DeepSeek Harness: balance, official token and cost analysis, trends, context warnings, API activity, and Tailscale remote access.",
-      "desc_prev": "Codex-style compact meter for the DSH web GUI: a tiny monospace pill showing live session cost, today's consumption and remaining DeepSeek API balance — click to open the platform usage page."
+      "previous": "tool",
+      "current": "model",
+      "desc_now": "Native Settings → Usage dashboard for DeepSeek Harness: balance, official token and cost analysis, trends, context warnings, and API activity.",
+      "desc_prev": "Native Settings → Usage dashboard for DeepSeek Harness: balance, official token and cost analysis, trends, context warnings, API activity, and Tailscale remote access."
     },
     {
-      "full_name": "allentnetus/dsh-job-hunting",
+      "full_name": "tangwenhao616-netizen/dsh-anywhere",
+      "previous": "tool",
+      "current": "coding",
+      "desc_now": "Put a dsh (DeepSeek Harness) workspace on ANY machine — fleet enrollment for NAT'd off-site machines + SSH execution world, two modes in one plugin",
+      "desc_prev": "Put a dsh (DeepSeek Harness) workspace on ANY machine — fleet enrollment for NAT'd off-site machines + SSH execution world, two modes in one plugin"
+    },
+    {
+      "full_name": "13323232dong/dsh-tunnel-qr-plugin",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "DSH Web 二维码公网隧道插件：右下角快速打开访问二维码，支持 Basic Auth 凭证展示与密码显隐。",
+      "desc_prev": "DSH Web plugin for a reusable public tunnel QR button and dialog"
+    },
+    {
+      "full_name": "xiyue718/dsh-ui-file-browser",
+      "previous": "web-ui",
+      "current": "resource",
+      "desc_now": "DSH 文件浏览插件：工作区目录树、会话文件视图、编辑与预览。 / DSH file browser plugin: workspace directory tree, Files conversation view, editing and preview.",
+      "desc_prev": null
+    },
+    {
+      "full_name": "R-LEI2536/dsh-more-agent-presets",
       "previous": "agent",
-      "current": "tool",
-      "desc_now": "DeepSeek Harness job hunting plugin and runtime skill for local job intelligence workflows.",
-      "desc_prev": "DeepSeek Harness job hunting plugin and runtime skill for local job intelligence workflows."
-    },
-    {
-      "full_name": "FleetingEcho/dsh-powerdesk",
-      "previous": "other",
-      "current": "memory",
-      "desc_now": "IDE workbench plugin for DSH. Fast terminal (restty/WebGPU over a Rust PTY), CodeMirror 6 editor, file explorer, markdown notes, sandboxed browser, and ripgrep search — all as tabs in dockable right and bottom panels. Extendable with your own React components.",
-      "desc_prev": null
-    },
-    {
-      "full_name": "sidleo/skill-scan",
-      "previous": "other",
-      "current": "web-ui",
-      "desc_now": "Configurable skill discovery provider for DeepSeek Harness (DSH): cwd/project/ancestors/global layers with editable parent dirs, plugin card UI, disk persistence",
-      "desc_prev": null
+      "current": "coding",
+      "desc_now": "More Agent Presets for DSH derived from other coding agents (e.g. qwen code, iflow)",
+      "desc_prev": "More Agent Presets for DeepSeek Harness"
     }
   ]
 }
