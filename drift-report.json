@@ -1,54 +1,26 @@
 {
-  "generated_at": "2026-08-18T11:03:21.870Z",
-  "count": 7,
+  "generated_at": "2026-08-18T13:23:13.116Z",
+  "count": 3,
   "items": [
     {
-      "full_name": "dream-num/dsh-univer-office",
-      "previous": "other",
-      "current": "document",
-      "desc_now": "Preview, create, edit office spreadsheets, docs & slides inside DeepSeek Harness. Power by Univer.",
-      "desc_prev": "Preview Univer sheets, docs & slides inside DeepSeek Harness."
+      "full_name": "lusblead/dsh-Kingdom",
+      "previous": "conversation",
+      "current": "agent",
+      "desc_now": "在dsh中建立一个独属于你的王国，构建一个真正的有组织的Agent体系",
+      "desc_prev": "独立 dsh 插件：安装后在 DSH 会话中初始化/接入本地王国（Phase 1+2 FROZEN，Claim != Fact 治理闭环）"
     },
     {
-      "full_name": "3361805598-gif/dsh-md-annotator",
+      "full_name": "zhuyun017/dsh-her-companion",
       "previous": "other",
-      "current": "web-ui",
+      "current": "memory",
       "desc_now": null,
       "desc_prev": null
     },
     {
-      "full_name": "huchunlinnk/deepseek-desktop",
-      "previous": "other",
-      "current": "coding",
-      "desc_now": "Native Tauri shell for DeepSeek Harness, self-maintained by deepseek-desk-rsi (AI-for-AI daily sync + 1:1 feature parity)",
-      "desc_prev": null
-    },
-    {
-      "full_name": "huchunlinnk/deepseek-desk-rsi",
-      "previous": "other",
-      "current": "agent",
-      "desc_now": "Recursive Self-Improvement engine for DeepSeek Harness — DSH maintains DSH: bounded perceive→integrate→verify→parity→repair→propose loop enforcing 1:1 upstream feature parity",
-      "desc_prev": null
-    },
-    {
-      "full_name": "AshModeling/dsh-light-theater",
-      "previous": "other",
+      "full_name": "uigdwunm/dsh-conversation-nav",
+      "previous": "conversation",
       "current": "web-ui",
-      "desc_now": "DSH Web UI 输入框皮肤:跟随主题的「灯光剧场」边框巡游 + 双光束动画,零依赖纯 CSS,一键开关可调参。",
-      "desc_prev": null
-    },
-    {
-      "full_name": "cosmic-snail/dsh-travel-plan",
-      "previous": "resource",
-      "current": "other",
-      "desc_now": "给 DeepSeek Harness 加能照着走的旅行攻略：小红书/抖音发现 POI，核验后再按天排程",
-      "desc_prev": "DeepSeek Harness plugin: plan-travel-guide skill with Xiaohongshu/Douyin/Weibo/Bilibili POI discovery and day-by-day itineraries"
-    },
-    {
-      "full_name": "lhwwxy/dsh-agentic-router",
-      "previous": "other",
-      "current": "tool",
-      "desc_now": "监听每次模型请求，按任务类型与复杂度把请求路由到最合适的模型档位；四个专家并行推荐、EXP3 元选择器决定听谁的；每回合按质量代理信号（工具失败、模型重试、延迟）计算奖励并回传，路由策略随使用越学越准。全部决策与奖励落盘，可审计、可重放。",
+      "desc_now": "为 DSH Web 对话区提供回到顶部 / 上一条 / 下一条 / 回到底部的圆形导航按钮，自动处理更早历史分页。",
       "desc_prev": null
     }
   ]
