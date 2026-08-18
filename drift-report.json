@@ -1,40 +1,54 @@
 {
-  "generated_at": "2026-08-18T09:11:20.297Z",
-  "count": 5,
+  "generated_at": "2026-08-18T11:03:21.870Z",
+  "count": 7,
   "items": [
     {
-      "full_name": "zhoushoujianwork/easyeda-agent",
-      "previous": "agent",
+      "full_name": "dream-num/dsh-univer-office",
+      "previous": "other",
+      "current": "document",
+      "desc_now": "Preview, create, edit office spreadsheets, docs & slides inside DeepSeek Harness. Power by Univer.",
+      "desc_prev": "Preview Univer sheets, docs & slides inside DeepSeek Harness."
+    },
+    {
+      "full_name": "3361805598-gif/dsh-md-annotator",
+      "previous": "other",
       "current": "web-ui",
-      "desc_now": "嘉立创EDA专业版(EasyEDA Pro)自动化：给 AI harness 装上画板的「手」—— 一套 typed 原理图/PCB 动作，CLI / Agent Skill / stdio MCP 三形态融合接入。承接嘉立创「不以卖板赚钱，以培养中国工程师为己任」 | EasyEDA Pro automation: the hands of your AI harness — typed schematic/PCB actions via CLI, Agent Skill and stdio MCP.",
+      "desc_now": null,
       "desc_prev": null
     },
     {
-      "full_name": "dabaicai001/star-deepseek-harness-desktop",
-      "previous": "web-ui",
-      "current": "resource",
-      "desc_now": "Star-deepseek-harness-desktop — DeepSeek Harness,一站式桌面运维台。Harness 自动规划并调用数据库 / SSH / SFTP / Docker 执行。本地优先、跨平台。本项目由自研的starhub 做的再次改进，现在改进中... 尽情期待吧，如果想使用老版本可以下载 0.6X.X 版本",
-      "desc_prev": "Star-deepseek-harness-desktop — DeepSeek Harness,一站式桌面运维台。Harness 自动规划并调用数据库 / SSH / SFTP / Docker 执行。本地优先、跨平台。本项目由自研的starhub 做的再次改进，现在改进中... 尽情期待吧，如果想使用老版本可以下载 0.6X.X 版本"
-    },
-    {
-      "full_name": "justinhuangai/deepseek-harness-agent",
-      "previous": "agent",
-      "current": "coding",
-      "desc_now": "The AI Agent for productive coding, work, and personal life. Built on DeepSeek Harness. 用于高效编程、工作和个人生活的AI智能体。基于官方DeepSeek Harness构建，多端版本，一键使用。",
-      "desc_prev": "The AI Agent built on DeepSeek Harness: Everything is a Plugin.   基于 DeepSeek Harness 构建的 AI 智能体：一切皆插件。提供桌面版本，开箱即用。"
-    },
-    {
-      "full_name": "ismoss/dsh-harness-zh-l10n",
-      "previous": "coding",
-      "current": "web-ui",
-      "desc_now": "DeepSeek Harness (dsh) 中文界面汉化补丁：五模式描述/权限标签/命令描述/梁神模式全部汉化，apply.bat 一键安装，拿到就能用。",
-      "desc_prev": "DeepSeek Harness (dsh) 中文 UI 描述优化补丁包 — 五模式描述/权限标签/命令描述/梁神模式全部汉化 — 外发版(直接对 dsh 执行同款修改) + 开发版(含工具链)"
-    },
-    {
-      "full_name": "mouyase/dsh-hashline",
+      "full_name": "huchunlinnk/deepseek-desktop",
       "previous": "other",
       "current": "coding",
-      "desc_now": "dsh plugin wrapping hashline line-addressed editor as a native tool",
+      "desc_now": "Native Tauri shell for DeepSeek Harness, self-maintained by deepseek-desk-rsi (AI-for-AI daily sync + 1:1 feature parity)",
+      "desc_prev": null
+    },
+    {
+      "full_name": "huchunlinnk/deepseek-desk-rsi",
+      "previous": "other",
+      "current": "agent",
+      "desc_now": "Recursive Self-Improvement engine for DeepSeek Harness — DSH maintains DSH: bounded perceive→integrate→verify→parity→repair→propose loop enforcing 1:1 upstream feature parity",
+      "desc_prev": null
+    },
+    {
+      "full_name": "AshModeling/dsh-light-theater",
+      "previous": "other",
+      "current": "web-ui",
+      "desc_now": "DSH Web UI 输入框皮肤:跟随主题的「灯光剧场」边框巡游 + 双光束动画,零依赖纯 CSS,一键开关可调参。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "cosmic-snail/dsh-travel-plan",
+      "previous": "resource",
+      "current": "other",
+      "desc_now": "给 DeepSeek Harness 加能照着走的旅行攻略：小红书/抖音发现 POI，核验后再按天排程",
+      "desc_prev": "DeepSeek Harness plugin: plan-travel-guide skill with Xiaohongshu/Douyin/Weibo/Bilibili POI discovery and day-by-day itineraries"
+    },
+    {
+      "full_name": "lhwwxy/dsh-agentic-router",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "监听每次模型请求，按任务类型与复杂度把请求路由到最合适的模型档位；四个专家并行推荐、EXP3 元选择器决定听谁的；每回合按质量代理信号（工具失败、模型重试、延迟）计算奖励并回传，路由策略随使用越学越准。全部决策与奖励落盘，可审计、可重放。",
       "desc_prev": null
     }
   ]
