@@ -78,6 +78,20 @@ const hiddenOrViaExecOpts = (lib.match(/execFileAsync\([\s\S]{0,600}?(?:windowsH
 check("全部 execFileAsync 调用点带 windowsHide（或经 execOpts 传递）", execCallCount === hiddenOrViaExecOpts, true);
 check("spawnSync bash 探测带 windowsHide", /spawnSync\("bash", \["--version"\], \{ encoding: "utf8", windowsHide: true \}\)/.test(lib), true);
 
+// ---- issue #134：bundle 声明包必须走 profile bundles 层注册 ----
+// bundle 包（dsh.bundle.patch）的实质在 patch 层；单条 insert 只挂载空壳入口
+// （实测 @linxin666/dsh-web-ui-all：lib/index.js 空操作 shim + 15 个子插件行全在
+// bundle patch）。契约：识别函数存在；注册写 profile package.json 原子（tmp+rename）；
+// 注册经 pnpm install（cwd=profile）；bundle 分支在写 insert 之前 continue（不写 patch 条目）；
+// 卸载 bundle 主路径 pnpm remove + 降级手工清理。
+check("isBundlePackage 检测 dsh.bundle.patch 声明", /function isBundlePackage[\s\S]*?dsh\.bundle[\s\S]*?patch/.test(lib), true);
+check("registerBundlePackage 记录 dependencies + bundles 层", /registerBundlePackage[\s\S]*?manifest\.dependencies = deps;[\s\S]*?bundles\.push\(pkgName\)/.test(lib), true);
+check("registerBundlePackage 经 pnpm install 注册（cwd=profile）", /registerBundlePackage[\s\S]*?runPnpm\(\["install"\], \{ cwd: PROFILE_WEB_DIR/.test(lib), true);
+check("profile manifest 原子写（tmp + rename）", /const tmp = PROFILE_PKG \+ "\.tmp";[\s\S]*?rename\(tmp, PROFILE_PKG\)/.test(lib), true);
+check("installRepo bundle 分支在 appendPatchEntry 前 continue（不写单条 insert）", /if \(isBundlePackage\(pkg\) && repo !== SELF_UPDATE_REPO\)[\s\S]*?registerBundlePackage[\s\S]*?continue;/.test(lib), true);
+check("卸载 bundle 主路径 pnpm remove", /record\.bundle === true[\s\S]*?runPnpm\(\["remove", pkgName\], \{ cwd: PROFILE_WEB_DIR/.test(lib), true);
+check("卸载 bundle 降级路径手工移除 manifest 条目", /uninstallBundleDegraded[\s\S]*?delete manifest\.dependencies\[pkgName\]/.test(lib), true);
+
 // ---- 扫描边界：symlink 不跟随（扫描范围必须限于 cacheDir 内）----
 // Dirent.isDirectory() 对 symlink 恒 false——若只有 isDirectory 分支判断，symlink 会落
 // 进文件分支被 readFile 读取：恶意仓库可提交指向仓库外任意文件的 symlink（如

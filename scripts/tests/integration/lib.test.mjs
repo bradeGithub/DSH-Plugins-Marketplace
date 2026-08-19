@@ -328,6 +328,101 @@ function mockFetch(payload, status = 200) {
     check("appendPatchEntry 追加后是合法 YAML", /^- insert:\s*$\s*  - id: reg-entry\s*  name: reg\/pkg/m.test(text), true);
   }
 
+  // ---- issue #134：bundle 声明包注册路径（installRepo + pnpm stub + uninstall handler）----
+  {
+    const stubDir = mkdtempSync(join(tmpdir(), "dsh-pnpm-stub-"));
+    const stubJs = 'const fs=require("fs"),path=require("path");const argv=process.argv.slice(2);const cwd=process.cwd();'
+      + 'if(argv[0]==="install"){const m=JSON.parse(fs.readFileSync(path.join(cwd,"package.json"),"utf8"));'
+      + 'for(const n of Object.keys(m.dependencies||{})){if(m.dependencies[n]==="1.2.3"){'
+      + 'const d=path.join(cwd,"node_modules",...n.split("/"));fs.mkdirSync(d,{recursive:true});'
+      + 'fs.writeFileSync(path.join(d,"package.json"),JSON.stringify({name:n,version:"1.2.3"}));}}}'
+      + 'else if(argv[0]==="remove"){const n=argv[1];fs.rmSync(path.join(cwd,"node_modules",...n.split("/")),{recursive:true,force:true});'
+      + 'const m=JSON.parse(fs.readFileSync(path.join(cwd,"package.json"),"utf8"));'
+      + 'if(m.dependencies)delete m.dependencies[n];'
+      + 'if(m.dsh&&m.dsh.profile&&Array.isArray(m.dsh.profile.bundles))m.dsh.profile.bundles=m.dsh.profile.bundles.filter((b)=>b!==n);'
+      + 'fs.writeFileSync(path.join(cwd,"package.json"),JSON.stringify(m,null,2));}';
+    writeFileSync(join(stubDir, "pnpm.js"), stubJs, "utf8");
+    writeFileSync(join(stubDir, "pnpm.cmd"), "@echo off\r\nnode \"%~dp0pnpm.js\" %*\r\nexit /b %ERRORLEVEL%\r\n", "utf8");
+    writeFileSync(join(stubDir, "pnpm"), "#!/bin/sh\nnode \"$(dirname \"$0\")/pnpm.js\" \"$@\"\n", "utf8");
+    const savedPath = process.env.PATH;
+    process.env.PATH = `${stubDir}${process.platform === "win32" ? ";" : ":"}${savedPath ?? ""}`;
+    try {
+      const web = join(process.env.DSH_HOME, "profiles", "web");
+      mkdirSync(web, { recursive: true });
+      writeFileSync(join(web, "package.json"), JSON.stringify({
+        name: "web-profile", version: "1.0.0",
+        dependencies: { "dsh-plugin-marketplace": "github:bradeGithub/DSH-Plugins-Marketplace" },
+        dsh: { profile: { bundles: ["dsh-plugin-marketplace"] } },
+      }, null, 2), "utf8");
+      // fixture：bundle 声明包（dsh.bundle.patch + 空操作入口，与 @linxin666/dsh-web-ui-all 同形态）
+      const fix = join(process.env.DSH_HOME, "bundle-fixture");
+      mkdirSync(join(fix, "lib"), { recursive: true });
+      writeFileSync(join(fix, "package.json"), JSON.stringify({
+        name: "fake-bundle-pkg", version: "1.2.3", main: "lib/index.js",
+        dsh: { bundle: { patch: "./cordis.patch.yml" } },
+      }, null, 2), "utf8");
+      writeFileSync(join(fix, "lib", "index.js"), "export function apply(_ctx) {}\n", "utf8");
+      writeFileSync(join(fix, "cordis.patch.yml"), "- insert:\n    - id: fake-sub\n      name: '@fake/sub-pkg'\n", "utf8");
+      const logLines = [];
+      const result = await lib.installRepo({
+        type: "cordis-plugin", cacheDir: fix, repo: "fake/bundle-repo", log: [],
+        answers: {}, logLine: (l) => logLines.push(l), lang: "zh", envAllowList: [],
+      });
+      const profPkg = JSON.parse(readFileSync(join(web, "package.json"), "utf8"));
+      check("bundle 注册写入 profile dependencies（精确版本）", profPkg.dependencies["fake-bundle-pkg"], "1.2.3");
+      check("bundle 注册追加 dsh.profile.bundles（保留既有条目）", profPkg.dsh.profile.bundles.join(","), "dsh-plugin-marketplace,fake-bundle-pkg");
+      check("bundle 注册不写 cordis.patch.yml insert", !existsSync(join(web, "cordis.patch.yml")) || !readFileSync(join(web, "cordis.patch.yml"), "utf8").includes("fake-bundle-pkg"), true);
+      check("bundle 安装结果带 bundle 标志", result.bundle, true);
+      check("bundle 安装 location 指向 profile 解析目录", String(result.location).endsWith(join("node_modules", "fake-bundle-pkg")), true);
+      check("bundle 注册日志含 pnpm install 步骤", logLines.some((l) => l.includes("pnpm install")), true);
+
+      // 卸载：补一条 bundle 安装记录后经 handler 全链路（pnpm remove 清理 manifest + 目录）
+      await lib.saveInstalled("fake/bundle-repo", {
+        type: "cordis-plugin", name: "fake-bundle-pkg", names: ["fake-bundle-pkg"],
+        location: join(web, "node_modules", "fake-bundle-pkg"), version: "1.2.3",
+        bundle: true, installedAt: Date.now(), envKeys: null,
+      });
+      const registered2 = [];
+      lib.apply({ get: (s) => (s === "webServer" ? { register: (r) => registered2.push(r) } : undefined), logger: { warn: () => {} }, slots: { inject: () => {} } });
+      const uninstallHandler = registered2.find((r) => r.path === "/api/marketplace/uninstall")?.handler;
+      const bodyStr = JSON.stringify({ repo: "fake/bundle-repo" });
+      let sent = false;
+      const unReq = {
+        method: "POST",
+        headers: { "x-dsh-marketplace": "1", host: "127.0.0.1:3080" },
+        socket: { remoteAddress: "127.0.0.1" },
+        url: "/api/marketplace/uninstall",
+        [Symbol.asyncIterator]() {
+          return { next: async () => (sent ? { value: undefined, done: true } : ((sent = true), { value: Buffer.from(bodyStr), done: false })) };
+        },
+      };
+      let uStatus = 0, uBody = null;
+      await uninstallHandler(unReq, { writeHead: (x) => { uStatus = x; }, end: (x) => { try { uBody = JSON.parse(x); } catch { uBody = null; } } });
+      const profAfter = JSON.parse(readFileSync(join(web, "package.json"), "utf8"));
+      check("bundle 卸载响应 200 done", uStatus === 200 && uBody?.status, "done");
+      check("bundle 卸载移除 profile dependencies", profAfter.dependencies["fake-bundle-pkg"], undefined);
+      check("bundle 卸载移除 dsh.profile.bundles 条目", profAfter.dsh.profile.bundles.join(","), "dsh-plugin-marketplace");
+      check("bundle 卸载删除包目录", existsSync(join(web, "node_modules", "fake-bundle-pkg")), false);
+
+      // 回归：非 bundle 插件仍走复制 + patch insert（原路径不受影响）
+      const plainFix = join(process.env.DSH_HOME, "plain-fixture");
+      mkdirSync(join(plainFix, "lib"), { recursive: true });
+      writeFileSync(join(plainFix, "package.json"), JSON.stringify({ name: "fake-plain-pkg", version: "0.0.1", main: "lib/index.js", dsh: { client: {} } }, null, 2), "utf8");
+      writeFileSync(join(plainFix, "lib", "index.js"), "export function apply(_ctx) {}\n", "utf8");
+      const plainResult = await lib.installRepo({
+        type: "cordis-plugin", cacheDir: plainFix, repo: "fake/plain-repo", log: [],
+        answers: {}, logLine: () => {}, lang: "zh", envAllowList: [],
+      });
+      const profBeforePlain = JSON.parse(readFileSync(join(web, "package.json"), "utf8"));
+      check("非 bundle 插件不写 profile dependencies", profBeforePlain.dependencies["fake-plain-pkg"], undefined);
+      check("非 bundle 插件结果无 bundle 标志", plainResult.bundle, false);
+      check("非 bundle 插件写入 cordis.patch.yml insert", readFileSync(join(web, "cordis.patch.yml"), "utf8").includes("fake-plain-pkg"), true);
+    } finally {
+      process.env.PATH = savedPath;
+      rmSync(stubDir, { recursive: true, force: true });
+    }
+  }
+
   // 网络类（mock fetch）
   const items = [{ full_name: "a/b", stargazers_count: 5, updated_at: "2026-01-01T00:00:00Z", description: "x", html_url: "https://github.com/a/b", clone_url: "https://github.com/a/b.git" }];
   const orig1 = mockFetch({ items, total_count: 1 });

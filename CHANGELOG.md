@@ -3,6 +3,12 @@
 本仓库的版本迭代记录。**v1.0.0 之前的版本均为 beta 系列**（开发期迭代，未单独打 tag）。/ Version history of this repository. **All versions before v1.0.0 are part of the beta series** (development iterations, not individually tagged).
 ---
 
+## v1.5.4 — 2026-08-19（修复：bundle 声明包装而不生效 / Fix: bundle-package registration gap）
+
+- **修复 bundle 声明包装而不生效（issue #134，重要）**：bundle 形态包（package.json 声明 `dsh.bundle.patch`）的实质内容在其 patch 层（子插件行），旧管线把它当普通插件写单条 cordis.patch.yml insert——只挂载空壳入口，子插件全部缺失（实测 `@linxin666/dsh-web-ui-all`：lib/index.js 是空操作 shim + 15 个子插件行，安装报成功但设置入口等全部不出现）；本地隔离复现 + 对照官方 harness 源码确认根因。现在识别 bundle 声明包后改走 profile bundles 层注册：写入 profile package.json（dependencies 精确版本 + dsh.profile.bundles 追加）→ pnpm install 对齐 pnpm 布局与 lockfile → 不再写单条 insert；卸载主路径 pnpm remove（同步清理 manifest/lockfile/目录），pnpm 不可用时降级手工清理并明示 / bundle-form packages now register through the profile bundles layer (recorded into profile package.json dependencies + dsh.profile.bundles, then pnpm install aligns the pnpm layout and lockfile) instead of a single insert row that only mounted the empty shell; uninstall runs pnpm remove with a manual degraded cleanup when pnpm is unavailable
+- **失败路径明示**：profile 无 package.json / bundle 包无 version / pnpm 缺失或 registry 缺包，均给出可操作错误提示（换官方 registry / 官方 CLI 指令）而非伪装成功 / explicit actionable errors for missing profile manifest, versionless bundles, missing pnpm, or registry misses instead of fake success
+- **回归测试**：security-guards +7 bundle 注册契约；lib 集成 +13（bundle 安装/卸载全链路 + 非 bundle 原路径不受影响）/ security-guards gains 7 bundle-registration contracts; lib integration gains 13 assertions covering bundle install/uninstall end-to-end plus the unchanged plain-plugin path
+
 ## v1.5.3 — 2026-08-18（修复：Windows 安装/自更新黑窗口闪烁 / Fix: Windows console-window flash）
 
 - **修复 Windows 子进程黑窗口闪烁（issue #125）**：市场从无控制台父进程（DSH web 服务）拉起 `cmd.exe /c pnpm`、`dsh`、`pwsh`、`git`、`npm`、`bash` 等控制台子进程时，Windows 每次都会新开一个黑窗口（安装/自更新高频触发，用户报告「每次调 cmd /c pnpm 都新开一个黑窗口」）；现在所有 `execFileAsync` 调用点统一带 `windowsHide: true`（`runNpm`/`runPnpm` 经 `execOpts` 传递，bash 版本探测 `spawnSync` 同样覆盖），非 Windows 平台该选项无副作用 / every execFileAsync call site (cmd.exe/pnpm/dsh/pwsh/git/npm/bash) now passes `windowsHide: true` — spawning console children from the console-less DSH web process no longer flashes a black window per call on Windows; ignored on other platforms
