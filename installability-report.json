@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-08-19T21:12:46.020Z",
+  "generated_at": "2026-08-19T23:08:43.266Z",
   "counts": {
-    "cordis-plugin": 5777,
-    "pkg-plain": 673,
+    "cordis-plugin": 5837,
+    "pkg-plain": 674,
     "manual": 507,
     "skill": 324,
     "multi-plugin": 279,
@@ -1279,6 +1279,10 @@
     {
       "full_name": "agi-fans/oh-my-dsh",
       "verdict": "pkg-plain"
+    },
+    {
+      "full_name": "AGSQ11/dsh-ai-council",
+      "verdict": "cordis-plugin"
     },
     {
       "full_name": "AGSQ11/dsh-model-probe",
@@ -10573,6 +10577,10 @@
       "verdict": "cordis-plugin"
     },
     {
+      "full_name": "iia-arg/dsh-plugins",
+      "verdict": "pkg-plain"
+    },
+    {
       "full_name": "iiwish/dsh-testkit",
       "verdict": "cordis-plugin"
     },
@@ -11091,6 +11099,10 @@
     {
       "full_name": "JavenLu233/dsh-cost-monitor",
       "verdict": "pkg-plain"
+    },
+    {
+      "full_name": "JavierNier/balance-show",
+      "verdict": "cordis-plugin"
     },
     {
       "full_name": "jaxxchen003/foliodrop-dsh-publish",
@@ -20869,6 +20881,10 @@
       "verdict": "cordis-plugin"
     },
     {
+      "full_name": "sandbaseai/dsh-plugin-store",
+      "verdict": "cordis-plugin"
+    },
+    {
       "full_name": "sandbaseai/sandbase-harness",
       "verdict": "cordis-plugin"
     },
@@ -20909,7 +20925,23 @@
       "verdict": "cordis-plugin"
     },
     {
+      "full_name": "satan9394/dsh-ai-image-design",
+      "verdict": "cordis-plugin"
+    },
+    {
+      "full_name": "satan9394/dsh-algorithmic-art",
+      "verdict": "cordis-plugin"
+    },
+    {
       "full_name": "satan9394/dsh-api-design",
+      "verdict": "cordis-plugin"
+    },
+    {
+      "full_name": "satan9394/dsh-api-documentation",
+      "verdict": "cordis-plugin"
+    },
+    {
+      "full_name": "satan9394/dsh-api-scaffolding",
       "verdict": "cordis-plugin"
     },
     {
@@ -20917,7 +20949,23 @@
       "verdict": "cordis-plugin"
     },
     {
+      "full_name": "satan9394/dsh-bash-testing",
+      "verdict": "cordis-plugin"
+    },
+    {
       "full_name": "satan9394/dsh-bazel-build-optimization",
+      "verdict": "cordis-plugin"
+    },
+    {
+      "full_name": "satan9394/dsh-before-you-build",
+      "verdict": "cordis-plugin"
+    },
+    {
+      "full_name": "satan9394/dsh-blockchain-web3",
+      "verdict": "cordis-plugin"
+    },
+    {
+      "full_name": "satan9394/dsh-brand-guidelines",
       "verdict": "cordis-plugin"
     },
     {
@@ -20941,11 +20989,23 @@
       "verdict": "cordis-plugin"
     },
     {
+      "full_name": "satan9394/dsh-codebase-design",
+      "verdict": "cordis-plugin"
+    },
+    {
+      "full_name": "satan9394/dsh-codebase-scanner",
+      "verdict": "cordis-plugin"
+    },
+    {
       "full_name": "satan9394/dsh-context-engineering",
       "verdict": "cordis-plugin"
     },
     {
       "full_name": "satan9394/dsh-contract-review",
+      "verdict": "cordis-plugin"
+    },
+    {
+      "full_name": "satan9394/dsh-data-engineering",
       "verdict": "cordis-plugin"
     },
     {
@@ -20961,7 +21021,15 @@
       "verdict": "cordis-plugin"
     },
     {
+      "full_name": "satan9394/dsh-distributed-debugging",
+      "verdict": "cordis-plugin"
+    },
+    {
       "full_name": "satan9394/dsh-docs-adr",
+      "verdict": "cordis-plugin"
+    },
+    {
+      "full_name": "satan9394/dsh-document-generation",
       "verdict": "cordis-plugin"
     },
     {
@@ -20969,7 +21037,15 @@
       "verdict": "cordis-plugin"
     },
     {
+      "full_name": "satan9394/dsh-dotnet-backend",
+      "verdict": "cordis-plugin"
+    },
+    {
       "full_name": "satan9394/dsh-doubt-driven-dev",
+      "verdict": "cordis-plugin"
+    },
+    {
+      "full_name": "satan9394/dsh-e2e-testing",
       "verdict": "cordis-plugin"
     },
     {
@@ -20981,11 +21057,39 @@
       "verdict": "cordis-plugin"
     },
     {
+      "full_name": "satan9394/dsh-file-conversion",
+      "verdict": "cordis-plugin"
+    },
+    {
+      "full_name": "satan9394/dsh-framework-migration",
+      "verdict": "cordis-plugin"
+    },
+    {
       "full_name": "satan9394/dsh-frontend-design",
       "verdict": "cordis-plugin"
     },
     {
       "full_name": "satan9394/dsh-frontend-engineering",
+      "verdict": "cordis-plugin"
+    },
+    {
+      "full_name": "satan9394/dsh-frontend-mobile",
+      "verdict": "cordis-plugin"
+    },
+    {
+      "full_name": "satan9394/dsh-full-stack-orchestration",
+      "verdict": "cordis-plugin"
+    },
+    {
+      "full_name": "satan9394/dsh-functional-programming",
+      "verdict": "cordis-plugin"
+    },
+    {
+      "full_name": "satan9394/dsh-game-development",
+      "verdict": "cordis-plugin"
+    },
+    {
+      "full_name": "satan9394/dsh-git-guardrails",
       "verdict": "cordis-plugin"
     },
     {
@@ -21001,7 +21105,15 @@
       "verdict": "cordis-plugin"
     },
     {
+      "full_name": "satan9394/dsh-hr-legal-compliance",
+      "verdict": "cordis-plugin"
+    },
+    {
       "full_name": "satan9394/dsh-humanizer-zh",
+      "verdict": "cordis-plugin"
+    },
+    {
+      "full_name": "satan9394/dsh-hybrid-cloud",
       "verdict": "cordis-plugin"
     },
     {
@@ -21013,11 +21125,39 @@
       "verdict": "cordis-plugin"
     },
     {
+      "full_name": "satan9394/dsh-internal-comms",
+      "verdict": "cordis-plugin"
+    },
+    {
+      "full_name": "satan9394/dsh-issue-triage",
+      "verdict": "cordis-plugin"
+    },
+    {
+      "full_name": "satan9394/dsh-javascript-typescript",
+      "verdict": "cordis-plugin"
+    },
+    {
       "full_name": "satan9394/dsh-karpathy-methodology",
       "verdict": "cordis-plugin"
     },
     {
+      "full_name": "satan9394/dsh-kpi-dashboard-design",
+      "verdict": "cordis-plugin"
+    },
+    {
+      "full_name": "satan9394/dsh-kubernetes-operations",
+      "verdict": "cordis-plugin"
+    },
+    {
       "full_name": "satan9394/dsh-llm-eval",
+      "verdict": "cordis-plugin"
+    },
+    {
+      "full_name": "satan9394/dsh-llm-finetuning",
+      "verdict": "cordis-plugin"
+    },
+    {
+      "full_name": "satan9394/dsh-mcp-builder",
       "verdict": "cordis-plugin"
     },
     {
@@ -21041,6 +21181,18 @@
       "verdict": "cordis-plugin"
     },
     {
+      "full_name": "satan9394/dsh-multi-cloud",
+      "verdict": "cordis-plugin"
+    },
+    {
+      "full_name": "satan9394/dsh-observability-tools",
+      "verdict": "cordis-plugin"
+    },
+    {
+      "full_name": "satan9394/dsh-operating-kit",
+      "verdict": "cordis-plugin"
+    },
+    {
       "full_name": "satan9394/dsh-parallel-dev",
       "verdict": "cordis-plugin"
     },
@@ -21061,6 +21213,10 @@
       "verdict": "cordis-plugin"
     },
     {
+      "full_name": "satan9394/dsh-plugin-eval",
+      "verdict": "cordis-plugin"
+    },
+    {
       "full_name": "satan9394/dsh-ponytail-dev",
       "verdict": "cordis-plugin"
     },
@@ -21073,6 +21229,10 @@
       "verdict": "cordis-plugin"
     },
     {
+      "full_name": "satan9394/dsh-python-development",
+      "verdict": "cordis-plugin"
+    },
+    {
       "full_name": "satan9394/dsh-quant-backtest",
       "verdict": "cordis-plugin"
     },
@@ -21081,7 +21241,19 @@
       "verdict": "cordis-plugin"
     },
     {
+      "full_name": "satan9394/dsh-reverse-engineering",
+      "verdict": "cordis-plugin"
+    },
+    {
+      "full_name": "satan9394/dsh-review-agent-governance",
+      "verdict": "cordis-plugin"
+    },
+    {
       "full_name": "satan9394/dsh-runbook",
+      "verdict": "cordis-plugin"
+    },
+    {
+      "full_name": "satan9394/dsh-sales-automation",
       "verdict": "cordis-plugin"
     },
     {
@@ -21093,11 +21265,23 @@
       "verdict": "cordis-plugin"
     },
     {
+      "full_name": "satan9394/dsh-setup-wizard",
+      "verdict": "cordis-plugin"
+    },
+    {
+      "full_name": "satan9394/dsh-signed-audit-trails",
+      "verdict": "cordis-plugin"
+    },
+    {
       "full_name": "satan9394/dsh-skill-creator",
       "verdict": "cordis-plugin"
     },
     {
       "full_name": "satan9394/dsh-slo",
+      "verdict": "cordis-plugin"
+    },
+    {
+      "full_name": "satan9394/dsh-social-publishing",
       "verdict": "cordis-plugin"
     },
     {
@@ -21129,11 +21313,67 @@
       "verdict": "cordis-plugin"
     },
     {
+      "full_name": "satan9394/dsh-teach",
+      "verdict": "cordis-plugin"
+    },
+    {
+      "full_name": "satan9394/dsh-tech-debt",
+      "verdict": "cordis-plugin"
+    },
+    {
       "full_name": "satan9394/dsh-terraform",
       "verdict": "cordis-plugin"
     },
     {
+      "full_name": "satan9394/dsh-threat-modeling",
+      "verdict": "cordis-plugin"
+    },
+    {
+      "full_name": "satan9394/dsh-to-questionnaire",
+      "verdict": "cordis-plugin"
+    },
+    {
+      "full_name": "satan9394/dsh-track-driven-dev",
+      "verdict": "cordis-plugin"
+    },
+    {
+      "full_name": "satan9394/dsh-vector-search",
+      "verdict": "cordis-plugin"
+    },
+    {
+      "full_name": "satan9394/dsh-wayfinder",
+      "verdict": "cordis-plugin"
+    },
+    {
       "full_name": "satan9394/dsh-web-clone",
+      "verdict": "cordis-plugin"
+    },
+    {
+      "full_name": "satan9394/dsh-web-scripting",
+      "verdict": "cordis-plugin"
+    },
+    {
+      "full_name": "satan9394/dsh-workflow-loop",
+      "verdict": "cordis-plugin"
+    },
+    {
+      "full_name": "satan9394/dsh-writing-beats",
+      "verdict": "cordis-plugin"
+    },
+    {
+      "full_name": "satan9394/dsh-writing-for-agents",
+      "verdict": "cordis-plugin"
+    },
+    {
+      "full_name": "satan9394/dsh-writing-fragments",
+      "verdict": "cordis-plugin"
+    },
+    {
+      "full_name": "satan9394/dsh-writing-shape",
+      "verdict": "cordis-plugin"
+    },
+    {
+      "full_name": "satan9394/dsh-x-twitter-research",
       "verdict": "cordis-plugin"
     },
     {
@@ -27271,6 +27511,10 @@
     {
       "full_name": "windygo123/dsh-see-world",
       "verdict": "manual"
+    },
+    {
+      "full_name": "WindyPro-rourou/dsh-code-studio",
+      "verdict": "cordis-plugin"
     },
     {
       "full_name": "WindyPro-rourou/dsh-logcat",
