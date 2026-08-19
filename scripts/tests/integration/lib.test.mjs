@@ -332,10 +332,14 @@ function mockFetch(payload, status = 200) {
   {
     const stubDir = mkdtempSync(join(tmpdir(), "dsh-pnpm-stub-"));
     const stubJs = 'const fs=require("fs"),path=require("path");const argv=process.argv.slice(2);const cwd=process.cwd();'
+      + 'let mode="";try{mode=fs.readFileSync(path.join(__dirname,"mode"),"utf8").trim()}catch(e){}'
       + 'if(argv[0]==="install"){const m=JSON.parse(fs.readFileSync(path.join(cwd,"package.json"),"utf8"));'
-      + 'for(const n of Object.keys(m.dependencies||{})){if(m.dependencies[n]==="1.2.3"){'
+      + 'for(const n of Object.keys(m.dependencies||{})){const v=m.dependencies[n];'
+      + 'if(mode==="fail-nocreate"&&v==="1.2.5")process.exit(1);'
+      + 'if(v==="1.2.3"||v==="1.2.4"||v==="1.2.5"){'
       + 'const d=path.join(cwd,"node_modules",...n.split("/"));fs.mkdirSync(d,{recursive:true});'
-      + 'fs.writeFileSync(path.join(d,"package.json"),JSON.stringify({name:n,version:"1.2.3"}));}}}'
+      + 'fs.writeFileSync(path.join(d,"package.json"),JSON.stringify({name:n,version:v}));}}'
+      + 'if(mode==="fail-create")process.exit(1);}'
       + 'else if(argv[0]==="remove"){const n=argv[1];fs.rmSync(path.join(cwd,"node_modules",...n.split("/")),{recursive:true,force:true});'
       + 'const m=JSON.parse(fs.readFileSync(path.join(cwd,"package.json"),"utf8"));'
       + 'if(m.dependencies)delete m.dependencies[n];'
@@ -346,6 +350,17 @@ function mockFetch(payload, status = 200) {
     writeFileSync(join(stubDir, "pnpm"), "#!/bin/sh\nnode \"$(dirname \"$0\")/pnpm.js\" \"$@\"\n", "utf8");
     const savedPath = process.env.PATH;
     process.env.PATH = `${stubDir}${process.platform === "win32" ? ";" : ":"}${savedPath ?? ""}`;
+    const makeFixture = (name, version, bundle) => {
+      const dir = join(process.env.DSH_HOME, `${name}-fixture`);
+      mkdirSync(join(dir, "lib"), { recursive: true });
+      writeFileSync(join(dir, "package.json"), JSON.stringify({
+        name, version, main: "lib/index.js",
+        dsh: bundle ? { bundle: { patch: "./cordis.patch.yml" } } : { client: {} },
+      }, null, 2), "utf8");
+      writeFileSync(join(dir, "lib", "index.js"), "export function apply(_ctx) {}\n", "utf8");
+      if (bundle) writeFileSync(join(dir, "cordis.patch.yml"), "- insert:\n    - id: fake-sub\n      name: '@fake/sub-pkg'\n", "utf8");
+      return dir;
+    };
     try {
       const web = join(process.env.DSH_HOME, "profiles", "web");
       mkdirSync(web, { recursive: true });
@@ -355,14 +370,7 @@ function mockFetch(payload, status = 200) {
         dsh: { profile: { bundles: ["dsh-plugin-marketplace"] } },
       }, null, 2), "utf8");
       // fixture：bundle 声明包（dsh.bundle.patch + 空操作入口，与 @linxin666/dsh-web-ui-all 同形态）
-      const fix = join(process.env.DSH_HOME, "bundle-fixture");
-      mkdirSync(join(fix, "lib"), { recursive: true });
-      writeFileSync(join(fix, "package.json"), JSON.stringify({
-        name: "fake-bundle-pkg", version: "1.2.3", main: "lib/index.js",
-        dsh: { bundle: { patch: "./cordis.patch.yml" } },
-      }, null, 2), "utf8");
-      writeFileSync(join(fix, "lib", "index.js"), "export function apply(_ctx) {}\n", "utf8");
-      writeFileSync(join(fix, "cordis.patch.yml"), "- insert:\n    - id: fake-sub\n      name: '@fake/sub-pkg'\n", "utf8");
+      const fix = makeFixture("fake-bundle-pkg", "1.2.3", true);
       const logLines = [];
       const result = await lib.installRepo({
         type: "cordis-plugin", cacheDir: fix, repo: "fake/bundle-repo", log: [],
@@ -375,6 +383,32 @@ function mockFetch(payload, status = 200) {
       check("bundle 安装结果带 bundle 标志", result.bundle, true);
       check("bundle 安装 location 指向 profile 解析目录", String(result.location).endsWith(join("node_modules", "fake-bundle-pkg")), true);
       check("bundle 注册日志含 pnpm install 步骤", logLines.some((l) => l.includes("pnpm install")), true);
+
+      // 结果导向：pnpm 退出非零但包已可解析 → 成功 + 告警（不伪装失败也不忽略告警）
+      writeFileSync(join(stubDir, "mode"), "fail-create", "utf8");
+      const fixB = makeFixture("fake-bundle-b", "1.2.4", true);
+      const logB = [];
+      const resultB = await lib.installRepo({
+        type: "cordis-plugin", cacheDir: fixB, repo: "fake/bundle-repo-b", log: [],
+        answers: {}, logLine: (l) => logB.push(l), lang: "zh", envAllowList: [],
+      });
+      check("pnpm 非零退出但包可解析 → 结果导向成功", resultB.bundle, true);
+      check("pnpm 非零退出但包可解析 → 告警日志", logB.some((l) => l.includes("以非零状态退出")), true);
+
+      // pnpm 未完成安装（包不可解析）→ 明示失败（bundleResolveFail），不伪装成功
+      writeFileSync(join(stubDir, "mode"), "fail-nocreate", "utf8");
+      const fixC = makeFixture("fake-bundle-c", "1.2.5", true);
+      let thrownC = null;
+      try {
+        await lib.installRepo({
+          type: "cordis-plugin", cacheDir: fixC, repo: "fake/bundle-repo-c", log: [],
+          answers: {}, logLine: () => {}, lang: "zh", envAllowList: [],
+        });
+      } catch (error) {
+        thrownC = String(error?.message ?? error);
+      }
+      check("pnpm 未完成安装 → bundleResolveFail 明示失败", /仍未在 profile node_modules 解析到/.test(thrownC ?? ""), true);
+      writeFileSync(join(stubDir, "mode"), "", "utf8");
 
       // 卸载：补一条 bundle 安装记录后经 handler 全链路（pnpm remove 清理 manifest + 目录）
       await lib.saveInstalled("fake/bundle-repo", {
@@ -401,14 +435,11 @@ function mockFetch(payload, status = 200) {
       const profAfter = JSON.parse(readFileSync(join(web, "package.json"), "utf8"));
       check("bundle 卸载响应 200 done", uStatus === 200 && uBody?.status, "done");
       check("bundle 卸载移除 profile dependencies", profAfter.dependencies["fake-bundle-pkg"], undefined);
-      check("bundle 卸载移除 dsh.profile.bundles 条目", profAfter.dsh.profile.bundles.join(","), "dsh-plugin-marketplace");
+      check("bundle 卸载移除 dsh.profile.bundles 条目", profAfter.dsh.profile.bundles.join(","), "dsh-plugin-marketplace,fake-bundle-b,fake-bundle-c");
       check("bundle 卸载删除包目录", existsSync(join(web, "node_modules", "fake-bundle-pkg")), false);
 
       // 回归：非 bundle 插件仍走复制 + patch insert（原路径不受影响）
-      const plainFix = join(process.env.DSH_HOME, "plain-fixture");
-      mkdirSync(join(plainFix, "lib"), { recursive: true });
-      writeFileSync(join(plainFix, "package.json"), JSON.stringify({ name: "fake-plain-pkg", version: "0.0.1", main: "lib/index.js", dsh: { client: {} } }, null, 2), "utf8");
-      writeFileSync(join(plainFix, "lib", "index.js"), "export function apply(_ctx) {}\n", "utf8");
+      const plainFix = makeFixture("fake-plain-pkg", "0.0.1", false);
       const plainResult = await lib.installRepo({
         type: "cordis-plugin", cacheDir: plainFix, repo: "fake/plain-repo", log: [],
         answers: {}, logLine: () => {}, lang: "zh", envAllowList: [],

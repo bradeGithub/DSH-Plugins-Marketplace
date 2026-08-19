@@ -89,6 +89,8 @@ check("registerBundlePackage 记录 dependencies + bundles 层", /registerBundle
 check("registerBundlePackage 经 pnpm install 注册（cwd=profile）", /registerBundlePackage[\s\S]*?runPnpm\(\["install"\], \{ cwd: PROFILE_WEB_DIR/.test(lib), true);
 check("profile manifest 原子写（tmp + rename）", /const tmp = PROFILE_PKG \+ "\.tmp";[\s\S]*?rename\(tmp, PROFILE_PKG\)/.test(lib), true);
 check("installRepo bundle 分支在 appendPatchEntry 前 continue（不写单条 insert）", /if \(isBundlePackage\(pkg\) && repo !== SELF_UPDATE_REPO\)[\s\S]*?registerBundlePackage[\s\S]*?continue;/.test(lib), true);
+check("bundle 注册结果导向：pnpm 非零退出但包可解析 → 告警继续", /let pnpmErr = null;[\s\S]*?if \(pnpmErr\) logLine\(t\(lang, "bundlePnpmWarn"/.test(lib), true);
+check("bundle 注册验证子依赖可解析（realpath + createRequire，对齐 ESM 解析语义）", /realpath\(resolvedPkg\)[\s\S]*?createRequire\(join\(anchor, "noop\.js"\)\)[\s\S]*?bundleDepsResolveFail/.test(lib), true);
 check("卸载 bundle 主路径 pnpm remove", /record\.bundle === true[\s\S]*?runPnpm\(\["remove", pkgName\], \{ cwd: PROFILE_WEB_DIR/.test(lib), true);
 check("卸载 bundle 降级路径手工移除 manifest 条目", /uninstallBundleDegraded[\s\S]*?delete manifest\.dependencies\[pkgName\]/.test(lib), true);
 
