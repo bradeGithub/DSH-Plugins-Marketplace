@@ -3,6 +3,11 @@
 本仓库的版本迭代记录。**v1.0.0 之前的版本均为 beta 系列**（开发期迭代，未单独打 tag）。/ Version history of this repository. **All versions before v1.0.0 are part of the beta series** (development iterations, not individually tagged).
 ---
 
+## v1.5.5 — 2026-08-19（修复：GitHub-only bundle 包注册 404 / Fix: GitHub-only bundle packages 404 on registration）
+
+- **修复只发 GitHub 不发 npm 的 bundle 包安装失败（dsh-theme-endfield 案例）**：v1.5.4 的 bundle 注册固定用「版本号」做依赖声明——仓库克隆来源且未发布到 npm 的 bundle 包，pnpm 去 registry 解析 `name@1.0.0` 必然 404。现在区分来源：npm 等价回退来源用精确版本（registry 可解析）；仓库克隆来源用 `github:<owner>/<repo>` 声明（与官方 CLI 指令同形，pnpm 直接拉 GitHub tarball）/ bundle dependency specifiers now follow the install source: exact published versions for npm-fallback installs, `github:<owner>/<repo>` for repo-clone installs of GitHub-only packages (previously pnpm 404'd resolving a version that was never published)
+- **回归测试**：security-guards +1 来源区分契约；lib 集成 +2（仓库来源 github: 声明场景 + npm 来源精确版本场景）/ security-guards gains a source-discrimination contract; lib integration gains the github:-specifier scenario alongside the npm-version scenario
+
 ## v1.5.4 — 2026-08-19（修复：bundle 声明包装而不生效 / Fix: bundle-package registration gap）
 
 - **修复 bundle 声明包装而不生效（issue #134，重要）**：bundle 形态包（package.json 声明 `dsh.bundle.patch`）的实质内容在其 patch 层（子插件行），旧管线把它当普通插件写单条 cordis.patch.yml insert——只挂载空壳入口，子插件全部缺失（实测 `@linxin666/dsh-web-ui-all`：lib/index.js 是空操作 shim + 15 个子插件行，安装报成功但设置入口等全部不出现）；本地隔离复现 + 对照官方 harness 源码确认根因。现在识别 bundle 声明包后改走 profile bundles 层注册：写入 profile package.json（dependencies 精确版本 + dsh.profile.bundles 追加）→ pnpm install 对齐 pnpm 布局与 lockfile → 不再写单条 insert；卸载主路径 pnpm remove（同步清理 manifest/lockfile/目录），pnpm 不可用时降级手工清理并明示 / bundle-form packages now register through the profile bundles layer (recorded into profile package.json dependencies + dsh.profile.bundles, then pnpm install aligns the pnpm layout and lockfile) instead of a single insert row that only mounted the empty shell; uninstall runs pnpm remove with a manual degraded cleanup when pnpm is unavailable

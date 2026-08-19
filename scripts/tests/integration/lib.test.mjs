@@ -335,10 +335,10 @@ function mockFetch(payload, status = 200) {
       + 'let mode="";try{mode=fs.readFileSync(path.join(__dirname,"mode"),"utf8").trim()}catch(e){}'
       + 'if(argv[0]==="install"){const m=JSON.parse(fs.readFileSync(path.join(cwd,"package.json"),"utf8"));'
       + 'for(const n of Object.keys(m.dependencies||{})){const v=m.dependencies[n];'
-      + 'if(mode==="fail-nocreate"&&v==="1.2.5")process.exit(1);'
-      + 'if(v==="1.2.3"||v==="1.2.4"||v==="1.2.5"){'
+      + 'if(mode==="fail-nocreate"&&(v==="1.2.5"||String(v).startsWith("github:fake/")))process.exit(1);'
+      + 'if(v==="1.2.3"||v==="1.2.4"||v==="1.2.5"||String(v).startsWith("github:fake/")){'
       + 'const d=path.join(cwd,"node_modules",...n.split("/"));fs.mkdirSync(d,{recursive:true});'
-      + 'fs.writeFileSync(path.join(d,"package.json"),JSON.stringify({name:n,version:v}));}}'
+      + 'fs.writeFileSync(path.join(d,"package.json"),JSON.stringify({name:n,version:"1.2.3"}));}}'
       + 'if(mode==="fail-create")process.exit(1);}'
       + 'else if(argv[0]==="remove"){const n=argv[1];fs.rmSync(path.join(cwd,"node_modules",...n.split("/")),{recursive:true,force:true});'
       + 'const m=JSON.parse(fs.readFileSync(path.join(cwd,"package.json"),"utf8"));'
@@ -371,11 +371,13 @@ function mockFetch(payload, status = 200) {
         dsh: { profile: { bundles: ["dsh-plugin-marketplace"] } },
       }, null, 2), "utf8");
       // fixture：bundle 声明包（dsh.bundle.patch + 空操作入口，与 @linxin666/dsh-web-ui-all 同形态）
+      // 场景 A：npm 等价回退来源（npmTarget 有值）→ 依赖声明用精确版本
       const fix = makeFixture("fake-bundle-pkg", "1.2.3", true);
       const logLines = [];
       const result = await lib.installRepo({
         type: "cordis-plugin", cacheDir: fix, repo: "fake/bundle-repo", log: [],
         answers: {}, logLine: (l) => logLines.push(l), lang: "zh", envAllowList: [],
+        npmTarget: "@fake/bundle-pkg",
       });
       const profPkg = JSON.parse(readFileSync(join(web, "package.json"), "utf8"));
       check("bundle 注册写入 profile dependencies（精确版本）", profPkg.dependencies["fake-bundle-pkg"], "1.2.3");
@@ -384,6 +386,17 @@ function mockFetch(payload, status = 200) {
       check("bundle 安装结果带 bundle 标志", result.bundle, true);
       check("bundle 安装 location 指向 profile 解析目录", String(result.location).endsWith(join("node_modules", "fake-bundle-pkg")), true);
       check("bundle 注册日志含 pnpm install 步骤", logLines.some((l) => l.includes("pnpm install")), true);
+
+      // 场景 D：仓库克隆来源（npmTarget 为空，如 dsh-theme-endfield 只发 GitHub）→ github: 声明
+      const fixD = makeFixture("fake-bundle-d", "1.2.6", true);
+      const logD = [];
+      const resultD = await lib.installRepo({
+        type: "cordis-plugin", cacheDir: fixD, repo: "fake/bundle-repo-d", log: [],
+        answers: {}, logLine: (l) => logD.push(l), lang: "zh", envAllowList: [],
+      });
+      const profD = JSON.parse(readFileSync(join(web, "package.json"), "utf8"));
+      check("仓库来源 bundle 依赖声明 github: 形态", profD.dependencies["fake-bundle-d"], "github:fake/bundle-repo-d");
+      check("仓库来源 bundle 注册成功", resultD.bundle, true);
 
       // 结果导向：pnpm 退出非零但包已可解析 → 成功 + 告警（不伪装失败也不忽略告警）
       writeFileSync(join(stubDir, "mode"), "fail-create", "utf8");
@@ -436,7 +449,7 @@ function mockFetch(payload, status = 200) {
       const profAfter = JSON.parse(readFileSync(join(web, "package.json"), "utf8"));
       check("bundle 卸载响应 200 done", uStatus === 200 && uBody?.status, "done");
       check("bundle 卸载移除 profile dependencies", profAfter.dependencies["fake-bundle-pkg"], undefined);
-      check("bundle 卸载移除 dsh.profile.bundles 条目", profAfter.dsh.profile.bundles.join(","), "dsh-plugin-marketplace,fake-bundle-b,fake-bundle-c");
+      check("bundle 卸载移除 dsh.profile.bundles 条目", profAfter.dsh.profile.bundles.join(","), "dsh-plugin-marketplace,fake-bundle-d,fake-bundle-b,fake-bundle-c");
       check("bundle 卸载删除包目录", existsSync(join(web, "node_modules", "fake-bundle-pkg")), false);
 
       // 回归：非 bundle 插件仍走复制 + patch insert（原路径不受影响）
