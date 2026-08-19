@@ -1,62 +1,41 @@
 {
-  "generated_at": "2026-08-19T05:11:50.604Z",
-  "count": 8,
+  "generated_at": "2026-08-19T07:23:28.027Z",
+  "count": 5,
   "items": [
     {
-      "full_name": "simon300000/dsh-auto",
+      "full_name": "Nrxous/dsh-context7",
       "previous": "other",
-      "current": "agent",
-      "desc_now": "Auto Approve with Audit Agent",
-      "desc_prev": "dsh Auto Approve"
-    },
-    {
-      "full_name": "Tencent-TDS/dsh-kuikly-expert",
-      "previous": "tool",
-      "current": "agent",
-      "desc_now": "Kuikly DeepSeek Harness plugin that turns your AI agent into a Kuikly cross-platform app development expert.",
-      "desc_prev": "A DeepSeek Harness plugin bundling four Kuikly skills for cross-platform app development over the create-kuikly-app CLI"
-    },
-    {
-      "full_name": "wuxiangru915/dsh-review-loop",
-      "previous": "coding",
-      "current": "web-ui",
-      "desc_now": "Incremental diff reviewer for DeepSeek Harness — Web UI review panel + /review command. ",
-      "desc_prev": "Incremental diff reviewer for DeepSeek Harness — Web UI review panel + /review command. 增量代码审查插件：checkpoint 增量队列 + 审查意见注入 agent."
-    },
-    {
-      "full_name": "wangxilhy23/dsh-wx-skin",
-      "previous": "web-ui",
       "current": "resource",
-      "desc_now": "deepseek harness 皮肤插件。支持选择本地目录下的图片作为背景设置",
+      "desc_now": null,
       "desc_prev": null
     },
     {
-      "full_name": "wuxiangru915/dsh-session-manager",
-      "previous": "conversation",
-      "current": "other",
-      "desc_now": "Session manager for DeepSeek Harness: restore archived sessions, delete-all, inline content preview.",
-      "desc_prev": "DSH 会话管理插件：归档会话恢复/删除、全部会话总览、内容预览 · Session manager for DeepSeek Harness: restore archived sessions, delete-all, inline content preview."
+      "full_name": "EIGHTfs/dsh-git-rescue",
+      "previous": "tool",
+      "current": "model",
+      "desc_now": "DSH git 版本管理 + 崩溃自动救援插件（仅 GitHub token 方案）",
+      "desc_prev": "DSH git 版本管理 + 崩溃自动救援插件（仅 GitHub token 方案）"
     },
     {
-      "full_name": "HQ1995/deepseek-code",
-      "previous": "coding",
-      "current": "other",
-      "desc_now": "DeepSeek Code: Use the DeepSeek Harness via the Grok Build TUI",
-      "desc_prev": "dscode — a terminal UI for AI coding agents (personal project; builds on the open-source grok-build TUI and DeepSeek Harness runtime)"
-    },
-    {
-      "full_name": "geguanming/dsh-office-plugin",
-      "previous": "agent",
-      "current": "web-ui",
-      "desc_now": "DSH Ox-Horse Office - a DeepSeek Harness web plugin rendering multi-agent sessions as a live pixi.js office",
-      "desc_prev": "DSH Ox-Horse Office - a DeepSeek Harness web plugin rendering multi-agent sessions as a live pixi.js office"
-    },
-    {
-      "full_name": "duhu2000/qcc-mcp-legal-oauth",
+      "full_name": "KaramachiA217/dsh-bundle-manager",
       "previous": "other",
       "current": "tool",
-      "desc_now": "DeepSeek Harness 插件：一键 OAuth 授权连接企查查法律数据 MCP（法律产品：法规/案例） / One-click OAuth connect to Qichacha legal-data MCP (regulation & case) for DeepSeek Harness",
-      "desc_prev": "DeepSeek Harness 插件：一键 OAuth(PKCE) 授权连接企查查法律数据 MCP（法规 legal-regulation / 案例 legal-case）"
+      "desc_now": "Runtime mount manager for optional third-party plugins in DeepSeek Harness - mount/unmount bundle rows in-process via the Loader API (instant, no restart, never touches the profile manifest), with named presets and self-healing failure fallback.",
+      "desc_prev": null
+    },
+    {
+      "full_name": "statem-li/dsh-webui",
+      "previous": "web-ui",
+      "current": "memory",
+      "desc_now": "DeepSeek Harness 会话增强全家桶：视图/消息导航、工具聚合、Markdown 渲染、本地记忆、用量工作台、技能管理、文件浏览器、供应商设置、AI 浏览器、生图/视觉、峰谷时刻卡片等",
+      "desc_prev": "webui：右上角「对话/轨迹」图块视图切换 + 会话消息导航（消息弹窗、右侧消息横条）"
+    },
+    {
+      "full_name": "ROOOOOYczx/DSH-peakseek",
+      "previous": "tool",
+      "current": "other",
+      "desc_now": "DeepSeek Harness plugin for peak and idle model pricing hints with a one-click patch installer.",
+      "desc_prev": "Check DeepSeek peak/off‑peak status, fetch current service pricing. 查看 DeepSeek （梁文）峰/谷时状态，获取当前服务定价。"
     }
   ]
 }
