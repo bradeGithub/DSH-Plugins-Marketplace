@@ -1,34 +1,34 @@
 {
-  "generated_at": "2026-08-19T19:09:56.705Z",
+  "generated_at": "2026-08-19T21:00:54.698Z",
   "count": 4,
   "items": [
     {
-      "full_name": "omdsh-dev/dsh-voice-funasr",
-      "previous": "other",
-      "current": "web-ui",
-      "desc_now": "Local offline voice input for DSH using FunASR ONNX, with Web Speech fallback, optional LLM polishing, and a browser settings panel.",
-      "desc_prev": null
+      "full_name": "Renzic-Stone/DSH-EasyRewrite",
+      "previous": "web-ui",
+      "current": "memory",
+      "desc_now": "DSH Web内目前最无感的消息撤回、重编辑插件，原版体验，兼容性强，功能简单可开关，设置丰富，现代化轻量ui框架",
+      "desc_prev": "DSH Web内目前最无感的消息撤回、重编辑插件，原版体验，兼容性强，功能简单可开关，设置丰富，现代化轻量ui框架"
     },
     {
-      "full_name": "tafcear/kimi-tide",
+      "full_name": "y-wi/dsh-deepseek-web",
+      "previous": "other",
+      "current": "conversation",
+      "desc_now": "将 DeepSeek 网页端模型、对话历史无缝接入 DeepSeek Harness ",
+      "desc_prev": "将 DeepSeek 网页端接入 DeepSeek Harness 的非官方 Provider"
+    },
+    {
+      "full_name": "Yu-tao-Li/dsh-read-image-view",
       "previous": "tool",
-      "current": "coding",
-      "desc_now": "月汐 kimi-tide — DeepSeek Harness（DSH）双模型自动分工路由插件：按任务逐步骤在 Kimi 与 DeepSeek 之间选路（能力评分 × 预算窗口 × 图像护栏），决策全程可观测；0.4.x 起经官方 pi-ai kimi-coding 路由 API key 直连。",
-      "desc_prev": "月汐 — Kimi Code (Moonshot) 接入 DeepSeek Harness 的完整方案：标准 DSH 插件 + Kimi CLI 桥接维护 fork + Agent 协作闭环方法论"
+      "current": "conversation",
+      "desc_now": "用于展示对话中读取的图片（read_image 结果）：DSH Web GUI 对话流专用 Read image 行，默认缩略图 + 页面内全精度放大层（缩放按钮/滚轮/1:1）· Displays images read in the conversation (read_image results) in the DSH Web GUI",
+      "desc_prev": "Render read_image tool results as real images in the DSH Web GUI conversation flow (v0.1.0) · 在 DSH Web GUI 对话流中显示 read_image 读到的图片"
     },
     {
-      "full_name": "daha1216/dsh-skill-adult-tension-narrative",
+      "full_name": "GooDAnDReaDY/dsh-fal-image-gen",
       "previous": "other",
-      "current": "memory",
-      "desc_now": "DeepSeek Harness 成年人(18+/adult)互动叙事 Skill：NPC 活人感（有记忆/立场/底线）、自带破甲与张力引擎、随机开局可预锁、时间推进、全维 YAML 存档。仅限虚构成年人。",
-      "desc_prev": "DeepSeek Harness 成年人(18+/adult)互动叙事 Skill：自带破甲（张力引擎逐层攻破 NPC 防线）+ 成人属性；随机开局、NPC 独立决策、时间推进、YAML 存档。仅限虚构成年人。"
-    },
-    {
-      "full_name": "logandoo/vibeweaver-dsh",
-      "previous": "agent",
-      "current": "memory",
-      "desc_now": "vibeweaver 的 deepseek harness 专属发行版，帮你的 dsh 交付可信任，经过验证的代码。",
-      "desc_prev": "vibeweaver 的 deepseek harness 专属发行版"
+      "current": "vision",
+      "desc_now": "Image generation for DeepSeek Harness: a generate_image tool backed by the FAL queue API, with the picture shown inline in the conversation",
+      "desc_prev": null
     }
   ]
 }
