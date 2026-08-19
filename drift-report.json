@@ -1,20 +1,62 @@
 {
-  "generated_at": "2026-08-19T03:05:26.977Z",
-  "count": 2,
+  "generated_at": "2026-08-19T05:11:50.604Z",
+  "count": 8,
   "items": [
     {
-      "full_name": "anneheartrecord/dsh-desk-pet",
-      "previous": "web-ui",
-      "current": "coding",
-      "desc_now": "macOS desk pet for DeepSeek Harness: a real always-on-top window that clears fullscreen Spaces, six states driven by your agent, and a bundled skill that turns one photo into a whole skin. System Python, zero dependencies.",
-      "desc_prev": "Always-on-top DeepSeek Harness desktop pet. Default whale, four skins, four silent states."
+      "full_name": "simon300000/dsh-auto",
+      "previous": "other",
+      "current": "agent",
+      "desc_now": "Auto Approve with Audit Agent",
+      "desc_prev": "dsh Auto Approve"
     },
     {
-      "full_name": "wenbin-wb/dsh-bridge",
+      "full_name": "Tencent-TDS/dsh-kuikly-expert",
       "previous": "tool",
-      "current": "notify",
-      "desc_now": "把你本地的 DeepSeek Harness 无缝延伸到手机、平板、公网、甚至 IM 聊天软件。无论你在哪，都能通过扫码、网页或未来的微信/QQ/飞书，随时调用你的 AI 助手",
-      "desc_prev": "DeepSeek Harness 多通道远程访问插件：局域网二维码 / Cloudflare 隧道 / 自建 WebSocket 隧道"
+      "current": "agent",
+      "desc_now": "Kuikly DeepSeek Harness plugin that turns your AI agent into a Kuikly cross-platform app development expert.",
+      "desc_prev": "A DeepSeek Harness plugin bundling four Kuikly skills for cross-platform app development over the create-kuikly-app CLI"
+    },
+    {
+      "full_name": "wuxiangru915/dsh-review-loop",
+      "previous": "coding",
+      "current": "web-ui",
+      "desc_now": "Incremental diff reviewer for DeepSeek Harness — Web UI review panel + /review command. ",
+      "desc_prev": "Incremental diff reviewer for DeepSeek Harness — Web UI review panel + /review command. 增量代码审查插件：checkpoint 增量队列 + 审查意见注入 agent."
+    },
+    {
+      "full_name": "wangxilhy23/dsh-wx-skin",
+      "previous": "web-ui",
+      "current": "resource",
+      "desc_now": "deepseek harness 皮肤插件。支持选择本地目录下的图片作为背景设置",
+      "desc_prev": null
+    },
+    {
+      "full_name": "wuxiangru915/dsh-session-manager",
+      "previous": "conversation",
+      "current": "other",
+      "desc_now": "Session manager for DeepSeek Harness: restore archived sessions, delete-all, inline content preview.",
+      "desc_prev": "DSH 会话管理插件：归档会话恢复/删除、全部会话总览、内容预览 · Session manager for DeepSeek Harness: restore archived sessions, delete-all, inline content preview."
+    },
+    {
+      "full_name": "HQ1995/deepseek-code",
+      "previous": "coding",
+      "current": "other",
+      "desc_now": "DeepSeek Code: Use the DeepSeek Harness via the Grok Build TUI",
+      "desc_prev": "dscode — a terminal UI for AI coding agents (personal project; builds on the open-source grok-build TUI and DeepSeek Harness runtime)"
+    },
+    {
+      "full_name": "geguanming/dsh-office-plugin",
+      "previous": "agent",
+      "current": "web-ui",
+      "desc_now": "DSH Ox-Horse Office - a DeepSeek Harness web plugin rendering multi-agent sessions as a live pixi.js office",
+      "desc_prev": "DSH Ox-Horse Office - a DeepSeek Harness web plugin rendering multi-agent sessions as a live pixi.js office"
+    },
+    {
+      "full_name": "duhu2000/qcc-mcp-legal-oauth",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "DeepSeek Harness 插件：一键 OAuth 授权连接企查查法律数据 MCP（法律产品：法规/案例） / One-click OAuth connect to Qichacha legal-data MCP (regulation & case) for DeepSeek Harness",
+      "desc_prev": "DeepSeek Harness 插件：一键 OAuth(PKCE) 授权连接企查查法律数据 MCP（法规 legal-regulation / 案例 legal-case）"
     }
   ]
 }
