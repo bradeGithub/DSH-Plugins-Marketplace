@@ -1,34 +1,48 @@
 {
-  "generated_at": "2026-08-19T07:23:28.027Z",
-  "count": 5,
+  "generated_at": "2026-08-19T09:12:53.336Z",
+  "count": 8,
   "items": [
     {
-      "full_name": "Nrxous/dsh-context7",
-      "previous": "other",
-      "current": "resource",
-      "desc_now": null,
-      "desc_prev": null
-    },
-    {
-      "full_name": "EIGHTfs/dsh-git-rescue",
-      "previous": "tool",
-      "current": "model",
-      "desc_now": "DSH git 版本管理 + 崩溃自动救援插件（仅 GitHub token 方案）",
-      "desc_prev": "DSH git 版本管理 + 崩溃自动救援插件（仅 GitHub token 方案）"
-    },
-    {
-      "full_name": "KaramachiA217/dsh-bundle-manager",
-      "previous": "other",
-      "current": "tool",
-      "desc_now": "Runtime mount manager for optional third-party plugins in DeepSeek Harness - mount/unmount bundle rows in-process via the Loader API (instant, no restart, never touches the profile manifest), with named presets and self-healing failure fallback.",
-      "desc_prev": null
-    },
-    {
-      "full_name": "statem-li/dsh-webui",
+      "full_name": "omdsh-dev/dsh-mnemon",
       "previous": "web-ui",
       "current": "memory",
-      "desc_now": "DeepSeek Harness 会话增强全家桶：视图/消息导航、工具聚合、Markdown 渲染、本地记忆、用量工作台、技能管理、文件浏览器、供应商设置、AI 浏览器、生图/视觉、峰谷时刻卡片等",
-      "desc_prev": "webui：右上角「对话/轨迹」图块视图切换 + 会话消息导航（消息弹窗、右侧消息横条）"
+      "desc_now": "Three-tier memory control plane for DeepSeek Harness: persistent runtime context, searchable project documents, pluggable long-term memory, smart routing, supervised agent workflows, WebUI, and headless tools.",
+      "desc_prev": "Three-tier memory control plane for DeepSeek Harness: persistent runtime context, searchable project documents, pluggable long-term memory, smart routing, supervised agent workflows, WebUI, and headless tools."
+    },
+    {
+      "full_name": "xmanrui/dsh-im",
+      "previous": "coding",
+      "current": "notify",
+      "desc_now": "通过扫码或机器人凭据把IM机器人接入DeepSeek Harness（支持飞书、微信、钉钉、企业微信、QQ、Slack、Telegram、Discord和WhatsApp）。 Connect IM bots to DeepSeek Harness via QR code or credentials (9 channels).",
+      "desc_prev": "通过扫码或机器人凭据把IM机器人接入DeepSeek Harness（支持飞书、微信、钉钉、企业微信、QQ、Slack、Telegram、Discord和WhatsApp）。 Connect IM bots to DeepSeek Harness via QR code or credentials (9 channels)."
+    },
+    {
+      "full_name": "EdgeTypE/dsh-better-deepseek",
+      "previous": "other",
+      "current": "web-ui",
+      "desc_now": "DeepSeek Harness bridge plugin for Better DeepSeek Chrome extension.",
+      "desc_prev": "DeepSeek Harness bridge plugin for Better DeepSeek Chrome extension."
+    },
+    {
+      "full_name": "Max-Samson/dsh-usage-chart",
+      "previous": "model",
+      "current": "resource",
+      "desc_now": "A DeepSeek Harness Web plugin for real-time Token usage, cost estimates, per-round charts, and DeepSeek API balance.",
+      "desc_prev": "A DeepSeek Harness Web plugin for real-time Token usage, cost estimates, per-round charts, and DeepSeek API balance."
+    },
+    {
+      "full_name": "NelsonLongxiang/dsh-open-a2a-net",
+      "previous": "tool",
+      "current": "web-ui",
+      "desc_now": "Open A2A network plugin for DeepSeek Harness: signed agent cards, decentralized peer/zone discovery, direct routing model tools, and joinable session nodes in the web sidebar",
+      "desc_prev": "dsh-open-a2a-net"
+    },
+    {
+      "full_name": "linziyanleo/dsh-custom-provider",
+      "previous": "resource",
+      "current": "tool",
+      "desc_now": "Configure custom LLM providers in DeepSeek Harness.",
+      "desc_prev": "Configure static OpenAI-compatible providers and model catalogs in DeepSeek Harness."
     },
     {
       "full_name": "ROOOOOYczx/DSH-peakseek",
@@ -36,6 +50,13 @@
       "current": "other",
       "desc_now": "DeepSeek Harness plugin for peak and idle model pricing hints with a one-click patch installer.",
       "desc_prev": "Check DeepSeek peak/off‑peak status, fetch current service pricing. 查看 DeepSeek （梁文）峰/谷时状态，获取当前服务定价。"
+    },
+    {
+      "full_name": "liuwenji007/dsh-muyu",
+      "previous": "other",
+      "current": "agent",
+      "desc_now": "DeepSeek Harness 电子木鱼：右下角的小肥鲸，敲头记功德，等 loop 时摸摸鱼头",
+      "desc_prev": null
     }
   ]
 }
