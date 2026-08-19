@@ -348,6 +348,7 @@ function mockFetch(payload, status = 200) {
     writeFileSync(join(stubDir, "pnpm.js"), stubJs, "utf8");
     writeFileSync(join(stubDir, "pnpm.cmd"), "@echo off\r\nnode \"%~dp0pnpm.js\" %*\r\nexit /b %ERRORLEVEL%\r\n", "utf8");
     writeFileSync(join(stubDir, "pnpm"), "#!/bin/sh\nnode \"$(dirname \"$0\")/pnpm.js\" \"$@\"\n", "utf8");
+    if (process.platform !== "win32") chmodSync(join(stubDir, "pnpm"), 0o755); // CI（Linux）需要可执行位，否则 execFile spawn EACCES
     const savedPath = process.env.PATH;
     process.env.PATH = `${stubDir}${process.platform === "win32" ? ";" : ":"}${savedPath ?? ""}`;
     const makeFixture = (name, version, bundle) => {
