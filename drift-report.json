@@ -1,13 +1,20 @@
 {
-  "generated_at": "2026-08-19T01:35:26.776Z",
-  "count": 1,
+  "generated_at": "2026-08-19T03:05:26.977Z",
+  "count": 2,
   "items": [
     {
-      "full_name": "changer-changer/dsh-whale-cards",
+      "full_name": "anneheartrecord/dsh-desk-pet",
       "previous": "web-ui",
-      "current": "resource",
-      "desc_now": "A polished local-first DSH Web teahouse: curated mini-games, resumable breaks, and Lanyin companion.",
-      "desc_prev": "A calm, resumable Gin Rummy break with an original whale companion inside DeepSeek Harness."
+      "current": "coding",
+      "desc_now": "macOS desk pet for DeepSeek Harness: a real always-on-top window that clears fullscreen Spaces, six states driven by your agent, and a bundled skill that turns one photo into a whole skin. System Python, zero dependencies.",
+      "desc_prev": "Always-on-top DeepSeek Harness desktop pet. Default whale, four skins, four silent states."
+    },
+    {
+      "full_name": "wenbin-wb/dsh-bridge",
+      "previous": "tool",
+      "current": "notify",
+      "desc_now": "把你本地的 DeepSeek Harness 无缝延伸到手机、平板、公网、甚至 IM 聊天软件。无论你在哪，都能通过扫码、网页或未来的微信/QQ/飞书，随时调用你的 AI 助手",
+      "desc_prev": "DeepSeek Harness 多通道远程访问插件：局域网二维码 / Cloudflare 隧道 / 自建 WebSocket 隧道"
     }
   ]
 }
