@@ -1,27 +1,34 @@
 {
-  "generated_at": "2026-08-20T11:06:29.449Z",
-  "count": 3,
+  "generated_at": "2026-08-20T12:49:28.281Z",
+  "count": 4,
   "items": [
     {
-      "full_name": "apexingai/openharness",
-      "previous": "other",
-      "current": "agent",
-      "desc_now": "The easy-to-use agent harness.",
-      "desc_prev": "The open-source harness keeps agents working productively. Based on DeepSeek Harness."
+      "full_name": "Vast-Unhurried/dsh-toolkit",
+      "previous": "tool",
+      "current": "web-ui",
+      "desc_now": "DeepSeek Harness 实用工具箱：便签、API 余额与费用、删除会话、第三方模型推理等级、对话节点导航条",
+      "desc_prev": "DeepSeek Harness 实用工具箱：便签、API 余额与费用、删除会话、第三方模型推理等级"
     },
     {
-      "full_name": "Angel-GP/dsh-gitpeek",
+      "full_name": "lumi-lei/interchange-plugin",
       "previous": "other",
       "current": "web-ui",
-      "desc_now": "GitHub panel for DeepSeek Harness: Actions runs, Commits & Releases side by side, right in your DSH session",
+      "desc_now": "Local-first role-based collaboration tools for DeepSeek Harness, with an embedded panel and human-confirmed delivery.",
       "desc_prev": null
     },
     {
-      "full_name": "collapsey/xiaokui-pet",
+      "full_name": "Vergil-long/dsh-custom-font",
       "previous": "other",
       "current": "web-ui",
-      "desc_now": "小葵 XiaoKui 桌宠：一只玳瑁小猫，可出现在 Windows 桌面(PyQt5)、任意网页(Chrome/Edge 扩展)和 DeepSeek Harness 界面中，支持喂食/玩耍/睡觉/巡逻/属性养成",
+      "desc_now": "DSH自定义界面字体插件",
       "desc_prev": null
+    },
+    {
+      "full_name": "autorouter0-ai/dsh-llm-autorouter",
+      "previous": "model",
+      "current": "other",
+      "desc_now": "DeepSeek Harness plugin: use AutoRouter as your LLM provider — unified routing, failover, and model discovery",
+      "desc_prev": "AutoRouter (model routing gateway / relay) LLM adapter for the DeepSeek Harness"
     }
   ]
 }
