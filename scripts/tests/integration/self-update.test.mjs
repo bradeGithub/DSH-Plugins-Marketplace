@@ -93,6 +93,10 @@ globalThis.fetch = origFetch;
 // Windows 上 execFile 无法启动 .cmd/.bat（无条件 spawn EINVAL），必须经 cmd.exe 包装；
 // 且必须用独立参数形态（/c + 参数数组，Node 自动引号）——拼接 cmdLine + /d /s /c
 // 时 cmd 引号规则边缘可被恶意 target 逃逸（PR #63 修复）。静态断言锁死模式。
+// 一并固定 #157：POST 更新成功后必须闭合 selfUpdateState（updateAvailable=false）——
+// 否则 GET /self-update 返回旧 state，客户端刷新后「更新提示」复活。
+// 断言形式：成功分支紧跟 `selfUpdateState = {` 且块内含 updateAvailable: false
+// （区别于 checkSelfUpdate 内部依赖 compareVersions 的赋值——那里更新后仍可能为 true）。
 {
   const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
   const src = readFileSync(join(ROOT, "lib", "index.js"), "utf8").replace(/\r\n/g, "\n");
@@ -104,6 +108,11 @@ globalThis.fetch = origFetch;
   check("doSelfUpdate 不再直接 execFile dsh.cmd 路径", !selfUpdateBody.includes('execFileAsync(dshCli, dshArgs'), true);
   check("runNpm npm.cmd fallback 经 cmd.exe /c 独立参数", runNpmBody.includes('execFileAsync("cmd.exe", ["/c", "npm.cmd", ...args], execOpts)'), true);
   check("runNpm 无拼接 cmdLine 残留", !runNpmBody.includes('const cmdLine = ["npm.cmd"'), true);
+  // #157 静态契约：POST 更新成功分支必须闭合 selfUpdateState（updateAvailable=false）。
+  // 若该重置被移除，GET /self-update 返回旧 state → 客户端「更新提示」刷新后复活。
+  const postBody = src.match(/if \(result\.status === "no-update"\) \{[\s\S]*?installRunning = null;/)?.[0] ?? "";
+  check("self-update POST 成功分支重置 selfUpdateState", /selfUpdateState = \{[\s\S]*?updateAvailable: false/m.test(postBody), true);
+  check("self-update POST 成功分支用新版本号（非旧 installedVersion）", /installedVersion: result\.installedVersion/m.test(postBody), true);
 }
 
 rmSync(home, { recursive: true, force: true });
