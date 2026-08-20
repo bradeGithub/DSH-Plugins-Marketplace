@@ -1,27 +1,20 @@
 {
-  "generated_at": "2026-08-20T07:23:52.803Z",
-  "count": 3,
+  "generated_at": "2026-08-20T09:16:11.173Z",
+  "count": 2,
   "items": [
     {
-      "full_name": "xiaoshihou514/dsh-desktop-pet",
-      "previous": "agent",
-      "current": "web-ui",
-      "desc_now": "DeepSeek Harness：鲸鱼娘桌宠！",
-      "desc_prev": "DeepSeek Harness：鲸鱼娘桌宠！"
-    },
-    {
-      "full_name": "cpj-dev/dsh-plugin-cc",
-      "previous": "web-ui",
-      "current": "tool",
-      "desc_now": "Bridge Deepseek-harness into Claude Code for review, critique, delegation, and session import.",
-      "desc_prev": "Bridge Deepseek-harness into Claude Code for review, critique, delegation, and session import."
-    },
-    {
-      "full_name": "DshMarketPlace/dshmarketplace",
+      "full_name": "FeatherHunter/dsh-chinese-skill-patch",
       "previous": "other",
       "current": "tool",
-      "desc_now": "Bilingual directory of DeepSeek Harness (DSH) plugins — 3,400+ listings, sandbox-verified install commands, written detail pages, public API. Next.js on Cloudflare Workers.",
-      "desc_prev": "Bilingual directory of DeepSeek Harness (DSH) plugins — 1,004 listings, written detail pages, public API. Next.js on Cloudflare Workers."
+      "desc_now": "让 DSH 原生支持中文技能名 · Make DSH discover Chinese skill names without renaming — /私 → 私家大厨 · More by @FeatherHunter: 🎨 dsh-opencode-palette · ⚡ dsh-prompt",
+      "desc_prev": "DSH plugin: allow Chinese (Unicode-letter) skill names in SKILL.md without renaming to kebab-case"
+    },
+    {
+      "full_name": "DON738110198/dsh-session-integrity",
+      "previous": "tool",
+      "current": "agent",
+      "desc_now": "Diagnose poisoned DeepSeek Harness sessions and continue from provider-safe recovery boundaries",
+      "desc_prev": "Read-only provider transcript and tool-call integrity checks for DeepSeek Harness sessions"
     }
   ]
 }
