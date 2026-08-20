@@ -1,69 +1,20 @@
 {
-  "generated_at": "2026-08-20T15:12:46.473Z",
-  "count": 9,
+  "generated_at": "2026-08-20T17:10:16.303Z",
+  "count": 2,
   "items": [
     {
-      "full_name": "Mr-remon219/dsh-search-boost",
-      "previous": "vision",
-      "current": "tool",
-      "desc_now": "The plunge for dsh to boost model's search ability.",
-      "desc_prev": "The plunge for dsh to boost model's search ability."
-    },
-    {
-      "full_name": "yu-wenchao/deepseek-harness-desktop-Install",
-      "previous": "tool",
-      "current": "vision",
-      "desc_now": "deepseek harness桌面客户端(含插件市场和多模态视觉) 一键安装包，双击DeepSeekHarnessSetup-desktop.exe就可以一键安装，适合小白！",
-      "desc_prev": "deepseek harness桌面客户端 一键安装包，双击DeepSeekHarnessSetup-desktop.exe就可以一键安装，适合小白！"
-    },
-    {
-      "full_name": "TLNing260310/dsh-researcher",
-      "previous": "tool",
-      "current": "coding",
-      "desc_now": "Read-only Project Intelligence Layer for DeepSeek Harness · 基于证据的只读项目认知层 — prevents AI coding agents from making locally correct changes that gradually break the whole project",
-      "desc_prev": "Restores understanding when AI's reasonable-looking changes drift the architecture: read-only build-shaping agent preset for DeepSeek Harness (Research -> Plan -> Code upstream)"
-    },
-    {
-      "full_name": "XHR666/dsh-mpkg-wallpaper",
+      "full_name": "Phant0Meow/dsh-meow-smooth",
       "previous": "web-ui",
-      "current": "resource",
-      "desc_now": "Load Wallpaper Engine .mpkg / Steam Workshop folders as the DeepSeek Harness web background: video & web wallpapers, scene static-frame & layer composite, time-of-day switching, carousel rotation lists, unified frosted blur, theme color. 浏览器内加载壁纸引擎 mpkg/创意工坊目录作为 DSH 网页背景：视频/网页壁纸、场景静态帧与图层合成、多时段切换、轮播列表、统一磨砂虚化、主题颜色。",
-      "desc_prev": "Load Wallpaper Engine .mpkg files as the DeepSeek Harness web background: embedded mp4, time-of-day switching, unified frosted blur, lens zoom. 浏览器内直接加载壁纸引擎 mpkg 作为 DSH 网页背景：内嵌视频、多时段切换、统一磨砂虚化、镜头缩放。"
+      "current": "notify",
+      "desc_now": "手机端ui交互优化，让手机端dsh真正可用。你可以躺着coding了。 电脑、手机都支持的通知系统。AI跑任务，你切出去刷b站了，AI跑完任务或者中途提问，会发通知给你。 还有一些ui交互方面的细节优化。",
+      "desc_prev": "喵丝滑: dsh (DeepSeek Harness) front-end UX plugin — fold composer, mobile sidebar/header polish, notifications via Web Push"
     },
     {
-      "full_name": "webkong/dsh-plugin-manager",
+      "full_name": "codelogickeep/deepseek-harness-plugin",
       "previous": "resource",
       "current": "tool",
-      "desc_now": "DSH 插件管理器：在 Web 设置页管理内置与三方插件——安装、卸载、启用、停用，支持 GitHub 搜索安装与非 bundle 插件一键装载",
-      "desc_prev": "DSH 插件管理器：内置/三方插件安装、卸载、启动、停用与 GitHub 直跳"
-    },
-    {
-      "full_name": "Vast-Unhurried/dsh-toolkit",
-      "previous": "web-ui",
-      "current": "memory",
-      "desc_now": "DeepSeek Harness 实用工具箱：便签、API 余额与费用、删除会话、第三方模型推理等级、对话节点导航条、轻拟物皮肤",
-      "desc_prev": "DeepSeek Harness 实用工具箱：便签、API 余额与费用、删除会话、第三方模型推理等级、对话节点导航条"
-    },
-    {
-      "full_name": "ciky20171114/dsh-plugin-midscene",
-      "previous": "tool",
-      "current": "web-ui",
-      "desc_now": "Midscene-based AI UI automation plugin for DeepSeek Harness (android_ui + web_ui)",
-      "desc_prev": null
-    },
-    {
-      "full_name": "GooDAnDReaDY/dsh-key-rotation",
-      "previous": "other",
-      "current": "web-ui",
-      "desc_now": "Per-provider API key rotation for DeepSeek Harness: a key pool per provider, automatic switch to the next key on quota or rate-limit failures, with live key status in the Web UI",
-      "desc_prev": null
-    },
-    {
-      "full_name": "0x5446/reins",
-      "previous": "coding",
-      "current": "tool",
-      "desc_now": "Native iOS client for DeepSeek Harness (dsh). Answer your agent from your phone — the relay only ever sees ciphertext.",
-      "desc_prev": "Answer your coding agent from your phone. End-to-end encrypted; the relay only ever sees ciphertext."
+      "desc_now": "DeepSeek Harness (dsh) plugins + scaffold: file tree with live git status, browser-reader, MiniMax search, cron scheduler, flash-worker preset, DingTalk bridge. MIT.",
+      "desc_prev": "DeepSeek Harness (DSH) 插件集合仓库与安装脚手架。"
     }
   ]
 }
