@@ -76,17 +76,17 @@ check("buildMinimalEnv 只含白名单键", nonWhitelist, []);
 // ---- 步骤1: classifyTree（Trees 探测判定）----
 const blob = (path) => ({ type: "blob", path });
 const tree = (path) => ({ type: "tree", path });
-check("根目录 SKILL.md → 有 skill", classifyTree([blob("SKILL.md")], false), { has_skill: true, has_install_script: false });
-check("子目录 SKILL.md → 有 skill", classifyTree([blob("skills/foo/SKILL.md"), blob("README.md")], false), { has_skill: true, has_install_script: false });
-check("无 SKILL.md 且未截断 → false", classifyTree([blob("README.md")], false), { has_skill: false, has_install_script: false });
-check("truncated 且无 SKILL.md → null 未知", classifyTree([blob("README.md")], true), { has_skill: null, has_install_script: null });
-check("truncated 但有 SKILL.md → skill true、script null", classifyTree([blob("SKILL.md")], true), { has_skill: true, has_install_script: null });
-check("非 blob 的 SKILL.md 不算", classifyTree([tree("SKILL.md")], false), { has_skill: false, has_install_script: false });
-check("大小写不敏感", classifyTree([blob("dir/skill.MD")], false), { has_skill: true, has_install_script: false });
-check("install.sh 命中", classifyTree([blob("install.sh")], false), { has_skill: false, has_install_script: true });
-check("子目录 install.ps1 命中", classifyTree([blob("scripts/install.ps1")], false), { has_skill: false, has_install_script: true });
-check("myinstall.sh 不误伤", classifyTree([blob("myinstall.sh")], false), { has_skill: false, has_install_script: false });
-check("非数组 tree 容错", classifyTree(null, false), { has_skill: false, has_install_script: false });
+check("根目录 SKILL.md → 有 skill", classifyTree([blob("SKILL.md")], false), { has_skill: true, has_install_script: false, root_skill: true, skill_min_depth: 1, root_script: false });
+check("子目录 SKILL.md → 有 skill", classifyTree([blob("skills/foo/SKILL.md"), blob("README.md")], false), { has_skill: true, has_install_script: false, root_skill: false, skill_min_depth: 3, root_script: false });
+check("无 SKILL.md 且未截断 → false", classifyTree([blob("README.md")], false), { has_skill: false, has_install_script: false, root_skill: false, skill_min_depth: null, root_script: false });
+check("truncated 且无 SKILL.md → null 未知", classifyTree([blob("README.md")], true), { has_skill: null, has_install_script: null, root_skill: null, skill_min_depth: null, root_script: null });
+check("truncated 但有 SKILL.md → skill true、script null", classifyTree([blob("SKILL.md")], true), { has_skill: true, has_install_script: null, root_skill: true, skill_min_depth: 1, root_script: null });
+check("非 blob 的 SKILL.md 不算", classifyTree([tree("SKILL.md")], false), { has_skill: false, has_install_script: false, root_skill: false, skill_min_depth: null, root_script: false });
+check("大小写不敏感", classifyTree([blob("dir/skill.MD")], false), { has_skill: true, has_install_script: false, root_skill: false, skill_min_depth: 2, root_script: false });
+check("install.sh 命中", classifyTree([blob("install.sh")], false), { has_skill: false, has_install_script: true, root_skill: false, skill_min_depth: null, root_script: true });
+check("子目录 install.ps1 命中", classifyTree([blob("scripts/install.ps1")], false), { has_skill: false, has_install_script: true, root_skill: false, skill_min_depth: null, root_script: false });
+check("myinstall.sh 不误伤", classifyTree([blob("myinstall.sh")], false), { has_skill: false, has_install_script: false, root_skill: false, skill_min_depth: null, root_script: false });
+check("非数组 tree 容错", classifyTree(null, false), { has_skill: false, has_install_script: false, root_skill: false, skill_min_depth: null, root_script: false });
 
 // ---- 步骤1: shouldInheritProbe（增量继承判定）----
 const oldRepo = { full_name: "a/b", updated_at: "2026-01-01T00:00:00Z", has_skill: true, has_install_script: false, pkg_name: "abc" };
