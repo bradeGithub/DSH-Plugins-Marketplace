@@ -326,6 +326,12 @@ function mockFetch(payload, status = 200) {
     check("appendPatchEntry 默认注释+[] 形态追加成功", ok, true);
     check("appendPatchEntry 清掉裸 [] 行（flow 序列不残留）", !/^\s*\[\]\s*$/m.test(text), true);
     check("appendPatchEntry 追加后是合法 YAML", /^- insert:\s*$\s*  - id: reg-entry\s*  name: reg\/pkg/m.test(text), true);
+    // #82 深层回归防护：形状正则可能放过「裸 [] 行未清净」的错位（流式序列残留悄悄回归）。
+    // 语义级脊柱断言：首个非注释顶层节点必须是插入块，且不得是 flow 空序列残留——
+    // 这是 DSH loader 解析 patch 文件成败的根（残留 [] 在前会让 loader 把 [] 当整个补丁，
+    // 或把后续 insert 当作非法文档成员 → 启动解析崩溃，issue #71/#73/#82 同源）。
+    const firstTop = text.split("\n").filter((l) => !/^\s*#/.test(l)).find((l) => l.trim() !== "");
+    check("appendPatchEntry 顶层首节点为插入块且无 [] 残留", Boolean(firstTop && firstTop.startsWith("- insert") && !/^\[\]\s*$/.test(firstTop)), true);
   }
 
   // ---- issue #134：bundle 声明包注册路径（installRepo + pnpm stub + uninstall handler）----

@@ -55,14 +55,18 @@ function visiblePaths(paths) {
   return paths.filter((p) => !String(p).split("/").some((seg) => seg.startsWith(".")));
 }
 
-/** Phase A：单仓库 trees 探测 → 信号集。返回 null 表示不可判定（网络失败）。 */
-async function probeTree(repo) {
+/** Phase A：单仓库 trees 探测 → 信号集。返回 null 表示不可判定（网络失败）。
+ *  B1 修正（2026-08-19 审计）：分支 404 不再直接判 gone——trees 404 也可能是
+ *  空仓库/无该分支（仓库存在但无提交树，GitHub 对空仓库 trees 返回 404），
+ *  全部分支 404 时返回 branchMissing，由 confirmGone（repo 级 API）二次确认。
+ *  教训：corrinehu/dsh-workbuddy-connect 等 16 个仓库被误判 gone，实测全部存在。 */
+export async function probeTree(repo) {
   const branches = [repo.default_branch || "main", "main", "master"].filter((v, i, a) => v && a.indexOf(v) === i);
   for (const branch of branches) {
     const url = `https://api.github.com/repos/${repo.full_name}/git/trees/${branch}?recursive=1`;
     const res = await fetchJson(url, "application/vnd.github+json");
     if (res.status === 403) return { rateLimited: true, remaining: res.remaining, resetMs: res.resetMs };
-    if (res.status === 404) return { gone: true, remaining: res.remaining };
+    if (res.status === 404) continue; // B1：分支缺失/空仓库，尝试下一个分支，不判 gone
     if (res.status !== 200) continue;
     let tree = [];
     let truncated = false;
@@ -94,7 +98,18 @@ async function probeTree(repo) {
     const isPreset = paths.includes("preset.yml") && paths.includes("agent.cordis.yml");
     return { rootPkg, nestedPkgs, hasSkill, rootSkill, minSkillDepth, hasScript, rootScript, isPreset, truncated, remaining: res.remaining };
   }
-  return null;
+  // B1：全部分支 404（空仓库 / 无该分支 / 真删除）——需 repo 级 API 二次确认
+  return { branchMissing: true, remaining: null };
+}
+
+/** B1 二次确认：trees 全分支 404 时用 repo 级 API 判定仓库是否真删除（404=gone）。
+ *  trees 404 ≠ 删除（空仓库/分支名缺失同样 404）——repo 级 404 才是真 gone。
+ *  返回 { gone } 或 { rateLimited }。 */
+export async function confirmGone(repo) {
+  const url = `https://api.github.com/repos/${repo.full_name}`;
+  const res = await fetchJson(url, "application/vnd.github+json");
+  if (res.status === 403) return { rateLimited: true, remaining: res.remaining, resetMs: res.resetMs };
+  return { gone: res.status === 404, remaining: res.remaining };
 }
 
 /** Phase B：读 package.json 内容判定真插件。 */
@@ -119,7 +134,7 @@ async function fetchPkg(repo, path) {
  *  - 只有**根目录** install 脚本才算 script 型（深层 install.sh 同理）。 */
 export function verdictOf(sig, pkgLooks, nestedLooks) {
   if (!sig) return "unknown";
-  if (sig.gone) return "gone";
+  if (sig.gone) return "gone"; // 防御：B1 后 probeTree 不再直接产 gone，保留兼容旧契约
   if (sig.isPreset) return "agent-preset";
   if (sig.rootPkg && pkgLooks === true) return "cordis-plugin";
   if (sig.rootScript === true) return "script";
@@ -195,9 +210,21 @@ async function main() {
           if (!(await waitForQuota(sig.resetMs))) break;
           continue;
         }
-        if (sig.gone) { entry.verdict = "gone"; }
+        if (sig.branchMissing) {
+          // B1：trees 全分支 404 → repo 级 API 二次确认（空仓库 ≠ 删除）
+          const confirm = await confirmGone(repo);
+          if (confirm.rateLimited) {
+            cursor--; // 同一仓库等待后重试
+            if (!(await waitForQuota(confirm.resetMs))) break;
+            continue;
+          }
+          if (confirm.remaining != null) remaining = confirm.remaining;
+          entry.verdict = confirm.gone ? "gone" : "empty"; // empty = 存在但无提交树（空仓库）
+        }
         else if (sig.remaining != null) remaining = sig.remaining;
-        if (!sig.gone && (sig.rootPkg || sig.nestedPkgs.length > 0)) {
+        if (sig.branchMissing) {
+          // B1：已由 confirmGone 定论（gone/empty），跳过形态判定
+        } else if (sig.rootPkg || (sig.nestedPkgs?.length ?? 0) > 0) {
           // 根清单优先；仅子目录清单时读最多 3 个子包
           const paths = sig.rootPkg ? ["package.json"] : sig.nestedPkgs.slice(0, 3);
           let looks = false;
@@ -215,7 +242,7 @@ async function main() {
             continue;
           }
           entry.verdict = verdictOf(sig, looks, looks);
-        } else if (!sig.gone) {
+        } else {
           entry.verdict = verdictOf(sig, false, false);
         }
         if (entry.verdict === "unknown" && sig && sig.truncated) entry.truncated = true;
@@ -240,7 +267,7 @@ async function main() {
   // 汇总
   const counts = {};
   for (const r of Object.values(results)) counts[r.verdict] = (counts[r.verdict] || 0) + 1;
-  const order = ["cordis-plugin", "multi-plugin", "skill", "agent-preset", "script", "pkg-plain", "manual", "unknown", "gone"];
+  const order = ["cordis-plugin", "multi-plugin", "skill", "agent-preset", "script", "pkg-plain", "manual", "unknown", "gone", "empty"];
   console.log("\n===== 可安装性汇总 =====");
   for (const v of order) if (counts[v]) console.log(String(counts[v]).padStart(5), v);
   for (const [v, n] of Object.entries(counts)) if (!order.includes(v)) console.log(String(n).padStart(5), v);

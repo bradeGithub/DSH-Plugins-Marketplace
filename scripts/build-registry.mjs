@@ -113,7 +113,8 @@ async function fetchPage(query, page, extraSort = "") {
   return await res.json();
 }
 
-function normalize(r) {
+/** B2 收录门控 normalize：fork 是噪音非覆盖（真排除），archived 保留但降权（客户端显示徽章）。 */
+export function normalize(r) {
   return {
     full_name: r.full_name,
     name: r.name,
@@ -123,7 +124,9 @@ function normalize(r) {
     updated_at: r.updated_at,
     default_branch: r.default_branch ?? "main",
     topics: r.topics ?? [],
-    license: r.license?.spdx_id ?? null
+    license: r.license?.spdx_id ?? null,
+    fork: r.fork === true,
+    archived: r.archived === true
   };
 }
 
@@ -344,6 +347,19 @@ export function applyInstallability(repos, verdictMap) {
     else delete repo.installable;
   }
   return repos;
+}
+
+/**
+ * B3 失效清理（纯函数）：报告 verdict === "gone"（B1 已由 repo 级 API 二次确认的真删除）
+ * 的条目从索引剔除——「降权达到用户侧删除」：报告归档保留，仓库复活后 topic 扫描自然重收。
+ * empty（仓库存在但无提交树）不剔除：新仓库可能很快有内容，保留无徽章。
+ * @param {Array} repos registry 条目数组
+ * @param {Map<string,string>} verdictMap full_name → 探测 verdict
+ */
+export function applyGoneCleanup(repos, verdictMap) {
+  const gone = new Set();
+  for (const [name, v] of verdictMap) if (v === "gone") gone.add(name);
+  return repos.filter((r) => !gone.has(String(r.full_name ?? "")));
 }
 
 /**
@@ -736,7 +752,8 @@ export function splitSegment(seg) {
  *   newCount=0 表示本段没有新增仓库（数据已被其他段覆盖）→ 调用方直接收敛，不再分裂；
  *   failed=true 表示中途有页面失败（限流/网络）→ 数据可能不全，调用方标记未完成但不分裂。
  */
-async function fetchStarSegment(topic, seg, since) {
+/** B2 门控测试导出：单段抓取（fork 排除在循环内）。 */
+export async function fetchStarSegment(topic, seg, since) {
   const query = starRangeQuery(topic, seg, since);
   const collected = [];
   const seen = new Set();
@@ -752,7 +769,8 @@ async function fetchStarSegment(topic, seg, since) {
     }
     const items = data.items ?? [];
     for (const r of items) {
-      if (seen.has(r.full_name) || EXCLUDED.has(r.name)) continue;
+      // B2：fork 真排除（带 topic 的 fork 不是独立插件，纯噪音）——降权无价值，直接不进索引
+      if (seen.has(r.full_name) || EXCLUDED.has(r.name) || r.fork === true) continue;
       seen.add(r.full_name);
       collected.push(normalize(r));
       newCount++;
@@ -858,6 +876,7 @@ async function fetchAllTopics() {
         for (const r of items) {
           if (merged.has(r.full_name)) continue; // 跨 query 全局去重
           if (EXCLUDED.has(r.name)) continue;
+          if (r.fork === true) continue; // B2：fork 真排除（兜底路径同款）
           merged.set(r.full_name, normalize(r));
           freshCount++;
         }
@@ -887,22 +906,36 @@ async function fetchAllTopics() {
  * 从 Trees 响应中判定探测字段（纯函数，便于测试）：
  * - has_skill: 存在 SKILL.md（仓库根或任意子目录，仅 blob）
  * - has_install_script: 存在 install.sh / install.ps1 / install.bat（安全徽章数据）
+ * - C 扩展（2026-08-19）：安装形态判定——root_skill（根 SKILL.md = 单技能形态）、
+ *   skill_min_depth（SKILL.md 最小路径段数：1=根 / 3=skills/<name>/ 合集 / ≥4=大项目内部埋藏）、
+ *   root_script（根 install 脚本）。对齐 verify-installability 的 verdictOf 语义——
+ *   skills 条目据此区分「单技能/技能合集/深层埋藏（非市场可装）」。
  * - truncated=true 且未命中 → null（未知）——超大仓库可能没返回完整树，
  *   此时「没扫到」不能断定「没有」，必须记 null，绝不误判 false。
  */
 export function classifyTree(tree, truncated) {
   const list = Array.isArray(tree) ? tree : [];
-  const hasSkill = list.some((f) => f.type === "blob" && /(^|\/)SKILL\.md$/i.test(String(f.path ?? "")));
+  const skillPaths = list
+    .filter((f) => f.type === "blob" && /(^|\/)SKILL\.md$/i.test(String(f.path ?? "")))
+    .map((f) => String(f.path ?? ""));
+  const hasSkill = skillPaths.length > 0;
   const hasScript = list.some((f) => /(^|\/)install\.(sh|ps1|bat)$/i.test(String(f.path ?? "")));
+  const rootSkill = skillPaths.some((p) => /^SKILL\.md$/i.test(p));
+  const rootScript = list.some((f) => /^install\.(sh|ps1|bat)$/i.test(String(f.path ?? "")));
+  const skillMinDepth = hasSkill ? Math.min(...skillPaths.map((p) => p.split("/").length)) : null;
   return {
     has_skill: hasSkill ? true : (truncated ? null : false),
-    has_install_script: hasScript ? true : (truncated ? null : false)
+    has_install_script: hasScript ? true : (truncated ? null : false),
+    root_skill: hasSkill ? rootSkill : (truncated ? null : false),
+    skill_min_depth: hasSkill ? skillMinDepth : null,
+    root_script: hasScript ? rootScript : (truncated ? null : false)
   };
 }
 
 /** 增量继承判定（纯函数）：updated_at 未变且旧条目有**真实探测结果**（true/false）→ 整包继承。
  *  null（未知：未探测 / 护栏中断 / truncated 大仓库）不继承——重跑时重新探测，
- *  保证冷启动分批探测能逐步收敛到全量真实结果（truncated 大仓库数量有限，反复重试代价可接受）。 */
+ *  保证冷启动分批探测能逐步收敛到全量真实结果（truncated 大仓库数量有限，反复重试代价可接受）。
+ *  C：skills 模式的形态字段（root_skill/skill_min_depth/root_script）随继承一起带（同一探测来源）。 */
 export function shouldInheritProbe(repo, old) {
   return Boolean(old && old.updated_at === repo.updated_at && typeof old.has_skill === "boolean");
 }
@@ -942,6 +975,12 @@ async function probeRepo(repo) {
     const classified = classifyTree(data.tree, data.truncated === true);
     repo.has_skill = classified.has_skill;
     repo.has_install_script = classified.has_install_script;
+    // C：安装形态字段（单技能/合集/深层埋藏/根脚本）——仅 skills 模式消费，dsh 模式不写
+    if (MODE === "skills") {
+      repo.root_skill = classified.root_skill;
+      repo.skill_min_depth = classified.skill_min_depth;
+      repo.root_script = classified.root_script;
+    }
   } catch {
     repo.has_skill = null;
     repo.has_install_script = null;
@@ -1063,7 +1102,11 @@ async function main() {
         Object.assign(repo, {
           has_skill: old.has_skill,
           has_install_script: old.has_install_script,
-          pkg_name: old.pkg_name ?? null
+          pkg_name: old.pkg_name ?? null,
+          // C：形态字段随继承带（同一探测来源，updated_at 未变即真实）
+          root_skill: old.root_skill,
+          skill_min_depth: old.skill_min_depth,
+          root_script: old.root_script
         });
       } else {
         probeQueue.push(repo);
@@ -1138,6 +1181,10 @@ async function main() {
         Array.isArray(report.repos) ? report.repos.map((r) => [String(r.full_name), r.verdict]) : []
       );
       applyInstallability(repos, verdictMap);
+      // B3：已确认 gone 的条目从索引剔除（报告归档保留，复活自动重收）
+      const before = repos.length;
+      repos = applyGoneCleanup(repos, verdictMap);
+      if (repos.length < before) log(`B3 失效清理：剔除 ${before - repos.length} 个已确认 gone 条目（报告归档可恢复）`);
     } catch {
       log("installability-report.json 缺失或损坏：本次构建不标注可安装性徽标");
     }
