@@ -61,6 +61,24 @@ function mockFetch(payload, status = 200) {
   });
   return orig;
 }
+/** 同 mockFetch，但捕获每次请求的 JSON body（断言 issue 模板渲染用）。返回 { orig, bodies }。 */
+function mockFetchCapture(payload, status = 200) {
+  const orig = globalThis.fetch;
+  const bodies = [];
+  globalThis.fetch = async (url, opts) => {
+    if (opts?.body) {
+      try { bodies.push(JSON.parse(String(opts.body))); } catch { bodies.push(null); }
+    }
+    return {
+      ok: status >= 200 && status < 300,
+      status,
+      json: async () => payload,
+      text: async () => (typeof payload === "string" ? payload : JSON.stringify(payload)),
+      arrayBuffer: async () => Buffer.from(typeof payload === "string" ? payload : JSON.stringify(payload)),
+    };
+  };
+  return { orig, bodies };
+}
 
 (async () => {
   const lib = await import("../../../lib/index.js");
@@ -238,7 +256,7 @@ function mockFetch(payload, status = 200) {
 
   // ---- sanitizeLog（日志脱敏）----
   check("脱敏 Windows 主目录", lib.sanitizeLog("C:\\Users\\wyzin\\.dsh\\marketplace\\cache\\a"), "~\\<user>\\.dsh\\marketplace\\cache\\a");
-  check("脱敏 Unix 主目录", lib.sanitizeLog("cd /home/alice/dsh && pwd"), "cd ~/<user> && pwd");
+  check("脱敏 Unix 主目录（保留结构隐藏用户名）", lib.sanitizeLog("cd /home/alice/dsh && pwd"), "cd ~/<user>/dsh && pwd");
   check("脱敏 sk- 密钥", lib.sanitizeLog("key=sk-ABC12345XYZ"), "key=sk-ABC123…");
   check("脱敏 ghp_ 密钥", lib.sanitizeLog("token=ghp_abcdefgh123456789"), "token=ghp_abcdef…");
   check("脱敏 AKIA", lib.sanitizeLog("AKIAIOSFODNN7EXAMPLE"), "AKIAIOSFOD…");
@@ -332,8 +350,12 @@ function mockFetch(payload, status = 200) {
   check("matchProfileEntry 未命中", matchedNull, null);
 
   // detectInstalled（repo 对象，返回 boolean；无安装记录 → false）
+  // mock fetch：detectInstalled → loadOfficialPackages 枚举失败回退 registry/搜索 API——
+  // 真实 fetch 在限流/慢网下会拖死测试（coverage 环境实测 403 + 分页重试 → 超时）。
+  const origDetect = mockFetch({ items: [], total_count: 0 });
   check("detectInstalled 未装", await lib.detectInstalled({ full_name: "none/repo", name: "repo" }), false);
   check("detectInstalled 类型", typeof (await lib.detectInstalled({ full_name: "owner/repo", name: "repo" })), "boolean");
+  globalThis.fetch = origDetect;
 
   // appendPatchEntry（entryId + pkgName，返回 boolean 是否追加）
   mkdirSync(join(process.env.DSH_HOME, "profiles", "web"), { recursive: true });
@@ -880,19 +902,64 @@ function mockFetch(payload, status = 200) {
     // 保存 token
     let r = await fbCall(fbToken, { token: "ghp_fake-token" });
     check("feedback token 保存 hasToken", r.b && r.b.hasToken, true);
-    // 提交：fetch 返回 422（label 尚未创建）→ 不带 label 重试 → 仍失败 → manualUrl + error
-    // （提交成功即移除 pending——422 测试与成功测试用不同 repo）
+    // 422 路径返回 manualUrl——手动预填链接不带日志（URL 长度限制 + 额外暴露面）
     const orig422 = mockFetch({}, 422);
     r = await fbCall(fbSubmit, { repo: "none/feedback-repo", ok: true, note: "x" });
     globalThis.fetch = orig422;
     check("feedback 422 重试后 manualUrl", typeof (r.b && r.b.manualUrl) === "string", true);
     check("feedback 422 重试后 error 含 422", r.b && r.b.error && r.b.error.includes("422"), true);
+    check("manualUrl 不含日志快照（URL 暴露面）", decodeURIComponent(r.b.manualUrl).includes("安装日志（已脱敏测试样本）"), false);
     // 提交：fetch 返回 200 + html_url → 自动创建成功 → issueUrl
-    const origOk = mockFetch({ html_url: "https://github.com/bradeGithub/DSH-Plugins-Marketplace/issues/1" }, 200);
+    // 捕获请求体断言模板渲染（异常反馈带 details 折叠日志 + 双语标记；正常反馈零日志）。
+    // 先经 queueFeedback 入队带快照的 entry（对齐真实链路：安装时入队 → 反馈时取出）。
+    await lib.queueFeedback({
+      repo: "none/feedback-repo2", name: "fb-pkg", type: "cordis-plugin", version: "1.0.0",
+      installedAt: Date.now(),
+      method: "market-direct",
+      reinstall: true,
+      envProfile: { platform: "win32", node: "v22.0.0", market: "1.5.5", dsh: "0.1.0-rc.8", pnpm: "9.15.0", git: "2.45.0" },
+      logSnapshot: "安装日志（已脱敏测试样本）",
+    });
+    const cap = mockFetchCapture({ html_url: "https://github.com/bradeGithub/DSH-Plugins-Marketplace/issues/1" }, 200);
     r = await fbCall(fbSubmit, { repo: "none/feedback-repo2", ok: false, note: "y" });
-    globalThis.fetch = origOk;
+    globalThis.fetch = cap.orig;
     check("feedback 自动建 issue 200", r.s, 200);
     check("feedback issueUrl", r.b && r.b.issueUrl, "https://github.com/bradeGithub/DSH-Plugins-Marketplace/issues/1");
+    const issueBody = cap.bodies?.[0]?.body ?? "";
+    check("issue body 异常带 details 折叠", issueBody.includes("<details>") && issueBody.includes("安装日志（已脱敏测试样本）"), true);
+    check("issue body 双语标题", issueBody.includes("安装反馈 / Install Feedback"), true);
+    check("issue body 带环境画像", issueBody.includes("win32") && issueBody.includes("v22.0.0"), true);
+    // S3 字段增补：method/reinstall/扩展画像
+    check("issue body 安装方式", issueBody.includes("market-direct"), true);
+    check("issue body 重装标志", issueBody.includes("重装 / Reinstall | yes"), true);
+    check("issue body DSH 版本", issueBody.includes("DSH 0.1.0-rc.8"), true);
+    check("issue body pnpm/git 可用性", issueBody.includes("pnpm 9.15.0") && issueBody.includes("git 2.45.0"), true);
+    check("issue 异常带 install-failed label", JSON.stringify(cap.bodies?.[0]?.labels ?? []).includes("install-failed"), true);
+    // 正常反馈：不带日志（噪音源头掐掉）
+    await lib.queueFeedback({
+      repo: "none/feedback-repo3", name: "fb-pkg-ok", type: "skill", version: "2.0.0",
+      installedAt: Date.now(),
+      envProfile: { platform: "linux", node: "v22.0.0", market: "1.5.5" },
+      logSnapshot: "不应出现",
+    });
+    const capOk = mockFetchCapture({ html_url: "https://github.com/bradeGithub/DSH-Plugins-Marketplace/issues/2" }, 200);
+    r = await fbCall(fbSubmit, { repo: "none/feedback-repo3", ok: true, note: "" });
+    globalThis.fetch = capOk.orig;
+    check("feedback 正常反馈 200", r.s, 200);
+    const okBody = capOk.bodies?.[0]?.body ?? "";
+    check("issue body 正常反馈零日志", okBody.includes("不应出现"), false);
+    check("issue body 正常反馈带画像", okBody.includes("linux"), true);
+
+    // queueFeedbackSafe 容错：feedback.json 只读 → 吞错 + 日志提示（安装流不受影响）
+    {
+      const fbFile = join(process.env.DSH_HOME, "marketplace", "feedback.json");
+      chmodSync(fbFile, 0o444);
+      const logLines = [];
+      await lib.queueFeedbackSafe({ repo: "x/readonly", name: "x", installedAt: 1 }, (l) => logLines.push(l), "zh");
+      chmodSync(fbFile, 0o644);
+      check("queueFeedbackSafe 失败吞错不抛", true, true);
+      check("queueFeedbackSafe 失败日志提示", logLines.some((l) => l.includes("反馈队列写入失败")), true);
+    }
     // 清除 token
     r = await fbCall(fbToken, { token: "" });
     check("feedback token 清除", r.b && r.b.hasToken, false);
@@ -1087,7 +1154,25 @@ function mockFetch(payload, status = 200) {
   ];
   const listHandler = registered.find((h) => h.path === "/api/marketplace/list")?.handler;
   if (listHandler) {
-    const origList = mockFetch({ repos: repos4, generated_at: new Date().toISOString() });
+    // 按 URL 分流 mock：list 主链路走 registry 源（repos 形态）；内部 loadOfficialPackages
+    // 枚举失败回退的搜索 API 给空 items 快速终止（单一形态 mock 会让搜索兜底把 registry
+    // 响应当空页慢速翻页——coverage 慢速环境实测拖到超时）。
+    const origList = (() => {
+      const orig = globalThis.fetch;
+      globalThis.fetch = async (url) => {
+        const u = String(url ?? "");
+        if (u.includes("/search/") || u.includes("api.github.com/search")) {
+          return { ok: true, status: 200, json: async () => ({ items: [], total_count: 0 }), text: async () => JSON.stringify({ items: [], total_count: 0 }), arrayBuffer: async () => Buffer.from("{\"items\":[]}") };
+        }
+        return {
+          ok: true, status: 200,
+          json: async () => ({ repos: repos4, generated_at: new Date().toISOString() }),
+          text: async () => JSON.stringify({ repos: repos4, generated_at: new Date().toISOString() }),
+          arrayBuffer: async () => Buffer.from(JSON.stringify({ repos: repos4 })),
+        };
+      };
+      return orig;
+    })();
     let listStatus = 0;
     let listBody = null;
     await listHandler({ method: "GET", headers: { "x-dsh-marketplace": "1", host: "127.0.0.1:3080" }, url: "/api/marketplace/list?refresh=1" },
