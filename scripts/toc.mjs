@@ -20,6 +20,7 @@ export const DEFAULT_TOC_EXCLUDES = [
   ".git",
   "dist",
   "CHANGELOG.md", // changelog 是时间线记录，不参与导航 TOC
+  "docs/CHANGELOG.md", // CHANGELOG 已移入 docs/（2026-08-21 根目录整理）
 ];
 
 /**

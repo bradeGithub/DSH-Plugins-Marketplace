@@ -34,6 +34,7 @@
 - [⚖️ 免责声明](#免责声明)
 - [🧱 已知限制](#已知限制)
 - [🌱 第三方生态](#第三方生态)
+- [🙏 致谢](#致谢)
 - [🛠️ 开发与维护](#开发与维护)
 - [📝 更新日志](#更新日志)
 - [📄 许可](#许可)
@@ -305,7 +306,7 @@ GitHub Actions（每 2 小时，仓库自带 token）
 
 **所有反馈者**：通过市场自动反馈、issue 报告问题的每一位用户——你们的问题报告直接驱动了 v1.5.x 的修复节奏。
 
-想参与贡献？见 [CONTRIBUTING.md](CONTRIBUTING.md) 与 [STANDARD.md §7 自测清单](STANDARD.md)。
+想参与贡献？见 [docs/CONTRIBUTING.md](docs/CONTRIBUTING.md) 与 [STANDARD.md §7 自测清单](STANDARD.md)。
 
 ---
 
@@ -320,7 +321,7 @@ GitHub Actions（每 2 小时，仓库自带 token）
 
 ## 📝 更新日志
 
-版本迭代记录见 [CHANGELOG.md](CHANGELOG.md)（v1.0.0 之前为 beta 系列）。
+版本迭代记录见 [docs/CHANGELOG.md](docs/CHANGELOG.md)（v1.0.0 之前为 beta 系列）。
 
 ---
 

@@ -34,6 +34,7 @@ A plugin marketplace for [DeepSeek Harness](https://github.com/deepseek-ai/deeps
 - [⚖️ Disclaimer](#disclaimer)
 - [🧱 Known limitations](#known-limitations)
 - [🌱 Third-party ecosystem](#third-party-ecosystem)
+- [🙏 Acknowledgements](#acknowledgements)
 - [🛠️ Development & maintenance](#development-maintenance)
 - [📝 Changelog](#changelog)
 - [📄 License](#license)
@@ -305,7 +306,7 @@ Also, [awesome-dsh-plugin](https://github.com/awesome-dsh-plugin/awesome-dsh-plu
 
 **Every reporter**: every user who filed install feedback or issues — your reports directly drive the v1.5.x fix cadence.
 
-Want to contribute? See [CONTRIBUTING.md](CONTRIBUTING.md) and the [STANDARD.md §7 self-check list](STANDARD.en.md).
+Want to contribute? See [docs/CONTRIBUTING.md](docs/CONTRIBUTING.md) and the [STANDARD.md §7 self-check list](STANDARD.en.md).
 
 ---
 
@@ -320,7 +321,7 @@ Want to contribute? See [CONTRIBUTING.md](CONTRIBUTING.md) and the [STANDARD.md 
 
 ## 📝 Changelog
 
-See [CHANGELOG.md](CHANGELOG.md) for the full version history (all versions before v1.0.0 are part of the beta series).
+See [docs/CHANGELOG.md](docs/CHANGELOG.md) for the full version history (all versions before v1.0.0 are part of the beta series).
 
 ---
 
