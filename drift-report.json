@@ -1,27 +1,13 @@
 {
-  "generated_at": "2026-08-21T10:52:22.447Z",
-  "count": 3,
+  "generated_at": "2026-08-21T13:28:04.100Z",
+  "count": 1,
   "items": [
     {
-      "full_name": "derekhu0002/archgraph",
-      "previous": "other",
-      "current": "memory",
-      "desc_now": "An architecture-graph driven framework for Agentic Engineering.",
-      "desc_prev": "An architecture-graph driven framework for Agentic Engineering."
-    },
-    {
-      "full_name": "ShanHaiFish/fexp-file-explorer",
-      "previous": "web-ui",
-      "current": "resource",
-      "desc_now": "DSH 动态 Cordis 插件：在左侧工作区浏览目录与文件。双入口（文件浏览/打开目录）、320px 浏览面板、文件预览、一键打开系统资源管理器、文件引用添加到聊天。A dynamic Cordis plugin for DSH: workspace file explorer in the left sidebar.",
-      "desc_prev": "已迁移并入 dsh-plugins 插件组仓库（本仓库归档，v1.5.1 Release 与文档站保留）。Moved into ShanHaiFish/dsh-plugins monorepo; this repo is archived."
-    },
-    {
-      "full_name": "nickhelion/dsh-serverchan-notify",
-      "previous": "conversation",
-      "current": "other",
-      "desc_now": "Archived: moved to nickhelion/dsh-plugins",
-      "desc_prev": "DeepSeek Harness plugin: ServerChan3 (Server酱) push notifications whenever an agent turn finishes an answer — codex Stop-hook parity"
+      "full_name": "WSL043/dsh-codex-subscription",
+      "previous": "tool",
+      "current": "vision",
+      "desc_now": "DeepSeek Harness 的 ChatGPT/Codex 订阅插件：独立 OAuth、模型、真实额度、搜索与图片；无需 API Key 或 Codex CLI",
+      "desc_prev": "在 DeepSeek Harness 中直接使用 ChatGPT/Codex 订阅，无需 OpenAI API Key 或额外客户端，支持 OAuth 登录、订阅搜索与额度显示 | ChatGPT/Codex subscription plugin for DSH"
     }
   ]
 }
