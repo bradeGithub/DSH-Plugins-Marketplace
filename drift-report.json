@@ -1,13 +1,20 @@
 {
-  "generated_at": "2026-08-21T13:28:04.100Z",
-  "count": 1,
+  "generated_at": "2026-08-21T15:10:23.158Z",
+  "count": 2,
   "items": [
     {
-      "full_name": "WSL043/dsh-codex-subscription",
-      "previous": "tool",
-      "current": "vision",
-      "desc_now": "DeepSeek Harness 的 ChatGPT/Codex 订阅插件：独立 OAuth、模型、真实额度、搜索与图片；无需 API Key 或 Codex CLI",
-      "desc_prev": "在 DeepSeek Harness 中直接使用 ChatGPT/Codex 订阅，无需 OpenAI API Key 或额外客户端，支持 OAuth 登录、订阅搜索与额度显示 | ChatGPT/Codex subscription plugin for DSH"
+      "full_name": "EIGHTfs/dsh-git-rescue",
+      "previous": "model",
+      "current": "tool",
+      "desc_now": "DSH 救援恢复插件：守护进程 + git 仓库恢复 + 救援环境 + 安装器（2.0.0 完全重构）",
+      "desc_prev": "DSH git 版本管理 + 崩溃自动救援插件（仅 GitHub token 方案）"
+    },
+    {
+      "full_name": "qiqiangvae/dsh-input-enhancer",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "一个输入框增强工具，可以锁住发送按钮、暂存输入框内容",
+      "desc_prev": "An extension to enhance the DeepSeek Harness input box"
     }
   ]
 }
