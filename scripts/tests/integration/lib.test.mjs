@@ -398,7 +398,7 @@ function mockFetchCapture(payload, status = 200) {
       + 'if(e.deps)pk.dependencies=e.deps;}catch(err){pk.main=main;}}'
       + 'fs.writeFileSync(p,JSON.stringify(pk));}}'
       + '}if(mode==="fail-create")process.exit(1);}'
-      + 'else if(argv[0]==="remove"){const n=argv[1];'
+      + 'else if(argv[0]==="remove"){const n=argv.slice(1).filter((a)=>!a.startsWith("--"))[0];'
       + 'if(mode==="fail-remove")process.exit(1);'
       + 'fs.rmSync(path.join(cwd,"node_modules",...n.split("/")),{recursive:true,force:true});'
       + 'const m=JSON.parse(fs.readFileSync(path.join(cwd,"package.json"),"utf8"));'

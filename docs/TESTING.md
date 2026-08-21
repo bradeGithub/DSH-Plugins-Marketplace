@@ -23,6 +23,8 @@
 - [5.5 机械化质量检查（行覆盖之外）](#55-机械化质量检查行覆盖之外)
 - [5.4 脱敏测试（redact）](#54-脱敏测试redact)
 - [5. 端到端（e2e）策略](#5-端到端e2e策略)
+  - [workspace 吞依赖陷阱（issue #146/#147/#168 同源根因）](#workspace-吞依赖陷阱issue-146147168-同源根因)
+  - [真实安装验收（手动，不进自动金字塔）](#真实安装验收手动不进自动金字塔)
 - [6. 编写清单](#6-编写清单)
 - [7. 已知 lib API 问题](#7-已知-lib-api-问题)
 <!-- /TOC -->
@@ -125,6 +127,28 @@ e2e 用**本地 fixture 替代真实网络**，保证 CI 可复现：
   ```
 - **handler 触发**：apply(ctx) 捕获 webServer.register 的路由 handler，模拟 HTTP req/res 调用
 - **SKIP 策略**：前置条件缺失（如 git 不可用）时输出 SKIP 并以 0 退出（CI 不失败）
+
+### workspace 吞依赖陷阱（issue #146/#147/#168 同源根因）
+
+**机制**：用户主目录常驻 `pnpm-workspace.yaml`（DSH 部署只写 allowBuilds，**无 packages 字段**）→
+pnpm 11 向上查找把**根目录当唯一项目** → `~/.dsh/profiles/web` 的裸 `pnpm install` 被吞：
+依赖装不进 profile node_modules 却静默 "Already up to date" → bundle 装不上。
+npm 不受影响（npm 只认 package.json 显式 workspaces 字段）。
+
+**修复**：runPnpm 的三个调用点（bundle 注册 install / bundle 卸载 remove / buildPluginPackage install）
+带 `--ignore-workspace` 跳过 workspace 发现；`pnpm run build` 保持不带（monorepo 插件需 workspace: 协议）。
+
+**测试**：`scripts/tests/e2e/workspace-trap.e2e.mjs`（进金字塔，e2e 层）——构造祖先 workspace 根
+（无 packages 字段，同真实主目录形态）后：对照组裸 pnpm 被吞（判别力）/修复后依赖进 profile/
+workspace 根未被污染/npm 路径不受影响。git + pnpm 缺失时 SKIP。
+
+### 真实安装验收（手动，不进自动金字塔）
+
+`scripts/tests/manual/real-install-verify.mjs [repo...]`——真实网络 clone + 真实安装，
+验证：①脱敏管线在真实 bug 日志下无泄漏（密钥/路径/undefined 拼接形态）②安装链路真实错误
+可诊断。内置 issue 异常反馈清单（#168/#152/#147/#146/#145/#134/#125/#93/#90/#84/#82）；
+带参数只体检指定仓库。临时 DSH_HOME 隔离不污染真实部署；网络超时自动重试一次；
+每仓 5s~2min，非 CI 环境跑。
 
 ## 6. 编写清单
 
