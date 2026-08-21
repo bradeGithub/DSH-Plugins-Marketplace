@@ -32,8 +32,8 @@ chore: update registry.json
 
 ### 1.3 禁止事项
 
-- 主题与正文禁止 emoji（由 commit-msg hook 强制）
-- 禁止无 type 的提交（由 commit-msg hook 强制）
+- 主题与正文禁止 emoji（commit-msg hook 检查；等级按 `.hooksrc` 分级，当前 warn 仅提醒）
+- 禁止无 type 的提交（commit-msg hook 强制）
 
 ## 2. 代码规范
 
@@ -47,8 +47,12 @@ chore: update registry.json
 
 - **架构**：测试金字塔（unit → integration → e2e），完整规范见 [TESTING.md](TESTING.md)
 - 统一运行器：`node scripts/tests/run.mjs`
-- 覆盖率：`node scripts/coverage.mjs`（validate/toc 目标 100%；当前 lib/index.js 83%、overall 87%）
+- 覆盖率：`node scripts/coverage.mjs`（lib/index.js 非豁免 100%，口径见 TESTING.md §4；当前 303/303）
 - 新增纯函数必须配套断言；hook 校验逻辑必须可测（放 validate.mjs）
+- 日志脱敏（`lib/redact.js`）与安装反馈（`docs/FEEDBACK.md`）属正式能力：改脱敏规则须同步
+  redact.test.mjs 泄漏/误报面断言（成对维护，见 TESTING.md §5.4）；workspace 吞依赖陷阱
+  回归由 `scripts/tests/e2e/workspace-trap.e2e.mjs` 守护（见 TESTING.md §5）
+- 真实安装验收（手动）：`scripts/tests/manual/real-install-verify.mjs`（不进自动金字塔，见 TESTING.md §5）
 - CI：`node --check` 语法检查 + 金字塔测试同步执行（见 registry.yml）
 
 ## 4. 文档规范
@@ -64,7 +68,8 @@ chore: update registry.json
 - 中英文档标题、结构保持一致
 - `CHANGELOG.md`：双语，`## vX.Y.Z (日期)` 条目，`- **标题** 中文 / English` 格式
 - `docs/`：规范与深度文档，层级与索引见 [docs/README.md](README.md)（文档中心）
-  - L0 索引 `docs/README.md` → L1 源规范 `DEVELOPMENT.md` → L2 专项（`GIT_HOOKS.md`/`CODING_STANDARDS.md`）
+  - L0 索引 `docs/README.md` → L1 源规范 `DEVELOPMENT.md` → L2 专项（`GIT_HOOKS.md`/`CODING_STANDARDS.md`/`TESTING.md`/`FEEDBACK.md`）
+  - `FEEDBACK.md`：安装反馈系统规范（模板/字段/脱敏机制/隐私边界），实现为 `lib/redact.js` + `lib/index.js` 反馈链路
 - 新文档必须更新文档中心索引 + 生成 TOC
 
 ### 4.3 TOC
@@ -89,7 +94,7 @@ chore: update registry.json
 - [7. 新规范落地流程](#7-新规范落地流程)
 <!-- /TOC -->`
 - 标题带 emoji 时，TOC 锚点按 GitHub slug 规则去除 emoji
-- pre-commit hook 检测：TOC 缺失或过期 → 拒绝提交（运行 `node scripts/toc.mjs --check`）
+- pre-commit hook 检测：TOC 缺失或过期 → 按 `.hooksrc` 分级拦截（当前 warn 仅提醒；运行 `node scripts/toc.mjs --check`）
 
 ### 4.4 禁止事项
 

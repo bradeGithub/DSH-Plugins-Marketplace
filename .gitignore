@@ -1,0 +1,28 @@
+# ── 构建/测试生成物 ──
+# 安装探测断点快照（verify-installability.mjs 写系统临时目录，此处保险）
+*.probe-snapshot.json
+
+# ── Node 依赖与产物（本插件零 npm 依赖，但本地开发/工具链可能产生）──
+node_modules/
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+dist/
+build/
+coverage/
+.nyc_output/
+
+# ── 临时 / 日志 ──
+*.log
+*.tmp
+.DS_Store
+Thumbs.db
+
+# ── 环境与密钥 ──
+.env
+.env.*
+!.env.example
+
+# ── 编辑器 / 系统 ──
+.vscode/
+.idea/

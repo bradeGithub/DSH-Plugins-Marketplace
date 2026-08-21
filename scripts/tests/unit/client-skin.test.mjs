@@ -117,5 +117,21 @@ check("tab 未选中显式 tertiary 颜色", /tabBtn: \{ padding: "7px 16px"[^}]
 check("disclaimer 带 dshm-dim", /className: "dshm-dim", style: \{ fontSize: 11, color: "var\(--dsw-alias-label-tertiary\)", marginTop: 16/.test(client), true);
 check("已安装按钮显式 tertiary 颜色", /btnInstalled: \{ padding: "5px 14px"[^}]*color: "var\(--dsw-alias-label-tertiary\)"/.test(client), true);
 
+// ---- A：typeMap 契约（安装完成类型本地化）----
+// 背景：L653 曾裸拼 inst.result.type（bundle 显示英文），typeMap 修复后契约固化——
+// zh/en 双字典必须覆盖全部 6 个安装类型键（bundle 为 A 新增类型），
+// doneMsg 消费点必须用 typeMap 映射（未知类型兜底原文）。
+const TYPE_KEYS = ["cordis-plugin", "bundle", "script", "skill", "agent-preset", "instructions"];
+const zhBlock = client.slice(client.indexOf("typeMap: {"), client.indexOf("},", client.indexOf("typeMap: {")) + 2);
+const enBlock = client.slice(client.indexOf("typeMap: {", client.indexOf("typeMap: {") + 10), client.indexOf("},", client.indexOf("typeMap: {", client.indexOf("typeMap: {") + 10)) + 2);
+for (const k of TYPE_KEYS) {
+  check(`typeMap zh 含 ${k}`, new RegExp(`"${k}":`).test(zhBlock), true);
+  check(`typeMap en 含 ${k}`, new RegExp(`"${k}":`).test(enBlock), true);
+}
+check("typeMap 消费点用映射（未知类型兜底原文）",
+  /t\("doneMsg", \{ type: inst\.result\.type === "cli" \? t\("typeCli"\) : \(t\("typeMap"\)\[inst\.result\.type\] \?\? inst\.result\.type\) \}\)/.test(client), true);
+check("typeMap 六键中英文均有（bundle 为 A 新增）",
+  TYPE_KEYS.every((k) => new RegExp(`"${k}": "[^"]+"`).test(zhBlock)) && TYPE_KEYS.every((k) => new RegExp(`"${k}": "[^"]+"`).test(enBlock)), true);
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail === 0 ? 0 : 1);

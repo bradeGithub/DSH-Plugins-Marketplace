@@ -1,4 +1,4 @@
-import { compareVersions, isTrustedRequest, isTrustedHost, isSensitiveEnvKey, buildMinimalEnv, buildFilteredEnv, looksLikeDshPlugin, wslPosixPath, normalizeRepoRef, dedupeReposByPkgName, slugify, SCRIPT_ENV_KEYS, sanitizeLog } from "../../../lib/index.js";
+import { compareVersions, shouldUpdate, isTrustedRequest, isTrustedHost, isSensitiveEnvKey, buildMinimalEnv, buildFilteredEnv, looksLikeDshPlugin, wslPosixPath, normalizeRepoRef, dedupeReposByPkgName, slugify, SCRIPT_ENV_KEYS, sanitizeLog, buildFeedbackLogSnapshot, buildEnvProfile } from "../../../lib/index.js";
 
 let pass = 0, fail = 0;
 function check(name, actual, expected) {
@@ -29,6 +29,12 @@ check("字母 pre > 数字 pre（反向对称）", compareVersions("1.0.0-alpha"
 // 相等标识应继续比下一段（前导零形态宽容处理，但必须保持反对称）。
 check("rc.01 == rc.1（数值相等继续）", compareVersions("1.2.3-rc.01", "1.2.3-rc.1"), 0);
 check("rc.1 == rc.01（对称）", compareVersions("1.2.3-rc.1", "1.2.3-rc.01"), 0);
+// mutation findings m01/m02：updateAvailable 语义拼接处锁定（<0 即应更新）——抽出的纯函数三态 + 空守卫
+check("shouldUpdate 新版 → true", shouldUpdate("1.0.0", "1.0.1"), true);
+check("shouldUpdate 相等 → false", shouldUpdate("1.0.1", "1.0.1"), false);
+check("shouldUpdate 旧版 → false", shouldUpdate("1.0.1", "1.0.0"), false);
+check("shouldUpdate 无 installed → false", shouldUpdate(null, "1.0.1"), false);
+check("shouldUpdate 无 latest → false", shouldUpdate("1.0.0", null), false);
 
 // ---- R1: isTrustedRequest（Host 白名单 + 自定义头 + Origin）----
 const req = (headers) => ({ headers });
@@ -141,6 +147,50 @@ check("sanitizeLog 黏连形态保留脱敏标记", /x?sk-abcdef…/.test(glued)
 const lowPath = sanitizeLog("c:\\users\\alice\\.ssh\\config");
 check("sanitizeLog 小写 users 路径脱敏", lowPath.includes("alice"), false);
 check("sanitizeLog 小写路径含脱敏标记", lowPath.includes("~\\<user>"), true);
+// 路径脱敏保留结构（AppData/Temp 等深层目录名），只隐藏用户名段——诊断价值与隐私平衡
+const deepPath = sanitizeLog(String.raw`C:\Users\bob\AppData\Local\Temp\dsh-x`);
+check("sanitizeLog 深层路径隐藏用户名", deepPath.includes("bob"), false);
+check("sanitizeLog 深层路径保留结构", deepPath.includes(String.raw`~\<user>\AppData\Local\Temp`), true);
+// /home 深层路径同款
+const homeDeep = sanitizeLog("/home/carol/.dsh/profiles/web/node_modules/x");
+check("sanitizeLog /home 深层隐藏用户名", homeDeep.includes("carol"), false);
+
+// ---- 反馈诊断快照（真实 bug 场景样本驱动）----
+{
+  const realLog = [
+    "[1/5] 克隆 https://github.com/lynx-gt/dsh-subagent-cwd ...",
+    "克隆完成。",
+    "[2/5] 识别安装类型: bundle 插件",
+    "        判定报告：命中特征「package.json 声明 bundle 形态（dsh.bundle.patch）」→ 理由：bundle 包经 profile bundles 层注册",
+    "[4/5] 开始安装 ...",
+    "安装失败: pnpm 安装后仍未在 profile node_modules 解析到 dsh-subagent-cwd——pnpm 输出：Command failed: cmd.exe /c pnpm install",
+  ];
+  const snap = buildFeedbackLogSnapshot(realLog);
+  check("快照含类型判定锚点行", snap.includes("[2/5]"), true);
+  check("快照含判定报告锚点", snap.includes("判定报告"), true);
+  check("快照含尾部错误行", snap.includes("pnpm 安装后仍未"), true);
+  // 隐私：快照注入用户路径后必须脱敏
+  const withPath = buildFeedbackLogSnapshot([...realLog, "Command failed: git clone C:\\Users\\secretname\\AppData\\Local\\Temp\\x"]);
+  check("快照路径脱敏（无用户名）", withPath.includes("secretname"), false);
+  check("快照路径脱敏（含 <user> 标记）", withPath.includes("~\\<user>"), true);
+  // 密钥形态脱敏
+  const withKey = buildFeedbackLogSnapshot(["npm warn token sk-abcdef123456789012345"]);
+  check("快照密钥脱敏", withKey.includes("sk-abcdef1234567890"), false);
+  // 限幅：超长日志截断到 2000 + 截断标记
+  const bigLog = Array.from({ length: 200 }, (_, i) => `line ${i} ${"x".repeat(50)}`);
+  const bigSnap = buildFeedbackLogSnapshot(bigLog);
+  check("快照限幅 ≤2000+标记", bigSnap.length <= 2000 + 20 && bigSnap.includes("…(前段截断)…"), true);
+  // 非数组容错
+  check("快照非数组 → 空串", buildFeedbackLogSnapshot(null), "");
+}
+// ---- 环境画像（无个人数据）----
+{
+  const p = buildEnvProfile();
+  check("画像 platform 字段", typeof p.platform, "string");
+  check("画像 node 字段", typeof p.node, "string");
+  check("画像 market 字段", typeof p.market, "string");
+  check("画像无用户名/路径字段", JSON.stringify(p).match(/users|home|AppData|Lenovo/i), null);
+}
 
 // ---- R2: env 构造 ----
 const filtered = buildFilteredEnv();

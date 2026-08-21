@@ -21,7 +21,10 @@
 - [4. 覆盖率要求](#4-覆盖率要求)
   - [豁免原则](#豁免原则)
 - [5.5 机械化质量检查（行覆盖之外）](#55-机械化质量检查行覆盖之外)
+- [5.4 脱敏测试（redact）](#54-脱敏测试redact)
 - [5. 端到端（e2e）策略](#5-端到端e2e策略)
+  - [workspace 吞依赖陷阱（issue #146/#147/#168 同源根因）](#workspace-吞依赖陷阱issue-146147168-同源根因)
+  - [真实安装验收（手动，不进自动金字塔）](#真实安装验收手动不进自动金字塔)
 - [6. 编写清单](#6-编写清单)
 - [7. 已知 lib API 问题](#7-已知-lib-api-问题)
 <!-- /TOC -->
@@ -88,11 +91,24 @@ process.exit(fail === 0 ? 0 : 1);
 
 | 工具 | 命令 | 度量 |
 |---|---|---|
-| 突变测试 | `node scripts/mutation-test.mjs` | 测试敏感度（24 个语义突变点；存活 = 语义未锁定；当前存活 3 个全部评估为接受） |
+| 突变测试 | `node scripts/mutation-test.mjs` | 测试敏感度（24 个语义突变点；存活 = 语义未锁定；当前存活 0 / 被杀 15 / 契约锁定 9） |
 | 性质测试 | `node scripts/tests/unit/property-based.test.mjs` | 不变式（幂等/反对称/传递性/边界/差分 `annotateInstalled ≡ detectInstalled`；8/8） |
 | i18n 完整性 | `node scripts/tests/unit/i18n-completeness.test.mjs` | 字典覆盖 + 占位符一致性（5/5，进金字塔自动跑） |
 
 改 lib 后三件套复跑顺序：`coverage → mutation → property → smoke`。
+
+## 5.4 脱敏测试（redact）
+
+安装日志附公开 issue 前的多层脱敏（`lib/redact.js`），测试按三面组织（`scripts/tests/unit/redact.test.mjs`）：
+
+| 面 | 断言方式 | 覆盖 |
+|---|---|---|
+| 泄漏面 | `noLeak(name, input, ...secrets)`——输出不含敏感原文子串 | 已知密钥 21 形态（AWS 含临时凭证/sk 系/GitHub PAT/JWT/PEM/DB 连接串/webhook/Bearer 头）+ 用户路径 + 上下文邻近捕获 |
+| 误报面 | `keep(name, input, ...parts)`——非敏感上下文保留 | 包名含 token/停用词/纯小写标识符/短值不掩码 |
+| 注入面 | CR/LF 统一、控制字符剔除、markdown 围栏 ``` → ''' | 防击穿 issue details 折叠块 |
+
+**新增密钥规则**：`lib/redact.js` KNOWN_KEY_RULES 加正则 + redact.test.mjs 加对应 noLeak 断言（成对维护）。
+性质测试的 sanitizeLog 不变式（路径残留/密钥残留/标记存在）是 fuzz 层兜底——粘连形态（多路径分隔符拼接）由它守护。
 
 ## 5. 端到端（e2e）策略
 
@@ -111,6 +127,28 @@ e2e 用**本地 fixture 替代真实网络**，保证 CI 可复现：
   ```
 - **handler 触发**：apply(ctx) 捕获 webServer.register 的路由 handler，模拟 HTTP req/res 调用
 - **SKIP 策略**：前置条件缺失（如 git 不可用）时输出 SKIP 并以 0 退出（CI 不失败）
+
+### workspace 吞依赖陷阱（issue #146/#147/#168 同源根因）
+
+**机制**：用户主目录常驻 `pnpm-workspace.yaml`（DSH 部署只写 allowBuilds，**无 packages 字段**）→
+pnpm 11 向上查找把**根目录当唯一项目** → `~/.dsh/profiles/web` 的裸 `pnpm install` 被吞：
+依赖装不进 profile node_modules 却静默 "Already up to date" → bundle 装不上。
+npm 不受影响（npm 只认 package.json 显式 workspaces 字段）。
+
+**修复**：runPnpm 的三个调用点（bundle 注册 install / bundle 卸载 remove / buildPluginPackage install）
+带 `--ignore-workspace` 跳过 workspace 发现；`pnpm run build` 保持不带（monorepo 插件需 workspace: 协议）。
+
+**测试**：`scripts/tests/e2e/workspace-trap.e2e.mjs`（进金字塔，e2e 层）——构造祖先 workspace 根
+（无 packages 字段，同真实主目录形态）后：对照组裸 pnpm 被吞（判别力）/修复后依赖进 profile/
+workspace 根未被污染/npm 路径不受影响。git + pnpm 缺失时 SKIP。
+
+### 真实安装验收（手动，不进自动金字塔）
+
+`scripts/tests/manual/real-install-verify.mjs [repo...]`——真实网络 clone + 真实安装，
+验证：①脱敏管线在真实 bug 日志下无泄漏（密钥/路径/undefined 拼接形态）②安装链路真实错误
+可诊断。内置 issue 异常反馈清单（#168/#152/#147/#146/#145/#134/#125/#93/#90/#84/#82）；
+带参数只体检指定仓库。临时 DSH_HOME 隔离不污染真实部署；网络超时自动重试一次；
+每仓 5s~2min，非 CI 环境跑。
 
 ## 6. 编写清单
 

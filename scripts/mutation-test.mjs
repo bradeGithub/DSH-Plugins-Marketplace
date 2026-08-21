@@ -51,11 +51,11 @@ const MUTATIONS = [
   // updateAvailable 判定），pattern 按实际源码调整到调用点，语义变化真实。
   {
     id: "m01",
-    name: "compareVersions 调用点 >= 0 → > 0（相等版本不再视为已最新）",
+    name: "shouldUpdate 方向反转（compareVersions < 0 → > 0，新版反而不可更新）",
     type: "behavior",
-    pattern: /compareVersions\(([^)]*)\) >= 0/g,
-    replacement: "compareVersions($1) > 0",
-    note: "checkSelfUpdate 跳过条件与双源取高（reduce）各 1 处；lib-pure 只直接测 compareVersions 函数，不测调用点"
+    pattern: /compareVersions\(installed, latest\) < 0/g,
+    replacement: "compareVersions(installed, latest) > 0",
+    note: "shouldUpdate 内部最新判定；lib-pure「shouldUpdate 新版 → true」锁定"
   },
   {
     id: "m02",
@@ -213,11 +213,11 @@ const MUTATIONS = [
   // ---- 补充突变（发现的高价值点）----
   {
     id: "m21",
-    name: "comparePre 数字标识 vs 字母数字标识顺序反转（数字段不再优先）",
+    name: "comparePre 数字段不再优先（if (xNum) return -1 → return 1，数字 pre 反而大于字母）",
     type: "behavior",
-    pattern: /if \(xNum\) return 1;/g,
-    replacement: "if (xNum) return -1;",
-    note: "lib-pure 有数字vs数字（rc.10>rc.9）与字母vs字母（beta.2>alpha.5），缺「数字 vs 字母」用例"
+    pattern: /if \(xNum\) return -1;/g,
+    replacement: "if (xNum) return 1;",
+    note: "comparePre xNum→-1（数字段优先）语义；lib-pure「数字 pre < 字母 pre」锁定"
   },
   {
     id: "m22",
@@ -395,14 +395,14 @@ function main() {
   // ---- 结论：行为测试最薄弱的面 ----
   console.log("\n=== 结论：行为测试最薄弱的面 ===");
   const findings = [
-    "1. 版本判定调用点（m01/m02）：lib-pure 只测 compareVersions 函数返回值，updateAvailable / checkSelfUpdate / 双源取高的语义拼接处（>= 0 / < 0 判定）完全未锁定。建议把更新判定抽成纯函数（如 shouldUpdate(installed, latest)）补相等/新版/旧版三用例。",
-    "2. 规范化函数（m06 normalizeRepoRef 大小写、m19 slugify）：两个纯函数均无行为测试（slugify 甚至未导出）。建议 lib-pure 补「大小写混写 full_name 与已装记录命中」用例，并导出 slugify 后补大写仓库名用例。",
-    "3. 资源上限常量（m11 MAX_BODY_BYTES）：security-guards 锁了 MAX_RESPONSE_BYTES / MAX_EXEC_BUFFER / LOG_LINE_MAX，唯独 MAX_BODY_BYTES 无任何断言（常量与使用点都没有）。建议并入「单次外部输入内存上限」契约。",
-    "4. 边界语义（m20 responseTooLarge 恰好等于上限、m24 172.17-172.31 网段、m21 数字段 vs 字母段）：测试只覆盖典型值与端点，不覆盖边界。建议各补一条边界用例。",
-    "5. 重复硬编码（m22）：buildMinimalEnv 的白名单在测试内整份复制，源码删项（如 PATH）不报警。建议导出 SCRIPT_ENV_KEYS，测试断言 buildMinimalEnv 键集 === 导出清单。",
-    "6. 大小写不敏感（m23）：isSensitiveEnvKey 的 /i 标志无用例（敏感用例全用大写键名）。建议补「github_token 小写键名也敏感」。",
-    "7. 排序权重（m16 dedupe 1e12）：已装优先的排序语义无行为测试。建议补「已装低星 vs 未装高星同 pkg_name → 保留已装」。",
-    "8. 备注 m03：readStateJson 的 ENOENT 区分被 security-guards 静态锁定（种子预期的「行为存活」未发生），但损坏文件 → WARN + 备份 .corrupt-<ts> 的运行时路径仍无行为测试（loadInstalled 在 integration 子集外）。建议在 installed-load 测试里补损坏 JSON 分支。"
+    "1. 版本判定调用点（m01/m02）：已抽 shouldUpdate 纯函数并锁定——m01（方向反转：< 0 → > 0）与 m02（< 0 → <= 0）均被 lib-pure「shouldUpdate 新版/相等」杀。checkSelfUpdate 两处 updateAvailable 与 doSelfUpdate no-update 分支统一走 shouldUpdate。",
+    "2. 规范化函数（m06/m19）：已覆盖——normalizeRepoRef 大小写/幂等、slugify（已导出）大小写/特殊字符/空回退，均在 lib-pure。",
+    "3. 资源上限常量（m11 MAX_BODY_BYTES）：已并入 security-guards「单次外部输入内存上限」契约（=1MB 断言）。",
+    "4. 边界语义（m20/m24/m21）：已覆盖并全部锁定——responseTooLarge 恰好等于上限不算超限（> 契约锁定）；172 网段上下界四端点；comparePre 数字段优先（m21 被 lib-pure「数字 pre < 字母 pre」杀）；rc.01==rc.1 / beta.2>alpha.5。",
+    "5. 重复硬编码（m22）：已导出 SCRIPT_ENV_KEYS，lib-pure 断言 buildMinimalEnv 键集 ⊆ 导出清单（同源不脱节）。",
+    "6. 大小写不敏感（m23）：已补 lib-pure「小写 github_token/api_key/db_password 敏感」。",
+    "7. 排序权重（m16 dedupe 1e12）：已补 lib-pure「已装低星优先 + NaN stars 保留」。",
+    "8. 损坏 JSON（m03）：已由 security-guards 静态契约锁定（损坏 → 备份 .corrupt-<ts>）。"
   ];
   for (const f of findings) console.log(f);
 

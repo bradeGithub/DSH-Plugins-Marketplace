@@ -327,7 +327,8 @@ export function applyMarketTags(repos) {
  * 面向客户端的精简字段 `installable`，只标注两类需要提示的仓库：
  *   "pkg-plain" → "non-plugin"（有 package.json 但非 DSH 插件，装了不可用）
  *   "manual"    → "manual"（无可自动安装内容，只能按 README 手动装）
- * 其余（cordis-plugin/skill/script/multi-plugin/agent-preset/unknown）不写字段 → 客户端默认无徽标。
+ * 其余（cordis-plugin/bundle-plugin/skill/script/multi-plugin/agent-preset/unknown）不写字段 →
+ * 客户端默认无徽标（bundle-plugin 是合法可装形态，与 cordis-plugin 同等对待，无红标）。
  * 报告缺失或条目缺失 → 删除旧盖章（徽标随报告刷新，避免过期误导）。
  * 人工验证标注优先：market_tags 含 "verified-install" 的仓库跳过机器盖章——
  * 探测器对「根目录非插件但 README 提供官方聚合包」的仓库会误判 pkg-plain
@@ -635,6 +636,16 @@ export function looksLikeDshPlugin(pkg) {
   return names.includes("@deepseek-ai/cordis") || names.includes("@deepseek-ai/dsh") || names.some((n) => n.startsWith("@deepseek-ai/dsh-"));
 }
 
+/**
+ * bundle 声明判定（与 lib/index.js isBundlePackage 同款）：dsh.bundle.patch 非空字符串。
+ * bundle 包经 profile bundles 层注册（issue #134），与普通 cordis 插件安装路径不同。
+ */
+export function isBundlePackage(pkg) {
+  return Boolean(pkg && typeof pkg === "object" && pkg.dsh && typeof pkg.dsh === "object"
+    && pkg.dsh.bundle && typeof pkg.dsh.bundle === "object"
+    && typeof pkg.dsh.bundle.patch === "string" && pkg.dsh.bundle.patch.length > 0);
+}
+
 /** DSH 生态 topics 白名单：含这些主题的仓库即使根清单无 dsh 声明也不盖
  *  「非 DSH 插件」（技能/预设/多包形态的根清单判定不适用，避免误伤）。 */
 const DSH_TOPIC_HINTS = new Set(["cordis-plugin", "cordis", "dsh-skill", "agent-skills", "dsh-preset", "agent-preset"]);
@@ -906,7 +917,7 @@ async function fetchAllTopics() {
  * 从 Trees 响应中判定探测字段（纯函数，便于测试）：
  * - has_skill: 存在 SKILL.md（仓库根或任意子目录，仅 blob）
  * - has_install_script: 存在 install.sh / install.ps1 / install.bat（安全徽章数据）
- * - C 扩展（2026-08-19）：安装形态判定——root_skill（根 SKILL.md = 单技能形态）、
+ * - 安装形态判定：root_skill（根 SKILL.md = 单技能形态）、
  *   skill_min_depth（SKILL.md 最小路径段数：1=根 / 3=skills/<name>/ 合集 / ≥4=大项目内部埋藏）、
  *   root_script（根 install 脚本）。对齐 verify-installability 的 verdictOf 语义——
  *   skills 条目据此区分「单技能/技能合集/深层埋藏（非市场可装）」。
@@ -1290,7 +1301,10 @@ async function enrichPkgNames(repos, includeVersion = false) {
     && (r.stargazers_count ?? 0) >= 3000
     && r.installable === void 0
     && !(Array.isArray(r.market_tags) && r.market_tags.includes("verified-install"));
-  const todo = repos.filter((r) => (includeVersion ? !r.pkg_name || !r.version : !r.pkg_name) || highStarSuspect(r));
+  // bundle 状态新鲜度敏感（声明可变），带 bundle 标记的条目强制每轮重抓
+  // ——否则旧 `bundle: true` 残留（普通插件意外显示 bundle 徽章），或 bundle 移除后永不清除。
+  const bundleSuspect = (r) => includeVersion && r.bundle === true;
+  const todo = repos.filter((r) => (includeVersion ? !r.pkg_name || !r.version : !r.pkg_name) || highStarSuspect(r) || bundleSuspect(r));
   if (todo.length === 0) return;
   let cursor = 0;
   const worker = async () => {
@@ -1310,7 +1324,12 @@ async function enrichPkgNames(repos, includeVersion = false) {
           if (includeVersion && typeof pkg.version === "string" && pkg.version.length > 0) {
             r.version = pkg.version;
           }
-          if (includeVersion) r.__plainPkg = looksLikeDshPlugin(pkg) !== true;
+          if (includeVersion) {
+            r.__plainPkg = looksLikeDshPlugin(pkg) !== true;
+            // bundle 声明轻标记——三态写回（是 bundle → true，否 → 清除旧值）。
+            // 只条件写 true 会导致仓库从 bundle 变普通插件后旧标记永久残留。
+            if (isBundlePackage(pkg)) r.bundle = true; else delete r.bundle;
+          }
         }
       } catch { /* 网络失败：保持 null */ }
     }

@@ -15,6 +15,10 @@ A plugin marketplace for [DeepSeek Harness](https://github.com/deepseek-ai/deeps
   <img src="https://img.shields.io/badge/i18n-zh%20%7C%20en-important" alt="i18n">
 </p>
 
+<p align="center">
+  <img src="assets/social-preview.png" alt="DSH Plugin Marketplace — social preview cover" width="90%">
+</p>
+
 ---
 
 <!-- TOC -->
@@ -34,6 +38,7 @@ A plugin marketplace for [DeepSeek Harness](https://github.com/deepseek-ai/deeps
 - [⚖️ Disclaimer](#disclaimer)
 - [🧱 Known limitations](#known-limitations)
 - [🌱 Third-party ecosystem](#third-party-ecosystem)
+- [🙏 Acknowledgements](#acknowledgements)
 - [🛠️ Development & maintenance](#development-maintenance)
 - [📝 Changelog](#changelog)
 - [📄 License](#license)
@@ -44,12 +49,12 @@ A plugin marketplace for [DeepSeek Harness](https://github.com/deepseek-ai/deeps
 ## ✨ Why this marketplace
 
 <p align="center">
-  <b>3900+</b> DSH plugins &nbsp;·&nbsp; <b>14000+</b> general Skills &nbsp;·&nbsp; <b>2 h</b> auto-ingestion &nbsp;·&nbsp; <b>0</b> API rate limits
+  <b>9500+</b> DSH plugins &nbsp;·&nbsp; <b>20000+</b> general Skills &nbsp;·&nbsp; <b>2 h</b> auto-ingestion &nbsp;·&nbsp; <b>0</b> API rate limits
 </p>
 
 | | Strength | Details |
 |---|---|---|
-| 🔍 | **Complete coverage** | Auto-discovers **every** repo under the GitHub `dsh-plugin` topic (**3900+** and counting), plus a dedicated **14000+** general Skills column (`agent-skills` ∪ `claude-skills`) |
+| 🔍 | **Complete coverage** | Auto-discovers **every** repo under the GitHub `dsh-plugin` topic (**9500+** and counting), plus a dedicated **20000+** general Skills column (`agent-skills` ∪ `claude-skills`) |
 | 🤖 | **Auto-ingestion, zero paperwork** | CI incrementally scans the topic every 2 hours — tag your repo with `dsh-plugin` and it enters the marketplace within **2 hours at most**, no issue, no review queue |
 | ⚡ | **Instant, rate-limit-free** | The list is served from a static registry via the jsDelivr CDN — thousands of plugins load instantly, end users make **zero GitHub API calls** |
 | 🎯 | **Smart type detection** | Automatically detects and installs 4 repo types: cordis plugin / skill (SKILL.md) / agent preset / install script — source-built plugins get a build-confirmation prompt; plugins needing API keys pause and ask for material |
@@ -103,7 +108,7 @@ dsh plugin --profile web install bradeGithub/DSH-Plugins-Marketplace   # reinsta
    - Material needed → an input dialog appears; provide the API key etc. and click «Submit and continue install»
    - **Update** → overwrite-upgrade when a newer version is detected
    - **Installed** (grey) → nothing to do
-5. Switch to the **General Skills** tab to browse 14000+ skills with search / infinite-scroll pagination / one-click install
+5. Switch to the **General Skills** tab to browse 20000+ skills with search / infinite-scroll pagination / one-click install
 
 ---
 
@@ -125,7 +130,7 @@ dsh plugin --profile web install bradeGithub/DSH-Plugins-Marketplace   # reinsta
 - **Search**: real-time filtering by plugin name / full repo name / tags
 - **Category**: build-time auto-categorization from description/tags (12 categories: vision / document / memory / model / notify / coding / conversation / web-ui / agent / tool / resource / other), filter chips in the UI + category badges on cards
 - **Community badge**: the build fetches awesome lists (default: [awesome-dsh-plugin](https://github.com/awesome-dsh-plugin/awesome-dsh-plugin), community-curated) and stamps a blue «Community listed» badge on intersecting repos (tooltip explains the source) — quick recognition of community-recognized plugins (listing ≠ endorsement by this marketplace)
-- **General Skills column**: switch to the «General Skills» tab in Settings — browse the CI-built skills index (`agent-skills` ∪ `claude-skills`, 14000+ repos) with search / paginated infinite scroll / one-click install to `~/.dsh/skills/` / installed recognition; repos with install scripts carry a 🛡 badge, unverified probes show a weak «unverified» hint
+- **General Skills column**: switch to the «General Skills» tab in Settings — browse the CI-built skills index (`agent-skills` ∪ `claude-skills`, 20000+ repos) with search / paginated infinite scroll / one-click install to `~/.dsh/skills/` / installed recognition; repos with install scripts carry a 🛡 badge, unverified probes show a weak «unverified» hint
 - **Refresh feedback**: click «Refresh» to force a re-fetch, with a toast confirming «refresh succeeded / refresh failed»
 - **GitHub link**: every card links to the original repo (opens in a new tab)
 - **Dark/light themes**: built entirely on DSH theme tokens (`--dsw-alias-*`), adapting automatically
@@ -156,7 +161,7 @@ The plugin lives at `~/.dsh/profiles/web/node_modules/dsh-plugin-marketplace/` a
 ```
 GitHub Actions (every 2 hours, repo's own token)
    └─ scripts/build-registry.mjs: pages topic:dsh-plugin, incremental merge, dedupe/self-exclude
-        └─ commits registry.json back to main (3900+ plugins, sorted by stars)
+        └─ commits registry.json back to main (9500+ plugins, sorted by stars)
              └─ plugin reads: jsDelivr CDN (fast in CN) → raw.githubusercontent (fallback)
                   └─ only if all sources fail: GitHub search API (paged, 10-min cache)
 ```
@@ -269,7 +274,7 @@ When both exist and differ → the card shows an «Update» button plus `install
 - The whole install task is attached to a single POST request (clone + npm install + build + material-confirmation loops); a short-timeout reverse proxy in front of DSH (default 60 s) may cut the connection — the backend task keeps running, refresh the page to confirm the result
 - Version detection only works for plugins with `package.json`; skills / presets / script types have no version concept; authors who never bump `version` won't trigger update hints
 - The plugin list is served from the static registry (CDN) by default; the GitHub search API is used only when both registry sources are unreachable, and its unauthenticated limit is **10 requests/minute** — clicking «Refresh» too often during fallback may hit the limit (the UI will report refresh failure — wait and retry)
-- **Skills index scope**: full index since v1.3 — Search API «stars segments + time-window bisection» breaks the 1000-results-per-query cap, covering all repos of `agent-skills` ∪ `claude-skills` (14000+ currently); `has_skill` probing fills in batches under the Core API quota (CI resumes incrementally every 2 hours; unprobed repos show a «unverified» hint)
+- **Skills index scope**: full index since v1.3 — Search API «stars segments + time-window bisection» breaks the 1000-results-per-query cap, covering all repos of `agent-skills` ∪ `claude-skills` (20000+ currently); `has_skill` probing fills in batches under the Core API quota (CI resumes incrementally every 2 hours; unprobed repos show a «unverified» hint)
 - **Index update cadence**: both indexes are incrementally rebuilt by CI every 2 hours (repos pushed in the last 3 days, capturing new repos / stars / updated_at instantly) and merged with the old index; a full rebuild at 04:00 UTC daily refreshes star counts
 - «Installed» recognition for script-type plugins is based on cache-dir existence; after deleting the cache it will show as installable again
 - The «Community listed» badge comes from a third-party awesome list (default [awesome-dsh-plugin](https://github.com/awesome-dsh-plugin/awesome-dsh-plugin)); if the list fetch fails, that build doesn't update the badge (incremental builds keep the old stamp, the next build recovers); listing does not represent this marketplace's endorsement
@@ -305,25 +310,28 @@ Also, [awesome-dsh-plugin](https://github.com/awesome-dsh-plugin/awesome-dsh-plu
 
 **Every reporter**: every user who filed install feedback or issues — your reports directly drive the v1.5.x fix cadence.
 
-Want to contribute? See [CONTRIBUTING.md](CONTRIBUTING.md) and the [STANDARD.md §7 self-check list](STANDARD.en.md).
+Want to contribute? See [docs/CONTRIBUTING.md](docs/CONTRIBUTING.md) and the [STANDARD.md §7 self-check list](STANDARD.en.md).
 
 ---
 
 ## 🛠️ Development & maintenance
 
 - Server-side logic: edit `lib/index.js` (syntax check: `node --check`)
+- Log redaction: edit `lib/redact.js` (multi-layer sanitization before install logs go to public issues — keys / paths / context-adjacent / entropy fallback; rule pairs maintained in [docs/TESTING.md](docs/TESTING.md))
 - Page UI: edit `lib/client.js` (browser bundle, `window.__ModuleLoader__.load` format; `require` resolves DSH platform modules)
 - Restart DSH for changes to take effect; the client bundle's revision (`rev`) is content-hashed, and the browser fetches the new version automatically after a restart
 - **Plugin authors, read [STANDARD.md](STANDARD.md)** ([English](STANDARD.en.md)): the marketplace-recognition spec — how to shape each plugin type (cordis plugin / skill / agent preset / script) so the marketplace detects, installs and updates it correctly, including the type-detection rules and known anti-patterns.
+- Install-feedback system (auto-created issue template / fields / redaction / privacy boundaries) in [docs/FEEDBACK.md](docs/FEEDBACK.md); documentation index in [docs/README.md](docs/README.md)
 
 ---
 
 ## 📝 Changelog
 
-See [CHANGELOG.md](CHANGELOG.md) for the full version history (all versions before v1.0.0 are part of the beta series).
+See [docs/CHANGELOG.md](docs/CHANGELOG.md) for the full version history (all versions before v1.0.0 are part of the beta series).
 
 ---
 
 ## 📄 License
 
 MIT
+

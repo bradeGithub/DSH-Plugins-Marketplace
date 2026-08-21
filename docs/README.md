@@ -13,12 +13,17 @@
 
 ```
 docs/
-├── README.md            ← 本索引（入口/导航）
-├── DEVELOPMENT.md       ← 文档源规范（meta）：提交/代码/文档/测试/Changelog 总纲
-├── GIT_HOOKS.md         ← Git Hook 规范：Hook 清单/分级机制/emoji 全覆盖/跨平台
-├── CODING_STANDARDS.md  ← 代码规范：注释/命名/错误处理/多端兼容/安全
-├── TESTING.md           ← 测试规范：金字塔架构/覆盖率/e2e 策略
-└── LIB-ISSUES.md        ← 测试发现的 lib API 问题（待商讨提交 upstream）
+├── README.md             ← 本索引（入口/导航）
+├── DEVELOPMENT.md        ← 文档源规范（meta）：提交/代码/文档/测试/Changelog 总纲
+├── CONTRIBUTING.md       ← 贡献指南：Fork/分支/提交/PR 流程
+├── GIT_HOOKS.md          ← Git Hook 规范：Hook 清单/分级机制/emoji 全覆盖/跨平台
+├── CODING_STANDARDS.md   ← 代码规范：注释/命名/错误处理/多端兼容/安全
+├── TESTING.md            ← 测试规范：金字塔架构/覆盖率/e2e 策略/workspace 陷阱
+├── FEEDBACK.md           ← 安装反馈系统规范：模板/诊断字段/脱敏机制/隐私边界
+├── CHANGELOG.md          ← 版本迭代记录（双语）
+├── SKIN-MANIFEST-SPEC.md ← 皮肤清单格式规范（实现：lib/skin-manifest.js）
+├── SKIN-MANIFEST-RECORD.md ← 皮肤清单维护记录（生成器输出/审计）
+└── LIB-ISSUES.md         ← 测试发现的 lib API 问题（待商讨提交 upstream）
 ```
 
 ## 层级规则
@@ -27,7 +32,7 @@ docs/
 |---|---|---|
 | **L0 索引** | 导航入口、层级说明、维护流程 | `docs/README.md` |
 | **L1 源规范（meta）** | 全仓库行为总纲，冲突时最高优先 | `docs/DEVELOPMENT.md` |
-| **L2 专项规范** | 单一领域的详细规则 | `docs/GIT_HOOKS.md`、`docs/CODING_STANDARDS.md` |
+| **L2 专项规范** | 单一领域的详细规则 | `docs/GIT_HOOKS.md`、`docs/CODING_STANDARDS.md`、`docs/TESTING.md`、`docs/FEEDBACK.md`、`docs/SKIN-MANIFEST-SPEC.md` |
 | **L3 执行层** | 纯函数实现（可测）、Hook、脚本 | `scripts/hooks/*.mjs`、`scripts/toc.mjs` |
 
 **规范冲突解决**：L1 > L2 > 项目 README > 社区惯例。新增规范先在 L1 确立，再细化到 L2。

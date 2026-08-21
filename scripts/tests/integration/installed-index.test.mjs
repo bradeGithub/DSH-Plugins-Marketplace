@@ -32,11 +32,22 @@ const profileNm = join(home, "profiles", "web", "node_modules");
 // ① 清单记录
 mkdirSync(marketRoot, { recursive: true });
 writeFileSync(join(marketRoot, "installed.json"), JSON.stringify({
-  "t1/recorded": { type: "skill", name: "recorded", location: join(skillsDir, "recorded"), installedAt: 1 }
+  "t1/recorded": { type: "skill", name: "recorded", location: join(skillsDir, "recorded"), installedAt: 1 },
+  // #157 dirOwners 属主记录：`other/recorded-skill` 安装到 skills/recorded-skill
+  "other/recorded-skill": { type: "skill", name: "recorded-skill", location: join(skillsDir, "recorded-skill"), installedAt: 1 },
+  // 边缘 C（slugify 碰撞）：a/dot.name 的 slug 是 dot-name，与 a/a-dash.name 同键——
+  // 目录 skills/dot-name 属主是 a/dot.name，`b/dot-name` 不得误标（dirOwners 反索引消歧）
+  "a/dot.name": { type: "skill", name: "dot.name", location: join(skillsDir, "dot-name"), installedAt: 1 }
 }), "utf8");
 // ② 目录启发式
 mkdirSync(join(skillsDir, "heuristic"), { recursive: true });
 writeFileSync(join(skillsDir, "heuristic", "SKILL.md"), "# x", "utf8");
+// #157：同名不同 owner 目录属主——目录存在，但属主是 other/recorded-skill
+mkdirSync(join(skillsDir, "recorded-skill"), { recursive: true });
+writeFileSync(join(skillsDir, "recorded-skill", "SKILL.md"), "# recorded-skill", "utf8");
+// 边缘 C：slugify 碰撞目录（dot-name 由 a/dot.name 创建）
+mkdirSync(join(skillsDir, "dot-name"), { recursive: true });
+writeFileSync(join(skillsDir, "dot-name", "SKILL.md"), "# dot-name", "utf8");
 // ⑤ 缓存克隆（script 类型：存在 install.ps1）
 mkdirSync(join(cacheDir, "t1__cacheclone"), { recursive: true });
 writeFileSync(join(cacheDir, "t1__cacheclone", "install.ps1"), "# x", "utf8");
@@ -95,6 +106,13 @@ const dshRepos = [
   mkRepo("t1/manual"),                                    // 未安装（A2 手动安装场景用）
   mkRepo("t1/newpkg", { pkg_name: "newpkg" }),            // 未安装（A2b 手动装包场景用）
   mkRepo("t1/clean"),                                     // 未安装 → false
+  // #157：同名不同 owner——`other/recorded-skill` 装到 skills/recorded 后，
+  // `t1/recorded-skill`（同为 recorded-skill）不得误标已安装（dirOwners 属主校验）。
+  mkRepo("t1/recorded-skill", { has_skill: true }),
+  mkRepo("other/recorded-skill", { has_skill: true }),
+  // 边缘 C：`b/dot-name` 与 `a/dot.name` 同 slug（dot-name），目录属主是 a/dot.name → b 不误标
+  mkRepo("b/dot-name", { has_skill: true }),
+  mkRepo("a/dot.name", { has_skill: true }),
 ];
 const skillsRepos = [
   mkRepo("t1/recorded", { has_skill: true }),             // 清单 → true
@@ -187,6 +205,13 @@ const fpOf = (body) => body?.fp;
   check("list 官方包 repository 反向索引排除 → 未安装", map["t1/fromofficial"], false);
   check("list name-null 包不判已安装（扫描层语义，与 detectInstalled 一致）", map["t1/fromnoname"], false);
   check("list 未安装 → false", map["t1/clean"], false);
+  // #157：同名不同 owner——`other/recorded-skill` 装了 skills/recorded-skill，
+  // 同 slug 的 `t1/recorded-skill` 不得误标（dirOwners 属主校验）
+  check("list #157 属主记录 → installed", map["other/recorded-skill"], true);
+  check("list #157 同名不同 owner → 未安装", map["t1/recorded-skill"], false);
+  // 边缘 C：slugify 碰撞（a/dot.name 与 b/dot-name 同键 dot-name）——目录属主是 a/dot.name
+  check("list 边缘C slugify碰撞 属主 → installed", map["a/dot.name"], true);
+  check("list 边缘C slugify碰撞 非属主 → 未安装", map["b/dot-name"], false);
   // 适配层会补入 adaptor.json 中不在列表里的 to 端仓库——8 条预置全部在且都被标注即可
   check("list 预置仓库全部在列表中", dshRepos.every((r) => Object.hasOwn(map, r.full_name)), true);
   check("list 条数不因适配层补入而丢失", r.body?.repos?.length >= dshRepos.length, true);
