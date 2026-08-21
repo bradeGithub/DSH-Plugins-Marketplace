@@ -1,27 +1,27 @@
 {
-  "generated_at": "2026-08-21T19:11:55.194Z",
+  "generated_at": "2026-08-21T21:00:09.077Z",
   "count": 3,
   "items": [
     {
-      "full_name": "Cerbur/clutch-dsh",
-      "previous": "other",
-      "current": "web-ui",
-      "desc_now": "Open-source DSH plugins for DeepSeek Harness, starting with a Git worktree-aware Session view for the DSH Web UI.",
-      "desc_prev": null
-    },
-    {
-      "full_name": "luxueliu/luxueliu-reasoning-efforts",
+      "full_name": "GTC2080/dsh-APEX_Plugin",
       "previous": "tool",
-      "current": "model",
-      "desc_now": "DSH里只有ds能选推理强度？20个常用模型推理强度按钮已就位！涵盖grok/Gemini / Kimi/glm……20个模型仅预设，实际槽位无上限！可以任意添加你的本地网关模型！（非 ds 系网关模型推理强度档位插件 + 路由级 llm-pi-ai 补丁）",
-      "desc_prev": "让 DSH 网关里非 ds 系模型也能显示推理强度：20 个别名档位真理源 + /efforts 一键检查重打 + 路由级 llm-pi-ai 补丁 — DeepSeek Harness 插件"
+      "current": "agent",
+      "desc_now": "DeepSeek Harness 的 APEX 实验插件：Minimal 锚定、Pro 主导、视觉版 Flash Max 有界协作与宿主级 Web 验收。",
+      "desc_prev": "DeepSeek Harness 的 APEX 实验插件：Minimal 锚定启动、按需 Standard 工具、持久任务状态与 V4 Flash 定向研究。"
     },
     {
-      "full_name": "iyam-x/iyam-dsh-desktop",
-      "previous": "other",
-      "current": "notify",
-      "desc_now": "a deepseek harness desktop，DeepSeek Harness（DSH）的跨平台原生桌面客户端。内置完整 DSH 内核与 Node.js 运行时，无需联网、无需预先安装 Node.js 即可开箱即用，带有系统通知，自定义主题",
-      "desc_prev": "a deepseek harness desktop"
+      "full_name": "398894496-arch/runtime36",
+      "previous": "memory",
+      "current": "vision",
+      "desc_now": "DSH-KRouter — Agent knowledge OS. Self-evolution. First qualifying day auto-provisional; second accepted task → formal. Correction-first. Retrieval is the lock, not the product. Timer off ≠ optional. Cursor, Codex, Claude Code, DeepSeek Harness.",
+      "desc_prev": "KRouter Obsidian — deterministic Obsidian knowledge routing for agents."
+    },
+    {
+      "full_name": "LittleFishStars/dsh-opencode-tui",
+      "previous": "tool",
+      "current": "web-ui",
+      "desc_now": "为 DeepSeek Harness 制作的仿 OpenCode 的 TUI 界面插件",
+      "desc_prev": null
     }
   ]
 }
