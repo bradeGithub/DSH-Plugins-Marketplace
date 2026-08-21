@@ -100,6 +100,11 @@ keep("纯小写标识符", "secret: error-module-not-found", "error-module-not-f
 keep("短值(<8)", "pwd: abc", "pwd: abc");
 keep("正常日志", "pnpm install completed with 0 errors", "pnpm install completed");
 
+// ---- 泄漏面：弱凭据（DeepSec L1 ai_pattern_default_password 同族，值级检测）----
+noLeak("弱凭据 12345678", "PWD=12345678", "12345678");
+noLeak("弱凭据 admin123", "password: admin123", "admin123");
+keep("文档示例 changeme 不掩", "password: changeme", "changeme");
+
 // ---- 注入面 ----
 keep("CR/LF 净化", "line1\r\nline2\rline3", "line1\nline2\nline3");
 check("markdown 围栏净化", neutralizeMarkdownFences("```sh\ncode\n```"), "'''sh\ncode\n'''");

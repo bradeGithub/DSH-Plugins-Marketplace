@@ -84,7 +84,7 @@
 1. **注入净化**：CR/LF 统一、控制字符剔除、markdown 围栏 ``` → ''' （防击穿 details 折叠块）
 2. **已知密钥掩码**：云厂商（AWS 含临时凭证 ASIA 系、阿里云 LTAI、腾讯云 AKID、百度 bce-auth-v1）、sk 系（OpenAI/Anthropic）、GitHub（ghp_/PAT）、GitLab、Slack、npm、HuggingFace、Google（AIza/GOCSPX-）、LLM 聚合商（Groq/xAI/Perplexity/Fireworks/Cerebras，前缀取 secret-scanner 社区共识——官方不披露格式）、Cloudflare（cfut_/cfat_/cfk_）、Vercel（vcp_ 系）、Stripe（含 sk_org_）、Telegram bot、Discord bot 三段式、JWT 三段式、PEM 私钥块、DB 连接串（user:pass@）、Slack/Discord webhook、Bearer/Basic 头
 3. **用户路径**：`C:\Users\<name>\...` → `~\<user>\...`（保留深层结构，只隐藏用户名段）
-4. **上下文邻近**：`password:/token=/api_key=` 等关键词 + 分隔符 + 值 → 掩码（宽松策略：公开渠道默认拒绝，误掩码代价低漏报代价高）
+4. **上下文邻近**：`password:/token=/api_key=` 等关键词 + 分隔符 + 值 → 掩码（宽松策略：公开渠道默认拒绝，误掩码代价低漏报代价高）；**弱凭据值级检测**（admin/12345678/admin123 等 8+ 位默认密码，DeepSec L1 ai_pattern_default_password 同族）不因「纯小写无数字」放行
 5. **allowlist 压误报**：~30 停用词（example/placeholder/changeme…）+ 纯小写标识符（`error-module-not-found` 是包名不是密钥）不掩码
 
 掩码形态：`[AWS-REDACTED]` / `[JWT-REDACTED]` / `[REDACTED]`（上下文邻近）。
