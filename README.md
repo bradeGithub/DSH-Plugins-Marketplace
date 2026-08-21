@@ -15,6 +15,10 @@
   <img src="https://img.shields.io/badge/i18n-中文%20%7C%20English-important" alt="i18n">
 </p>
 
+<p align="center">
+  <img src="assets/social-preview.png" alt="DSH 插件市场 — 社交预览封面" width="90%">
+</p>
+
 ---
 
 <!-- TOC -->

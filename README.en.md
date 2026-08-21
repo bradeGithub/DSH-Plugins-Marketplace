@@ -15,6 +15,10 @@ A plugin marketplace for [DeepSeek Harness](https://github.com/deepseek-ai/deeps
   <img src="https://img.shields.io/badge/i18n-zh%20%7C%20en-important" alt="i18n">
 </p>
 
+<p align="center">
+  <img src="assets/social-preview.png" alt="DSH Plugin Marketplace — social preview cover" width="90%">
+</p>
+
 ---
 
 <!-- TOC -->
