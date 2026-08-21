@@ -24,16 +24,16 @@
 - [7. 跨平台兼容约束](#7-跨平台兼容约束)
 - [8. 新增 Hook 检查项流程](#8-新增-hook-检查项流程)
 <!-- /TOC -->
-| `pre-commit` | 提交前 | 语法检查、测试金字塔、TOC 检测、敏感密钥扫描、覆盖率 | 任一失败即拒绝提交 |
-| `commit-msg` | 提交信息 | 主题格式、type 白名单、禁 emoji | 任一失败即拒绝提交 |
+| `pre-commit` | 提交前 | 语法检查、测试金字塔、TOC 检测、敏感密钥扫描、覆盖率 | 语法/测试/密钥/覆盖为 error 级；TOC 按 `.hooksrc` 分级（当前 warn） |
+| `commit-msg` | 提交信息 | 主题格式、type 白名单、禁 emoji | 主题格式/type 恒为 error；emoji 按 `.hooksrc` 分级（当前 warn） |
 
 ### 1.1 pre-commit 检查项
 
 1. **语法检查**：对 `lib/index.js`、`lib/client.js`、`scripts/*.mjs`、`scripts/hooks/*.mjs` 执行 `node --check`
-2. **测试金字塔**：执行 `node scripts/tests/run.mjs`（unit 550+ / integration 230+ / e2e；精确数量以 run.mjs 输出为准），失败即拒绝
-3. **TOC 检测**：执行 `node scripts/toc.mjs --check`
+2. **测试金字塔**：执行 `node scripts/tests/run.mjs`（unit / integration / e2e；精确数量以 run.mjs 输出为准），失败即拒绝
+3. **TOC 检测**：执行 `node scripts/toc.mjs --check`（按 `.hooksrc` 的 `tocLevel` 分级，当前 warn 仅提醒）
 4. **敏感密钥扫描**：检测暂存文件中的高危密钥格式（sk-/ghp_/AKIA 等），默认 error 拦截
-5. **覆盖率**：执行 `node scripts/coverage.mjs`（validate/toc 100%、lib/index.js 83%、overall 87%），未达 100% 即拒绝
+5. **覆盖率**：执行 `node scripts/coverage.mjs`（lib/index.js 非豁免 100%，口径见 TESTING.md §4），未达目标即拒绝
 
 ### 1.2 TOC 自动扫描
 
@@ -49,7 +49,7 @@ TOC 维护采用**自动发现**而非手动注册：
 
 1. **主题格式**：`<type>(<scope>): <描述>`（正则 `^(feat|fix|...)(\([a-z][a-z0-9-]*\))?: .+`）——**恒为 error，不可降级**
 2. **type 白名单**：`feat / fix / chore / ci / docs / style / refactor / test / perf / assets / revert`
-3. **禁 emoji**：按 `.hooksrc` 配置的 `emojiLevel` 分级（见第 3 节），默认 error
+3. **禁 emoji**：按 `.hooksrc` 配置的 `emojiLevel` 分级（见第 3 节），仓库当前配置 warn（仅提醒）
 
 ## 2. Hook 分级机制（.hooksrc）
 
@@ -58,10 +58,11 @@ Hook 检查并非全部绝对禁止——通过仓库根 `.hooksrc` 文件配置
 ### 2.1 配置项
 
 ```ini
-# .hooksrc — Git Hook 分级配置（key=value，# 注释）
-emojiLevel=error        # error | warn | off（默认 error）
+# .hooksrc — Git Hook 分级配置（示例，key=value，# 注释）
+emojiLevel=error        # error | warn | off（默认 error；本仓库当前 warn）
 requireCommitMsg=true   # 是否强制提交信息（默认 true）
 ```
+本仓库当前 `.hooksrc` 实际配置：`secretLevel=error`、`emojiLevel=warn`、`tocLevel=warn`。
 
 ### 2.2 等级语义
 

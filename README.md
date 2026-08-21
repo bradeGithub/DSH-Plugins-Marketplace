@@ -45,12 +45,12 @@
 ## ✨ 核心优势
 
 <p align="center">
-  <b>3900+</b> DSH 插件 &nbsp;·&nbsp; <b>14000+</b> 通用 Skills &nbsp;·&nbsp; <b>2 小时</b> 自动收录新插件 &nbsp;·&nbsp; <b>0</b> API 限流
+  <b>9500+</b> DSH 插件 &nbsp;·&nbsp; <b>20000+</b> 通用 Skills &nbsp;·&nbsp; <b>2 小时</b> 自动收录新插件 &nbsp;·&nbsp; <b>0</b> API 限流
 </p>
 
 | | 优势 | 说明 |
 |---|---|---|
-| 🔍 | **插件全** | 自动嗅探 GitHub `dsh-plugin` topic 的**全部**仓库（当前 **3900+**），另有 **14000+** 通用 Skills（`agent-skills` ∪ `claude-skills`）独立栏目 |
+| 🔍 | **插件全** | 自动嗅探 GitHub `dsh-plugin` topic 的**全部**仓库（当前 **9500+**），另有 **20000+** 通用 Skills（`agent-skills` ∪ `claude-skills`）独立栏目 |
 | 🤖 | **自动收录，零申请** | CI 每 2 小时增量扫描 topic，作者打上 `dsh-plugin` 标签后**最迟 2 小时自动进市场**——无需提 issue、无需人工审核 |
 | ⚡ | **秒开，零限流** | 列表走静态索引（jsDelivr CDN 分发）——几千个插件秒开，终端用户**零 GitHub API 调用、零限流** |
 | 🎯 | **智能类型识别** | 自动识别并安装 4 种类型：cordis 插件 / 技能（SKILL.md）/ agent 预设 / 安装脚本——源码型插件自动弹构建确认，需要 API Key 时自动暂停索取材料 |
@@ -104,7 +104,7 @@ dsh plugin --profile web install bradeGithub/DSH-Plugins-Marketplace   # 重装�
    - 需要材料时 → 页面弹出输入框，提供 API Key 等后点「提交材料并继续安装」
    - **更新** → 检测到新版本时覆盖升级
    - **已安装**（灰色）→ 无需操作
-5. 切换到 **通用 Skills** tab 浏览 14000+ 技能，支持搜索 / 触底分页 / 一键安装
+5. 切换到 **通用 Skills** tab 浏览 20000+ 技能，支持搜索 / 触底分页 / 一键安装
 
 ---
 
@@ -126,7 +126,7 @@ dsh plugin --profile web install bradeGithub/DSH-Plugins-Marketplace   # 重装�
 - **搜索**：按插件名 / 仓库全名 / 标签实时过滤
 - **插件分类**：构建时按简介/标签自动分类（12 类：视觉多模态 / 文档办公 / 记忆知识 / 模型用量 / 通知通讯 / 开发编码 / 对话会话 / 界面美化 / Agent 自动化 / 通用工具 / 聚合资源 / 其他），前端分类 chips 筛选 + 卡片分类徽章
 - **社区收录徽章**：构建期抓取 awesome 聚合页（[awesome-dsh-plugin](https://github.com/awesome-dsh-plugin/awesome-dsh-plugin)，社区人工筛选）收录的仓库，自动打「社区收录」蓝色徽章（悬停可见来源说明）——快速识别社区认可的插件（聚合页收录 ≠ 本市场背书）
-- **通用 Skills 栏目**：设置页 tab 切换到「通用 Skills」——浏览 CI 构建的全量 skills 索引（`agent-skills` ∪ `claude-skills`，14000+ 仓库），支持搜索 / 分页触底加载 / 一键安装到 `~/.dsh/skills/` / 已安装识别；含安装脚本的仓库带 🛡 标识，探测未知的仓库带「未验证」弱提示
+- **通用 Skills 栏目**：设置页 tab 切换到「通用 Skills」——浏览 CI 构建的全量 skills 索引（`agent-skills` ∪ `claude-skills`，20000+ 仓库），支持搜索 / 分页触底加载 / 一键安装到 `~/.dsh/skills/` / 已安装识别；含安装脚本的仓库带 🛡 标识，探测未知的仓库带「未验证」弱提示
 - **刷新反馈**：点「刷新」强制重新拉取，并以弹窗提示「刷新成功 / 刷新失败」
 - **Github原链**：每个卡片提供跳转到原仓库的链接（新标签页打开）
 - **深浅色适配**：全部使用 DSH 主题令牌（`--dsw-alias-*`），自动适配深色 / 浅色模式
@@ -157,7 +157,7 @@ dsh plugin --profile web install bradeGithub/DSH-Plugins-Marketplace   # 重装�
 ```
 GitHub Actions（每 2 小时，仓库自带 token）
    └─ scripts/build-registry.mjs：分页拉取 topic:dsh-plugin，增量合并，去重/排除本体
-        └─ 提交 registry.json 回 main（全量 3900+ 个插件，按 Star 排序）
+        └─ 提交 registry.json 回 main（全量 9500+ 个插件，按 Star 排序）
              └─ 插件读取：jsDelivr CDN（国内快）→ raw.githubusercontent（兜底）
                   └─ 全部失败才回退 GitHub 搜索 API（分页翻到底，缓存 10 分钟）
 ```
@@ -270,7 +270,7 @@ GitHub Actions（每 2 小时，仓库自带 token）
 - 安装任务整体同步挂在单个 POST 请求上（克隆 + npm 安装 + 构建 + 材料确认多轮回环），若在 DSH 前套了短超时的反向代理（默认 60s），连接可能被切断——后端任务仍会继续执行，前端需刷新状态确认结果
 - 版本检测仅对含 `package.json` 的插件生效；skill / 预设 / 脚本类无版本概念；作者发版不 bump version 时不会提示更新
 - 插件列表默认走静态索引（CDN）；仅当索引的两个源都不可用时才回退 GitHub 搜索 API，此时未认证限流 **10 次/分钟**，频繁点「刷新」可能触发限流（会提示刷新失败，稍等再试）
-- **Skills 索引范围**：v1.3 起为**全量索引**——通过 Search API「stars 分段 + 时间窗口二分」突破单 query 1000 条上限，收录 `agent-skills` ∪ `claude-skills` 全部仓库（当前 14000+）；`has_skill` 探测按 Core API 额度分批补齐（CI 每 2 小时增量续跑，未探测的仓库显示「未验证」）
+- **Skills 索引范围**：v1.3 起为**全量索引**——通过 Search API「stars 分段 + 时间窗口二分」突破单 query 1000 条上限，收录 `agent-skills` ∪ `claude-skills` 全部仓库（当前 20000+）；`has_skill` 探测按 Core API 额度分批补齐（CI 每 2 小时增量续跑，未探测的仓库显示「未验证」）
 - **索引更新节奏**：两个索引均为 CI 每 2 小时增量拉取（最近 3 天 pushed 的仓库，新仓库/star/更新时间即时捕获）并与旧索引合并，每天 04:00 UTC 全量重建刷新 star 数
 - 安装脚本类插件的「已安装」判定基于缓存目录存在性，卸载（删除缓存）后会重新显示为可安装
 - 「社区收录」徽章来自第三方 awesome 聚合页（默认 [awesome-dsh-plugin](https://github.com/awesome-dsh-plugin/awesome-dsh-plugin)），聚合页抓取失败时本轮构建不更新徽章（增量构建保留旧标，下次构建恢复）；收录与否不代表本市场对插件的质量背书
@@ -313,9 +313,11 @@ GitHub Actions（每 2 小时，仓库自带 token）
 ## 🛠️ 开发与维护
 
 - 修改服务端逻辑：编辑 `lib/index.js`（语法检查：`node --check`）
+- 修改日志脱敏：编辑 `lib/redact.js`（安装日志附公开 issue 前的多层净化——密钥/路径/上下文邻近/高熵兜底；规则成对维护见 [docs/TESTING.md](docs/TESTING.md)）
 - 修改页面 UI：编辑 `lib/client.js`（浏览器 bundle，`window.__ModuleLoader__.load` 格式，`require` 可解析 DSH 平台模块）
 - 修改后重启 DSH 生效；客户端 bundle 的版本号（rev）按内容哈希生成，重启后浏览器自动拉取新版本
 - **插件作者请看 [STANDARD.md](STANDARD.md)**（[English](STANDARD.en.md)）：市场识别层开发规范——每种插件（cordis 插件 / 技能 / agent 预设 / 脚本型）应该怎么写才能被市场正确收录、正确安装、正确更新，含类型判定规则与常见反模式。
+- 安装反馈系统（自动创建 issue 的模板/字段/脱敏机制/隐私边界）见 [docs/FEEDBACK.md](docs/FEEDBACK.md)；规范文档索引见 [docs/README.md](docs/README.md)
 
 ---
 
@@ -328,3 +330,4 @@ GitHub Actions（每 2 小时，仓库自带 token）
 ## 📄 许可
 
 MIT
+
