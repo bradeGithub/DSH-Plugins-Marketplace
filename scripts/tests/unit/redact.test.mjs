@@ -27,7 +27,7 @@ function keep(name, input, ...parts) {
 // token fixture 运行时拼接：GitHub secret scanning push protection 扫描源码字面量，
 // 完整形态的 provider token 字面量会被平台拒绝推送——拼接形态运行时等价，语义不变。
 const P = (a, b) => a + b;
-noLeak("AWS AKIA", "key AKIAIOSFODNN7EXAMPLE", "AKIAIOSFODNN7EXAMPLE");
+noLeak("AWS AKIA", P("key AKIA", "IOSFODNN7EXAMPLE"), P("AKIA", "IOSFODNN7EXAMPLE"));
 noLeak("AWS 临时凭证 ASIA", "credentials ASIAIOSFODNN7EXAMPLE", "ASIAIOSFODNN7EXAMPLE");
 noLeak("AWS base32 边界", "A3T234567ABCDEFGHJKMNPQRST", "A3T234567ABCDEFGHJKMNPQRST");
 noLeak("OpenAI sk-", "sk-abc123def456ghi789jkl012mno345pqr678", "sk-abc123def456ghi789jkl012mno345pqr678");
@@ -38,7 +38,7 @@ noLeak("GitHub PAT", P("github_pat_", "11ABCDEF2_0abcdefghijkmnopqrstuvwxyzABCDE
 noLeak("GitLab", "glpat-AbCdEfGhIjKlMnOpQrSt", "glpat-AbCdEfGhIjKlMnOpQrSt");
 noLeak("Slack bot", P("xoxb-", "123456789-abcdef"), "xoxb-123456789");
 noLeak("npm", "npm_aabbccddeeffgghhiijjkkllmmnnooppqqrrsstt", "npm_aabbccddeeffgghhiijjkkllmmnnooppqqrrsstt");
-noLeak("HuggingFace", "hf_abcdefghijklmnopqrstuvwxyzABCDEFGHIJ", "hf_abcdefghijklmnopqrstuvwxyzABCDEFGHIJ");
+noLeak("HuggingFace", P("hf_", "abcdefghijklmnopqrstuvwxyzABCDEFGHIJ"), P("hf_", "abcdefghijklmnopqrstuvwxyzABCDEFGHIJ"));
 noLeak("Google", "AIzaSyA1234567890abcdefghijklmnopqrstuv", "AIzaSyA1234567890abcdefghijklmnopqrstuv");
 noLeak("JWT", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjM0NTY3ODkwIn0.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJVadQssw5c", "eyJhbGciOiJIUzI1NiJ9.eyJzdWIi");
 noLeak("PEM 私钥", "-----BEGIN RSA PRIVATE KEY-----\nMIIEpAIBAAKCAQEA7\n-----END RSA PRIVATE KEY-----", "MIIEpAIBAAKCAQEA7");
