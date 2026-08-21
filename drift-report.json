@@ -1,34 +1,34 @@
 {
-  "generated_at": "2026-08-21T03:22:36.792Z",
+  "generated_at": "2026-08-21T05:19:00.607Z",
   "count": 4,
   "items": [
     {
-      "full_name": "Tabbit-Browser/dsh-plugin",
-      "previous": "tool",
-      "current": "resource",
-      "desc_now": "Tabbit Broser plugins for Deepseek Harness",
-      "desc_prev": "Tabbit Broser plugins for Deepseek Harness"
+      "full_name": "Gaq152/dsh-credits",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "DeepSeek Harness（dsh web）额度插件：跟随当前模型显示官方余额或 OpenCode Go 订阅用量，支持本会话估算、跨会话累计消耗与可视化设置。",
+      "desc_prev": null
     },
     {
-      "full_name": "3361805598-gif/dsh-md-annotator",
+      "full_name": "openrect/dsh-community-installer",
+      "previous": "resource",
+      "current": "coding",
+      "desc_now": "Clean Windows installer and auto-update companion for DeepSeek Harness (DSH), with lightweight online and offline setups.",
+      "desc_prev": "Unofficial community installer for @deepseek-ai/dsh on Windows."
+    },
+    {
+      "full_name": "liguobao/dsh-file-viewer",
       "previous": "web-ui",
-      "current": "vision",
-      "desc_now": "DSH Markdown sidebar viewer and editor with block- and text-range annotations for structured revision requests.",
-      "desc_prev": null
+      "current": "document",
+      "desc_now": "DeepSeek Harness 通用只读文件预览插件，支持图片、PDF、CSV、Markdown、JSON、YAML、源码及大文件。",
+      "desc_prev": "A universal file preview layer for DeepSeek Harness: open and inspect files right inside the web UI — no external application needed."
     },
     {
-      "full_name": "kevinshi3200/persona-auditor",
-      "previous": "other",
+      "full_name": "iqingyoung/429-throttle-mcp",
+      "previous": "model",
       "current": "agent",
-      "desc_now": "Persona Auditor — audit AI-generated code from a real user's perspective. Digital personas exhaustively traverse every user journey, then god's-eye attribution collapses bugs into a few root causes for precise fixing. Agent skill (Claude Code / Codex / Cursor / DSH).",
-      "desc_prev": null
-    },
-    {
-      "full_name": "zhuifengqug/dsh-adaptive-reasoning",
-      "previous": "other",
-      "current": "model",
-      "desc_now": "面向 DeepSeek Harness Web GUI 的、基于模型能力的推理档位滑块。",
-      "desc_prev": null
+      "desc_now": "带限流 MCP 代理 + Agent 操作员技能,告别免费 API 的 HTTP 429;自动控速、口语调参、长任务复盘 | Rate-limited MCP proxy + agent operator skill — no more HTTP 429 on free LLM APIs.",
+      "desc_prev": "带速率限制的 MCP 代理 — 模型通过此 MCP 调用外部 API，自动控制每分钟调用次数和 Token 用量，不再被 429 拒绝"
     }
   ]
 }
