@@ -26,7 +26,7 @@ function keep(name, input, ...parts) {
 // ---- 泄漏面：已知结构化密钥 ----
 // token fixture 运行时拼接：GitHub secret scanning push protection 扫描源码字面量，
 // 完整形态的 provider token 字面量会被平台拒绝推送——拼接形态运行时等价，语义不变。
-const P = (a, b) => a + b;
+const P = (...parts) => parts.join("");
 noLeak("AWS AKIA", P("key AKIA", "IOSFODNN7EXAMPLE"), P("AKIA", "IOSFODNN7EXAMPLE"));
 noLeak("AWS 临时凭证 ASIA", "credentials ASIAIOSFODNN7EXAMPLE", "ASIAIOSFODNN7EXAMPLE");
 noLeak("AWS base32 边界", "A3T234567ABCDEFGHJKMNPQRST", "A3T234567ABCDEFGHJKMNPQRST");
@@ -36,6 +36,31 @@ noLeak("Anthropic", "sk-ant-api03-xx1-yy2-zz3-aa4", "sk-ant-api03-xx1-yy2-zz3-aa
 noLeak("GitHub ghp_", P("ghp_", "abcdefghijklmnopqrstuvwxyz0123456789"), "hp_abcdefghijklmnopqrstuvwxyz012345");
 noLeak("GitHub PAT", P("github_pat_", "11ABCDEF2_0abcdefghijkmnopqrstuvwxyzABCDEFG"), "11ABCDEF2_0abcdefghijkmnopqrstuvwxyz");
 noLeak("GitLab", "glpat-AbCdEfGhIjKlMnOpQrSt", "glpat-AbCdEfGhIjKlMnOpQrSt");
+// 主流厂商扩充（Google 系/LLM 聚合/支付通信/国内云）
+noLeak("Google OAuth", P("GOCSPX-", "abcdefghijklmnopqrstuvwxyz123456"), "GOCSPX-abcdefghijklmnopqrstuvwxyz123456");
+noLeak("Groq", P("gsk_", "abcdefghijklmnopqrstuvwxyz12"), "gsk_abcdefghijklmnopqrstuvwxyz12");
+noLeak("xAI", P("xai-", "abcdefghijklmnopqrstuvwxyz12"), "xai-abcdefghijklmnopqrstuvwxyz12");
+noLeak("Perplexity", P("pplx-", "abcdefghijklmnopqrstuvwxyz12"), "pplx-abcdefghijklmnopqrstuvwxyz12");
+noLeak("Fireworks", P("fw_", "abcdefghijklmnopqrstuvwxyz12"), "fw_abcdefghijklmnopqrstuvwxyz12");
+noLeak("Cerebras", P("csk-", "abcdefghijklmnopqrstuvwxyz12"), "csk-abcdefghijklmnopqrstuvwxyz12");
+noLeak("Stripe live", P("sk_live_", "abcdefghijklmnop123456"), "sk_live_abcdefghijklmnop123456");
+noLeak("SendGrid", P("SG.", "abcdefghijklmnopqrstuv.ABCDEFGHIJKLMNOPQRSTUV"), "abcdefghijklmnopqrstuv");
+noLeak("Sentry", P("sntrys_", "eyJpYXQiOjE1NjAwMDAwMDB9/abc123"), "sntrys_eyJpYXQiOjE1NjAwMDAwMDB9");
+noLeak("Supabase", P("sbp_", "abcdefghijklmnopqrstuvwxyz12"), "sbp_abcdefghijklmnopqrstuvwxyz12");
+noLeak("Docker", P("dckr_pat_", "abcdefghijklmnopqrstuvwxyz12"), "dckr_pat_abcdefghijklmnopqrstuvwxyz12");
+noLeak("Netlify", P("nfp_", "abcdefghijklmnopqrstuvwxyz12"), "nfp_abcdefghijklmnopqrstuvwxyz12");
+noLeak("Linear", P("lin_api_", "abcdefghijklmnopqrstuvwxyz12"), "lin_api_abcdefghijklmnopqrstuvwxyz12");
+noLeak("Notion", P("secret_", "abcdefghijklmnopqrstuvwxyz0123456789AB"), "secret_abcdefghijklmnopqrstuvwxyz0123456789AB");
+noLeak("Figma", P("figd_", "abcdefghijklmnopqrstuvwxyz12"), "figd_abcdefghijklmnopqrstuvwxyz12");
+noLeak("Telegram bot", "1234567890:AAE abcdefghijklmnopqrstuvwxyz1234567890".replace(" ", ""), "1234567890:AA");
+noLeak("Twilio", P("SK", "abcdef0123456789abcdef0123456789"), P("SK", "abcdef0123456789abcdef0123456789"));
+noLeak("Airtable", P("patAbCdEf12", ".", "abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGH"), "patAbCdEf12.");
+noLeak("Notion integration", P("ntn_", "abcdefghijklmnopqrstuvwxyz0123456789AB"), "ntn_abcdefghijklmnopqrstuvwxyz0123456789AB");
+noLeak("Sentry user", P("sntryu_", "eyJhYmNkZWZnaGlqa2xtbm9wcXJzdHV2/abc123"), "sntryu_eyJhYmNkZWZnaGlqa2xtbm9wcXJzdHV2");
+noLeak("Supabase publishable", P("sb_publishable_", "abcdefghijklmnopqrstuvwxyz12"), "sb_publishable_abcdefghijklmnopqrstuvwxyz12");
+noLeak("阿里云 AK", P("LTAI", "AbCdEfGhIjKlMnOpQrSt"), "LTAIAbCdEfGhIjKlMnOpQrSt");
+noLeak("腾讯云", P("AKID", "AbCdEfGhIjKlMnOpQrStUvWx"), "AKIDAbCdEfGhIjKlMnOpQrStUvWx");
+noLeak("百度 BCE", P("bce-", "AbCdEfGhIjKlMnOpQrStUv"), "bce-AbCdEfGhIjKlMnOpQrStUv");
 noLeak("Slack bot", P("xoxb-", "123456789-abcdef"), "xoxb-123456789");
 noLeak("npm", "npm_aabbccddeeffgghhiijjkkllmmnnooppqqrrsstt", "npm_aabbccddeeffgghhiijjkkllmmnnooppqqrrsstt");
 noLeak("HuggingFace", P("hf_", "abcdefghijklmnopqrstuvwxyzABCDEFGHIJ"), P("hf_", "abcdefghijklmnopqrstuvwxyzABCDEFGHIJ"));
