@@ -1,55 +1,27 @@
 {
-  "generated_at": "2026-08-21T17:10:16.130Z",
-  "count": 7,
+  "generated_at": "2026-08-21T19:11:55.194Z",
+  "count": 3,
   "items": [
     {
-      "full_name": "xiajiajun516/dsh-config-manager",
-      "previous": "web-ui",
-      "current": "tool",
-      "desc_now": "DeepSeek Harness (DSH) backup & restore plugin — export, import, migrate and sync your complete DSH configuration, plugins, MCP servers, skills and workspace. One-click migration to another machine.",
-      "desc_prev": "Backup / export / import / migrate your DeepSeek Harness (DSH) configuration - dual-face Cordis plugin (host engine + Web UI). One-click restore on any machine."
-    },
-    {
-      "full_name": "wingsky-1/dsh-plugin-hub",
-      "previous": "coding",
-      "current": "resource",
-      "desc_now": "DSH (DeepSeek Harness) web GUI plugin collection — notifications, provider usage, LAN proxy, MCP manager, idle archive, file preview. Install: dsh plugin --profile web add @wingsky-1/dsh-plugins-all",
-      "desc_prev": "DSH (DeepSeek Harness) 插件集 | npm-installable plugins: MCP manager, notifications, LAN proxy, gzip, file preview, usage meter, idle archive. 零运行时依赖、patch-only 挂载、不改 DSH 源码。"
-    },
-    {
-      "full_name": "sd1g1/dsh-image-describe",
-      "previous": "tool",
-      "current": "vision",
-      "desc_now": "DeepSeek Harness 图片多模态描述插件",
-      "desc_prev": "DeepSeek Harness 宿主插件：让纯文本主模型也能通过 describe_image 工具“看图”"
-    },
-    {
-      "full_name": "duhu2000/dsh-mcp-connector",
+      "full_name": "Cerbur/clutch-dsh",
       "previous": "other",
-      "current": "tool",
-      "desc_now": "DeepSeek Harness 通用 MCP连接器、连接管理与扩展市场：连接 MCP Server，发现工具与 Prompt，扩展 AI 技能；支持 OAuth/PKCE、API Key、JSON 导入。由企查查（Qichacha/QCC）团队发起维护。General-purpose MCP connector, connection manager, plugin, extension and integration marketplace.",
-      "desc_prev": "DeepSeek Harness MCP Connector marketplace and connection manager"
+      "current": "web-ui",
+      "desc_now": "Open-source DSH plugins for DeepSeek Harness, starting with a Git worktree-aware Session view for the DSH Web UI.",
+      "desc_prev": null
     },
     {
-      "full_name": "sd1g1/dsh-subagent-model-override",
-      "previous": "conversation",
-      "current": "agent",
-      "desc_now": "DeepSeek Harness 子代理模型策略覆盖插件",
-      "desc_prev": "DeepSeek Harness 插件：全局强制进程内子代理会话使用统一 LLM 路由"
-    },
-    {
-      "full_name": "sd1g1/dsh-minimal-rules",
-      "previous": "conversation",
-      "current": "other",
-      "desc_now": "DeepSeek Harness 极简模式规则注入插件",
-      "desc_prev": "DSH 插件：极简模式下将 AGENTS.md 规则组装为独立 system-reminder 消息注入，支持恢复会话自动补充，并提供 global / global+project / all+creative 模式下拉菜单。"
-    },
-    {
-      "full_name": "TOBYCAI/image-mcp",
+      "full_name": "luxueliu/luxueliu-reasoning-efforts",
       "previous": "tool",
-      "current": "coding",
-      "desc_now": "本地 Pillow 图片处理 MCP：12 工具（信息/缩放/裁剪/转换/压缩/旋转/翻转/缩略图/水印/特效/占位/叠加），离线零成本，经 dsh-mcp-client 接入 DSH。Local Pillow image MCP with 12 tools for DeepSeek Harness, offline & free. | Platforms: macOS/Windows/Linux (Python+Pillow)",
-      "desc_prev": "本地 Pillow 图片处理 MCP Server：12 个工具（信息/缩放/裁剪/转换/压缩/旋转/翻转/缩略图/水印/特效/占位/叠加），离线零成本，经 dsh-mcp-client 接入 DSH。Local Pillow image-processing MCP with 12 tools, offline & free, for DeepSeek Harness via dsh-mcp-client."
+      "current": "model",
+      "desc_now": "DSH里只有ds能选推理强度？20个常用模型推理强度按钮已就位！涵盖grok/Gemini / Kimi/glm……20个模型仅预设，实际槽位无上限！可以任意添加你的本地网关模型！（非 ds 系网关模型推理强度档位插件 + 路由级 llm-pi-ai 补丁）",
+      "desc_prev": "让 DSH 网关里非 ds 系模型也能显示推理强度：20 个别名档位真理源 + /efforts 一键检查重打 + 路由级 llm-pi-ai 补丁 — DeepSeek Harness 插件"
+    },
+    {
+      "full_name": "iyam-x/iyam-dsh-desktop",
+      "previous": "other",
+      "current": "notify",
+      "desc_now": "a deepseek harness desktop，DeepSeek Harness（DSH）的跨平台原生桌面客户端。内置完整 DSH 内核与 Node.js 运行时，无需联网、无需预先安装 Node.js 即可开箱即用，带有系统通知，自定义主题",
+      "desc_prev": "a deepseek harness desktop"
     }
   ]
 }
