@@ -1,6 +1,4 @@
 # ── 构建/测试生成物 ──
-# build-registry.mjs 的分类漂移报告（上游已移除，本地构建/测试会再生成，不随索引提交）
-drift-report.json
 # 安装探测断点快照（verify-installability.mjs 写系统临时目录，此处保险）
 *.probe-snapshot.json
 
