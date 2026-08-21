@@ -1,3 +1,30 @@
-# 构建生成物——build-registry.mjs 的分类漂移报告（供维护者复审，不随索引提交；
-# 上游已从仓库移除该文件，本地构建/测试会再生成，故忽略避免误入库）
+# ── 构建/测试生成物 ──
+# build-registry.mjs 的分类漂移报告（上游已移除，本地构建/测试会再生成，不随索引提交）
 drift-report.json
+# 安装探测断点快照（verify-installability.mjs 写系统临时目录，此处保险）
+*.probe-snapshot.json
+
+# ── Node 依赖与产物（本插件零 npm 依赖，但本地开发/工具链可能产生）──
+node_modules/
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+dist/
+build/
+coverage/
+.nyc_output/
+
+# ── 临时 / 日志 ──
+*.log
+*.tmp
+.DS_Store
+Thumbs.db
+
+# ── 环境与密钥 ──
+.env
+.env.*
+!.env.example
+
+# ── 编辑器 / 系统 ──
+.vscode/
+.idea/
