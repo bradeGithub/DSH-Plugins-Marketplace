@@ -81,7 +81,7 @@
 日志快照在入队时经**两套规则串行**（`redactLog` + `sanitizeLog` 双保险）：
 
 1. **注入净化**：CR/LF 统一、控制字符剔除、markdown 围栏 ``` → ''' （防击穿 details 折叠块）
-2. **已知密钥掩码**：云厂商（AWS 含临时凭证 ASIA 系）、sk 系（OpenAI/Anthropic）、GitHub（ghp_/PAT）、GitLab、Slack、npm、HuggingFace、Google、JWT 三段式、PEM 私钥块、DB 连接串（user:pass@）、Slack/Discord webhook、Bearer/Basic 头
+2. **已知密钥掩码**：云厂商（AWS 含临时凭证 ASIA 系、阿里云 LTAI、腾讯云 AKID、百度 bce-auth-v1）、sk 系（OpenAI/Anthropic）、GitHub（ghp_/PAT）、GitLab、Slack、npm、HuggingFace、Google（AIza/GOCSPX-）、LLM 聚合商（Groq/xAI/Perplexity/Fireworks/Cerebras，前缀取 secret-scanner 社区共识——官方不披露格式）、Cloudflare（cfut_/cfat_/cfk_）、Vercel（vcp_ 系）、Stripe（含 sk_org_）、Telegram bot、Discord bot 三段式、JWT 三段式、PEM 私钥块、DB 连接串（user:pass@）、Slack/Discord webhook、Bearer/Basic 头
 3. **用户路径**：`C:\Users\<name>\...` → `~\<user>\...`（保留深层结构，只隐藏用户名段）
 4. **上下文邻近**：`password:/token=/api_key=` 等关键词 + 分隔符 + 值 → 掩码（宽松策略：公开渠道默认拒绝，误掩码代价低漏报代价高）
 5. **allowlist 压误报**：~30 停用词（example/placeholder/changeme…）+ 纯小写标识符（`error-module-not-found` 是包名不是密钥）不掩码
@@ -93,8 +93,27 @@
 **收集**：插件元数据、安装方式、环境版本号（platform/Node/DSH/pnpm/git）、脱敏后的安装日志尾部。
 **永不收集**：环境变量值（安装材料只作 env 传入从不持久化）、完整用户路径、密钥明文。
 **已知限制**：日志为第三方插件 stderr 输出，脱敏规则为形态匹配——理论上存在未知形态泄漏可能；
+无公开固定前缀的密钥（Mistral/Cohere/Together/火山方舟/Ollama Cloud/智谱等）靠上下文邻近与高熵兜底。
 维护者发现泄漏应立即编辑 issue 移除并补充 redact 规则（`lib/redact.js` + `scripts/tests/unit/redact.test.mjs`）。
 用户可在备注中要求删除其反馈 issue（维护者手工处理）。
+
+### 密钥规则维护参考（官方文档站）
+
+| 厂商 | 文档 |
+|---|---|
+| GitHub | https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/about-authentication-to-github |
+| Stripe | https://docs.stripe.com/keys |
+| Supabase | https://supabase.com/docs/guides/api/api-keys |
+| Telegram | https://core.telegram.org/bots/api |
+| Cloudflare | https://developers.cloudflare.com/fundamentals/api/get-started/token-formats/ |
+| Vercel | https://vercel.com/docs/accounts/access-tokens |
+| Airtable | https://airtable.com/developers/web/guides/personal-access-tokens |
+| Docker | https://docs.docker.com/security/access-tokens/ |
+| Figma | https://developers.figma.com/docs/rest-api/personal-access-tokens/ |
+| 腾讯云 | https://cloud.tencent.com/document/api/213/30654 |
+| 交叉验证源 | gitleaks 规则库 https://github.com/gitleaks/gitleaks/blob/master/config/gitleaks.toml |
+
+AI 推理厂商（Groq/xAI/Perplexity/Fireworks/Cerebras/Mistral/Ollama）官方文档一律不披露密钥格式，前缀依赖 secret-scanner 社区共识；每季度对照上表与 gitleaks 更新复核。
 
 ## 维护者处理流程
 

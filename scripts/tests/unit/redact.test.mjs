@@ -44,6 +44,10 @@ noLeak("Perplexity", P("pplx-", "abcdefghijklmnopqrstuvwxyz12"), "pplx-abcdefghi
 noLeak("Fireworks", P("fw_", "abcdefghijklmnopqrstuvwxyz12"), "fw_abcdefghijklmnopqrstuvwxyz12");
 noLeak("Cerebras", P("csk-", "abcdefghijklmnopqrstuvwxyz12"), "csk-abcdefghijklmnopqrstuvwxyz12");
 noLeak("Stripe live", P("sk_live_", "abcdefghijklmnop123456"), "sk_live_abcdefghijklmnop123456");
+noLeak("Stripe org", P("sk_org_", "abcdefghijklmnop123456"), "sk_org_abcdefghijklmnop123456");
+noLeak("Cloudflare user token", P("cfut_", "abcdefghijklmnopqrstuvwxyz0123456789AB"), "cfut_abcdefghijklmnopqrstuvwxyz0123456789AB");
+noLeak("Cloudflare account token", P("cfat_", "abcdefghijklmnopqrstuvwxyz0123456789AB"), "cfat_abcdefghijklmnopqrstuvwxyz0123456789AB");
+noLeak("Vercel PAT", P("vcp_", "abcdefghijklmnopqrstuvwxyz1234567890"), "vcp_abcdefghijklmnopqrstuvwxyz1234567890");
 noLeak("SendGrid", P("SG.", "abcdefghijklmnopqrstuv.ABCDEFGHIJKLMNOPQRSTUV"), "abcdefghijklmnopqrstuv");
 noLeak("Sentry", P("sntrys_", "eyJpYXQiOjE1NjAwMDAwMDB9/abc123"), "sntrys_eyJpYXQiOjE1NjAwMDAwMDB9");
 noLeak("Supabase", P("sbp_", "abcdefghijklmnopqrstuvwxyz12"), "sbp_abcdefghijklmnopqrstuvwxyz12");
@@ -53,6 +57,8 @@ noLeak("Linear", P("lin_api_", "abcdefghijklmnopqrstuvwxyz12"), "lin_api_abcdefg
 noLeak("Notion", P("secret_", "abcdefghijklmnopqrstuvwxyz0123456789AB"), "secret_abcdefghijklmnopqrstuvwxyz0123456789AB");
 noLeak("Figma", P("figd_", "abcdefghijklmnopqrstuvwxyz12"), "figd_abcdefghijklmnopqrstuvwxyz12");
 noLeak("Telegram bot", "1234567890:AAE abcdefghijklmnopqrstuvwxyz1234567890".replace(" ", ""), "1234567890:AA");
+noLeak("Telegram bot 无 AA 头", "110201543:AAHdqTcvCH1vGWJxfSeofSAs0K5PALDsawX", "AAHdqTcvCH1vGWJxfSeofSAs0K5PALDsawX");
+noLeak("Discord bot 三段式", P("MTIzNDU2Nzg5MDEyMzQ1Njc4.", "XAaBcD.", "abcdefghijklmnopqrstuvwxyzABCDEFGHIJ"), "abcdefghijklmnopqrstuvwxyzABCDEFGHIJ");
 noLeak("Twilio", P("SK", "abcdef0123456789abcdef0123456789"), P("SK", "abcdef0123456789abcdef0123456789"));
 noLeak("Airtable", P("patAbCdEf12", ".", "abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGH"), "patAbCdEf12.");
 noLeak("Notion integration", P("ntn_", "abcdefghijklmnopqrstuvwxyz0123456789AB"), "ntn_abcdefghijklmnopqrstuvwxyz0123456789AB");
@@ -60,7 +66,7 @@ noLeak("Sentry user", P("sntryu_", "eyJhYmNkZWZnaGlqa2xtbm9wcXJzdHV2/abc123"), "
 noLeak("Supabase publishable", P("sb_publishable_", "abcdefghijklmnopqrstuvwxyz12"), "sb_publishable_abcdefghijklmnopqrstuvwxyz12");
 noLeak("阿里云 AK", P("LTAI", "AbCdEfGhIjKlMnOpQrSt"), "LTAIAbCdEfGhIjKlMnOpQrSt");
 noLeak("腾讯云", P("AKID", "AbCdEfGhIjKlMnOpQrStUvWx"), "AKIDAbCdEfGhIjKlMnOpQrStUvWx");
-noLeak("百度 BCE", P("bce-", "AbCdEfGhIjKlMnOpQrStUv"), "bce-AbCdEfGhIjKlMnOpQrStUv");
+noLeak("百度 BCE", P("bce-auth-v1/", "AbCdEfGhIjKlMnOpQrStUv/"), "bce-auth-v1/AbCdEfGhIjKlMnOpQrStUv");
 noLeak("Slack bot", P("xoxb-", "123456789-abcdef"), "xoxb-123456789");
 noLeak("npm", "npm_aabbccddeeffgghhiijjkkllmmnnooppqqrrsstt", "npm_aabbccddeeffgghhiijjkkllmmnnooppqqrrsstt");
 noLeak("HuggingFace", P("hf_", "abcdefghijklmnopqrstuvwxyzABCDEFGHIJ"), P("hf_", "abcdefghijklmnopqrstuvwxyzABCDEFGHIJ"));
