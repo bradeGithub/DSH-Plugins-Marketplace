@@ -21,6 +21,7 @@
 - [4. 覆盖率要求](#4-覆盖率要求)
   - [豁免原则](#豁免原则)
 - [5.5 机械化质量检查（行覆盖之外）](#55-机械化质量检查行覆盖之外)
+- [5.4 脱敏测试（redact）](#54-脱敏测试redact)
 - [5. 端到端（e2e）策略](#5-端到端e2e策略)
 - [6. 编写清单](#6-编写清单)
 - [7. 已知 lib API 问题](#7-已知-lib-api-问题)
@@ -88,11 +89,24 @@ process.exit(fail === 0 ? 0 : 1);
 
 | 工具 | 命令 | 度量 |
 |---|---|---|
-| 突变测试 | `node scripts/mutation-test.mjs` | 测试敏感度（24 个语义突变点；存活 = 语义未锁定；当前存活 3 个全部评估为接受） |
+| 突变测试 | `node scripts/mutation-test.mjs` | 测试敏感度（24 个语义突变点；存活 = 语义未锁定；当前存活 0 / 被杀 15 / 契约锁定 9） |
 | 性质测试 | `node scripts/tests/unit/property-based.test.mjs` | 不变式（幂等/反对称/传递性/边界/差分 `annotateInstalled ≡ detectInstalled`；8/8） |
 | i18n 完整性 | `node scripts/tests/unit/i18n-completeness.test.mjs` | 字典覆盖 + 占位符一致性（5/5，进金字塔自动跑） |
 
 改 lib 后三件套复跑顺序：`coverage → mutation → property → smoke`。
+
+## 5.4 脱敏测试（redact）
+
+安装日志附公开 issue 前的多层脱敏（`lib/redact.js`），测试按三面组织（`scripts/tests/unit/redact.test.mjs`）：
+
+| 面 | 断言方式 | 覆盖 |
+|---|---|---|
+| 泄漏面 | `noLeak(name, input, ...secrets)`——输出不含敏感原文子串 | 已知密钥 21 形态（AWS 含临时凭证/sk 系/GitHub PAT/JWT/PEM/DB 连接串/webhook/Bearer 头）+ 用户路径 + 上下文邻近捕获 |
+| 误报面 | `keep(name, input, ...parts)`——非敏感上下文保留 | 包名含 token/停用词/纯小写标识符/短值不掩码 |
+| 注入面 | CR/LF 统一、控制字符剔除、markdown 围栏 ``` → ''' | 防击穿 issue details 折叠块 |
+
+**新增密钥规则**：`lib/redact.js` KNOWN_KEY_RULES 加正则 + redact.test.mjs 加对应 noLeak 断言（成对维护）。
+性质测试的 sanitizeLog 不变式（路径残留/密钥残留/标记存在）是 fuzz 层兜底——粘连形态（多路径分隔符拼接）由它守护。
 
 ## 5. 端到端（e2e）策略
 
