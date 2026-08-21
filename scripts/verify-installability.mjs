@@ -3,7 +3,8 @@
 //   Phase A: git/trees?recursive=1（每仓库 1 次 API）→ SKILL.md / install 脚本 / package.json 位置
 //   Phase B: contents API 读根 package.json（或子目录清单，最多 3 个）→ looksLikeDshPlugin 同款判定
 // 结论（verdict，与 lib detectType 优先级一致）：
-//   skill / agent-preset / script / cordis-plugin（真 DSH 插件） / multi-plugin（仅子目录有插件）
+//   skill / agent-preset / script / cordis-plugin（真 DSH 插件） / bundle-plugin（bundle 声明，cordis 子类型）
+//   multi-plugin（仅子目录有插件）
 //   pkg-plain（有 package.json 但非 DSH 插件——可被 detectType 按 cordis 装，但装完不可用）/ manual（只能手动）
 //   unknown（探测失败/truncated 无信号）/ gone（仓库已消失）
 // 断点快照存系统临时目录，中断后重跑同一命令可续。
@@ -15,7 +16,7 @@ import { join, dirname } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { execFileSync } from "node:child_process";
 import { tmpdir } from "node:os";
-import { looksLikeDshPlugin } from "./build-registry.mjs";
+import { looksLikeDshPlugin, isBundlePackage } from "./build-registry.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const limitArg = process.argv.find((a) => a.startsWith("--limit="));
@@ -56,7 +57,7 @@ function visiblePaths(paths) {
 }
 
 /** Phase A：单仓库 trees 探测 → 信号集。返回 null 表示不可判定（网络失败）。
- *  B1 修正（2026-08-19 审计）：分支 404 不再直接判 gone——trees 404 也可能是
+ *  B1 修正：分支 404 不再直接判 gone——trees 404 也可能是
  *  空仓库/无该分支（仓库存在但无提交树，GitHub 对空仓库 trees 返回 404），
  *  全部分支 404 时返回 branchMissing，由 confirmGone（repo 级 API）二次确认。
  *  教训：corrinehu/dsh-workbuddy-connect 等 16 个仓库被误判 gone，实测全部存在。 */
@@ -113,14 +114,14 @@ export async function confirmGone(repo) {
 }
 
 /** Phase B：读 package.json 内容判定真插件。 */
-async function fetchPkg(repo, path) {
+export async function fetchPkg(repo, path) {
   const url = `https://api.github.com/repos/${repo.full_name}/contents/${path.split("/").map(encodeURIComponent).join("/")}`;
   const res = await fetchJson(url, "application/vnd.github.raw+json");
   if (res.status === 403) return { rateLimited: true, remaining: res.remaining, resetMs: res.resetMs };
   if (res.status !== 200) return { ok: false, remaining: res.remaining };
   try {
     const pkg = JSON.parse(res.body);
-    return { ok: true, looksLike: looksLikeDshPlugin(pkg), remaining: res.remaining };
+    return { ok: true, looksLike: looksLikeDshPlugin(pkg), bundle: isBundlePackage(pkg), remaining: res.remaining };
   } catch {
     return { ok: false, remaining: res.remaining };
   }
@@ -136,7 +137,7 @@ export function verdictOf(sig, pkgLooks, nestedLooks) {
   if (!sig) return "unknown";
   if (sig.gone) return "gone"; // 防御：B1 后 probeTree 不再直接产 gone，保留兼容旧契约
   if (sig.isPreset) return "agent-preset";
-  if (sig.rootPkg && pkgLooks === true) return "cordis-plugin";
+  if (sig.rootPkg && pkgLooks === true) return sig.bundle === true ? "bundle-plugin" : "cordis-plugin";
   if (sig.rootScript === true) return "script";
   if (sig.rootPkg) {
     if (sig.rootSkill === true) return "skill";
@@ -228,12 +229,13 @@ async function main() {
           // 根清单优先；仅子目录清单时读最多 3 个子包
           const paths = sig.rootPkg ? ["package.json"] : sig.nestedPkgs.slice(0, 3);
           let looks = false;
+          let bundle = false;
           let stopped = false;
           let resetMs = 0;
           for (const p of paths) {
             const r = await fetchPkg(repo, p);
             if (r.rateLimited) { remaining = r.remaining; resetMs = r.resetMs; stopped = true; break; }
-            if (r.ok && r.looksLike) { looks = true; break; }
+            if (r.ok && r.looksLike) { looks = true; if (r.bundle) bundle = true; break; }
             if (r.remaining != null) remaining = r.remaining;
           }
           if (stopped) {
@@ -241,7 +243,8 @@ async function main() {
             if (!(await waitForQuota(resetMs))) break;
             continue;
           }
-          entry.verdict = verdictOf(sig, looks, looks);
+          const sig2 = { ...sig, bundle };
+          entry.verdict = verdictOf(sig2, looks, looks);
         } else {
           entry.verdict = verdictOf(sig, false, false);
         }
