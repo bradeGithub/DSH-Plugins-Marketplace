@@ -90,7 +90,7 @@ noLeak("上下文 client_secret", 'client_secret => "ZxYwVuTsRq9876543210"', "Zx
 noLeak("Win 用户路径", String.raw`git clone C:\Users\alice\AppData\Local\Temp\dsh-x`, "\\alice\\");
 keep("Win 路径保留结构", String.raw`C:\Users\alice\AppData\Local\Temp\dsh-x`, String.raw`~\<user>\AppData\Local\Temp`);
 noLeak("/home 路径", "cd /home/bob/.dsh/profiles && ls", "/bob/");
-noLeak("$HOME 路径", "export PATH=$HOME/.local/bin:$PATH", "$HOME/.local/bin:$PATH");
+keep("$HOME 路径保留内容", "export PATH=$HOME/.local/bin:$PATH", "~/.local/bin:$PATH");
 
 // ---- 误报面：allowlist（不得掩码）----
 keep("包名含 token", "cannot find module token-parser-helper", "token-parser-helper");
