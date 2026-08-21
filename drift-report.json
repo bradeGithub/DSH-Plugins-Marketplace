@@ -1,27 +1,13 @@
 {
-  "generated_at": "2026-08-21T07:10:43.282Z",
-  "count": 3,
+  "generated_at": "2026-08-21T13:28:04.100Z",
+  "count": 1,
   "items": [
     {
-      "full_name": "tafcear/kimi-tide",
-      "previous": "coding",
-      "current": "web-ui",
-      "desc_now": "🌊 kimi-tide（月汐）— DSH 模型路由插件：预设+规则驱动，每步自动在 Kimi 与 DeepSeek 间选路；图像护栏 + 配额面板 + 决策可观测 · preset+rule model router for DeepSeek Harness",
-      "desc_prev": "月汐 kimi-tide — DeepSeek Harness（DSH）双模型自动分工路由插件：按任务逐步骤在 Kimi 与 DeepSeek 之间选路（能力评分 × 预算窗口 × 图像护栏），决策全程可观测；0.4.x 起经官方 pi-ai kimi-coding 路由 API key 直连。"
-    },
-    {
-      "full_name": "Laplace-bit/dsh-bell-notify",
-      "previous": "conversation",
-      "current": "other",
-      "desc_now": "Configurable, unobtrusive Web Audio lifecycle notifications for DeepSeek Harness (dsh): 10 events, custom sounds, offline playback.",
-      "desc_prev": "DeepSeek Harness (dsh) 社区插件：为 Agent 生命周期事件合成铃声 + 右下角呼吸状态点，每个事件可上传自定义音频。dsh plugin that rings bells and shows a breathing status dot for Agent lifecycle events."
-    },
-    {
-      "full_name": "lasdrder0705/dsh-chat-zone",
-      "previous": "web-ui",
-      "current": "tool",
-      "desc_now": "DSH Web 插件「对话区」。安装：dsh plugin --profile web add github:lasdrder0705/dsh-chat-zone",
-      "desc_prev": "DSH Web plugin: Chat zone (对话区) — one-click chats under ~/dsh_CHAT and split/mixed sidebar layout"
+      "full_name": "WSL043/dsh-codex-subscription",
+      "previous": "tool",
+      "current": "vision",
+      "desc_now": "DeepSeek Harness 的 ChatGPT/Codex 订阅插件：独立 OAuth、模型、真实额度、搜索与图片；无需 API Key 或 Codex CLI",
+      "desc_prev": "在 DeepSeek Harness 中直接使用 ChatGPT/Codex 订阅，无需 OpenAI API Key 或额外客户端，支持 OAuth 登录、订阅搜索与额度显示 | ChatGPT/Codex subscription plugin for DSH"
     }
   ]
 }
