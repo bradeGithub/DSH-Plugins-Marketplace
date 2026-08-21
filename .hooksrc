@@ -2,7 +2,8 @@
 # 密钥扫描：error（发现疑似密钥即阻止提交）
 secretLevel=error
 # 排除：lib.test.mjs 含 AWS 官方文档示例密钥（AKIA…EXAMPLE 标准示例值，非真实密钥）
-secretExclusions=scripts/tests/integration/lib.test.mjs
+# 排除：redact.test.mjs 的脱敏测试样本（sk-/ghp_/AKIA 等全为虚构 fixture——测试对象即密钥形态）
+secretExclusions=scripts/tests/integration/lib.test.mjs,scripts/tests/unit/redact.test.mjs
 # 提交信息 emoji 检查：warn（仅提醒，不阻断）
 emojiLevel=warn
 # README TOC 检查：warn（仅提醒，不阻断）
