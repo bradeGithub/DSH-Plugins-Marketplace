@@ -2,7 +2,7 @@
 // 守护「空仓库/无分支」不误判 gone（2026-08-19 审计：16 个真实存在的仓库被误判删除）。
 // mock 全局 fetch（不执行 main——import 时 isMain 守卫跳过）。
 
-import { probeTree, confirmGone } from "../../verify-installability.mjs";
+import { probeTree, confirmGone, verdictOf, fetchPkg } from "../../verify-installability.mjs";
 
 let pass = 0, fail = 0;
 function check(name, actual, expected) {
@@ -104,6 +104,40 @@ const TREE_OK = { tree: [{ type: "blob", path: "package.json" }, { type: "blob",
   const c = await confirmGone({ full_name: "gone/repo" });
   globalThis.fetch = orig;
   check("真删除全链路：branchMissing + repo 404 → gone", sig?.branchMissing === true && c?.gone === true, true);
+}
+
+// ---- C1：bundle 声明判定（bundle-plugin 子类型）----
+{
+  const rootPkg = { rootPkg: true, rootSkill: false, truncated: false, hasSkill: false };
+  check("bundle 声明 → bundle-plugin", verdictOf({ ...rootPkg, bundle: true }, true, false), "bundle-plugin");
+  check("非 bundle 真插件 → cordis-plugin", verdictOf({ ...rootPkg, bundle: false }, true, false), "cordis-plugin");
+  check("bundle 但根无清单 → 不判 bundle（bundle 字段仅根清单生效）", verdictOf({ ...rootPkg, bundle: true }, false, false), "pkg-plain");
+}
+
+// ---- C1：fetchPkg 的 bundle 字段（mock contents API）----
+{
+  const orig = mockFetch({
+    "https://api.github.com/repos/bundle/repo/contents/package.json": {
+      status: 200,
+      body: { name: "bundle-pkg", version: "1.0.0", dsh: { bundle: { patch: "./cordis.patch.yml" } } },
+    },
+  });
+  const r = await fetchPkg({ full_name: "bundle/repo" }, "package.json");
+  globalThis.fetch = orig;
+  check("fetchPkg bundle 声明 → bundle:true", r?.bundle, true);
+  check("fetchPkg bundle 声明 → looksLike:true", r?.looksLike, true);
+}
+{
+  const orig = mockFetch({
+    "https://api.github.com/repos/plain/repo/contents/package.json": {
+      status: 200,
+      body: { name: "plain-pkg", version: "1.0.0" },
+    },
+  });
+  const r = await fetchPkg({ full_name: "plain/repo" }, "package.json");
+  globalThis.fetch = orig;
+  check("fetchPkg 无 bundle 声明 → bundle:false", r?.bundle, false);
+  check("fetchPkg 无 dsh → looksLike:false", r?.looksLike, false);
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);

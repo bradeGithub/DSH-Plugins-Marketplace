@@ -1,6 +1,9 @@
 // B2/B3 收录门控测试：fork 真排除 + archived 降权字段 + gone 失效清理。
 // 覆盖 build-registry.mjs 的收录过滤与清理逻辑（与 categories/installability 同族）。
 
+import { readFileSync } from "node:fs";
+import { join, dirname } from "node:path";
+import { fileURLToPath } from "node:url";
 import { normalize, applyGoneCleanup, fetchStarSegment } from "../../build-registry.mjs";
 
 let pass = 0, fail = 0;
@@ -70,6 +73,17 @@ function check(name, actual, expected) {
 {
   const out = applyGoneCleanup([{ full_name: "x/y" }], new Map());
   check("B3 空报告原样返回", out.length, 1);
+}
+
+// ---- C1 生命周期：bundle 字段三态写回 + 强制重抓 ----
+// 背景：只条件写 true（isBundlePackage → r.bundle = true）会在仓库从 bundle 变普通插件后
+// 残留旧标记；enrichPkgNames 的 todo 过滤（!pkg_name || !version）跳过已富化条目 → 永不刷新。
+// 契约：① 重抓时非 bundle 必须 delete ② 带 bundle 标记的条目必须进 todo（强制重抓）。
+{
+  const src = readFileSync(join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..", "scripts", "build-registry.mjs"), "utf8");
+  check("C1 三态写回：非 bundle → delete r.bundle", /if \(isBundlePackage\(pkg\)\) r\.bundle = true; else delete r\.bundle;/.test(src), true);
+  check("C1 bundleSuspect：bundle 标记强制重抓", /const bundleSuspect = \(r\) => includeVersion && r\.bundle === true;/.test(src), true);
+  check("C1 todo 含 bundleSuspect", /\|\| highStarSuspect\(r\) \|\| bundleSuspect\(r\)/.test(src), true);
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);

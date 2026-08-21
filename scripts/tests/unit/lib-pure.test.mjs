@@ -1,4 +1,4 @@
-import { compareVersions, isTrustedRequest, isTrustedHost, isSensitiveEnvKey, buildMinimalEnv, buildFilteredEnv, looksLikeDshPlugin, wslPosixPath, normalizeRepoRef, dedupeReposByPkgName, slugify, SCRIPT_ENV_KEYS, sanitizeLog } from "../../../lib/index.js";
+import { compareVersions, shouldUpdate, isTrustedRequest, isTrustedHost, isSensitiveEnvKey, buildMinimalEnv, buildFilteredEnv, looksLikeDshPlugin, wslPosixPath, normalizeRepoRef, dedupeReposByPkgName, slugify, SCRIPT_ENV_KEYS, sanitizeLog } from "../../../lib/index.js";
 
 let pass = 0, fail = 0;
 function check(name, actual, expected) {
@@ -29,6 +29,12 @@ check("字母 pre > 数字 pre（反向对称）", compareVersions("1.0.0-alpha"
 // 相等标识应继续比下一段（前导零形态宽容处理，但必须保持反对称）。
 check("rc.01 == rc.1（数值相等继续）", compareVersions("1.2.3-rc.01", "1.2.3-rc.1"), 0);
 check("rc.1 == rc.01（对称）", compareVersions("1.2.3-rc.1", "1.2.3-rc.01"), 0);
+// mutation findings m01/m02：updateAvailable 语义拼接处锁定（<0 即应更新）——抽出的纯函数三态 + 空守卫
+check("shouldUpdate 新版 → true", shouldUpdate("1.0.0", "1.0.1"), true);
+check("shouldUpdate 相等 → false", shouldUpdate("1.0.1", "1.0.1"), false);
+check("shouldUpdate 旧版 → false", shouldUpdate("1.0.1", "1.0.0"), false);
+check("shouldUpdate 无 installed → false", shouldUpdate(null, "1.0.1"), false);
+check("shouldUpdate 无 latest → false", shouldUpdate("1.0.0", null), false);
 
 // ---- R1: isTrustedRequest（Host 白名单 + 自定义头 + Origin）----
 const req = (headers) => ({ headers });

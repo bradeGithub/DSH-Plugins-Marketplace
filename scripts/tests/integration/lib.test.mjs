@@ -199,6 +199,29 @@ function mockFetch(payload, status = 200) {
   writeFileSync(join(presetRootDir, "agent.cordis.yml"), "# a\n", "utf8");
   check("detectType 根预设仍 agent-preset", await lib.detectType(presetRootDir), "agent-preset");
 
+  // ---- bundle 声明包 → detectType 判 bundle（cordis 子类型）----
+  const bundleDir = join(process.env.DSH_HOME, "bundle-detect");
+  mkdirSync(bundleDir, { recursive: true });
+  writeFileSync(join(bundleDir, "package.json"), JSON.stringify({
+    name: "fake-bundle-detect", version: "1.0.0", dsh: { bundle: { patch: "./cordis.patch.yml" } },
+  }), "utf8");
+  writeFileSync(join(bundleDir, "cordis.patch.yml"), "- insert:\n    - id: fake-sub\n      name: '@fake/sub-pkg'\n", "utf8");
+  check("detectType bundle 声明 → bundle", await lib.detectType(bundleDir), "bundle");
+  // 对照组：dsh 声明但非 bundle → cordis-plugin（不变）
+  const cordisDir = join(process.env.DSH_HOME, "cordis-detect");
+  mkdirSync(cordisDir, { recursive: true });
+  writeFileSync(join(cordisDir, "package.json"), JSON.stringify({ name: "fake-cordis-detect", version: "1.0.0", dsh: { client: {} } }), "utf8");
+  check("detectType 非 bundle dsh 声明 → cordis-plugin（不变）", await lib.detectType(cordisDir), "cordis-plugin");
+  // 边界：bundle 声明但 install.ps1 也在根 → 声明优先（bundle 形态防脚本劫持，B1 同款语义）
+  const bundleScriptDir = join(process.env.DSH_HOME, "bundle-script-detect");
+  mkdirSync(bundleScriptDir, { recursive: true });
+  writeFileSync(join(bundleScriptDir, "package.json"), JSON.stringify({
+    name: "fake-bundle-script", version: "1.0.0", dsh: { bundle: { patch: "./cordis.patch.yml" } },
+  }), "utf8");
+  writeFileSync(join(bundleScriptDir, "cordis.patch.yml"), "- insert:\n", "utf8");
+  writeFileSync(join(bundleScriptDir, "install.ps1"), "# x\n", "utf8");
+  check("detectType bundle 声明 + install.ps1 → bundle（声明优先）", await lib.detectType(bundleScriptDir), "bundle");
+
   // ---- classifyInstallFailure（失败分类提示）----
   check("分类 EINTEGRITY", lib.classifyInstallFailure("npm ERR! code EINTEGRITY\nintegrity checksum failed").includes("完整性"), true);
   check("分类 node-gyp", lib.classifyInstallFailure("gyp ERR! stack Error: not found: python3").includes("node-gyp"), true);
@@ -344,9 +367,18 @@ function mockFetch(payload, status = 200) {
       + 'if(mode==="fail-nocreate"&&(v==="1.2.5"||String(v).startsWith("github:fake/")))process.exit(1);'
       + 'if(v==="1.2.3"||v==="1.2.4"||v==="1.2.5"||String(v).startsWith("github:fake/")){'
       + 'const d=path.join(cwd,"node_modules",...n.split("/"));fs.mkdirSync(d,{recursive:true});'
-      + 'fs.writeFileSync(path.join(d,"package.json"),JSON.stringify({name:n,version:"1.2.3"}));}}'
-      + 'if(mode==="fail-create")process.exit(1);}'
-      + 'else if(argv[0]==="remove"){const n=argv[1];fs.rmSync(path.join(cwd,"node_modules",...n.split("/")),{recursive:true,force:true});'
+      + 'const p=path.join(d,"package.json");let main="";'
+      + 'try{main=fs.readFileSync(path.join(__dirname,"entry"),"utf8").trim()}catch(e){}'
+      + 'if(!fs.existsSync(p)){const pk={name:n,version:"1.2.3"};if(main){try{const e=JSON.parse(main);'
+      + 'if(e.main){pk.main=e.main;'
+      + 'const dir=path.join(d,path.dirname(e.main));fs.mkdirSync(dir,{recursive:true});'
+      + 'const f=path.join(d,e.main);if(!fs.existsSync(f))fs.writeFileSync(f,"export function apply(_ctx) {}");}'
+      + 'if(e.deps)pk.dependencies=e.deps;}catch(err){pk.main=main;}}'
+      + 'fs.writeFileSync(p,JSON.stringify(pk));}}'
+      + '}if(mode==="fail-create")process.exit(1);}'
+      + 'else if(argv[0]==="remove"){const n=argv[1];'
+      + 'if(mode==="fail-remove")process.exit(1);'
+      + 'fs.rmSync(path.join(cwd,"node_modules",...n.split("/")),{recursive:true,force:true});'
       + 'const m=JSON.parse(fs.readFileSync(path.join(cwd,"package.json"),"utf8"));'
       + 'if(m.dependencies)delete m.dependencies[n];'
       + 'if(m.dsh&&m.dsh.profile&&Array.isArray(m.dsh.profile.bundles))m.dsh.profile.bundles=m.dsh.profile.bundles.filter((b)=>b!==n);'
@@ -404,6 +436,23 @@ function mockFetch(payload, status = 200) {
       check("仓库来源 bundle 依赖声明 github: 形态", profD.dependencies["fake-bundle-d"], "github:fake/bundle-repo-d");
       check("仓库来源 bundle 注册成功", resultD.bundle, true);
 
+      // 旧路径（type=cordis-plugin）bundle + entry 缺失 → 同样拦截（registerBundlePackage 共享校验）
+      writeFileSync(join(stubDir, "entry"), "lib/index.js", "utf8");
+      const fixL = makeFixture("fake-bundle-l", "1.3.4", true);
+      let thrownL = null;
+      try {
+        await lib.installRepo({
+          type: "cordis-plugin", cacheDir: fixL, repo: "fake/bundle-repo-l", log: [],
+          answers: {}, logLine: () => {}, lang: "zh", envAllowList: [],
+        });
+      } catch (error) {
+        thrownL = String(error?.message ?? error);
+      }
+      check("旧路径 bundle + entry 缺失 → 拦截（共享校验）", /加载入口/.test(thrownL ?? ""), true);
+      const profAfterL = JSON.parse(readFileSync(join(web, "package.json"), "utf8"));
+      check("旧路径 entry 拦截 → manifest 回滚", profAfterL.dependencies["fake-bundle-l"], undefined);
+      rmSync(join(stubDir, "entry"), { force: true });
+
       // 结果导向：pnpm 退出非零但包已可解析 → 成功 + 告警（不伪装失败也不忽略告警）
       writeFileSync(join(stubDir, "mode"), "fail-create", "utf8");
       const fixB = makeFixture("fake-bundle-b", "1.2.4", true);
@@ -428,7 +477,64 @@ function mockFetch(payload, status = 200) {
         thrownC = String(error?.message ?? error);
       }
       check("pnpm 未完成安装 → bundleResolveFail 明示失败", /仍未在 profile node_modules 解析到/.test(thrownC ?? ""), true);
+      // B：失败后 manifest 回滚（写前快照恢复）——dependencies/bundles 不含 fake-bundle-c
+      const profAfterC = JSON.parse(readFileSync(join(web, "package.json"), "utf8"));
+      check("B 失败回滚 → dependencies 不含失败包", profAfterC.dependencies["fake-bundle-c"], undefined);
+      check("B 失败回滚 → bundles 不含失败包", (profAfterC.dsh.profile.bundles ?? []).includes("fake-bundle-c"), false);
       writeFileSync(join(stubDir, "mode"), "", "utf8");
+
+      // B：依赖解析失败回滚——stub 创建的包声明不存在的子依赖 → bundleRequire.resolve 失败
+      // → bundleDepsResolveFail + manifest 回滚
+      writeFileSync(join(stubDir, "entry"), JSON.stringify({ main: "lib/index.js", deps: { "@fake/missing-dep": "1.0.0" } }), "utf8");
+      const fixK = makeFixture("fake-bundle-k", "1.3.3", true);
+      let thrownK = null;
+      try {
+        await lib.installRepo({
+          type: "bundle", cacheDir: fixK, repo: "fake/bundle-repo-k", log: [],
+          answers: {}, logLine: () => {}, lang: "zh", envAllowList: [],
+        });
+      } catch (error) {
+        thrownK = String(error?.message ?? error);
+      }
+      check("B 子依赖解析失败 → bundleDepsResolveFail 明示", /子依赖|sub-dependencies/.test(thrownK ?? ""), true);
+      const profAfterK = JSON.parse(readFileSync(join(web, "package.json"), "utf8"));
+      check("B 子依赖失败回滚 → dependencies 不含失败包", profAfterK.dependencies["fake-bundle-k"], undefined);
+      check("B 子依赖失败回滚 → bundles 不含失败包", (profAfterK.dsh.profile.bundles ?? []).includes("fake-bundle-k"), false);
+      rmSync(join(stubDir, "entry"), { force: true });
+
+      // main 路径穿越（../../ 逃逸）→ 拒绝（不得 exists 探测外部路径）
+      writeFileSync(join(stubDir, "entry"), "../../../../../../Windows/System32/notepad.exe", "utf8");
+      const fixM = makeFixture("fake-bundle-m", "1.3.5", true);
+      let thrownM = null;
+      try {
+        await lib.installRepo({
+          type: "bundle", cacheDir: fixM, repo: "fake/bundle-repo-m", log: [],
+          answers: {}, logLine: () => {}, lang: "zh", envAllowList: [],
+        });
+      } catch (error) {
+        thrownM = String(error?.message ?? error);
+      }
+      check("边界1 main 路径穿越 → 拒绝", /穿越|越界|traversal|越界/.test(thrownM ?? ""), true);
+      const profAfterM = JSON.parse(readFileSync(join(web, "package.json"), "utf8"));
+      check("边界1 main 穿越 → manifest 回滚", profAfterM.dependencies["fake-bundle-m"], undefined);
+      rmSync(join(stubDir, "entry"), { force: true });
+
+      // 依赖名含绝对路径（C:/Windows/...）→ 拒绝（不得 resolve 外部文件）
+      writeFileSync(join(stubDir, "entry"), JSON.stringify({ main: "lib/index.js", deps: { "C:/Windows/System32/notepad.exe": "1.0.0" } }), "utf8");
+      const fixN = makeFixture("fake-bundle-n", "1.3.6", true);
+      let thrownN = null;
+      try {
+        await lib.installRepo({
+          type: "bundle", cacheDir: fixN, repo: "fake/bundle-repo-n", log: [],
+          answers: {}, logLine: () => {}, lang: "zh", envAllowList: [],
+        });
+      } catch (error) {
+        thrownN = String(error?.message ?? error);
+      }
+      check("边界2 依赖名绝对路径 → 拒绝", /非法|invalid|依赖名|穿越/.test(thrownN ?? ""), true);
+      const profAfterN = JSON.parse(readFileSync(join(web, "package.json"), "utf8"));
+      check("边界2 依赖名绝对路径 → manifest 回滚", profAfterN.dependencies["fake-bundle-n"], undefined);
+      rmSync(join(stubDir, "entry"), { force: true });
 
       // 卸载：补一条 bundle 安装记录后经 handler 全链路（pnpm remove 清理 manifest + 目录）
       await lib.saveInstalled("fake/bundle-repo", {
@@ -455,8 +561,125 @@ function mockFetch(payload, status = 200) {
       const profAfter = JSON.parse(readFileSync(join(web, "package.json"), "utf8"));
       check("bundle 卸载响应 200 done", uStatus === 200 && uBody?.status, "done");
       check("bundle 卸载移除 profile dependencies", profAfter.dependencies["fake-bundle-pkg"], undefined);
-      check("bundle 卸载移除 dsh.profile.bundles 条目", profAfter.dsh.profile.bundles.join(","), "dsh-plugin-marketplace,fake-bundle-d,fake-bundle-b,fake-bundle-c");
+      check("bundle 卸载移除 dsh.profile.bundles 条目", profAfter.dsh.profile.bundles.join(","), "dsh-plugin-marketplace,fake-bundle-d,fake-bundle-b");
       check("bundle 卸载删除包目录", existsSync(join(web, "node_modules", "fake-bundle-pkg")), false);
+
+      // 卸载降级路径（覆盖率 L4007）：pnpm remove 失败 → 手工清理 profile 条目 + 目录
+      writeFileSync(join(stubDir, "mode"), "fail-remove", "utf8");
+      await lib.saveInstalled("fake/bundle-repo-g", {
+        type: "bundle", name: "fake-bundle-g", names: ["fake-bundle-g"],
+        location: join(web, "node_modules", "fake-bundle-g"), version: "1.2.9",
+        bundle: true, installedAt: Date.now(), envKeys: null,
+      });
+      // 先注册到 manifest（手工清理路径读取它）
+      const profG = JSON.parse(readFileSync(join(web, "package.json"), "utf8"));
+      profG.dependencies["fake-bundle-g"] = "1.2.9";
+      if (!(profG.dsh.profile.bundles ?? []).includes("fake-bundle-g")) profG.dsh.profile.bundles.push("fake-bundle-g");
+      writeFileSync(join(web, "package.json"), JSON.stringify(profG, null, 2), "utf8");
+      const registeredG = [];
+      lib.apply({ get: (s) => (s === "webServer" ? { register: (r) => registeredG.push(r) } : undefined), logger: { warn: () => {} }, slots: { inject: () => {} } });
+      const uninstallG = registeredG.find((r) => r.path === "/api/marketplace/uninstall")?.handler;
+      let sentG = false;
+      const unReqG = {
+        method: "POST",
+        headers: { "x-dsh-marketplace": "1", host: "127.0.0.1:3080" },
+        socket: { remoteAddress: "127.0.0.1" },
+        url: "/api/marketplace/uninstall",
+        [Symbol.asyncIterator]() {
+          return { next: async () => (sentG ? { value: undefined, done: true } : ((sentG = true), { value: Buffer.from(JSON.stringify({ repo: "fake/bundle-repo-g" })), done: false })) };
+        },
+      };
+      let uStatusG = 0;
+      await uninstallG(unReqG, { writeHead: (x) => { uStatusG = x; }, end: () => {} });
+      const profAfterG = JSON.parse(readFileSync(join(web, "package.json"), "utf8"));
+      check("pnpm remove 失败 → 手工清理移除 dependencies", profAfterG.dependencies["fake-bundle-g"], undefined);
+      check("pnpm remove 失败 → 手工清理移除 bundles 条目", (profAfterG.dsh.profile.bundles ?? []).includes("fake-bundle-g"), false);
+      check("pnpm remove 失败 → 手工清理删除包目录", existsSync(join(web, "node_modules", "fake-bundle-g")), false);
+      // 覆盖率 L4007：writeProfileManifest 写失败 → catch 吞错（不影响目录删除兜底）
+      // 先构造 manifest 有依赖 + 目录存在，再把 manifest 设为只读 → 手工清理写回失败
+      const profRO = JSON.parse(readFileSync(join(web, "package.json"), "utf8"));
+      profRO.dependencies["fake-bundle-ro"] = "1.3.0";
+      if (!(profRO.dsh.profile.bundles ?? []).includes("fake-bundle-ro")) profRO.dsh.profile.bundles.push("fake-bundle-ro");
+      writeFileSync(join(web, "package.json"), JSON.stringify(profRO, null, 2), "utf8");
+      mkdirSync(join(web, "node_modules", "fake-bundle-ro"), { recursive: true });
+      writeFileSync(join(web, "node_modules", "fake-bundle-ro", "package.json"), JSON.stringify({ name: "fake-bundle-ro", version: "1.3.0" }), "utf8");
+      await lib.saveInstalled("fake/bundle-repo-ro", {
+        type: "bundle", name: "fake-bundle-ro", names: ["fake-bundle-ro"],
+        location: join(web, "node_modules", "fake-bundle-ro"), version: "1.3.0",
+        bundle: true, installedAt: Date.now(), envKeys: null,
+      });
+      chmodSync(join(web, "package.json"), 0o444); // 只读：writeProfileManifest 抛错 → catch 吞
+      const registeredRO = [];
+      lib.apply({ get: (s) => (s === "webServer" ? { register: (r) => registeredRO.push(r) } : undefined), logger: { warn: () => {} }, slots: { inject: () => {} } });
+      const uninstallRO = registeredRO.find((r) => r.path === "/api/marketplace/uninstall")?.handler;
+      let sentRO = false;
+      const unReqRO = {
+        method: "POST",
+        headers: { "x-dsh-marketplace": "1", host: "127.0.0.1:3080" },
+        socket: { remoteAddress: "127.0.0.1" },
+        url: "/api/marketplace/uninstall",
+        [Symbol.asyncIterator]() {
+          return { next: async () => (sentRO ? { value: undefined, done: true } : ((sentRO = true), { value: Buffer.from(JSON.stringify({ repo: "fake/bundle-repo-ro" })), done: false })) };
+        },
+      };
+      let uStatusRO = 0;
+      await uninstallRO(unReqRO, { writeHead: (x) => { uStatusRO = x; }, end: () => {} });
+      chmodSync(join(web, "package.json"), 0o644); // 恢复可写（finally 路径清理依赖）
+      check("写回失败被 catch 吞（目录删除兜底仍执行）", existsSync(join(web, "node_modules", "fake-bundle-ro")), false);
+      writeFileSync(join(stubDir, "mode"), "", "utf8");
+
+      // detectType 判 bundle 后的独立安装路径（type=bundle 直接走 registerBundlePackage）
+      const fixE = makeFixture("fake-bundle-e", "1.2.7", true);
+      const logE = [];
+      const resultE = await lib.installRepo({
+        type: "bundle", cacheDir: fixE, repo: "fake/bundle-repo-e", log: [],
+        answers: {}, logLine: (l) => logE.push(l), lang: "zh", envAllowList: [],
+      });
+      const profE = JSON.parse(readFileSync(join(web, "package.json"), "utf8"));
+      check("type=bundle 安装走 registerBundlePackage（仓库来源 github: 声明）", profE.dependencies["fake-bundle-e"], "github:fake/bundle-repo-e");
+      check("type=bundle 安装结果带 bundle 标志", resultE.bundle, true);
+      check("type=bundle 安装结果 type 为 bundle", resultE.type, "bundle");
+      check("type=bundle 安装结果无 count（客户端 count>1 分支 undefined 兜底）", resultE.count, undefined);
+      // B：entry 校验（#146 型）——bundle 包 main 指向缺失文件（lib/ 未构建）→ 安装后 entry 校验拦截
+      const fixH = makeFixture("fake-bundle-h", "1.3.1", true);
+      const logH = [];
+      const resultH = await lib.installRepo({
+        type: "bundle", cacheDir: fixH, repo: "fake/bundle-repo-h", log: [],
+        answers: {}, logLine: (l) => logH.push(l), lang: "zh", envAllowList: [],
+      });
+      // stub 写入的 fake-bundle-h package.json 无 main 声明（stub 只写 name/version）
+      // → entry 校验应 pass（无 main 不拦截）；用带 main 的 fixture 走 installRepo 验证校验
+      check("type=bundle 无 main 声明 → 安装成功（entry 校验不拦截）", resultH.bundle, true);
+      // entry 缺失拦截：#146 型——stub 创建带 main 的包（entry 模式）但无产物 → 拦截 + 回滚
+      writeFileSync(join(stubDir, "entry"), "lib/index.js", "utf8");
+      const fixI = makeFixture("fake-bundle-i", "1.3.2", true);
+      let thrownI = null;
+      try {
+        await lib.installRepo({
+          type: "bundle", cacheDir: fixI, repo: "fake/bundle-repo-i", log: [],
+          answers: {}, logLine: () => {}, lang: "zh", envAllowList: [],
+        });
+      } catch (error) {
+        thrownI = String(error?.message ?? error);
+      }
+      check("entry 缺失（main 指向不存在文件）→ 拦截", /加载入口/.test(thrownI ?? ""), true);
+      const profAfterI = JSON.parse(readFileSync(join(web, "package.json"), "utf8"));
+      check("entry 拦截后 manifest 回滚（dependencies 无 fake-bundle-i）", profAfterI.dependencies["fake-bundle-i"], undefined);
+      check("entry 拦截后 bundles 回滚（无 fake-bundle-i）", (profAfterI.dsh.profile.bundles ?? []).includes("fake-bundle-i"), false);
+      check("entry 拦截后包目录已删", existsSync(join(web, "node_modules", "fake-bundle-i")), false);
+      rmSync(join(stubDir, "entry"), { force: true });      check("type=bundle 安装日志含 bundleDetected", logE.some((l) => l.includes("bundle 形态")), true);
+      // type=bundle 但包实际非 bundle 声明 → 明示失败（防御：detectType 与 installRepo 判定漂移）
+      const fixF = makeFixture("fake-bundle-f", "1.2.8", false);
+      let thrownF = null;
+      try {
+        await lib.installRepo({
+          type: "bundle", cacheDir: fixF, repo: "fake/bundle-repo-f", log: [],
+          answers: {}, logLine: () => {}, lang: "zh", envAllowList: [],
+        });
+      } catch (error) {
+        thrownF = String(error?.message ?? error);
+      }
+      check("type=bundle 但非 bundle 声明 → 拒绝（防判定漂移）", /拒绝安装|bundle/.test(thrownF ?? ""), true);
 
       // 回归：非 bundle 插件仍走复制 + patch insert（原路径不受影响）
       const plainFix = makeFixture("fake-plain-pkg", "0.0.1", false);

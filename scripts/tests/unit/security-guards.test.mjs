@@ -27,6 +27,7 @@ check("MAX_RESPONSE_BYTES = 32MB", /const MAX_RESPONSE_BYTES = 32 \* 1024 \* 102
 const sizeBody = lib.match(/function responseTooLarge\(res\) \{[\s\S]*?\n\}/)?.[0] ?? "";
 check("responseTooLarge 存在", sizeBody.length > 0, true);
 check("responseTooLarge 读 content-length", sizeBody.includes('res?.headers?.get?.("content-length")'), true);
+check("responseTooLarge 恰好等于上限不算超限（> 非 >=）", /return len > MAX_RESPONSE_BYTES;/.test(sizeBody), true);
 const fetchJsonBody = lib.match(/async function fetchJson\(url, extraHeaders = \{\}\) \{[\s\S]*?\n\}/)?.[0] ?? "";
 check("fetchJson 超限抛错", /if \(responseTooLarge\(res\)\) throw new Error\(`响应过大/.test(fetchJsonBody), true);
 check("fetchRegistryRepos 超限换源", /if \(responseTooLarge\(res\)\) continue; \/\/ L6/.test(lib), true);

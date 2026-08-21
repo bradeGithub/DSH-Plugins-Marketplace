@@ -2,6 +2,7 @@
 // reactive-resume（skills/resume-builder/SKILL.md）/ OpenViking（bot/workspace/skills/*/SKILL.md）
 // 蹭 topic 案例曾因 SKILL_RE 命中任意路径 SKILL.md 被误判 skill 而漏过 non-plugin 徽章。
 import { verdictOf } from "../../verify-installability.mjs";
+import { isBundlePackage } from "../../build-registry.mjs";
 
 let pass = 0, fail = 0;
 function check(name, actual, expected) {
@@ -61,6 +62,34 @@ check("空信号 → manual",
 check("gone → gone",
   verdictOf({ gone: true }, false, false),
   "gone");
+
+// ---- C1：bundle 声明判定（bundle-plugin 子类型）----
+check("bundle 声明 + 根清单 → bundle-plugin",
+  verdictOf({ rootPkg: true, bundle: true, truncated: false }, true, false),
+  "bundle-plugin");
+check("bundle 但非根清单 → 不判 bundle（仅根清单生效）",
+  verdictOf({ bundle: true, truncated: false }, false, false),
+  "manual");
+check("bundle + preset.yml 声明 → agent-preset 优先（preset 形态覆盖 bundle）",
+  verdictOf({ isPreset: true, rootPkg: true, bundle: true, truncated: false }, true, false),
+  "agent-preset");
+check("bundle + 根 SKILL.md 无 dsh 声明 → skill（bundle 仅随 dsh 声明生效）",
+  verdictOf({ rootPkg: true, rootSkill: true, bundle: true, truncated: false }, false, false),
+  "skill");
+
+// ---- C1：isBundlePackage 判定（build-registry 脚本侧来源）----
+check("dsh.bundle.patch 非空 → bundle",
+  isBundlePackage({ dsh: { bundle: { patch: "./cordis.patch.yml" } } }), true);
+check("dsh.bundle.patch 空字符串 → 非 bundle",
+  isBundlePackage({ dsh: { bundle: { patch: "" } } }), false);
+check("dsh.bundle 非对象 → 非 bundle",
+  isBundlePackage({ dsh: { bundle: "patch.yml" } }), false);
+check("dsh 无 bundle → 非 bundle",
+  isBundlePackage({ dsh: { client: {} } }), false);
+check("无 dsh → 非 bundle",
+  isBundlePackage({ name: "x" }), false);
+check("null/非对象 → 非 bundle",
+  isBundlePackage(null), false);
 
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail === 0 ? 0 : 1);

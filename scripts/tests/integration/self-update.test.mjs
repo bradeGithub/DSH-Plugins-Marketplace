@@ -96,7 +96,7 @@ globalThis.fetch = origFetch;
 // 一并固定 #157：POST 更新成功后必须闭合 selfUpdateState（updateAvailable=false）——
 // 否则 GET /self-update 返回旧 state，客户端刷新后「更新提示」复活。
 // 断言形式：成功分支紧跟 `selfUpdateState = {` 且块内含 updateAvailable: false
-// （区别于 checkSelfUpdate 内部依赖 compareVersions 的赋值——那里更新后仍可能为 true）。
+// （区别于 checkSelfUpdate 内部依赖 shouldUpdate 的赋值——那里更新后仍可能为 true）。
 {
   const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
   const src = readFileSync(join(ROOT, "lib", "index.js"), "utf8").replace(/\r\n/g, "\n");
@@ -113,6 +113,13 @@ globalThis.fetch = origFetch;
   const postBody = src.match(/if \(result\.status === "no-update"\) \{[\s\S]*?installRunning = null;/)?.[0] ?? "";
   check("self-update POST 成功分支重置 selfUpdateState", /selfUpdateState = \{[\s\S]*?updateAvailable: false/m.test(postBody), true);
   check("self-update POST 成功分支用新版本号（非旧 installedVersion）", /installedVersion: result\.installedVersion/m.test(postBody), true);
+  // mutation findings m01/m02：updateAvailable 语义拼接必须经 shouldUpdate 纯函数（<0 判定锁定），
+  // 不得回退为裸 compareVersions(...) < 0 字面拼三处（直连 + registry 回退）导致语义漂移。
+  const checkBody = src.match(/async function checkSelfUpdate\(\) \{[\s\S]*?\n\}/)?.[0] ?? "";
+  check("checkSelfUpdate updateAvailable 用 shouldUpdate（非裸 compareVersions）",
+    (checkBody.match(/updateAvailable: shouldUpdate\(/g) ?? []).length >= 2, true);
+  check("checkSelfUpdate 无裸 compareVersions 留给 updateAvailable",
+    !/updateAvailable: Boolean\([^)]*compareVersions\(/.test(checkBody), true);
 }
 
 rmSync(home, { recursive: true, force: true });
