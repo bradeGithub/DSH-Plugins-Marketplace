@@ -1,27 +1,27 @@
 {
-  "generated_at": "2026-08-22T10:45:32.079Z",
+  "generated_at": "2026-08-22T13:02:43.535Z",
   "count": 3,
   "items": [
     {
-      "full_name": "Wenaixi/dsh-ponytail",
-      "previous": "tool",
-      "current": "other",
-      "desc_now": "DSH 完整移植版 DietrichGebert/ponytail — 懒惰 senior 模式，hook注入",
-      "desc_prev": "DSH 完整移植版 DietrichGebert/ponytail — 懒惰 senior 模式，6 个中文 Skill，无空 tool"
+      "full_name": "godchen520/dsh-web-remote",
+      "previous": "web-ui",
+      "current": "notify",
+      "desc_now": "DSH 手机/外网远程访问插件：免配置公网隧道 + 局域网 HTTPS 直连 + 自定义公网链接/端口 + 微信机器人",
+      "desc_prev": "DSH 手机/外网远程访问插件：Cloudflare Quick Tunnel 公网隧道 + token 鉴权 + gzip 压缩 + 局域网 HTTPS 直连 + 手机图标面板 + QQ 机器人取链接"
     },
     {
-      "full_name": "Wenaixi/dsh-superpower",
-      "previous": "tool",
-      "current": "agent",
-      "desc_now": "DSH port of obra/superpowers — 完整移植、中文化、DSH 原生",
-      "desc_prev": "DSH port of obra/superpowers — 14 技能完整移植、中文化、DSH 原生 SkillProvider (sync v6.3.0)"
-    },
-    {
-      "full_name": "zhangz-2018/dsh-project-orchestrator",
-      "previous": "agent",
+      "full_name": "edusrez/dsh-smart-restart",
+      "previous": "conversation",
       "current": "tool",
-      "desc_now": "Local-first AI project orchestration workbench and CLI plugin for DeepSeek Harness: approval-gated planning, Git worktrees, task execution, Issues, and auditable evidence.",
-      "desc_prev": "DeepSeek Harness 持久化、审批驱动的项目编排工作台"
+      "desc_now": "Wake the main agent after a DeepSeek Harness (DSH) restart so interrupted work resumes without the user prompting.",
+      "desc_prev": "Wake the main agent after a DeepSeek Harness (DSH) restart so interrupted work resumes without the user prompting."
+    },
+    {
+      "full_name": "DIAG5/dsh-better-input",
+      "previous": "document",
+      "current": "tool",
+      "desc_now": "BetterInput是一套输入增强套件：从语音识别、AI 润色、提示词优化，到把各类文件转成结构清晰的Md，再到交互体验优化等——把每一种喂给智能体的输入都变得更好。BetterInput is an input-enhancement suite for DSH: voice recognition, AI polishing, prompt optimization, turning files into structured Markdown, and UX refinements — making every input you feed an agent better.",
+      "desc_prev": "Better input experience for DeepSeek Harness : voice input, AI prompt polishing, PDF & image input.DeepSeek Harness输入体验增强：语音输入、AI提示词润色、PDF转md、图片输入。"
     }
   ]
 }
