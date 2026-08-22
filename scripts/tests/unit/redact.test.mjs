@@ -4,7 +4,7 @@
 //   误报面——标识符/停用词/包名不得掩码（掩码过度 = 维护者无法诊断）
 //   注入面——CR/LF 与 markdown 围栏必须净化（附 issue 特有攻击面）
 
-import { redactLog, shannonEntropy, neutralizeMarkdownFences } from "../../../lib/redact.js";
+import { redactLog, shannonEntropy, neutralizeMarkdownFences, findSecrets } from "../../../lib/redact.js";
 
 let pass = 0, fail = 0;
 function check(name, actual, expected) {
@@ -100,6 +100,11 @@ keep("纯小写标识符", "secret: error-module-not-found", "error-module-not-f
 keep("短值(<8)", "pwd: abc", "pwd: abc");
 keep("正常日志", "pnpm install completed with 0 errors", "pnpm install completed");
 
+// ---- 泄漏面：弱凭据（DeepSec L1 ai_pattern_default_password 同族，值级检测）----
+noLeak("弱凭据 12345678", "PWD=12345678", "12345678");
+noLeak("弱凭据 admin123", "password: admin123", "admin123");
+keep("文档示例 changeme 不掩", "password: changeme", "changeme");
+
 // ---- 注入面 ----
 keep("CR/LF 净化", "line1\r\nline2\rline3", "line1\nline2\nline3");
 check("markdown 围栏净化", neutralizeMarkdownFences("```sh\ncode\n```"), "'''sh\ncode\n'''");
@@ -132,6 +137,24 @@ keep("纯英文长词不掩", "error message authenticationfailedtoken", "authen
   check("真实场景无密钥", out.includes("sk-live-abc123def456ghi789jkl"), false);
   check("真实场景保留错误上下文", out.includes("pnpm failed in profile directory"), true);
   check("真实场景保留 clone 错误", out.includes("Command failed: git clone"), true);
+}
+
+// ---- findSecrets：安装前 secrets 扫描（复用规则面，返回结构化命中）----
+{
+  const src = [
+    "// config",
+    "const key = \"sk-abc123def456ghi789jkl012mno345pqr678\";",
+    "const url = \"https://github.com/owner/repo\";",
+    "password: Tr0ub4dor&3XYZ",
+  ].join("\n");
+  const hits = findSecrets(src);
+  check("findSecrets 已知密钥命中", hits.some((h) => h.kind === "secret-key" && h.line === 2), true);
+  check("findSecrets 上下文邻近命中", hits.some((h) => h.kind === "context" && h.line === 4), true);
+  check("findSecrets 不误报 URL", hits.every((h) => !h.text.includes("github.com/owner/repo")), true);
+  check("findSecrets 命中行含原文", hits[0].text.includes("sk-abc123"), true);
+  check("findSecrets maxHits 截断", findSecrets("token: aBcDeFgH0123\n".repeat(20), { maxHits: 3 }).length, 3);
+  check("findSecrets 空输入", findSecrets("").length, 0);
+  check("findSecrets 纯文档不误报", findSecrets("# README\ninstall via dsh plugin add owner/repo\n").length, 0);
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);

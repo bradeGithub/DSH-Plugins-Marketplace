@@ -110,6 +110,10 @@ process.exit(fail === 0 ? 0 : 1);
 **新增密钥规则**：`lib/redact.js` KNOWN_KEY_RULES 加正则 + redact.test.mjs 加对应 noLeak 断言（成对维护）。
 性质测试的 sanitizeLog 不变式（路径残留/密钥残留/标记存在）是 fuzz 层兜底——粘连形态（多路径分隔符拼接）由它守护。
 
+**findSecrets（安装前扫描复用面）**：同文件导出的结构化扫描（返回 `{line, kind, text}`），测试断言已知密钥/邻近命中行号、URL 不误报、maxHits 截断；集成层 `scanCacheSecrets` 断言目录遍历（node_modules 跳过/.env 基名命中/相对路径形态）、e2e 断言弹窗链路（值已脱敏 + continue/cancel 两分支）。
+
+**依赖 CVE 扫描（scanCacheVulnerabilities）**：`readVulnScanDeps` 纯函数断言扫描面（dependencies+optional，dev 不进）与版本解析（lockfile 精确优先/剥 ^~ 取下界）；集成层 mock fetch 断言 bulk API 命中（只收 critical/high）、moderate 不弹、网络失败与 API 非 200 静默降级、file: 协议读子包版本；e2e mock bulk URL 断言弹窗详情与 continue/cancel 双分支。
+
 ## 5. 端到端（e2e）策略
 
 e2e 用**本地 fixture 替代真实网络**，保证 CI 可复现：

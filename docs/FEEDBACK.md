@@ -84,10 +84,14 @@
 1. **注入净化**：CR/LF 统一、控制字符剔除、markdown 围栏 ``` → ''' （防击穿 details 折叠块）
 2. **已知密钥掩码**：云厂商（AWS 含临时凭证 ASIA 系、阿里云 LTAI、腾讯云 AKID、百度 bce-auth-v1）、sk 系（OpenAI/Anthropic）、GitHub（ghp_/PAT）、GitLab、Slack、npm、HuggingFace、Google（AIza/GOCSPX-）、LLM 聚合商（Groq/xAI/Perplexity/Fireworks/Cerebras，前缀取 secret-scanner 社区共识——官方不披露格式）、Cloudflare（cfut_/cfat_/cfk_）、Vercel（vcp_ 系）、Stripe（含 sk_org_）、Telegram bot、Discord bot 三段式、JWT 三段式、PEM 私钥块、DB 连接串（user:pass@）、Slack/Discord webhook、Bearer/Basic 头
 3. **用户路径**：`C:\Users\<name>\...` → `~\<user>\...`（保留深层结构，只隐藏用户名段）
-4. **上下文邻近**：`password:/token=/api_key=` 等关键词 + 分隔符 + 值 → 掩码（宽松策略：公开渠道默认拒绝，误掩码代价低漏报代价高）
+4. **上下文邻近**：`password:/token=/api_key=` 等关键词 + 分隔符 + 值 → 掩码（宽松策略：公开渠道默认拒绝，误掩码代价低漏报代价高）；**弱凭据值级检测**（admin/12345678/admin123 等 8+ 位默认密码，DeepSec L1 ai_pattern_default_password 同族）不因「纯小写无数字」放行
 5. **allowlist 压误报**：~30 停用词（example/placeholder/changeme…）+ 纯小写标识符（`error-module-not-found` 是包名不是密钥）不掩码
 
 掩码形态：`[AWS-REDACTED]` / `[JWT-REDACTED]` / `[REDACTED]`（上下文邻近）。
+
+## 安装前 secrets 扫描（同规则面的第二用途）
+
+`findSecrets`（`lib/redact.js` 导出）复用「已知密钥 + 上下文邻近」两个低误报面（不含路径/Bearer/熵兜底——源码里误报率高），供 `scanCacheSecrets`（`lib/index.js`）在安装确认前遍历克隆缓存扫描硬编码凭据：只扫文本型扩展名与 `.env*` 基名文件，跳过 node_modules/.git/dist/build/vendor，文件数 200 / 单文件 512KB 上限。命中即在 `__confirm_secrets__` 弹窗亮出文件、行号与类别（**值经 redactLog 掩码展示**，弹窗文本永不携带密钥原文），用户可继续（示例/占位符）或取消（清缓存中止）。
 
 ## 隐私边界
 
