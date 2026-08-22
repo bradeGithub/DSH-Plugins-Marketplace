@@ -1,12 +1,19 @@
 {
-  "generated_at": "2026-08-22T16:48:30.311Z",
-  "count": 1,
+  "generated_at": "2026-08-22T18:53:12.843Z",
+  "count": 2,
   "items": [
     {
-      "full_name": "Clarklevis1995/dsh-mobile",
+      "full_name": "hyperion2144/dsh-desktop-tauriapp",
       "previous": "other",
-      "current": "web-ui",
-      "desc_now": "DeepSeek Harness Mobile 是一个面向 DeepSeek Harness 的原生 iOS 客户端。它通过 dsh-plugin-mobile-gateway 与 Harness 建立 WebSocket 连接，将工作区、会话、实时回复和 Agent 执行轨迹带到 iPhone，同时延续 DeepSeek WebUI 克制、清晰的视觉语言",
+      "current": "coding",
+      "desc_now": "Tauri 2 desktop shell wrapping the DeepSeek Harness Web GUI (macOS + Windows) — tray daemon, auto-launch/reuse of local dsh, --patch plugin injection, mobile access via LAN/tunnel pairing with cloudflared one-click tunnel.",
+      "desc_prev": null
+    },
+    {
+      "full_name": "red000000/dsh-cross-session-bridge",
+      "previous": "other",
+      "current": "conversation",
+      "desc_now": "适用于deepseek harness的根会话桥插件，可令根会话间双向通信",
       "desc_prev": null
     }
   ]
