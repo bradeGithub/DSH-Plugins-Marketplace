@@ -1,34 +1,34 @@
 {
-  "generated_at": "2026-08-22T01:41:27.947Z",
+  "generated_at": "2026-08-22T03:13:07.378Z",
   "count": 4,
   "items": [
     {
-      "full_name": "Airmetro/dsh-update-checker",
-      "previous": "web-ui",
-      "current": "resource",
-      "desc_now": "DeepSeek Harness 主程序与插件更新管理：npm/GitHub 双源 semver 比对、多语言横幅、一键更新（主程序自动备份/校验/回滚，插件临时目录安装）、更新后看门狗重启。Update management for DeepSeek Harness and its plugins: dual-source semver checks, locale banner, one-click updates with backup/rollback, watchdog restart.",
-      "desc_prev": "全栈更新管理：对 DeepSeek Harness 主程序与每个已装第三方插件做 npm/GitHub 双源 semver 比对，GUI 横幅随系统语言（中/英）提示可更新插件；一键更新主程序或任意插件，自动备份可回滚，更新后看门狗自动重启服务。Whole-stack update management for DeepSeek Harness: dual-source semver checks of the main program and every third-party plugin, a locale-aware banner, one-click updates with backup/rollback and watchdog-guarded restart."
-    },
-    {
-      "full_name": "kinoward/dsh-plugin-subhub",
-      "previous": "conversation",
-      "current": "tool",
-      "desc_now": "Bring third-party subscription accounts into DeepSeek Harness - 为 DeepSeek Harness 接入第三方订阅账户(当前支持 OpenAI / ChatGPT、xAI (Grok)、GitHub Copilot,全部通过浏览器授权登录)",
-      "desc_prev": "Bring third-party subscription accounts into DeepSeek Harness - 为 DeepSeek Harness 接入第三方订阅账户(当前支持 OpenAI / ChatGPT 订阅,更多订阅服务规划中)"
-    },
-    {
-      "full_name": "TYEclipse/dsh-webfetch",
-      "previous": "other",
-      "current": "resource",
-      "desc_now": "Web page reader for DeepSeek Harness (dsh): fetch any URL as clean Markdown/plain text, inventory links, read RSS/Atom feeds — zero runtime dependencies, built-in http proxy support",
-      "desc_prev": "Web page reader for DeepSeek Harness (dsh): fetch any URL and extract clean Markdown / plain text plus a link inventory - zero runtime dependencies, read-only"
-    },
-    {
-      "full_name": "FloatingLifeTL/dsh-plugin-session-manager-custom",
+      "full_name": "fyjgtddco/DSH-SW-and-CAD",
       "previous": "tool",
-      "current": "other",
-      "desc_now": "DeepSeek Harness Web plugin for local session data management",
-      "desc_prev": "Persistent custom session data manager for the DSH web profile"
+      "current": "web-ui",
+      "desc_now": "专为SW和CAD设计的插件！内置DeepSeek Harness“工程模式”，让DeepSeek Harness以“完成工图”作为第一目标，避免分心，此插件还可以以SW一键转化为CAD图纸，无需任何操作",
+      "desc_prev": "（目前只是测试！用不了，先不要用！实在不行也可以帮我修bug）这个是DeepSeek Harness一键式导入工程模式，然后可以让DeepSeek Harness直接将“完成工图”作为第一目标，你可以选择让AI帮你直接作图，在完成复杂的工艺流程图的时候，可以完全按照AI的想法去做或者自己下命令"
+    },
+    {
+      "full_name": "guannan1031/dsh-commerce-cockpit",
+      "previous": "other",
+      "current": "document",
+      "desc_now": "电商经营驾驶舱 · Ecommerce Business Cockpit — DeepSeek Harness 演示插件。演示界面与数据校验层开源；客户数据映射、指标口径与诊断服务私有。",
+      "desc_prev": "电商经营驾驶舱 · Ecommerce Business Cockpit — DeepSeek Harness plugin (demo/landing, source private)"
+    },
+    {
+      "full_name": "Mr-Neutr0n/dsh-medseek",
+      "previous": "tool",
+      "current": "memory",
+      "desc_now": "Clinical tools for DeepSeek Harness: handover and discharge drafts, de-identification, completeness checks, and cited lookups. Draft-only, not a medical device.",
+      "desc_prev": "Clinical tools for DeepSeek Harness: handover and discharge drafts, de-identification, completeness checks, and cited lookups. Draft-only, not a medical device."
+    },
+    {
+      "full_name": "siweimofang/dsh-plugin-zhishe-baojia-shenhe",
+      "previous": "other",
+      "current": "vision",
+      "desc_now": "知设装修报价审核DSH插件 - 支持视觉OCR截图输入",
+      "desc_prev": null
     }
   ]
 }
