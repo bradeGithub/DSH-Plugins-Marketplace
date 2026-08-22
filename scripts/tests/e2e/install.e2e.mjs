@@ -634,6 +634,33 @@ function setupUrlRewrite(owner, repoName) {
     check("e2e 恶意 lifecycle 拒绝 aborted", r.body && r.body.status, "aborted");
     check("e2e 恶意 lifecycle 拒绝后缓存已清理", existsSync(join(HOME, "marketplace", "cache", "e2e-owner__demo-plugin-evil-scripts")), false);
 
+    // 安装前 secrets 扫描：源码含硬编码密钥 → 弹窗亮出（值脱敏）→ continue 放行
+    const skP = (...p) => ["sk-", ...p].join("");
+    setupUrlRewrite(owner, "demo-plugin-leaked-key");
+    makeFixtureRepo("demo-plugin-leaked-key", {
+      "package.json": JSON.stringify({ name: "demo-plugin-leaked-key", version: "1.0.0", dsh: { version: "1.0.0" }, main: "index.js" }),
+      "index.js": `module.exports = { apiKey: "${skP("AbCd1234EfGh5678IjKl90Mn")}" };\n`,
+    });
+    r = await postInstall("e2e-owner/demo-plugin-leaked-key", {});
+    check("e2e secrets 弹窗 awaiting-input", r.body && r.body.status, "awaiting-input");
+    check("e2e secrets 弹窗问题 id", r.body && r.body.questions && r.body.questions[0] && r.body.questions[0].id, "__confirm_secrets__");
+    const secretQ = r.body && r.body.questions && r.body.questions[0] || {};
+    check("e2e secrets 弹窗含文件与行号", /index\.js#L1/.test(secretQ.question || ""), true);
+    // 值必须已脱敏：弹窗文本不含密钥原文
+    check("e2e secrets 弹窗值已脱敏", (secretQ.question || "").includes(skP("AbCd1234EfGh5678IjKl90Mn")), false);
+    check("e2e secrets 弹窗含掩码标记", (secretQ.question || "").includes("[SECRET-KEY-REDACTED]"), true);
+    r = await postInstall("e2e-owner/demo-plugin-leaked-key", { __confirm_secrets__: "continue" });
+    check("e2e secrets 放行后安装完成", r.body && ["done", "installed"].includes(r.body.status), true);
+    // 取消路径：命中后 cancel → aborted 且缓存清理
+    setupUrlRewrite(owner, "demo-plugin-leaked-key2");
+    makeFixtureRepo("demo-plugin-leaked-key2", {
+      "package.json": JSON.stringify({ name: "demo-plugin-leaked-key2", version: "1.0.0", dsh: { version: "1.0.0" }, main: "index.js" }),
+      "index.js": `module.exports = { apiKey: "${skP("ZxYw9876VuTs5432RqPo12Mn")}" };\n`,
+    });
+    r = await postInstall("e2e-owner/demo-plugin-leaked-key2", { __confirm_secrets__: "cancel" });
+    check("e2e secrets 取消 aborted", r.body && r.body.status, "aborted");
+    check("e2e secrets 取消后缓存已清理", existsSync(join(HOME, "marketplace", "cache", "e2e-owner__demo-plugin-leaked-key2")), false);
+
     // ---- 源码型插件构建路径：__confirm_build__=allow → buildPluginPackage ----
     // npm 分支（无 pnpm-lock.yaml）：真实 runNpm install（离线）+ run build 产出入口。
     setupUrlRewrite(owner, "demo-build");

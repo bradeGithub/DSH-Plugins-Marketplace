@@ -89,6 +89,10 @@
 
 掩码形态：`[AWS-REDACTED]` / `[JWT-REDACTED]` / `[REDACTED]`（上下文邻近）。
 
+## 安装前 secrets 扫描（同规则面的第二用途）
+
+`findSecrets`（`lib/redact.js` 导出）复用「已知密钥 + 上下文邻近」两个低误报面（不含路径/Bearer/熵兜底——源码里误报率高），供 `scanCacheSecrets`（`lib/index.js`）在安装确认前遍历克隆缓存扫描硬编码凭据：只扫文本型扩展名与 `.env*` 基名文件，跳过 node_modules/.git/dist/build/vendor，文件数 200 / 单文件 512KB 上限。命中即在 `__confirm_secrets__` 弹窗亮出文件、行号与类别（**值经 redactLog 掩码展示**，弹窗文本永不携带密钥原文），用户可继续（示例/占位符）或取消（清缓存中止）。
+
 ## 隐私边界
 
 **收集**：插件元数据、安装方式、环境版本号（platform/Node/DSH/pnpm/git）、脱敏后的安装日志尾部。

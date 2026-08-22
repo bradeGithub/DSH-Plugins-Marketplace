@@ -1451,6 +1451,34 @@ function mockFetchCapture(payload, status = 200) {
   mkdirSync(join(lcDir, "scripts"), { recursive: true });
   writeFileSync(join(lcDir, "scripts", "build.js"), "console.log('build ok');\n", "utf8");
   check("lifecycle 干净脚本无命中", (await lib.scanLifecycleHazards(lcDir)).length, 0);
+
+  // 安装前 secrets 扫描（scanCacheSecrets：目录遍历 + 扩展名过滤 + 上限）
+  const secDir = join(process.env.DSH_HOME, "secrets-fixtures");
+  // token fixture 拼接构造：避免源码出现完整密钥字面量（平台 secret scanning push protection）
+  const secP = (...p) => ["sk-", ...p].join("");
+  mkdirSync(join(secDir, "lib"), { recursive: true });
+  mkdirSync(join(secDir, "node_modules", "dep"), { recursive: true });
+  writeFileSync(join(secDir, "config.js"), `module.exports = { apiKey: "${secP("AbCd1234EfGh5678IjKl90Mn")}" };\n`, "utf8");
+  writeFileSync(join(secDir, "lib", "settings.json"), JSON.stringify({ password: "Tr0ub4dor&3XYZ" }), "utf8");
+  // node_modules 内的命中必须被跳过（依赖目录不算插件源码泄露）
+  writeFileSync(join(secDir, "node_modules", "dep", "index.js"), `const k = "${secP("ZxYw9876VuTs5432RqPo12Mn")}";\n`, "utf8");
+  const secHits = await lib.scanCacheSecrets(secDir);
+  check("secrets 已知密钥结构命中", secHits.some((h) => h.kind === "secret-key" && h.file === "config.js" && h.line === 1), true);
+  check("secrets 关键词邻近命中", secHits.some((h) => h.kind === "context" && h.file === "lib/settings.json"), true);
+  check("secrets 跳过 node_modules", secHits.every((h) => !h.file.includes("node_modules")), true);
+  check("secrets 相对路径正斜杠", secHits.every((h) => !h.file.includes("\\")), true);
+  // .env 文件（无扩展名形态）也要扫到
+  writeFileSync(join(secDir, ".env.local"), "API_KEY=ghp_abcdefghijklmnopqrstuvwxyz0123456789\n", "utf8");
+  const secHits2 = await lib.scanCacheSecrets(secDir);
+  check("secrets .env 基名文件命中", secHits2.some((h) => h.file === ".env.local" && h.kind === "github"), true);
+  // 干净仓库无命中
+  const secClean = join(secDir, "clean");
+  mkdirSync(secClean, { recursive: true });
+  writeFileSync(join(secClean, "index.js"), "console.log('hello world');\n", "utf8");
+  check("secrets 干净仓库无命中", (await lib.scanCacheSecrets(secClean)).length, 0);
+  // 不存在的目录返回空
+  check("secrets 目录缺失返回空", (await lib.scanCacheSecrets(join(secDir, "nope"))).length, 0);
+
   // 9. CLI 指令 npm 等价回退纯函数（issue #54 archify 教训）
   check("isNpmCliTarget scope 包带版本", lib.isNpmCliTarget("@tt-a1i/archify-dsh@0.1.0"), true);
   check("isNpmCliTarget 裸包名", lib.isNpmCliTarget("dsh-web-ui-all"), true);
