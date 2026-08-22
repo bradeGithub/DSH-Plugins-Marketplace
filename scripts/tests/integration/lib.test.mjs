@@ -1479,6 +1479,98 @@ function mockFetchCapture(payload, status = 200) {
   // 不存在的目录返回空
   check("secrets 目录缺失返回空", (await lib.scanCacheSecrets(join(secDir, "nope"))).length, 0);
 
+  // 安装前依赖 CVE 扫描（readVulnScanDeps 纯函数 + scanCacheVulnerabilities mock API）
+  const vulnPkg = {
+    name: "vuln-fixture", version: "1.0.0",
+    dependencies: { lodash: "^4.17.15", express: "4.18.2" },
+    optionalDependencies: { fsevents: "^2.3.2" },
+    devDependencies: { "dev-only-pkg": "^1.0.0" },
+  };
+  const vulnDeps = lib.readVulnScanDeps(vulnPkg, new Map([["lodash", "4.17.15"]]));
+  check("cve deps 含 dependencies+optional", vulnDeps.map((d) => d.name).sort(), ["express", "fsevents", "lodash"]);
+  check("cve lockfile 精确版本优先", vulnDeps.find((d) => d.name === "lodash").version, "4.17.15");
+  check("cve 无锁文件剥 ^ 取下界", vulnDeps.find((d) => d.name === "fsevents").version, "2.3.2");
+  check("cve devDependencies 不进扫描面", vulnDeps.some((d) => d.name === "dev-only-pkg"), false);
+  const cveDir = join(process.env.DSH_HOME, "cve-fixtures");
+  mkdirSync(cveDir, { recursive: true });
+  writeFileSync(join(cveDir, "package.json"), JSON.stringify(vulnPkg), "utf8");
+  // mock：lodash@4.17.15 命中 critical/high，express/fsevents 干净
+  const origVulnFetch = globalThis.fetch;
+  globalThis.fetch = async (url, opts) => {
+    if (!String(url).includes("/security/advisories/bulk")) return { ok: false, status: 404 };
+    const req = JSON.parse(String(opts.body));
+    const payload = {};
+    if (req.lodash?.[0] === "4.17.15") {
+      payload.lodash = [{
+        severity: "critical", title: "Prototype Pollution in lodash",
+        vulnerable_versions: ">=4.0.0 <4.17.21", url: "https://github.com/advisories/GHSA-test"
+      }];
+    }
+    return {
+      ok: true, status: 200,
+      json: async () => payload,
+      text: async () => JSON.stringify(payload),
+      arrayBuffer: async () => Buffer.from(JSON.stringify(payload)),
+    };
+  };
+  try {
+    const vulnHits = await lib.scanCacheVulnerabilities(cveDir);
+    check("cve bulk API critical/high 命中", vulnHits.length, 1);
+    check("cve 命中字段完整", [vulnHits[0].name, vulnHits[0].severity, vulnHits[0].title.includes("Prototype Pollution")],
+      ["lodash", "critical", true]);
+    // moderate/low 不弹（只收 critical/high）
+    globalThis.fetch = async (url, opts) => {
+      if (!String(url).includes("/security/advisories/bulk")) return { ok: false, status: 404 };
+      const req = JSON.parse(String(opts.body));
+      const payload = req.lodash ? { lodash: [{ severity: "moderate", title: "ReDoS", vulnerable_versions: "<4.17.21", url: "" }] } : {};
+      return {
+        ok: true, status: 200,
+        json: async () => payload,
+        text: async () => JSON.stringify(payload),
+        arrayBuffer: async () => Buffer.from(JSON.stringify(payload)),
+      };
+    };
+    const vulnModerate = await lib.scanCacheVulnerabilities(cveDir);
+    check("cve moderate/low 不命中弹窗面", vulnModerate.length, 0);
+    // 网络失败静默降级（不阻断安装）
+    globalThis.fetch = async () => { throw new Error("network down"); };
+    check("cve 网络失败静默降级", (await lib.scanCacheVulnerabilities(cveDir)).length, 0);
+    // API 非 200 同样降级
+    globalThis.fetch = async () => ({ ok: false, status: 503 });
+    check("cve API 非 200 静默降级", (await lib.scanCacheVulnerabilities(cveDir)).length, 0);
+  } finally {
+    globalThis.fetch = origVulnFetch;
+  }
+  // package.json 缺失返回空
+  check("cve package.json 缺失返回空", (await lib.scanCacheVulnerabilities(join(secDir, "clean"))).length, 0);
+  // file: 协议依赖从目标分包 package.json 取版本
+  const cveFileDir = join(process.env.DSH_HOME, "cve-file-fixture");
+  mkdirSync(join(cveFileDir, "packages", "local-a"), { recursive: true });
+  writeFileSync(join(cveFileDir, "package.json"), JSON.stringify({
+    name: "vuln-file", version: "1.0.0",
+    dependencies: { "local-a": "file:packages/local-a" },
+  }), "utf8");
+  writeFileSync(join(cveFileDir, "packages", "local-a", "package.json"),
+    JSON.stringify({ name: "local-a", version: "2.0.3" }), "utf8");
+  globalThis.fetch = async (url, opts) => {
+    if (!String(url).includes("/security/advisories/bulk")) return { ok: false, status: 404 };
+    const req = JSON.parse(String(opts.body));
+    const payload = req["local-a"]?.[0] === "2.0.3" ? { "local-a": [{ severity: "high", title: "XSS", vulnerable_versions: "<2.1.0", url: "" }] } : {};
+    return {
+      ok: true, status: 200,
+      json: async () => payload,
+      text: async () => JSON.stringify(payload),
+      arrayBuffer: async () => Buffer.from(JSON.stringify(payload)),
+    };
+  };
+  try {
+    const fileHits = await lib.scanCacheVulnerabilities(cveFileDir);
+    check("cve file: 协议依赖读子包版本命中", fileHits.length, 1);
+    check("cve file: 命中版本正确", [fileHits[0].name, fileHits[0].version], ["local-a", "2.0.3"]);
+  } finally {
+    globalThis.fetch = origVulnFetch;
+  }
+
   // 9. CLI 指令 npm 等价回退纯函数（issue #54 archify 教训）
   check("isNpmCliTarget scope 包带版本", lib.isNpmCliTarget("@tt-a1i/archify-dsh@0.1.0"), true);
   check("isNpmCliTarget 裸包名", lib.isNpmCliTarget("dsh-web-ui-all"), true);

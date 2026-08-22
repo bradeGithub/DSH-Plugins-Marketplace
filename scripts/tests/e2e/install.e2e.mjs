@@ -661,6 +661,62 @@ function setupUrlRewrite(owner, repoName) {
     check("e2e secrets 取消 aborted", r.body && r.body.status, "aborted");
     check("e2e secrets 取消后缓存已清理", existsSync(join(HOME, "marketplace", "cache", "e2e-owner__demo-plugin-leaked-key2")), false);
 
+    // 依赖 CVE 扫描：mock bulk advisories API 命中 critical → 弹窗亮漏洞详情 → continue 放行
+    // 依赖用本地 file: 包（e2e npm 走离线缓存，registry 包不可装）
+    const origE2eFetch = globalThis.fetch;
+    setupUrlRewrite(owner, "demo-plugin-vuln-deps");
+    makeFixtureRepo("demo-plugin-vuln-deps", {
+      "package.json": JSON.stringify({
+        name: "demo-plugin-vuln-deps", version: "1.0.0", dsh: { version: "1.0.0" }, main: "index.js",
+        dependencies: { "vuln-dep": "file:packages/vuln-dep" },
+      }),
+      "packages/vuln-dep/package.json": JSON.stringify({ name: "vuln-dep", version: "1.0.0" }),
+      "index.js": "module.exports = {}\n",
+    });
+    globalThis.fetch = async (url, opts) => {
+      if (String(url).includes("/security/advisories/bulk")) {
+        const req = JSON.parse(String(opts?.body ?? "{}"));
+        const payload = req["vuln-dep"] ? {
+          "vuln-dep": [{
+            severity: "critical", title: "Prototype Pollution in vuln-dep",
+            vulnerable_versions: "<=1.0.0", url: "https://github.com/advisories/GHSA-e2e-test"
+          }]
+        } : {};
+        return {
+          ok: true, status: 200,
+          json: async () => payload,
+          text: async () => JSON.stringify(payload),
+          arrayBuffer: async () => Buffer.from(JSON.stringify(payload)),
+        };
+      }
+      return origE2eFetch(url, opts);
+    };
+    try {
+      r = await postInstall("e2e-owner/demo-plugin-vuln-deps", {});
+      check("e2e vulns 弹窗 awaiting-input", r.body && r.body.status, "awaiting-input");
+      check("e2e vulns 弹窗问题 id", r.body && r.body.questions && r.body.questions[0] && r.body.questions[0].id, "__confirm_vulns__");
+      const vulnQ = r.body && r.body.questions && r.body.questions[0] || {};
+      check("e2e vulns 弹窗含包名与 severity", (vulnQ.question || "").includes("[critical] vuln-dep"), true);
+      check("e2e vulns 弹窗含 advisory 链接", (vulnQ.question || "").includes("GHSA-e2e-test"), true);
+      r = await postInstall("e2e-owner/demo-plugin-vuln-deps", { __confirm_vulns__: "continue" });
+      check("e2e vulns 放行后安装完成", r.body && ["done", "installed"].includes(r.body.status), true);
+      // 取消路径
+      setupUrlRewrite(owner, "demo-plugin-vuln-deps2");
+      makeFixtureRepo("demo-plugin-vuln-deps2", {
+        "package.json": JSON.stringify({
+          name: "demo-plugin-vuln-deps2", version: "1.0.0", dsh: { version: "1.0.0" }, main: "index.js",
+          dependencies: { "vuln-dep2": "file:packages/vuln-dep2" },
+        }),
+        "packages/vuln-dep2/package.json": JSON.stringify({ name: "vuln-dep2", version: "1.0.0" }),
+        "index.js": "module.exports = {}\n",
+      });
+      r = await postInstall("e2e-owner/demo-plugin-vuln-deps2", { __confirm_vulns__: "cancel" });
+      check("e2e vulns 取消 aborted", r.body && r.body.status, "aborted");
+      check("e2e vulns 取消后缓存已清理", existsSync(join(HOME, "marketplace", "cache", "e2e-owner__demo-plugin-vuln-deps2")), false);
+    } finally {
+      globalThis.fetch = origE2eFetch;
+    }
+
     // ---- 源码型插件构建路径：__confirm_build__=allow → buildPluginPackage ----
     // npm 分支（无 pnpm-lock.yaml）：真实 runNpm install（离线）+ run build 产出入口。
     setupUrlRewrite(owner, "demo-build");
