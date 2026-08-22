@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-08-22T06:15:13.809Z",
+  "generated_at": "2026-08-22T07:14:59.516Z",
   "counts": {
-    "cordis-plugin": 7638,
-    "pkg-plain": 759,
-    "manual": 596,
+    "cordis-plugin": 7639,
+    "pkg-plain": 760,
+    "manual": 597,
     "script": 180,
-    "skill": 343,
-    "multi-plugin": 317,
+    "skill": 344,
+    "multi-plugin": 318,
+    "bundle-plugin": 148,
     "gone": 49,
-    "bundle-plugin": 129,
     "agent-preset": 37,
     "unknown": 55,
     "empty": 12
@@ -4265,6 +4265,14 @@
     {
       "full_name": "Casually/deepseek-harness-plugs-manage",
       "verdict": "cordis-plugin"
+    },
+    {
+      "full_name": "Casually/dsh-plug-mcp",
+      "verdict": "bundle-plugin"
+    },
+    {
+      "full_name": "Casually/dsh-plug-skills",
+      "verdict": "bundle-plugin"
     },
     {
       "full_name": "Casually/dsh-web-remote-frp",
@@ -14139,6 +14147,10 @@
       "verdict": "cordis-plugin"
     },
     {
+      "full_name": "KamChiHei/deepseek-usage-monitor",
+      "verdict": "bundle-plugin"
+    },
+    {
       "full_name": "kami-mura/dsh-cost",
       "verdict": "cordis-plugin"
     },
@@ -16717,6 +16729,10 @@
     {
       "full_name": "Lixxx1/dsh-vscode",
       "verdict": "pkg-plain"
+    },
+    {
+      "full_name": "liyu34/dsh-wsl-tray",
+      "verdict": "bundle-plugin"
     },
     {
       "full_name": "Liyuk/dsh-quota-router",
@@ -24763,6 +24779,10 @@
       "verdict": "manual"
     },
     {
+      "full_name": "SeerableOfficial/dsh-web-search-toggle",
+      "verdict": "bundle-plugin"
+    },
+    {
       "full_name": "SeireiA/dsh-plugin-rtk",
       "verdict": "pkg-plain"
     },
@@ -25740,6 +25760,10 @@
     },
     {
       "full_name": "skyzhao1223/dsh-plugin-scaffold",
+      "verdict": "cordis-plugin"
+    },
+    {
+      "full_name": "SKzrui/DSH-CLI",
       "verdict": "cordis-plugin"
     },
     {
@@ -36027,6 +36051,10 @@
       "verdict": "cordis-plugin"
     },
     {
+      "full_name": "Wodexinhaoleng-Kasssa/dsh-reader",
+      "verdict": "bundle-plugin"
+    },
+    {
       "full_name": "wodongx123/dsh-desktop-tray",
       "verdict": "cordis-plugin"
     },
@@ -40441,6 +40469,10 @@
     {
       "full_name": "zurrll/dsh-file-explorer",
       "verdict": "cordis-plugin"
+    },
+    {
+      "full_name": "ZutoMayoo/totoTheCat",
+      "verdict": "bundle-plugin"
     },
     {
       "full_name": "zuuky/dsh-omnifile",
