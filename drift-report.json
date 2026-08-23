@@ -1,0 +1,41 @@
+{
+  "generated_at": "2026-08-23T06:44:16.275Z",
+  "count": 5,
+  "items": [
+    {
+      "full_name": "zhu1090093659/dsh-web-ui",
+      "previous": "web-ui",
+      "current": "coding",
+      "desc_now": "DeepSeek Harness（DSH）Web GUI 插件与皮肤生态：一切皆插件。梁神模式、任务看板、移动端远程与 SSH 运维构筑开发工作台；皮肤经 WebGL 深度优化，更支持 Wallpaper Engine 壁纸；皮肤、宠物、插件由 DSH 大市场一键安装，正迈向 DSH 创意工坊。A pluggable plugin-skin ecosystem for the DSH Web GUI - LiangShen mode, task board, remote mobile UI, SSH ops, WebGL-optimized skins with Wallpaper Engine wallpapers - becoming a DSH creative workshop.",
+      "desc_prev": "Plugin and skin collection for DeepSeek Harness (DSH) Web UI - task board, git graph, right-side panel, remote mobile UI, pet, live token stats, and skin center."
+    },
+    {
+      "full_name": "Khorsheed/dsh-ankh-guard",
+      "previous": "agent",
+      "current": "coding",
+      "desc_now": "dsh 自托管运维守护：agent 改完代码先验证构建测试再重启，起不来自动回滚。镜像仓，与 Khorsheed/dsh-plugins 的 packages/ankh-guard 自动同步。",
+      "desc_prev": "防止 Agent 自我修改把服务改崩的守护插件（dsh 插件）：绿色构建凭证绑定 git HEAD，改坏不许重启；watchdog 无感重启 + canary 自动回滚"
+    },
+    {
+      "full_name": "Nono-neko/dsh-browser",
+      "previous": "coding",
+      "current": "web-ui",
+      "desc_now": "Cordis bundle plugin for DeepSeek Harness(DSH). Built‑in multi‑tab browser powered by Puppeteer, provides browser_open/browser_read agent tools & workspace file preview inside DSH Web GUI.",
+      "desc_prev": "Cordis bundle plugin for DeepSeek Harness(DSH). Built‑in multi‑tab browser powered by Puppeteer, provides browser_open/browser_read agent tools & workspace file preview inside DSH Web GUI."
+    },
+    {
+      "full_name": "ltxlong/dsh-session-kit",
+      "previous": "coding",
+      "current": "web-ui",
+      "desc_now": "为会话增加管理菜单、归档会话管理、轮次级删除、重新生成，以及右侧话题快捷导航。Add a management menu for conversations, archive conversation management, delete by round, regenerate, and a quick topic navigation on the right.",
+      "desc_prev": "A DeepSeek Harness plugin that adds practical session utilities without patching DSH core code. 一个 DeepSeek Harness 插件，用于增强会话页的日常管理能力。它不修改 DSH 核心源码，而是通过官方扩展点为会话增加管理菜单、归档会话管理、轮次级删除/重新生成，以及右侧话题快捷导航。"
+    },
+    {
+      "full_name": "deluo/dsh-usage-display",
+      "previous": "other",
+      "current": "coding",
+      "desc_now": "在 dsh（DeepSeek Harness）会话头部展示模型厂商余额/用量徽标的插件：内置 DeepSeek 余额、MiniMax Token Plan 与智谱 GLM Coding Plan 配额，适配器架构支持接入更多厂商；host 侧按轮次取数，经 SSE 同步到浏览器。",
+      "desc_prev": null
+    }
+  ]
+}
