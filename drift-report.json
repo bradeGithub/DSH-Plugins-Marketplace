@@ -1,34 +1,13 @@
 {
-  "generated_at": "2026-08-23T16:46:41.383Z",
-  "count": 4,
+  "generated_at": "2026-08-23T18:52:23.004Z",
+  "count": 1,
   "items": [
     {
-      "full_name": "Leon0555/dsh-lan-access",
-      "previous": "other",
+      "full_name": "zhouzhencheng07/dsh-kit",
+      "previous": "coding",
       "current": "tool",
-      "desc_now": "一个DSH局域网内访问插件：让 DeepSeek Harness 可在局域网内被其他设备访问的 DSH 插件。同一局域网下，手机/平板/电脑打开浏览器即可直接访问你某台设备上的 DSH——无需 SSH、无需内网穿透，npm 一键安装。",
-      "desc_prev": null
-    },
-    {
-      "full_name": "MistyBridge/dsh-agent-bus",
-      "previous": "agent",
-      "current": "conversation",
-      "desc_now": "Multi-agent orchestration for DeepSeek Harness: turn isolated sessions into a team that assigns work, reviews output, and runs DAG workflows — durable task ledger, real reviewers, crash-safe recovery.",
-      "desc_prev": "Multi-agent orchestration for DeepSeek Harness. Sessions in one workspace assign work, review results, and run DAG workflows — without you as the messenger."
-    },
-    {
-      "full_name": "maskshell/solidforge-dsh",
-      "previous": "conversation",
-      "current": "coding",
-      "desc_now": "让 DSH Coding 流程更具有确定性！以 DSH 预设与全局插件（任意会话皆可使用）两种形式交付。收敛 → 规范化 → 实现：并行 TDD 双环收敛门禁、对抗式跨源评审、对源逐条引用核查、先行技术碰撞检索——每道门控均提供诚实记录，绝不静默转绿",
-      "desc_prev": "面向 DeepSeek Harness 的收敛工程（Loop-Engineering）系统，以 DSH 预设与任意会话皆可使用的全局插件两种形式交付。收敛 → 规格化 → 实现：并行 TDD 双环收敛门禁、对抗式跨源评审、对源逐条引用核查、先行技术碰撞检索——每道门控均提供诚实记录，绝不静默转绿。"
-    },
-    {
-      "full_name": "bettermen/dsh-course-writer",
-      "previous": "web-ui",
-      "current": "vision",
-      "desc_now": "虾说教材写作 · dsh-course-writer — AI course-authoring workspace plugin for DeepSeek Harness (DSH). 三栏式工作台 · 九阶段门禁 · 课程/章节/资料库/知识图谱 · 导出 TXT/Word · 分享协作。Three-pane workspace, nine-phase gated workflow, lorebook, export & share.",
-      "desc_prev": "虾说教材写作 — AI 教材写作工作台（DeepSeek Harness 插件）：三栏式界面 + 九阶段门禁 + 课程/章节/资料库管理 + 导出 + 分享协作"
+      "desc_now": "Free keyless Tavily web search tool for DeepSeek Harness (dsh)",
+      "desc_prev": "DSH web 页面能力插件包：VSCode 风格页内终端（首个能力），零依赖零构建"
     }
   ]
 }
