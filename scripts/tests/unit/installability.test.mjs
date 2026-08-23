@@ -2,7 +2,7 @@
 // reactive-resume（skills/resume-builder/SKILL.md）/ OpenViking（bot/workspace/skills/*/SKILL.md）
 // 蹭 topic 案例曾因 SKILL_RE 命中任意路径 SKILL.md 被误判 skill 而漏过 non-plugin 徽章。
 import { verdictOf } from "../../verify-installability.mjs";
-import { isBundlePackage } from "../../build-registry.mjs";
+import { isBundlePackage, classifyEcoType } from "../../build-registry.mjs";
 
 let pass = 0, fail = 0;
 function check(name, actual, expected) {
@@ -90,6 +90,26 @@ check("无 dsh → 非 bundle",
   isBundlePackage({ name: "x" }), false);
 check("null/非对象 → 非 bundle",
   isBundlePackage(null), false);
+
+// ---- T3：classifyEcoType 生态件类型（eco_type 字段）----
+check("eco_type bundle：dsh.bundle.patch 非空",
+  classifyEcoType({ dsh: { bundle: { patch: "./cordis.patch.yml" } } }), "bundle");
+check("eco_type plugin：dsh 声明无 bundle",
+  classifyEcoType({ dsh: { client: { platform: "web" } } }), "plugin");
+check("eco_type null：无 dsh 声明",
+  classifyEcoType({ name: "x" }), null);
+check("eco_type null：非对象",
+  classifyEcoType(null), null);
+
+// ---- T1：desktop 形态判定（eco_type="desktop"，安装器/客户端/启动器）----
+check("desktop：名称命中 launcher 且无 dsh 声明",
+  classifyEcoType({ name: "x" }, { name: "dsh-launcher", description: "lightweight launcher" }), "desktop");
+check("desktop：描述命中 桌面客户端",
+  classifyEcoType({ name: "x" }, { name: "x", description: "DeepSeek Harness 桌面客户端" }), "desktop");
+check("desktop 不误伤：有 dsh 声明是插件",
+  classifyEcoType({ dsh: { client: {} } }, { name: "desktop-app", description: "desktop app" }), "plugin");
+check("desktop 不误伤：无关键词",
+  classifyEcoType({ name: "x" }, { name: "x", description: "AI gateway" }), null);
 
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail === 0 ? 0 : 1);

@@ -646,6 +646,29 @@ export function isBundlePackage(pkg) {
     && typeof pkg.dsh.bundle.patch === "string" && pkg.dsh.bundle.patch.length > 0);
 }
 
+/**
+ * 生态件类型判定（T3）：package.json 静态可判的形态标签，写 eco_type 字段。
+ * - bundle：dsh.bundle.patch 非空（与 isBundlePackage 同源，安装路径不同 → 用户可见区分）
+ * - desktop：安装器/桌面客户端/启动器形态（T1 调研发现 other 最大隐性簇）——
+ *   基于 name/description/topics 关键词判定（无 package.json 或 dsh 声明不强判）
+ * - plugin / null：普通 cordis 插件或未声明（皮肤/技能合集等根清单无声明时归 null，
+ *   由 has_skill 等 Trees 探测字段补充——T3b 待 dsh 模式探测接通后扩展）
+ * 返回 "bundle" | "desktop" | "plugin" | null；不可判 → null。
+ */
+const DESKTOP_HINTS = /launcher|desktop[- ]?(?:app|pet|tool)|便携|启动器|桌面(?:应用|宠物|端|客户端)|系统托盘|tray icon|wallpaper|壁纸/;
+
+export function classifyEcoType(pkg, repo = {}) {
+  if (!pkg || typeof pkg !== "object") return null;
+  if (isBundlePackage(pkg)) return "bundle";
+  // 桌面形态（安装器/客户端/启动器）：非插件生态件。无 dsh 声明时按名称/描述/主题判——
+  // 有 dsh 声明说明是插件（dsh 声明优先，防桌面客户端借 dsh 声明抢 bundle 形态）。
+  if (!pkg.dsh && DESKTOP_HINTS.test(String(repo.description ?? "") + " " + String(repo.name ?? ""))) {
+    return "desktop";
+  }
+  if (pkg.dsh && typeof pkg.dsh === "object") return "plugin";
+  return null;
+}
+
 /** DSH 生态 topics 白名单：含这些主题的仓库即使根清单无 dsh 声明也不盖
  *  「非 DSH 插件」（技能/预设/多包形态的根清单判定不适用，避免误伤）。 */
 const DSH_TOPIC_HINTS = new Set(["cordis-plugin", "cordis", "dsh-skill", "agent-skills", "dsh-preset", "agent-preset"]);
@@ -1329,6 +1352,11 @@ async function enrichPkgNames(repos, includeVersion = false) {
             // bundle 声明轻标记——三态写回（是 bundle → true，否 → 清除旧值）。
             // 只条件写 true 会导致仓库从 bundle 变普通插件后旧标记永久残留。
             if (isBundlePackage(pkg)) r.bundle = true; else delete r.bundle;
+            // T3：生态件类型（对外展示字段）。三态语义——bundle→"bundle"，
+            // 桌面形态（无 dsh 声明 + 名称/描述命中）→"desktop"；dsh 声明无 bundle→"plugin"；
+            // 不可判→null（清除旧值防残留）。
+            const eco = classifyEcoType(pkg, r);
+            if (eco === null) delete r.eco_type; else r.eco_type = eco;
           }
         }
       } catch { /* 网络失败：保持 null */ }
