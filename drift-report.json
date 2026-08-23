@@ -1,27 +1,34 @@
 {
-  "generated_at": "2026-08-23T13:03:27.274Z",
-  "count": 3,
+  "generated_at": "2026-08-23T14:43:33.309Z",
+  "count": 4,
   "items": [
     {
       "full_name": "EthanYoQ/AI-Novel-Writer",
-      "previous": "coding",
+      "previous": "memory",
+      "current": "other",
+      "desc_now": "AI 小说创作软件：把灵感、角色、世界观、大纲、章节写作、审稿和修稿组织成可控流程；提供 Windows/macOS 桌面版、Ollama 与 DSH 插件预览。",
+      "desc_prev": "开源、本地优先的 AI 小说创作工作台，提供 Windows/macOS 桌面版与 DeepSeek Harness（DSH）插件开发预览，支持长篇大纲、角色、章节蓝图、审稿修稿、知识库与 Ollama。"
+    },
+    {
+      "full_name": "Andiii208/dsh-ultramath",
+      "previous": "tool",
+      "current": "document",
+      "desc_now": "UltraMath 数学建模竞赛多 Agent 求解 DSH 插件: 5 角色预设 + 33 篇模型库 + 论文模板/审稿脚本随包 + 进度可视化",
+      "desc_prev": "UltraMath 数学建模竞赛多 Agent 求解 DSH 插件: 5 角色预设 + 33 篇模型库技能 + SKILL.md 主入口 (plugin_check pass)"
+    },
+    {
+      "full_name": "ZekaiShi/smart-subagent",
+      "previous": "agent",
       "current": "memory",
-      "desc_now": "开源、本地优先的 AI 小说创作工作台，提供 Windows/macOS 桌面版与 DeepSeek Harness（DSH）插件开发预览，支持长篇大纲、角色、章节蓝图、审稿修稿、知识库与 Ollama。",
-      "desc_prev": "本地优先 AI 小说创作工作台，提供 Windows/macOS 桌面版与 DeepSeek Harness 插件开发预览，支持角色、大纲、章节蓝图、审稿修稿和本地模型。"
+      "desc_now": "Unified DeepSeek Harness plugin: role-based subagent routing + per-agent evolution (prefercmd/memory as knowledge allow/deny lists), so repeated tasks start from proven commands and save tokens. Unified subagent routing and evolution: prefercmd/memory serve as knowledge allow/deny lists, saving tokens.",
+      "desc_prev": "按 agent_key 将 DeepSeek Harness subagent 严格路由到已注册 provider/model 的轻量插件"
     },
     {
-      "full_name": "openma-ai/Martty",
+      "full_name": "mba1398/dsh-done",
       "previous": "other",
-      "current": "tool",
-      "desc_now": "deepseek-harness-tui（dsh-tui） before. Self-Improvement TUI Plugin of DeepSeek Harness. Everything Here Is Also A Plugin.  Martty is a ACP client.",
-      "desc_prev": "deepseek-harness-tui before. Self-Improvement TUI Plugin of DeepSeek Harness. Everything Here Is Also A Plugin. dsh-tui"
-    },
-    {
-      "full_name": "maskshell/solidforge-dsh",
-      "previous": "coding",
-      "current": "conversation",
-      "desc_now": "面向 DeepSeek Harness 的收敛工程（Loop-Engineering）系统，以 DSH 预设与任意会话皆可使用的全局插件两种形式交付。收敛 → 规格化 → 实现：并行 TDD 双环收敛门禁、对抗式跨源评审、对源逐条引用核查、先行技术碰撞检索——每道门控均提供诚实记录，绝不静默转绿。",
-      "desc_prev": "让测试绿了不等于你做对了 — 双轴收敛纪律 (spec-gaming orthogonal axis) 的 DeepSeek Harness 原生实现 | Two-axis convergence discipline for coding agents"
+      "current": "model",
+      "desc_now": "One plugin that don't consume tokens.",
+      "desc_prev": null
     }
   ]
 }
