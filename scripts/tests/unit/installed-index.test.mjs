@@ -94,7 +94,7 @@ check("SkillsTab doRefresh finally 复位", /fetchPage\(1, query, true\)\.finall
 // 单飞构建在飞时 save/remove 把 installedIndex 置 null，构建完成会无条件写回旧快照
 // （构建开始时扫描的目录/记录）→ 新安装/卸载在下次事件前标注 miss（静默陈旧）。
 // 契约：save/remove 递增代际计数；构建完成写入前校验代际，变了则丢弃结果（保持 null）。
-check("A1 save/remove 递增代际计数（≥2 处）", (lib.match(/installedIndexGen\+\+/g) ?? []).length, 2);
+check("A1 save/remove/切 profile 递增代际计数（≥3 处）", (lib.match(/installedIndexGen\+\+/g) ?? []).length, 3);
 check("A1 构建完成写入前校验代际", /installedIndexGen !== buildGen/.test(lib), true);
 
 // ---- A3：无 fp 回退必须含 cached_at（防漏更新）----

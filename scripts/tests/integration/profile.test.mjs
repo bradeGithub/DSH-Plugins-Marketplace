@@ -60,6 +60,27 @@ check("readTargetProfile 合法配置生效", await lib.readTargetProfile(), { p
 writeFileSync(configFile, "{ broken", "utf8");
 check("readTargetProfile 损坏 JSON 回退 web", await lib.readTargetProfile(), { profile: "web", fromConfig: false });
 
+// ---- 切换 profile 后扫描缓存失效（五轮审计）----
+// profileScanCache 按 PROFILE_NM 构建（列表「已安装」标注来源）。切换后必须重扫：
+// 否则 desktop 已装插件在 web 列表仍标「已装」，切回时旧标注反向残留。
+{
+  mkdirSync(join(home, "profiles", "web", "node_modules", "alpha-pkg"), { recursive: true });
+  writeFileSync(join(home, "profiles", "web", "node_modules", "alpha-pkg", "package.json"),
+    JSON.stringify({ name: "alpha-pkg", version: "1.0.0" }), "utf8");
+  mkdirSync(join(home, "profiles", "desktop", "node_modules", "beta-pkg"), { recursive: true });
+  writeFileSync(join(home, "profiles", "desktop", "node_modules", "beta-pkg", "package.json"),
+    JSON.stringify({ name: "beta-pkg", version: "2.0.0" }), "utf8");
+  lib.setTargetProfile("web");
+  let scan = await lib.scanProfilePackages();
+  check("扫描缓存 web 含 alpha-pkg", scan.has("alpha-pkg"), true);
+  check("扫描缓存 web 不含 beta-pkg", scan.has("beta-pkg"), false);
+  lib.setTargetProfile("desktop");
+  scan = await lib.scanProfilePackages();
+  check("切换后扫描缓存重扫（desktop 含 beta-pkg）", scan.has("beta-pkg"), true);
+  check("切换后扫描缓存反向失效（不含 alpha-pkg）", scan.has("alpha-pkg"), false);
+  lib.setTargetProfile("web"); // 恢复（后续路由测试用）
+}
+
 // ---- profile 路由 ----
 let registered = [];
 const fakeCtx = {
