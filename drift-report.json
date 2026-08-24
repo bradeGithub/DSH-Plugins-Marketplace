@@ -1,41 +1,27 @@
 {
-  "generated_at": "2026-08-24T07:23:55.399Z",
-  "count": 5,
+  "generated_at": "2026-08-24T09:09:10.590Z",
+  "count": 3,
   "items": [
     {
-      "full_name": "dhicoc/dsh-reverse-skill",
-      "previous": "memory",
-      "current": "tool",
-      "desc_now": "Complete reverse-skill (85 SKILL.md) as a DeepSeek Harness (dsh) Cordis plugin — reverse engineering, authorized pentesting and security research skill pack.",
-      "desc_prev": "Complete reverse-skill (85 SKILL.md) as a DeepSeek Harness (dsh) Cordis plugin — reverse engineering, authorized pentesting and security research skill pack."
+      "full_name": "zhu1090093659/dsh-web",
+      "previous": "coding",
+      "current": "resource",
+      "desc_now": "DeepSeek Harness（DSH）Web 插件聚合生态包 · 一切皆插件，创意工坊分发（dsh-market.com）",
+      "desc_prev": "DeepSeek Harness（DSH）Web GUI 插件与皮肤生态：一切皆插件。任务看板、移动端远程与 SSH 运维构筑开发工作台；皮肤经 WebGL 深度优化，更支持 Wallpaper Engine 壁纸；皮肤、宠物、插件由 DSH 大市场一键安装，正迈向 DSH 创意工坊。A pluggable plugin-skin ecosystem for the DSH Web GUI - Task board, remote mobile UI, SSH ops, WebGL-optimized skins with Wallpaper Engine wallpapers - becoming a DSH creative workshop."
     },
     {
-      "full_name": "hchao3335-maker/dsh-lan-gate",
-      "previous": "vision",
-      "current": "tool",
-      "desc_now": "一个DSH内网访问插件 局域网设备安全访问本机 DSH 的即插即用网关：本机审批、设备令牌、限流、手机适配，单文件零依赖。",
-      "desc_prev": "一个DSH内网访问插件 局域网设备安全访问本机 DSH 的即插即用网关：本机审批、设备令牌、限流、手机适配，单文件零依赖。"
-    },
-    {
-      "full_name": "YTxue/dsh-skill-manager-ytxue",
-      "previous": "agent",
-      "current": "web-ui",
-      "desc_now": "DSH web plugin: skill manager in the Settings sidebar - list/enable/disable, folder batch import with conflict prompts, state-driven one-click DSH-spec check & auto-fix, system/project scope labels.",
-      "desc_prev": "DSH web plugin: skill manager in the Settings sidebar - list/enable/disable, folder batch import with conflict prompts, state-driven one-click DSH-spec check & auto-fix, system/project scope labels."
-    },
-    {
-      "full_name": "Shizuku-keop/dsh-micro-inversion-standard",
-      "previous": "model",
-      "current": "coding",
-      "desc_now": "一个可复用的 DSH Agent Preset：双阶段、Token 精益的编码智能体模式。  核心目标：把模型思维链的起手习惯从 \"let me\" 翻转为 \"we need\"，同时把上下文占用与 Token 消耗压到最低，并保持供应商 KV Cache 对未变前缀持续命中。",
+      "full_name": "LongSir0419/dsh-git-branch-manage",
+      "previous": "other",
+      "current": "resource",
+      "desc_now": "DSH bundle: 当前 Git 分支徽标。在会话 header 与新会话欢迎页显示当前分支，支持切换、新建、更新、拉取、推送、删除（仅本地分支，IDEA 风格目录树）。",
       "desc_prev": null
     },
     {
-      "full_name": "WSL043/dsh-native-reasoning-slider",
+      "full_name": "EvieHe/dsh-resume-headless",
       "previous": "other",
-      "current": "web-ui",
-      "desc_now": "Model-aware reasoning effort slider for DeepSeek Harness, with a Claude-inspired WebGL energy field, native themes, and a live demo.",
-      "desc_prev": "DSH Native Effort Slider — model-aware reasoning control with native modes and custom light/dark colors"
+      "current": "tool",
+      "desc_now": "DeepSeek Harness (dsh) bundle: headless one-shot session resume. `dsh --profile headless --resume <session-id> \"task\"` continues a persisted session (history and turn numbering carry on), prints and exits. Overrides the official headless runner via ctx.agents.resume(); install with `dsh plugin add github:EvieHe/dsh-resume-headless#v0.1.1`.",
+      "desc_prev": null
     }
   ]
 }
