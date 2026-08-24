@@ -63,6 +63,13 @@ check("logLine 定义处截断（≥2 处，保护响应体 log 数组）", (lib
 // 契约：tmp + rename 原子替换（与 saveInstalled/appendPatchEntry 同模式）。
 check("writeListCache 原子写（tmp + rename）", /const tmp = listCacheFile\(kind\) \+ "\.tmp";[\s\S]*?await rename\(tmp, listCacheFile\(kind\)\);/.test(lib), true);
 
+// ---- profile 切换与安装互斥（四轮审计 #184 补丁面）----
+// 安装/卸载/自更新进行中切换 targetProfile：运行中安装路径读 PROFILE_NM/PATCH_FILE/
+// PROFILE_PKG 常量（registerBundlePackage/appendPatchEntry），切换落点突变 → 记录与
+// 实体错位 / patch 写错 profile。契约：profile POST 在鉴权后、写配置前检查 installRunning。
+check("profile POST 安装进行中拒绝切换（installRunning 互斥）", /path: "\/api\/marketplace\/profile"[\s\S]*?if \(installRunning !== null\) return json\(res, 409, \{ error: t\(lang, "installBusy"\) \}\);/.test(lib), true);
+check("profile POST 互斥检查位于配置写入之前", /path: "\/api\/marketplace\/profile"[\s\S]*?installRunning !== null[\s\S]*?writeFile\(cfgPath, JSON\.stringify\(cfg, null, 2\), "utf8"\)/.test(lib), true);
+
 // ---- 上游 v1.5.0 npm 等价回退（installNpmTargetToTemp）：cmd 包装契约 ----
 // 深集成豁免（真实 npm 二进制）——但存在性必须被测试感知：win32 经 cmd.exe 启动 npm
 //（.cmd 垫片 execFile 直接启动会 EINVAL，issue #46 同族），不直接 execFile npm.cmd。
