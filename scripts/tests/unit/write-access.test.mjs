@@ -57,9 +57,9 @@ check("注入 __DSH_MP_TOKEN__ 脚本", /window\.__DSH_MP_TOKEN__="\$\{writeToke
 
 // ---- 契约 5：全部写操作端点都走 isWriteAllowed（审查 S1 鉴权统一）----
 // install / uninstall / self-update POST / feedback / feedback-token POST /
-// env-edit / backup-webdav / restore-webdav = 8 处。
+// env-edit / backup-webdav / restore-webdav / profile POST（issue #184）= 9 处。
 // 新增写端点时必须同步此处计数——漏一处即 LAN 内任意设备可无 token 写。
-check("全部写端点走 isWriteAllowed（8 处）", (lib.match(/await isWriteAllowed\(req\)\)\) return json\(res, 403/g) ?? []).length, 8);
+check("全部写端点走 isWriteAllowed（9 处）", (lib.match(/await isWriteAllowed\(req\)\)\) return json\(res, 403/g) ?? []).length, 9);
 
 // ---- 契约 6：客户端写操作带 token 头 ----
 check("client mpHeaders 存在", /function mpHeaders\(extra\) \{[\s\S]{0,200}window\.__DSH_MP_TOKEN__/.test(client), true);
