@@ -107,6 +107,12 @@ check("A3 无 fp 回退串含 cached_at", /return JSON\.stringify\(\[data\.sourc
 // 相同 → 客户端跳过重渲染 → 列表不更新（静默）。契约：fp 串附带 repos.length。
 check("A4 listFingerprint 串含列表长度", /function listFingerprint\(repos\) \{[\s\S]{0,400}repos\.length/.test(lib), true);
 
+// ---- A5：指纹必须含 installed 标志（切 profile/装/卸后标注变化仍触发重渲染）----
+// 标注随请求时状态计算（annotateInstalled），full_name 序列不变但 installed 位翻转
+// 时旧指纹不感知 → 客户端 fp===lastFp 跳过重渲染 → 列表停留在旧 profile 标注。
+// 契约：installed 标志混入哈希。
+check("A5 listFingerprint 混入 installed 标志", /function listFingerprint\(repos\) \{[\s\S]{0,400}installed === true/.test(lib), true);
+
 // ---- C1：pkg_name 冲突日志须汇总计数（不拼接全量明细刷屏）----
 // 每次列表请求 console.warn 一长串被隐藏仓库名（几十个），dsh+skills 双列表请求
 // 时刷屏（用户实测日志可见）。契约：冲突日志改为计数汇总，明细不拼进 warn 消息。
