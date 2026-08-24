@@ -1327,7 +1327,11 @@ async function enrichPkgNames(repos, includeVersion = false) {
   // bundle 状态新鲜度敏感（声明可变），带 bundle 标记的条目强制每轮重抓
   // ——否则旧 `bundle: true` 残留（普通插件意外显示 bundle 徽章），或 bundle 移除后永不清除。
   const bundleSuspect = (r) => includeVersion && r.bundle === true;
-  const todo = repos.filter((r) => (includeVersion ? !r.pkg_name || !r.version : !r.pkg_name) || highStarSuspect(r) || bundleSuspect(r));
+  // eco_type 同样新鲜度敏感：仓库加/移除 dsh.bundle.patch、桌面客户端改插件后，
+  // pkg_name/version 都在 → 不进 todo → 旧枚举永久残留（与 bundleSuspect 同构）。
+  const ecoTypeSuspect = (r) => includeVersion && typeof r.eco_type === "string";
+  const todo = repos.filter((r) => (includeVersion ? !r.pkg_name || !r.version : !r.pkg_name)
+    || highStarSuspect(r) || bundleSuspect(r) || ecoTypeSuspect(r));
   if (todo.length === 0) return;
   let cursor = 0;
   const worker = async () => {

@@ -650,6 +650,45 @@ function mockFetchCapture(payload, status = 200) {
       check("写回失败被 catch 吞（目录删除兜底仍执行）", existsSync(join(web, "node_modules", "fake-bundle-ro")), false);
       writeFileSync(join(stubDir, "mode"), "", "utf8");
 
+      // 跨 profile 卸载（issue #184 边界）：targetProfile 切到 desktop 后，卸载
+      // 安装记录仍指向 web 的插件——必须按 record.location 定位真实落点删除，
+      // 而非在 desktop 的 node_modules 下按包名拼路径（rm force:true 静默残留）。
+      {
+        mkdirSync(join(process.env.DSH_HOME, "profiles", "desktop", "node_modules"), { recursive: true });
+        const legacyPkg = join(web, "node_modules", "legacy-web-plugin");
+        mkdirSync(legacyPkg, { recursive: true });
+        writeFileSync(join(legacyPkg, "package.json"), JSON.stringify({ name: "legacy-web-plugin", version: "0.9.0" }), "utf8");
+        await lib.saveInstalled("fake/legacy-repo", {
+          type: "cordis-plugin", name: "legacy-web-plugin", names: ["legacy-web-plugin"],
+          location: legacyPkg, version: "0.9.0", installedAt: Date.now(), envKeys: null,
+        });
+        lib.setTargetProfile("desktop");
+        try {
+          const registeredX = [];
+          lib.apply({ get: (s) => (s === "webServer" ? { register: (r) => registeredX.push(r) } : undefined), logger: { warn: () => {} }, slots: { inject: () => {} } });
+          const uninstallX = registeredX.find((r) => r.path === "/api/marketplace/uninstall")?.handler;
+          let sentX = false;
+          const unReqX = {
+            method: "POST",
+            headers: { "x-dsh-marketplace": "1", host: "127.0.0.1:3080" },
+            socket: { remoteAddress: "127.0.0.1" },
+            url: "/api/marketplace/uninstall",
+            [Symbol.asyncIterator]() {
+              return { next: async () => (sentX ? { value: undefined, done: true } : ((sentX = true), { value: Buffer.from(JSON.stringify({ repo: "fake/legacy-repo" })), done: false })) };
+            },
+          };
+          let uStatusX = 0;
+          let uBodyX = null;
+          await uninstallX(unReqX, { writeHead: (x) => { uStatusX = x; }, end: (b) => { try { uBodyX = JSON.parse(b); } catch { uBodyX = null; } } });
+          check("跨 profile 卸载响应 done", [uStatusX === 200, uBodyX?.status], [true, "done"]);
+          check("跨 profile 卸载删除旧 profile 实体目录", existsSync(legacyPkg), false);
+          check("跨 profile 卸载不误删当前 profile 目录", existsSync(join(process.env.DSH_HOME, "profiles", "desktop", "node_modules")), true);
+          check("跨 profile 卸载移除安装记录", lib.hasInstalledRecord("fake/legacy-repo"), false);
+        } finally {
+          lib.setTargetProfile("web");
+        }
+      }
+
       // detectType 判 bundle 后的独立安装路径（type=bundle 直接走 registerBundlePackage）
       const fixE = makeFixture("fake-bundle-e", "1.2.7", true);
       const logE = [];
@@ -1491,6 +1530,16 @@ function mockFetchCapture(payload, status = 200) {
   check("cve lockfile 精确版本优先", vulnDeps.find((d) => d.name === "lodash").version, "4.17.15");
   check("cve 无锁文件剥 ^ 取下界", vulnDeps.find((d) => d.name === "fsevents").version, "2.3.2");
   check("cve devDependencies 不进扫描面", vulnDeps.some((d) => d.name === "dev-only-pkg"), false);
+  // npm: 别名依赖：漏洞面在真实包上——解出真实名+版本进扫描面
+  const aliasDeps = lib.readVulnScanDeps({
+    dependencies: { "my-lodash": "npm:lodash@4.17.15", "@x/alias": "npm:@scope/pkg@2.0.0", local: "file:./p", ws: "workspace:*", lnk: "link:../q" }
+  }, new Map());
+  check("cve npm: 别名解出真实包", aliasDeps.find((d) => d.name === "lodash")?.version, "4.17.15");
+  check("cve npm: scoped 别名同款解析", aliasDeps.some((d) => d.name === "@scope/pkg" && d.version === "2.0.0"), true);
+  check("cve 本地协议（file/workspace/link）跳过", aliasDeps.every((d) => !["local", "ws", "lnk"].includes(d.name)), true);
+  // 边界：npm: 无版本段（git 分支引用形态）不误收
+  const gitAlias = lib.readVulnScanDeps({ dependencies: { g: "npm:pkg@main" } }, new Map());
+  check("cve npm: 非语义版本段按原样保留", gitAlias[0]?.version, "main");
   const cveDir = join(process.env.DSH_HOME, "cve-fixtures");
   mkdirSync(cveDir, { recursive: true });
   writeFileSync(join(cveDir, "package.json"), JSON.stringify(vulnPkg), "utf8");
