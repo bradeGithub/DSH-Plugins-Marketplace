@@ -662,6 +662,9 @@ function mockFetchCapture(payload, status = 200) {
           type: "cordis-plugin", name: "legacy-web-plugin", names: ["legacy-web-plugin"],
           location: legacyPkg, version: "0.9.0", installedAt: Date.now(), envKeys: null,
         });
+        // K2 回归：旧 profile 的 cordis.patch.yml 条目必须被清理（而非当前 profile 的文件）
+        const webPatch = join(web, "cordis.patch.yml");
+        writeFileSync(webPatch, "[]\n- insert:\n    id: mp-legacy\n    name: \"legacy-web-plugin\"\n", "utf8");
         lib.setTargetProfile("desktop");
         try {
           const registeredX = [];
@@ -684,6 +687,46 @@ function mockFetchCapture(payload, status = 200) {
           check("跨 profile 卸载删除旧 profile 实体目录", existsSync(legacyPkg), false);
           check("跨 profile 卸载不误删当前 profile 目录", existsSync(join(process.env.DSH_HOME, "profiles", "desktop", "node_modules")), true);
           check("跨 profile 卸载移除安装记录", lib.hasInstalledRecord("fake/legacy-repo"), false);
+          const webPatchAfter = readFileSync(webPatch, "utf8");
+          check("跨 profile 卸载清理旧 profile patch 条目", webPatchAfter.includes("legacy-web-plugin"), false);
+        } finally {
+          lib.setTargetProfile("web");
+        }
+      }
+
+      // K22 回归：无 names 字段的旧记录（name 为 -plugins 结尾的仓库目录名，L5 防呆
+      // 放弃 name）跨 profile 卸载——targets 推断必须按 recordNm 锚点定位。修复前用
+      // 当前 PROFILE_NM 判断，跨 profile 时 location 在旧 profile → 条件 false →
+      // targets 空 → 走 uninstallNoTargets → 记录删除但目录/patch 残留（孤儿态）。
+      {
+        const legacyPkg = join(web, "node_modules", "real-pkg");
+        mkdirSync(legacyPkg, { recursive: true });
+        writeFileSync(join(legacyPkg, "package.json"), JSON.stringify({ name: "real-pkg", version: "0.5.0" }), "utf8");
+        await lib.saveInstalled("fake/legacy-no-names", {
+          type: "cordis-plugin", name: "legacy-plugins",
+          location: legacyPkg, version: "0.5.0", installedAt: Date.now(), envKeys: null,
+        });
+        lib.setTargetProfile("desktop");
+        try {
+          const registeredK = [];
+          lib.apply({ get: (s) => (s === "webServer" ? { register: (r) => registeredK.push(r) } : undefined), logger: { warn: () => {} }, slots: { inject: () => {} } });
+          const uninstallK = registeredK.find((r) => r.path === "/api/marketplace/uninstall")?.handler;
+          let sentK = false;
+          const unReqK = {
+            method: "POST",
+            headers: { "x-dsh-marketplace": "1", host: "127.0.0.1:3080" },
+            socket: { remoteAddress: "127.0.0.1" },
+            url: "/api/marketplace/uninstall",
+            [Symbol.asyncIterator]() {
+              return { next: async () => (sentK ? { value: undefined, done: true } : ((sentK = true), { value: Buffer.from(JSON.stringify({ repo: "fake/legacy-no-names" })), done: false })) };
+            },
+          };
+          let uStatusK = 0;
+          let uBodyK = null;
+          await uninstallK(unReqK, { writeHead: (x) => { uStatusK = x; }, end: (b) => { try { uBodyK = JSON.parse(b); } catch { uBodyK = null; } } });
+          check("K22 无 names 旧记录跨 profile 卸载响应 done", [uStatusK === 200, uBodyK?.status], [true, "done"]);
+          check("K22 无 names 旧记录实体目录已删", existsSync(legacyPkg), false);
+          check("K22 卸载移除安装记录", lib.hasInstalledRecord("fake/legacy-no-names"), false);
         } finally {
           lib.setTargetProfile("web");
         }
