@@ -1,69 +1,13 @@
 {
-  "generated_at": "2026-08-24T16:58:46.566Z",
-  "count": 9,
+  "generated_at": "2026-08-24T19:02:19.755Z",
+  "count": 1,
   "items": [
     {
-      "full_name": "398894496-arch/runtime36",
-      "previous": "vision",
-      "current": "memory",
-      "desc_now": "Second brain for coding agents. Seal the day, distill into Obsidian, hit that page tomorrow. Cursor, Codex, Claude Code, DeepSeek Harness.",
-      "desc_prev": "DSH-KRouter — Agent knowledge OS. Self-evolution. Timer on by default; API key or subscription is the key. First qualifying day auto-provisional; second accepted task → formal. Correction-first. Retrieval is the lock, not the product. Cursor, Codex, Claude Code, DeepSeek Harness."
-    },
-    {
-      "full_name": "qkycir-123/dsh-run2skill",
-      "previous": "agent",
-      "current": "conversation",
-      "desc_now": "Automatically turn successful DeepSeek Harness sessions into reusable, reviewable Agent Skills.",
-      "desc_prev": "DSH-native, local-first Run-to-Skill plugin for DeepSeek Harness"
-    },
-    {
-      "full_name": "Max-Null/dsh-chinese-thinking",
-      "previous": "other",
-      "current": "conversation",
-      "desc_now": "One-line fix: inject a fixed system-prompt section so the agent always thinks and replies in Chinese, whatever the user's language · 中文思考：注入固定提示词，让 agent 始终用中文思考与回复（无论用户语言）",
-      "desc_prev": null
-    },
-    {
-      "full_name": "Max-Null/dsh-plugin-center",
-      "previous": "other",
-      "current": "web-ui",
-      "desc_now": "Plugin center for DeepSeek Harness: browse, install and update community plugins from inside the Web UI · DSH 插件管理中心：在 Web 界面浏览社区市场、一键安装与更新插件",
-      "desc_prev": null
-    },
-    {
-      "full_name": "Max-Null/dsh-skill-mcp-center",
-      "previous": "other",
-      "current": "web-ui",
-      "desc_now": "Skill & MCP center for DeepSeek Harness: manage skills and MCP servers in Settings, live MCP status in the sidebar · Skill 与 MCP 管理中心：设置里管理技能与 MCP 服务器，侧边栏实时状态",
-      "desc_prev": null
-    },
-    {
-      "full_name": "Max-Null/dsh-draft-polish",
-      "previous": "other",
-      "current": "conversation",
-      "desc_now": "Draft polish for DeepSeek Harness: one-click LLM polish of your draft in the composer, rewrites it in place with session context · 草稿润色：发送前一键调用 LLM 润色草稿，结果回填输入框",
-      "desc_prev": null
-    },
-    {
-      "full_name": "zmm863-commits/dsh-paperclip",
+      "full_name": "Kevoyuan/dsh-trading212",
       "previous": "other",
       "current": "tool",
-      "desc_now": "DSH Web GUI paperclip button: a single 📎 button in the composer that opens a file picker (drag & drop supported) and inserts file contents into the textarea. 在 DSH Web 输入框右侧添加回形针按钮，点击选择/拖拽文件，内容自动插入输入框。",
-      "desc_prev": null
-    },
-    {
-      "full_name": "fplj-fplj/dsh-ua-headers",
-      "previous": "other",
-      "current": "agent",
-      "desc_now": "为 DeepSeek Harness (DSH) 定制的 User-Agent 与请求头插件：按模型匹配改写 UA / 合并自定义请求头，遵循 dsh-ecosystem-spec 生态规范。A dsh-ecosystem-spec compliant plugin to customize User-Agent and request headers per model.",
-      "desc_prev": null
-    },
-    {
-      "full_name": "zaimokuza-yoshiteru/dsh-acp-adapter",
-      "previous": "tool",
-      "current": "web-ui",
-      "desc_now": "Use AI agents from the DSH session UI.",
-      "desc_prev": "ACP adapter plugin for DeepSeek Harness"
+      "desc_now": "Read-only Trading 212 portfolio dashboard and dsh tools for holdings, history, risk, and trade markers.",
+      "desc_prev": "在 dsh 中查看 Trading 212 持仓、历史成交与个股买卖点的只读插件。"
     }
   ]
 }
