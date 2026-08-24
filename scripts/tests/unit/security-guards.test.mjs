@@ -87,7 +87,7 @@ check("spawnSync bash 探测带 windowsHide", /spawnSync\("bash", \["--version"\
 // 卸载 bundle 主路径 pnpm remove + 降级手工清理。
 check("isBundlePackage 检测 dsh.bundle.patch 声明", /function isBundlePackage[\s\S]*?dsh\.bundle[\s\S]*?patch/.test(lib), true);
 check("registerBundlePackage 记录 dependencies + bundles 层", /registerBundlePackage[\s\S]*?manifest\.dependencies = deps;[\s\S]*?bundles\.push\(pkgName\)/.test(lib), true);
-check("registerBundlePackage 经 pnpm install 注册（cwd=profile，跳过 workspace）", /registerBundlePackage[\s\S]*?runPnpm\(\["install", "--ignore-workspace"\], \{ cwd: PROFILE_WEB_DIR/.test(lib), true);check("profile manifest 原子写（tmp + rename）", /const tmp = PROFILE_PKG \+ "\.tmp";[\s\S]*?rename\(tmp, PROFILE_PKG\)/.test(lib), true);
+check("registerBundlePackage 经 pnpm install 注册（cwd=profile，跳过 workspace）", /registerBundlePackage[\s\S]*?runPnpm\(\["install", "--ignore-workspace"\], \{ cwd: PROFILE_WEB_DIR/.test(lib), true);check("profile manifest 原子写（tmp + rename，路径参数化支持跨 profile）", /const tmp = pkgPath \+ "\.tmp";[\s\S]*?rename\(tmp, pkgPath\)/.test(lib), true);
 check("installRepo bundle 分支在 appendPatchEntry 前 continue（不写单条 insert）", /if \(isBundlePackage\(pkg\) && repo !== SELF_UPDATE_REPO\)[\s\S]*?registerBundlePackage[\s\S]*?continue;/.test(lib), true);
 check("bundle 注册结果导向：pnpm 非零退出但包可解析 → 告警继续", /let pnpmErr = null;[\s\S]*?if \(pnpmErr\) logLine\(t\(lang, "bundlePnpmWarn"/.test(lib), true);
 check("bundle 注册验证子依赖可解析（realpath + createRequire，对齐 ESM 解析语义）", /realpath\(resolvedPkg\)[\s\S]*?createRequire\(join\(anchor, "noop\.js"\)\)[\s\S]*?bundleDepsResolveFail/.test(lib), true);
@@ -107,7 +107,7 @@ check("scanRequirements 显式跳过 symlink", /if \(ent\.isSymbolicLink\(\)\) c
 check("check-update 包名形态校验（≤2 段 + 段字符集 + 排除 ./..）", /const parts = pkgName\.split\("\/"\);[\s\S]*?parts\.length > 2 \|\| parts\.some\(/.test(lib), true);
 check("list handler cliNpmForm 分支同款校验（2539 漏网点）",
   /const cliParts = cliTarget\.split\("\/"\);[\s\S]*?cliParts\.length > 2 \|\| cliParts\.some\(/.test(lib), true);
-check("env-keys location 受管目录校验（扫描前）", /const managed = \[PROFILE_NM, SKILLS_DIR, PRESETS_DIR, CACHE_DIR\]\.some/.test(lib), true);
+check("env-keys location 受管目录校验（扫描前；锚点按记录定位）", /const managed = \[resolveRecordNodeModules\(record\), SKILLS_DIR, PRESETS_DIR, CACHE_DIR\]\.some/.test(lib), true);
 
 // ---- CLI 安装分支：无字符串拼接命令（注入面）----
 // win32 的 dsh .cmd 垫片经 cmd.exe /c 启动——若用「拼接 cmdLine + /d /s /c」：

@@ -41,24 +41,24 @@ check("setTargetProfile 含点回退 web", lib.setTargetProfile("web.profile"), 
 // 恢复 web（后续测试用）
 lib.setTargetProfile("web");
 
-// ---- readTargetProfile：config.json 缺失 → web ----
-check("readTargetProfile 无配置回退 web", await lib.readTargetProfile(), "web");
+// ---- readTargetProfile：config.json 缺失 → web（fromConfig=false，启动回调不覆盖显式设置）----
+check("readTargetProfile 无配置回退 web", await lib.readTargetProfile(), { profile: "web", fromConfig: false });
 
 // ---- readTargetProfile：非法名 → web ----
 writeFileSync(configFile, JSON.stringify({ targetProfile: "../evil" }), "utf8");
-check("readTargetProfile 非法名回退 web", await lib.readTargetProfile(), "web");
+check("readTargetProfile 非法名回退 web", await lib.readTargetProfile(), { profile: "web", fromConfig: false });
 
 // ---- readTargetProfile：目录不存在 → web ----
 writeFileSync(configFile, JSON.stringify({ targetProfile: "ghost" }), "utf8");
-check("readTargetProfile 目录不存在回退 web", await lib.readTargetProfile(), "web");
+check("readTargetProfile 目录不存在回退 web", await lib.readTargetProfile(), { profile: "web", fromConfig: false });
 
-// ---- readTargetProfile：合法 + 目录存在 → 生效 ----
+// ---- readTargetProfile：合法 + 目录存在 → 生效（fromConfig=true）----
 writeFileSync(configFile, JSON.stringify({ targetProfile: "desktop" }), "utf8");
-check("readTargetProfile 合法配置生效", await lib.readTargetProfile(), "desktop");
+check("readTargetProfile 合法配置生效", await lib.readTargetProfile(), { profile: "desktop", fromConfig: true });
 
 // ---- readTargetProfile：损坏 JSON → web ----
 writeFileSync(configFile, "{ broken", "utf8");
-check("readTargetProfile 损坏 JSON 回退 web", await lib.readTargetProfile(), "web");
+check("readTargetProfile 损坏 JSON 回退 web", await lib.readTargetProfile(), { profile: "web", fromConfig: false });
 
 // ---- profile 路由 ----
 let registered = [];

