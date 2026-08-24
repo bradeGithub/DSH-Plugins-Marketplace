@@ -1,27 +1,20 @@
 {
-  "generated_at": "2026-08-24T09:09:10.590Z",
-  "count": 3,
+  "generated_at": "2026-08-24T10:55:28.562Z",
+  "count": 2,
   "items": [
     {
-      "full_name": "zhu1090093659/dsh-web",
-      "previous": "coding",
-      "current": "resource",
-      "desc_now": "DeepSeek Harness（DSH）Web 插件聚合生态包 · 一切皆插件，创意工坊分发（dsh-market.com）",
-      "desc_prev": "DeepSeek Harness（DSH）Web GUI 插件与皮肤生态：一切皆插件。任务看板、移动端远程与 SSH 运维构筑开发工作台；皮肤经 WebGL 深度优化，更支持 Wallpaper Engine 壁纸；皮肤、宠物、插件由 DSH 大市场一键安装，正迈向 DSH 创意工坊。A pluggable plugin-skin ecosystem for the DSH Web GUI - Task board, remote mobile UI, SSH ops, WebGL-optimized skins with Wallpaper Engine wallpapers - becoming a DSH creative workshop."
+      "full_name": "Cerbur/clutch-dsh",
+      "previous": "web-ui",
+      "current": "other",
+      "desc_now": "Open-source DSH plugins for DeepSeek Harness, clutch-dsh-worktree.",
+      "desc_prev": "Open-source DSH plugins for DeepSeek Harness, starting with a Git worktree-aware Session view for the DSH Web UI."
     },
     {
-      "full_name": "LongSir0419/dsh-git-branch-manage",
-      "previous": "other",
-      "current": "resource",
-      "desc_now": "DSH bundle: 当前 Git 分支徽标。在会话 header 与新会话欢迎页显示当前分支，支持切换、新建、更新、拉取、推送、删除（仅本地分支，IDEA 风格目录树）。",
-      "desc_prev": null
-    },
-    {
-      "full_name": "EvieHe/dsh-resume-headless",
-      "previous": "other",
-      "current": "tool",
-      "desc_now": "DeepSeek Harness (dsh) bundle: headless one-shot session resume. `dsh --profile headless --resume <session-id> \"task\"` continues a persisted session (history and turn numbering carry on), prints and exits. Overrides the official headless runner via ctx.agents.resume(); install with `dsh plugin add github:EvieHe/dsh-resume-headless#v0.1.1`.",
-      "desc_prev": null
+      "full_name": "taxueseek/taxue-dsh-artisan",
+      "previous": "tool",
+      "current": "vision",
+      "desc_now": "taxue 画师：DeepSeek Harness 一体化视觉创作工具链（提示词反推/优化 + 多供应商生图，支持异步后台出图）",
+      "desc_prev": "taxue 画师：DeepSeek Harness 一体化视觉创作工具链（提示词反推/优化 + 多供应商生图，支持异步后台出图）"
     }
   ]
 }
