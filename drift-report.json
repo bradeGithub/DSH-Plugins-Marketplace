@@ -1,20 +1,27 @@
 {
-  "generated_at": "2026-08-24T10:55:28.562Z",
-  "count": 2,
+  "generated_at": "2026-08-24T13:16:04.499Z",
+  "count": 3,
   "items": [
     {
-      "full_name": "Cerbur/clutch-dsh",
-      "previous": "web-ui",
+      "full_name": "LuZhouheng/dsh-gen3d",
+      "previous": "conversation",
       "current": "other",
-      "desc_now": "Open-source DSH plugins for DeepSeek Harness, clutch-dsh-worktree.",
-      "desc_prev": "Open-source DSH plugins for DeepSeek Harness, starting with a Git worktree-aware Session view for the DSH Web UI."
+      "desc_now": null,
+      "desc_prev": "DeepSeek Harness 3D 角色生成插件：直连 Meshy / Hunyuan3D / Tripo3D / Rodin 官方 API，自配 key，mock 回退"
     },
     {
-      "full_name": "taxueseek/taxue-dsh-artisan",
-      "previous": "tool",
-      "current": "vision",
-      "desc_now": "taxue 画师：DeepSeek Harness 一体化视觉创作工具链（提示词反推/优化 + 多供应商生图，支持异步后台出图）",
-      "desc_prev": "taxue 画师：DeepSeek Harness 一体化视觉创作工具链（提示词反推/优化 + 多供应商生图，支持异步后台出图）"
+      "full_name": "cxdyun/dsh-skills-marketplace",
+      "previous": "coding",
+      "current": "resource",
+      "desc_now": "DeepSeek Harness 版本的类 CodeX 插件市场",
+      "desc_prev": "DeepSeek Harness 版本的类 CodeX 插件市场"
+    },
+    {
+      "full_name": "Oscar-Williams/dsh-deepatlas",
+      "previous": "web-ui",
+      "current": "other",
+      "desc_now": "Local capability assurance and evidence-backed plugin navigation for DeepSeek Harness.",
+      "desc_prev": "DeepAtlas (dsh-插件导航) — task-aware plugin navigator for DeepSeek Harness: scan the dsh-plugin ecosystem, recommend by task, audit before install, and install only with explicit user consent."
     }
   ]
 }
