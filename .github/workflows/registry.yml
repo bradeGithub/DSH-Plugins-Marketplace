@@ -80,7 +80,11 @@ jobs:
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add registry.json registry.json.gz skills.json skills.json.gz drift-report.json installability-report.json
+          git add registry.json registry.json.gz skills.json skills.json.gz installability-report.json
+          # drift-report.json 是条件产物（仅探测出漂移时生成/存在）——用 -A + 容忍缺失：
+          # 普通 git add 在文件不存在时直接报 pathspec 错误导致构建失败（exit 128）；
+          # -A 语义覆盖新增/修改/删除，|| true 容忍当前工作树无该文件。
+          git add -A drift-report.json 2>/dev/null || true
           if git diff --cached --quiet; then
             echo "索引无变化，跳过提交"
             exit 0
