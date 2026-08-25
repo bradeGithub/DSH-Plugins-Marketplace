@@ -1,55 +1,27 @@
 {
-  "generated_at": "2026-08-25T03:18:30.891Z",
-  "count": 7,
+  "generated_at": "2026-08-25T05:30:12.560Z",
+  "count": 3,
   "items": [
     {
-      "full_name": "pointer-a/dsh-server-login",
-      "previous": "tool",
-      "current": "web-ui",
-      "desc_now": "面向公网的多租户 DSH 托管平台 —— 部署到一台公网服务器后，多个用户注册并经管理员审核，各自获得一套相互隔离的 deepseek-harness（DSH）环境，随时通过域名安全访问。",
-      "desc_prev": "面向公网的多租户 DSH 托管平台 —— 部署到一台公网服务器后，多个用户注册并经管理员审核，各自获得一套相互隔离的 deepseek-harness（DSH）环境，随时通过域名安全访问。"
-    },
-    {
-      "full_name": "gehennawu/dsh-service",
-      "previous": "tool",
-      "current": "notify",
-      "desc_now": "面向自托管 DSH Web 的服务控制与运维插件。提供安全重启、版本管理与一键升级、健康诊断、模型用量统计、备份管理、任务通知和 Linux 文件权限维护。｜A service-control and operations plugin for self-hosted DSH Web. Provides safe restart, version management and one-click upgrade, health diagnostics, model-usage statistics, remote quota, backup management, task notifications, and Linux file-permission maintenance.",
-      "desc_prev": "DSH Web 自托管运维插件：安全重启/恢复、健康诊断、模型用量与错误统计、备份及 Linux 权限维护｜Self-hosted operations plugin for DSH Web: safe restart/recovery, health diagnostics, model usage/error stats, backups, and Linux permission repair."
-    },
-    {
-      "full_name": "GearVoid/dsh-taskify",
-      "previous": "agent",
-      "current": "coding",
-      "desc_now": "Intent anchors for DeepSeek Harness — keep coding agents inside the boundaries you actually specified.",
-      "desc_prev": "A Task Compiler for DeepSeek Harness — from rough ideas to agent-ready tasks."
-    },
-    {
-      "full_name": "Yourtsao/Offical-paper-Wrighting--Chinese--skill",
-      "previous": "agent",
-      "current": "other",
-      "desc_now": "Gongwen writing Skill by a senior SOE office director (PhD) — 38 document types, GB/T 9704, no fabrication [待补], 10x faster first-draft approval. 公文写作技能包，38类文种。Wanna know how Chinese official writing works? Just try!",
-      "desc_prev": "Chinese Official Document Writing Agent Skill (公文写作) — 38 categories, GB/T 9704, anti-hallucination, AI gongwen generator for SOEs & government. 中文公文写作技能包，38类文种，Claude/Agent Skills 通用。"
-    },
-    {
-      "full_name": "Motuo24/dsh-thinking-slider",
-      "previous": "model",
-      "current": "agent",
-      "desc_now": "This plugin, called \"DSH Intensity Adjustment and Optimization,\" mimics the gear selection and adjustment functionality found in Codex's GPT-5.6 Terra, and unlocks Low, Medium, and other gear options.",
-      "desc_prev": "让 DSH 的思考强度调节像音量一样顺滑——把模型推理等级按钮列表换成带档位吸附的滑条。"
-    },
-    {
-      "full_name": "Yourtsao/gongwen-dsh",
-      "previous": "memory",
-      "current": "other",
-      "desc_now": "Gongwen writing DSH plugin by a senior SOE office director (PhD) — 38 document types, GB/T 9704, no fabrication [待补], 10x faster first-draft approval. 智能公文写作。Wanna know how Chinese official writing works? Just try!",
-      "desc_prev": "智能公文写作 DeepSeek Harness 插件——0知识库在线调用，免费10次/7天，2元/次或399元包年（前10个终身），GB/T 9704 38类文种"
-    },
-    {
-      "full_name": "BigBlueBaby/codex2dsh",
+      "full_name": "hyrinx/dsh-plugin-open-with",
       "previous": "other",
-      "current": "memory",
-      "desc_now": "把 Codex（OpenAI Codex CLI / Desktop）的 MCP 服务器、技能、全局指令、记忆与会话历史一键迁移进 DeepSeek Harness（DSH）——可视化面板 + CLI，源码只读、dry-run 预览、密钥按原样迁移。",
+      "current": "coding",
+      "desc_now": "在DeepSeek Harness Web 会话头部添加胶囊拆分按钮，一键在当前工作区打开VS Code、终端（CMD / PowerShell）和文件资源管理器。",
       "desc_prev": null
+    },
+    {
+      "full_name": "ac0033/dsh-ctm",
+      "previous": "other",
+      "current": "coding",
+      "desc_now": "dsh 插件：CTM 上下文/终端管理，把模型上下文变成可见、可编辑、可评分的一等对象",
+      "desc_prev": null
+    },
+    {
+      "full_name": "Punky971210/dsh-punky-swarm",
+      "previous": "coding",
+      "current": "tool",
+      "desc_now": "Engine-enforced guardrails for DeepSeek Harness agent swarms: quality gates reject half-done work, crash-safe checkpoints resume in place — keeps AI teams from breaking, not just running.",
+      "desc_prev": "expandable-coding-team and plugins on dsh"
     }
   ]
 }
