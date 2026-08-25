@@ -1,27 +1,41 @@
 {
-  "generated_at": "2026-08-24T22:48:01.492Z",
-  "count": 3,
+  "generated_at": "2026-08-25T01:42:41.246Z",
+  "count": 5,
   "items": [
     {
-      "full_name": "TLNing260310/dsh-researcher",
+      "full_name": "yjh051108/dsh-router-standard",
       "previous": "tool",
-      "current": "memory",
-      "desc_now": "Read-only repository research, durable project memory, and evidence-gated definitions of done for AI coding agents on DeepSeek Harness.",
-      "desc_prev": "Evidence-backed project cognition and host-governed definitions of done for DeepSeek Harness."
+      "current": "coding",
+      "desc_now": "已并入 dsh-routing-suite（单仓库化）；本仓库为历史镜像/归档 —— 注意力工程主线 v1.19.1/v34 研发线未发布。新代码见 github.com/yjh051108/dsh-routing-suite",
+      "desc_prev": "Task-aware reasoning-mode router for DeepSeek Harness: three measured behavior bands (spec/mixed/react) with phase-transition evidence, persona + first-turn tool injection, agent-visible tuning. Dual-attractor policy paper included."
     },
     {
-      "full_name": "ns-zzj/dsh-hos-scrcpy",
-      "previous": "coding",
-      "current": "vision",
-      "desc_now": "在DeepSeek Harness网页中控制鸿蒙手机并让AI识别内容",
-      "desc_prev": "在DeepSeek Harness网页中控制鸿蒙手机"
-    },
-    {
-      "full_name": "dat-lequoc/dsh-kiro",
+      "full_name": "yjh051108/dsh-super-injector",
       "previous": "other",
+      "current": "web-ui",
+      "desc_now": "推荐组件（非必须）：DeepSeek Harness 运行时注入器；已随 dsh-routing-suite 单仓库化保留，本仓库继续维护/发布。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "chengzhi43/dsh-file",
+      "previous": "coding",
       "current": "tool",
-      "desc_now": "Kiro provider for DeepSeek Harness with Builder ID login, live model discovery, and reasoning effort controls",
-      "desc_prev": "Kiro provider for DeepSeek Harness with Builder ID login, live model discovery, and reasoning effort controls"
+      "desc_now": "A VS Code-style file manager plugin for DeepSeek Harness Web / DeepSeek Harness 的 VS Code 风格文件管理器插件",
+      "desc_prev": "A VS Code-style file manager plugin for DeepSeek Harness Web / DeepSeek Harness 的 VS Code 风格文件管理器插件"
+    },
+    {
+      "full_name": "Yourtsao/Offical-paper-Wrighting--Chinese--skill",
+      "previous": "resource",
+      "current": "agent",
+      "desc_now": "Chinese Official Document Writing Agent Skill (公文写作) — 38 categories, GB/T 9704, anti-hallucination, AI gongwen generator for SOEs & government. 中文公文写作技能包，38类文种，Claude/Agent Skills 通用。",
+      "desc_prev": "国企公文写作 AI 技能包｜38类文种·76篇精选范例·AI秒变笔杆子"
+    },
+    {
+      "full_name": "xyzs996/dsh-switch-cost",
+      "previous": "model",
+      "current": "tool",
+      "desc_now": "DeepSeek Harness (dsh) plugin to compare LLM API cost across models and providers: prices the current session on the model that ran it, then reprices the same token counts against 15 routes on file. DeepSeek peak/off-peak resolved per UTC hour, cache read and write priced separately, every rate with its source and check date.",
+      "desc_prev": "Prices a dsh session against other models: what it cost on the route that ran it, and what the same token counts would have cost elsewhere."
     }
   ]
 }

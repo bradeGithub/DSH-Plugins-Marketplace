@@ -1,15 +1,15 @@
 {
-  "generated_at": "2026-08-24T23:01:28.245Z",
+  "generated_at": "2026-08-25T01:53:06.442Z",
   "counts": {
-    "bundle-plugin": 812,
+    "bundle-plugin": 823,
     "cordis-plugin": 7690,
     "pkg-plain": 843,
-    "manual": 639,
+    "manual": 640,
     "script": 198,
     "skill": 356,
     "multi-plugin": 347,
     "gone": 53,
-    "agent-preset": 41,
+    "agent-preset": 43,
     "unknown": 55,
     "empty": 14
   },
@@ -269,6 +269,10 @@
     {
       "full_name": "142475/dsh-esc-stop",
       "verdict": "cordis-plugin"
+    },
+    {
+      "full_name": "142gg-GZX/unity-dsh-bridge",
+      "verdict": "bundle-plugin"
     },
     {
       "full_name": "147228/dsh-black-whale",
@@ -2575,6 +2579,18 @@
       "verdict": "pkg-plain"
     },
     {
+      "full_name": "aorucshiea/dsh-omnipotent-preset",
+      "verdict": "agent-preset"
+    },
+    {
+      "full_name": "aorucshiea/dsh-plugin-toggle",
+      "verdict": "bundle-plugin"
+    },
+    {
+      "full_name": "aorucshiea/dsh-preset-switch",
+      "verdict": "bundle-plugin"
+    },
+    {
       "full_name": "aorucshiea/dsh-safe-tui",
       "verdict": "bundle-plugin"
     },
@@ -2841,6 +2857,10 @@
     {
       "full_name": "Ash-b07/deepseek-harness-vision-bridge",
       "verdict": "pkg-plain"
+    },
+    {
+      "full_name": "Asher-2000/dsh-artist-mode",
+      "verdict": "agent-preset"
     },
     {
       "full_name": "Asher-2000/dsh-expert-mode",
@@ -7117,6 +7137,14 @@
     {
       "full_name": "ddtcorex/agent-dev-skills",
       "verdict": "cordis-plugin"
+    },
+    {
+      "full_name": "ddtcorex/dsh-maestro-memory",
+      "verdict": "bundle-plugin"
+    },
+    {
+      "full_name": "ddtcorex/dsh-maestro-mobile",
+      "verdict": "bundle-plugin"
     },
     {
       "full_name": "ddv12138/dsh-hash-edit",
@@ -11659,6 +11687,10 @@
       "verdict": "bundle-plugin"
     },
     {
+      "full_name": "hanshanyike/dsh-yolo",
+      "verdict": "bundle-plugin"
+    },
+    {
       "full_name": "hanshenmesen/dsh-turn-delete",
       "verdict": "cordis-plugin"
     },
@@ -12883,6 +12915,10 @@
       "verdict": "cordis-plugin"
     },
     {
+      "full_name": "huermi/dsh-JEPA-adapter",
+      "verdict": "manual"
+    },
+    {
       "full_name": "huey1in/reef",
       "verdict": "cordis-plugin"
     },
@@ -12989,6 +13025,10 @@
     {
       "full_name": "hviana/dsh-cli-bridge",
       "verdict": "cordis-plugin"
+    },
+    {
+      "full_name": "hw-cola/dsh-dynamic-agents",
+      "verdict": "bundle-plugin"
     },
     {
       "full_name": "hw-cola/dsh-message-enhancer",
@@ -16461,6 +16501,10 @@
     {
       "full_name": "kouyichi/dsh-tui-app",
       "verdict": "pkg-plain"
+    },
+    {
+      "full_name": "kovey/dsh-nvim-tui",
+      "verdict": "bundle-plugin"
     },
     {
       "full_name": "kpl0111/dsh-context-guard",
@@ -24343,6 +24387,10 @@
       "verdict": "manual"
     },
     {
+      "full_name": "PrismScopes/dsh-importer",
+      "verdict": "bundle-plugin"
+    },
+    {
       "full_name": "Propheta114/dsh-icon-manager",
       "verdict": "manual"
     },
@@ -29113,6 +29161,10 @@
     {
       "full_name": "Stormycry-cryp/dsh-AuthInOne",
       "verdict": "cordis-plugin"
+    },
+    {
+      "full_name": "striveh/dsh-capability-resolver",
+      "verdict": "bundle-plugin"
     },
     {
       "full_name": "striveh/dsh-llm-call-inspector",
@@ -37857,6 +37909,10 @@
     {
       "full_name": "wang-jie-git/dsh-memory-ai",
       "verdict": "gone"
+    },
+    {
+      "full_name": "wang-junjian/dsh-artifact-viewer",
+      "verdict": "bundle-plugin"
     },
     {
       "full_name": "wang-junjian/dsh-github-trending",
