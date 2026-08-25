@@ -94,7 +94,7 @@ check("SkillsTab doRefresh finally 复位", /fetchPage\(1, query, true\)\.finall
 // 单飞构建在飞时 save/remove 把 installedIndex 置 null，构建完成会无条件写回旧快照
 // （构建开始时扫描的目录/记录）→ 新安装/卸载在下次事件前标注 miss（静默陈旧）。
 // 契约：save/remove 递增代际计数；构建完成写入前校验代际，变了则丢弃结果（保持 null）。
-check("A1 save/remove 递增代际计数（≥2 处）", (lib.match(/installedIndexGen\+\+/g) ?? []).length, 2);
+check("A1 save/remove/切 profile 递增代际计数（≥3 处）", (lib.match(/installedIndexGen\+\+/g) ?? []).length, 3);
 check("A1 构建完成写入前校验代际", /installedIndexGen !== buildGen/.test(lib), true);
 
 // ---- A3：无 fp 回退必须含 cached_at（防漏更新）----
@@ -106,6 +106,16 @@ check("A3 无 fp 回退串含 cached_at", /return JSON\.stringify\(\[data\.sourc
 // FNV-1a 32 位对 ~2262 条列表内容变化碰撞概率约 0.06%；碰撞后果 = 内容变了但 fp
 // 相同 → 客户端跳过重渲染 → 列表不更新（静默）。契约：fp 串附带 repos.length。
 check("A4 listFingerprint 串含列表长度", /function listFingerprint\(repos\) \{[\s\S]{0,400}repos\.length/.test(lib), true);
+
+// ---- A5：指纹必须含 installed 标志（切 profile/装/卸后标注变化仍触发重渲染）----
+// 标注随请求时状态计算（annotateInstalled），full_name 序列不变但 installed 位翻转
+// 时旧指纹不感知 → 客户端 fp===lastFp 跳过重渲染 → 列表停留在旧 profile 标注。
+// 契约：installed 标志混入哈希。
+check("A5 listFingerprint 混入 installed 标志", /function listFingerprint\(repos\) \{[\s\S]{0,400}installed === true/.test(lib), true);
+// ---- A6：保存 profile 成功且值变化时递增 tick（客户端重新拉取列表）----
+// PluginTab/SkillsTab 的列表 effect 只依赖 props.tick——保存后不 tick 则已渲染
+// 列表不重新 fetch，六轮的指纹修复根本没机会生效（无新请求）。
+check("A6 saveTargetProfile 成功且 profile 变化时递增 tick", /saveTargetProfile[\s\S]{0,900}data\.profile !== prevProfile\) setTick\(tick \+ 1\);/.test(client), true);
 
 // ---- C1：pkg_name 冲突日志须汇总计数（不拼接全量明细刷屏）----
 // 每次列表请求 console.warn 一长串被隐藏仓库名（几十个），dsh+skills 双列表请求

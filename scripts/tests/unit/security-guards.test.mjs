@@ -63,6 +63,20 @@ check("logLine 定义处截断（≥2 处，保护响应体 log 数组）", (lib
 // 契约：tmp + rename 原子替换（与 saveInstalled/appendPatchEntry 同模式）。
 check("writeListCache 原子写（tmp + rename）", /const tmp = listCacheFile\(kind\) \+ "\.tmp";[\s\S]*?await rename\(tmp, listCacheFile\(kind\)\);/.test(lib), true);
 
+// ---- profile 切换与安装互斥（四轮审计 #184 补丁面）----
+// 安装/卸载/自更新进行中切换 targetProfile：运行中安装路径读 PROFILE_NM/PATCH_FILE/
+// PROFILE_PKG 常量（registerBundlePackage/appendPatchEntry），切换落点突变 → 记录与
+// 实体错位 / patch 写错 profile。契约：profile POST 在鉴权后、写配置前检查 installRunning。
+check("profile POST 安装进行中拒绝切换（installRunning 互斥）", /path: "\/api\/marketplace\/profile"[\s\S]*?if \(installRunning !== null\) return json\(res, 409, \{ error: t\(lang, "installBusy"\) \}\);/.test(lib), true);
+check("profile POST 互斥检查位于配置写入之前", /path: "\/api\/marketplace\/profile"[\s\S]*?installRunning !== null[\s\S]*?writeFile\(cfgPath, JSON\.stringify\(cfg, null, 2\), "utf8"\)/.test(lib), true);
+
+// ---- CLI 安装记录带 profile 锚点提示（七轮审计）----
+// CLI 记录无包级 location（官方 CLI 自管落点），跨 profile 后卸载/检测更新无锚点
+// 可依 → 回退当前 PROFILE_NM 落错 profile（孤儿态）。契约：保存时带安装时刻
+// targetProfile；resolveRecordNodeModules 支持提示分支。
+check("CLI 安装记录保存安装时刻 profile 提示", /saveInstalled\(repo, \{ type: "cli"[\s\S]{0,200}profile: targetProfile \}\)/.test(lib), true);
+check("resolveRecordNodeModules 支持 CLI profile 提示分支", /function resolveRecordNodeModules\(record\) \{[\s\S]*?record\.profile === "string"/.test(lib), true);
+
 // ---- 上游 v1.5.0 npm 等价回退（installNpmTargetToTemp）：cmd 包装契约 ----
 // 深集成豁免（真实 npm 二进制）——但存在性必须被测试感知：win32 经 cmd.exe 启动 npm
 //（.cmd 垫片 execFile 直接启动会 EINVAL，issue #46 同族），不直接 execFile npm.cmd。
@@ -87,7 +101,7 @@ check("spawnSync bash 探测带 windowsHide", /spawnSync\("bash", \["--version"\
 // 卸载 bundle 主路径 pnpm remove + 降级手工清理。
 check("isBundlePackage 检测 dsh.bundle.patch 声明", /function isBundlePackage[\s\S]*?dsh\.bundle[\s\S]*?patch/.test(lib), true);
 check("registerBundlePackage 记录 dependencies + bundles 层", /registerBundlePackage[\s\S]*?manifest\.dependencies = deps;[\s\S]*?bundles\.push\(pkgName\)/.test(lib), true);
-check("registerBundlePackage 经 pnpm install 注册（cwd=profile，跳过 workspace）", /registerBundlePackage[\s\S]*?runPnpm\(\["install", "--ignore-workspace"\], \{ cwd: PROFILE_WEB_DIR/.test(lib), true);check("profile manifest 原子写（tmp + rename）", /const tmp = PROFILE_PKG \+ "\.tmp";[\s\S]*?rename\(tmp, PROFILE_PKG\)/.test(lib), true);
+check("registerBundlePackage 经 pnpm install 注册（cwd=profile，跳过 workspace）", /registerBundlePackage[\s\S]*?runPnpm\(\["install", "--ignore-workspace"\], \{ cwd: PROFILE_WEB_DIR/.test(lib), true);check("profile manifest 原子写（tmp + rename，路径参数化支持跨 profile）", /const tmp = pkgPath \+ "\.tmp";[\s\S]*?rename\(tmp, pkgPath\)/.test(lib), true);
 check("installRepo bundle 分支在 appendPatchEntry 前 continue（不写单条 insert）", /if \(isBundlePackage\(pkg\) && repo !== SELF_UPDATE_REPO\)[\s\S]*?registerBundlePackage[\s\S]*?continue;/.test(lib), true);
 check("bundle 注册结果导向：pnpm 非零退出但包可解析 → 告警继续", /let pnpmErr = null;[\s\S]*?if \(pnpmErr\) logLine\(t\(lang, "bundlePnpmWarn"/.test(lib), true);
 check("bundle 注册验证子依赖可解析（realpath + createRequire，对齐 ESM 解析语义）", /realpath\(resolvedPkg\)[\s\S]*?createRequire\(join\(anchor, "noop\.js"\)\)[\s\S]*?bundleDepsResolveFail/.test(lib), true);
@@ -107,7 +121,7 @@ check("scanRequirements 显式跳过 symlink", /if \(ent\.isSymbolicLink\(\)\) c
 check("check-update 包名形态校验（≤2 段 + 段字符集 + 排除 ./..）", /const parts = pkgName\.split\("\/"\);[\s\S]*?parts\.length > 2 \|\| parts\.some\(/.test(lib), true);
 check("list handler cliNpmForm 分支同款校验（2539 漏网点）",
   /const cliParts = cliTarget\.split\("\/"\);[\s\S]*?cliParts\.length > 2 \|\| cliParts\.some\(/.test(lib), true);
-check("env-keys location 受管目录校验（扫描前）", /const managed = \[PROFILE_NM, SKILLS_DIR, PRESETS_DIR, CACHE_DIR\]\.some/.test(lib), true);
+check("env-keys location 受管目录校验（扫描前；锚点按记录定位）", /const managed = \[resolveRecordNodeModules\(record\), SKILLS_DIR, PRESETS_DIR, CACHE_DIR\]\.some/.test(lib), true);
 
 // ---- CLI 安装分支：无字符串拼接命令（注入面）----
 // win32 的 dsh .cmd 垫片经 cmd.exe /c 启动——若用「拼接 cmdLine + /d /s /c」：
