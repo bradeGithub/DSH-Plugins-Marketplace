@@ -1,20 +1,27 @@
 {
-  "generated_at": "2026-08-25T08:59:06.796Z",
-  "count": 2,
+  "generated_at": "2026-08-25T10:47:41.235Z",
+  "count": 3,
   "items": [
     {
-      "full_name": "superfish058/dsh-llm-proxy",
+      "full_name": "Letter2025/dsh-task-worktree",
       "previous": "other",
-      "current": "vision",
-      "desc_now": "DSH 模型代理插件：按模型粒度走代理（Clash 等）+ 失败自动重试 + 多模态模型镜像 + 逐模型测试连接，模型列表与官方同步，设置页实时生效。",
-      "desc_prev": "DSH 模型代理插件：按模型走代理（Clash 等）+ 失败自动重试，设置页实时生效。"
+      "current": "tool",
+      "desc_now": "Complete Git worktree support for DeepSeek Harness: task-scoped isolated checkouts on their own branches, recorded in a per-repo manifest that survives sessions and restarts",
+      "desc_prev": null
     },
     {
       "full_name": "biggerboy/dsh-conversation-anchors",
-      "previous": "web-ui",
+      "previous": "conversation",
+      "current": "tool",
+      "desc_now": "Codex-style tick-rail and thinking-process fold for DeepSeek Harness Web GUI: per-turn dashes, hover preview, click-to-scroll, eager history, collapsed Think/tool rows.",
+      "desc_prev": "Codex-style conversation tick-rail for DeepSeek Harness Web GUI: per-turn dashes, hover preview, and click-to-scroll."
+    },
+    {
+      "full_name": "popeye1113/dsh-question-jump-bar",
+      "previous": "other",
       "current": "conversation",
-      "desc_now": "Codex-style conversation tick-rail for DeepSeek Harness Web GUI: per-turn dashes, hover preview, and click-to-scroll.",
-      "desc_prev": "Sidebar conversation anchor navigation plugin for DeepSeek Harness web GUI"
+      "desc_now": "DSH Web 插件：会话右侧的问题索引标尺（Question Jump Bar），每个刻度一次提问，悬停预览、点击/键盘跳转。",
+      "desc_prev": null
     }
   ]
 }
