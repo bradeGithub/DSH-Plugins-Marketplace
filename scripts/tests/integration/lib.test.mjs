@@ -1704,6 +1704,17 @@ function mockFetchCapture(payload, status = 200) {
       check("锚点：非法 profile 名回退",
         lib.resolveRecordNodeModules({ location: join(profilesRoot, "..", "evil", "node_modules", "x") }),
         join(profilesRoot, "desktop", "node_modules"));
+      // 七轮审计：CLI 记录（无 location）用安装时刻保存的 profile 提示定位
+      check("锚点：CLI 记录 profile 提示定位到提示的 profile",
+        lib.resolveRecordNodeModules({ location: null, profile: "legacy" }), legacyNm);
+      // 提示非法（穿越形态）→ 回退当前 PROFILE_NM
+      check("锚点：CLI 记录非法提示回退当前 NM",
+        lib.resolveRecordNodeModules({ location: null, profile: "../evil" }),
+        join(profilesRoot, "desktop", "node_modules"));
+      // 无提示且无 location → 回退当前 PROFILE_NM
+      check("锚点：CLI 记录无提示回退当前 NM",
+        lib.resolveRecordNodeModules({ profile: null }),
+        join(profilesRoot, "desktop", "node_modules"));
     } finally {
       lib.setTargetProfile("web");
     }

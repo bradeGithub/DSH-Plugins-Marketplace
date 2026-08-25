@@ -70,6 +70,13 @@ check("writeListCache 原子写（tmp + rename）", /const tmp = listCacheFile\(
 check("profile POST 安装进行中拒绝切换（installRunning 互斥）", /path: "\/api\/marketplace\/profile"[\s\S]*?if \(installRunning !== null\) return json\(res, 409, \{ error: t\(lang, "installBusy"\) \}\);/.test(lib), true);
 check("profile POST 互斥检查位于配置写入之前", /path: "\/api\/marketplace\/profile"[\s\S]*?installRunning !== null[\s\S]*?writeFile\(cfgPath, JSON\.stringify\(cfg, null, 2\), "utf8"\)/.test(lib), true);
 
+// ---- CLI 安装记录带 profile 锚点提示（七轮审计）----
+// CLI 记录无包级 location（官方 CLI 自管落点），跨 profile 后卸载/检测更新无锚点
+// 可依 → 回退当前 PROFILE_NM 落错 profile（孤儿态）。契约：保存时带安装时刻
+// targetProfile；resolveRecordNodeModules 支持提示分支。
+check("CLI 安装记录保存安装时刻 profile 提示", /saveInstalled\(repo, \{ type: "cli"[\s\S]{0,200}profile: targetProfile \}\)/.test(lib), true);
+check("resolveRecordNodeModules 支持 CLI profile 提示分支", /function resolveRecordNodeModules\(record\) \{[\s\S]*?record\.profile === "string"/.test(lib), true);
+
 // ---- 上游 v1.5.0 npm 等价回退（installNpmTargetToTemp）：cmd 包装契约 ----
 // 深集成豁免（真实 npm 二进制）——但存在性必须被测试感知：win32 经 cmd.exe 启动 npm
 //（.cmd 垫片 execFile 直接启动会 EINVAL，issue #46 同族），不直接 execFile npm.cmd。
