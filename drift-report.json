@@ -1,13 +1,41 @@
 {
-  "generated_at": "2026-08-26T07:08:49.728Z",
-  "count": 1,
+  "generated_at": "2026-08-26T08:59:50.516Z",
+  "count": 5,
   "items": [
     {
-      "full_name": "luxueliu/luxueliu-dsh-md-writing-tools",
-      "previous": "web-ui",
-      "current": "coding",
-      "desc_now": "给 DSH 侧边栏的 Markdown 编辑器补上加粗、斜体、标题、格式刷等写作快捷键",
-      "desc_prev": null
+      "full_name": "dshplugin/dsh-plugin-hub",
+      "previous": "vision",
+      "current": "resource",
+      "desc_now": "DeepSeek Harness 社区内置插件市场（dsh-plugin）— 搜索插件、下载并安装 4000+ 人工精选社区插件，每日更新、完全免费。内置在 Harness「设置 → 插件中心」，无需离开应用即可浏览、搜索、安装各类 AI 插件。",
+      "desc_prev": "DeepSeek Harness 社区内置插件市场（dsh-plugin）— 搜索插件、下载并安装 4000+ 人工精选社区插件，每日更新、完全免费。内置在 Harness「设置 → 插件中心」，无需离开应用即可浏览、搜索、安装各类 AI 插件。"
+    },
+    {
+      "full_name": "chen731215-dev/dsh-tavern",
+      "previous": "conversation",
+      "current": "memory",
+      "desc_now": "DSH 原生酒馆管理面板，入口：设置 → 通用设置 → 酒馆管理（原生）。多角色卡/多世界书/多预设，会话级预设隔离；世界书智能关键词注入省 60-70% 上下文；记忆总结 + 角色关系网；剧情选项一键发送；创作/扮演双模式；NSFW 成人模式。免费非商用（CC BY-NC-SA 4.0）。安装：dsh plugin --profile web add dsh-tavern",
+      "desc_prev": "DSH 原生酒馆管理面板，入口：设置 → 通用设置 → 酒馆管理（原生）。多角色卡/多世界书/多预设，会话级预设隔离；世界书智能关键词注入省 60-70% 上下文；记忆总结 + 角色关系网；剧情选项一键发送；创作/扮演双模式；NSFW 成人模式。免费非商用（CC BY-NC-SA 4.0）。安装：dsh plugin --profile web add dsh-tavern"
+    },
+    {
+      "full_name": "SiriLee/dsh-rewind",
+      "previous": "tool",
+      "current": "memory",
+      "desc_now": "DeepSeek Harness plugin: in-place conversation rewind in the same session window (Claude Code /rewind semantics) + optional file restore",
+      "desc_prev": "DeepSeek Harness plugin: in-place conversation rewind in the same session window (Claude Code /rewind semantics) + optional file restore"
+    },
+    {
+      "full_name": "Ultronen/dsh-archived-chats",
+      "previous": "tool",
+      "current": "resource",
+      "desc_now": "会话档案 / Session Archive for DeepSeek Harness：按工作区浏览和全文搜索归档聊天，原生只读预览消息、工具活动与已存储图片，管理标签备注、历史版本恢复为副本与 ZIP 备份恢复；提供带保护快照的可撤销回收站、空间分账、保留策略及来源与分支。所有数据留在本机。 Session Archive: full-text search, read-only preview, History restore-as-copy, ZIP backups, Recycle Bin, storage accounting, retention, and lineage. All data stays local.",
+      "desc_prev": "本地归档聊天中心：搜索和预览完整对话、历史版本与恢复副本、ZIP 备份、可撤销回收站、保留策略及来源与分支。Local archived-chat manager: full-text preview, local history, restore-as-copy, ZIP backups, Recycle Bin, retention, and Origins & Branches."
+    },
+    {
+      "full_name": "stultuss/dsh-clear-tool-results",
+      "previous": "tool",
+      "current": "resource",
+      "desc_now": "DSH 宿主插件：每轮对话结束后，把该轮的原始工具结果归档（tool result）到会话目录（tool-result-logs），并从上下文中清除，减少 Token 消耗；模型可用 read_tool_result_log 工具按轮次或时间自主读取归档数据。",
+      "desc_prev": "DeepSeek Harness（DSH）host 平面插件：**每个 turn 结束时，把上一轮产生的 `tool/result` 从模型上下文中清除**，并提供聊天命令开关："
     }
   ]
 }
