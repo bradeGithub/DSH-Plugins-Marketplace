@@ -1,19 +1,26 @@
 {
-  "generated_at": "2026-08-26T17:02:45.927Z",
-  "count": 2,
+  "generated_at": "2026-08-26T20:01:54.799Z",
+  "count": 3,
   "items": [
     {
-      "full_name": "988hj7tczd-oss/harness-github",
-      "previous": "other",
+      "full_name": "zhouzhencheng07/dsh-kit",
+      "previous": "tool",
       "current": "coding",
-      "desc_now": "DeepSeek Harness GitHub plugin: review PRs, triage issues, debug Actions CI, handle incoming GitHub events (webhooks + polling) via dsh-native tools.",
-      "desc_prev": null
+      "desc_now": "Page capability kit for DeepSeek Harness (dsh): terminal dock, file tree, source control, skills manager, phone access, background jobs and keyless web search in the browser UI",
+      "desc_prev": "Free keyless Tavily web search tool for DeepSeek Harness (dsh)"
     },
     {
-      "full_name": "DobyChao/dsh-workspace-enhancement",
+      "full_name": "ne-ilyxa/dsh-session-drafts",
+      "previous": "web-ui",
+      "current": "notify",
+      "desc_now": "Cursor-style draft chats for DeepSeek Harness (DSH): New Session reuses the empty draft — and only mints a fresh one when every draft has unsent text — so empty placeholders never stack, exactly like Cursor's (or Telegram's) chat list.",
+      "desc_prev": "Cursor-style New Session for DeepSeek Harness (DSH): every click mints a fresh durable draft session — plus a sidebar Drafts switcher to keep several empty chats open at once."
+    },
+    {
+      "full_name": "lyuwen/dsh-steer-button",
       "previous": "other",
-      "current": "coding",
-      "desc_now": "DeepSeek Harness plugin: local and remote (SSH) workspaces in one place. Remote execution uses a single SSH connection (multi-hop jumps allowed); bash, files, PTY, and LSP share that link.",
+      "current": "agent",
+      "desc_now": "Queue, Steer, and Backlog for DSH. More diverse way to interact with the agent while it's running.",
       "desc_prev": null
     }
   ]
