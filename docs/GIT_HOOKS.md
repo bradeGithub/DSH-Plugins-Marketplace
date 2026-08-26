@@ -121,12 +121,22 @@ bash scripts/install-hooks.sh
 - 不推荐：`git commit --no-verify`（跳过全部 hook）
 - 例外场景：紧急修复、CI 自动提交（registry.json 更新）、hook 自身迭代调试
 - 跳过时请在提交信息中注明原因（如 `ci: update registry.json (--no-verify 自动提交)`）
+- **底线在 CI**：`.github/workflows/lint.yml` 对每次 push/PR 重跑语法/单元/集成/TOC/密钥扫描——本地 `--no-verify` 绕不过 PR 门禁
+
+## 5.1 CI 增量模式（环境变量）
+
+check.mjs 支持两个环境变量（测试与 CI 用，本地无需设置）：
+
+| 变量 | 作用 |
+|---|---|
+| `CHECK_WORKTREE` | git 命令与暂存文件读取的目标工作树（默认仓库根）——hook-check.test.mjs 用临时仓库隔离 |
+| `CHECK_DIFF_BASE` | 设置后密钥扫描改用 `git diff --name-only <base>...HEAD` 扫相对基线的增量（CI checkout 无 staged 概念；lint.yml 传 PR base.sha 或 HEAD~1） |
 
 ## 6. 测试要求
 
 - 所有 hook 校验逻辑必须是**纯函数**（放 `scripts/hooks/validate.mjs` / `scripts/toc.mjs`），可被 unit 测试覆盖
 - 新增 hook 检查项必须配套断言（目标：校验逻辑 100% 覆盖）
-- Hook 编排（`check.mjs`）不直接测试，但调用链在 CI 中完整执行
+- Hook 编排（`check.mjs`）由 `scripts/tests/unit/hook-check.test.mjs` 行为测试覆盖（spawn 子进程：本地 staged 扫描 / CI 增量 / 未知 --only / --help / secretExclusions），调用链在 CI 中完整执行
 
 ## 7. 跨平台兼容约束
 

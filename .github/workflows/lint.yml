@@ -1,0 +1,41 @@
+name: lint-guards
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: lint-guards-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  guards:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # CI 增量密钥扫描需要基线分支的完整历史（diff base...HEAD）
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: 语法检查
+        run: node scripts/hooks/check.mjs --only=syntax
+
+      - name: 单元 + 集成测试
+        run: node scripts/hooks/check.mjs --only=tests
+
+      - name: TOC 完整性
+        run: node scripts/hooks/check.mjs --only=toc
+
+      - name: 密钥扫描（相对基线的增量，防 --no-verify 绕过本地 hook）
+        run: node scripts/hooks/check.mjs --only=secret
+        env:
+          # PR：扫相对目标分支的变更；push 到 main（多为 merge）：扫相对上一个 commit
+          CHECK_DIFF_BASE: ${{ github.event.pull_request.base.sha || 'HEAD~1' }}

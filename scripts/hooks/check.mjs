@@ -18,6 +18,8 @@ import { fileURLToPath } from "node:url";
 import { SYNTAX_CHECK_FILES, validateSubject, extractSubject, parseHookConfig, DEFAULT_HOOK_CONFIG, detectSecret } from "./validate.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
+// 检查目标工作树：本地默认仓库根；测试（hook-check.test.mjs）与 CI 场景可覆盖。
+const WORKTREE = process.env.CHECK_WORKTREE ?? ROOT;
 const USAGE = `用法:
   node scripts/hooks/check.mjs [选项]
 
@@ -135,21 +137,28 @@ function checkToc() {
   }
 }
 
-// ---- 4. 敏感密钥扫描（暂存文件）----
+// ---- 4. 敏感密钥扫描（暂存文件；CI 模式扫与基线分支的增量）----
+// 本地扫 git diff --cached（staged）；CHECK_DIFF_BASE 设置时（CI）改用
+// `git diff --name-only <base>...HEAD`——checkout 后的 CI 无 staged 概念，
+// 扫 PR 相对基线分支的实际变更（业界 gitleaks --log-opts 同语义）。
 function checkSecret() {
   if (!want("secret")) return;
-  const cfg = loadHookConfig(ROOT);
+  const cfg = loadHookConfig(WORKTREE);
   if (cfg.secretLevel === "off") return;
   try {
-    const staged = execFileSync("git", ["diff", "--cached", "--name-only"], { cwd: ROOT, encoding: "utf8" });
+    const diffBase = process.env.CHECK_DIFF_BASE;
+    const diffArgs = diffBase
+      ? ["diff", "--name-only", `${diffBase}...HEAD`]
+      : ["diff", "--cached", "--name-only"];
+    const staged = execFileSync("git", diffArgs, { cwd: WORKTREE, encoding: "utf8" });
     const files = staged.split("\n").map((s) => s.trim()).filter(Boolean);
     let found = 0;
     for (const f of files) {
       if (cfg.secretExclusions.some((ex) => f.includes(ex))) continue;
-      if (!existsSync(join(ROOT, f))) continue;
+      if (!existsSync(join(WORKTREE, f))) continue;
       let content;
       try {
-        content = readFileSync(join(ROOT, f), "utf8");
+        content = readFileSync(join(WORKTREE, f), "utf8");
       } catch {
         continue; // 二进制/编码异常跳过
       }
@@ -176,12 +185,12 @@ function checkSecret() {
 // ---- 5. 提交信息规范 ----
 function checkCommitMsg() {
   if (!want("commit-msg")) return;
-  const msgPath = process.argv.slice(2).find((a) => !a.startsWith("--")) ?? join(ROOT, ".git", "COMMIT_EDITMSG");
+  const msgPath = process.argv.slice(2).find((a) => !a.startsWith("--")) ?? join(WORKTREE, ".git", "COMMIT_EDITMSG");
   if (!existsSync(msgPath)) {
     fail("commit-msg", `未找到提交信息文件: ${msgPath}`);
   } else {
     const subject = extractSubject(readFileSync(msgPath, "utf8"));
-    const level = loadHookConfig(ROOT).emojiLevel ?? "error";
+    const level = loadHookConfig(WORKTREE).emojiLevel ?? "error";
     const r = validateSubject(subject, { emojiLevel: level });
     if (r.ok) {
       console.log(`[OK] [commit-msg] ${subject}`);
