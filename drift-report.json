@@ -1,20 +1,20 @@
 {
-  "generated_at": "2026-08-26T10:50:03.545Z",
+  "generated_at": "2026-08-26T13:10:47.511Z",
   "count": 2,
   "items": [
     {
-      "full_name": "qwe225380/dsh-omni-router",
+      "full_name": "AndrasSama/dsh-omp-advisor",
       "previous": "agent",
       "current": "tool",
-      "desc_now": "Task-level reliability layer for DeepSeek Harness - decide when to intervene, prepare context, verify evidence, recover from failure. Reuses existing Skills/Tools/Plugins.",
-      "desc_prev": "Capability-aware reliability layer for DeepSeek Harness - reuse existing Skills/Plugins, fill gaps, recover from failures, prove completion."
+      "desc_now": "Ward concil is oh-my-pi advisor subsystem ported to DeepSeek Harness — independent reviewer models watch your agent and advise it (nit injects, concern/blocker steer) it also include an auto resume and git checkpoints",
+      "desc_prev": "oh-my-pi advisor subsystem ported to DeepSeek Harness — independent reviewer models watch your agent and advise it (nit injects, concern/blocker steer)"
     },
     {
-      "full_name": "SiriLee/dsh-edit-approval",
-      "previous": "coding",
-      "current": "other",
-      "desc_now": "Per-edit approval gate for DeepSeek Harness — red/green line diff review before write/edit/stream operations · DSH 插件：逐操作审批门，write/edit/stream 执行前进行红绿行级 diff 审查",
-      "desc_prev": "DeepSeek Harness plugin: per-edit approval with red/green line diff before write/edit/str_replace_editor (approve / reject / always allow)"
+      "full_name": "liujia-io/dsh-image-picker",
+      "previous": "conversation",
+      "current": "tool",
+      "desc_now": "Paperclip image-picker button for the DeepSeek Harness web composer - pick reference images via the system file dialog and feed them into the official attachment pipeline.",
+      "desc_prev": null
     }
   ]
 }
