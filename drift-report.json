@@ -1,27 +1,34 @@
 {
-  "generated_at": "2026-08-26T20:01:54.799Z",
-  "count": 3,
+  "generated_at": "2026-08-26T23:04:57.613Z",
+  "count": 4,
   "items": [
     {
-      "full_name": "zhouzhencheng07/dsh-kit",
+      "full_name": "TYEclipse/dsh-color",
       "previous": "tool",
       "current": "coding",
-      "desc_now": "Page capability kit for DeepSeek Harness (dsh): terminal dock, file tree, source control, skills manager, phone access, background jobs and keyless web search in the browser UI",
-      "desc_prev": "Free keyless Tavily web search tool for DeepSeek Harness (dsh)"
+      "desc_now": "Color toolbox for DeepSeek Harness (dsh): parse/convert any CSS color (hex, rgb, hsl, hwb, named), WCAG contrast ratios with AA/AAA verdicts, named-color lookup, harmonious palettes (7 types), and color adjustments — zero runtime dependencies, pure math",
+      "desc_prev": "Color conversion toolbox for DeepSeek Harness (dsh): parse/convert any CSS color (hex, rgb, hsl, hwb, named), WCAG contrast ratios with AA/AAA verdicts, named-color lookup — zero runtime dependencies, pure math"
     },
     {
-      "full_name": "ne-ilyxa/dsh-session-drafts",
-      "previous": "web-ui",
-      "current": "notify",
-      "desc_now": "Cursor-style draft chats for DeepSeek Harness (DSH): New Session reuses the empty draft — and only mints a fresh one when every draft has unsent text — so empty placeholders never stack, exactly like Cursor's (or Telegram's) chat list.",
-      "desc_prev": "Cursor-style New Session for DeepSeek Harness (DSH): every click mints a fresh durable draft session — plus a sidebar Drafts switcher to keep several empty chats open at once."
-    },
-    {
-      "full_name": "lyuwen/dsh-steer-button",
+      "full_name": "aorucshiea/dsh-safe-tui",
       "previous": "other",
-      "current": "agent",
-      "desc_now": "Queue, Steer, and Backlog for DSH. More diverse way to interact with the agent while it's running.",
-      "desc_prev": null
+      "current": "tool",
+      "desc_now": "DeepSeek Harness safe-mode recovery console: minimal TUI, history, repair, model/provider management",
+      "desc_prev": "DeepSeek Harness safe-mode recovery console: minimal TUI, history, repair, model/provider management"
+    },
+    {
+      "full_name": "luxueliu/luxueliu-dsh-md-writing-tools",
+      "previous": "coding",
+      "current": "document",
+      "desc_now": "DSH 侧栏写作还靠手点？Word 手感快捷键一次装齐：加粗/斜体/删除线/行内代码/标题升降/插链接/格式刷；重复按键即取消格式，多行整行感知，侧栏升级被覆盖一键装回 — DeepSeek Harness 写作插件",
+      "desc_prev": "给 DSH 侧边栏的 Markdown 编辑器补上加粗、斜体、标题、格式刷等写作快捷键"
+    },
+    {
+      "full_name": "luxueliu/luxueliu-dsh-story",
+      "previous": "notify",
+      "current": "model",
+      "desc_now": "DSH 写小说缺的四件事一次配齐！世界书角色卡拖进输入框，正文整篇进上下文；剧情断了 /gemini-sum 一键交接新窗；/out 导出干净成稿；/sum 一句话成角色卡/世界书；[论坛体][第二人称] 打字即展开 — DeepSeek Harness 创作插件",
+      "desc_prev": "DSH fiction writing: Continue-style lore drop, plot handoff, clean transcript, character/world cards"
     }
   ]
 }
