@@ -1,83 +1,34 @@
 {
-  "generated_at": "2026-08-27T15:58:18.261Z",
-  "count": 11,
+  "generated_at": "2026-08-27T20:28:55.748Z",
+  "count": 4,
   "items": [
     {
-      "full_name": "SiriLee/dsh-rewind",
-      "previous": "memory",
-      "current": "tool",
-      "desc_now": "DSH 插件：真正便捷无感的同窗口内对话回退，从不新建分支；自带轻量工作区备份，可一并还原文件（完整 Claude Code /rewind 语义）。 · DSH plugin: genuinely effortless in-window conversation rewind — never forking a new session; ships a lightweight workspace backup that restores files together with the rewind (full Claude Code /rewind semantics).",
-      "desc_prev": "DSH 插件：真正便捷无感的同窗口内对话回退，从不新建分支；自带轻量工作区备份，可一并还原文件（完整 Claude Code /rewind 语义）。 · DSH plugin: genuinely effortless in-window conversation rewind — never forking a new session; ships a lightweight workspace backup that restores files together with the rewind (full Claude Code /rewind semantics)."
-    },
-    {
-      "full_name": "sky-unicorn/dsh-enhanced-plugins",
+      "full_name": "01Virex/dsh-status-rotator",
       "previous": "tool",
-      "current": "notify",
-      "desc_now": "DeepSeek Harness（DSH）一站式增强套件，基于公开插件扩展点构建，无需修改 DSH Core。提供 Windows Launcher、桌面通知与动态桌宠、Plugin Community、MCP Server Manager、模型输入类型配置、最后一条消息编辑与重新生成，以及 Claude Code / Codex Subagents 实时控制。所有功能均可独立安装，支持全量部署、按需组合、升级迁移与安全卸载。",
-      "desc_prev": "dsh-enhanced-plugins 是一站式 DeepSeek Harness 增强插件包，集成 MCP 管理、插件市场、文件引用、模型能力配置及子智能体开关。"
-    },
-    {
-      "full_name": "STARDUSTLC666/dsh-dingtalk",
-      "previous": "notify",
-      "current": "tool",
-      "desc_now": "DeepSeek Harness 钉钉群机器人插件：dingtalk_notify/text/health 三工具，自定义机器人 webhook + HMAC 加签，手写签名实现、零运行时依赖；纯 Node 全平台。· DingTalk group-robot notifications for DeepSeek Harness agents.",
-      "desc_prev": "DeepSeek Harness 钉钉群机器人通知插件：dingtalk_notify/dingtalk_text 两工具，自定义机器人 webhook + HMAC 加签安全模式，手写签名实现、零运行时依赖；纯 Node 全平台。· DingTalk group-robot notifications for DeepSeek Harness agents."
-    },
-    {
-      "full_name": "x102201/deepseek-harness-helper",
-      "previous": "tool",
-      "current": "other",
-      "desc_now": "🖥️ DeepSeek Harness 桌面客户端 · 💻 全平台(Win/macOS/Linux, x64/ARM)· 🔀 多窗口并行运行(单机可部署多个 dsh 实例,可独立运行,也可协同完成同一任务)· 🪟 可拖拽分屏(类似 Xshell 窗口管理)· 📦 .dshpack 环境导出",
-      "desc_prev": "DSHHelper 是一款 Windows / macOS / Linux 桌面软件，帮你更方便地使用 DeepSeek Harness（dsh）。不用自己装 Node、配环境，打开软件就能创建多个独立工作区，像开多个浏览器窗口一样并排使用；还能把配置打包成 .dshpack 文件，方便备份或在另一台电脑恢复。"
-    },
-    {
-      "full_name": "STARDUSTLC666/dsh-cite",
-      "previous": "other",
-      "current": "tool",
-      "desc_now": "DeepSeek Harness 参考文献插件：cite_lookup/check/format/bibtex/health 五工具，DOI 精确查询、Crossref 题录检索、GB/T 7714/APA/MLA/Chicago 格式化、有界并发 DOI 校验；纯 Node 全平台。· Citation tools for DeepSeek Harness agents.",
-      "desc_prev": null
-    },
-    {
-      "full_name": "STARDUSTLC666/dsh-flakefinder",
-      "previous": "other",
-      "current": "tool",
-      "desc_now": "DSH 测试稳定性插件：六工具重复运行 vitest/jest/pytest/node:test 识别 flaky 用例，历史留档与隔离清单、健康自检，零运行时依赖。",
-      "desc_prev": "DSH 测试稳定性插件：重复运行测试识别 flaky 用例，历史与隔离清单，零运行时依赖。"
-    },
-    {
-      "full_name": "bailinghub/bailinghub-dsh-plugin",
-      "previous": "tool",
-      "current": "agent",
-      "desc_now": "Let a local DeepSeek Harness Agent use BailingHub to query data, update records, and run permitted actions in your online store, SaaS, or other admin system.",
-      "desc_prev": "Submit and track governed business tasks from DeepSeek Harness through one operator-configured BailingHub route."
-    },
-    {
-      "full_name": "fufengyuan/dsh-stool-plugin",
-      "previous": "other",
-      "current": "tool",
-      "desc_now": "DSH 运维工具箱插件。将 stool 运维 CLI 的全部能力注册为 DSH 模型可调用的工具，无需手动操作即可让 Agent 自动执行服务器管理、日志搜索、数据库查询、CI/CD 部署等操作。",
-      "desc_prev": null
-    },
-    {
-      "full_name": "JanEickholt/dsh-inline-diff",
-      "previous": "tool",
-      "current": "document",
-      "desc_now": "Renders edit and write tool calls as always-expanded side-by-side diffs, with optional syntax coloring and word-level highlighting.",
-      "desc_prev": "See every file edit inline in the DeepSeek Harness chat — always-open side-by-side diffs for edit/write tool calls"
-    },
-    {
-      "full_name": "SleepEggTart/dsh-code-coverage",
-      "previous": "other",
-      "current": "coding",
-      "desc_now": "解析 DSH session 日志归因 AI 生成文件，叠加 c8 覆盖率，产出 AI vs 人工代码覆盖率对比、高危未测文件清单与信任分。",
-      "desc_prev": null
-    },
-    {
-      "full_name": "niyongsheng/meww",
-      "previous": "other",
       "current": "web-ui",
-      "desc_now": "ai pet电子宠物",
-      "desc_prev": "one ai pet"
+      "desc_now": "A DeepSeek Harness (dsh) web plugin: rotate the \"Deep diving…\" status label with typewriter-animated rainbow phrases, a live status pill, tab titles, schedule presets — and video-site-style danmaku floating behind the UI.",
+      "desc_prev": "A DeepSeek Harness (dsh) web plugin that replaces the \"Deep diving…\" turn-status label with phase-aware, typewriter-animated, rainbow-gradient phrases — all configurable from a JSON file."
+    },
+    {
+      "full_name": "yuxino/dsh-blue-whale-maid",
+      "previous": "notify",
+      "current": "web-ui",
+      "desc_now": "DeepSeek Harness 桌宠插件。",
+      "desc_prev": "汐汐：会跟随任务状态动作，并在需要确认、结束或失败时提醒你的 DeepSeek Harness 蓝鲸女仆桌宠插件。"
+    },
+    {
+      "full_name": "xiaxi626/dsh-skills-nexus",
+      "previous": "coding",
+      "current": "tool",
+      "desc_now": "Universal DSH skill adapter. Install once, then register any GitHub repo containing a SKILL.md as a DSH skill — one command per repo. No Cordis plugin code or package.json needed in the skill repo.",
+      "desc_prev": "通用 DSH skill 枢纽。安装一次，即可把任意含 SKILL.md 的 GitHub 仓库注册为 DSH skill——一条命令添加一个。skill 仓库无需 Cordis 插件代码或 package.json。Universal DSH skill adapter. Install once, then register any GitHub repo containing a SKILL.md as a DSH skill — one command per repo. No Cordis plugin code or package.json needed in the skill repo."
+    },
+    {
+      "full_name": "ramen-ai-dev/dsh-ramen-guard",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "Fail-closed DeepSeek Harness guard enforcing ramen-ai Core IT policy before tool execution.",
+      "desc_prev": null
     }
   ]
 }
