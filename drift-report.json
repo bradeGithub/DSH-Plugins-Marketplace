@@ -1,97 +1,34 @@
 {
-  "generated_at": "2026-08-28T16:50:42.115Z",
-  "count": 13,
+  "generated_at": "2026-08-28T20:20:58.428Z",
+  "count": 4,
   "items": [
     {
-      "full_name": "upstash/skills",
-      "previous": "resource",
-      "current": "tool",
-      "desc_now": "Collection of skills for Upstash",
-      "desc_prev": "Collection of skills for Upstash"
+      "full_name": "sluminositys/dsh-nested-followups",
+      "previous": "conversation",
+      "current": "web-ui",
+      "desc_now": "Branch from any answer and keep branching at any depth. Recursively isolated follow-ups that leave the main DSH task untouched.",
+      "desc_prev": "Ask a follow-up on any past answer in an isolated branch, keeping your main conversation clean. 针对任意历史回答发起追问，新问题在独立分支中展开，主对话保持干净。A conversation-tree plugin for DeepSeek Harness / DeepSeek Harness 会话树插件。"
     },
     {
-      "full_name": "kirkchinese/CiteCiter",
-      "previous": "web-ui",
-      "current": "tool",
-      "desc_now": "为 DeepSeek Harness 打造的 AI 学习、检查与纠偏插件。",
-      "desc_prev": "Verifiable, source-bound, read-only investigations for DSH responses—without interrupting the main task."
-    },
-    {
-      "full_name": "yuxino/dsh-blue-whale-maid",
-      "previous": "web-ui",
-      "current": "notify",
-      "desc_now": "DeepSeek Harness Web 的蓝鲸女仆桌宠，任务有动静时会在页面边上提醒你。",
-      "desc_prev": "DeepSeek Harness 桌宠插件。"
-    },
-    {
-      "full_name": "fengyungithub/dsh-short-video-studio",
-      "previous": "web-ui",
-      "current": "other",
-      "desc_now": "基于deepseek harness和ComfyUI的AI视频创作工作台",
-      "desc_prev": "基于deepseek harness的类MiniMax-Design的AI视频创作工作台"
-    },
-    {
-      "full_name": "Lbunc/dsh-local-llm-controller",
-      "previous": "vision",
-      "current": "tool",
-      "desc_now": "为DSH接入本地大模型能力：在「设置→插件」页一键启停本地 llama.cpp 大模型（双槽x双模态x双预设），卡片内配置、一条命令安装、自动注册，装完即用。 | Enable local large model capabilities for DSH: One-click start/stop for local llama.cpp models (dual‑slot × dual‑modal × dual‑preset) right in Settings → Plugins; configure within the card, install with a single command, automatically register, and ready to use ",
-      "desc_prev": "为DSH接入本地大模型能力：在「设置→插件」页一键启停本地 llama.cpp 大模型（35B/9B，视觉×文本×快速/长上下文），卡片内配置、一条命令安装、自动注册，装完即用。 | start/stop a local llama.cpp llama-server right from Settings → Plugins, with Qwen3.6-35B / Qwen3.5-9B (vision × text, fast × long-context) as session models — card config, one-command install, auto-registered."
-    },
-    {
-      "full_name": "cilis/dsh-tauri-launcher",
+      "full_name": "tma1-ai/dsh-otel",
       "previous": "other",
+      "current": "model",
+      "desc_now": "What a DeepSeek Harness run costs in tokens, money, and time. OpenTelemetry traces, metrics, and logs in GreptimeDB, with seven Grafana dashboards.",
+      "desc_prev": "OpenTelemetry traces, metrics, and logs for DeepSeek Harness, written straight into GreptimeDB"
+    },
+    {
+      "full_name": "better-er/dsh-live-token-stats",
+      "previous": "tool",
       "current": "coding",
-      "desc_now": "DeepSeek Harness (DSH) Launcher，this is a dsh plugin.",
-      "desc_prev": "DeepSeek Harness (DSH) Launcher，this is a dsh plugin."
-    },
-    {
-      "full_name": "sch246/dsh-warm-minimal",
-      "previous": "resource",
-      "current": "tool",
-      "desc_now": "DSH 温暖极简模式：模仿官方 minimal 的首轮两工具形态引导 deepseek-v4-pro 进入 we need 思维链；bootstrap 后第二轮再放行其余工具。",
-      "desc_prev": "DSH 温暖极简模式：会话创建即写入一条高质量首轮轨迹（we/let's 风格），真实输入从第二轮开始，AGENTS.md 与技能目录自然注入"
-    },
-    {
-      "full_name": "KhalilHsu/dsh-plugins",
-      "previous": "other",
-      "current": "tool",
-      "desc_now": "Enhance DeepSeek Harness Web GUI with smart per-turn reasoning/tool folding and query navigation.",
-      "desc_prev": null
-    },
-    {
-      "full_name": "Drhushi/dsh-plugin-tav2",
-      "previous": "other",
-      "current": "web-ui",
-      "desc_now": "DeepSeek Harness 插件 —— 对话式游戏本地化：跟 AI 助手说说话，完成游戏翻译全流程。引擎适配器架构，首发支持 Ren'Py。",
-      "desc_prev": null
-    },
-    {
-      "full_name": "zhm20001/dsh-usage-board",
-      "previous": "other",
-      "current": "web-ui",
-      "desc_now": "dsh-usage-board 是专为 DSH (DeepSeek Harness) 设计的用量与成本可视化看板插件。  插件能实时捕获会话内的 Token 消耗、Step 耗时和异常指标，支持冷启动增量回溯历史全量会话，并按 Sub-agent DAG 调用关系进行树状归集与反向明细穿透。",
-      "desc_prev": null
-    },
-    {
-      "full_name": "lgquan/dsh-voco",
-      "previous": "other",
-      "current": "conversation",
-      "desc_now": "Persistent voice conversations for DSH with cloud speech recognition, Edge TTS, and background Agent delegation.",
-      "desc_prev": "​​dsh-plugin"
+      "desc_now": "DSH Web 插件：基于 DeepSeek 官方 BPE 分词器，在 composer 下方实时渲染 token 状态带，显示流式 TPS、输出 token 与首字延迟，并对比上次 step 的估算与实际偏差；纯插件自包含，不改 DSH 源码",
+      "desc_prev": "dsh·实时 Token 统计·溺水检测插件"
     },
     {
       "full_name": "XianmingLF/xmlf-plugin-manager",
-      "previous": "resource",
-      "current": "coding",
-      "desc_now": "管理当前第三方已安装插件的信息 比较简单的版本 可按照自己的需求修改 github地址安装正在开发",
-      "desc_prev": "管理当前第三方已安装插件的信息"
-    },
-    {
-      "full_name": "zhangkkkai/dsh-spec-panel",
-      "previous": "web-ui",
+      "previous": "coding",
       "current": "resource",
-      "desc_now": "一个基于 dsh-better-sidebar 的 SDD（规范驱动开发，Spec-Driven Development）配套插件：在侧边栏提供一个 Spec 工作台，围绕 OpenSpec 的标准目录结构，让「先写规范 → 再实现 → 再验证」的流程一目了然、可操作。",
-      "desc_prev": null
+      "desc_now": "管理当前第三方已安装插件的信息 比较简单的版本 可按照自己的需求修改",
+      "desc_prev": "管理当前第三方已安装插件的信息 比较简单的版本 可按照自己的需求修改 github地址安装正在开发"
     }
   ]
 }
