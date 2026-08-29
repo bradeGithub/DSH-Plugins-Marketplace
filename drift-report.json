@@ -1,62 +1,48 @@
 {
-  "generated_at": "2026-08-29T11:46:58.899Z",
-  "count": 8,
+  "generated_at": "2026-08-29T16:43:36.221Z",
+  "count": 6,
   "items": [
     {
-      "full_name": "chuspeeism/dashi-taskboard",
+      "full_name": "liguobao/deepseek-harness-remote",
+      "previous": "resource",
+      "current": "tool",
+      "desc_now": "基于 DeepSeek Harness 插件机制的多端远程访问方案，让桌面端与 Android 端安全连接并操作远程 Harness。（A multi-device remote access solution built on the DeepSeek Harness plugin system, enabling desktop and Android clients to securely connect to and operate a remote Harness.）",
+      "desc_prev": "基于 DeepSeek Harness 插件机制的多端远程访问方案，让桌面端与 Android 端安全连接并操作远程 Harness。（A multi-device remote access solution built on the DeepSeek Harness plugin system, enabling desktop and Android clients to securely connect to and operate a remote Harness.）"
+    },
+    {
+      "full_name": "Likenttt/garmin-connect-plugin-for-dsh",
       "previous": "other",
-      "current": "web-ui",
-      "desc_now": "现代化可灵活嵌入的任务面板，支持 Codex、DeepSeek Harness",
-      "desc_prev": null
-    },
-    {
-      "full_name": "fishzjp/qa-skills",
-      "previous": "tool",
-      "current": "memory",
-      "desc_now": "让 AI 像资深测试工程师一样工作：面向 AI Agent 的测试工程 Skill 框架——10 Skills + 共享知识库 + 类型决策矩阵（Claude Code / dsh 等 Agent 可用）",
-      "desc_prev": "让 AI 像资深测试工程师一样工作：全生命周期 QA Agent Skills 框架——方法论 + 10 Skills + 可复现 Benchmark（Claude Code 等 Agent 可用）"
-    },
-    {
-      "full_name": "ai-eks/dsh-docking-layout",
-      "previous": "web-ui",
       "current": "coding",
-      "desc_now": "Organize unlimited conversation tabs into editor-style, drag-to-split groups for DeepSeek Harness Web.",
-      "desc_prev": null
+      "desc_now": "A TypeScript-based Garmin Connect plugin and MCP server with secure browser-based MFA, built for DeepSeek Harness and designed to work with other AI agents.",
+      "desc_prev": "DeepSeek Harness plugin for Garmin Connect — AI-powered fitness data access"
     },
     {
-      "full_name": "7A7K/DSH-Timeline-Navigator",
-      "previous": "conversation",
-      "current": "web-ui",
-      "desc_now": "DeepSeek Harness 长对话时间线导航插件：按回合组织、搜索、星标收藏并跳转历史消息。A lightweight UI navigator for long DSH conversations.",
-      "desc_prev": "A turn-based conversation timeline for DeepSeek Harness with bookmarks, history loading, keyboard controls, and mobile support."
-    },
-    {
-      "full_name": "Jokasa7/dsh-product-subagent-console",
-      "previous": "conversation",
-      "current": "web-ui",
-      "desc_now": "Design, observe, diagnose, and reuse evidence-backed multi-Agent workflows inside DeepSeek Harness",
-      "desc_prev": "Plan, run, and compare multi-Agent work inside DeepSeek Harness conversations"
-    },
-    {
-      "full_name": "ccll/dsh-activity-pane",
+      "full_name": "fb0sh/dsh-pentester",
       "previous": "other",
-      "current": "conversation",
-      "desc_now": "Activity session overview pane for DeepSeek Harness (DSH) web — running sessions, sub-agents, waiting-for-action reminders & recent history at a glance / DSH 活动会话总览窗格",
+      "current": "web-ui",
+      "desc_now": "基于 DeepSeek Harness 的多 Agent PTES 渗透测试编排插件，支持自动化侦察、漏洞分析、验证与报告，使用 Docker/Kali 隔离工具箱 | Multi-agent PTES penetration testing plugin for DeepSeek Harness with automated recon, vulnerability analysis, validation, reporting, and Docker/Kali toolbox",
       "desc_prev": null
     },
     {
-      "full_name": "omdsh-dev/dsh-accessibility",
+      "full_name": "w1661884010-jpg/dsh-plugin-github-market",
+      "previous": "tool",
+      "current": "web-ui",
+      "desc_now": "DSH web client plugin: browse GitHub dsh-plugin topic repositories - plugin market tab, category tags, three-part filters, growth ranking, fuzzy search, favorites, install-command copy",
+      "desc_prev": "DSH web client plugin: browse GitHub dsh-plugin topic repositories (fuzzy search, sort, favorites, install-command copy, optional token)"
+    },
+    {
+      "full_name": "wp-a/dsh-academic-paper-search",
+      "previous": "tool",
+      "current": "document",
+      "desc_now": "DeepSeek Harness 的中文学术论文检索 Bundle：复用 Academic Paper Search MCP，支持多源检索去重、引用核验、引文图谱、MeSH、试验检索与审计导出。",
+      "desc_prev": "DeepSeek Harness Bundle for verified multi-source academic paper search"
+    },
+    {
+      "full_name": "rogerdigital/dsh-vet",
       "previous": "other",
       "current": "tool",
-      "desc_now": "DSH accessibility companion, core remediation, test tooling, assistive-technology evidence, and accessible authoring.",
-      "desc_prev": "Screen-reader guidance and in-app accessibility diagnostics for DeepSeek Harness"
-    },
-    {
-      "full_name": "TelosmaYLX/dsh-session-notify",
-      "previous": "other",
-      "current": "model",
-      "desc_now": "当dsh任务完成时自动推送windows消息，支持自定义文案和图片，以及显示会话用时、消耗token、速度tps等指标",
-      "desc_prev": "任务完成时自动推送windows消息"
+      "desc_now": "Security vetting for DeepSeek Harness (DSH) plugins: permission & supply-chain audits before install, graded via the open dsh-vet/v1 report standard.",
+      "desc_prev": null
     }
   ]
 }
