@@ -1,13 +1,62 @@
 {
-  "generated_at": "2026-08-29T03:43:02.750Z",
-  "count": 1,
+  "generated_at": "2026-08-29T11:46:58.899Z",
+  "count": 8,
   "items": [
     {
-      "full_name": "jarvis959/galvanize-dsh",
+      "full_name": "chuspeeism/dashi-taskboard",
+      "previous": "other",
+      "current": "web-ui",
+      "desc_now": "现代化可灵活嵌入的任务面板，支持 Codex、DeepSeek Harness",
+      "desc_prev": null
+    },
+    {
+      "full_name": "fishzjp/qa-skills",
       "previous": "tool",
-      "current": "notify",
-      "desc_now": "Triggers inside your DSH agent: wake a fresh DeepSeek Harness session when files, mail, webhooks, or git events happen. Native Cordis bundle, heartbeat-proved install.",
-      "desc_prev": "Native DSH (DeepSeek Harness) bundle for galvanize event triggers: trigger_* tools in the agent schema, heartbeat-proved installation, thin client over the core's versioned local API."
+      "current": "memory",
+      "desc_now": "让 AI 像资深测试工程师一样工作：面向 AI Agent 的测试工程 Skill 框架——10 Skills + 共享知识库 + 类型决策矩阵（Claude Code / dsh 等 Agent 可用）",
+      "desc_prev": "让 AI 像资深测试工程师一样工作：全生命周期 QA Agent Skills 框架——方法论 + 10 Skills + 可复现 Benchmark（Claude Code 等 Agent 可用）"
+    },
+    {
+      "full_name": "ai-eks/dsh-docking-layout",
+      "previous": "web-ui",
+      "current": "coding",
+      "desc_now": "Organize unlimited conversation tabs into editor-style, drag-to-split groups for DeepSeek Harness Web.",
+      "desc_prev": null
+    },
+    {
+      "full_name": "7A7K/DSH-Timeline-Navigator",
+      "previous": "conversation",
+      "current": "web-ui",
+      "desc_now": "DeepSeek Harness 长对话时间线导航插件：按回合组织、搜索、星标收藏并跳转历史消息。A lightweight UI navigator for long DSH conversations.",
+      "desc_prev": "A turn-based conversation timeline for DeepSeek Harness with bookmarks, history loading, keyboard controls, and mobile support."
+    },
+    {
+      "full_name": "Jokasa7/dsh-product-subagent-console",
+      "previous": "conversation",
+      "current": "web-ui",
+      "desc_now": "Design, observe, diagnose, and reuse evidence-backed multi-Agent workflows inside DeepSeek Harness",
+      "desc_prev": "Plan, run, and compare multi-Agent work inside DeepSeek Harness conversations"
+    },
+    {
+      "full_name": "ccll/dsh-activity-pane",
+      "previous": "other",
+      "current": "conversation",
+      "desc_now": "Activity session overview pane for DeepSeek Harness (DSH) web — running sessions, sub-agents, waiting-for-action reminders & recent history at a glance / DSH 活动会话总览窗格",
+      "desc_prev": null
+    },
+    {
+      "full_name": "omdsh-dev/dsh-accessibility",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "DSH accessibility companion, core remediation, test tooling, assistive-technology evidence, and accessible authoring.",
+      "desc_prev": "Screen-reader guidance and in-app accessibility diagnostics for DeepSeek Harness"
+    },
+    {
+      "full_name": "TelosmaYLX/dsh-session-notify",
+      "previous": "other",
+      "current": "model",
+      "desc_now": "当dsh任务完成时自动推送windows消息，支持自定义文案和图片，以及显示会话用时、消耗token、速度tps等指标",
+      "desc_prev": "任务完成时自动推送windows消息"
     }
   ]
 }
