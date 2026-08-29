@@ -1,34 +1,13 @@
 {
-  "generated_at": "2026-08-28T20:20:58.428Z",
-  "count": 4,
+  "generated_at": "2026-08-29T03:43:02.750Z",
+  "count": 1,
   "items": [
     {
-      "full_name": "sluminositys/dsh-nested-followups",
-      "previous": "conversation",
-      "current": "web-ui",
-      "desc_now": "Branch from any answer and keep branching at any depth. Recursively isolated follow-ups that leave the main DSH task untouched.",
-      "desc_prev": "Ask a follow-up on any past answer in an isolated branch, keeping your main conversation clean. 针对任意历史回答发起追问，新问题在独立分支中展开，主对话保持干净。A conversation-tree plugin for DeepSeek Harness / DeepSeek Harness 会话树插件。"
-    },
-    {
-      "full_name": "tma1-ai/dsh-otel",
-      "previous": "other",
-      "current": "model",
-      "desc_now": "What a DeepSeek Harness run costs in tokens, money, and time. OpenTelemetry traces, metrics, and logs in GreptimeDB, with seven Grafana dashboards.",
-      "desc_prev": "OpenTelemetry traces, metrics, and logs for DeepSeek Harness, written straight into GreptimeDB"
-    },
-    {
-      "full_name": "better-er/dsh-live-token-stats",
+      "full_name": "jarvis959/galvanize-dsh",
       "previous": "tool",
-      "current": "coding",
-      "desc_now": "DSH Web 插件：基于 DeepSeek 官方 BPE 分词器，在 composer 下方实时渲染 token 状态带，显示流式 TPS、输出 token 与首字延迟，并对比上次 step 的估算与实际偏差；纯插件自包含，不改 DSH 源码",
-      "desc_prev": "dsh·实时 Token 统计·溺水检测插件"
-    },
-    {
-      "full_name": "XianmingLF/xmlf-plugin-manager",
-      "previous": "coding",
-      "current": "resource",
-      "desc_now": "管理当前第三方已安装插件的信息 比较简单的版本 可按照自己的需求修改",
-      "desc_prev": "管理当前第三方已安装插件的信息 比较简单的版本 可按照自己的需求修改 github地址安装正在开发"
+      "current": "notify",
+      "desc_now": "Triggers inside your DSH agent: wake a fresh DeepSeek Harness session when files, mail, webhooks, or git events happen. Native Cordis bundle, heartbeat-proved install.",
+      "desc_prev": "Native DSH (DeepSeek Harness) bundle for galvanize event triggers: trigger_* tools in the agent schema, heartbeat-proved installation, thin client over the core's versioned local API."
     }
   ]
 }
