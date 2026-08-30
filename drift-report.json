@@ -1,83 +1,20 @@
 {
-  "generated_at": "2026-08-30T16:36:48.072Z",
-  "count": 11,
+  "generated_at": "2026-08-30T21:03:30.030Z",
+  "count": 2,
   "items": [
     {
-      "full_name": "modusensus/dsh-mneme",
-      "previous": "tool",
+      "full_name": "pgmi-builds/better-dsh",
+      "previous": "coding",
       "current": "memory",
-      "desc_now": "🧠 The memory that dreams — self-evolving memory for DeepSeek Harness: your AI remembers across sessions, consolidates in its sleep, forgets what matters less, and grows smarter over time. Fully offline & private.",
-      "desc_prev": "🧠 The memory that dreams — self-evolving memory for DeepSeek Harness: your AI remembers across sessions, consolidates in its sleep, forgets what matters less, and grows smarter over time. Fully offline & private."
+      "desc_now": "Make your dsh ready for serious coding tasks. (Tools x Schemas)^REPL. skill://, ctx://, agent://, dvc://, dsh://, IPython REPL, Context as Variables, cross compactions recallable, full context revive. hash-edit, dvc://browser, subagent as function, workflow as function.",
+      "desc_prev": "dsh RLM mode (Recursive Language Models), iPython REPL tool-calling interface, context-as-variables, in dsh Everything is a Plugin ecosystem."
     },
     {
-      "full_name": "feiyang-dev/dsh-usage-plugin",
-      "previous": "web-ui",
-      "current": "tool",
-      "desc_now": "DeepSeek Harness 用量与消耗插件（dsh-usage-plugin）—— 每次调用的 token 用量/缓存命中统计、峰谷计费、余额查询、CSV/JSON/PNG 导出，可经桌面端一键安装或命令行 dsh plugin add 安装。",
-      "desc_prev": "DeepSeek Harness 用量与消耗插件（dsh-usage-plugin）—— 每次调用的 token 用量/缓存命中统计、峰谷计费、余额查询、CSV/JSON/PNG 导出，可经桌面端一键安装或命令行 dsh plugin add 安装。"
-    },
-    {
-      "full_name": "cloader/dsh-taskboard",
-      "previous": "vision",
-      "current": "other",
-      "desc_now": "deepseekharness 任务看板插件 ",
-      "desc_prev": "deepseekharness 任务看板插件 "
-    },
-    {
-      "full_name": "Suiwan/whale-purse",
-      "previous": "web-ui",
-      "current": "notify",
-      "desc_now": "A cute whale desktop pet for DeepSeek Harness that keeps an eye on your DeepSeek balance and session usage/cost. Drag her anywhere, click to open a live panel with real-time spend, peak/off-peak pricing, budget alerts, and history trends.",
-      "desc_prev": null
-    },
-    {
-      "full_name": "MarecGents/deepseek-harness-hub",
-      "previous": "resource",
-      "current": "coding",
-      "desc_now": "DeepSeek Harness 生态的 Windows 桌面插件项目。 A Windows desktop plugin project for the DeepSeek Harness ecosystem.",
-      "desc_prev": "windows desktop project as plugin for deepseek harness"
-    },
-    {
-      "full_name": "zhang-jiazhi/dsh-stats-panel",
-      "previous": "web-ui",
-      "current": "resource",
-      "desc_now": "DeepSeek Harness Token 用量统计面板：模型/渠道聚合、余额配额、精确归档与费用估算",
-      "desc_prev": "dsh插件"
-    },
-    {
-      "full_name": "PianoPrince/dsh-workspace-mover",
-      "previous": "other",
-      "current": "tool",
-      "desc_now": "拖拽跨工作区真迁移 DSH 会话：批量移动、挂错归位、分组合并；步步备份回滚，零 token 消耗 / Move DSH sessions across workspaces by drag & drop — true migration, batch move, misfiled homing, group merge; backups + rollback, zero tokens.",
-      "desc_prev": null
-    },
-    {
-      "full_name": "GooDAnDReaDY/dsh-tts",
-      "previous": "web-ui",
-      "current": "other",
-      "desc_now": "Text-to-speech for DeepSeek Harness: neural voice read-aloud with multi-provider fallback chains",
-      "desc_prev": "Text-to-speech for DeepSeek Harness Web UI: speak agent replies via a provider fallback chain (OpenAI, ElevenLabs, Google, Azure, Groq, Deepgram, OpenRouter, Edge, Piper, eSpeak)"
-    },
-    {
-      "full_name": "GooDAnDReaDY/dsh-lanmode",
-      "previous": "other",
-      "current": "web-ui",
-      "desc_now": "LAN network routing and browser media API compatibility helper for DeepSeek Harness Web UI",
-      "desc_prev": "Settings over the LAN for DeepSeek Harness"
-    },
-    {
-      "full_name": "maiziman/deepseek-harness-portable",
+      "full_name": "bruc3van/dsh-doctor",
       "previous": "tool",
-      "current": "vision",
-      "desc_now": "Community-built Windows desktop wrapper for official tagged DeepSeek Harness source — unzip and run; no Node.js, installer, or admin rights.",
-      "desc_prev": "Portable, zero-install DeepSeek Harness desktop app for Windows — one ZIP, no Node.js or admin rights."
-    },
-    {
-      "full_name": "steven-ngle/dsh-elden",
-      "previous": "other",
-      "current": "web-ui",
-      "desc_now": "Elden Ring style event overlays for the DeepSeek Harness web UI",
-      "desc_prev": "Elden Ring like overlays in DeepSeek Harness"
+      "current": "coding",
+      "desc_now": "帮助 Agent 诊断和升级 DeepSeek Harness 插件，从 DSH 0.1.1 适配到 0.1.2：识别 API 变化、修改代码、处理语义迁移，并为重新发布做好准备。",
+      "desc_prev": "DSH Doctor 面向 DSH 与插件使用者，帮助快速找出导致 DSH 启动异常或升级后不可用的插件，集中说明每个插件的问题、影响与处理方式，并检查常见的 profile 配置和版本漂移。诊断默认完全只读；只有显式使用 --fix、核对并确认精确的修复计划后才会执行，文件修改会先创建备份。"
     }
   ]
 }
