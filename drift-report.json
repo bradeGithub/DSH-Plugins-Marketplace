@@ -1,0 +1,41 @@
+{
+  "generated_at": "2026-08-30T05:22:12.592Z",
+  "count": 5,
+  "items": [
+    {
+      "full_name": "foryourhealth111-pixel/Vibe-Skills",
+      "previous": "agent",
+      "current": "model",
+      "desc_now": "Intelligent Skill routing and workflow orchestration for AI agents — +21.12 pp reward, −29.6% tokens on SkillsBench with DeepSeekV4Flash-VE.",
+      "desc_prev": "VibeSkills is a general-purpose Skill that automatically routes local Skills and intelligently orchestrates harness workflows."
+    },
+    {
+      "full_name": "edonadei/caliper",
+      "previous": "agent",
+      "current": "model",
+      "desc_now": "Run your real agent with and without your skills, MCPs, and rules. See which ones actually help, and what they cost in tokens. Supports Claude Code, Codex, Pi, and Hermes.",
+      "desc_prev": "Know if your agent skill actually works. A lightweight evaluation harness that tracks a success rate across Claude Code, Codex, Pi, and Hermes."
+    },
+    {
+      "full_name": "huanghai-lab/dsh-custom-instructions",
+      "previous": "coding",
+      "current": "tool",
+      "desc_now": "DSH Web 安全自定义指令管理器：编辑全局 AGENTS.md，支持模板、Markdown 预览、历史恢复、导入导出与并发保护。",
+      "desc_prev": "DSH Web GUI 自定义指令编辑器插件：在设置页直接编辑 ~/.dsh/AGENTS.md 全局指令（类似 ChatGPT Custom Instructions），对所有聊天生效。热插拔安装，无需改动 DSH 源码。"
+    },
+    {
+      "full_name": "limlnx523/dsh-plus-plus",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "DSH++ — a local-first control plane for DeepSeek Harness. Plugin security auditing and workflow regression testing.",
+      "desc_prev": "DSH++ — a local-first control plane for DeepSeek Harness"
+    },
+    {
+      "full_name": "wszhoho/dsh-file-attachment",
+      "previous": "resource",
+      "current": "web-ui",
+      "desc_now": "拖入 / 粘贴 / 工具栏上传按钮（↑，可多选、移动端支持拍照）为输入框附加文件：图片走既有草稿图片流程（不落盘）；文档全文落盘到会话工作区 .dsh-file-attachment/ 并插入 @绝对路径引用",
+      "desc_prev": "拖拽/粘贴文件（支持多文件）进输入框：图片沿用原有草稿图片流程；文档读取内容存入项目根 .dsh-file-attachment 临时目录并插入 @绝对路径引用"
+    }
+  ]
+}
