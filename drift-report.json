@@ -1,20 +1,13 @@
 {
-  "generated_at": "2026-08-30T21:03:30.030Z",
-  "count": 2,
+  "generated_at": "2026-08-31T00:25:15.175Z",
+  "count": 1,
   "items": [
     {
-      "full_name": "pgmi-builds/better-dsh",
-      "previous": "coding",
-      "current": "memory",
-      "desc_now": "Make your dsh ready for serious coding tasks. (Tools x Schemas)^REPL. skill://, ctx://, agent://, dvc://, dsh://, IPython REPL, Context as Variables, cross compactions recallable, full context revive. hash-edit, dvc://browser, subagent as function, workflow as function.",
-      "desc_prev": "dsh RLM mode (Recursive Language Models), iPython REPL tool-calling interface, context-as-variables, in dsh Everything is a Plugin ecosystem."
-    },
-    {
-      "full_name": "bruc3van/dsh-doctor",
-      "previous": "tool",
-      "current": "coding",
-      "desc_now": "帮助 Agent 诊断和升级 DeepSeek Harness 插件，从 DSH 0.1.1 适配到 0.1.2：识别 API 变化、修改代码、处理语义迁移，并为重新发布做好准备。",
-      "desc_prev": "DSH Doctor 面向 DSH 与插件使用者，帮助快速找出导致 DSH 启动异常或升级后不可用的插件，集中说明每个插件的问题、影响与处理方式，并检查常见的 profile 配置和版本漂移。诊断默认完全只读；只有显式使用 --fix、核对并确认精确的修复计划后才会执行，文件修改会先创建备份。"
+      "full_name": "zhu1090093659/dsh-web",
+      "previous": "resource",
+      "current": "web-ui",
+      "desc_now": "DeepSeek Harness (DSH) Web Plugin Aggregation Ecosystem · Everything is a plugin, distributed via the Creative Workshop",
+      "desc_prev": "DeepSeek Harness（DSH）Web 插件聚合生态包 · 一切皆插件，创意工坊分发"
     }
   ]
 }
