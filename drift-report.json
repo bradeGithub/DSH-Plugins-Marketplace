@@ -1,13 +1,48 @@
 {
-  "generated_at": "2026-08-31T00:25:15.175Z",
-  "count": 1,
+  "generated_at": "2026-08-31T08:33:27.949Z",
+  "count": 6,
   "items": [
     {
-      "full_name": "zhu1090093659/dsh-web",
+      "full_name": "tafcear/kimi-tide",
+      "previous": "web-ui",
+      "current": "coding",
+      "desc_now": "🌊 月汐（kimi-tide）— DSH 的「每一步自动选模型」插件：贴图自动走能看图的模型，写代码走编码模型，闲聊翻译走便宜模型，每次选了谁、为什么，面板看得见 · The per-step model router for DeepSeek Harness: any connected model, routed by your rules",
+      "desc_prev": "🌊 kimi-tide（月汐）— DSH 逐步模型路由器：预设 + 规则 + @指令，任意已接入的模型都按你的想法选路；图像转述流 / 图像护栏 / 多 plan 配额面板（kimi/GLM）/ 决策可观测 · provider-agnostic per-step model router for DeepSeek Harness"
+    },
+    {
+      "full_name": "TaoruiLiu19/dsh-gsv",
+      "previous": "coding",
+      "current": "resource",
+      "desc_now": "为 DSH (DeepSeek Harness) 打造的语音朗读插件——双模式可选： Edge 云端零配置即用（20+ 免费音色，联网即读）+  GSV 本地离线音色克隆；支持一键朗读、自动朗读、音色市场。",
+      "desc_prev": "dsh-gsv-tts 是一个为 DeepSeek Harness (DSH) 开发的语音合成插件，将本地高性能 TTS 引擎 GSV-TTS-Lite 无缝接入 DSH 智能体生态。"
+    },
+    {
+      "full_name": "xie-tj/dsh-easy-exit",
+      "previous": "other",
+      "current": "conversation",
+      "desc_now": "DeepSeek Harness 最新用户消息编辑与重发插件（Host / Client 解耦）",
+      "desc_prev": "Optional DeepSeek Harness plugin for editing and resending the latest direct-human message"
+    },
+    {
+      "full_name": "WSL043/dsh-reasoning-slider",
+      "previous": "web-ui",
+      "current": "document",
+      "desc_now": "已归档：DeepSeek Harness 模型感知推理强度滑杆；现有 Release 与演示保留，不再适配未来 DSH。",
+      "desc_prev": "DeepSeek Harness 推理强度滑杆：按模型能力控制 reasoning effort，提供原生与 WebGL 模式。"
+    },
+    {
+      "full_name": "WhaleHarness/WhaleHarness",
       "previous": "resource",
       "current": "web-ui",
-      "desc_now": "DeepSeek Harness (DSH) Web Plugin Aggregation Ecosystem · Everything is a plugin, distributed via the Creative Workshop",
-      "desc_prev": "DeepSeek Harness（DSH）Web 插件聚合生态包 · 一切皆插件，创意工坊分发"
+      "desc_now": "WhaleHarness: verified plugin store & audit for DeepSeek Harness. 180 verified plugins, 2752 audited DSH repos (2053 authors), AI-agent-readable data (agent.json/llms.txt/audit.json/rankings.json). We verify, you install.",
+      "desc_prev": "A curated DeepSeek Harness plugin store: 180 verified plugins with reproducible builds, sandboxed review, and sha256-pinned tarballs, plus transparent stats and a public audit of 2743+ DSH repos (2048 authors). https://whaleharness.com"
+    },
+    {
+      "full_name": "TelosmaYLX/dsh-session-notify",
+      "previous": "model",
+      "current": "notify",
+      "desc_now": "当dsh任务完成/阻塞/提问等情况时，自动推送windows消息进行提醒，支持自定义文案和图片，以及显示会话用时、消耗token、速度tps等指标。Automatically push Windows notifications upon completion of a dsh task, supporting custom text and images, as well as displaying metrics including session duration, token consumption, and TPS speed.",
+      "desc_prev": "当dsh任务完成/阻塞/提问等情况时，自动推送windows消息，支持自定义文案和图片，以及显示会话用时、消耗token、速度tps等指标。Automatically push Windows notifications upon completion of a dsh task, supporting custom text and images, as well as displaying metrics including session duration, token consumption, and TPS speed."
     }
   ]
 }
