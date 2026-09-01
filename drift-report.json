@@ -1,0 +1,27 @@
+{
+  "generated_at": "2026-09-01T04:29:45.545Z",
+  "count": 3,
+  "items": [
+    {
+      "full_name": "A3Boy/dsh-web-tools",
+      "previous": "web-ui",
+      "current": "tool",
+      "desc_now": "Multi-provider Web Search & Fetch for DeepSeek Harness — 8 deeply adapted providers, SearchHints, resilient fallback, and native X / Xiaohongshu retrieval.",
+      "desc_prev": "Multi-provider Web Search & Fetch for DeepSeek Harness — Tavily, Exa, Firecrawl, Brave, You.com, Jina & SearXNG with fallback and native settings UI."
+    },
+    {
+      "full_name": "AFAP/dsh-input-file-ref",
+      "previous": "web-ui",
+      "current": "tool",
+      "desc_now": "【已归档】dsh-input-file-ref（不再维护）：DeepSeek Harness 0.1.2-alpha.3 起已原生支持 @ 选取文件/文件夹/会话，请直接升级最新版，无需本插件。",
+      "desc_prev": "输入框文件引用插件：在 DeepSeek Harness Web GUI 输入框里像 Kimicode/Cursor 那样，输入 @ 弹出可搜索、可逐级下钻的文件选择面板，选中后把 @相对路径 回填进输入框（保留 @、末尾一空格），让模型按路径读取该文件。"
+    },
+    {
+      "full_name": "spritebbb/dsh-skill-usage",
+      "previous": "web-ui",
+      "current": "conversation",
+      "desc_now": "DSH 实时技能显示小插件 🌟 输入框下方的可爱小徽章，实时显示当前技能，悬停看历史。Real-time active skill chip for DeepSeek Harness.",
+      "desc_prev": "Real-time display of the currently active skill in the DeepSeek Harness Web GUI — a composer dock chip showing the current skill name with hover history. 🌟 实时显示 DSH 当前正在使用的技能，安装在输入框下方的小徽章，装上就能用～"
+    }
+  ]
+}
