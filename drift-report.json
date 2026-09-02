@@ -1,27 +1,20 @@
 {
-  "generated_at": "2026-09-02T14:23:46.237Z",
-  "count": 3,
+  "generated_at": "2026-09-02T19:29:31.464Z",
+  "count": 2,
   "items": [
     {
-      "full_name": "Hilbert-beinghappy/seektty",
-      "previous": "tool",
-      "current": "coding",
-      "desc_now": "面向 DeepSeek Harness 的 Claude Code 风格终端界面，支持 Windows、macOS 与 Linux，兼容透明终端、VS Code 主题和自定义配色。",
-      "desc_prev": "面向 DeepSeek Harness 的 Claude Code 风格终端界面，支持 Windows、macOS 与 Linux，兼容透明终端、VS Code 主题和自定义配色。"
-    },
-    {
-      "full_name": "WSL043/dsh-codex-subscription",
-      "previous": "memory",
-      "current": "vision",
-      "desc_now": "把 ChatGPT / Codex 订阅接入 DeepSeek Harness：OAuth、模型、额度、搜索和图片生成，无需 API Key 或 Codex CLI。",
-      "desc_prev": "把 ChatGPT / Codex 订阅接入 DeepSeek Harness：OAuth、模型、额度、搜索和图片生成，无需 API Key 或 Codex CLI。"
-    },
-    {
-      "full_name": "yuezengwu/dsh-explain",
+      "full_name": "FeatherHunter/dsh-mattpocock-skills-deck",
       "previous": "web-ui",
-      "current": "other",
-      "desc_now": "Private, local-first continuous learning for DeepSeek Harness: capture, review, and correct what Explain learns.",
-      "desc_prev": "DSH 本地优先学习模式插件：跨会话全局学习线程、按来源讲解、ExplainContext、压缩与可诊断设置界面"
+      "current": "notify",
+      "desc_now": "非官方 DeepSeek Harness 插件：Matt Pocock 技能套件（mattpocock/skills）的 DSH 控制面板（Deck）——将 wayfinder 地图/票务/进度、triage / grilling / handoff 动作注入带进 DSH；配套 25 个工程与效率技能。打开形式仅右侧 details 列（无 PiP/悬浮）。安装：dsh plugin --profile <name> add 一条命令即装好，无需手动注册（DSH Desktop 桌面应用用 --profile desktop，自启 web 服务用 --profile web；profile 装错不生效，多个入口需分别安装）。",
+      "desc_prev": "迷雾已散，终点可见。冒险，由MattSkillsDeck接管。mattpocock/skills在DSH的配套插件—像游戏里接任务一样，一键领取、一键派发。你的每一颗⭐都是我夜空中最亮的星，会温暖我，谢谢你。The fog is gone, the goal is clear — your adventure, handled by MattSkillsDeck. Turn mattpocock/skills into a living quest board in DSH — visible progress, dispatchable missions. Your ⭐ is the brightest star in my night sky — it truly warms me. "
+    },
+    {
+      "full_name": "yohanchen1/MathModelingAgent",
+      "previous": "other",
+      "current": "agent",
+      "desc_now": "Closed-loop scientific modeling agent with evidence-backed verification and reproducible correction.",
+      "desc_prev": null
     }
   ]
 }
