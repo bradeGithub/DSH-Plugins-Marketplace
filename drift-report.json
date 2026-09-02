@@ -1,13 +1,769 @@
 {
-  "generated_at": "2026-09-02T03:52:46.516Z",
-  "count": 1,
+  "generated_at": "2026-09-02T09:27:52.417Z",
+  "count": 109,
   "items": [
     {
-      "full_name": "lovaxi/Rubato_Plugins",
+      "full_name": "SepineTam/mcp-for-stata",
+      "previous": "tool",
+      "current": "web-ui",
+      "desc_now": "A MCP server for integrating Stata into your agent loop with a safety-first design.",
+      "desc_prev": "A MCP server for Stata to integrate Stata into your agent. "
+    },
+    {
+      "full_name": "KongFangXun/sofagent",
+      "previous": "tool",
+      "current": "coding",
+      "desc_now": "FDE Harness: audit-first governance for AI coding agents — 24 rules, HMAC chain, snapshot rollback (80 tools, 13 plugins)",
+      "desc_prev": "Open-source FDE Harness layer for enterprise AI: 24-rule git-diff audit, auto snapshot rollback, rule injection, self-evolution. Ships as 13 plugins (9 DSH + 4 OpenClaw) + MCP server (79 tools). MIT."
+    },
+    {
+      "full_name": "xby-skill/xby-chucknorris",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "ChuckNorris MCP服务器是一个通过动态模式适配为大型语言模型提供增强提示的工具，主要用于安全研究和评估。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-markdown-to-notion",
       "previous": "other",
       "current": "coding",
-      "desc_now": "Make your AI's working state visible on a physical desk device - one Rubato plugin per coding agent.",
-      "desc_prev": "Rubato is a palm-sized retro-Macintosh screen built for one job: looking after the bodies of programmers and heavy AI users."
+      "desc_now": "一个将Markdown内容转换为Notion API兼容格式的MCP服务器，适用于内容管理和开发集成。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-time-zone",
+      "previous": "other",
+      "current": "coding",
+      "desc_now": "一个全面的MCP服务器，提供全球时区管理和时间转换功能，适用于全球业务协调、旅行规划和开发运维。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-smart-search",
+      "previous": "tool",
+      "current": "coding",
+      "desc_now": "Smart Search MCP 是一个专注于技术领域的智能搜索工具集，提供14个增强型搜索工具，覆盖国际和国内主流技术平台，具备智能URL生成、输入验证、高级搜索技巧等功能，适用于开发者快速查找技术文档、API参考、开源项目等。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-ancient-poetry-kg",
+      "previous": "other",
+      "current": "vision",
+      "desc_now": "围绕中国古代诗词名称，作者，朝代，经典词句的知识图谱。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-generate-prd-prompt",
+      "previous": "conversation",
+      "current": "tool",
+      "desc_now": "Mercury Spec Ops MCP Server 是一个基于模块化架构的动态提示生成和模板组装工具，适用于AI助手与专业内容的交互，支持31种技术栈、10种分析维度和34个模板部分的动态生成。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-logo-analyze",
+      "previous": "other",
+      "current": "web-ui",
+      "desc_now": "一个智能Logo提取和处理的MCP服务器，支持从网站URL自动识别并提取Logo图标，并提供图像处理和矢量转换功能。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-nba-stats",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "一个提供实时和历史NBA数据的模型上下文协议服务器，包括球员统计、比赛得分、球队信息和高级分析。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-review-code",
+      "previous": "other",
+      "current": "coding",
+      "desc_now": "一个基于Model Context Protocol (MCP)的代码审查工具服务器，提供多维度的代码审查和打分功能。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-daily-object-detection",
+      "previous": "other",
+      "current": "web-ui",
+      "desc_now": "输入一张图像，对其中的人/宠物/车/火焰/纸箱进行检测，输出图片中所有目标的检测框、置信度和标签。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-cookie-reward",
+      "previous": "other",
+      "current": "web-ui",
+      "desc_now": "一个通过游戏化自我反思为LLM提供Cookie奖励的模型上下文协议服务器。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-extract-image",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "MCP服务器提供从本地文件、URL提取图像并转换为base64格式的功能，适用于LLM分析。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-read-website",
+      "previous": "other",
+      "current": "coding",
+      "desc_now": "一个快速、高效的网页内容提取工具，将网页转换为干净的Markdown格式，适用于AI代理、IDE和LLM管道。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-random-number",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "提供伪随机和加密安全的随机数生成功能，包括整数、浮点数、加权选择、列表洗牌和安全令牌生成。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-pet-detect",
+      "previous": "other",
+      "current": "web-ui",
+      "desc_now": "识别宠物 (猫/狗) 面部表情，输出 4 类情绪: Angry / Happy / Relaxed / Sad。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-ip-query",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "依托全球蜜罐网络及百万级节点构建的IP情报分析平台，提供精准的IP画像与威胁预警服务。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-the-met",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "查询搜索和获取博物馆的开放藏品数据",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-hot-news",
+      "previous": "other",
+      "current": "resource",
+      "desc_now": "基于 Model Context Protocol (MCP) 协议的全网热点趋势一站式聚合服务，支持实时更新和多数据源扩展。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-who-is",
+      "previous": "other",
+      "current": "coding",
+      "desc_now": "一个基于Model Context Protocol (MCP)的WHOIS域名查询服务器，支持877+顶级域名和169个国家代码顶级域名的解析，提供全面的域名注册信息查询功能。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-blockchain-data-service",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "Vitruveo MCP Server 是一个为 Vitruveo 网络提供只读区块链服务的模型上下文协议服务器，适用于AI代理访问区块链数据。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-dblp",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "一个通过模型上下文协议（MCP）提供DBLP计算机科学文献数据库访问的服务，支持学术文献检索、引用生成及格式化功能。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-fastdomaincheck",
+      "previous": "tool",
+      "current": "coding",
+      "desc_now": "一个基于Python和MCP协议的域名注册状态检查服务器，支持批量检查和双重验证。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-text-transformer",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "提供多种文本转换功能的MCP服务器，包括大小写转换、反转字符串、检测回文等功能。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-recipe-query",
+      "previous": "other",
+      "current": "coding",
+      "desc_now": "一个支持通过命令行查询菜谱和报菜名的菜谱查询工具，适用于烹饪爱好者和开发者。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-traditional-chinese-medicine-kg",
+      "previous": "other",
+      "current": "memory",
+      "desc_now": "围绕中药名，中药材，别名，来源，分布，功能，主治，归经，四气，四气及其之间的联系构建知识谱图。仅限初步研究，具体应用需根据实际情况调整。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-real-time-news",
+      "previous": "other",
+      "current": "resource",
+      "desc_now": "实时新闻",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-bilibili",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "用于哔哩哔哩API的MCP服务器，支持视频搜索、用户内容获取等多种操作，适用于哔哩哔哩内容管理和数据分析场景。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-dream-of-red-chamber-relationship",
+      "previous": "other",
+      "current": "vision",
+      "desc_now": "关于《红楼梦》人物之间关系的知识图谱。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-hugeicons",
+      "previous": "web-ui",
+      "current": "coding",
+      "desc_now": "Hugeicons MCP Server是一个基于TypeScript的服务器，提供Hugeicons图标库的集成工具和资源，支持多种平台的图标搜索、获取和使用指南。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-glama-registry",
+      "previous": "resource",
+      "current": "tool",
+      "desc_now": "提供MCP注册服务器的搜索功能，用于查询匹配特定字符串的MCP服务器。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-toronto-open-data-server",
+      "previous": "other",
+      "current": "web-ui",
+      "desc_now": "一个通过CKAN API直接访问多伦多开放数据的MCP服务器，支持智能数据集发现、灵活查询和CSV数据预览，专为LLM代理设计。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-text-toolkit",
+      "previous": "tool",
+      "current": "coding",
+      "desc_now": "一个提供文本转换、格式化和分析功能的MCP服务器，可直接集成到开发工作流中。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-vnstock",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "一个非官方的MCP服务器，提供访问越南股市数据的工具，包括实时和历史股票价格、公司财务数据、市场统计和基金信息等。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-constellation",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "一个功能完整的星座 MCP (Model Context Protocol) 服务，提供星座信息查询、运势分析、配对测试等功能。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-anndata",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "AnnData MCP是一个通过MCP协议检索AnnData对象信息的工具，适用于生物医学数据分析场景。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-philippine-geocoding",
+      "previous": "other",
+      "current": "coding",
+      "desc_now": "提供菲律宾标准地理编码（PSGC）API访问的模型上下文协议（MCP）服务器，包含完整的菲律宾地理层级数据。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-math",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "一个高性能的数学计算协议服务器，提供从基础算术到高级微积分和线性代数的全面数学计算功能。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-hackernews-search",
+      "previous": "tool",
+      "current": "coding",
+      "desc_now": "一个通过Model Context Protocol提供HackerNews内容搜索、检索和分析的服务，适用于AI代理和开发者。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-csv2json",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "一个基于FastMCP的CSV到JSON转换MCP服务器，提供高效的CSV数据转换服务。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-akshare-one",
+      "previous": "other",
+      "current": "resource",
+      "desc_now": "基于akshare-one的MCP服务器，提供中国股票市场数据的全面接口，包括历史数据、实时数据、新闻数据和财务报表等金融信息。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-hitoshura25-android-playstore-deploy",
+      "previous": "other",
+      "current": "resource",
+      "desc_now": "一个帮助开发者设置自动化Google Play商店部署流程的工具，支持项目分析、密钥生成、服务账户配置和GitHub Actions工作流生成。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-open-data-hk",
+      "previous": "other",
+      "current": "resource",
+      "desc_now": "一个提供香港政府官方开放数据门户DATA.GOV.HK数据访问的MCP服务器，支持数据集列表、详情查询、分类检索及格式筛选等功能。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-advertising-analysis",
+      "previous": "other",
+      "current": "document",
+      "desc_now": "一个用于在LLM响应中注入广告的MCP服务器演示项目，展示广告注入中间件的风险。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-aws-blackbelt",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "一个提供 AWS Black Belt 在线研讨会搜索功能的模型上下文协议（MCP）服务器，支持通过关键词搜索研讨会内容并获取研讨会视频的文字记录。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-fetch",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "一个模型上下文协议服务器，提供网页内容抓取功能，将HTML转换为Markdown以便于处理。适用于需要从网页提取和处理内容的场景。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-domain-lookup",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "一个提供全面域名研究工具（包括RDAP、WHOIS和DNS查询功能）的模型上下文协议（MCP）服务器。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-mm1-simulation",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "一个用于M/M/1和M/M/c队列系统模拟和分析的Model Context Protocol服务器，提供全面的资源、工具和提示。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-search-apple-docs",
+      "previous": "tool",
+      "current": "coding",
+      "desc_now": "通过模型上下文协议（MCP）访问苹果官方开发者文档、框架、API及WWDC视频，支持AI驱动的自然语言查询，提供Swift/Objective-C代码示例和技术指南。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-howtocook",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "基于MCP协议的AI菜谱推荐服务器，提供菜谱查询、分类筛选、智能膳食规划和每日菜单推荐功能。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-celo-composer-kit",
+      "previous": "conversation",
+      "current": "web-ui",
+      "desc_now": "Celo MCP Server 是一个用于安装和配置 Celo Composer Kit MCP 服务器的工具，支持在 macOS 上运行，提供组件发现、集成和示例功能。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-db",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "MCP Database Server 是一个为AI助手和基于LLM的工具提供安全数据库访问的服务，支持SQLite、PostgreSQL、MySQL和MariaDB，具有查询验证、审计日志和安全控制功能。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-drand",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "drand-mcp-server是一个提供可验证随机数的服务，用于AI应用中的模型驱动流程，支持通过时间或轮次获取随机数。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-detect",
+      "previous": "other",
+      "current": "web-ui",
+      "desc_now": "包括日常物体检测、昆虫识别、植物识别、动物识别、电动自行车检测、手机检测、手势检测、火焰检测、香烟检测、人头人体检测、野生动物检测、鸟类识别、宠物情绪识别、菜品识别、安全帽人体检测、行人检测、反光衣检测、车辆检测、图像分类、目标检测、旋转目标检测、人体姿态估计和万物识别。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-bazi",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "八字 MCP 是一款基于 AI 的八字计算器，提供精准的八字排盘数据，用于性格分析和命运预测。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-lunar-calendar",
+      "previous": "other",
+      "current": "coding",
+      "desc_now": "一个基于Python 3.12和lunar-python的中国传统农历日历功能服务器，提供八字计算、日历转换、黄历查询等功能。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-captcha",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "验证码识别工具集，支持文本、滑块、旋转、选择等验证方式的识别。注意：一定要遵守目标网站或系统的使用条款和法律法规，在允许的条件下使用。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-awslabs-cdk",
+      "previous": "other",
+      "current": "coding",
+      "desc_now": "AWS CDK MCP Server是一个提供AWS Cloud Development Kit (CDK)最佳实践、基础设施即代码模式和CDK Nag安全合规性的工具，适用于开发者在构建AWS应用程序时获取指导和建议。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-sequentialthinking",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "一个实现顺序思维协议的MCP服务器，提供结构化的问题解决方法，将复杂问题分解为可管理的步骤，并支持迭代优化和替代推理路径。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-traditional-chinese-medicine-formulas-kg",
+      "previous": "other",
+      "current": "memory",
+      "desc_now": "围绕中药方剂、方名、来源、别名、处方、中药名、剂量、功能主治及其之间的联系构建知识谱图。仅限初步研究，具体应用需根据实际情况调整。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-jsondiff",
+      "previous": "other",
+      "current": "web-ui",
+      "desc_now": "基于MCP协议的高效JSON对比工具，专为AI对话场景设计，提供智能对比、快速响应和清晰输出。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-ccxt",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "一款通过自然语言交互追踪每日卡路里摄入量的MCP服务器，提供餐食记录、每日总结、周报生成和食物搜索功能。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-mathematics",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "MCP Mathematics 是一个全面的数学计算服务器，可将任何AI助手转变为强大的数学计算引擎，提供高级数学函数、单位转换和财务计算等功能。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-arxiv-paper-search",
+      "previous": "tool",
+      "current": "document",
+      "desc_now": "一个基于arXiv的论文检索与内容解析工具，支持论文搜索、PDF链接获取和内容解析功能，适用于学术研究和AI领域的最新论文获取。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-fluent",
+      "previous": "other",
+      "current": "web-ui",
+      "desc_now": "一个帮助AI助手高效导航ANSYS Fluent在线文档的模型上下文协议（MCP）服务器，提供智能URL导航、预映射主题路径和官方文档链接。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-pic",
+      "previous": "other",
+      "current": "web-ui",
+      "desc_now": "包括通用文本识别、手写识别、车牌识别、身份证识别、日常物体检测、昆虫识别、植物识别、护照识别、港澳台通行证识别、银行卡识别、营业执照识别、驾驶证识别、行驶证识别、动物识别、电动自行车检测、手机检测、手势检测、火焰检测、香烟检测、人头人体检测、野生动物检测、鸟类识别、宠物情绪识别、菜品识别、安全帽人体检测、行人检测、反光衣检测、车辆检测、图像分类、目标检测、旋转目标检测、人体姿态估计和万物识别。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-bbot",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "BBOT MCP服务器是一个用于管理和执行BBOT安全扫描的工具，提供模块管理、预设配置、实时监控等功能。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-cpan-package-info",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "一个MCP服务器，用于获取CPAN包的README内容、元数据和搜索功能。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-cryptocurrency-data-api-service",
+      "previous": "other",
+      "current": "web-ui",
+      "desc_now": "DexPaprika MCP Server是一个提供实时加密货币和DEX数据访问的API服务，专为AI助手设计，无需配置即可获取代币、流动池和DEX数据。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-char-index",
+      "previous": "other",
+      "current": "coding",
+      "desc_now": "一个基于字符索引的字符串操作协议服务器，适用于需要精确字符定位的测试代码生成和数据处理场景。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-random-generator",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "一款符合MCP协议的加密安全随机数生成服务器，适用于AI应用、LLM及其他需要高质量随机数的系统。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-running-formulas",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "一个提供全面的跑步计算工具的MCP服务器，包括VDOT计算、训练配速、比赛时间预测、速度标记、心率区间和配速转换等功能。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-quick-chart",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "一个基于Model Context Protocol (MCP)的服务器，提供与Quick Chart交互的标准化接口，支持图表生成和管理。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-lit",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "一个强大的模型上下文协议（MCP）服务器，提供对学术文献数据库的无缝访问，帮助研究人员使用LLM和MCP客户端（如Claude、Cursor等）加速文献综述过程。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-mvn",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "Maven MCP Server是一个通过自然语言交互的AI驱动Maven依赖管理工具，提供版本检查、安全扫描和依赖分析功能。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-react-composer-kit",
+      "previous": "conversation",
+      "current": "web-ui",
+      "desc_now": "一个为Composer Kit React组件库提供文档、示例和使用信息的MCP服务器，专为在Celo区块链上构建web3应用而设计。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-todolist",
+      "previous": "other",
+      "current": "memory",
+      "desc_now": "为大型语言模型和AI代理提供外部工作记忆和任务管理功能，支持复杂多步骤任务的可靠执行。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-ai-persona",
+      "previous": "other",
+      "current": "coding",
+      "desc_now": "一个支持多AI人格召唤与协作的MCP协议服务器，可用于代码分析、产品设计等多场景智能协作。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-osrs-stat",
+      "previous": "tool",
+      "current": "resource",
+      "desc_now": "一个提供实时《Old School RuneScape》玩家统计数据和排行榜数据的Model Context Protocol (MCP)服务器，支持多种游戏模式和玩家比较功能。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-scan-code",
+      "previous": "other",
+      "current": "coding",
+      "desc_now": "CodeGuard MCP是一款实时AI代码安全扫描工具，用于检测AI生成代码中的漏洞、密钥和合规性问题，适用于开发环境中的代码安全审查。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-mingli",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "一个支持多种命理系统（紫微斗数、八字等）的MCP协议服务器，为AI工具提供命理分析与运势查询功能。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-mathematical-visualization",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "基于JSXGraph的MCP协议服务器，提供13种数学可视化工具，适用于教育数学、工程和科学应用。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-hnews",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "一个提供从Hacker News获取信息的工具集，包括获取故事、评论、用户信息和搜索故事等功能。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-uk-police-data-query",
+      "previous": "other",
+      "current": "resource",
+      "desc_now": "一个提供英国警察数据查询的MCP服务器，包括犯罪记录、警察部队、社区信息和拦截搜查数据。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-daily-hot",
+      "previous": "other",
+      "current": "resource",
+      "desc_now": "基于Model Context Protocol (MCP)协议的全网热点趋势一站式聚合服务，支持Python实现，适用于新闻资讯、社交媒体、科技开发等多领域。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-gathering-card-lookup-service",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "一个基于Model Context Protocol (MCP)的服务端，提供万智牌中文卡牌信息的查询和搜索功能。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-kubernetes-runbooks",
+      "previous": "other",
+      "current": "resource",
+      "desc_now": "一个基于模型上下文协议(MCP)的服务器，提供对Kubernetes故障排除手册的访问，支持搜索、内容获取和AI集成。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-article",
+      "previous": "other",
+      "current": "coding",
+      "desc_now": "基于FastMCP框架开发的专业文献搜索工具，支持多源文献搜索、文献详情获取、参考文献管理、文献关系分析、期刊质量评估和批量结果导出等功能，适用于学术研究和AI助手集成。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-structured-argumentation",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "一组模型上下文协议服务器，为大型语言模型提供认知增强工具。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-generate-echarts",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "MCP ECharts 是一个基于 Apache ECharts 的动态图表生成和数据分析工具，支持多种导出格式和 MinIO 对象存储集成。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-currency-and-oil",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "Zenrus MCP Server 是一个提供实时货币汇率和石油价格的服务器，支持多种计算功能，适用于金融分析和自动化工具集成。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-cellosaurus",
+      "previous": "other",
+      "current": "memory",
+      "desc_now": "Cellosaurus MCP Server是一个非官方的模型上下文协议服务器，用于访问SIB Cellosaurus细胞系知识资源，提供细胞系搜索、详细信息获取和数据库版本信息等功能。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-epub-template-server",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "智能模板发现助手 - 为 AI 应用提供强大的 epub360 模板搜索能力",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-source-coop",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "一个用于发现和访问800TB+地理空间数据的MCP服务器，支持AI客户端通过JSON-RPC协议进行交互，提供智能搜索和高效数据访问功能。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-gsap-animation-generate",
+      "previous": "other",
+      "current": "coding",
+      "desc_now": "一个全面的GSAP动画生成工具，提供AI驱动的意图分析、完整的API覆盖和生产就绪的动画模式，帮助开发者快速创建高性能动画。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-medical-knowledge-graph",
+      "previous": "memory",
+      "current": "vision",
+      "desc_now": "围绕疾病，药品，症状，诊断，并发症，饮食及其关系的知识图谱。仅限初步研究，具体应用需根据实际情况调整。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-rfc-doc",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "一个用于从ietf.org网站获取、解析和阅读RFC文档的MCP服务器，提供程序化交互工具。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-qanon",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "一个提供QAnon帖子数据集访问的MCP服务器，用于人类学和社会学研究，支持搜索、过滤和分析功能。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-time",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "提供时间和时区转换功能的模型上下文协议服务器，支持获取当前时间和时区转换。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-math-genie-calc",
+      "previous": "other",
+      "current": "coding",
+      "desc_now": "math_genie_calc是一款专注于科学计算的Python应用，提供从基础运算到复杂三角函数的多种计算功能，适合学生、科研人员等使用。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-akshare",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "AKShare MCP Server 是一个通过AKShare提供中国股票市场数据的模型上下文协议服务器，支持实时行情、历史数据、基本面分析等功能。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-bilibili-api",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "一个为bilibili.com API提供服务的Model Context Protocol (MCP)服务器，支持获取用户信息、视频搜索等功能。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-ons-data",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "一个用于访问英国国家统计局(ONS) Beta API的模型上下文协议(MCP)服务器，无需API密钥即可获取官方统计数据。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-code-document-update",
+      "previous": "other",
+      "current": "coding",
+      "desc_now": "Context7 MCP 是一款为开发者提供最新代码文档和示例的服务，通过集成到开发环境中，确保LLM生成的代码基于最新的库文档。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-extract-antv-topic",
+      "previous": "other",
+      "current": "coding",
+      "desc_now": "为AI开发和QA设计的模型上下文协议服务器，提供AntV文档上下文和代码示例。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-helmet-head",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "输入一张图像，对其中的人体、头部和安全帽进行检测，输出图片中所有目标的检测框、置信度和标签。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xby-skill/xby-mermaid-doc",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "Mermaid Doc MCP Server是一个用于生成Mermaid文档的服务器，提供列出可用图表和检索特定图表文档的功能。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "BitDG/dsh-cloud-model-providers",
+      "previous": "other",
+      "current": "model",
+      "desc_now": "接入 Ant Digital MaaS 与 NVIDIA NIM 流式模型路由 / Streaming model routes for DSH",
+      "desc_prev": "DSH bundle for Ant Digital MaaS and NVIDIA NIM streaming model providers"
     }
   ]
 }
