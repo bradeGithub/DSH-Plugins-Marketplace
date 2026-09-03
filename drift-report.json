@@ -1,34 +1,13 @@
 {
-  "generated_at": "2026-09-03T14:26:34.857Z",
-  "count": 4,
+  "generated_at": "2026-09-03T19:20:11.317Z",
+  "count": 1,
   "items": [
     {
-      "full_name": "dream-num/dsh-univer-office",
-      "previous": "notify",
-      "current": "document",
-      "desc_now": "Give DeepSeek Harness a real office environment.  Univer Office Plugin brings spreadsheets, docs, slides, canvases, relational tables, and more into one runtime — with connected data, validation, versioned changes, and isolated worktrees for multi-agent collaboration.",
-      "desc_prev": "Give DeepSeek Harness a real office environment.  Univer Office Plugin brings spreadsheets, docs, slides, canvases, relational tables, and more into one runtime — with connected data, validation, versioned changes, and isolated worktrees for multi-agent collaboration."
-    },
-    {
-      "full_name": "PerryLink/dsh-memento",
-      "previous": "resource",
-      "current": "memory",
-      "desc_now": "Bounded, layered, approval-gated, auditable cross-session memory for DeepSeek Harness (capability seam: ctx.memory + SQLite provider + memory tool + frozen snapshot injection)",
-      "desc_prev": "Bounded, layered, approval-gated, auditable cross-session memory for DeepSeek Harness (capability seam: ctx.memory + SQLite provider + memory tool + frozen snapshot injection)"
-    },
-    {
-      "full_name": "dshplugin/dsh-plugin-hub",
+      "full_name": "UNLINEARITY/dsh-code",
       "previous": "tool",
-      "current": "resource",
-      "desc_now": "DeepSeek Harness 社区内置插件市场（dsh-plugin）— 搜索插件、下载并安装 4000+ 人工精选社区插件，每日更新、完全免费。内置在 Harness「设置 → 插件中心」，无需离开应用即可浏览、搜索、安装各类 AI 插件。",
-      "desc_prev": "DeepSeek Harness 社区内置插件市场（dsh-plugin）— 搜索插件、下载并安装 4000+ 人工精选社区插件，每日更新、完全免费。内置在 Harness「设置 → 插件中心」，无需离开应用即可浏览、搜索、安装各类 AI 插件。"
-    },
-    {
-      "full_name": "NinjaSln-labs/dsh-plugins",
-      "previous": "memory",
-      "current": "other",
-      "desc_now": "[已封版 archived] DSH 插件集历史存档：插件已全部迁移独立单库（见 README 索引）",
-      "desc_prev": "DeepSeek Harness 个人自研插件集：上下文罗盘 / 跨会话知识 / 子代理模型路由 / AI 生图（Personally developed plugins for DeepSeek Harness）"
+      "current": "coding",
+      "desc_now": " Claude-Code-style TUI bundle for DeepSeek Harness. 充分结合 DSH 的核心机制和高级特性与Codex CLI 、Claude Code 等主流交互机制，打造的 DSH-Code. （对齐DSH官方上游最新版本！持续更新中！支持DSH 特殊模式，插件系统，模型管理，子代理管理，切换模型特殊动画）注：自 DSH-Code 1.0.0起，代码由DSH-Code 自迭代完善，不使用外部 agent /CLI 完成！",
+      "desc_prev": " Claude-Code-style TUI bundle for DeepSeek Harness. 充分结合 DSH 的核心机制和高级特性与Codex CLI 、Claude Code 等主流交互机制，打造的 DSH-Code. （对齐DSH官方上游最新版本！持续更新中！支持DSH 特殊模式，插件系统，模型管理，子代理管理，切换模型特殊动画）"
     }
   ]
 }
