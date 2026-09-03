@@ -1,34 +1,34 @@
 {
-  "generated_at": "2026-09-03T09:36:43.324Z",
+  "generated_at": "2026-09-03T14:26:34.857Z",
   "count": 4,
   "items": [
     {
-      "full_name": "Altairpaca/dshelm",
-      "previous": "agent",
-      "current": "model",
-      "desc_now": "Evidence-backed, explainable multi-model routing for DeepSeek Harness — policy resolution, provenance, and compatibility boundaries.",
-      "desc_prev": "DSHelm — DeepSeek Harness 的可解释多模型调度层。Chinese-first, DSH-native, evidence-backed."
+      "full_name": "dream-num/dsh-univer-office",
+      "previous": "notify",
+      "current": "document",
+      "desc_now": "Give DeepSeek Harness a real office environment.  Univer Office Plugin brings spreadsheets, docs, slides, canvases, relational tables, and more into one runtime — with connected data, validation, versioned changes, and isolated worktrees for multi-agent collaboration.",
+      "desc_prev": "Give DeepSeek Harness a real office environment.  Univer Office Plugin brings spreadsheets, docs, slides, canvases, relational tables, and more into one runtime — with connected data, validation, versioned changes, and isolated worktrees for multi-agent collaboration."
     },
     {
-      "full_name": "ppy-web/dsh-plugin-xiaomi-mimo-tts",
-      "previous": "other",
-      "current": "tool",
-      "desc_now": "给DSH接入免费的 Xiaomi MiMo TTS API，支持使用预置/自定义/浏览器内置声音朗读正文",
-      "desc_prev": "给DSH接入免费的 Xiaomi MiMo TTS API，支持使用预置/自定义声音朗读正文"
+      "full_name": "PerryLink/dsh-memento",
+      "previous": "resource",
+      "current": "memory",
+      "desc_now": "Bounded, layered, approval-gated, auditable cross-session memory for DeepSeek Harness (capability seam: ctx.memory + SQLite provider + memory tool + frozen snapshot injection)",
+      "desc_prev": "Bounded, layered, approval-gated, auditable cross-session memory for DeepSeek Harness (capability seam: ctx.memory + SQLite provider + memory tool + frozen snapshot injection)"
     },
     {
-      "full_name": "kenny2077/dsh-web-search-zai",
+      "full_name": "dshplugin/dsh-plugin-hub",
       "previous": "tool",
-      "current": "coding",
-      "desc_now": "GLM/ZAI web search for DeepSeek Harness: Coding Plan quota or REST API billing",
-      "desc_prev": "One ZAI_API_KEY for both chat and search — plug-and-play Z.ai (GLM) web search for the DeepSeek Harness."
+      "current": "resource",
+      "desc_now": "DeepSeek Harness 社区内置插件市场（dsh-plugin）— 搜索插件、下载并安装 4000+ 人工精选社区插件，每日更新、完全免费。内置在 Harness「设置 → 插件中心」，无需离开应用即可浏览、搜索、安装各类 AI 插件。",
+      "desc_prev": "DeepSeek Harness 社区内置插件市场（dsh-plugin）— 搜索插件、下载并安装 4000+ 人工精选社区插件，每日更新、完全免费。内置在 Harness「设置 → 插件中心」，无需离开应用即可浏览、搜索、安装各类 AI 插件。"
     },
     {
-      "full_name": "zaizaizhao/dsh-branchmark",
+      "full_name": "NinjaSln-labs/dsh-plugins",
       "previous": "memory",
-      "current": "coding",
-      "desc_now": "While vibe coding, save an answer you may need later, use Side Chat for a question that suddenly comes up, or open a related conversation for deeper work without losing focus on the current task.",
-      "desc_prev": "为开发者提供重点知识摘录、可追溯 Session 树和注意力分叉，让主 Session 始终专注于当前目标，让每条支线都能找回来源，让 Vibe Coding 告别注意力丢失。"
+      "current": "other",
+      "desc_now": "[已封版 archived] DSH 插件集历史存档：插件已全部迁移独立单库（见 README 索引）",
+      "desc_prev": "DeepSeek Harness 个人自研插件集：上下文罗盘 / 跨会话知识 / 子代理模型路由 / AI 生图（Personally developed plugins for DeepSeek Harness）"
     }
   ]
 }
