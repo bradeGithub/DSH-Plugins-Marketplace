@@ -1,0 +1,41 @@
+{
+  "generated_at": "2026-09-04T03:54:48.738Z",
+  "count": 5,
+  "items": [
+    {
+      "full_name": "cryjkd/dsh-clawbot",
+      "previous": "other",
+      "current": "notify",
+      "desc_now": "在 DeepSeek Harness（DSH）里接入微信官方 ilink 机器人网关：扫码绑定后，AI 能主动给自己发微信通知；每次回复后自动推送任务完成摘要；目标完成/阻断时自动通知；需要批准/选择时主动微信提醒。自带设置界面（设置 → ClawBot：扫码二维码、微信在线/断线状态、手动发送、三个自动通知开关、监听开关、解除绑定、自定义图标）。  底层走腾讯官方 ilink 网关（https://ilinkai.weixin.qq.com），无第三方破解、无自建中转，消息只发给绑定的账号自己。",
+      "desc_prev": "dsh-clawbot"
+    },
+    {
+      "full_name": "GearVoid/dsh-taskify",
+      "previous": "conversation",
+      "current": "coding",
+      "desc_now": "让 Coding Agent 不越界：Focus 固定执行范围，Persistent Anchors 保留不能改变的边界。",
+      "desc_prev": "DeepSeek Harness Web 的持久约束插件：不改写原始 Prompt，让明确边界在当前会话中跨轮持续。"
+    },
+    {
+      "full_name": "cyjyyd/dsh-ssh-tui",
+      "previous": "coding",
+      "current": "tool",
+      "desc_now": "SSH-friendly DeepSeek Harness TUI. Plain ANSI, incremental redraws, no browser.",
+      "desc_prev": "DeepSeek Harness enhanced plugin:dsh-tui. you can use Deepseek Harness within Terminal,optimized perfomance in ssh environment"
+    },
+    {
+      "full_name": "lnabc03/bright-drift",
+      "previous": "coding",
+      "current": "tool",
+      "desc_now": "Workspace drift awareness for agents — so the agent immediately knows what external changes happened in its workspace.",
+      "desc_prev": "Workspace drift awareness for AI coding agents — watches the workspace and injects a budgeted, attributed diff of external/user changes into the agent's context at each step boundary."
+    },
+    {
+      "full_name": "zsxian11/dsh-flywheel",
+      "previous": "tool",
+      "current": "conversation",
+      "desc_now": "面向 DeepSeek Harness（DSH） 的「会话飞轮」插件 。在单会话隔离下，让一条龙长会话接近当前句只带工作集；用项目级产物图 + 倒排在会话之间传递短卡。",
+      "desc_prev": "面向 DeepSeek Harness（DSH） 的「会话飞轮」插件 —— 仓外独立仓库（v1），与 Cursor 侧共用同一套索引与检索协议。  一句话目标：在单会话隔离下，让一条龙长会话接近 Cursor 的「当前句只带工作集」；用项目级产物图 + 倒排在会话之间传递短卡，而不是把 transcript 糊在一起。"
+    }
+  ]
+}
