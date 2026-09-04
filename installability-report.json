@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-09-04T19:17:34.794Z",
+  "generated_at": "2026-09-04T22:36:54.574Z",
   "counts": {
-    "bundle-plugin": 2814,
+    "bundle-plugin": 2818,
     "cordis-plugin": 7833,
     "pkg-plain": 1040,
     "manual": 744,
     "script": 235,
     "skill": 381,
-    "multi-plugin": 424,
+    "multi-plugin": 425,
     "gone": 57,
     "agent-preset": 48,
     "unknown": 55,
@@ -6859,6 +6859,10 @@
       "verdict": "cordis-plugin"
     },
     {
+      "full_name": "chiphoton/DeepSeek-Harness-Video-Director",
+      "verdict": "bundle-plugin"
+    },
+    {
       "full_name": "chipweaver/veripower",
       "verdict": "bundle-plugin"
     },
@@ -9385,6 +9389,10 @@
     {
       "full_name": "dingminhua/dsh-connect-workbuddy",
       "verdict": "bundle-plugin"
+    },
+    {
+      "full_name": "dingminhua/dsh-sub-cli",
+      "verdict": "multi-plugin"
     },
     {
       "full_name": "dingminhua/dsh-subagent-default-model",
@@ -12536,6 +12544,10 @@
     },
     {
       "full_name": "FraYoshi/dsh-ui-models-invert-selection",
+      "verdict": "bundle-plugin"
+    },
+    {
+      "full_name": "FraYoshi/dsh-widechat",
       "verdict": "bundle-plugin"
     },
     {
@@ -27613,6 +27625,10 @@
     {
       "full_name": "ngk3pori/dsh-zh-cn-ui",
       "verdict": "cordis-plugin"
+    },
+    {
+      "full_name": "nguyenduclong-ict/dsh-plugin-live-terminal",
+      "verdict": "bundle-plugin"
     },
     {
       "full_name": "niaccky/dsh-install-guard",
@@ -46176,6 +46192,10 @@
     },
     {
       "full_name": "wangsan71/dsh-locale-zh-tw",
+      "verdict": "bundle-plugin"
+    },
+    {
+      "full_name": "wangser10032/dsh-model-autoconfig",
       "verdict": "bundle-plugin"
     },
     {

@@ -1,34 +1,13 @@
 {
-  "generated_at": "2026-09-04T19:04:06.320Z",
-  "count": 4,
+  "generated_at": "2026-09-04T22:25:00.318Z",
+  "count": 1,
   "items": [
     {
-      "full_name": "T-Auto/dsh-ecosystem-spec",
-      "previous": "coding",
-      "current": "other",
-      "desc_now": "deepseek-harness Plugin Access and Implementation Standards / deepseek-harness交互生态插件规范与实施标准",
-      "desc_prev": "deepseek-harness TUI Plugin Access and Implementation Standards / deepseek-harness终端交互生态插件准入规范与实施标准"
-    },
-    {
-      "full_name": "hytime/dsh-thinking-effort",
-      "previous": "agent",
+      "full_name": "Ultronen/dsh-archived-chats",
+      "previous": "resource",
       "current": "tool",
-      "desc_now": "A DeepSeek Harness plugin for reasoning-effort defaults and protocol-aware gateway compatibility settings for llm-pi-ai models.",
-      "desc_prev": "Configurable reasoning levels for hand-declared DSH llm-pi-ai models, with bilingual settings and subagent defaults."
-    },
-    {
-      "full_name": "zeng6125-rgb/dsh-llm-retry-settings",
-      "previous": "other",
-      "current": "model",
-      "desc_now": "DSH 插件：LLM 自动重试设置卡片——重试次数/退避/抖动与 25 个错误码可勾选，回答被输出 token 上限截断时还能自动续写，改完实时生效。",
-      "desc_prev": "DSH 插件：LLM 自动重试设置卡片——调整重试次数与退避时间实时生效，可勾选额外可重试错误码。"
-    },
-    {
-      "full_name": "KhaosGx/dsh-stop-service",
-      "previous": "memory",
-      "current": "web-ui",
-      "desc_now": "DSH 设置页「服务控制」：实时服务信息 + 优雅终止按钮，不留孤儿进程。 / A service panel for DeepSeek Harness Web: live host info + graceful stop.",
-      "desc_prev": "Service panel for DeepSeek Harness (DSH) Web: live host info (PID, versions, uptime, memory) plus a confirm-guarded stop button for graceful shutdown — no orphaned background processes. · DSH 设置页「服务控制」：实时服务信息 + 终止服务按钮"
+      "desc_now": "Local-first session lifecycle for DeepSeek Harness agents: search, replay, restore-as-copy, backups, retention, and lineage.",
+      "desc_prev": "会话档案 / Session Archive for DeepSeek Harness：按工作区浏览和全文搜索归档聊天，原生只读预览消息、工具活动与已存储图片，管理标签备注、历史版本恢复为副本与 ZIP 备份恢复；提供带保护快照的可撤销回收站、空间分账、保留策略及来源与分支。所有数据留在本机。 Session Archive: full-text search, read-only preview, History restore-as-copy, ZIP backups, Recycle Bin, storage accounting, retention, and lineage. All data stays local."
     }
   ]
 }
