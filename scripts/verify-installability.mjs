@@ -37,7 +37,12 @@ function tokenOf() {
 const TOKEN = tokenOf();
 const headers = { Authorization: `Bearer ${TOKEN}`, "User-Agent": "dsh-marketplace-installability-probe", "X-GitHub-Api-Version": "2022-11-28" };
 
+const ALLOWED_HOST = "api.github.com"; // 白名单：url 拼自 registry.json 的 full_name（外部/可被 PR 篡改的数据），禁止越权访问非 GitHub API 主机（防 SSRF）
 async function fetchJson(url, accept) {
+  const parsed = new URL(url);
+  if (parsed.protocol !== "https:" || parsed.hostname !== ALLOWED_HOST) {
+    throw new Error(`拒绝非白名单主机请求: ${parsed.hostname}`);
+  }
   const res = await fetch(url, { headers: { ...headers, ...(accept ? { Accept: accept } : {}) }, signal: AbortSignal.timeout(20000) });
   const remaining = Number(res.headers.get("x-ratelimit-remaining") ?? "0");
   const resetMs = Number(res.headers.get("x-ratelimit-reset") ?? "0") * 1000 || 0;
