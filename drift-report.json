@@ -1,27 +1,27 @@
 {
-  "generated_at": "2026-09-06T13:36:42.240Z",
+  "generated_at": "2026-09-06T16:54:38.806Z",
   "count": 3,
   "items": [
     {
-      "full_name": "sjh9714/dsh-movein",
-      "previous": "agent",
-      "current": "tool",
-      "desc_now": "Try DeepSeek Harness with your existing Claude Code setup. Preview skills and configuration before applying. Codex and OpenCode supported.",
-      "desc_prev": "Try DeepSeek Harness with your existing Claude Code setup. Preview skills and configuration before applying. Codex and OpenCode supported."
+      "full_name": "Liora2050348900/dsh-token-optimizer",
+      "previous": "model",
+      "current": "resource",
+      "desc_now": "Layered token-optimization pipeline for DeepSeek Harness: output ladder, MCP lazy loading,compaction driver, cache-hit reporting. Built on real DSH plugin APIs; ~40-60% input saved in long sessions.",
+      "desc_prev": "Layered token-optimization pipeline for DeepSeek Harness: output ladder, MCP lazy loading,compaction driver, cache-hit reporting. Built on real DSH plugin APIs; ~40-60% input saved in long sessions."
     },
     {
-      "full_name": "WSK-build/DSHBox",
+      "full_name": "Liora2050348900/dsh-behavior-enhancer",
+      "previous": "tool",
+      "current": "resource",
+      "desc_now": "Behavior-management plugin for DeepSeek Harness: tool-call discipline prompt section, failure-triggered parallelism convergence (pool drops to 1, auto-restores), consecutive-failure user intervention. Complements dsh-token-optimizer; works standalone.",
+      "desc_prev": "Behavior-management plugin for DeepSeek Harness: tool-call discipline prompt section, failure-triggered parallelism convergence (pool drops to 1, auto-restores), consecutive-failure user intervention. Complements dsh-token-optimizer; works standalone."
+    },
+    {
+      "full_name": "chuxindd/dsh-context-enhancement",
       "previous": "coding",
-      "current": "agent",
-      "desc_now": "Run DeepSeek Harness locally on Android phones and tablets. One APK with Debian, Node.js, DSH, and WebView — no root or Termux required. 在安卓手机和平板上本机运行完整 DSH。",
-      "desc_prev": "Run DeepSeek Harness on Android — a layered runtime (Debian + Node.js + DSH) inside a rootless PRoot sandbox, with an embedded WebView UI, file manager, persistent terminal, and one-tap runtime/DSH updates. Install the APK and go."
-    },
-    {
-      "full_name": "Oscar-Williams/dsh-deepcanary",
-      "previous": "vision",
-      "current": "notify",
-      "desc_now": "Know when your DeepSeek Harness tasks need you. Local alerts, quiet notifications, and a task inbox.",
-      "desc_prev": "Local attention supervision for DeepSeek Harness: evidence-first signals, quiet notifications, and an actionable inbox."
+      "current": "tool",
+      "desc_now": "适用于 DeepSeek Harness 的单会话上下文增强工具，力求化解会话在触发 /compact 上下文压缩后损失信息过多，导致前后表现“判若两人”的技术困境。",
+      "desc_prev": "面向 DeepSeek Harness 编程会话的持久化任务状态与上下文感知压缩。"
     }
   ]
 }
