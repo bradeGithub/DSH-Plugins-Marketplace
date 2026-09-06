@@ -1,27 +1,20 @@
 {
-  "generated_at": "2026-09-06T16:54:38.806Z",
-  "count": 3,
+  "generated_at": "2026-09-06T20:19:41.883Z",
+  "count": 2,
   "items": [
     {
-      "full_name": "Liora2050348900/dsh-token-optimizer",
-      "previous": "model",
-      "current": "resource",
-      "desc_now": "Layered token-optimization pipeline for DeepSeek Harness: output ladder, MCP lazy loading,compaction driver, cache-hit reporting. Built on real DSH plugin APIs; ~40-60% input saved in long sessions.",
-      "desc_prev": "Layered token-optimization pipeline for DeepSeek Harness: output ladder, MCP lazy loading,compaction driver, cache-hit reporting. Built on real DSH plugin APIs; ~40-60% input saved in long sessions."
+      "full_name": "ltxlong/dsh-session-kit",
+      "previous": "web-ui",
+      "current": "memory",
+      "desc_now": "会话管理菜单、归档管理、轮次级删除、重新生成、记忆管理、话题导航。Add a management menu for conversations, archive conversation management, delete by round, regenerate, and a quick topic navigation on the right.",
+      "desc_prev": "会话管理菜单、归档管理、轮次级删除、重新生成，话题快捷导航。Add a management menu for conversations, archive conversation management, delete by round, regenerate, and a quick topic navigation on the right."
     },
     {
-      "full_name": "Liora2050348900/dsh-behavior-enhancer",
+      "full_name": "rootkiller6788/dsh-launcher",
       "previous": "tool",
-      "current": "resource",
-      "desc_now": "Behavior-management plugin for DeepSeek Harness: tool-call discipline prompt section, failure-triggered parallelism convergence (pool drops to 1, auto-restores), consecutive-failure user intervention. Complements dsh-token-optimizer; works standalone.",
-      "desc_prev": "Behavior-management plugin for DeepSeek Harness: tool-call discipline prompt section, failure-triggered parallelism convergence (pool drops to 1, auto-restores), consecutive-failure user intervention. Complements dsh-token-optimizer; works standalone."
-    },
-    {
-      "full_name": "chuxindd/dsh-context-enhancement",
-      "previous": "coding",
-      "current": "tool",
-      "desc_now": "适用于 DeepSeek Harness 的单会话上下文增强工具，力求化解会话在触发 /compact 上下文压缩后损失信息过多，导致前后表现“判若两人”的技术困境。",
-      "desc_prev": "面向 DeepSeek Harness 编程会话的持久化任务状态与上下文感知压缩。"
+      "current": "other",
+      "desc_now": "DSHL — 桌面启动器，用于管理 AI 运行时、实例、插件、MCP 服务、技能集、配置方案与发行包。",
+      "desc_prev": "DSHL — A desktop launcher for managing AI runtimes, instances, plugins, MCP servers, skills, profiles, and distributions."
     }
   ]
 }
