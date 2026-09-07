@@ -6,7 +6,7 @@
 // 前置：git 可用（`git --version`）；npm 缺失时跳过 cordis-plugin 分支。
 // 运行：node scripts/tests/e2e/install.e2e.mjs
 
-import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, existsSync, rmSync, renameSync } from "node:fs";
+import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, existsSync, rmSync, renameSync, chmodSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { tmpdir } from "node:os";
 import { execFileSync } from "node:child_process";
@@ -790,6 +790,8 @@ function setupUrlRewrite(owner, repoName) {
     `if [ -f "${failFlagPosix}" ]; then exit 1; fi`,
     "exit 0"
   ].join("\n"), "utf8");
+  // POSIX 下 runDsh 直接 spawn `dsh`，脚本必须可执行，否则 ENOENT 回退 cordis-plugin。
+  if (process.platform !== "win32") chmodSync(join(fakeBin, "dsh"), 0o755);
   writeFileSync(join(fakeBin, "dsh.cmd"), [
     "@echo off",
     `echo %* >> "${argsLog}"`,
