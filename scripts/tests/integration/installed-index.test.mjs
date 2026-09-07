@@ -27,6 +27,7 @@ const cacheDir = join(marketRoot, "cache");
 const listCacheDir = join(marketRoot, "list-cache");
 const skillsDir = join(home, "skills");
 const profileNm = join(home, "profiles", "web", "node_modules");
+const desktopNm = join(home, "profiles", "desktop", "node_modules");
 
 // ---- 环境构造：真相源（与 detectInstalled 五重判定一一对应）----
 // ① 清单记录
@@ -53,6 +54,8 @@ mkdirSync(join(cacheDir, "t1__cacheclone"), { recursive: true });
 writeFileSync(join(cacheDir, "t1__cacheclone", "install.ps1"), "# x", "utf8");
 // ④ 包名映射：node_modules 目录名命中（无 package.json，目录名兜底）
 mkdirSync(join(profileNm, "pkghit"), { recursive: true });
+// profile 切换一致性：desktop 只拥有该包，web 不应在稳定响应中误带它。
+mkdirSync(join(desktopNm, "desktop-only"), { recursive: true });
 // ④ pkg_name 索引字段映射：目录名与仓库名不同，靠 registry 索引的 pkg_name 命中
 mkdirSync(join(profileNm, "the-real-pkg"), { recursive: true });
 // 官方包排除：@deepseek-ai 官方包永远不算用户安装的市场插件。
@@ -93,6 +96,8 @@ const mkRepo = (full_name, over = {}) => ({
   license: null, pkg_name: null, version: null, category: null, has_skill: null, has_install_script: null, ...over,
 });
 const dshRepos = [
+  mkRepo("none/cli-pkg", { npm_version: "2.0.0" }), // worker 内异步读包版本，制造切换窗口
+  mkRepo("t1/desktop-only", { pkg_name: "desktop-only" }), // desktop profile 独有
   mkRepo("t1/recorded"),                                  // ① 清单 → true
   mkRepo("t1/heuristic"),                                 // ② 目录 → true
   mkRepo("t1/cacheclone"),                                // ⑤ 缓存克隆 → true
@@ -103,8 +108,8 @@ const dshRepos = [
   mkRepo("t1/fromofficial"),                              // 官方包 repository 反向索引 → false（repoIndex 排除）
   mkRepo("t1/fromnoname"),                                // ④ name-null 非官方条目 reverse 命中 → true
   mkRepo("t1/trap", { pkg_name: "otherpkg" }),            // ④ repository 撞名 → false
-  mkRepo("t1/manual"),                                    // 未安装（A2 手动安装场景用）
-  mkRepo("t1/newpkg", { pkg_name: "newpkg" }),            // 未安装（A2b 手动装包场景用）
+  mkRepo("t1/manual"),                                    // 未安装（手动安装场景用）
+  mkRepo("t1/newpkg", { pkg_name: "newpkg" }),            // 未安装（手动装包场景用）
   mkRepo("t1/clean"),                                     // 未安装 → false
   // #157：同名不同 owner——`other/recorded-skill` 装到 skills/recorded 后，
   // `t1/recorded-skill`（同为 recorded-skill）不得误标已安装（dirOwners 属主校验）。
@@ -176,6 +181,8 @@ const uninstallHandler = registered.find((h) => h.path === "/api/marketplace/uni
 check("list 路由已注册", !!listHandler, true);
 check("skills 路由已注册", !!skillsHandler, true);
 check("uninstall 路由已注册", !!uninstallHandler, true);
+const compatibilityIndex = await lib.ensureInstalledIndex();
+check("兼容 ensureInstalledIndex 导出仍返回索引", compatibilityIndex instanceof Object && compatibilityIndex.profile instanceof Map, true);
 
 const mkReq = (url) => ({ method: "GET", url });
 const mkRes = () => {
@@ -199,6 +206,7 @@ const fpOf = (body) => body?.fp;
   check("list ② 目录启发式 → installed", map["t1/heuristic"], true);
   check("list ⑤ 缓存克隆（script）→ installed", map["t1/cacheclone"], true);
   check("list ④ node_modules 目录名 → installed", map["t1/pkghit"], true);
+  check("list web profile 不含 desktop 独有包", map["t1/desktop-only"], false);
   check("list ④ pkg_name 索引 → installed", map["t1/pkgnamed"], true);
   check("list ③ 本体识别 → installed", map[OWN_REPO], true);
   check("list 官方包排除 → 未安装", map["t1/official"], false);
@@ -224,29 +232,60 @@ const fpOf = (body) => body?.fp;
   check("list fp 两次响应一致", fpOf(r2.body), fpOf(r.body));
 }
 
-// ==================== B1 验证：索引侧 repository 撞名拦截 ====================
+// ==================== profile 切换：并发标注结果必须来自单一稳定代际 ====================
+// 前面的请求已预热 web 的 profileScanCache / InstalledIndex。列表首项是 npm-cli 记录，
+// worker 会异步读取 package.json；在该 await 窗口切到 desktop。若不丢弃第一次局部结果，
+// 响应会同时带上 web 的 pkghit 与 desktop 的 desktop-only，形成混代标注。
+{
+  const r = mkRes();
+  let timer = null;
+  let switched = false;
+  try {
+    // 失效预热缓存，确保切换发生在异步 profile 扫描期间而非缓存命中之后。
+    lib.setTargetProfile("desktop");
+    lib.setTargetProfile("web");
+    const switchTask = new Promise((resolve) => {
+      timer = setTimeout(() => {
+        lib.setTargetProfile("desktop");
+        switched = true;
+        resolve();
+      }, 0);
+    });
+    await listHandler(mkReq("/api/marketplace/list"), r.res);
+    await switchTask;
+    const map = installedMapOf(r.body);
+    check("profile 切换发生在列表请求完成前", switched, true);
+    check("稳定状态重试后使用 desktop 独有包", map["t1/desktop-only"], true);
+    check("稳定状态重试后丢弃 web 独有包标注", map["t1/pkghit"], false);
+  } finally {
+    if (timer !== null) clearTimeout(timer);
+    lib.setTargetProfile("web");
+  }
+}
+
+// ==================== 验证：索引侧 repository 撞名拦截 ====================
 // profileNm/otherpkg 的 package.json repository 指向 other/real → 带 pkg_name "otherpkg"
 // 的仓库 t1/trap 不应判已安装（同探测路径 matchProfileEntry 语义）。
 {
   const r = mkRes();
   await listHandler(mkReq("/api/marketplace/list"), r.res);
-  check("B1 repository 撞名 → 不判已安装", installedMapOf(r.body)["t1/trap"], false);
+  check("repository 撞名 → 不判已安装", installedMapOf(r.body)["t1/trap"], false);
 }
 
-// ==================== A2 复现：force refresh（refresh=1）不失效索引 ====================
+// ==================== 复现：force refresh（refresh=1）不失效索引 ====================
 // 用户手动装了 skill（直接建目录，不经过市场安装流程）后点「刷新」——
 // 列表重拉了但 InstalledIndex 仍用旧快照 → 目录启发式 miss → 标注陈旧。
 {
   const r = mkRes();
   await listHandler(mkReq("/api/marketplace/list"), r.res);
-  check("A2 前置：t1/manual 初始未安装", installedMapOf(r.body)["t1/manual"], false);
+  check("前置：t1/manual 初始未安装", installedMapOf(r.body)["t1/manual"], false);
   // 手动安装：直接在 skills 目录建 skill（索引构建于首次 list，dirs 集合不含 manual）
   mkdirSync(join(skillsDir, "manual"), { recursive: true });
   writeFileSync(join(skillsDir, "manual", "SKILL.md"), "# x", "utf8");
   const r2 = mkRes();
   await listHandler(mkReq("/api/marketplace/list?refresh=1"), r2.res);
   // 期望：目录启发式应命中（manual 目录已存在）→ 标注 true；当前实现 refresh 不失效索引 → 仍是 false
-  check("A2 force refresh 后目录启发式命中（索引已失效重建）", installedMapOf(r2.body)["t1/manual"], true);
+  check("force refresh 后目录启发式命中（索引已失效重建）", installedMapOf(r2.body)["t1/manual"], true);
 }
 
 // ==================== skills handler：两重标注 + fp ====================
@@ -264,25 +303,25 @@ const fpOf = (body) => body?.fp;
   check("skills 响应带服务端分页字段", typeof r.body?.total, "number");
 }
 
-// ==================== A2b 排查：force refresh 须同时失效 profileScanCache ====================
-// A2 修复只置 installedIndex = null；索引重建时 scanProfilePackages() 命中旧缓存
+// ==================== 排查：force refresh 须同时失效 profileScanCache ====================
+// 修复只置 installedIndex = null；索引重建时 scanProfilePackages() 命中旧缓存
 // → 用户手动 npm install 新包（node_modules 新目录）后点刷新，包名映射仍 miss。
 {
   const r = mkRes();
   await listHandler(mkReq("/api/marketplace/list"), r.res);
-  check("A2b 前置：t1/newpkg 初始未安装", installedMapOf(r.body)["t1/newpkg"], false);
+  check("前置：t1/newpkg 初始未安装", installedMapOf(r.body)["t1/newpkg"], false);
   // 手动装包：直接在 profile node_modules 建目录（无 package.json，目录名兜底命中）
   mkdirSync(join(profileNm, "newpkg"), { recursive: true });
   const r2 = mkRes();
   await listHandler(mkReq("/api/marketplace/list?refresh=1"), r2.res);
   // 期望：包名映射命中（profile 重扫含 newpkg）→ 标注 true
-  check("A2b force refresh 后包名映射命中（profile 缓存已失效）", installedMapOf(r2.body)["t1/newpkg"], true);
+  check("force refresh 后包名映射命中（profile 缓存已失效）", installedMapOf(r2.body)["t1/newpkg"], true);
 }
 
-// ==================== B2 验证：卸载事件失效 → 普通 list 懒重建 ====================
+// ==================== 验证：卸载事件失效 → 普通 list 懒重建 ====================
 // uninstall handler → removeInstalled（删记录 + installedIndex=null + 删目录）→
-// 下次 list 懒重建 → 标注翻转为未安装。A2 与 B2 的差别：B2 走事件失效，A2 只重拉列表。
-// 放在 skills 场景之后：B2 删除 skillsDir/recorded，不影响前面的 recorded 断言。
+// 下次 list 懒重建 → 标注翻转为未安装。与 的差别：走事件失效，只重拉列表。
+// 放在 skills 场景之后：删除 skillsDir/recorded，不影响前面的 recorded 断言。
 {
   const mkUninstallReq = (repo) => ({
     method: "POST",
@@ -293,13 +332,13 @@ const fpOf = (body) => body?.fp;
   });
   const r = mkRes();
   await listHandler(mkReq("/api/marketplace/list"), r.res);
-  check("B2 前置：t1/recorded 已安装", installedMapOf(r.body)["t1/recorded"], true);
+  check("前置：t1/recorded 已安装", installedMapOf(r.body)["t1/recorded"], true);
   const ur = mkRes();
   await uninstallHandler(mkUninstallReq("t1/recorded"), ur.res);
-  check("B2 卸载成功", ur.status, 200);
+  check("卸载成功", ur.status, 200);
   const r2 = mkRes();
   await listHandler(mkReq("/api/marketplace/list"), r2.res);
-  check("B2 卸载后列表标注翻转为未安装（事件失效→懒重建）", installedMapOf(r2.body)["t1/recorded"], false);
+  check("卸载后列表标注翻转为未安装（事件失效→懒重建）", installedMapOf(r2.body)["t1/recorded"], false);
 }
 
 globalThis.fetch = origFetch;

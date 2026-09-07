@@ -1,0 +1,9 @@
+window.__ModuleLoader__.load({
+  id: "dsh-plugin-marketplace",
+  factory: (require) => {
+    var module = { exports: {} };
+    var exports = module.exports;
+    var react = require("react");
+    var h = react.createElement;
+    var useState = react.useState;
+    var useEffect = react.useEffect;

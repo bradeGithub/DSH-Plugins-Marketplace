@@ -1,8 +1,8 @@
 // uninstall handler 安全校验测试：
-// - script 型插件的 location 必须位于克隆缓存 CACHE_DIR 内才允许删除（安全纵深 L6）
+// - script 型插件的 location 必须位于克隆缓存 CACHE_DIR 内才允许删除（安全纵深）
 //   ——installed.json 被篡改时不能删除任意路径；
 // - skill / agent-preset 型：location 必须位于 SKILLS_DIR / PRESETS_DIR 内（前缀或精确相等）。
-//   L1 修复：多 skill / 多预设仓库安装时 location 记为 SKILLS_DIR / PRESETS_DIR 本身
+//   安全约束：多 skill / 多预设仓库安装时 location 记为 SKILLS_DIR / PRESETS_DIR 本身
 //   （无尾分隔符）——精确相等也必须放行删除，否则目录残留而记录已删。
 
 
@@ -26,7 +26,7 @@ mkdirSync(insideDir, { recursive: true });
 mkdirSync(outsideDir, { recursive: true });
 writeFileSync(join(insideDir, "x.txt"), "x", "utf8");
 writeFileSync(join(outsideDir, "y.txt"), "y", "utf8");
-// skill / 预设场景构造：SKILLS_DIR / PRESETS_DIR 本身及其子目录（L1 修复）
+// skill / 预设场景构造：SKILLS_DIR / PRESETS_DIR 本身及其子目录（安全约束）
 const skillsDir = join(home, "skills");
 const presetsDir = join(home, ".agent-presets");
 const normalSkillDir = join(skillsDir, "normalskill");
@@ -128,7 +128,7 @@ if (uninstallHandler) {
   check("uninstall 常规 skill（子目录 location）→ 200", r4.status, 200);
   check("uninstall 常规 skill 目录已删", existsSync(normalSkillDir), false);
 
-  // 场景 5：多 skill 仓库（location = SKILLS_DIR 本身，无尾分隔符）→ 整个目录被删除（L1 修复）
+  // 场景 5：多 skill 仓库（location = SKILLS_DIR 本身，无尾分隔符）→ 整个目录被删除（安全约束）
   const r5 = mkRes();
   await uninstallHandler(mkReq("owner/multiskill"), r5.res);
   check("uninstall 多 skill（location=SKILLS_DIR 本身）→ 200", r5.status, 200);

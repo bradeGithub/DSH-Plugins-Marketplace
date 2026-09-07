@@ -4,12 +4,22 @@
 // 缺 key 时 t() 返回裸 key 名（用户看到 "step1"）——比对防止漏文案。
 // 与 coverage/mutation/property 同属「机械化质量检查」族。
 
-import { readFileSync } from "node:fs";
+import { readFileSync, readdirSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
-const lib = readFileSync(join(ROOT, "lib", "index.js"), "utf8");
+// 分层重构后字典与 t() 引用分散到 lib/ 子目录——递归拼接（与 security-guards 同款）
+const collectLib = (dir) => {
+  const out = [];
+  for (const e of readdirSync(dir, { withFileTypes: true })) {
+    const p = join(dir, e.name);
+    if (e.isDirectory()) out.push(...collectLib(p));
+    else if (e.name.endsWith(".js")) out.push(readFileSync(p, "utf8"));
+  }
+  return out;
+};
+const lib = collectLib(join(ROOT, "lib")).join("\n");
 const client = readFileSync(join(ROOT, "lib", "client.js"), "utf8");
 
 let pass = 0, fail = 0;

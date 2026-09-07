@@ -41,6 +41,8 @@ import { readFile, writeFile, mkdir, rm } from "node:fs/promises";
 import { gzipSync } from "node:zlib";
 import { join, dirname } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
+import { normalizeRegistryRepo as normalize } from "../lib/domain/normalize.js";
+import { hasDshPluginDeclaration, isBundlePackage } from "../lib/domain/validation.js";
 
 const ROOT = dirname(fileURLToPath(import.meta.url));
 const MODE = process.env.SOURCES_MODE ?? "dsh";
@@ -113,27 +115,12 @@ async function fetchPage(query, page, extraSort = "") {
   return await res.json();
 }
 
-/** B2 收录门控 normalize：fork 是噪音非覆盖（真排除），archived 保留但降权（客户端显示徽章）。 */
-export function normalize(r) {
-  return {
-    full_name: r.full_name,
-    name: r.name,
-    description: r.description,
-    html_url: r.html_url,
-    stargazers_count: r.stargazers_count,
-    updated_at: r.updated_at,
-    default_branch: r.default_branch ?? "main",
-    topics: r.topics ?? [],
-    license: r.license?.spdx_id ?? null,
-    fork: r.fork === true,
-    archived: r.archived === true
-  };
-}
+export { normalize };
 
 // ── 插件分类（dsh 模式）──
 // 基于 description + name + 过滤后的 topics 的关键词规则分类（无需读 README）。
 // 规则按优先级排列：先匹配先得（特异词在前，宽泛词在后），无匹配 → "other"。
-// v1.3.8 依据 120 仓库 README 审计重排（基线准确率 45.8% → 100%）：
+// v1.3.8 依据 120 仓库 README 分类结果重排（基线准确率 45.8% → 100%）：
 //   顺序要点：web-ui 提到 conversation 之前（对话类宽词曾吞掉 UI 插件）；
 //   model 收紧（provider/deepseek-api/usage 曾误吞 web-ui/TUI）；
 //   resource 强特征（awesome/目录/排行等）前置，避免聚合仓库被 coding/agent 抢走。
@@ -181,7 +168,7 @@ const CATEGORY_RULES = [
     patterns: [/通知/, /消息通知|消息提醒|消息推送/, /\bmessage notification/i, /telegram/i, /wechat/i, /微信/, /\bim\b/i, /提醒/, /alert/i, /ntfy/i, /broadcast/i, /广播/, /邮件/, /mail/i, /desktop[- ]?notification/i, /handoff/i, /消息互通/, /跨实例/]
   },
   // 聚合资源强特征（前置）：awesome 目录/排行/商店/手册必须在 document/coding 之前匹配，
-  // 否则 curated 列表与手册会被"文档/开发"宽词抢走（v1.3.8 审计发现 5+ 错分）。
+  // 否则 curated 列表与手册会被"文档/开发"宽词抢走（v1.3.8 分类验证发现 5+ 错分）。
   {
     id: "resource",
     // v1.3.8：/discovery/ 收窄（OpenBiliClaw 内容发现 Agent 误伤 → 只认插件发现类）；
@@ -208,7 +195,7 @@ const CATEGORY_RULES = [
     // 去 /style/（"Tag-style/Codex-style" 误伤 agent 运行时/输入框插件）；/tab/ → /\btab\b/（"database" 误伤）
     patterns: [/web[- ]?ui/i, /\bui\b/i, /界面/, /skin/i, /皮肤/, /theme/i, /主题/, /sidebar/i, /侧边栏/, /whale/i, /鲸鱼/, /宠物/, /美化/, /wallpaper/i, /壁纸/, /widget/i, /组件/, /home[- ]?page/i, /主页/, /status[- ]?bar/i, /状态栏/, /minigame/i, /小游戏/, /game/i, /游戏/, /panel/i, /面板/, /banner/i, /横幅/, /广告/, /\btab\b/i, /标签页/, /dock/i, /icon/i, /图标/, /avatar/i, /头像/, /\bdesign\b/i, /设计/, /导航|navbar/i, /生成式 ?ui|generative ui/i]
   },
-  // 通用工具（合并原前后置两组；v1.3.8 增补 CLI/逆向/图库/图表/研究/一键配置 等审计命中词）
+  // 通用工具（合并原前后置两组；v1.3.8 增补 CLI/逆向/图库/图表/研究/一键配置 等分类命中词）
   {
     id: "tool",
     patterns: [/mcp[- ]?server/i, /sandbox/i, /沙箱/, /security/i, /安全/, /guardrail/i, /护栏/, /weather/i, /天气/, /calculator/i, /计算器/, /行情/, /ticker/i, /会议/, /meeting/i, /benchmark/i, /基准/, /fuzzer/i, /模糊测试/, /vault/i, /密码/, /credential/i, /凭据/, /encrypt/i, /加密/, /\botp\b/i, /\btotp\b/i, /profiler/i, /性能分析/, /探针/, /search/i, /搜索/, /browser/i, /浏览器/, /\btool/i, /工具/, /\bjson\b/i, /\bcsv\b/i, /\bregex\b/i, /encoding/i, /编码转换/, /\bstat\b/i, /schema/i, /protocol/i, /协议/, /remote/i, /远程/, /dns/i, /网络/, /network/i, /performance/i, /性能/, /health/i, /健康检查/, /check/i, /检查/, /monitor/i, /监控/, /备份/, /backup/i, /sync/i, /同步/, /export/i, /导入/, /import/i, /convert/i, /转换/, /decode/i, /解码/, /encode/i, /压缩/, /zip/i, /file/i, /文件/, /\bcli\b/i, /command[- ]?line/i, /reverse[- ]?engineer/i, /逆向/, /gallery/i, /图库/, /diagram/i, /图表|图形/, /\bresearch\b/i, /研究/, /一键配置|configure|configuration/i]
@@ -238,7 +225,7 @@ const CATEGORY_RULES = [
 const CATEGORY_OTHER = "other";
 
 /**
- * 人工分类覆写（v1.3.8）：120 仓库 README 审计后，对规则无法可靠判定的边界仓库做确定性人工修正。
+ * 确定性分类覆写（v1.3.8）：根据 120 个仓库的 README 分类结果，为规则无法可靠判定的边界仓库提供稳定修正。
  * 仅覆盖规则能力之外的案例——desc 为空、语义超出特征词、或特征词天然冲突（如"玩具"仓库含 protocol/文件 字样）。
  * 每条附理由；新仓库不受影响，仍由 CATEGORY_RULES 分类。
  */
@@ -351,7 +338,7 @@ export function applyInstallability(repos, verdictMap) {
 }
 
 /**
- * B3 失效清理（纯函数）：报告 verdict === "gone"（B1 已由 repo 级 API 二次确认的真删除）
+ * 失效清理（纯函数）：报告 verdict === "gone"（repo 级 API 已确认真删除）
  * 的条目从索引剔除——「降权达到用户侧删除」：报告归档保留，仓库复活后 topic 扫描自然重收。
  * empty（仓库存在但无提交树）不剔除：新仓库可能很快有内容，保留无徽章。
  * @param {Array} repos registry 条目数组
@@ -624,35 +611,15 @@ async function fetchDisclosureMap() {
   }
 }
 
-/**
- * DSH 插件能力判定（与 lib/index.js、verify-installability.mjs 同款标准，本文件为唯一脚本侧来源）：
- * package.json 有 dsh 字段，或依赖 @deepseek-ai/cordis、@deepseek-ai/dsh、@deepseek-ai/dsh-* 任一。
- */
-export function looksLikeDshPlugin(pkg) {
-  if (!pkg || typeof pkg !== "object") return false;
-  if (pkg.dsh && typeof pkg.dsh === "object") return true;
-  const deps = { ...(pkg.dependencies ?? {}), ...(pkg.peerDependencies ?? {}) };
-  const names = Object.keys(deps);
-  return names.includes("@deepseek-ai/cordis") || names.includes("@deepseek-ai/dsh") || names.some((n) => n.startsWith("@deepseek-ai/dsh-"));
-}
+export { hasDshPluginDeclaration as looksLikeDshPlugin, isBundlePackage };
 
 /**
- * bundle 声明判定（与 lib/index.js isBundlePackage 同款）：dsh.bundle.patch 非空字符串。
- * bundle 包经 profile bundles 层注册（issue #134），与普通 cordis 插件安装路径不同。
- */
-export function isBundlePackage(pkg) {
-  return Boolean(pkg && typeof pkg === "object" && pkg.dsh && typeof pkg.dsh === "object"
-    && pkg.dsh.bundle && typeof pkg.dsh.bundle === "object"
-    && typeof pkg.dsh.bundle.patch === "string" && pkg.dsh.bundle.patch.length > 0);
-}
-
-/**
- * 生态件类型判定（T3）：package.json 静态可判的形态标签，写 eco_type 字段。
+ * 生态件类型判定：package.json 静态可判的形态标签，写 eco_type 字段。
  * - bundle：dsh.bundle.patch 非空（与 isBundlePackage 同源，安装路径不同 → 用户可见区分）
- * - desktop：安装器/桌面客户端/启动器形态（T1 调研发现 other 最大隐性簇）——
+ * - desktop：安装器/桌面客户端/启动器形态（other 中常见的隐性簇）——
  *   基于 name/description/topics 关键词判定（无 package.json 或 dsh 声明不强判）
  * - plugin / null：普通 cordis 插件或未声明（皮肤/技能合集等根清单无声明时归 null，
- *   由 has_skill 等 Trees 探测字段补充——T3b 待 dsh 模式探测接通后扩展）
+ *   由 has_skill 等 Trees 探测字段补充）
  * 返回 "bundle" | "desktop" | "plugin" | null；不可判 → null。
  */
 const DESKTOP_HINTS = /launcher|desktop[- ]?(?:app|pet|tool)|便携|启动器|桌面(?:应用|宠物|端|客户端)|系统托盘|tray icon|wallpaper|壁纸/;
@@ -786,7 +753,7 @@ export function splitSegment(seg) {
  *   newCount=0 表示本段没有新增仓库（数据已被其他段覆盖）→ 调用方直接收敛，不再分裂；
  *   failed=true 表示中途有页面失败（限流/网络）→ 数据可能不全，调用方标记未完成但不分裂。
  */
-/** B2 门控测试导出：单段抓取（fork 排除在循环内）。 */
+/** 门控测试导出：单段抓取（fork 排除在循环内）。 */
 export async function fetchStarSegment(topic, seg, since) {
   const query = starRangeQuery(topic, seg, since);
   const collected = [];
@@ -803,7 +770,7 @@ export async function fetchStarSegment(topic, seg, since) {
     }
     const items = data.items ?? [];
     for (const r of items) {
-      // B2：fork 真排除（带 topic 的 fork 不是独立插件，纯噪音）——降权无价值，直接不进索引
+      // fork 真排除（带 topic 的 fork 不是独立插件，纯噪音）——降权无价值，直接不进索引
       if (seen.has(r.full_name) || EXCLUDED.has(r.name) || r.fork === true) continue;
       seen.add(r.full_name);
       collected.push(normalize(r));
@@ -910,7 +877,7 @@ async function fetchAllTopics() {
         for (const r of items) {
           if (merged.has(r.full_name)) continue; // 跨 query 全局去重
           if (EXCLUDED.has(r.name)) continue;
-          if (r.fork === true) continue; // B2：fork 真排除（兜底路径同款）
+          if (r.fork === true) continue; // fork 真排除（兜底路径同款）
           merged.set(r.full_name, normalize(r));
           freshCount++;
         }
@@ -1086,7 +1053,7 @@ async function main() {
   // skills 模式即使完整拉取也必须加载旧索引——探测继承依赖旧探测结果（探测远比 Search 贵）。
   // incremental 也必须加载旧索引：增量只拉最近 N 天 pushed 的仓库，若所有段恰好都收敛
   // （complete=true），不合并会把旧索引整体替换成残缺子集（v1.4.5 修复）。
-  // 审查 C3：dsh 全量构建同样必须加载旧索引——分类漂移检测（oldMap 比对旧 category）依赖它；
+  // dsh 全量构建同样必须加载旧索引——分类漂移检测（oldMap 比对旧 category）依赖它；
   // 此前全量分支 existing=[] 导致漂移检测空跑且 0 漂移时误删 drift-report.json。
   // 合并循环对 existing 本就安全（fresh 优先 + stale 剔除），无条件加载无副作用。
   const STALE_DAYS = 14;
@@ -1194,7 +1161,7 @@ async function main() {
       }
     }
     try {
-      const reportPath = join(ROOT, "..", "drift-report.json");
+      const reportPath = process.env.DRIFT_REPORT_FILE ?? join(ROOT, "..", "drift-report.json");
       if (driftItems.length > 0) {
         await writeFile(reportPath, JSON.stringify({ generated_at: new Date().toISOString(), count: driftItems.length, items: driftItems }, null, 2) + "\n", "utf8");
         log(`分类漂移 ${driftItems.length} 条（drift-report.json）：${driftItems.map((d) => `${d.full_name} ${d.previous}→${d.current}`).join("、")}`);
@@ -1215,10 +1182,10 @@ async function main() {
         Array.isArray(report.repos) ? report.repos.map((r) => [String(r.full_name), r.verdict]) : []
       );
       applyInstallability(repos, verdictMap);
-      // B3：已确认 gone 的条目从索引剔除（报告归档保留，复活自动重收）
+      // 已确认 gone 的条目从索引剔除（报告归档保留，复活自动重收）
       const before = repos.length;
       repos = applyGoneCleanup(repos, verdictMap);
-      if (repos.length < before) log(`B3 失效清理：剔除 ${before - repos.length} 个已确认 gone 条目（报告归档可恢复）`);
+      if (repos.length < before) log(`失效清理：剔除 ${before - repos.length} 个已确认 gone 条目（报告归档可恢复）`);
     } catch {
       log("installability-report.json 缺失或损坏：本次构建不标注可安装性徽标");
     }
@@ -1356,7 +1323,7 @@ async function enrichPkgNames(repos, includeVersion = false) {
             // bundle 声明轻标记——三态写回（是 bundle → true，否 → 清除旧值）。
             // 只条件写 true 会导致仓库从 bundle 变普通插件后旧标记永久残留。
             if (isBundlePackage(pkg)) r.bundle = true; else delete r.bundle;
-            // T3：生态件类型（对外展示字段）。三态语义——bundle→"bundle"，
+            // 生态件类型（对外展示字段）。三态语义——bundle→"bundle"，
             // 桌面形态（无 dsh 声明 + 名称/描述命中）→"desktop"；dsh 声明无 bundle→"plugin"；
             // 不可判→null（清除旧值防残留）。
             const eco = classifyEcoType(pkg, r);
@@ -1376,7 +1343,7 @@ async function enrichPkgNames(repos, includeVersion = false) {
  * 解决 issue #26：monorepo / npm 发布型插件（如 dsh-web-ui）根 package.json version
  * 常年不 bump，GitHub 侧版本与 npm 实际发布版本脱节——npm 型 cli 的自动升级提示
  * 以 npm_version（安装源同源）为准。
- * 继承策略：合并后旧条目保留 npm_version（不重查）；本轮 fresh 重拉的仓库字段缺失 → 重查；
+ * 继承策略：合并后旧条目保留 npm_version（不重查）；fresh 重拉的仓库字段缺失 → 重查；
  * 每天 04:00 全量重建（complete 整体替换）时全部重查 → 每天刷新一次 npm 版本。
  * npm 实时性由前端「检测更新」手动按钮兜底（实时查 registry，不依赖索引）。 */
 async function enrichNpmVersions(repos) {

@@ -130,6 +130,7 @@ dsh plugin --profile web install bradeGithub/DSH-Plugins-Marketplace   # 重装�
 - **搜索**：按插件名 / 仓库全名 / 标签实时过滤
 - **插件分类**：构建时按简介/标签自动分类（12 类：视觉多模态 / 文档办公 / 记忆知识 / 模型用量 / 通知通讯 / 开发编码 / 对话会话 / 界面美化 / Agent 自动化 / 通用工具 / 聚合资源 / 其他），前端分类 chips 筛选 + 卡片分类徽章
 - **社区收录徽章**：构建期抓取 awesome 聚合页（[awesome-dsh-plugin](https://github.com/awesome-dsh-plugin/awesome-dsh-plugin)，社区人工筛选）收录的仓库，自动打「社区收录」蓝色徽章（悬停可见来源说明）——快速识别社区认可的插件（聚合页收录 ≠ 本市场背书）
+- **仓库状态徽章**：GitHub 已归档的仓库显示「已归档」提示及说明，但不改变安装资格
 - **通用 Skills 栏目**：设置页 tab 切换到「通用 Skills」——浏览 CI 构建的全量 skills 索引（`agent-skills` ∪ `claude-skills`，20000+ 仓库），支持搜索 / 分页触底加载 / 一键安装到 `~/.dsh/skills/` / 已安装识别；含安装脚本的仓库带 🛡 标识，探测未知的仓库带「未验证」弱提示
 - **刷新反馈**：点「刷新」强制重新拉取，并以弹窗提示「刷新成功 / 刷新失败」
 - **Github原链**：每个卡片提供跳转到原仓库的链接（新标签页打开）
@@ -212,7 +213,8 @@ GitHub Actions（每 2 小时，仓库自带 token）
 │   │   ├── package.json        （dsh.client 声明 + exports）
 │   │   └── lib/
 │   │       ├── index.js        （服务端：GitHub 拉取 / 安装管线 / 版本检测）
-│   │       └── client.js       （客户端：市场页面 UI）
+│   │       ├── client.js       （发布 bundle：客户端市场页面 UI）
+│   │       └── client-src/     （bundle 源片段，开发时由 assembler 拼接）
 │   └── cordis.patch.yml        （插件注册条目）
 └── marketplace/
     ├── cache/<owner>__<name>/  （克隆缓存，安装与版本对比的数据源）
@@ -316,9 +318,11 @@ GitHub Actions（每 2 小时，仓库自带 token）
 
 ## 🛠️ 开发与维护
 
-- 修改服务端逻辑：编辑 `lib/index.js`（语法检查：`node --check`）
+- 修改服务端逻辑：按职责编辑 `lib/app/`、`lib/domain/`、`lib/http/` 或 `lib/infra/`；跨层装配与宿主入口仍在 `lib/index.js`（语法检查：`node --check`）
+- 架构边界：服务端业务按 `http → app → domain` 分层，HTTP 可直接依赖 `infra`；`lib/index.js` 是组合入口，但当前仍保留安装执行器、registry/cache、patch IO 和已安装索引等兼容适配逻辑；继续抽取属于后续架构优化，不以压低文件行数为目标
 - 修改日志脱敏：编辑 `lib/redact.js`（安装日志附公开 issue 前的多层净化——密钥/路径/上下文邻近/高熵兜底；规则成对维护见 [docs/TESTING.md](docs/TESTING.md)）
-- 修改页面 UI：编辑 `lib/client.js`（浏览器 bundle，`window.__ModuleLoader__.load` 格式，`require` 可解析 DSH 平台模块）
+- 修改页面 UI：编辑 `lib/client-src/*.fragment`，运行 `node scripts/assemble-client.mjs --write` 生成受版本控制的 `lib/client.js`（浏览器 bundle，`window.__ModuleLoader__.load` 格式；`require` 可解析 DSH 平台模块）
+- `node scripts/assemble-client.mjs`（不带 `--write`）检查 source fragments 与发布 bundle 是否无漂移
 - 修改后重启 DSH 生效；客户端 bundle 的版本号（rev）按内容哈希生成，重启后浏览器自动拉取新版本
 - **插件作者请看 [STANDARD.md](STANDARD.md)**（[English](STANDARD.en.md)）：市场识别层开发规范——每种插件（cordis 插件 / 技能 / agent 预设 / 脚本型）应该怎么写才能被市场正确收录、正确安装、正确更新，含类型判定规则与常见反模式。
 - 安装反馈系统（自动创建 issue 的模板/字段/脱敏机制/隐私边界）见 [docs/FEEDBACK.md](docs/FEEDBACK.md)；规范文档索引见 [docs/README.md](docs/README.md)
@@ -334,4 +338,3 @@ GitHub Actions（每 2 小时，仓库自带 token）
 ## 📄 许可
 
 MIT
-

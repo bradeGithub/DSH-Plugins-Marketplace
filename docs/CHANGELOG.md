@@ -93,7 +93,7 @@
 
 ## v1.4.4 — 2026-08-15（修复:满屏「未验证」+ 徽章不显示 + git 网络错误分类 / Fixes: unverified badges everywhere, missing badges & git network error classification）
 
-**修复批次（issue #19/#20/#21 反馈闭环产出 + 实测回归）**：市场本体更新到 v1.4.3 后的五个问题一次修复 / a fix batch from the feedback loop and real-world regression: five issues found after the v1.4.3 release
+**问题修复（issue #19/#20/#21 反馈与实测回归）**：市场本体更新到 v1.4.3 后的五个问题已修复 / fixes for five issues reported in feedback and confirmed by real-world regression after the v1.4.3 release
 
 - **修复插件市场满屏「未验证」（issue #21 截图确认）**：`normalizeRepo` 把插件市场（registry.json）条目也归一化出 `has_skill: null`——该字段本只属于 Skills 栏目（探测未知的弱化提示），导致整个插件市场 tab 每条都显示「未验证」徽章。现在仅 skills 模式输出三态（true/false/null），插件市场不再显示；实测插件市场 3283 条 0 条带该字段，Skills 栏目 null 仅 8 条不变 / the plugin-marketplace tab showed "unverified" on every card because `normalizeRepo` stamped `has_skill: null` onto registry entries that never had the field (it belongs only to the Skills tab's unknown-probe hint); now only skills mode carries the tri-state field — 0/3283 marketplace entries affected, Skills tab unchanged
 - **修复「已验证安装」等徽章不显示（实测回归）**：`normalizeRepo` 未透传构建期盖章字段 `market_tags` / `installable`——列表接口把它们丢掉，前端「✓ 已验证安装」「仅手动安装」「非 DSH 插件」徽章从未显示。补透传后 dsh-market / dsh-web-ui / dsh-anchored-standard / 市场本体 / archify / dsh-deep-whale / dsh-tdai-memory 全部显示徽章 / `normalizeRepo` dropped the build-time stamp fields `market_tags` and `installable`, so the "verified install", "manual only" and "not a plugin" badges never rendered; now passed through — all seven verified repos show their badge
@@ -167,21 +167,21 @@
 
 ---
 
-## v1.3.12 — 2026-08-15（KIMI K3 代码审阅整改 / Review fixes per KIMI K3 audit）
+## v1.3.12 — 2026-08-15（安装与列表修复 / Install and list fixes）
 
-按《DSH插件市场-代码审阅-review.md》逐项整改（H1-H4 全部修复，M3-M6/L1/L3-L5 修复，M1/M2 记为已知限制） / all H1–H4 and M3–M6/L1/L3–L5 items from the KIMI K3 review fixed; M1/M2 documented as known limitations
+修复安装脚本幂等、平台脚本选择、Skills 并发、索引大小、JSON 输入、环境扫描、适配重定向、文档端点、patch 规范和同名包提示等问题 / Fixed install-script idempotency, platform selection, Skills concurrency, index size handling, JSON input errors, environment scanning, adaptor redirects, documented endpoints, patch validation and duplicate-package notices
 
-- **H1 安装脚本幂等失效**：`install.sh`/`install.ps1` 的注册检查用 `^name:` 行首锚定，匹配不到 `- insert:` 块内的缩进行 → 每次运行重复追加条目；改为 `^\s*name:` 与服务端一致 / install scripts' idempotency check now allows leading whitespace (indented `name:` inside `- insert:` blocks), matching the server
-- **H2 script 类型平台选择**：不再无条件 ps1 优先——Windows 优先 ps1、其他平台优先 sh，首选缺失回退另一脚本，两者皆缺给出明确报错 / script-type installs now pick the script by platform (ps1 on Windows, sh elsewhere) with a clear error when neither fits
-- **H3 skills 列表无界并发**：已安装标注复用 12-worker 并发池（12000+ 仓库不再一次性发起上万并发 fs.stat）/ skills flagging uses the same 12-worker pool as the plugin list
-- **H4 skills.json 超 1MB**：GitHub Contents API 对 >1MB 文件必 403 → skills 模式跳过 api 源，不再每次刷新白打一个必失败的请求 / the api source is skipped for skills (11MB index exceeds the 1MB Contents API limit)
-- **M3 非法 JSON 静默吞掉**：`readJsonBody` 解析失败抛 400（此前被当成空 body 报 badRepo，误导排障）；卸载处理器错误码统一用 `status` / invalid JSON now throws 400 instead of being silently treated as an empty body
-- **M4 环境变量扫描**：camelCase 分支去掉裸 `Key|Pass`（"hotKey" 等普通词不再误报）；扫描递归两层（跳过点目录/node_modules/dist/build），多包仓库子目录 README 不再漏报 / env scan: dropped bare `Key|Pass` suffixes (no more `hotKey` false positives) and recursed two levels for sub-directory READMEs
-- **M5 适配层重定向明示**：安装日志首行输出「适配层重定向：实际安装的是 X」 / adaptor redirects are now announced in the install log
-- **M6 文档漂移**：README 补全 `/api/marketplace/uninstall`、`/api/marketplace/self-update` 端点与手动预装插件不可卸载的说明 / README documents the missing endpoints and the manual-install uninstall limitation
-- **L1/L3/L5**：`removePatchEntry` 声明仅支持本插件生成格式；`install.sh` curl|bash 模式临时目录加 `trap` 清理；`-plugins$` 防呆过滤补注释
-- **L4 同名包隐藏提示**：`dedupeReposByPkgName` 返回 `{ repos, dropped }`，列表接口透传 `dropped` 计数，客户端显示「N 个同名包已隐藏」提示条 / duplicate-package hiding is no longer silent: the API reports `dropped` and the client shows a hint
-- **审计集同步**：CI 重建的 registry 暂缺 `bruc3van/dsh-desktop`、`JustGenius-s/DSH-Desktop`（搜索索引滞后，完整爬取后回归）→ 移出审计集；`Nagi-ovo/dsh-visualize` 简介明确为「在 DSH 对话中生成」→ 期望改为 conversation
+- **安装脚本幂等失效**：`install.sh`/`install.ps1` 的注册检查用 `^name:` 行首锚定，匹配不到 `- insert:` 块内的缩进行 → 每次运行重复追加条目；改为 `^\s*name:` 与服务端一致 / install scripts' idempotency check now allows leading whitespace (indented `name:` inside `- insert:` blocks), matching the server
+- **script 类型平台选择**：不再无条件 ps1 优先——Windows 优先 ps1、其他平台优先 sh，首选缺失回退另一脚本，两者皆缺给出明确报错 / script-type installs now pick the script by platform (ps1 on Windows, sh elsewhere) with a clear error when neither fits
+- **Skills 列表并发**：已安装标注复用 12-worker 并发池（12000+ 仓库不再一次性发起上万并发 fs.stat）/ skills flagging uses the same 12-worker pool as the plugin list
+- **skills.json 大小处理**：GitHub Contents API 对 >1MB 文件必 403 → skills 模式跳过 api 源，不再每次刷新白打一个必失败的请求 / the api source is skipped for skills (11MB index exceeds the 1MB Contents API limit)
+- **非法 JSON 静默吞掉**：`readJsonBody` 解析失败抛 400（此前被当成空 body 报 badRepo，误导排障）；卸载处理器错误码统一用 `status` / invalid JSON now throws 400 instead of being silently treated as an empty body
+- **环境变量扫描**：camelCase 分支去掉裸 `Key|Pass`（"hotKey" 等普通词不再误报）；扫描递归两层（跳过点目录/node_modules/dist/build），多包仓库子目录 README 不再漏报 / env scan: dropped bare `Key|Pass` suffixes (no more `hotKey` false positives) and recursed two levels for sub-directory READMEs
+- **适配层重定向明示**：安装日志首行输出「适配层重定向：实际安装的是 X」 / adaptor redirects are now announced in the install log
+- **文档漂移**：README 补全 `/api/marketplace/uninstall`、`/api/marketplace/self-update` 端点与手动预装插件不可卸载的说明 / README documents the missing endpoints and the manual-install uninstall limitation
+- **patch 条目与安装脚本清理**：`removePatchEntry` 声明仅支持本插件生成格式；`install.sh` curl|bash 模式临时目录加 `trap` 清理；`-plugins$` 防呆过滤补注释
+- **同名包隐藏提示**：`dedupeReposByPkgName` 返回 `{ repos, dropped }`，列表接口透传 `dropped` 计数，客户端显示「N 个同名包已隐藏」提示条 / duplicate-package hiding is no longer silent: the API reports `dropped` and the client shows a hint
+- **分类期望集更新**：CI 重建的 registry 暂缺 `bruc3van/dsh-desktop`、`JustGenius-s/DSH-Desktop`（搜索索引滞后，完整爬取后回归）→ 移出分类期望集；`Nagi-ovo/dsh-visualize` 简介明确为「在 DSH 对话中生成」→ 期望改为 conversation
 
 ## v1.3.11 — 2026-08-15（卸载大小写修复 / Uninstall case-sensitivity fix）
 
@@ -204,14 +204,14 @@
 - **探测结论（1796 仓库）**：84.9% 可一键安装——cordis 插件 1122、技能 283、脚本 62、多包 56、agent 预设 1；8.6%（155）有 package.json 但非 DSH 插件（如 PicGo-Core）；5.8%（105）仅能手动安装（awesome 列表/文档仓库）；11 个仓库已删除（已从 registry 清理）/ verdicts across 1796 repos: 84.9% one-click installable (1122 cordis plugins, 283 skills, 62 scripts, 56 multi-package, 1 preset); 8.6% (155) have a manifest but are not DSH plugins (e.g. PicGo-Core); 5.8% (105) manual-only (awesome lists / docs); 11 deleted repos cleaned from the registry
 - **卡片徽标**：构建期把探测结论盖章进 registry（`installable` 字段），卡片显示「仅手动安装」灰标 /「非 DSH 插件」红标，列表不隐藏，信息透明 / registry now carries an `installable` stamp from the probe; cards show a gray "manual only" or red "not a DSH plugin" badge without hiding anything
 - **盖章纯函数 + 回归测试**：`applyInstallability` 导出并固化为单元测试（pkg-plain→non-plugin、manual→manual、报告外清章） / `applyInstallability` is a pure exported function pinned by a unit test
-- **审计集同步**：已消失的 `UntR/dsh-plugin-marketplace-e2e-verification`（临时验证仓库）从 `audit-expected.json` 移除（119 条）/ the deleted disposable verification repo dropped from the audit set (119 entries)
+- **分类期望集更新**：已消失的 `UntR/dsh-plugin-marketplace-e2e-verification`（临时验证仓库）从 `audit-expected.json` 移除（119 条）/ the deleted disposable verification repo dropped from the classification expectation set (119 entries)
 
-## v1.3.8 — 2026-08-15（分类引擎重写 + 100% 审计回归 / Category engine rewrite & audit parity）
+## v1.3.8 — 2026-08-15（分类引擎重写 + 100% 分类回归 / Category engine rewrite & classification parity）
 
-- **分类准确率 45.8% → 100%**：以 120 个 Top 仓库 README 人工审计结果为基准（`audit-expected.json`），重排规则优先级并逐词精修 `CATEGORY_RULES`——移除误伤词（`/notif/`、`/style/`、`/compat/`、`/marketplace/`、`/ppt/`、`/office/`、`/\bgit\b/`、`/\btui\b/`、裸 `/rust/`、裸 `/tab/`、裸 `/compile/` 等），生态泛标签（`coding-agents`、`developer-tools`、`prompt-engineering`、`agentic-coding` 等）移入停用词表；新增 `CATEGORY_OVERRIDES` 人工覆写表兜底规则能力之外的边界仓库（desc 为空 / 语义超出特征词），每条附理由 / category accuracy 45.8% → 100% against a 120-repo README audit (`audit-expected.json`): rule priority reordered and the pattern set surgically rewritten — false-positive words removed (`/notif/`, `/style/`, `/compat/`, `/marketplace/`, `/ppt/`, `/office/`, `/\bgit\b/`, `/\btui\b/`, bare `/rust/`, bare `/tab/`, bare `/compile/`, …); ecosystem-wide topics (`coding-agents`, `developer-tools`, `prompt-engineering`, `agentic-coding`, …) moved into the stop-word list; a curated `CATEGORY_OVERRIDES` map now covers edge repos rules cannot judge (empty descriptions, semantics beyond feature words), each entry annotated with its rationale
+- **分类准确率 45.8% → 100%**：以 120 个 Top 仓库 README 分类结果为基准（`audit-expected.json`），重排规则优先级并逐词精修 `CATEGORY_RULES`——移除误伤词（`/notif/`、`/style/`、`/compat/`、`/marketplace/`、`/ppt/`、`/office/`、`/\bgit\b/`、`/\btui\b/`、裸 `/rust/`、裸 `/tab/`、裸 `/compile/` 等），生态泛标签（`coding-agents`、`developer-tools`、`prompt-engineering`、`agentic-coding` 等）移入停用词表；新增 `CATEGORY_OVERRIDES` 人工覆写表兜底规则能力之外的边界仓库（desc 为空 / 语义超出特征词），每条附理由 / category accuracy 45.8% → 100% against a 120-repo README classification set (`audit-expected.json`): rule priority reordered and the pattern set surgically rewritten — false-positive words removed (`/notif/`, `/style/`, `/compat/`, `/marketplace/`, `/ppt/`, `/office/`, `/\bgit\b/`, `/\btui\b/`, bare `/rust/`, bare `/tab/`, bare `/compile/`, …); ecosystem-wide topics (`coding-agents`, `developer-tools`, `prompt-engineering`, `agentic-coding`, …) moved into the stop-word list; a curated `CATEGORY_OVERRIDES` map now covers edge repos rules cannot judge (empty descriptions, semantics beyond feature words), each entry annotated with its rationale
 - **你点名的三个案例全部归位**：`dsh-ads` 界面美化（原误分"对话"）、`dsh-web-ui` 界面美化（原误分"开发编码"）、`dsh-TUI` 开发编码（原误分"模型用量"）；`dsh-tui/dsh-tui` 等"plugin bundle"打包产物不再误归"聚合资源" / the three cases you flagged are all fixed: `dsh-ads` → 界面美化 (was "对话"), `dsh-web-ui` → 界面美化 (was "开发编码"), `dsh-TUI` → 开发编码 (was "模型用量"); "plugin bundle" packaging repos like `dsh-tui/dsh-tui` no longer land in "聚合资源"
 - **分类标签易读性**：对话类分类文案由「对话会话」改为「对话聊天」，避免"对话对话"的观感歧义 / the conversation-category label reads 「对话聊天」 instead of 「对话会话」 (no more confusing doubled word)
-- **分类回归测试**：新增 `scripts/tests/unit/categories.test.mjs`，将 120 仓库审计期望固化为单元测试，规则改动回归即红；`validate-categories.mjs` 支持 DEBUG=1 输出命中词，便于日后精修 / a new unit test (`categories.test.mjs`) pins the 120-repo audit expectations so any future rule regression turns CI red; `validate-categories.mjs` prints matched patterns under DEBUG=1 for future tuning
+- **分类回归测试**：新增 `scripts/tests/unit/categories.test.mjs`，将 120 仓库分类期望固化为单元测试，规则改动回归即红；`validate-categories.mjs` 支持 DEBUG=1 输出命中词，便于日后精修 / a new unit test (`categories.test.mjs`) pins the 120-repo classification expectations so any future rule regression turns CI red; `validate-categories.mjs` prints matched patterns under DEBUG=1 for future tuning
 - **registry.json 已重分类**：1796 条目按新规则全量重算（825 条分类变更），`generated_at` 已刷新 / `registry.json` reclassified in place (825 of 1796 entries changed), `generated_at` refreshed
 
 ## v1.3.7 — 2026-08-14（卸载功能 + 适配层 / Uninstall & adaptor layer）
@@ -226,13 +226,13 @@
 - **皮肤/多包仓库自动安装**：根目录无插件清单但子目录含 DSH 插件（如 `dsh-deep-whale` 的皮肤合集）时，自动发现全部子包清单（`findPluginRoots`，`looksLikeDshPlugin` 过滤防误装）并逐个安装——scoped 包名路径校验、patch 注册、npm 脚本/构建确认按子包汇总，完成显示「已安装 N 个插件」/ skin & multi-package repos: when the repo root has no manifest but subdirectories contain DSH plugins (e.g. the `dsh-deep-whale` skin collection), all sub-package manifests are discovered (`findPluginRoots`, filtered by `looksLikeDshPlugin`) and installed one by one — scoped-name path checks, patch registration, npm-script/build confirms aggregated per package, completion shows «N plugins installed»
 - **安装确认回环卡死对话框修复**：提交材料/确认后服务端不再重复克隆（复用 ≤15 分钟的新鲜缓存），二次请求从几十秒变为毫秒级；「运行中」阶段新增「取消并关闭」按钮，后台任务结束后 mutex 自动释放，杜绝无法关闭的卡死对话框 / stuck install dialog fixed: the server no longer re-clones on answer submission (reuses the fresh ≤15-min cache, round-trips drop from tens of seconds to milliseconds); a «Cancel & close» button was added to the running phase — the background task finishes and releases the mutex, so the dialog can never get stuck
 
-## v1.3.5 — 2026-08-14（安装健壮性 + 测试体系收编 / Install robustness & test pyramid）
+## v1.3.5 — 2026-08-14（安装健壮性 + 测试体系 / Install robustness & test pyramid）
 
 - **空值跳过修复（issue #5）**：安装流程提交时预填所有问题 id 为空串——服务端按「键存在即视为已提供」判定，此前未触碰的输入框键缺失导致空值跳过后反复弹窗死循环；选项型问题不受影响 / empty-value skip fixed (issue #5): submit now pre-fills every question id with an empty string — the server treats key-presence as provided, and untouched fields previously had no key, causing an infinite re-prompt loop; option questions are unaffected
 - **Windows pnpm 构建修复（PR #4）**：`runPnpm` 的 win32 分支改为经 `cmd.exe /d /s /c` 启动——Node `execFile` 无法直接启动 `.cmd`，此前凡带 `pnpm-lock.yaml` 的源码型插件在 Windows 上构建必失败（spawn EINVAL）/ Windows pnpm builds fixed (PR #4): `runPnpm` now launches via `cmd.exe /d /s /c` on win32 — `execFile` cannot start `.cmd` shims, so source-only plugins with `pnpm-lock.yaml` always failed to build on Windows (spawn EINVAL)
 - **webServer 依赖注入（PR #7）**：`lib/index.js` 声明 `export const inject = ["webServer"]`——此前未声明服务依赖，cordis 不保证 webServer 先启动，`dsh web` 插件树加载存在竞态失败 / webServer dependency injection (PR #7): declared `inject = ["webServer"]` — without it cordis does not guarantee the service starts first, causing a racy plugin-tree load failure
-- **测试体系收编（PR #8 + follow-up）**：测试金字塔 unit 160 / integration 51 / e2e 49 全量收编（本地 fixture git 仓库 + mock 网络 + 隔离 DSH_HOME，e2e 附 Windows 无符号链接权限适配）；覆盖率工具（NODE_V8_COVERAGE 零依赖）；Git Hook 体系按 review 降级收编——`merge` 加入提交类型白名单、emoji/TOC 默认 warn 不阻断、密钥扫描保持 error，`install-hooks` 可选不强制；规范文档体系恢复（作者 force-push 时丢失的 docs/ 已从旧 head 找回）/ test pyramid adopted (PR #8 + follow-ups): unit 160 / integration 51 / e2e 49 (local fixture git repos + mocked network + isolated DSH_HOME; e2e adapted for Windows without symlink privilege); zero-dependency coverage tool; Git Hooks adopted in downgraded form per review — `merge` added to the commit-type whitelist, emoji/TOC default to warn (non-blocking), secret scan stays error, `install-hooks` remains optional; docs restored (the author's force-push dropped `docs/`; recovered from the old head)
-- **lib API 问题转 issue**：测试排查发现的 10 条 lib API 设计问题转 [issue #9](https://github.com/bradeGithub/DSH-Plugins-Marketplace/issues/9) 跟踪 / the 10 lib API design findings from test-driven review are tracked in [issue #9](https://github.com/bradeGithub/DSH-Plugins-Marketplace/issues/9)
+- **测试体系与 CI（PR #8 + follow-up）**：测试金字塔包含 unit 160 / integration 51 / e2e 49（本地 fixture git 仓库 + mock 网络 + 隔离 DSH_HOME，e2e 附 Windows 无符号链接权限适配）；覆盖率工具（NODE_V8_COVERAGE 零依赖）；Git Hook 体系按分级策略接入——`merge` 加入提交类型白名单、emoji/TOC 默认 warn 不阻断、密钥扫描保持 error，`install-hooks` 可选不强制；规范文档体系恢复（作者 force-push 时丢失的 docs/ 已从旧 head 找回）/ test pyramid adopted (PR #8 + follow-ups): unit 160 / integration 51 / e2e 49 (local fixture git repos + mocked network + isolated DSH_HOME; e2e adapted for Windows without symlink privilege); zero-dependency coverage tool; Git Hooks adopted with documented severity levels — `merge` added to the commit-type whitelist, emoji/TOC default to warn (non-blocking), secret scan stays error, `install-hooks` remains optional; docs restored (the author's force-push dropped `docs/`; recovered from the old head)
+- **lib API 问题转 issue**：测试发现的 10 条 lib API 设计问题转 [issue #9](https://github.com/bradeGithub/DSH-Plugins-Marketplace/issues/9) 跟踪 / the 10 lib API design findings surfaced by testing are tracked in [issue #9](https://github.com/bradeGithub/DSH-Plugins-Marketplace/issues/9)
 
 ## v1.3.4 — 2026-08-14（更新检测修复 + 启动自检 / Update detection fix & startup self-check）
 
@@ -245,7 +245,7 @@
 - **前端分类筛选**：DSH 插件 tab 新增分类 chips（全部 + 12 类），点击筛选，可与搜索词联合过滤；卡片名称旁显示分类徽章 / category filter chips added to the plugins tab (All + 12 categories), combinable with the search box; cards show a category badge
 - **修复分类筛选全部匹配 0**：服务端 `normalizeRepo` 未透传 registry.json 的 `category` 字段，导致客户端每个插件都按「其他」处理——点击任一具体分类均显示「匹配 0 个」，卡片分类徽章也全部消失；现已透传并做 12 类白名单校验 / category filter matched 0 for every category: the server's `normalizeRepo` dropped the `category` field from registry.json, so every plugin fell back to «other» — every category chip matched nothing and card badges vanished; the field now passes through with a 12-key whitelist check
 - **分类空态文案**：仅按分类筛选（搜索框为空）时显示「该分类下暂无插件」，不再出现「没有匹配「」的插件」/ category-only empty state now shows «No plugins in this category» instead of a message with empty quotes
-- **包名冲突与源码型插件修复**（漏洞发现与修复方案由 **bubble-w8** 提供，见 PR #3；修复经评审并结合进本仓库）：/ pkg-name conflicts & source-only plugins fixed (vulnerability report and fix design by **bubble-w8**, PR #3; merged after review):
+- **包名冲突与源码型插件修复**（漏洞发现与修复方案由 **bubble-w8** 提供，见 PR #3；修复已合入本仓库）：/ pkg-name conflicts & source-only plugins fixed (vulnerability report and fix design by **bubble-w8**, PR #3; merged into this repository):
   - **pkg_name 冲突消解**：同名 npm 包在 node_modules 安装目标互斥——列表只保留一个（已安装优先，其次 Star 高者），索引构建期同步去重（40+ 组冲突实测归零）；「已安装」识别之后再去重，避免隐藏手动安装的低 Star 仓库 / pkg_name conflict resolution: same-name npm packages share one node_modules target — only one entry is kept (installed first, then higher stars), dedup also applied at index build time (40+ conflict groups measured to zero); dedup runs after installed-detection so manually installed low-star repos stay visible
   - **源码型插件构建**：只提交源码（main / client bundle 缺失，含 conditional exports 形态）的插件安装前弹窗确认，允许则 pnpm/npm 装依赖并执行 build；构建路径不清洗 `link:`/`workspace:` 依赖（pnpm 原生支持，清洗会破坏 monorepo 构建）/ source-only plugin builds: plugins shipping source only (missing main / client bundle, including conditional-exports shapes) ask for confirmation and run `install && build`; the build path keeps `link:`/`workspace:` deps intact (pnpm-native, stripping them breaks monorepo builds)
   - **scoped 包 YAML 引号**：`@scope/name` 包名注册到 cordis.patch.yml 时自动加引号（plain scalar 非法），`hasPatchEntry` 兼容引号形式防重复注册 / scoped-package YAML quoting: `@scope/name` entries are quoted when registered into cordis.patch.yml (plain scalars are invalid); `hasPatchEntry` accepts quoted forms to avoid duplicate registrations
@@ -255,7 +255,7 @@
 - **多 Skill 仓库一键安装**：自动发现仓库根目录与子目录中的全部 `SKILL.md` 并逐个安装（`anthropics/skills` 等合集仓库不再只装一个或误判为文档）；完成时显示「已安装 N 个 Skills」/ multi-Skill install: every `SKILL.md` in the repo root or subdirectories is discovered and installed one by one (collection repos like `anthropics/skills` are no longer misjudged); completion shows «N Skills installed»
 - **安装面板居中弹层**：安装进度改为固定居中浮层 + 动画进度条，不再把页面滚到顶部；运行中隐藏「返回列表」按钮 / the install panel became a fixed centered overlay with an animated progress bar (no scroll-to-top); the back button is hidden while running
 - **确认式安装**：Skill / Agent 预设不再误扫 README 示例索要 API Key——只有真正执行脚本或安装插件时才检查环境变量；「提交材料」改为「安装前确认」，纯选项问题点击选项即提交 / confirm-before-install: skills and presets no longer scan README examples for API keys — env checks run only for scripts/plugins; «submit materials» became «confirm before install», option questions submit on click
-- **第三方生态条目**：README 新增「第三方生态」小节（Harness Desktop——社区 Windows 桌面版，稳定版内置本市场；作者关联与官方无关性均已披露），由作者提交 PR 经评审合并 / README gained a «Third-party ecosystem» section (Harness Desktop — community Windows desktop app whose stable release embeds this marketplace; affiliation disclosed), submitted by the author and merged after review
+- **第三方生态条目**：README 新增「第三方生态」小节（Harness Desktop——社区 Windows 桌面版，稳定版内置本市场；作者关联与官方无关性均已披露），由作者提交 PR 已合并 / README gained a «Third-party ecosystem» section (Harness Desktop — community Windows desktop app whose stable release embeds this marketplace; affiliation disclosed), submitted by the author and merged into this repository
 - **测试接入 CI**：guided-install 冒烟测试并入 CI 语法检查步骤 / guided-install smoke tests wired into the CI syntax-check step
 
 ---
@@ -272,7 +272,7 @@
 - **全量 skills 索引**：`skills.json` 从 1867 条扩展至 **11000+ 条**——GitHub Search API 单 query 硬上限 1000 条、topic 页爬虫也被限制 50 页，因此改用「**stars 分段 + 时间窗口二分**」突破限制取全量：按 star 数分段查询（`stars:>=1000` / `100..999` / `10..99` / …），段拉满 1000 条即对半分裂，单值段（如 `stars:0`）按 `pushed` 时间窗口二分（窗口窄于 30 天即接受部分结果）；段内 0 新增直接收敛避免无谓查询 / full skills index: `skills.json` grew from 1867 to **11,000+ repos** — since both Search API (1000/query) and topic-page crawling (50 pages) are capped, we now use «stars segments + time-window bisection»: query by star ranges, bisect segments that fill 1000, bisect single-value segments (e.g. `stars:0`) by pushed time windows (accept partial results below 30-day granularity); segments with 0 new repos converge early
 - **冷启动预算**：全量拉取约 1.5 小时（Search 30/min 限额是主要瓶颈）；`has_skill` 探测按 Core API 5000/h 额度护栏分批，CI 每 2 小时增量续跑直至全量探测完成（未探测仓库显示「未验证」）/ cold-start budget: ~1.5h for the full fetch (Search 30/min is the bottleneck); `has_skill` probing batches under the 5000/h Core quota guardrail, CI resumes incrementally every 2h until all repos are probed
 - **探测分支回退**：爬虫来源已移除（GitHub 未认证 topic 页限制 50 页/1000 条），Trees 探测增加 main→master 分支回退（Search 数据自带 default_branch，爬虫数据没有）/ branch fallback main→master added to Trees probing (crawler source removed; Search data carries default_branch)
-- **增量更新机制**：CI 每 2 小时以 `INCREMENTAL_DAYS=3` 增量拉取（只拉最近 3 天 pushed 的仓库——新仓库/star/更新时间变化全部捕获，几分钟完成，实测 1867→12665 条的索引增量轮次 2 分钟）；每天 04:00 UTC 全量重建刷新 star 数；`workflow_dispatch` 支持 `full=true` 手动全量 / incremental updates every 2h (`INCREMENTAL_DAYS=3`, only repos pushed in the last 3 days — new repos and star/updated changes are all captured, ~2 min per run); full rebuild daily at 04:00 UTC to refresh star counts; `workflow_dispatch` with `full=true` triggers a manual full build
+- **增量更新机制**：CI 每 2 小时以 `INCREMENTAL_DAYS=3` 增量拉取（只拉最近 3 天 pushed 的仓库——新仓库/star/更新时间变化全部捕获，几分钟完成，实测 1867→12665 条的索引增量运行约 2 分钟）；每天 04:00 UTC 全量重建刷新 star 数；`workflow_dispatch` 支持 `full=true` 手动全量 / incremental updates every 2h (`INCREMENTAL_DAYS=3`, only repos pushed in the last 3 days — new repos and star/updated changes are all captured, ~2 min per run); full rebuild daily at 04:00 UTC to refresh star counts; `workflow_dispatch` with `full=true` triggers a manual full build
 
 ---
 
@@ -283,13 +283,13 @@
 - **全局安装互斥**：同一时刻只允许一个安装任务，其余安装按钮全部禁用（客户端）+ 服务端 409 兜底，从源头杜绝并发安装竞态 / global install mutex: one install at a time, all other buttons disabled + server-side 409
 - **非插件仓库弹窗**：`package.json` 未声明 DSH 插件能力的仓库（聚合页 / 桌面应用 / 普通 npm 项目，如 awesome-*、iPolloWork）安装前弹窗告知「非插件，建议自行安装」，可选强制安装或取消 / non-plugin repo detection: repos without DSH plugin declaration get a confirmation dialog (install manually or force-install)
 - **无可自动安装内容弹窗**：awesome 聚合页等改为弹窗展示 README 摘要 + 可点击仓库链接 / repos with no auto-installable content now show a dialog with README excerpt + clickable repo link
-- **第二轮代码审查残留问题全部修复**（对应 `review.md` 的 R1/R2/R3 + m1–m6 + n2–n5）：/ all second-round review findings fixed (R1–R3, m1–m6, n2–n5):
-  - **R1 DNS rebinding**：安装端点由「Origin===Host」改为 **Host 白名单校验**——仅放行本机回环（localhost/127.0.0.1/[::1]）、局域网私有网段（10/8、172.16/12、192.168/16）与 `DSH_MARKETPLACE_ALLOWED_HOSTS` 显式配置的主机，攻击者域名（含 rebinding 到 127.0.0.1 的域名）一律拒绝 / install endpoint now validates the Host against an allowlist (loopback / private LAN ranges / `DSH_MARKETPLACE_ALLOWED_HOSTS`) — attacker domains, including DNS-rebinding ones, are always rejected
-  - **R2 环境变量最小化**：第三方安装脚本只获得**基础系统变量白名单**，npm 安装剔除全部密钥类变量（TOKEN/KEY/SECRET/PASSWORD/CREDENTIAL）——`process.env` 不再全量外泄给第三方代码 / third-party scripts get a minimal env allowlist; npm installs strip all secret-class vars — `process.env` is no longer leaked wholesale
-  - **R3 环境变量「空值可跳过」真正生效**（键存在即视为已提供），并顺带修复连带 bug：此前二次提交时用户填写的密钥不在 env 白名单里、插件实际拿不到 / empty-value skip now works (key presence decides), plus the related bug where user-submitted secrets never reached the plugin env
-  - **m1** 列表标注改索引写入，恢复「按 Star 降序」的稳定顺序；**m2** 仅当已装版本**严格低于**最新版本才提示「更新」（仓库回滚不再误报）；**m3** 原 per-repo 安装锁升级为**全局安装互斥**（见上，任何并发安装都被拒绝）；**m4** patch 写入失败如实报错，不再误显示「已存在条目，跳过注册」；**m5** `installed.json` 写入串行化，并发安装不再互相覆盖；**m6** 外部 fetch 加 15 秒超时，CDN 挂起不再卡死列表服务
-  - **n2** 403/413 错误文案接入 i18n；**n3** 预发布版本按段数字比较（`rc.10 > rc.9`）+ 支持一位/两位版本号；**n4** 请求体 Buffer 收集后一次解码；**n5** 客户端展示 403/409 的真实拒绝原因
-- **冒烟测试**：`scripts/smoke-tests.mjs`（70 项断言，覆盖 R1/R2/n3/探测/继承/非插件判定），CI 语法检查步骤同步执行 / smoke tests (70 assertions) added and wired into CI
+- **安装与安全问题修复**：安装端点、环境变量、版本比较、请求体读取、错误文案和安装互斥等问题已修复 / **Install and security fixes**: install endpoint, environment handling, version comparison, request-body handling, error messages, and install mutual exclusion are fixed:
+  - **DNS rebinding**：安装端点由「Origin===Host」改为 **Host 白名单校验**——仅放行本机回环（localhost/127.0.0.1/[::1]）、局域网私有网段（10/8、172.16/12、192.168/16）与 `DSH_MARKETPLACE_ALLOWED_HOSTS` 显式配置的主机，攻击者域名（含 rebinding 到 127.0.0.1 的域名）一律拒绝 / install endpoint now validates the Host against an allowlist (loopback / private LAN ranges / `DSH_MARKETPLACE_ALLOWED_HOSTS`) — attacker domains, including DNS-rebinding ones, are always rejected
+  - **环境变量最小化**：第三方安装脚本只获得**基础系统变量白名单**，npm 安装剔除全部密钥类变量（TOKEN/KEY/SECRET/PASSWORD/CREDENTIAL）——`process.env` 不再全量外泄给第三方代码 / third-party scripts get a minimal env allowlist; npm installs strip all secret-class vars — `process.env` is no longer leaked wholesale
+  - **环境变量「空值可跳过」真正生效**（键存在即视为已提供），并顺带修复连带 bug：用户填写的密钥未加入 env 白名单、插件实际拿不到 / empty-value skip now works (key presence decides), plus the related bug where user-submitted secrets never reached the plugin env
+  - 列表标注改索引写入，恢复「按 Star 降序」的稳定顺序；仅当已装版本**严格低于**最新版本才提示「更新」（仓库回滚不再误报）；原 per-repo 安装锁升级为**全局安装互斥**（见上，任何并发安装都被拒绝）；patch 写入失败如实报错，不再误显示「已存在条目，跳过注册」；`installed.json` 写入串行化，并发安装不再互相覆盖；外部 fetch 加 15 秒超时，CDN 挂起不再卡死列表服务
+  - 403/413 错误文案接入 i18n；预发布版本按段数字比较（`rc.10 > rc.9`）+ 支持一位/两位版本号；请求体 Buffer 收集后一次解码；客户端展示 403/409 的真实拒绝原因
+- **冒烟测试**：`scripts/smoke-tests.mjs`（70 项断言，覆盖 Host 白名单、环境变量、版本比较、探测、继承和非插件判定），CI 语法检查步骤同步执行 / smoke tests (70 assertions) cover host allowlists, environment handling, version comparison, probing, inheritance, and non-plugin detection; wired into CI
 - **先装插件后装市场也能识别**：打开市场即自动扫描已安装的 cordis 插件（含 scoped 包 `@scope/name`），通过包名映射 + `repository` 双向校验与市场仓库比对，命中即标「已安装」/ plugins installed before the marketplace are now auto-detected on open: scans installed cordis packages (including scoped ones) and reconciles them against market repos via package-name mapping + bidirectional `repository` checks
 - **DSH 官方插件清单**：运行时自动枚举 `@deepseek-ai/*` 官方包（含兜底清单），官方插件永远不会被当成或误标为用户安装的市场插件 / DSH official plugin list (runtime-enumerated `@deepseek-ai/*` plus fallback): official plugins are never treated as user-installed market plugins
 - **索引携带包名（pkg_name）**：registry CI 构建时抓取各仓库 package.json 的 name，用于包名与仓库名不一致时的关联 / registry now carries each repo's package name (`pkg_name`) for robust repo↔package association
@@ -317,7 +317,7 @@
 
 ## v0.9.0-beta — 2026-08-14（安全加固 / Security hardening）
 
-基于独立代码审查完成全面加固 / Hardened after an independent code review:
+基于独立安全评估完成全面加固 / Hardened with comprehensive security improvements:
 
 - **CSRF 防护**：安装端点校验自定义头 `X-DSH-Marketplace` + Origin 必须与 Host 一致，阻止恶意网页伪造"脚本确认"静默安装 / CSRF protection: custom header + Origin check on the install endpoint
 - **包名白名单与路径包含校验**：`pkg.name` 按 npm 命名规则校验，目标路径必须在 profile node_modules 内，杜绝路径穿越 / 任意目录删除 / YAML 注入 / Package-name whitelist + path containment (no path traversal / arbitrary delete / YAML injection)

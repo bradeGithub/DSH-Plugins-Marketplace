@@ -1,0 +1,556 @@
+    function MarketplaceSection() {
+      var tabState = useState("plugins"); var activeTab = tabState[0]; var setActiveTab = tabState[1];
+      var state3 = useState(null); var inst = state3[0]; var setInst = state3[1];
+      var state4 = useState({}); var inputValues = state4[0]; var setInputValues = state4[1];
+      var state5 = useState(0); var tick = state5[0]; var setTick = state5[1];
+      var state7 = useState(null); var toast = state7[0]; var setToast = state7[1];
+      var state8 = useState(0); var setRerender = state8[1];
+      var state9 = useState(null); var selfUpd = state9[0]; var setSelfUpd = state9[1];
+      var selfUpdState = useState(false); var selfUpdating = selfUpdState[0]; var setSelfUpdating = selfUpdState[1];
+      var state11 = useState(null); var uninstallingRepo = state11[0]; var setUninstallingRepo = state11[1];
+      // 安装反馈：待确认队列 + 当前输入
+      var fbState = useState([]); var fbPending = fbState[0]; var setFbPending = fbState[1];
+      var fbNoteState = useState(""); var fbNote = fbNoteState[0]; var setFbNote = fbNoteState[1];
+      var fbBusyState = useState(false); var fbBusy = fbBusyState[0]; var setFbBusy = fbBusyState[1];
+      var fbTokenState = useState(""); var fbTokenInput = fbTokenState[0]; var setFbTokenInput = fbTokenState[1];
+      // 反馈开关（v1.4.6）：默认开启；关闭后不拉取/不弹「是否正常」确认弹窗。偏好存 localStorage。
+      var fbEnabledState = useState(function () {
+        try { return localStorage.getItem("dshm.fb.enabled") !== "0"; } catch (e) { return true; }
+      });
+      var fbEnabled = fbEnabledState[0]; var setFbEnabled = fbEnabledState[1];
+      // 环境变量编辑（issue #18）：弹窗表单 state
+      var editState = useState(null); var editRepo = editState[0]; var setEditRepo = editState[1];
+      var editRowsState = useState([]); var editRows = editRowsState[0]; var setEditRows = editRowsState[1];
+      var editBusyState = useState(false); var editBusy = editBusyState[0]; var setEditBusy = editBusyState[1];
+
+      /** 打开编辑弹窗：拉取该插件扫描到的 env 键（值不回显）。 */
+      function openEdit(repo) {
+        setEditBusy(true);
+        setEditRepo(repo);
+        setEditRows([]);
+        fetch("/api/marketplace/env-keys?repo=" + encodeURIComponent(repo), { headers: { "X-DSH-Marketplace": "1" } })
+          .then(function (r) { return r.json(); })
+          .then(function (data) {
+            setEditBusy(false);
+            if (data && data.envKeys) {
+              setEditRows((data.envKeys || []).map(function (k) {
+                return { key: k, value: "", configured: !!(data.configured && data.configured[k]) };
+              }));
+            } else if (data && data.error) {
+              setEditRepo(null);
+              showToast(t("editFail", { err: data.error }), false);
+            }
+          })
+          .catch(function (err) { setEditBusy(false); setEditRepo(null); showToast(t("editFail", { err: String(err) }), false); });
+      }
+
+      /** 保存编辑：POST 值（空值 = 清除该键）。 */
+      function saveEdit() {
+        if (!editRepo || editBusy) return;
+        setEditBusy(true);
+        var values = {};
+        editRows.forEach(function (row) {
+          var key = (row.key || "").trim();
+          if (!key) return;
+          values[key] = row.value || "";
+        });
+        fetch("/api/marketplace/env-edit", {
+          method: "POST",
+          headers: mpHeaders({ "Content-Type": "application/json" }),
+          body: JSON.stringify({ repo: editRepo, values: values })
+        }).then(function (r) { return r.json(); }).then(function (data) {
+          setEditBusy(false);
+          if (data && data.status === "done") {
+            setEditRepo(null);
+            showToast(t("editSaved"), true);
+          } else {
+            showToast(t("editFail", { err: (data && data.error) || "unknown" }), false);
+          }
+        }).catch(function (err) {
+          setEditBusy(false);
+          showToast(t("editFail", { err: String(err) }), false);
+        });
+      }
+
+      function updateEditRow(idx, field, value) {
+        setEditRows(editRows.map(function (row, i) { return i === idx ? Object.assign({}, row, { [field]: value }) : row; }));
+      }
+
+      /** 打开市场时读取是否已配置 token（不回显 token 本身，仅用于提示）。 */
+      useEffect(function () {
+        fetch("/api/marketplace/feedback/token", { headers: { "X-DSH-Marketplace": "1" } })
+          .then(function (r) { return r.json(); })
+          .then(function (data) { if (data && data.hasToken) setFbTokenInput("********"); })
+          .catch(function () { /* 静默 */ });
+      }, []);
+
+      // 目标 profile（issue #184）：打开市场时读取当前值
+      var profileState = useState("web");
+      var targetProfile = profileState[0]; var setTargetProfile = profileState[1];
+      var profileBusyState = useState(false); var profileBusy = profileBusyState[0]; var setProfileBusy = profileBusyState[1];
+      useEffect(function () {
+        fetch("/api/marketplace/profile", { headers: { "X-DSH-Marketplace": "1" } })
+          .then(function (r) { return r.json(); })
+          .then(function (data) { if (data && data.status === "done" && data.profile) setTargetProfile(data.profile); })
+          .catch(function () { /* 静默 */ });
+      }, []);
+
+      /** 保存目标 profile（空值回退 web）。 */
+      function saveTargetProfile() {
+        var name = targetProfile.trim() || "web";
+        setProfileBusy(true);
+        var prevProfile = targetProfile;
+        fetch("/api/marketplace/profile", {
+          method: "POST",
+          headers: mpHeaders({ "Content-Type": "application/json" }),
+          body: JSON.stringify({ profile: name })
+        }).then(function (r) { return r.json(); }).then(function (data) {
+          if (data && data.status === "done") {
+            showToast(t("profileSaved", { profile: data.profile }), true);
+            setTargetProfile(data.profile);
+            // 已安装标注随 profile 变化（服务端按当前 PROFILE_NM 扫描）——tick 触发
+            // PluginTab/SkillsTab 重新拉取，列表立即反映新目标的标注。
+            if (data.profile !== prevProfile) setTick(tick + 1);
+          } else {
+            showToast(t("profileSaveFail", { err: (data && data.error) || "unknown" }), false);
+          }
+        }).catch(function (err) { showToast(t("profileSaveFail", { err: String(err) }), false); })
+          .finally(function () { setProfileBusy(false); });
+      }
+
+      /** 保存/清除 GitHub Token（空串或 ****** 视为清除）。 */
+      function saveFbToken() {
+        var token = fbTokenInput.trim();
+        if (token === "********") token = "";
+        fetch("/api/marketplace/feedback/token", {
+          method: "POST",
+          headers: mpHeaders({ "Content-Type": "application/json" }),
+          body: JSON.stringify({ token: token })
+        }).then(function (r) { return r.json(); }).then(function (data) {
+          if (data && data.status === "done") {
+            showToast(t("fbTokenSaved"), true);
+            setFbTokenInput(data.hasToken ? "********" : "");
+          } else {
+            showToast(t("fbFail", { err: (data && data.error) || "unknown" }), false);
+          }
+        }).catch(function (err) { showToast(t("fbFail", { err: String(err) }), false); });
+      }
+
+      // 打开市场时拉取待确认反馈（安装完成后服务端写入队列）
+      useEffect(function () {
+        var cancelled = false;
+        if (fbDismissed || !fbEnabled) return function () { cancelled = true; };
+        fetch("/api/marketplace/feedback/pending", { headers: { "X-DSH-Marketplace": "1" } })
+          .then(function (r) { return r.json(); })
+          .then(function (data) { if (!cancelled && Array.isArray(data.pending) && data.pending.length > 0) setFbPending(data.pending); })
+          .catch(function () { /* 网络失败：静默，不打扰 */ });
+        return function () { cancelled = true; };
+      }, [tick, fbEnabled]);
+
+      /** 提交反馈：POST 服务端（移除队列 + 同步 GitHub issue），返回 issueUrl/manualUrl。 */
+      function submitFeedback(ok) {
+        var entry = fbPending[0];
+        if (!entry || fbBusy) return;
+        setFbBusy(true);
+        fetch("/api/marketplace/feedback", {
+          method: "POST",
+          headers: mpHeaders({ "Content-Type": "application/json" }),
+          body: JSON.stringify({ repo: entry.repo, ok: ok, note: fbNote, lang: langCurrent })
+        }).then(function (r) { return r.json(); }).then(function (data) {
+          setFbBusy(false);
+          if (data && data.status === "done") {
+            showToast(t("fbSent"), true);
+            // 同步结果：自动创建的 issue 或预填手动提交链接 → 打开浏览器
+            if (data.issueUrl) { window.open(data.issueUrl, "_blank"); }
+            else if (data.manualUrl) { window.open(data.manualUrl, "_blank"); showToast(t("fbManual"), true); }
+            else if (data.error) { showToast(t("fbFail", { err: data.error }), false); }
+            setFbNote("");
+            var rest = fbPending.slice(1);
+            setFbPending(rest);
+          } else {
+            showToast(t("fbFail", { err: (data && data.error) || "unknown" }), false);
+          }
+        }).catch(function (err) {
+          setFbBusy(false);
+          showToast(t("fbFail", { err: String(err) }), false);
+        });
+      }
+
+      function dismissFeedback() {
+        fbDismissed = true;
+        setFbPending([]);
+        setFbNote("");
+      }
+
+      /** npm 型 cli 插件手动版本检测（v1.4.11）：查 npm registry → 有新版则按钮变「更新 vX」走重装。 */
+      function checkUpdate(repo, setCheckSt) {
+        setCheckSt("checking");
+        fetch("/api/marketplace/check-update", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "X-DSH-Marketplace": "1" },
+          body: JSON.stringify({ repo: repo.full_name })
+        }).then(function (r) { return r.json(); }).then(function (data) {
+          if (data && data.status === "done" && data.updateAvailable) {
+            setCheckSt("update:" + data.latestVersion);
+            showToast(t("updateHint", { old: data.installedVersion, new: data.latestVersion }), true);
+          } else if (data && data.status === "done" && !data.updateAvailable) {
+            setCheckSt(null);
+            showToast((data && data.error) || t("checkUpToDate", { ver: data.installedVersion }), true);
+          } else {
+            setCheckSt(null);
+            showToast((data && data.error) || t("checkUpdateFail", { err: "unknown" }), false);
+          }
+        }).catch(function (err) {
+          setCheckSt(null);
+          showToast(t("checkUpdateFail", { err: String(err) }), false);
+        });
+      }
+
+      /** 反馈开关切换：写 localStorage；关闭时清空已拉取的待确认队列（重新打开会自动重拉）。 */
+      function toggleFbEnabled() {
+        var next = !fbEnabled;
+        try { localStorage.setItem("dshm.fb.enabled", next ? "1" : "0"); } catch (e) { /* 存储不可用：仅会话内生效 */ }
+        setFbEnabled(next);
+        if (!next) setFbPending([]);
+      }
+
+      // 小优待：打开页面时拉取市场本体自更新检测结果（服务端启动时已直链 GitHub 查过，
+      // 超过 30 分钟未检查会在此顺带重查）；tick 变化（安装/刷新后）重拉，更新完提示即消失
+      useEffect(function () {
+        var cancelled = false;
+        fetch("/api/marketplace/self-update", { headers: { "X-DSH-Marketplace": "1" } })
+          .then(function (r) { return r.json(); })
+          .then(function (data) { if (!cancelled) setSelfUpd(data || null); })
+          .catch(function () { if (!cancelled) setSelfUpd(null); });
+        return function () { cancelled = true; };
+      }, [tick]);
+
+      /** 一键更新市场本体（v1.4.7）：POST self-update → 服务端克隆最新仓库并原子替换，重启 DSH 生效。
+       *  v1.5.1：CLI 路径失败后服务端回退目录替换（CLI 180s + clone 300s），
+       *  前端 900s 超时兜底——「运行中」不再无限挂起（spawn EINVAL 案例）。 */
+      function runSelfUpdate() {
+        if (selfUpdating) return;
+        setSelfUpdating(true);
+        fetch("/api/marketplace/self-update", {
+          method: "POST",
+          headers: mpHeaders({ "Content-Type": "application/json" }),
+          body: JSON.stringify({}),
+          signal: AbortSignal.timeout(900000)
+        }).then(function (r) { return r.json(); }).then(function (data) {
+          setSelfUpdating(false);
+          if (data && data.status === "done") {
+            setSelfUpd(null);
+            showToast(t("selfUpdated", { new: data.installedVersion }), true);
+          } else {
+            showToast((data && data.error) || t("selfUpdateFail", { err: "unknown" }), false);
+            if (data && data.status === "no-update") setSelfUpd(null);
+          }
+        }).catch(function (err) {
+          setSelfUpdating(false);
+          showToast(t("selfUpdateFail", { err: String(err) }), false);
+        });
+      }
+
+      useEffect(function () {
+        if (!toast) return;
+        var t2 = setTimeout(function () { setToast(null); }, 2600);
+        return function () { clearTimeout(t2); };
+      }, [toast]);
+
+      // 语言切换时重新渲染（翻译函数读取实时语言快照）
+      useEffect(function () {
+        var cb = function () { setRerender(function (n) { return n + 1; }); };
+        localeChangeCbs.push(cb);
+        return function () {
+          var i = localeChangeCbs.indexOf(cb);
+          if (i >= 0) localeChangeCbs.splice(i, 1);
+        };
+      }, []);
+
+      function runInstall(repo, answers, baseLog) {
+        setInst({ repo: repo, phase: "running", log: baseLog || [], questions: [], answers: answers, result: null });
+        fetch("/api/marketplace/install", {
+          method: "POST",
+          headers: mpHeaders({ "Content-Type": "application/json" }),
+          body: JSON.stringify({ repo: repo, answers: answers || {}, lang: langCurrent })
+        }).then(function (r) { return r.json(); }).then(function (data) {
+          setInst(function (prev) {
+            // 面板可能已被另一个安装占用：过期响应直接丢弃，避免旧日志覆盖新面板
+            if (!prev || prev.repo !== repo) return prev;
+            var base = prev.log || [];
+            // n5：403（来源校验拒绝）/ 409（并发安装中）等响应没有 status 但有 error，
+            // 把真实原因写进日志，不再显示无信息的「安装失败: unknown」
+            var extra = [];
+            if (!data.status && data.error) extra = [data.error];
+            var log = base.concat(extra, data.log || []);
+            if (data.status === "awaiting-input") {
+              return { repo: repo, phase: "input", log: log, questions: data.questions || [], answers: answers || {}, result: null };
+            }
+            var phase = data.status === "done" ? "done" : (data.status === "aborted" ? "aborted" : (data.status === "manual" ? "manual" : "failed"));
+            return { repo: repo, phase: phase, log: log, questions: [], answers: answers || {}, result: data };
+          });
+          // 安装结束（非等待输入）：两个 tab 都重新拉取列表——服务端实时标注 installed，
+          // 安装成功的卡片自动变「已安装」并置顶，无需本地拼装状态
+          if (data.status !== "awaiting-input") setTick(tick + 1);
+          // 备份恢复队列推进（manual/aborted 也继续下一个，避免卡死）
+          if (data.status !== "awaiting-input" && restoreState.list) {
+            restoreState.idx++;
+            nextRestore();
+          }
+        }).catch(function (err) {
+          setInst(function (prev) {
+            if (!prev || prev.repo !== repo) return prev;
+            return { repo: repo, phase: "failed", log: (prev.log || []).concat([t("requestFail", { err: String(err) })]), questions: [], answers: answers || {}, result: null };
+          });
+          setTick(tick + 1);
+          if (restoreState.list) {
+            restoreState.idx++;
+            nextRestore();
+          }
+        });
+      }
+
+      function submit(values) {
+        if (!inst) return;
+        // Issue #5：先为所有当前问题 id 预填空串——服务端按「键存在即视为已提供
+        // （空值=跳过）」判定，未触碰的输入框键不存在会被误判为「未提供」，
+        // 导致空值跳过后反复弹窗死循环；选项型问题不受影响（选中值会覆盖空串）。
+        var all = {};
+        (inst.questions || []).forEach(function (q) { all[q.id] = ""; });
+        var merged = Object.assign({}, inst.answers || {}, all, values || {});
+        runInstall(inst.repo, merged, inst.log);
+      }
+
+      function cancelInstall() {
+        setInst(null);
+        setInputValues({});
+        setTick(tick + 1);
+      }
+
+      /** 卸载：POST /api/marketplace/uninstall，完成后刷新列表并 toast 反馈。 */
+      function uninstallPlugin(fullName) {
+        if (uninstallingRepo) return;
+        setUninstallingRepo(fullName);
+        fetch("/api/marketplace/uninstall", {
+          method: "POST",
+          headers: mpHeaders({ "Content-Type": "application/json" }),
+          body: JSON.stringify({ repo: fullName, lang: langCurrent })
+        }).then(function (r) { return r.json(); }).then(function (data) {
+          if (data && data.status === "done") {
+            // removed=0 说明没有实际删除任何内容（无记录/无可定位目录）——弹日志原文而不是虚假的「已卸载」
+            if (data.removed === 0 && Array.isArray(data.log) && data.log.length > 0) {
+              showToast(data.log.join(" "), false);
+            } else {
+              showToast(t("uninstallOk", { repo: fullName }), true);
+            }
+          } else {
+            showToast(t("uninstallFail", { err: (data && (data.error || data.log && data.log.join(" "))) || "unknown" }), false);
+          }
+          setTick(tick + 1);
+        }).catch(function (err) {
+          showToast(t("uninstallFail", { err: String(err) }), false);
+          setTick(tick + 1);
+        }).finally(function () {
+          setUninstallingRepo(null);
+        });
+      }
+
+      function showToast(text, ok) {
+        setToast({ text: text, ok: !!ok });
+      }
+
+      // ---- 备份 / 恢复（#15）----
+      var wdState1 = useState(""); var wdUrl = wdState1[0]; var setWdUrl = wdState1[1];
+      var wdState2 = useState(""); var wdUser = wdState2[0]; var setWdUser = wdState2[1];
+      var wdState3 = useState(""); var wdPass = wdState3[0]; var setWdPass = wdState3[1];
+
+      function nextRestore() {
+        if (!restoreState.list) return;
+        if (restoreState.idx >= restoreState.list.length) {
+          restoreState.list = null;
+          showToast(t("backupRestoreDone"), true);
+          setTick(tick + 1);
+          return;
+        }
+        runInstall(restoreState.list[restoreState.idx], {}, []);
+      }
+
+      function startRestore(repoList) {
+        if (restoreState.list) return; // 已在恢复中
+        if (!Array.isArray(repoList) || repoList.length === 0) return;
+        restoreState.list = repoList;
+        restoreState.idx = 0;
+        showToast(t("backupRestoreStart", { n: repoList.length }), true);
+        nextRestore();
+      }
+
+      function exportBackup() {
+        fetch("/api/marketplace/backup", { headers: { "X-DSH-Marketplace": "1" } })
+          .then(function (r) { return r.json(); })
+          .then(function (data) {
+            if (data.error || !data.backup) { showToast(data.error || t("backupRestoreErr", { err: "empty" }), false); return; }
+            var blob = new Blob([JSON.stringify(data.backup, null, 2)], { type: "application/json" });
+            var a = document.createElement("a");
+            a.href = URL.createObjectURL(blob);
+            a.download = "dsh-marketplace-backup-" + new Date().toISOString().slice(0, 10) + ".json";
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            URL.revokeObjectURL(a.href);
+            showToast(t("backupDownloadOk"), true);
+          })
+          .catch(function (err) { showToast(t("backupRestoreErr", { err: String(err) }), false); });
+      }
+
+      function importBackupFile(file) {
+        if (!file || restoreState.list) return;
+        var reader = new FileReader();
+        reader.onload = function () {
+          var backup;
+          try { backup = JSON.parse(String(reader.result)); } catch (e) { showToast(t("backupBadFile"), false); return; }
+          fetch("/api/marketplace/restore/diff", {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "X-DSH-Marketplace": "1" },
+            body: JSON.stringify({ backup: backup })
+          }).then(function (r) { return r.json(); }).then(function (data) {
+            if (data.error) { showToast(data.error, false); return; }
+            showToast((data.log || []).join(" ") || t("backupRestoreDone"), true);
+            if (Array.isArray(data.missing) && data.missing.length > 0) startRestore(data.missing);
+          }).catch(function (err) { showToast(t("backupRestoreErr", { err: String(err) }), false); });
+        };
+        reader.readAsText(file);
+      }
+
+      function webdavPush() {
+        if (restoreState.list) return;
+        fetch("/api/marketplace/backup/webdav", {
+          method: "POST",
+          headers: mpHeaders({ "Content-Type": "application/json" }),
+          body: JSON.stringify({ url: wdUrl.trim(), username: wdUser.trim(), password: wdPass })
+        }).then(function (r) { return r.json(); }).then(function (data) {
+          showToast((data.log || []).join(" ") || (data.error || t("backupRestoreErr", { err: "webdav" })), data.status === "done");
+        }).catch(function (err) { showToast(t("backupRestoreErr", { err: String(err) }), false); });
+      }
+
+      function webdavPull() {
+        if (restoreState.list) return;
+        fetch("/api/marketplace/restore/webdav", {
+          method: "POST",
+          headers: mpHeaders({ "Content-Type": "application/json" }),
+          body: JSON.stringify({ url: wdUrl.trim(), username: wdUser.trim(), password: wdPass })
+        }).then(function (r) { return r.json(); }).then(function (data) {
+          if (data.error) { showToast(data.error, false); return; }
+          showToast((data.log || []).join(" ") || t("backupRestoreDone"), true);
+          if (Array.isArray(data.missing) && data.missing.length > 0) startRestore(data.missing);
+        }).catch(function (err) { showToast(t("backupRestoreErr", { err: String(err) }), false); });
+      }
+
+      function exportLogs() {
+        fetch("/api/marketplace/logs", { headers: { "X-DSH-Marketplace": "1" } })
+          .then(function (r) { return r.json(); })
+          .then(function (data) {
+            if (data.error || typeof data.text !== "string") { showToast(data.error || t("backupRestoreErr", { err: "logs" }), false); return; }
+            var blob = new Blob([data.text], { type: "text/plain" });
+            var a = document.createElement("a");
+            a.href = URL.createObjectURL(blob);
+            a.download = "dsh-marketplace-logs-" + new Date().toISOString().slice(0, 10) + ".txt";
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            URL.revokeObjectURL(a.href);
+            showToast((data.log || []).join(" ") || t("backupRestoreDone"), true);
+          })
+          .catch(function (err) { showToast(t("backupRestoreErr", { err: String(err) }), false); });
+      }
+
+      var wdInputStyle = Object.assign({}, s.input, { width: 150, marginTop: 0 });
+
+      var tabProps = { inst: inst, runInstall: runInstall, setInputValues: setInputValues, tick: tick, showToast: showToast, uninstalling: uninstallingRepo, onEdit: openEdit, onUninstall: uninstallPlugin, onCheckUpdate: checkUpdate };
+
+      return h("div", { style: s.page },
+        toast ? h("div", { style: toast.ok ? s.toast : s.toastErr }, toast.text) : null,
+        selfUpd && selfUpd.updateAvailable ? h("div", { style: Object.assign({}, s.selfUpdBanner, { display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10 }) },
+          h("span", null, t("selfUpdate", { old: selfUpd.installedVersion, new: selfUpd.latestVersion })),
+          h("button", { className: "dshm-btn", style: Object.assign({}, s.btnUpdate, { minWidth: 88 }), disabled: selfUpdating, onClick: runSelfUpdate }, selfUpdating ? t("selfUpdating") : t("selfUpdateBtn"))
+        ) : null,
+        h("div", { style: s.tabBar },
+          h("button", { style: activeTab === "plugins" ? s.tabActive : s.tabBtn, onClick: function () { setActiveTab("plugins"); } }, t("tabPlugins")),
+          h("button", { style: activeTab === "skills" ? s.tabActive : s.tabBtn, onClick: function () { setActiveTab("skills"); } }, t("tabSkills")),
+          h("div", { style: { display: "flex", alignItems: "center", gap: 6, marginLeft: "auto", marginBottom: 6 } },
+            h("label", { style: { display: "flex", alignItems: "center", gap: 6, fontSize: 12, color: "var(--dsw-alias-label-secondary)", cursor: "pointer", whiteSpace: "nowrap" } },
+              h("input", { type: "checkbox", checked: fbEnabled, onChange: toggleFbEnabled, style: { accentColor: "var(--dsw-alias-brand-primary)", cursor: "pointer", margin: 0 } }),
+              t("fbToggle")
+            )
+          )
+        ),
+        h("div", { key: "profile-cfg", style: { border: "1px solid var(--dsw-alias-border-l2)", borderRadius: 10, padding: "10px 14px", margin: "0 0 12px" } },
+          h("p", { style: { fontSize: 12, fontWeight: 600, margin: "0 0 8px", color: "var(--dsw-alias-label-secondary)" } }, t("profileTitle")),
+          h("div", { style: { display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" } },
+            h("span", { style: { fontSize: 12, color: "var(--dsw-alias-label-secondary)" } }, t("profileLabel")),
+            h("input", { style: Object.assign({}, wdInputStyle, { width: 160 }), type: "text", placeholder: "web", value: targetProfile, onChange: function (e) { setTargetProfile(e.target.value); } }),
+            h("button", { className: "dshm-btn", style: s.btn, disabled: profileBusy, onClick: saveTargetProfile }, profileBusy ? t("installing") : t("profileSave"))
+          ),
+          h("p", { style: { fontSize: 11, color: "var(--dsw-alias-label-tertiary)", margin: "6px 0 0" } }, t("profileNote"))
+        ),
+        h("div", { key: "backup", style: { border: "1px solid var(--dsw-alias-border-l2)", borderRadius: 10, padding: "10px 14px", margin: "0 0 12px" } },
+          h("p", { style: { fontSize: 12, fontWeight: 600, margin: "0 0 8px", color: "var(--dsw-alias-label-secondary)" } }, t("backupTitle")),
+          h("div", { style: { display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" } },
+            h("button", { className: "dshm-btn", style: s.btn, onClick: exportBackup }, t("backupExport")),
+            h("button", { className: "dshm-btn", style: s.btn, onClick: function () { var el = document.getElementById("dshm-backup-file"); if (el) el.click(); } }, t("backupImport")),
+            h("input", { id: "dshm-backup-file", type: "file", accept: ".json,application/json", style: { display: "none" }, onChange: function (e) { importBackupFile(e.target.files && e.target.files[0]); e.target.value = ""; } }),
+            h("input", { style: wdInputStyle, placeholder: t("backupWebdavUrl"), value: wdUrl, onChange: function (e) { setWdUrl(e.target.value); } }),
+            h("input", { style: Object.assign({}, wdInputStyle, { width: 100 }), placeholder: t("backupWebdavUser"), value: wdUser, onChange: function (e) { setWdUser(e.target.value); } }),
+            h("input", { style: Object.assign({}, wdInputStyle, { width: 100 }), type: "password", placeholder: t("backupWebdavPass"), value: wdPass, onChange: function (e) { setWdPass(e.target.value); } }),
+            h("button", { className: "dshm-btn", style: s.btn, onClick: webdavPush }, t("backupWebdavPush")),
+            h("button", { className: "dshm-btn", style: s.btn, onClick: webdavPull }, t("backupWebdavPull")),
+            h("button", { className: "dshm-btn", style: s.btn, onClick: exportLogs }, t("logExport"))
+          ),
+          h("p", { style: { fontSize: 11, color: "var(--dsw-alias-label-tertiary)", margin: "6px 0 0" } }, t("backupNote"))
+        ),
+        h("div", { key: "feedback-cfg", style: { border: "1px solid var(--dsw-alias-border-l2)", borderRadius: 10, padding: "10px 14px", margin: "0 0 12px" } },
+          h("p", { style: { fontSize: 12, fontWeight: 600, margin: "0 0 8px", color: "var(--dsw-alias-label-secondary)" } }, t("fbTitle")),
+          h("div", { style: { display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" } },
+            h("span", { style: { fontSize: 12, color: "var(--dsw-alias-label-secondary)" } }, t("fbTokenLabel")),
+            h("input", { style: Object.assign({}, wdInputStyle, { width: 220 }), type: "password", placeholder: "ghp_...", value: fbTokenInput, onChange: function (e) { setFbTokenInput(e.target.value); } }),
+            h("button", { className: "dshm-btn", style: s.btn, onClick: saveFbToken }, t("fbTokenSave"))
+          ),
+          h("p", { style: { fontSize: 11, color: "var(--dsw-alias-label-tertiary)", margin: "6px 0 0" } }, t("fbTokenNote"))
+        ),
+        inst ? h("div", { style: s.installOverlay }, h(InstallPanel, { inst: inst, inputValues: inputValues, setInputValues: setInputValues, submit: submit, cancel: cancelInstall })) : null,
+        editRepo ? h("div", { style: s.installOverlay }, h("div", { style: s.panel },
+          h("h3", { style: { margin: "0 0 8px", fontSize: 15 } }, t("editTitle")),
+          h("p", { style: { fontSize: 12, margin: "0 0 12px", color: "var(--dsw-alias-label-secondary)" } }, t("editHint", { repo: editRepo })),
+          editRows.length === 0 && !editBusy ? h("p", { style: { fontSize: 12, margin: "0 0 12px", color: "var(--dsw-alias-state-warn-primary)" } }, t("editEmpty")) : null,
+          editRows.map(function (row, i) {
+            return h("div", { key: i, style: { display: "flex", gap: 8, alignItems: "center", margin: "0 0 8px" } },
+              h("input", { style: Object.assign({}, s.input, { marginTop: 0, flex: "1 1 40%" }), type: "text", placeholder: t("editKeyPlaceholder"), value: row.key, onChange: function (e) { updateEditRow(i, "key", e.target.value); } }),
+              h("input", { style: Object.assign({}, s.input, { marginTop: 0, flex: "1 1 40%" }), type: "password", placeholder: t("editValuePlaceholder") + (row.configured ? " (" + t("editConfigured") + ")" : ""), value: row.value, onChange: function (e) { updateEditRow(i, "value", e.target.value); } }),
+              h("button", { className: "dshm-btn", style: s.btn, disabled: editBusy, onClick: function () { setEditRows(editRows.filter(function (_, j) { return j !== i; })); } }, t("editRemove"))
+            );
+          }),
+          h("div", { style: { display: "flex", gap: 8, justifyContent: "space-between", marginTop: 14 } },
+            h("button", { className: "dshm-btn", style: s.btn, disabled: editBusy, onClick: function () { setEditRows(editRows.concat([{ key: "", value: "", configured: false }])); } }, t("editAddKey")),
+            h("div", { style: { display: "flex", gap: 8 } },
+              h("button", { className: "dshm-btn", style: s.btn, disabled: editBusy, onClick: function () { setEditRepo(null); } }, t("cancelRunning")),
+              h("button", { className: "dshm-btn dshm-btn-primary", style: s.btnPrimary, disabled: editBusy, onClick: saveEdit }, editBusy ? t("installing") : t("editSave"))
+            )
+          )
+        )) : null,
+        (!inst && fbEnabled && fbPending.length > 0) ? h("div", { style: s.installOverlay }, (function () {
+          var entry = fbPending[0];
+          return h("div", { style: s.panel },
+            h("h3", { style: { margin: "0 0 8px", fontSize: 15 } }, t("fbTitle")),
+            h("p", { style: { fontSize: 13, margin: "0 0 4px", color: "var(--dsw-alias-label-primary)", whiteSpace: "pre-wrap", wordBreak: "break-word" } }, t("fbAsk", { name: entry.name || entry.repo })),
+            h("p", { style: { fontSize: 12, margin: "0 0 10px", color: "var(--dsw-alias-label-tertiary)" } }, entry.repo + (entry.version ? " · v" + entry.version : "")),
+            h("input", { style: Object.assign({}, s.input, { marginTop: 0 }), type: "text", placeholder: t("fbNote"), value: fbNote, onChange: function (e) { setFbNote(e.target.value); } }),
+            h("div", { style: { display: "flex", gap: 8, justifyContent: "flex-end", marginTop: 14 } },
+              h("button", { className: "dshm-btn", style: Object.assign({}, s.btn, { border: "1px solid var(--dsw-alias-state-success-secondary, #15803d)", color: "var(--dsw-alias-state-success-primary)" }), disabled: fbBusy, onClick: function () { submitFeedback(true); } }, fbBusy ? t("fbSubmitting") : t("fbOk")),
+              h("button", { className: "dshm-btn", style: Object.assign({}, s.btn, { border: "1px solid var(--dsw-alias-state-error-secondary, #b91c1c)", color: "var(--dsw-alias-state-error-primary)" }), disabled: fbBusy, onClick: function () { submitFeedback(false); } }, fbBusy ? t("fbSubmitting") : t("fbBad")),
+              h("button", { className: "dshm-btn", style: s.btn, disabled: fbBusy, onClick: dismissFeedback }, t("fbLater"))
+            )
+          );
+        })()) : null,
+        activeTab === "plugins" ? h(PluginTab, tabProps) : h(SkillsTab, tabProps),
+        h("p", { key: "disclaimer", className: "dshm-dim", style: { fontSize: 11, color: "var(--dsw-alias-label-tertiary)", marginTop: 16, lineHeight: 1.6 } }, t("disclaimer"))
+      );
+    }

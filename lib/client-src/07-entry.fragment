@@ -1,0 +1,36 @@
+    function apply(ctx) {
+      injectStyles();
+      // 接入 DSH locale 服务（经 inject 注入，官方消费方式）：
+      // 注册本插件字典、绑定翻译函数、订阅语言切换重渲染
+      if (ctx.locale && typeof ctx.locale.register === "function") {
+        try {
+          var dispose = ctx.locale.register(NS, { zh: DICT_ZH, en: DICT_EN });
+          if (typeof ctx.effect === "function") ctx.effect(() => dispose, "dsh-plugin-marketplace: dictionaries");
+        } catch (e) { /* 命名空间重复注册等极端情况：忽略 */ }
+        try { t = ctx.locale.bind(NS); } catch (e) { /* 保持回退翻译 */ }
+        try { langCurrent = ctx.locale.getLocale().active || langCurrent; } catch (e) { /* ignore */ }
+        if (typeof ctx.locale.subscribe === "function") {
+          try {
+            ctx.locale.subscribe(function () {
+              try { langCurrent = ctx.locale.getLocale().active; } catch (e) { /* ignore */ }
+              notifyLocaleChange();
+            });
+          } catch (e) { /* ignore */ }
+        }
+      }
+      ctx.slots.inject("settings.section", function () {
+        return ctx.slots.register({
+          name: "settings.section",
+          id: "dsh-plugin-marketplace",
+          order: 30,
+          locale: NS,
+          label: function () { return t("sectionLabel"); }
+        }, MarketplaceSection);
+      });
+    }
+
+    exports.apply = apply;
+    exports.inject = ["slots", "locale"];
+    return module.exports;
+  }
+});

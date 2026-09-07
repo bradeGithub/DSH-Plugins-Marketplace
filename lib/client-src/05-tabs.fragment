@@ -1,0 +1,227 @@
+    /** DSH 插件 tab：现有市场列表逻辑 + 分类筛选 + 分页懒加载（PR #16）。 */
+    var CATEGORY_KEYS = ["vision", "document", "memory", "model", "notify", "coding", "conversation", "web-ui", "agent", "tool", "resource", "other"];
+    var PLUGIN_PAGE_SIZE = 60;
+    function PluginTab(props) {
+      var state = useState(null); var repos = state[0]; var setRepos = state[1];
+      var state2 = useState(null); var error = state2[0]; var setError = state2[1];
+      var state3 = useState(""); var query = state3[0]; var setQuery = state3[1];
+      var state4 = useState("all"); var category = state4[0]; var setCategory = state4[1];
+      var state5 = useState(""); var dataSource = state5[0]; var setDataSource = state5[1];
+      var state6 = useState(0); var dropped = state6[0]; var setDropped = state6[1];
+      var state7 = useState(null); var lastFp = state7[0]; var setLastFp = state7[1];
+      var state8 = useState(false); var refreshing = state8[0]; var setRefreshing = state8[1];
+      var state9 = useState(PLUGIN_PAGE_SIZE); var visible = state9[0]; var setVisible = state9[1];
+
+
+      function doRefresh(force) {
+        setRefreshing(true);
+        props.showToast(t("refreshing"), true);
+        fetch("/api/marketplace/list?lang=" + langCurrent + (force ? "&refresh=1" : ""), { headers: { "X-DSH-Marketplace": "1" } }).then(function (r) { return r.json(); }).then(function (data) {
+          if (data.error) { setError(data.error); props.showToast(t("refreshFail", { err: data.error }), false); return; }
+          var fp = fingerprintOf(data);
+          // 指纹（source + cached_at + total）与当前已展示内容一致 → 跳过 setState，避免列表闪烁
+          if (repos === null || fp !== lastFp) {
+            setRepos(data.repos || []);
+            setDataSource(data.source || "");
+            setDropped(data.dropped || 0);
+            setVisible(PLUGIN_PAGE_SIZE);
+            setLastFp(fp);
+          }
+          props.showToast(t("refreshOk", { n: (data.repos || []).length }), true);
+        }).catch(function (err) {
+          props.showToast(t("refreshFail", { err: String(err) }), false);
+        }).finally(function () { setRefreshing(false); });
+      }
+
+      useEffect(function () {
+        var cancelled = false;
+        setError(null);
+        fetch("/api/marketplace/list?lang=" + langCurrent, { headers: { "X-DSH-Marketplace": "1" } }).then(function (r) { return r.json(); }).then(function (data) {
+          if (cancelled) return;
+          if (data.error) { setError(data.error); setRepos([]); }
+          else { setRepos(data.repos || []); setDataSource(data.source || ""); setDropped(data.dropped || 0); setVisible(PLUGIN_PAGE_SIZE); setLastFp(fingerprintOf(data)); }
+        }).catch(function (err) { if (!cancelled) { setError(String(err)); setRepos([]); } });
+        return function () { cancelled = true; };
+      }, [props.tick]);
+
+      // 搜索词/分类变化时重置分页（搜索在完整数组 filter 后重新分页）
+      useEffect(function () { setVisible(PLUGIN_PAGE_SIZE); }, [query, category]);
+
+      // 触底加载：sentinel 进入视口 → 追加一页（与 Skills tab 相同的交互）
+      useEffect(function () {
+        var el = document.getElementById("dshm-plugins-sentinel");
+        if (!el) return;
+        var observer = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) setVisible(function (n) { return n + PLUGIN_PAGE_SIZE; });
+          });
+        }, { rootMargin: "300px" });
+        observer.observe(el);
+        return function () { observer.disconnect(); };
+      }, [repos, query, category]);
+
+      return h("div", null,
+        h("div", { style: s.head },
+          h("div", null,
+            h("h2", { style: s.title }, t("sectionLabel")),
+            h("p", { className: "dshm-dim", style: s.sub }, t("pageSub"))
+          ),
+          h("button", { className: "dshm-btn", style: s.btn, disabled: refreshing, onClick: function () { doRefresh(true); } }, refreshing ? t("refreshing") : t("refresh"))
+        ),
+        h("input", {
+          style: Object.assign({}, s.input, { marginTop: 0, marginBottom: 8 }),
+          type: "search",
+          placeholder: t("searchPlaceholder"),
+          value: query,
+          onChange: function (e) { setQuery(e.target.value); }
+        }),
+        h("div", { style: { display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 12 } },
+          ["all"].concat(CATEGORY_KEYS).map(function (key) {
+            var active = category === key;
+            var label = key === "all" ? t("catAll") : t("cat" + key.split("-").map(function (p) { return p.charAt(0).toUpperCase() + p.slice(1); }).join(""));
+            return h("button", {
+              key: key,
+              className: "dshm-btn",
+              style: active ? Object.assign({}, s.btn, { background: "var(--dsw-alias-button-primary-fill)", color: "var(--dsw-alias-label-primary-foreground)", borderColor: "transparent", fontWeight: 600 }) : s.btn,
+              onClick: function () { setCategory(key); }
+            }, label);
+          })
+        ),
+        (dataSource === "cache" || dataSource === "search" || dataSource === "bundled") ? h("p", { style: s.srcHint }, t(dataSource === "cache" ? "dataSourceCache" : (dataSource === "search" ? "dataSourceSearch" : "dataSourceBundled"))) : null,
+        error ? h("div", { style: s.errRow },
+          h("p", { style: s.err, margin: 0 }, t("loadFail", { err: error })),
+          h("button", { className: "dshm-btn", style: s.btn, onClick: function () { doRefresh(false); } }, t("retry"))
+        ) : null,
+        repos === null ? h("p", { style: { fontSize: 13, color: "var(--dsw-alias-label-tertiary)" } }, t("loading")) : null,
+        repos ? (function () {
+          var q = query.trim().toLowerCase();
+          var list = repos.filter(function (r) {
+            if (category !== "all" && (r.category || "other") !== category) return false;
+            if (!q) return true;
+            return (r.name + " " + r.full_name + " " + (r.topics || []).join(" ")).toLowerCase().indexOf(q) !== -1;
+          });
+          var shown = list.slice(0, visible);
+          var hasMore = shown.length < list.length;
+          return [
+            h("p", { key: "count", className: "dshm-dim", style: Object.assign({}, s.meta, { margin: "0 0 8px" }) },
+              t("countTotal", { n: repos.length }) + ((q || category !== "all") ? t("countMatch", { n: list.length }) : "")),
+            dropped > 0 ? h("p", { key: "dedupe", style: s.srcHint }, t("dedupeHint", { n: dropped })) : null,
+            shown.map(function (repo) {
+              // 全局互斥：任何安装进行中 → 所有按钮禁用；只有正在安装的那个显示「安装中...」
+              return h(RepoCard, { key: repo.full_name, repo: repo, installed: repo.installed, updateAvailable: repo.updateAvailable, busy: !!(props.inst && props.inst.phase === "running"), selfBusy: !!(props.inst && props.inst.phase === "running" && props.inst.repo === repo.full_name), uninstalling: props.uninstalling, onEdit: props.onEdit, onUninstall: props.onUninstall, onCheckUpdate: props.onCheckUpdate, onInstall: function (fullName) { props.setInputValues({}); props.runInstall(fullName, {}, []); } });
+            }),
+            hasMore ? h("div", { key: "sentinel", id: "dshm-plugins-sentinel", style: { height: 1 } }) : null,
+            list.length === 0 ? h("p", { key: "empty", className: "dshm-dim", style: { fontSize: 13, color: "var(--dsw-alias-label-tertiary)" } }, q ? t("noMatch", { q: query }) : t("noMatchCat")) : null
+          ];
+        })() : null,
+        repos === null ? h("p", { className: "dshm-dim", style: { fontSize: 13, color: "var(--dsw-alias-label-tertiary)" } }, t("loading")) : null,
+        repos && repos.length === 0 && !error ? h("p", { className: "dshm-dim", style: { fontSize: 13, color: "var(--dsw-alias-label-tertiary)" } }, t("empty")) : null
+      );
+    }
+
+    /** 通用 Skills tab：服务端分页（每页 100，#14），搜索下推服务端，触底加载下一页。 */
+    var SKILL_PAGE_SIZE = 100;
+    var skillsFetchSeq = 0; // 模块级请求序号：查询/刷新/翻页竞态时丢弃过期响应
+    /** 备份恢复队列（模块级，单市场实例）：逐项走正常安装流程，awaiting-input 弹窗期间自动暂停。 */
+    var restoreState = { list: null, idx: 0 };
+    function SkillsTab(props) {
+      var state = useState(null); var repos = state[0]; var setRepos = state[1];
+      var state2 = useState(null); var error = state2[0]; var setError = state2[1];
+      var state3 = useState(""); var query = state3[0]; var setQuery = state3[1];
+      var state4 = useState(1); var page = state4[0]; var setPage = state4[1];
+      var state5 = useState(""); var dataSource = state5[0]; var setDataSource = state5[1];
+      var state6 = useState(0); var dropped = state6[0]; var setDropped = state6[1];
+      var state7 = useState(0); var total = state7[0]; var setTotal = state7[1];
+      var state8 = useState(false); var loading = state8[0]; var setLoading = state8[1];
+      // refreshing 独立声明于 SkillsTab 自身作用域（不能引用 PluginTab 内的同名 state——
+      // SkillsTab 是顶层函数，顶层函数引用缺失会导致渲染 disabled: refreshing 即崩）
+      var state9 = useState(false); var refreshing = state9[0]; var setRefreshing = state9[1];
+
+      function fetchPage(pg, q, refresh) {
+        var mySeq = ++skillsFetchSeq;
+        setLoading(true);
+        return fetch("/api/marketplace/skills?lang=" + langCurrent + "&page=" + pg + "&pageSize=" + SKILL_PAGE_SIZE + "&q=" + encodeURIComponent(q || "") + (refresh ? "&refresh=1" : ""), { headers: { "X-DSH-Marketplace": "1" } })
+          .then(function (r) { return r.json(); })
+          .then(function (data) {
+            if (mySeq !== skillsFetchSeq) return; // 已被更新的请求取代
+            if (data.error) { setError(data.error); setLoading(false); }
+            else {
+              setRepos(function (prev) {
+                if (pg === 1) return data.repos || [];
+                var seen = {};
+                (prev || []).forEach(function (r) { seen[r.full_name] = true; });
+                return (prev || []).concat((data.repos || []).filter(function (r) { if (seen[r.full_name]) return false; seen[r.full_name] = true; return true; }));
+              });
+              setPage(pg);
+              setTotal(data.total != null ? data.total : (data.repos || []).length);
+              setDataSource(data.source || "");
+              setDropped(data.dropped || 0);
+              setError(null);
+              setLoading(false);
+            }
+          })
+          .catch(function (err) { if (mySeq === skillsFetchSeq) { setError(String(err)); setLoading(false); } });
+      }
+
+      function doRefresh(force) {
+        setRefreshing(true);
+        props.showToast(t("refreshing"), true);
+        fetchPage(1, query, true).finally(function () { setRefreshing(false); });
+      }
+
+      // 初始加载 / 外部 tick（安装卸载后刷新第一页）
+      useEffect(function () { fetchPage(1, "", false); }, [props.tick]);
+      // 搜索词变化 → 重置并加载第 1 页（搜索已下推服务端）
+      useEffect(function () { fetchPage(1, query, false); }, [query]);
+
+      // 触底加载：sentinel 进入视口且未加载完 → 下一页
+      useEffect(function () {
+        var el = document.getElementById("dshm-skills-sentinel");
+        if (!el) return;
+        var observer = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting && !loading && repos && repos.length < total) {
+              fetchPage(page + 1, query, false);
+            }
+          });
+        }, { rootMargin: "300px" });
+        observer.observe(el);
+        return function () { observer.disconnect(); };
+      }, [repos, query, total, loading]);
+
+      var q = query.trim().toLowerCase();
+
+      return h("div", null,
+        h("div", { style: s.head },
+          h("div", null,
+            h("h2", { style: s.title }, t("tabSkills")),
+            h("p", { style: s.sub }, t("skillsSub"))
+          ),
+          h("button", { className: "dshm-btn", style: s.btn, disabled: refreshing, onClick: function () { doRefresh(true); } }, refreshing ? t("refreshing") : t("refresh"))
+        ),
+        h("input", {
+          style: Object.assign({}, s.input, { marginTop: 0, marginBottom: 12 }),
+          type: "search",
+          placeholder: t("searchPlaceholderSkills"),
+          value: query,
+          onChange: function (e) { setQuery(e.target.value); }
+        }),
+        (dataSource === "cache" || dataSource === "search" || dataSource === "bundled") ? h("p", { style: s.srcHint }, t(dataSource === "cache" ? "dataSourceCache" : (dataSource === "search" ? "dataSourceSearch" : "dataSourceBundled"))) : null,
+        error ? h("div", { style: s.errRow },
+          h("p", { style: s.err, margin: 0 }, t("loadFail", { err: error })),
+          h("button", { className: "dshm-btn", style: s.btn, onClick: function () { doRefresh(false); } }, t("retry"))
+        ) : null,
+        repos === null ? h("p", { className: "dshm-dim", style: { fontSize: 13, color: "var(--dsw-alias-label-tertiary)" } }, t("loading")) : null,
+        repos ? [
+          h("p", { key: "count", className: "dshm-dim", style: Object.assign({}, s.meta, { margin: "0 0 8px" }) },
+            t("countSkills", { n: total }) + (q ? t("countMatch", { n: total }) : "")),
+          dropped > 0 ? h("p", { key: "dedupe", style: s.srcHint }, t("dedupeHint", { n: dropped })) : null,
+          repos.map(function (repo) {
+            return h(RepoCard, { key: repo.full_name, repo: repo, installed: repo.installed, updateAvailable: false, busy: !!(props.inst && props.inst.phase === "running"), selfBusy: !!(props.inst && props.inst.phase === "running" && props.inst.repo === repo.full_name), uninstalling: props.uninstalling, onEdit: props.onEdit, onUninstall: props.onUninstall, onCheckUpdate: props.onCheckUpdate, onInstall: function (fullName) { props.setInputValues({}); props.runInstall(fullName, {}, []); } });
+          }),
+          repos.length < total && !loading ? h("div", { key: "sentinel", id: "dshm-skills-sentinel", style: { height: 1 } }) : null,
+          repos.length === 0 && !loading ? h("p", { key: "empty", className: "dshm-dim", style: { fontSize: 13, color: "var(--dsw-alias-label-tertiary)" } }, t("noMatch", { q: query })) : null
+        ] : null,
+        repos && repos.length === 0 && !error && !loading ? h("p", { style: { fontSize: 13, color: "var(--dsw-alias-label-tertiary)" } }, t("skillsEmpty")) : null
+      );
+    }

@@ -5,13 +5,14 @@
 
 ## 1. 语言与运行时
 
-- JavaScript（ESM，`"type": "module"`），无构建步骤，纯 Node 可运行
+- JavaScript（ESM，`"type": "module"`），Node 脚本无通用构建步骤，纯 Node 可运行
+- 浏览器市场 bundle 例外：`lib/client-src/*.fragment` 由 `node scripts/assemble-client.mjs` 按固定顺序确定性拼接为受版本控制的 `lib/client.js`；不得引入运行时动态加载或额外编译产物
 - 最低 Node 版本：仓库 engines 声明（当前 `^22.19.0 || >=24`）
-- 禁止 TypeScript 依赖、禁止编译产物提交（源码即运行产物）
+- 禁止 TypeScript 依赖、禁止未经声明的编译产物提交；受控的 `lib/client.js` 是浏览器市场唯一发布 bundle，由 source fragments 确定性生成
 
 ## 2. 模块结构
 
-- 纯函数模块放 `scripts/` 或 `lib/`，**无副作用顶层逻辑**
+- 纯函数模块放 `scripts/` 或 `lib/`；原则上无副作用顶层逻辑。`lib/index.js` 作为组合入口例外，可执行必要的启动装配、状态预加载与兼容适配，但业务实现应通过分层模块和依赖注入承载
 - 需要"直接运行 + 被 import"双用的脚本（如 toc.mjs）：
   - 顶层副作用必须包在 `if (isMain())` 内
   - `isMain()` 用 `pathToFileURL(argv[1])` 与 `import.meta.url` 比较 + basename fallback
@@ -63,6 +64,7 @@
 ## 7. 测试规范
 
 - 框架：`scripts/smoke-tests.mjs`（纯 node `check(name, actual, expected)`）
+- 浏览器 bundle：`scripts/tests/unit/client-runtime.test.mjs` 用 VM/fake browser 执行真实 `window.__ModuleLoader__.load`，`client-assembler.test.mjs` 锁定片段拼接与发布 bundle 无漂移
 - **覆盖目标**：校验/纯函数逻辑 100%（emoji 检测、提交规范、TOC、版本比较等）
 - 断言风格：正向 + 负向成对，覆盖边界（空串、null、undefined、CRLF/LF）
 - 新增函数必须配套断言，CI 与 hook 双重执行

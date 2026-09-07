@@ -1,0 +1,101 @@
+name: quality-gates
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: quality-gates-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 24
+
+      - name: Bootstrap host tools
+        run: npm install --global pnpm@9.15.9 @deepseek-ai/dsh@0.1.2-rc.1
+
+      - name: Syntax checks
+        run: node scripts/hooks/check.mjs --only=syntax
+
+      - name: Unit and integration tests
+        run: node scripts/hooks/check.mjs --only=tests
+
+      - name: Strict Node E2E
+        run: node scripts/hooks/check.mjs --only=e2e
+        env:
+          DSH_REQUIRE_E2E: "1"
+
+      - name: Install browser test dependencies
+        working-directory: scripts/tests/browser
+        run: |
+          npm ci
+          npx playwright install --with-deps chromium
+
+      - name: Browser E2E
+        run: node scripts/tests/frontend-e2e.mjs
+
+      - name: Coverage
+        run: node scripts/hooks/check.mjs --only=coverage
+
+      - name: Property tests
+        run: node scripts/tests/unit/property-based.test.mjs
+
+      - name: Smoke tests
+        run: node scripts/smoke-tests.mjs
+
+      - name: Mutation tests
+        run: node scripts/mutation-test.mjs
+
+      - name: Performance benchmark
+        run: node scripts/benchmarks/marketplace.mjs --json=benchmark-results.json
+
+      - name: Upload benchmark trend
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: benchmark-trend
+          path: benchmark-results.json
+          if-no-files-found: ignore
+
+      - name: Browser lockfile audit
+        working-directory: scripts/tests/browser
+        run: npm audit --audit-level=high
+
+      - name: Browser SBOM
+        working-directory: scripts/tests/browser
+        run: npm sbom --sbom-format=cyclonedx --omit=dev > sbom.json
+
+      - name: Supply chain provenance
+        run: node scripts/provenance.mjs --json=provenance.json
+
+      - name: Upload supply chain evidence
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: supply-chain
+          path: |
+            scripts/tests/browser/sbom.json
+            provenance.json
+          if-no-files-found: ignore
+
+      - name: Upload browser diagnostics
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: browser-e2e-diagnostics
+          path: scripts/tests/browser/test-results
+          if-no-files-found: ignore

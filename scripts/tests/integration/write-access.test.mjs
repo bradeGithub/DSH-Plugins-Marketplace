@@ -1,4 +1,4 @@
-// M1 写操作访问控制行为测试：
+// 写操作访问控制行为测试：
 // - 回环 Host → 写操作放行（默认模式，无需 token）
 // - LAN Host → 403（默认：未开启 lanWrite）
 // - LAN Host + lanWrite: true + 无 token → 403

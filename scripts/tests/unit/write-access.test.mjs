@@ -1,4 +1,4 @@
-// M1 写操作访问控制契约测试——静态断言（不执行 lib）。
+// 写操作访问控制契约测试——静态断言（不执行 lib）。
 //
 // 设计：默认仅回环 Host 可写（install/uninstall）——LAN 扫描器无法无凭据触发脚本执行；
 // LAN 模式 = config.json 显式开启 lanWrite: true（业界惯例：LAN 免密视为显式降级，
@@ -20,6 +20,8 @@ import { fileURLToPath } from "node:url";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
 const lib = readFileSync(join(ROOT, "lib", "index.js"), "utf8");
+const auth = readFileSync(join(ROOT, "lib", "http", "auth.js"), "utf8");
+const routes = readFileSync(join(ROOT, "lib", "http", "routes.js"), "utf8");
 const client = readFileSync(join(ROOT, "lib", "client.js"), "utf8");
 
 let pass = 0, fail = 0;
@@ -30,7 +32,7 @@ function check(name, actual, expected) {
 }
 
 // ---- 契约 1：isWriteAllowed 结构（isTrustedRequest + 回环/LAN 分支）----
-const fnBody = lib.match(/async function isWriteAllowed\(req\) \{[\s\S]*?\n\}/)?.[0] ?? "";
+const fnBody = auth.match(/async function isWriteAllowed\(req\) \{[\s\S]*?\n\}/)?.[0] ?? "";
 check("isWriteAllowed 存在", fnBody.length > 0, true);
 check("先过 isTrustedRequest（CSRF+Host+Origin）", fnBody.includes("if (!isTrustedRequest(req)) return false;"), true);
 check("回环 socket 地址直接放行（不可伪造）", fnBody.includes('remote === "127.0.0.1" || remote === "localhost" || remote === "::1"'), true);
@@ -42,24 +44,42 @@ check("token 长度不同先拒绝（防泄露）", fnBody.includes("if (got.len
 check("timing-safe 比较", fnBody.includes("timingSafeEqual(Buffer.from(got), Buffer.from(writeToken))"), true);
 
 // ---- 契约 2：token 生成 ----
-check("token 启动随机生成（randomBytes 32 → hex）", /const writeToken = randomBytes\(32\)\.toString\("hex"\);/.test(lib), true);
-check("token 头名 x-dsh-marketplace-token", /const WRITE_TOKEN_HEADER = "x-dsh-marketplace-token";/.test(lib), true);
+check("token 启动随机生成（randomBytes 32 → hex）", /randomHex: \(\) => randomBytes\(32\)\.toString\("hex"\),/.test(lib), true);
+check("token 头名 x-dsh-marketplace-token", /const WRITE_TOKEN_HEADER = "x-dsh-marketplace-token";/.test(auth), true);
 
 // ---- 契约 3：lanWrite 配置 fail-closed ----
-const lanBody = lib.match(/async function isLanWriteEnabled\(\) \{[\s\S]*?\n\}/)?.[0] ?? "";
+const lanBody = auth.match(/async function isLanWriteEnabled\(\) \{[\s\S]*?\n\}/)?.[0] ?? "";
 check("isLanWriteEnabled 存在", lanBody.length > 0, true);
 check("lanWrite === true 才开启", lanBody.includes('cfg.lanWrite === true'), true);
-check("读取失败视为未开启（默认安全）", /\} catch \{\r?\n    return false;/.test(lanBody), true);
+check("读取失败视为未开启（默认安全）", /\} catch \{\r?\n      return false;/.test(lanBody), true);
 
 // ---- 契约 4：tapIndex 注入（防御性 typeof 检查）----
 check("tapIndex 注入存在", /typeof webServer\.tapIndex === "function"/.test(lib), true);
-check("注入 __DSH_MP_TOKEN__ 脚本", /window\.__DSH_MP_TOKEN__="\$\{writeToken\}"/.test(lib), true);
+check("注入 __DSH_MP_TOKEN__ 脚本", /window\.__DSH_MP_TOKEN__="\$\{auth\.getToken\(\)\}"/.test(lib), true);
 
-// ---- 契约 5：全部写操作端点都走 isWriteAllowed（审查 S1 鉴权统一）----
-// install / uninstall / self-update POST / feedback / feedback-token POST /
-// env-edit / backup-webdav / restore-webdav / profile POST（issue #184）= 9 处。
-// 新增写端点时必须同步此处计数——漏一处即 LAN 内任意设备可无 token 写。
-check("全部写端点走 isWriteAllowed（9 处）", (lib.match(/await isWriteAllowed\(req\)\)\) return json\(res, 403/g) ?? []).length, 9);
+// ---- 契约 5：全部写操作端点都走 isWriteAllowed----
+// self-update POST / backup-webdav / restore-webdav / feedback / feedback-token POST /
+// env-edit / profile POST / install / uninstall = 9 处。
+// 新增写端点时必须同步此处列表——漏一处即 LAN 内任意设备可无 token 写。
+const writePaths = [
+  "/api/marketplace/self-update",
+  "/api/marketplace/backup/webdav",
+  "/api/marketplace/restore/webdav",
+  "/api/marketplace/feedback",
+  "/api/marketplace/feedback/token",
+  "/api/marketplace/profile",
+  "/api/marketplace/env-edit",
+  "/api/marketplace/install",
+  "/api/marketplace/uninstall"
+];
+const routeSegments = routes.split("  webServer.register({").slice(1);
+const writeContract = writePaths.every((path) => {
+  const segment = routeSegments.find((source) => source.includes(`path: "${path}"`));
+  return Boolean(segment && segment.includes("await isWriteAllowed(req)"));
+});
+check("全部写端点各自走 isWriteAllowed（9 处）", writeContract, true);
+check("路由注册完整且无重复", routeSegments.length, 17);
+check("路由工厂无 index 反向依赖", /from\s+["']\.\.\/index\.js["']/.test(routes), false);
 
 // ---- 契约 6：客户端写操作带 token 头 ----
 check("client mpHeaders 存在", /function mpHeaders\(extra\) \{[\s\S]{0,200}window\.__DSH_MP_TOKEN__/.test(client), true);

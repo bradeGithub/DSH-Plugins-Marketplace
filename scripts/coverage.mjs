@@ -4,7 +4,7 @@
 //   node scripts/coverage.mjs           运行 smoke-tests 并输出函数/分支覆盖率
 //   node scripts/coverage.mjs --json    输出 JSON 报告（供 CI 解析）
 // 零依赖：仅用 Node 内置（fs + URL），数据来自 v8 覆盖率 JSON。
-// 覆盖目标模块：scripts/hooks/validate.mjs、scripts/toc.mjs、lib/index.js。
+// 覆盖目标模块：scripts/hooks/validate.mjs、scripts/toc.mjs、lib/ 下所有 Node 运行时模块。
 
 import { execFileSync } from "node:child_process";
 import { mkdtempSync, readdirSync, readFileSync, existsSync } from "node:fs";
@@ -22,14 +22,25 @@ const TARGETS = [
   "scripts/build-skin-manifest.mjs",
   "scripts/extract-skin-palette.mjs",
   "scripts/inject-skin-manifest.mjs",
-  "lib/index.js",
-  "lib/skin-manifest.js",
+  "scripts/assemble-client.mjs",
+  "scripts/registry/validate-categories.mjs",
+  "scripts/registry/refresh-audit-snapshots.mjs",
+  // 分层重构后 lib/ 递归展开（index.js + domain/ 等子目录）
+  ...(function collectLibFiles(dir) {
+    const out = [];
+    for (const e of readdirSync(dir, { withFileTypes: true })) {
+      const p = join(dir, e.name);
+      if (e.isDirectory()) out.push(...collectLibFiles(p));
+      else if (e.name.endsWith(".js")) out.push(p.replace(/\\/g, "/"));
+    }
+    return out;
+  })(join(ROOT, "lib")),
 ];
 const jsonOut = process.argv.includes("--json");
 
 // 豁免：无法通过测试触发的合理分支。
 // - toc.mjs 主循环（isMain() 内，仅 CLI 运行时执行）
-// - lib/index.js：runNpm 等命名深集成函数（按函数名），以及
+// - lib/ 下各模块：runNpm 等命名深集成函数（按函数名），以及
 //   防御性死代码闭包（按源码特征子串定位——比行号鲁棒，lib 增删行不受影响）
 const EXEMPT_LIB_FUNCS = [
   "runNpm", "npmInstallWithFallback", "readJsonBody",
@@ -56,12 +67,9 @@ const EXEMPT_LIB_MARKERS = [
   "installedQueue.catch(() => {})",
   // 已安装索引构建失败的 catch（构建内部各 IO 均有兜底，reject 为防御路径）
   ".catch((err) => { installedIndex = null; throw err; })",
-  // 自更新检测失败 catch（checkSelfUpdate 内部已兜底）
-  "checkSelfUpdate().catch(",
-  // patch 写队列异常闭包（写盘/rename 失败时触发，防御分支）
-  "task.catch((error) => { taskError = error; })",
-  // uninstall 中 removePatchEntry 调用点的异常吞掉闭包（removePatchEntry 正常时永不触发）
-  "removePatchEntry(pkgName).catch(() => {})",
+  // 自更新检测失败 catch（app/update 的 check 内部已兜底；±80 容差同时覆盖
+  // 相邻的 readTargetProfile 启动 catch）
+  "runUpdateUseCase.check().catch(",
   // 克隆后 .gitmodules 读取的失败兜底（exists 刚确认后 readFile 失败为极小概率 IO 事件，
   // 且失败时 gm 为空串、安全校验照常执行——防御死代码）
   "join(cacheDir, \".gitmodules\")",
@@ -69,9 +77,8 @@ const EXEMPT_LIB_MARKERS = [
   // 失败时按「无顶层 js」处理——防御死代码；.some 回调本身由 e2e demo-js-top 覆盖）
   "await readdir(dest).catch(() => [])",
   // v1.4.x 新增队列/加载失败兜底（队列仅在前序任务 reject 时触发；加载失败仅文件损坏时触发）：
-  // envsQueue/feedbackQueue 队列链 catch 兜底（与 installedQueue 同模式）
+  // envsQueue 队列链 catch 兜底（与 installedQueue 同模式）
   "envsQueue = envsQueue.catch(() => {})",
-  "feedbackQueue = feedbackQueue.catch(() => {})",
   // 启动时反馈队列/env 存储加载失败的 logger 兜底（文件损坏才触发，防御分支）
   "loadFeedback().catch((error) => {",
   "loadEnvStore().catch((error) => {",
@@ -81,8 +88,6 @@ const EXEMPT_LIB_MARKERS = [
   // selfLatestFromCache 的 find 回调：真实触发条件为「启动预热完成后 >30 分钟再次打开页面
   // 且直连失败」——apply 预热已更新 checkedAt，测试无法模拟 30 分钟等待，豁免（真实路径可达）
   "repos.find((r) => r.full_name === SELF_UPDATE_REPO)",
-  // appendPatchEntry 队列链的 catch 吞掉闭包（队列仅在前序任务 reject 时触发——防御死代码）
-  "patchQueue = patchQueue.catch(() => {})",
   // installNpmTargetToTemp 的两处 readdir catch（npm install 成功后目录缺失的防御兜底；
   // 函数整体深集成豁免，此两行为其内部防御闭包）
   "readdir(join(nm, scope), { withFileTypes: true }).catch(() => [])",
@@ -93,30 +98,38 @@ const EXEMPT_LIB_MARKERS = [
   "(e) => e.isDirectory() && e.name === name",
 ];
 
-/** 计算 lib/index.js 中豁免函数的起始偏移集合（函数名 + 源码特征）。 */
+/** 计算 lib/ 下各文件豁免函数的起始偏移（函数名 + 源码特征），按文件分 Map。 */
 function libExemptOffsets(root) {
-  const path = join(root, "lib", "index.js");
-  if (!existsSync(path)) return new Set();
-  const src = readFileSync(path, "utf8");
-  const set = new Set();
-  for (const name of EXEMPT_LIB_FUNCS) {
-    const i = src.indexOf("function " + name);
-    if (i !== -1) set.add(i);
-  }
-  // 按源码特征定位（匿名闭包）：收集所有匹配位置的起始偏移
-  for (const marker of EXEMPT_LIB_MARKERS) {
-    let idx = src.indexOf(marker);
-    while (idx !== -1) {
-      set.add(idx);
-      idx = src.indexOf(marker, idx + marker.length);
+  const map = new Map(); // rel -> Set(offset)
+  const walk = (dir, relDir) => {
+    for (const e of readdirSync(dir, { withFileTypes: true })) {
+      const p = join(dir, e.name);
+      if (e.isDirectory()) walk(p, join(relDir, e.name));
+      else if (e.name.endsWith(".js")) {
+        const rel = join(relDir, e.name).replace(/\\/g, "/");
+        const src = readFileSync(p, "utf8");
+        const set = new Set();
+        for (const name of EXEMPT_LIB_FUNCS) {
+          const i = src.indexOf("function " + name);
+          if (i !== -1) set.add(i);
+        }
+        for (const marker of EXEMPT_LIB_MARKERS) {
+          let idx = src.indexOf(marker);
+          while (idx !== -1) { set.add(idx); idx = src.indexOf(marker, idx + marker.length); }
+        }
+        map.set(rel, set);
+      }
     }
-  }
-  return set;
+  };
+  walk(join(root, "lib"), "lib"); // rel 相对仓库根（与 TARGETS/查询同形）
+  return map;
 }
 
-/** 判断 offset 是否落在豁免特征点附近（闭包起始可能在 marker 后几字节）。 */
-function libExemptNear(offset) {
-  for (const off of libExempt) {
+/** 判断 offset 是否落在指定文件的豁免特征点附近（闭包起始可能在 marker 后几字节）。 */
+function libExemptNear(rel, offset) {
+  const set = libExempt.get(rel);
+  if (!set) return false;
+  for (const off of set) {
     if (Math.abs(offset - off) <= 80) return true;
   }
   return false;
@@ -145,15 +158,22 @@ function cliMainOffset(root, relPath, marker) {
 
 // 1. 临时目录收集覆盖率
 const covDir = mkdtempSync(join(tmpdir(), "dsh-cov-"));
+const driftDir = mkdtempSync(join(tmpdir(), "dsh-drift-"));
+let testsFailed = false;
 try {
   execFileSync("node", ["scripts/tests/run.mjs"], {
     cwd: ROOT,
     stdio: jsonOut ? ["inherit", "ignore", "inherit"] : "inherit",
-    env: { ...process.env, NODE_V8_COVERAGE: covDir },
+    env: {
+      ...process.env,
+      NODE_V8_COVERAGE: covDir,
+      DRIFT_REPORT_FILE: join(driftDir, "drift-report.json"),
+    },
   });
 } catch {
-  // 测试失败也输出覆盖率报告（部分覆盖信息仍有诊断价值）——
-  // 无 catch 时 execFileSync 抛错会中断整个报告（e2e 失败曾暴露此点）
+  testsFailed = true;
+  // 测试失败也输出覆盖率报告（部分覆盖信息仍有诊断价值），但最终保留失败码，
+  // 避免 E2E 失败时仅因覆盖率达到 100% 而误报质量门通过。
 }
 
 // 2. 聚合 v8 覆盖率 JSON
@@ -166,6 +186,8 @@ const validateManifestMain = validateManifestMainOffset(ROOT);
 const buildManifestMain = cliMainOffset(ROOT, "scripts/build-skin-manifest.mjs", "// ---- CLI ----");
 const extractPaletteMain = cliMainOffset(ROOT, "scripts/extract-skin-palette.mjs", "if (process.argv[1] && import.meta.url");
 const injectManifestMain = cliMainOffset(ROOT, "scripts/inject-skin-manifest.mjs", "if (process.argv[1] && import.meta.url");
+const validateCategoriesMain = cliMainOffset(ROOT, "scripts/registry/validate-categories.mjs", "export function main");
+const refreshSnapshotsMain = cliMainOffset(ROOT, "scripts/registry/refresh-audit-snapshots.mjs", "export function main");
 // 仓库根目录的 file:// 前缀：e2e 触发真实 npm install 时，npm 子进程（也在
 // NODE_V8_COVERAGE 下运行）会为 npm 自身 node_modules 里的模块生成 coverage，
 // 其中不少也名为 lib/index.js——只按尾部路径匹配会误收，必须限定在仓库根目录内。
@@ -185,9 +207,12 @@ for (const f of files) {
       const offset = fn.ranges[0]?.startOffset ?? 0;
       // 豁免判断
       let exempt = false;
-      if (url.endsWith("/lib/index.js")) {
-        // 精确偏移 或 落在豁免特征附近（闭包起始可能在 marker 后几字节）
-        exempt = libExempt.has(offset) || libExemptNear(offset);
+      if (url.startsWith(ROOT_PREFIX + "lib/")) {
+        // 精确偏移 或 落在豁免特征附近（闭包起始可能在 marker 后几字节）；
+        // rel = 相对仓库根的 lib/ 路径（TARGETS 同形）
+        const rel = url.slice(ROOT_PREFIX.length);
+        const exemptSet = libExempt.get(rel);
+        exempt = (exemptSet?.has(offset) ?? false) || libExemptNear(rel, offset);
       } else if (url.endsWith("/scripts/toc.mjs") && tocMain !== -1) {
         exempt = offset >= tocMain;
       } else if (url.endsWith("/scripts/validate-manifest.mjs") && validateManifestMain !== -1) {
@@ -198,6 +223,10 @@ for (const f of files) {
         exempt = offset >= extractPaletteMain;
       } else if (url.endsWith("/scripts/inject-skin-manifest.mjs") && injectManifestMain !== -1) {
         exempt = offset >= injectManifestMain;
+      } else if (url.endsWith("/scripts/registry/validate-categories.mjs") && validateCategoriesMain !== -1) {
+        exempt = offset >= validateCategoriesMain;
+      } else if (url.endsWith("/scripts/registry/refresh-audit-snapshots.mjs") && refreshSnapshotsMain !== -1) {
+        exempt = offset >= refreshSnapshotsMain;
       }
       if (exempt) continue;
       const key = `${fn.functionName}@${offset}`;
@@ -254,8 +283,9 @@ if (jsonOut) {
       console.log(`    未覆盖: ${r.uncovered.join(", ")}`);
     }
   }
-  if (overall < 100) {
-    console.log(`\n提示: 覆盖率未达 100%，检查未覆盖函数并补充断言（目标 100%）。`);
+  if (coveredFuncs < totalFuncs || testsFailed) {
+    if (testsFailed) console.log("\n提示: 测试金字塔未通过，覆盖率报告仅供诊断，质量门失败。");
+    else console.log(`\n提示: 覆盖率未达 100%，检查未覆盖函数并补充断言（目标 100%）。`);
     process.exit(1);
   }
 }

@@ -8,8 +8,9 @@
 // 每层失败即退出非零；--json 输出结构化结果（CI 用）。
 
 import { execFileSync } from "node:child_process";
-import { readdirSync, existsSync } from "node:fs";
+import { readdirSync, existsSync, mkdtempSync, rmSync } from "node:fs";
 import { join, dirname } from "node:path";
+import { tmpdir } from "node:os";
 import { fileURLToPath } from "node:url";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
@@ -27,6 +28,12 @@ for (const lv of levelList) {
   }
 }
 const targets = levelList;
+let ownedDriftDir = null;
+let childEnv = process.env;
+if (process.env.DRIFT_REPORT_FILE === undefined) {
+  ownedDriftDir = mkdtempSync(join(tmpdir(), "dsh-runner-drift-"));
+  childEnv = { ...process.env, DRIFT_REPORT_FILE: join(ownedDriftDir, "drift-report.json") };
+}
 
 const results = [];
 let failed = false;
@@ -41,7 +48,12 @@ for (const lv of targets) {
   const files = readdirSync(dir).filter((f) => f.endsWith(".test.mjs") || f.endsWith(".e2e.mjs")).sort();
   for (const f of files) {
     try {
-      execFileSync("node", [join(dir, f)], { cwd: ROOT, stdio: "inherit", timeout: FILE_TIMEOUT_MS[lv] ?? 300_000 });
+      execFileSync("node", [join(dir, f)], {
+        cwd: ROOT,
+        env: childEnv,
+        stdio: "inherit",
+        timeout: FILE_TIMEOUT_MS[lv] ?? 300_000
+      });
       results.push({ level: lv, file: f, ok: true });
       if (!jsonOut) console.log(`[OK] [${lv}] ${f}`);
     } catch (e) {
@@ -69,5 +81,13 @@ try {
   execFileSync(process.execPath, [join(TESTS, "cleanup.mjs")], { cwd: ROOT, stdio: "inherit" });
 } catch {
   console.error("[cleanup] 清理脚本执行失败（不影响测试结果）");
+} finally {
+  if (ownedDriftDir) {
+    try {
+      rmSync(ownedDriftDir, { recursive: true, force: true });
+    } catch {
+      // 临时诊断目录清理失败不覆盖原测试结果。
+    }
+  }
 }
 process.exit(failed ? 1 : 0);

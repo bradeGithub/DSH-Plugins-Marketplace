@@ -1,113 +1,241 @@
 #!/usr/bin/env node
-// 真实 DSH 环境端到端（#198 增补）：启动本机 dsh web，经 HTTP 验证
-// 跨 profile 状态机——profile 切换 → 列表标注/fp 随 profile 重算 → 白名单/目录校验。
-// 这是唯一覆盖「真实 DSH 宿主加载（cosmokit）→ 端口 → 鉴权 → 注入」全链路的形态。
-//
-// 前置：dsh CLI 可用（缺失或 3080 已被实例占用 → SKIP，不打扰用户运行中的实例）。
-// 运行：node scripts/tests/e2e/real-dsh.e2e.mjs
+// 真实 DSH 宿主端到端：临时 DSH_HOME + 真实 dsh web + 真实 HTTP。
+// 安装夹具走本地 git fixture 的 URL rewrite，不接触用户 profile、installed.json 或 patch。
 
 import { execFileSync, spawn } from "node:child_process";
-import { readdirSync } from "node:fs";
-import { join } from "node:path";
-import { homedir } from "node:os";
-
-const HOST = "http://127.0.0.1:3080";
-const HEADERS = { "x-dsh-marketplace": "1" };
-
-// ---- 前置检查 ----
-let dshAvailable = true;
-try {
-  if (process.platform === "win32") {
-    execFileSync("cmd.exe", ["/c", "dsh", "--version"], { stdio: "pipe", windowsHide: true }); // .cmd 垫片 spawn EINVAL，经 cmd 包装（issue #46 同族）
-  } else {
-    execFileSync("dsh", ["--version"], { stdio: "pipe", windowsHide: true });
-  }
-} catch { dshAvailable = false; }
-if (!dshAvailable) { console.log("SKIP: dsh CLI 不可用"); process.exit(0); }
-try {
-  const probe = await fetch(`${HOST}/api/marketplace/profile`, { headers: HEADERS, signal: AbortSignal.timeout(2000) });
-  if (probe.ok) { console.log("SKIP: 3080 已有 dsh 实例在运行（请手动验证或关闭后重跑）"); process.exit(0); }
-} catch { /* 无实例：继续 */ }
-
-// ---- 启动 dsh web（Windows 经 cmd.exe /c：.cmd 垫片 spawn EINVAL，issue #46 同族）----
-let child = null;
-const cleanup = () => {
-  if (child && child.pid) {
-    try { execFileSync("taskkill", ["/T", "/F", "/PID", String(child.pid)], { stdio: "ignore", windowsHide: true }); } catch { try { child.kill(); } catch { /* 已退出 */ } }
-    child = null;
-  }
-};
-process.on("exit", cleanup);
-process.on("SIGINT", () => { cleanup(); process.exit(130); });
+import {
+  copyFileSync,
+  cpSync,
+  existsSync,
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  rmSync,
+  writeFileSync,
+} from "node:fs";
+import { dirname, join } from "node:path";
+import { tmpdir } from "node:os";
+import { fileURLToPath } from "node:url";
 
 const isWin = process.platform === "win32";
-child = isWin
-  ? spawn("cmd.exe", ["/c", "dsh", "web", "--no-open"], { stdio: "ignore", windowsHide: true, detached: true })
-  : spawn("dsh", ["web", "--no-open"], { stdio: "ignore", detached: true });
+const port = Number(process.env.DSH_E2E_PORT ?? "3098");
+const host = `http://127.0.0.1:${port}`;
+const headers = { "x-dsh-marketplace": "1" };
+const sourceRoot = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
+const requireE2e = process.env.DSH_REQUIRE_E2E === "1" || process.env.CI === "true";
 
-// ---- 等待就绪（市场插件随 profile bundles 加载，profile 路由可应答即就绪；轮询 60s）----
-let ready = false;
-for (let i = 0; i < 300 && !ready; i++) {
-  await new Promise((r) => setTimeout(r, 200));
-  try {
-    const r = await fetch(`${HOST}/api/marketplace/profile`, { headers: HEADERS, signal: AbortSignal.timeout(1500) });
-    if (r.ok) ready = true;
-  } catch { /* 未就绪 */ }
+try {
+  if (isWin) execFileSync("cmd.exe", ["/c", "dsh", "--version"], { stdio: "pipe", windowsHide: true });
+  else execFileSync("dsh", ["--version"], { stdio: "pipe", windowsHide: true });
+} catch {
+  const label = requireE2e ? "FAIL" : "SKIP";
+  console.error(`${label}: dsh CLI 不可用，无法执行真实 Host/API E2E`);
+  process.exit(requireE2e ? 1 : 0);
 }
-if (!ready) { console.log("FAIL: dsh web 60s 内未就绪（市场插件未加载？）"); cleanup(); process.exit(1); }
 
-let pass = 0, fail = 0;
-const check = (name, actual, expected) => {
+const home = mkdtempSync(join(tmpdir(), "dsh-real-closure-"));
+const profilesRoot = join(home, "profiles");
+const webProfile = join(profilesRoot, "web");
+const desktopProfile = join(profilesRoot, "desktop");
+const fixtureRoot = join(home, "fixtures");
+const gitConfig = join(home, "gitconfig");
+let child = null;
+let childExit = null;
+
+function writeProfile(name, bundles) {
+  const profile = join(profilesRoot, name);
+  mkdirSync(join(profile, "node_modules"), { recursive: true });
+  writeFileSync(join(profile, "package.json"), JSON.stringify({
+    name: `dsh-profile-${name}`,
+    private: true,
+    dependencies: name === "web"
+      ? { "dsh-plugin-marketplace": `link:${sourceRoot.replace(/\\/g, "/")}` }
+      : {},
+    dsh: { profile: { bundles } },
+  }, null, 2), "utf8");
+  writeFileSync(join(profile, "cordis.patch.yml"), "[]\n", "utf8");
+  return profile;
+}
+
+function copyMarketplaceBundle() {
+  const target = join(webProfile, "node_modules", "dsh-plugin-marketplace");
+  mkdirSync(target, { recursive: true });
+  for (const file of ["package.json", "cordis.patch.yml", "registry.json", "skills.json", "adaptor.json"]) {
+    copyFileSync(join(sourceRoot, file), join(target, file));
+  }
+  cpSync(join(sourceRoot, "lib"), join(target, "lib"), { recursive: true });
+}
+
+function makeFixture(name, files) {
+  const dir = join(fixtureRoot, name);
+  mkdirSync(dir, { recursive: true });
+  for (const [relative, content] of Object.entries(files)) {
+    const target = join(dir, relative);
+    mkdirSync(dirname(target), { recursive: true });
+    writeFileSync(target, content, "utf8");
+  }
+  execFileSync("git", ["init", "-q", dir]);
+  execFileSync("git", ["-C", dir, "config", "user.email", "real-closure@test.local"]);
+  execFileSync("git", ["-C", dir, "config", "user.name", "real-closure"]);
+  execFileSync("git", ["-C", dir, "add", "-A"]);
+  execFileSync("git", ["-C", dir, "commit", "-qm", "fixture"]);
+  execFileSync("git", ["-C", dir, "update-server-info"]);
+  return dir;
+}
+
+function addGitRewrite(owner, repo, dir) {
+  const current = existsSync(gitConfig) ? readFileSync(gitConfig, "utf8") : "[core]\n\tautocrlf = false\n\n";
+  const target = dir.replace(/\\/g, "/");
+  writeFileSync(gitConfig, `${current}[url "${target}"]\n\tinsteadOf = https://github.com/${owner}/${repo}.git\n`, "utf8");
+  process.env.GIT_CONFIG_GLOBAL = gitConfig;
+}
+
+function cleanup() {
+  if (child?.pid) {
+    if (isWin) {
+      try {
+        execFileSync("taskkill", ["/T", "/F", "/PID", String(child.pid)], { stdio: "ignore", windowsHide: true });
+      } catch {
+        try { child.kill(); } catch { /* process already exited */ }
+      }
+    } else {
+      try { process.kill(-child.pid, "SIGTERM"); } catch {
+        try { child.kill(); } catch { /* process already exited */ }
+      }
+    }
+  }
+  child = null;
+  rmSync(home, { recursive: true, force: true });
+}
+
+process.on("exit", cleanup);
+
+writeProfile("web", ["@deepseek-ai/dsh-base", "@deepseek-ai/dsh-web-app", "dsh-plugin-marketplace"]);
+writeProfile("desktop", ["@deepseek-ai/dsh-base"]);
+copyMarketplaceBundle();
+const skillRepo = "real-closure/real-skill";
+const lifecycleRepo = "real-closure/real-lifecycle";
+addGitRewrite("real-closure", "real-skill", makeFixture("real-skill", {
+  "SKILL.md": "---\nname: real-host-skill\n---\n# real host skill\n",
+}));
+addGitRewrite("real-closure", "real-lifecycle", makeFixture("real-lifecycle", {
+  "package.json": JSON.stringify({
+    name: "real-host-lifecycle",
+    version: "1.0.0",
+    dsh: {},
+    main: "index.js",
+    scripts: {
+      prepare: "echo prepare",
+      postinstall: "echo postinstall",
+      install: "echo install",
+      preinstall: "echo preinstall",
+    },
+  }),
+  "index.js": "module.exports = {};\n",
+}));
+
+let pass = 0;
+let fail = 0;
+function check(name, actual, expected) {
   const ok = JSON.stringify(actual) === JSON.stringify(expected);
-  if (ok) pass++; else fail++;
-  console.log(`${ok ? "PASS" : "FAIL"} ${name}${ok ? "" : `: got ${JSON.stringify(actual)}, want ${JSON.stringify(expected)}`}`);
-};
-const api = async (path, opts = {}) => {
-  const res = await fetch(HOST + path, {
-    headers: { ...HEADERS, ...(opts.json ? { "Content-Type": "application/json" } : {}) },
-    method: opts.method ?? "GET",
-    ...(opts.body ? { body: JSON.stringify(opts.body) } : {}),
-    // list 首拉需全量标注（12 worker stat 千级 repo），放大到 120s
-    signal: AbortSignal.timeout(opts.timeout ?? (path.startsWith("/api/marketplace/list") ? 120000 : 30000)),
+  if (ok) pass++;
+  else {
+    fail++;
+    console.log(`FAIL ${name}: got ${JSON.stringify(actual)}, want ${JSON.stringify(expected)}`);
+  }
+  if (ok) console.log(`PASS ${name}`);
+}
+
+const api = async (path, options = {}) => {
+  const response = await fetch(host + path, {
+    method: options.method ?? "GET",
+    headers: { ...headers, ...(options.body === undefined ? {} : { "Content-Type": "application/json" }) },
+    ...(options.body === undefined ? {} : { body: JSON.stringify(options.body) }),
+    signal: AbortSignal.timeout(options.timeout ?? (path.startsWith("/api/marketplace/list") ? 120000 : 30000)),
   });
   let body = null;
-  try { body = await res.json(); } catch { /* 非 JSON */ }
-  return { status: res.status, body };
+  try { body = await response.json(); } catch { /* non-JSON response */ }
+  return { status: response.status, body };
 };
 
 try {
-  // 1. profile GET 初始为 web
-  const p0 = await api("/api/marketplace/profile");
-  check("profile GET 初始为 web", [p0.status, p0.body?.profile], [200, "web"]);
-  // 2. 非法名（路径穿越形态）拒绝
-  const pBad = await api("/api/marketplace/profile", { method: "POST", json: true, body: { profile: "../evil" } });
-  check("profile POST 非法名 400", pBad.status, 400);
-  // 3. 不存在的 profile 拒绝（目录存在性校验）
-  const pGhost = await api("/api/marketplace/profile", { method: "POST", json: true, body: { profile: "ghost" } });
-  check("profile POST 不存在 400", pGhost.status, 400);
-  // 4. 列表初始响应：repos>0 + fp 存在
-  const l0 = await api("/api/marketplace/list?lang=zh-CN");
-  check("list 正常（repos>0 带 fp）", [l0.status, (l0.body?.repos ?? []).length > 0, typeof l0.body?.fp === "string"], [200, true, true]);
-
-  // 5-8. 切到备用 profile（除 web 外的真实目录）→ 列表 fp 必须变化（标注随 profile 重算）
-  const profilesRoot = join(homedir(), ".dsh", "profiles");
-  let altProfile = null;
-  try { altProfile = readdirSync(profilesRoot).find((d) => d !== "web" && d !== "node_modules"); } catch { /* 目录不可读 */ }
-  if (altProfile) {
-    const p1 = await api("/api/marketplace/profile", { method: "POST", json: true, body: { profile: altProfile } });
-    check(`profile POST → ${altProfile} 成功`, [p1.status, p1.body?.profile], [200, altProfile]);
-    const p2 = await api("/api/marketplace/profile");
-    check("profile GET 确认切换", p2.body?.profile, altProfile);
-    const l1 = await api("/api/marketplace/list?lang=zh-CN");
-    check("切换后列表 fp 变化（标注重算）", typeof l1.body?.fp === "string" && l1.body.fp !== l0.body?.fp, true);
-    const p3 = await api("/api/marketplace/profile", { method: "POST", json: true, body: { profile: "web" } });
-    check("切回 web", p3.body?.profile, "web");
-  } else {
-    console.log("SKIP: 无备用 profile，跳过切换断言");
+  try {
+    const occupied = await fetch(`${host}/`, { signal: AbortSignal.timeout(500) });
+    throw new Error(`专用端口 ${port} 已被占用（HTTP ${occupied.status}）`);
+  } catch (error) {
+    if (error?.message?.startsWith("专用端口")) throw error;
   }
+
+  const env = { ...process.env, DSH_HOME: home.replace(/\\/g, "/"), GIT_CONFIG_GLOBAL: gitConfig };
+  child = isWin
+    ? spawn("cmd.exe", ["/d", "/s", "/c", "dsh", "--profile", "web", "--no-open", "--port", String(port)], { env, stdio: "ignore", windowsHide: true })
+    : spawn("dsh", ["--profile", "web", "--no-open", "--port", String(port)], { env, stdio: "ignore", detached: true });
+  child.on("exit", (code, signal) => { childExit = { code, signal }; });
+
+  let ready = false;
+  for (let i = 0; i < 300 && !ready; i++) {
+    await new Promise((resolve) => setTimeout(resolve, 200));
+    if (childExit) throw new Error(`dsh web 启动失败: ${JSON.stringify(childExit)}`);
+    try {
+      const probe = await fetch(`${host}/api/marketplace/profile`, { headers, signal: AbortSignal.timeout(1500) });
+      if (probe.ok) ready = true;
+    } catch { /* wait for startup */ }
+  }
+  if (!ready) throw new Error("dsh web 60s 内未就绪");
+
+  const profile0 = await api("/api/marketplace/profile");
+  check("真实宿主 profile 初始为 web", [profile0.status, profile0.body?.profile], [200, "web"]);
+
+  const list0 = await api("/api/marketplace/list?lang=zh-CN");
+  check("真实宿主 list 返回仓库与指纹", [list0.status, (list0.body?.repos ?? []).length > 0, typeof list0.body?.fp === "string"], [200, true, true]);
+  const skills0 = await api("/api/marketplace/skills?page=1&pageSize=5&lang=zh-CN");
+  check("真实宿主 Skills 返回分页列表", [skills0.status, skills0.body?.page, (skills0.body?.repos ?? []).length <= 5, skills0.body?.total > 0], [200, 1, true, true]);
+
+  const skillInstall = await api("/api/marketplace/install", { method: "POST", body: { repo: skillRepo, answers: {} } });
+  check("真实宿主 skill 类型识别并安装", [skillInstall.status, skillInstall.body?.status, skillInstall.body?.type], [200, "done", "skill"]);
+  check("真实宿主 skill 文件落入临时 DSH_HOME", existsSync(join(home, "skills", "real-host-skill", "SKILL.md")), true);
+  const skillUninstall = await api("/api/marketplace/uninstall", { method: "POST", body: { repo: skillRepo } });
+  check("真实宿主 skill 卸载返回 done", [skillUninstall.status, skillUninstall.body?.status], [200, "done"]);
+  check("真实宿主 skill 卸载后文件删除", existsSync(join(home, "skills", "real-host-skill")), false);
+
+  const lifecycleFirst = await api("/api/marketplace/install", { method: "POST", body: { repo: lifecycleRepo, answers: {} } });
+  check("真实宿主 lifecycle 返回确认状态", [lifecycleFirst.status, lifecycleFirst.body?.status, lifecycleFirst.body?.type, lifecycleFirst.body?.questions?.[0]?.id], [200, "awaiting-input", "cordis-plugin", "__confirm_npm_scripts__"]);
+  check("真实宿主 lifecycle 确认顺序可见", lifecycleFirst.body?.questions?.[0]?.question?.includes("preinstall, install, postinstall, prepare"), true);
+  const lifecycleCancel = await api("/api/marketplace/install", { method: "POST", body: { repo: lifecycleRepo, answers: { __confirm_npm_scripts__: "deny" } } });
+  check("真实宿主 lifecycle cancel 返回 aborted", [lifecycleCancel.status, lifecycleCancel.body?.status], [200, "aborted"]);
+  check("真实宿主 lifecycle cancel 清理缓存", existsSync(join(home, "marketplace", "cache", "real-closure__real-lifecycle")), false);
+
+  const alternate = "desktop";
+  const marker = (list0.body?.repos ?? []).find((repo) =>
+    repo.installed !== true
+    && typeof repo.full_name === "string"
+    && typeof repo.name === "string"
+    && /^[a-zA-Z0-9][a-zA-Z0-9._~-]*$/.test(repo.name)
+  );
+  if (marker) {
+    const markerDir = join(desktopProfile, "node_modules", marker.name);
+    mkdirSync(markerDir, { recursive: true });
+    writeFileSync(join(markerDir, "package.json"), JSON.stringify({
+      name: marker.pkg_name ?? marker.name,
+      version: "1.0.0",
+      repository: marker.full_name,
+    }), "utf8");
+  }
+  const profile1 = await api("/api/marketplace/profile", { method: "POST", body: { profile: alternate } });
+  check("真实宿主 profile 切换到 desktop", [profile1.status, profile1.body?.profile], [200, alternate]);
+  const list1 = await api("/api/marketplace/list?refresh=1&lang=zh-CN");
+  const markerAfter = marker && list1.body?.repos?.find((repo) => repo.full_name === marker.full_name);
+  const markerBefore = marker && list0.body?.repos?.find((repo) => repo.full_name === marker.full_name);
+  check("真实宿主切换后 profile 标注重新计算", [markerBefore?.installed, markerAfter?.installed, list1.body?.fp !== list0.body?.fp], [false, true, true]);
+  const profile2 = await api("/api/marketplace/profile", { method: "POST", body: { profile: "web" } });
+  check("真实宿主 profile 切回 web", [profile2.status, profile2.body?.profile], [200, "web"]);
+  check("真实宿主非法 profile 仍返回 400", (await api("/api/marketplace/profile", { method: "POST", body: { profile: "../evil" } })).status, 400);
+} catch (error) {
+  fail++;
+  console.log(`FAIL real-host runtime closure: ${error?.stack ?? error}`);
 } finally {
   cleanup();
 }
 
-console.log(`\nreal-dsh e2e: ${pass} passed, ${fail} failed`);
+console.log(`\nreal-host runtime closure e2e: ${pass} passed, ${fail} failed`);
 process.exit(fail === 0 ? 0 : 1);

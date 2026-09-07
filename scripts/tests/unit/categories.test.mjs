@@ -1,13 +1,13 @@
-// 分类回归测试：audit-expected.json（120 仓库 README 审计期望 + 元数据快照）中
+// 分类回归测试：audit-expected.json（120 仓库 README 分类期望 + 元数据快照）中
 // **当前索引内**的条目按三层判定：
 //   1. 快照一致 + 分类器输出 != 期望 → 规则回归（同输入输出变了 = 分类规则被改坏）→ 硬失败；
 //   2. 快照一致 + 输出 == 期望 → 命中；
 //   3. 快照缺失 / 元数据与快照不一致 → 元数据漂移（作者改了简介/主题，分类器输入变了）→
-//      不失败，写入漂移清单（drift-report.json + warning 输出）待人工复审。
+//      不失败，写入漂移清单（drift-report.json + warning 输出）待维护者处理。
 // 规则或 CATEGORY_OVERRIDES 改动后跑本测试，防止分类回归；
-// 作者改简介导致分类漂移**不再阻塞 CI**——索引构建继续，漂移由维护者定期复审
-// （分类器被误导 → 加 CATEGORY_OVERRIDES；审计过时 → 更新期望与快照）。
-// 注意：registry.json 由 CI 定期重建（搜索爬取偶有遗漏），审计条目暂缺时跳过并警告而非失败——
+// 作者改简介导致分类漂移**不再阻塞 CI**——索引构建继续，漂移由维护者定期处理
+// （分类器被误导 → 加 CATEGORY_OVERRIDES；分类期望过时 → 更新期望与快照）。
+// 注意：registry.json 由 CI 定期重建（搜索爬取偶有遗漏），分类条目暂缺时跳过并警告而非失败——
 // 索引成员归属是 CI 的职责，本测试只守护「分类规则」这一件事。
 // 用法：node scripts/tests/unit/categories.test.mjs
 
@@ -19,6 +19,7 @@ import { classifyRepo, applyInstallability, applyPlainPkgFallback } from "../../
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
 const registry = JSON.parse(readFileSync(join(ROOT, "registry.json"), "utf8"));
 const audit = JSON.parse(readFileSync(join(ROOT, "audit-expected.json"), "utf8"));
+const driftReportFile = process.env.DRIFT_REPORT_FILE ?? join(ROOT, "drift-report.json");
 
 const byName = new Map(registry.repos.map((r) => [r.full_name, r]));
 const entries = Object.entries(audit);
@@ -45,14 +46,14 @@ for (const [fullName, entry] of entries) {
   }
   const actual = classifyRepo(repo);
   if (snapshot === null) {
-    // 无快照（迁移时不在索引 / desc 为 null 的条目）：输出与期望一致 → 命中（审计未过时）；
+    // 无快照（索引未包含时 / desc 为 null 的条目）：输出与期望一致 → 命中（分类期望未过时）；
     // 不一致 → 无法区分回归与漂移，按漂移处理（不硬失败），提示维护者补快照。
     if (actual === expected) {
       pass++;
       continue;
     }
     drifted++;
-    drift.push({ full_name: fullName, expected, actual, note: "快照缺失（迁移时不在索引），请复审后补快照或更新期望" });
+    drift.push({ full_name: fullName, expected, actual, note: "快照缺失（索引未包含时），请复审后补快照或更新期望" });
     console.warn(`  漂移（快照缺失）: ${fullName}: 实际=${actual} 期望=${expected}`);
     continue;
   }
@@ -70,13 +71,13 @@ for (const [fullName, entry] of entries) {
   else failed.push(`${fullName}: 实际=${actual} 期望=${expected}`);
 }
 
-// 漂移清单落盘（诊断产物，供维护者定期复审；CI 构建目录同样生成，日志里亦有完整 warning）。
-// 0 漂移时移除旧报告，避免过期信息误导复审。
+// 漂移清单落盘（诊断产物，供维护者定期处理；CI 构建目录同样生成，日志里亦有完整 warning）。
+// 0 漂移时移除旧报告，避免过期信息误导维护判断。
 try {
   if (drift.length > 0) {
-    writeFileSync(join(ROOT, "drift-report.json"), JSON.stringify({ generated_at: new Date().toISOString(), count: drift.length, items: drift }, null, 2) + "\n", "utf8");
+    writeFileSync(driftReportFile, JSON.stringify({ generated_at: new Date().toISOString(), count: drift.length, items: drift }, null, 2) + "\n", "utf8");
   } else {
-    rmSync(join(ROOT, "drift-report.json"), { force: true });
+    rmSync(driftReportFile, { force: true });
   }
 } catch { /* 报告写入失败不影响判定 */ }
 
@@ -85,7 +86,7 @@ if (failed.length > 0) {
   for (const line of failed) console.error("  " + line);
   process.exit(1);
 }
-console.log(`PASS 分类审计: ${pass}/${entries.length} 命中（${skipped} 条暂缺跳过，${drifted} 条漂移待复审）`);
+console.log(`PASS 分类回归: ${pass}/${entries.length} 命中（${skipped} 条暂缺跳过，${drifted} 条漂移待复审）`);
 
 // 可安装性盖章回归：pkg-plain → non-plugin、manual → manual、其余不写字段、报告缺失条目清旧章。
 {

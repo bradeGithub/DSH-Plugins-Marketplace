@@ -645,12 +645,12 @@ runProperty("dedupeReposByPkgName", 7, 250, (rng, n) => {
         }
       }
     }
-    // 默认 isInstalled 参数（读模块内存 map，空环境 → 全部未安装）：不抛
+    // 显式注入安装判定，保持 domain 不依赖模块内状态
     if (examples.length === 0) {
       try {
-        lib.dedupeReposByPkgName([{ full_name: "a/b", pkg_name: null, stargazers_count: 1 }]);
+        lib.dedupeReposByPkgName([{ full_name: "a/b", pkg_name: null, stargazers_count: 1 }], () => false);
       } catch (error) {
-        examples.push({ iter: "fixed", detail: `默认参数调用抛出异常: ${error?.message ?? error}` });
+        examples.push({ iter: "fixed", detail: `显式安装判定调用抛出异常: ${error?.message ?? error}` });
       }
     }
     return { ok: examples.length === 0, examples: examples.slice(0, 4) };
