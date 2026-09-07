@@ -1,125 +1,20 @@
 {
-  "generated_at": "2026-09-07T09:59:24.531Z",
-  "count": 17,
+  "generated_at": "2026-09-07T15:46:16.575Z",
+  "count": 2,
   "items": [
     {
-      "full_name": "Cerbur/clutch-dsh",
-      "previous": "other",
-      "current": "coding",
-      "desc_now": "Open-source DSH plugins for DeepSeek Harness：Git Worktree session management（会话管理）、Session Title（会话标题）与 Fireworks（庆祝特效），面向 AI coding workflows。",
-      "desc_prev": "Open-source DSH plugins for DeepSeek Harness, clutch-dsh-worktree."
-    },
-    {
-      "full_name": "jonah791/dsh-agent-compact",
-      "previous": "model",
-      "current": "conversation",
-      "desc_now": "Agent-driven compaction for DeepSeek Harness: the agent summarizes its own conversation (KV-cache friendly, no giant rep",
-      "desc_prev": "Agent-driven compaction for DeepSeek Harness: the agent summarizes its own conversation (KV-cache friendly, no giant replay). Verified in production at ~460k-token sessions."
-    },
-    {
-      "full_name": "jonah791/dsh-agent-context",
-      "previous": "agent",
-      "current": "tool",
-      "desc_now": "上下文治理一体化插件：/context 命令 + ctx.contextMeter 服务 + 剪枝工具（prune_candidates/apply/expand/guard/stats，合并自 dsh-agent-context-prun",
-      "desc_prev": "DSH plugin: dsh-agent-context"
-    },
-    {
-      "full_name": "jonah791/dsh-agent-skill-forge",
-      "previous": "agent",
-      "current": "resource",
-      "desc_now": "被动技能熔炉（Trace2Skill 思想落地）：后台采集会话轨迹索引（零 LLM 成本）+ 信号送达；蒸馏/合并/剪枝决策归爱丽丝；技能输出为 SKILL.md（DSH 技能目录原生可加载）",
-      "desc_prev": "DSH self-built plugin"
-    },
-    {
-      "full_name": "jonah791/dsh-agent-taskboard",
-      "previous": "agent",
-      "current": "notify",
-      "desc_now": "任务板插件：主人/任何 agent 可发布任务（异步队列），宿主 agent 空闲时自主领取并完成（不打断会话）。含发布/列表/领取/完成/状态工具与 JSON 持久化 + 新任务排队通知。",
-      "desc_prev": "DSH self-built plugin"
-    },
-    {
-      "full_name": "jonah791/dsh-agent-watch",
-      "previous": "agent",
-      "current": "tool",
-      "desc_now": "哨卫插件（dsh-agent-watch）：跨工作区通用的 DSH Web 守护。监听全局哨兵文件（DSH_HOME/.hot-reload-flag，JSON {workspace, sessionId}），触发后沙盒预检 → 重启 we",
-      "desc_prev": "DSH self-built plugin"
-    },
-    {
-      "full_name": "jonah791/dsh-growth-profile",
-      "previous": "tool",
-      "current": "resource",
-      "desc_now": "养成档案：聚合当前状态/技能/里程碑/周目/主人反馈/生命核心为自我呈现视图（30s 实时轮询 + 精致面板；只读，被动哲学）",
-      "desc_prev": "DSH self-built plugin"
-    },
-    {
-      "full_name": "jonah791/dsh-wq-bridge",
-      "previous": "other",
-      "current": "coding",
-      "desc_now": "WorldQuant BRAIN 平台桥（Python Bridge 模式）：TS 壳管理 Python 子进程（stdio JSON-RPC），向 DSH 工具面暴露 AlphaFactory 平台能力",
-      "desc_prev": "DSH self-built plugin"
-    },
-    {
-      "full_name": "jonah791/dsh-agent-plugin-manager",
-      "previous": "agent",
-      "current": "resource",
-      "desc_now": "插件管理器：插件档案库（清单/用途/工具/配置认知）+ 生命周期管理（创建/挂载/启停/卸载/配置），host 工具面 + 官方设置页「插件管理」tab。",
-      "desc_prev": "DSH self-built plugin"
-    },
-    {
-      "full_name": "jonah791/dsh-agent-webops",
-      "previous": "agent",
-      "current": "vision",
-      "desc_now": "浏览器自主操作插件：爱丽丝经 headless Chrome (CDP) 自主打开页面/点击/输入/读取/截图——GUI 验证与网页操作全自主，不依赖主人手动操作。",
-      "desc_prev": "DSH self-built plugin"
-    },
-    {
-      "full_name": "jonah791/dsh-compact-provider",
-      "previous": "other",
-      "current": "tool",
-      "desc_now": "压缩一体化插件：AgentCompactEngine 挂载 compaction 服务 + session_compact 工具原语（爱丽丝自主决策压缩）",
-      "desc_prev": null
-    },
-    {
-      "full_name": "jonah791/dsh-agent-llm-retry",
-      "previous": "agent",
-      "current": "tool",
-      "desc_now": "LLM 运维一体化插件：模型请求自动多次重试（策略升级 maxRetries 20）+ Token 预算跟踪（token_budget_* 工具，合并自 dsh-agent-token-budget）",
-      "desc_prev": null
-    },
-    {
-      "full_name": "jonah791/dsh-tool-wsl",
-      "previous": "tool",
-      "current": "coding",
-      "desc_now": "WSL 命令行工具：在 WSL（Ubuntu）环境执行 bash 命令（wsl.exe -d <distro> -- bash -c），Windows 上取代 dsh-tool-bash；v0.2 命令走 base64 通道，v0.3 新增",
-      "desc_prev": null
-    },
-    {
-      "full_name": "jonah791/dsh-clyan",
-      "previous": "other",
-      "current": "tool",
-      "desc_now": "封装 clyan CLI（AI 驱动磁盘清理）为 DSH 工具面：健康检查/扫描/回收计划/清理/自动清理/历史/诊断/撤销",
-      "desc_prev": null
-    },
-    {
-      "full_name": "jonah791/dsh-session-eject",
-      "previous": "other",
+      "full_name": "uckkk/dsh-valley-meter",
+      "previous": "web-ui",
       "current": "model",
-      "desc_now": "会话应急删帧：删除最近 N 帧（step 粒度）事件并从上下文剔除，支持审核错误自动触发",
-      "desc_prev": null
+      "desc_now": "Minimal peak/valley meter for DeepSeek Harness: balance badge above the composer + hover 24h peak/valley timeline, 5s live balance refresh, independent spend metering, 10 color presets. 峰谷电表：余额徽章 + 悬停峰谷时间轴。",
+      "desc_prev": "Minimal peak/valley electricity-price countdown widget for DeepSeek Harness: live off-peak countdown & period, official account balance, today's spend, configurable colors, minimal/detailed styles."
     },
     {
-      "full_name": "jonah791/dsh-anima-tags",
-      "previous": "other",
+      "full_name": "gcry13067381632-jpg/dsh-qqbot",
+      "previous": "resource",
       "current": "tool",
-      "desc_now": "封装 danbooru-tags.exe 为 DSH 工具面（硬锚点校验/随机抽卡/批量），支撑 Anima 生图 prompt 组装",
-      "desc_prev": null
-    },
-    {
-      "full_name": "taontech/dsh-git",
-      "previous": "other",
-      "current": "web-ui",
-      "desc_now": "一个 Git tab，展示当前 项目路径的 Git 信息：仓库概况、文件修改状态、提交历史、分支与提交图、 贡献日历（最近一年每日提交热力图）",
-      "desc_prev": null
+      "desc_now": "DSH 接入官方 QQ 机器人：适合qq群 · 富媒体收发 · 表情包图库 · 多预设多开 · 定时唤醒 · 远程审批 · 自主沉默",
+      "desc_prev": "DSH 接入官方 QQ 机器人增：富媒体收发 · 表情包图库 · 多预设多开 · 定时唤醒 · 远程审批 · 延迟聚合回复 · 自主静默or回复"
     }
   ]
 }
