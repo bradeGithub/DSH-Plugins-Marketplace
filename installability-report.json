@@ -1,17 +1,17 @@
 {
-  "generated_at": "2026-09-06T20:30:16.716Z",
+  "generated_at": "2026-09-07T00:00:40.252Z",
   "counts": {
-    "bundle-plugin": 2994,
+    "bundle-plugin": 2996,
     "cordis-plugin": 7845,
     "pkg-plain": 1062,
     "manual": 750,
     "script": 235,
     "skill": 381,
-    "multi-plugin": 431,
+    "multi-plugin": 432,
     "gone": 57,
     "agent-preset": 51,
     "unknown": 55,
-    "empty": 14
+    "empty": 15
   },
   "repos": [
     {
@@ -14088,6 +14088,10 @@
     },
     {
       "full_name": "GooDAnDReaDY/dsh-russian-lang",
+      "verdict": "bundle-plugin"
+    },
+    {
+      "full_name": "GooDAnDReaDY/dsh-session-control",
       "verdict": "bundle-plugin"
     },
     {
@@ -30059,6 +30063,10 @@
       "verdict": "manual"
     },
     {
+      "full_name": "pakgrou-porg/yardmaster",
+      "verdict": "multi-plugin"
+    },
+    {
       "full_name": "PAKIKNOWLEDGE/dsh-auto-classifier",
       "verdict": "cordis-plugin"
     },
@@ -35115,6 +35123,10 @@
       "verdict": "cordis-plugin"
     },
     {
+      "full_name": "shaomingbo/dsh-codex-compaction",
+      "verdict": "empty"
+    },
+    {
       "full_name": "shaomingbo/dsh-file-picker",
       "verdict": "cordis-plugin"
     },
@@ -39961,6 +39973,10 @@
     {
       "full_name": "TYEclipse/dsh-plugins-hub",
       "verdict": "manual"
+    },
+    {
+      "full_name": "TYEclipse/dsh-probstat",
+      "verdict": "bundle-plugin"
     },
     {
       "full_name": "TYEclipse/dsh-semver",
