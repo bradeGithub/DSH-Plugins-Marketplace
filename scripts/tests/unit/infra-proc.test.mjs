@@ -1,5 +1,6 @@
 // infra/proc.js 直接导入测试：先锁定子进程适配边界，再迁移调用点。
 import { createProc, MAX_EXEC_BUFFER } from "../../../lib/infra/proc.js";
+import { join } from "node:path";
 
 let pass = 0, fail = 0;
 function check(name, actual, expected) {
@@ -179,8 +180,8 @@ check("MAX_EXEC_BUFFER 为 32MB", MAX_EXEC_BUFFER, 32 * 1024 * 1024);
     process.env.APPDATA = "C:/dynamic-two";
     await proc.runDsh(["plugin", "list"]);
     check("runDsh 动态读取 APPDATA", calls.map((call) => call.args[1]), [
-      "C:\\dynamic-one\\npm\\dsh.cmd",
-      "C:\\dynamic-two\\npm\\dsh.cmd",
+      join("C:/dynamic-one", "npm", "dsh.cmd"),
+      join("C:/dynamic-two", "npm", "dsh.cmd"),
     ]);
   } finally {
     if (savedAppData === undefined) delete process.env.APPDATA;
