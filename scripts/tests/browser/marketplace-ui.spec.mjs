@@ -1,5 +1,5 @@
 import { expect, test as base } from "@playwright/test";
-import { createDshHost, openMarketplace } from "./fixtures/dsh-host.mjs";
+import { createDshHost, openMarketplace, dismissOnboarding } from "./fixtures/dsh-host.mjs";
 import { createMarketplaceApi } from "./fixtures/marketplace-api.mjs";
 
 const test = base.extend({
@@ -137,6 +137,7 @@ test.describe("DSH 插件市场 frontend browser contract", () => {
     await expect(profile).toHaveValue("desktop");
 
     await page.reload({ waitUntil: "domcontentloaded" });
+    await dismissOnboarding(page);
     await page.getByRole("button", { name: "设置", exact: true }).click();
     await page.getByText("DSH插件市场", { exact: true }).last().click();
     await expect(page.getByRole("heading", { name: "DSH插件市场", exact: true }).last()).toBeVisible();

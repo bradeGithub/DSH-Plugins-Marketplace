@@ -154,8 +154,7 @@ export async function createDshHost() {
   };
 }
 
-export async function openMarketplace(page, authUrl) {
-  await page.goto(authUrl, { waitUntil: "domcontentloaded" });
+export async function dismissOnboarding(page) {
   // 关闭首次启动的引导对话框：0.1.1 是「继续」，0.1.2 是「稍后配置」（API Key 引导）。
   const continueButton = page.getByRole("button", { name: "继续", exact: true });
   const laterButton = page.getByRole("button", { name: "稍后配置", exact: true });
@@ -171,6 +170,11 @@ export async function openMarketplace(page, authUrl) {
   } catch (error) {
     if (!String(error?.message ?? error).includes("Timeout")) throw error;
   }
+}
+
+export async function openMarketplace(page, authUrl) {
+  await page.goto(authUrl, { waitUntil: "domcontentloaded" });
+  await dismissOnboarding(page);
   const settings = page.getByRole("button", { name: "设置", exact: true });
   await settings.waitFor({ state: "visible", timeout: 30_000 });
   await settings.click();
