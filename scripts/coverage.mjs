@@ -96,6 +96,9 @@ const EXEMPT_LIB_MARKERS = [
   // 按回调特征精确豁免：npm install 后包目录查找，命中/未命中都在深集成路径内）
   "(e) => e.isDirectory() && e.name === bare",
   "(e) => e.isDirectory() && e.name === name",
+  // uninstall 降级路径的 writeProfileManifest 失败兜底（manifest 已读成功，写盘失败为
+  // 极小概率 IO 事件；Linux V8 将其计为独立未覆盖函数，Windows 合并进父函数）
+  "writeProfileManifest(manifest, legacyManifest).catch(() => {})",
 ];
 
 /** 计算 lib/ 下各文件豁免函数的起始偏移（函数名 + 源码特征），按文件分 Map。 */
