@@ -267,6 +267,8 @@ function mockFetchCapture(payload, status = 200) {
   check("分类 git clone 网络 en", lib.classifyInstallFailure("fatal: unable to access: Couldn't connect to server", "en").includes("proxy"), true);
   check("分类 无匹配返回 null", lib.classifyInstallFailure("just a normal error"), null);
   check("分类 en 语言", lib.classifyInstallFailure("integrity checksum failed", "en").includes("integrity"), true);
+  check("分类 权限/占用", lib.classifyInstallFailure("npm ERR! code EACCES\nnpm ERR! syscall mkdir", "zh").includes("权限"), true);
+  check("分类 权限/占用 en", lib.classifyInstallFailure("EPERM: operation not permitted, unlink", "en").includes("Permission"), true);
 
   // ---- sanitizeLog（日志脱敏）----
   check("脱敏 Windows 主目录", lib.sanitizeLog("C:\\Users\\wyzin\\.dsh\\marketplace\\cache\\a"), "~\\<user>\\.dsh\\marketplace\\cache\\a");
