@@ -113,12 +113,17 @@ export async function createDshHost() {
   const port = await freePort();
   const url = `http://127.0.0.1:${port}`;
   const invocation = dshInvocation(["--profile", "web", "--no-open", "--port", String(port)]);
+  // 捕获子进程 stdout：DSH 0.1.2+ 在启动时打印带 `?token=` 的鉴权 URL，
+  // 根路径无 token 时返回 401（0.1.1 及更早直接服务裸 URL）。解析该 URL 供页面导航。
+  let bootOutput = "";
   const child = spawn(invocation.command, invocation.args, {
     env: { ...process.env, DSH_HOME: home.replace(/\\/g, "/") },
-    stdio: "ignore",
+    stdio: ["ignore", "pipe", "pipe"],
     windowsHide: true,
     detached: !isWin
   });
+  child.stdout?.on("data", (chunk) => { bootOutput += chunk.toString(); });
+  child.stderr?.on("data", (chunk) => { bootOutput += chunk.toString(); });
   try {
     await waitForHost(url, child);
   } catch (error) {
@@ -126,12 +131,20 @@ export async function createDshHost() {
     rmSync(home, { recursive: true, force: true });
     throw error;
   }
+  // 等待 stdout 中的鉴权 URL 落盘（0.1.2 在启动时打印；0.1.1 无 token 则跳过）。
+  const tokenDeadline = Date.now() + 5_000;
+  while (Date.now() < tokenDeadline && !/[?&]token=/.test(bootOutput)) {
+    await wait(50);
+  }
+  const tokenMatch = bootOutput.match(/[?&]token=([A-Za-z0-9_-]+)/);
+  const authUrl = tokenMatch ? `${url}/?token=${tokenMatch[1]}` : url;
   let closed = false;
   return {
     home,
     webProfile,
     port,
     url,
+    authUrl,
     async close() {
       if (closed) return;
       closed = true;
@@ -141,8 +154,8 @@ export async function createDshHost() {
   };
 }
 
-export async function openMarketplace(page, url) {
-  await page.goto(url, { waitUntil: "domcontentloaded" });
+export async function openMarketplace(page, authUrl) {
+  await page.goto(authUrl, { waitUntil: "domcontentloaded" });
   const continueButton = page.getByRole("button", { name: "继续", exact: true });
   try {
     await continueButton.waitFor({ state: "visible", timeout: 10_000 });

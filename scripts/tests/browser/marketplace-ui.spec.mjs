@@ -31,7 +31,7 @@ const test = base.extend({
 test.describe("DSH 插件市场 frontend browser contract", () => {
   test("characterize: 挂载市场并呈现安装状态", async ({ page, host, marketplaceApi }) => {
     marketplaceApi.setVariant("list", "legacy");
-    await openMarketplace(page, host.url);
+    await openMarketplace(page, host.authUrl);
 
     await expect(page.getByRole("heading", { name: "DSH插件市场", exact: true }).last()).toBeVisible();
     await expect(page.getByRole("textbox", { name: "web", exact: true })).toHaveValue("web");
@@ -49,7 +49,7 @@ test.describe("DSH 插件市场 frontend browser contract", () => {
   test("characterize: legacy 安装响应仍完成安装", async ({ page, host, marketplaceApi }) => {
     marketplaceApi.setVariant("list", "legacy");
     marketplaceApi.setVariant("install", "legacy");
-    await openMarketplace(page, host.url);
+    await openMarketplace(page, host.authUrl);
 
     await page.getByRole("button", { name: "安装", exact: true }).click();
     await expect(page.getByText("fixture lifecycle confirmation", { exact: true })).toBeVisible();
@@ -59,7 +59,7 @@ test.describe("DSH 插件市场 frontend browser contract", () => {
   });
 
   test("characterize: 在插件与 Skills 标签间切换", async ({ page, host, marketplaceApi }) => {
-    await openMarketplace(page, host.url);
+    await openMarketplace(page, host.authUrl);
 
     await page.getByRole("button", { name: "通用 Skills", exact: true }).click();
     await expect(page.getByRole("heading", { name: "通用 Skills", exact: true })).toBeVisible();
@@ -77,7 +77,7 @@ test.describe("DSH 插件市场 frontend browser contract", () => {
   test("characterize: 搜索空结果并从失败状态重试", async ({ page, host, marketplaceApi }) => {
     marketplaceApi.setVariant("list", "forward");
     marketplaceApi.failNext("list");
-    await openMarketplace(page, host.url);
+    await openMarketplace(page, host.authUrl);
 
     await expect(page.getByText("加载失败: fixture list unavailable", { exact: true })).toBeVisible();
     await page.getByRole("button", { name: "重试", exact: true }).click();
@@ -94,7 +94,7 @@ test.describe("DSH 插件市场 frontend browser contract", () => {
 
   test("characterize: 生命周期确认拒绝显示取消结果", async ({ page, host, marketplaceApi }) => {
     marketplaceApi.setVariant("install", "forward");
-    await openMarketplace(page, host.url);
+    await openMarketplace(page, host.authUrl);
 
     await page.getByRole("button", { name: "安装", exact: true }).click();
     await expect(page.getByText("fixture lifecycle confirmation", { exact: true })).toBeVisible();
@@ -110,7 +110,7 @@ test.describe("DSH 插件市场 frontend browser contract", () => {
 
   test("characterize: 网络中断后重试恢复列表", async ({ page, host, marketplaceApi }) => {
     marketplaceApi.abortNext("list");
-    await openMarketplace(page, host.url);
+    await openMarketplace(page, host.authUrl);
 
     await expect(page.getByText(/加载失败/)).toBeVisible();
     await page.getByRole("button", { name: "重试", exact: true }).click();
@@ -119,7 +119,7 @@ test.describe("DSH 插件市场 frontend browser contract", () => {
 
   test("characterize: 刷新请求进行中按钮禁用", async ({ page, host, marketplaceApi }) => {
     marketplaceApi.hangNext("list");
-    await openMarketplace(page, host.url);
+    await openMarketplace(page, host.authUrl);
 
     const refresh = page.getByRole("button", { name: "刷新", exact: true });
     await expect(refresh).toBeVisible();
@@ -128,7 +128,7 @@ test.describe("DSH 插件市场 frontend browser contract", () => {
   });
 
   test("characterize: 保存 profile 后 reload 仍重新挂载", async ({ page, host, marketplaceApi }) => {
-    await openMarketplace(page, host.url);
+    await openMarketplace(page, host.authUrl);
 
     const profile = page.getByRole("textbox", { name: "web", exact: true });
     await profile.fill("desktop");
