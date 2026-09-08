@@ -1,41 +1,20 @@
 {
-  "generated_at": "2026-09-08T03:59:31.471Z",
-  "count": 5,
+  "generated_at": "2026-09-08T09:43:28.648Z",
+  "count": 2,
   "items": [
     {
-      "full_name": "ppy-web/dsh-plugin-xiaomi-mimo-tts",
-      "previous": "tool",
-      "current": "resource",
-      "desc_now": "给DSH接入免费的 Xiaomi MiMo TTS API，支持使用预置/自定义/浏览器内置声音朗读正文",
-      "desc_prev": "给DSH接入免费的 Xiaomi MiMo TTS API，支持使用预置/自定义/浏览器内置声音朗读正文"
-    },
-    {
-      "full_name": "duhu2000/dsh-data-cleaning-agent",
-      "previous": "agent",
-      "current": "document",
-      "desc_now": "Data cleaning and data enrichment for CSV/XLSX/JSON enterprise lists in DeepSeek Harness, including spreadsheet cleaning, deduplication, profiling, optional Qichacha MCP and exports.",
-      "desc_prev": "Data cleaning and enterprise enrichment agent plugin for DeepSeek Harness."
-    },
-    {
-      "full_name": "kaixinguo360/dsh-script-manager",
-      "previous": "model",
+      "full_name": "Blackman99/codsh",
+      "previous": "coding",
       "current": "tool",
-      "desc_now": "DSH 自定义操作脚本管理器，将验证过的操作流程固化为可复用的脚本，用 /script 直接运行或注册为 Agent 工具，支持参数化脚本、执行预期声明、执行历史记录。",
-      "desc_prev": "DSH 自定义操作脚本管理插件，将验证过的操作流程固化为可复用脚本，不耗 token、支持参数化和执行验收。"
+      "desc_now": "You deserve a better cli",
+      "desc_prev": "One sentence to shipped — a terminal coding agent built around /ship, on the DeepSeek Harness"
     },
     {
-      "full_name": "duhu2000/dsh-pre-duediligence",
-      "previous": "other",
-      "current": "tool",
-      "desc_now": "Pre-visit due diligence and company research in DeepSeek Harness for customer background checks and risk briefs, with Qichacha MCP tool-call budget approval and entity confirmation.",
-      "desc_prev": "Pre Due Diligence"
-    },
-    {
-      "full_name": "hellogit2021/avoid-ai-writing-cn",
+      "full_name": "Asuna486-desuwa/dsh-safety-net",
       "previous": "tool",
-      "current": "resource",
-      "desc_now": "知乎\"去AI味写作技巧\"社区免费提供：中文写作去 AI 味插件。说\"去掉AI味\"即重写，说\"写的不错\"自动学习新 AI 词。",
-      "desc_prev": "知乎\"去AI味写作技巧\"社区免费提供：中文写作去 AI 味插件（AI-isms / AI writing / humanize）。说\"去掉AI味\"即重写，说\"写的不错\"自动学习新 AI 词。安装：dsh plugin --profile web add github:hellogit2021/avoid-ai-writing-cn"
+      "current": "coding",
+      "desc_now": "给自主运行的 Coding Agent 加的自我保护护栏：拦截对受保护路径的写入、破坏性操作前自动备份、CLI 自恢复命令",
+      "desc_prev": "Self-protection guardrails for the DeepSeek Harness: protected-path interception, backup-before-destroy, CLI self-recovery commands, and strict sandbox defaulting"
     }
   ]
 }
