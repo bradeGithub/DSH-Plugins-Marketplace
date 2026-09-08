@@ -13,6 +13,7 @@ const FRAGMENT_FILES = [
   "02-i18n.fragment",
   "03-theme.fragment",
   "04-components.fragment",
+  "05a-logic.fragment",
   "05-tabs.fragment",
   "06-marketplace.fragment",
   "07-entry.fragment",
