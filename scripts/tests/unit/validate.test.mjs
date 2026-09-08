@@ -1,4 +1,4 @@
-import { extractSubject, validateSubject, COMMIT_TYPES, SYNTAX_CHECK_FILES, hasEmoji, parseHookConfig, LEVELS, DEFAULT_HOOK_CONFIG, loadHookConfigFromText, detectSecret } from "../../hooks/validate.mjs";
+import { extractSubject, validateSubject, COMMIT_TYPES, SYNTAX_CHECK_FILES, hasEmoji, parseHookConfig, LEVELS, DEFAULT_HOOK_CONFIG, loadHookConfigFromText, detectSecret, classifyPrecommitTier } from "../../hooks/validate.mjs";
 
 let pass = 0, fail = 0;
 function check(name, actual, expected) {
@@ -120,6 +120,28 @@ check("parseHookConfig secretLevel", secCfg.secretLevel, "warn");
 check("parseHookConfig secretExclusions 列表", secCfg.secretExclusions.includes(".env.example") && secCfg.secretExclusions.includes("tests/fixtures"), true);
 check("parseHookConfig 默认 secretLevel", parseHookConfig("").secretLevel, "error");
 check("parseHookConfig 默认 secretExclusions 空", parseHookConfig("").secretExclusions.length, 0);
+
+// ---- 配置: precommitStrategy ----
+check("parseHookConfig precommitStrategy 默认 auto", DEFAULT_HOOK_CONFIG.precommitStrategy, "auto");
+check("parseHookConfig precommitStrategy full", parseHookConfig("precommitStrategy=full").precommitStrategy, "full");
+check("parseHookConfig precommitStrategy 非法值保持 auto", parseHookConfig("precommitStrategy=bogus").precommitStrategy, "auto");
+
+// ---- 提交内容感知分级（classifyPrecommitTier）----
+// 白名单快路径
+check("docs-only 跳过测试", classifyPrecommitTier(["docs/GIT_HOOKS.md"]).runTests, "none");
+check("tests-only 跑 unit 快层", classifyPrecommitTier(["scripts/tests/unit/lib-pure.test.mjs"]).runTests, "unit");
+check("docs+tests 混合跑 unit", classifyPrecommitTier(["docs/x.md", "scripts/tests/unit/y.test.mjs"]).runTests, "unit");
+check("generated registry 跳过测试", classifyPrecommitTier(["registry.json"]).runTests, "none");
+// 核心改动全量
+check("lib 改动全量快速门", classifyPrecommitTier(["lib/index.js"]).runTests, "unit,integration");
+check("scripts 非测试全量", classifyPrecommitTier(["scripts/toc.mjs"]).runTests, "unit,integration");
+check("hook 自改全量", classifyPrecommitTier([".hooksrc"]).runTests, "unit,integration");
+check("unknown 文件回退全量", classifyPrecommitTier(["unknown.txt"]).runTests, "unit,integration");
+check("空改动集回退全量", classifyPrecommitTier([]).runTests, "unit,integration");
+// 保守兜底：非测试 scripts 混入即全量（不因改辅助文件漏跑集成）
+check("scripts 非测试混入回退全量", classifyPrecommitTier(["docs/x.md", "scripts/build.mjs"]).runTests, "unit,integration");
+// full 策略恒全量
+check("full 策略 docs 也全量", classifyPrecommitTier(["docs/x.md"], { precommitStrategy: "full" }).runTests, "unit,integration");
 
 
 console.log(`\n${pass} passed, ${fail} failed`);

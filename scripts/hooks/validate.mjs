@@ -120,6 +120,7 @@ export const DEFAULT_HOOK_CONFIG = {
   secretLevel: "error",            // error | warn | off（密钥扫描）
   secretExclusions: [],            // 排除路径片段（如 ".env.example"）
   tocExclude: [],                  // TOC 自动扫描追加排除片段（逗号分隔）
+  precommitStrategy: "auto",       // auto | full（按 staged 改动分级；full 恒全量快速门）
 };
 
 /**
@@ -193,6 +194,8 @@ export function parseHookConfig(text) {
     } else if (key === "tocExclude") {
       // 逗号分隔的路径片段（TOC 自动扫描排除）
       cfg.tocExclude = value.split(",").map((s) => s.trim()).filter(Boolean);
+    } else if (key === "precommitStrategy") {
+      if (value === "full" || value === "auto") cfg.precommitStrategy = value;
     }
   }
   return cfg;
@@ -204,4 +207,43 @@ export function parseHookConfig(text) {
  */
 export function loadHookConfigFromText(text) {
   return parseHookConfig(text);
+}
+
+/**
+ * 提交内容感知的 pre-commit 分级运行判定（纯函数，可单测）。
+ * 输入 staged 文件列表，返回本次 pre-commit 应运行的检查项子集。
+ *
+ * fail-safe 原则：只对明确且保守的「低成本区域」降级（docs-only / tests-only）；
+ * 任何命中核心（lib/scripts）、hook 自身改动、或无法判定的情况一律回退全量快速门，
+ * 绝不因分级漏跑集成测试。CI 不降级（调用方在 CI 下强制 full）。
+ *
+ * @param {string[]} files staged 文件名列表
+ * @param {{ precommitStrategy: string }} [cfg] .hooksrc 配置
+ * @returns {{ runTests: string, tier: string }}
+ *   runTests: "none"（docs/generated，跳过测试）| "unit"（tests-only 快层）
+ *            | "unit,integration"（核心，全量快速门）
+ *   tier: 判定标签（docs-only / tests-only / docs+tests / core / hook / generated / empty / full）
+ */
+export function classifyPrecommitTier(files, cfg = {}) {
+  if (cfg.precommitStrategy === "full") return { runTests: "unit,integration", tier: "full" };
+  const list = Array.isArray(files) ? files.filter((s) => typeof s === "string") : [];
+  if (list.length === 0) return { runTests: "unit,integration", tier: "empty" };
+
+  const isTest = (f) => /\.(test|e2e)\.mjs$/.test(f) || /\.spec\.\w+$/.test(f) || f.startsWith("scripts/tests/");
+  const isDoc = (f) => f.endsWith(".md") || f.startsWith("docs/");
+  // hook 自身改动：分级逻辑/配置变化最可能破坏门，必须全量
+  const isHook = (f) => /scripts\/hooks\//.test(f) || /install-hooks\./.test(f) || f === ".hooksrc";
+  // CI 自动化生成的注册表/索引产物：走增量密钥扫描 + toc，不触发集成
+  const isGenerated = (f) => /^registry\.json$/.test(f) || /^skills\.json$/.test(f) || /\.gzip$/.test(f);
+
+  if (list.every(isHook)) return { runTests: "unit,integration", tier: "hook" };
+  if (list.every(isDoc)) return { runTests: "none", tier: "docs-only" };
+  // tests-only 保留一层 unit 快测（秒级覆盖纯函数/适配器契约），不跑 integration 慢层；
+  // 若同提交还改了 lib/scripts 核心，core 判定会回退全量，不会漏跑。
+  if (list.every(isTest)) return { runTests: "unit", tier: "tests-only" };
+  // 混合 docs + tests（无 lib/scripts 核心）→ 低成本，保留 unit 快层
+  if (list.every((f) => isDoc(f) || isTest(f))) return { runTests: "unit", tier: "docs+tests" };
+  if (list.every(isGenerated)) return { runTests: "none", tier: "generated" };
+  // 命中核心（lib / 非测试 scripts / 无法判定的其他）→ 全量快速门
+  return { runTests: "unit,integration", tier: "core" };
 }
