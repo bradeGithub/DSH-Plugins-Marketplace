@@ -1,34 +1,27 @@
 {
-  "generated_at": "2026-09-08T14:22:40.091Z",
-  "count": 4,
+  "generated_at": "2026-09-08T19:26:10.620Z",
+  "count": 3,
   "items": [
     {
-      "full_name": "Nagi-ovo/voyager",
-      "previous": "web-ui",
-      "current": "tool",
-      "desc_now": "Enhancement suite for Gemini, AI Studio, Claude & ChatGPT — plus a prompt manager for any websites, DeepSeek Harness included. / 面向 Gemini、AI Studio、Claude 与 ChatGPT 的增强套件；其中的提示词管理器可用于任意网站，如 DeepSeek Harness。",
-      "desc_prev": "Enhancement suite for Gemini, AI Studio, Claude & ChatGPT — plus a prompt manager for any web UI, DeepSeek Harness included. / 面向 Gemini、AI Studio、Claude 与 ChatGPT 的增强套件；其中的提示词管理器可用于任意 Web UI，含 DeepSeek Harness。"
-    },
-    {
-      "full_name": "zhu1090093659/dsh-trading",
-      "previous": "web-ui",
-      "current": "coding",
-      "desc_now": "Agent-native trading terminal built on DeepSeek Harness. Crypto, US, CN and HK in one three-column GUI, 19+ hot-swappable connectors, dry-run by default with human approval on every live order. BYOK, no data redistribution.",
-      "desc_prev": "Agent-native trading terminal built on DeepSeek Harness. Crypto, US, CN and HK in one three-column GUI, 19+ hot-swappable connectors, dry-run by default with human approval on every live order. BYOK, no data redistribution."
-    },
-    {
-      "full_name": "Jiyr0119/dsh-workspace-explorer",
-      "previous": "tool",
-      "current": "resource",
-      "desc_now": "DeepSeek Harness 工作区文件资源管理器:右侧目录树面板,点击/拖拽文件引用进输入框,UI 对齐 DSH 原生风格 | Workspace file explorer plugin for DeepSeek Harness: right-side file tree panel, click or drag file references into the composer, native DSH look",
-      "desc_prev": "DeepSeek Harness 工作区文件资源管理器:右侧目录树面板,点击/拖拽文件引用进输入框,UI 对齐 DSH 原生风格 | Workspace file explorer plugin for DeepSeek Harness: right-side file tree panel, click or drag file references into the composer, native DSH look"
-    },
-    {
-      "full_name": "biliye/dsh-voice-call",
+      "full_name": "Minglink/dsh-infinite-gen-3",
       "previous": "other",
-      "current": "document",
-      "desc_now": "这是一个deepseek专属的语音通话插件",
-      "desc_prev": "这是一个deepseek专属的语音通话插件"
+      "current": "tool",
+      "desc_now": "DeepSeek v4 Pro 网络安全红队工具（无限三代） — jailbreak prompts and test suite for DeepSeek    求 Star 收藏 ⭐",
+      "desc_prev": "DeepSeek 专用破甲插件「无限三代」dsh-infinite-gen-3 — armor-breaking plugin for DeepSeek，破甲版：稳定化破甲，求 Star 收藏 ⭐"
+    },
+    {
+      "full_name": "jhckevin/dsh-auto-review",
+      "previous": "tool",
+      "current": "web-ui",
+      "desc_now": "面向 DeepSeek Harness 的自动审批审查插件，借鉴 Codex 风格设计，结合原生沙盒与独立审查模型，提供风险审批、拒绝熔断及 WebUI/TUI 状态提示。",
+      "desc_prev": "Codex-style Auto Review inspired plugin for DeepSeek Harness, with native bridge and Linux sandbox integration"
+    },
+    {
+      "full_name": "chromoany/dsh-notify-me",
+      "previous": "conversation",
+      "current": "notify",
+      "desc_now": "DSH 桌面消息提醒插件 / desktop notification and message alerts for DeepSeek Harness web：需要你操作（可操作提醒）与回复完成提醒，系统通知+提示音+标签页标题，设置页开关 + 中英通知语言",
+      "desc_prev": "DSH desktop reminder plugin: notify when the agent needs your input or a reply finishes"
     }
   ]
 }
