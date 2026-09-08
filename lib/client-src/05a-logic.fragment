@@ -1,0 +1,29 @@
+    // ===== 列表消费纯函数（无 React/fetch/DOM 依赖，可被单测直接 eval）=====
+    // 刷新指纹：与当前已展示内容一致时跳过重渲染。
+    // 服务端内容指纹（fp，full_name 序列哈希）优先——cached_at 每次 refresh 都变，用它门控会永远不跳过；
+    // 旧版服务端无 fp 时回退 source+cached_at+total（= 每次重渲染的旧行为）：只按 source+total 门控
+    // 会在「内容一进一出」时错误跳过 → 列表漏更新，安全侧宁可比对新值。
+    function fingerprintOf(data) {
+      if (typeof data.fp === "string") return data.fp;
+      return JSON.stringify([data.source || "", data.cached_at || "", data.total || 0]);
+    }
+    // 插件 tab 的搜索/分类过滤（在完整数组 filter 后重新分页）。
+    function filterRepos(repos, query, category) {
+      var q = (query || "").trim().toLowerCase();
+      return repos.filter(function (r) {
+        if (category !== "all" && (r.category || "other") !== category) return false;
+        if (!q) return true;
+        return (r.name + " " + r.full_name + " " + (r.topics || []).join(" ")).toLowerCase().indexOf(q) !== -1;
+      });
+    }
+    // Skills 分页追加：第 1 页直接替换；后续页按 full_name 去重后拼接（跨页去重）。
+    function appendSkillsPage(prev, pg, dataRepos) {
+      if (pg === 1) return dataRepos || [];
+      var seen = {};
+      (prev || []).forEach(function (r) { seen[r.full_name] = true; });
+      return (prev || []).concat((dataRepos || []).filter(function (r) { if (seen[r.full_name]) return false; seen[r.full_name] = true; return true; }));
+    }
+    // Skills 触底加载门控：未加载完且不在加载中才请求下一页。
+    function shouldLoadMore(repos, total, loading) {
+      return Boolean(!loading && repos && repos.length < total);
+    }

@@ -132,6 +132,7 @@ check("type 白名单含 fix", COMMIT_TYPES.includes("fix"), true);
 check("type 白名单含 assets", COMMIT_TYPES.includes("assets"), true);
 check("type 白名单不含 unknown", COMMIT_TYPES.includes("unknown"), false);
 check("语法检查清单包含 lib/index.js", SYNTAX_CHECK_FILES.includes("lib/index.js"), true);
+check("语法检查清单包含 assembler", SYNTAX_CHECK_FILES.includes("scripts/assemble-client.mjs"), true);
 check("语法检查清单包含 smoke-tests", SYNTAX_CHECK_FILES.includes("scripts/smoke-tests.mjs"), true);
 
 // ---- emoji 检测: hasEmoji ----
@@ -176,17 +177,17 @@ check("parseHookConfig requireCommitMsg", cfg1.requireCommitMsg, false);
 const cfg2 = parseHookConfig("# 注释\nemojiLevel=off");
 check("parseHookConfig 注释跳过", cfg2.emojiLevel, "off");
 check("parseHookConfig 默认值保留", cfg2.requireCommitMsg, true);
-check("parseHookConfig 非法值回退默认", parseHookConfig("emojiLevel=banana").emojiLevel, "warn");
-check("parseHookConfig 空文本默认", parseHookConfig("").emojiLevel, "warn");
-check("parseHookConfig 非字符串", parseHookConfig(null).emojiLevel, "warn");
+check("parseHookConfig 非法值回退默认", parseHookConfig("emojiLevel=banana").emojiLevel, "error");
+check("parseHookConfig 空文本默认", parseHookConfig("").emojiLevel, "error");
+check("parseHookConfig 非字符串", parseHookConfig(null).emojiLevel, "error");
 check("LEVELS 常量", LEVELS.includes("warn") && LEVELS.includes("off") && LEVELS.includes("error"), true);
-check("DEFAULT_HOOK_CONFIG 默认 warn", DEFAULT_HOOK_CONFIG.emojiLevel, "warn");
-check("DEFAULT_HOOK_CONFIG tocLevel 默认 warn", DEFAULT_HOOK_CONFIG.tocLevel, "warn");
+check("DEFAULT_HOOK_CONFIG 默认 error", DEFAULT_HOOK_CONFIG.emojiLevel, "error");
+check("DEFAULT_HOOK_CONFIG tocLevel 默认 error", DEFAULT_HOOK_CONFIG.tocLevel, "error");
 check("parseHookConfig tocLevel", parseHookConfig("tocLevel=error").tocLevel, "error");
-check("parseHookConfig tocLevel 非法回退", parseHookConfig("tocLevel=banana").tocLevel, "warn");
+check("parseHookConfig tocLevel 非法回退", parseHookConfig("tocLevel=banana").tocLevel, "error");
 check("loadHookConfigFromText 解析文本", loadHookConfigFromText("emojiLevel=off").emojiLevel, "off");
-check("loadHookConfigFromText 空文本默认", loadHookConfigFromText("").emojiLevel, "warn");
-check("loadHookConfigFromText 非字符串", loadHookConfigFromText(null).emojiLevel, "warn");
+check("loadHookConfigFromText 空文本默认", loadHookConfigFromText("").emojiLevel, "error");
+check("loadHookConfigFromText 非字符串", loadHookConfigFromText(null).emojiLevel, "error");
 check("loadHookConfigFromText 完整配置", (() => {
   const c = loadHookConfigFromText("emojiLevel=warn\nsecretLevel=off\nsecretExclusions=a,b\ntocExclude=x");
   return c.emojiLevel === "warn" && c.secretLevel === "off" && c.secretExclusions.length === 2 && c.tocExclude.length === 1;

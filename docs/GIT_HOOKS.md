@@ -4,7 +4,7 @@
 
 ## 1. Hook 清单
 
-| Hook | 阶段 | 检查内容 | 拦截条件 |
+| Hook | 执行时机 | 检查内容 | 拦截条件 |
 |---|---|---|---|
 
 <!-- TOC -->
@@ -20,20 +20,22 @@
 - [3. emoji 检测全覆盖定义](#3-emoji-检测全覆盖定义)
 - [4. 安装](#4-安装)
 - [5. 跳过策略](#5-跳过策略)
+- [5.1 CI 增量模式（环境变量）](#51-ci-增量模式环境变量)
 - [6. 测试要求](#6-测试要求)
 - [7. 跨平台兼容约束](#7-跨平台兼容约束)
 - [8. 新增 Hook 检查项流程](#8-新增-hook-检查项流程)
 <!-- /TOC -->
-| `pre-commit` | 提交前 | 语法检查、测试金字塔、TOC 检测、敏感密钥扫描、覆盖率 | 语法/测试/密钥/覆盖为 error 级；TOC 按 `.hooksrc` 分级（当前 warn） |
-| `commit-msg` | 提交信息 | 主题格式、type 白名单、禁 emoji | 主题格式/type 恒为 error；emoji 按 `.hooksrc` 分级（当前 warn） |
+| `pre-commit` | 提交前 | 语法检查、unit+integration、TOC 检测、敏感密钥扫描 | 语法/测试/密钥为 error 级；TOC 按 `.hooksrc` 分级（当前 error）；完整 E2E、coverage 和 mutation 使用显式质量门 |
+| `commit-msg` | 提交信息 | 主题格式、type 白名单、禁 emoji | 主题格式/type 恒为 error；emoji 按 `.hooksrc` 分级（当前 error） |
 
 ### 1.1 pre-commit 检查项
 
-1. **语法检查**：对 `lib/index.js`、`lib/client.js`、`scripts/*.mjs`、`scripts/hooks/*.mjs` 执行 `node --check`
-2. **测试金字塔**：执行 `node scripts/tests/run.mjs`（unit / integration / e2e；精确数量以 run.mjs 输出为准），失败即拒绝
-3. **TOC 检测**：执行 `node scripts/toc.mjs --check`（按 `.hooksrc` 的 `tocLevel` 分级，当前 warn 仅提醒）
-4. **敏感密钥扫描**：检测暂存文件中的高危密钥格式（sk-/ghp_/AKIA 等），默认 error 拦截
-5. **覆盖率**：执行 `node scripts/coverage.mjs`（lib/index.js 非豁免 100%，口径见 TESTING.md §4），未达目标即拒绝
+1. **语法检查**：按 `scripts/hooks/validate.mjs` 的 `SYNTAX_CHECK_FILES` 清单执行 `node --check`，包含 `lib/client.js`、`scripts/assemble-client.mjs` 和 `scripts/registry/` 新入口
+2. **Bundle 漂移**：执行 `node scripts/assemble-client.mjs`，source fragments 与受版本控制的 `lib/client.js` 不一致即拒绝
+3. **快速测试门**：默认执行 `node scripts/tests/run.mjs --level=unit,integration`，失败即拒绝；完整 Node E2E 使用 `node scripts/hooks/check.mjs --only=e2e`，浏览器 E2E 使用 `node scripts/tests/frontend-e2e.mjs` 单独执行
+4. **TOC 检测**：执行 `node scripts/toc.mjs --check`（按 `.hooksrc` 的 `tocLevel` 分级，当前 error 命中即阻断）
+5. **敏感密钥扫描**：检测暂存文件中的高危密钥格式（sk-/ghp_/AKIA 等），默认 error 拦截
+6. **覆盖率**：由 `node scripts/hooks/check.mjs --only=coverage` 或 CI 显式执行（lib 与 Node 脚本非豁免函数 100%；client bundle 由 VM 运行时契约与 assembler 契约守护），未达目标即拒绝
 
 ### 1.2 TOC 自动扫描
 
@@ -48,8 +50,8 @@ TOC 维护采用**自动发现**而非手动注册：
 ### 1.2 commit-msg 检查项
 
 1. **主题格式**：`<type>(<scope>): <描述>`（正则 `^(feat|fix|...)(\([a-z][a-z0-9-]*\))?: .+`）——**恒为 error，不可降级**
-2. **type 白名单**：`feat / fix / chore / ci / docs / style / refactor / test / perf / assets / revert`
-3. **禁 emoji**：按 `.hooksrc` 配置的 `emojiLevel` 分级（见第 3 节），仓库当前配置 warn（仅提醒）
+2. **type 白名单**：`feat / fix / chore / ci / docs / style / refactor / test / perf / assets / revert / merge`
+3. **禁 emoji**：按 `.hooksrc` 配置的 `emojiLevel` 分级（见第 3 节），仓库当前配置 error（命中即阻断）
 
 ## 2. Hook 分级机制（.hooksrc）
 
@@ -59,10 +61,10 @@ Hook 检查并非全部绝对禁止——通过仓库根 `.hooksrc` 文件配置
 
 ```ini
 # .hooksrc — Git Hook 分级配置（示例，key=value，# 注释）
-emojiLevel=error        # error | warn | off（默认 error；本仓库当前 warn）
+emojiLevel=error        # error | warn | off（默认 error；本仓库当前 error）
 requireCommitMsg=true   # 是否强制提交信息（默认 true）
 ```
-本仓库当前 `.hooksrc` 实际配置：`secretLevel=error`、`emojiLevel=warn`、`tocLevel=warn`。
+本仓库当前 `.hooksrc` 实际配置：`secretLevel=error`、`emojiLevel=error`、`tocLevel=error`。
 
 ### 2.2 等级语义
 
@@ -131,12 +133,14 @@ check.mjs 支持两个环境变量（测试与 CI 用，本地无需设置）：
 |---|---|
 | `CHECK_WORKTREE` | git 命令与暂存文件读取的目标工作树（默认仓库根）——hook-check.test.mjs 用临时仓库隔离 |
 | `CHECK_DIFF_BASE` | 设置后密钥扫描改用 `git diff --name-only <base>...HEAD` 扫相对基线的增量（CI checkout 无 staged 概念；lint.yml 传 PR base.sha 或 HEAD~1） |
+| `DSH_REQUIRE_E2E` | 设为 `1` 时，真实 E2E 缺少 git/npm/pnpm/DSH CLI 等前置工具即失败；`--only=e2e` 自动设置该值 |
 
 ## 6. 测试要求
 
 - 所有 hook 校验逻辑必须是**纯函数**（放 `scripts/hooks/validate.mjs` / `scripts/toc.mjs`），可被 unit 测试覆盖
 - 新增 hook 检查项必须配套断言（目标：校验逻辑 100% 覆盖）
-- Hook 编排（`check.mjs`）由 `scripts/tests/unit/hook-check.test.mjs` 行为测试覆盖（spawn 子进程：本地 staged 扫描 / CI 增量 / 未知 --only / --help / secretExclusions），调用链在 CI 中完整执行
+- Hook 编排（`check.mjs`）由 `scripts/tests/unit/hook-check.test.mjs` 行为测试覆盖（spawn 子进程：本地 staged 扫描 / CI 增量 / 未知 --only / --help / secretExclusions / E2E 严格分派）；调用链在 CI 中完整执行
+- 默认 pre-commit 保持快速的 unit+integration 门；推送前或 CI 需额外执行 `node scripts/hooks/check.mjs --only=e2e`、`node scripts/coverage.mjs` 和 `node scripts/mutation-test.mjs`。E2E 缺少声明前置工具时，严格模式必须失败而不是计为通过
 
 ## 7. 跨平台兼容约束
 
@@ -153,6 +157,6 @@ check.mjs 支持两个环境变量（测试与 CI 用，本地无需设置）：
 1. 在 `docs/DEVELOPMENT.md` 更新对应规范（meta）
 2. 实现为纯函数（`validate.mjs` 或独立模块）
 3. 在 `scripts/tests/unit/` 增加对应断言（validate/toc 100% 覆盖目标）
-4. 接入 `scripts/hooks/check.mjs` 对应阶段
+4. 接入 `scripts/hooks/check.mjs` 对应执行时机
 5. 更新本文件 Hook 清单
 6. 重装 hook（`install-hooks.ps1` / `.sh`）验证

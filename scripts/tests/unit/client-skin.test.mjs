@@ -15,9 +15,12 @@
 import { readFileSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
+import { assembleClient, FRAGMENT_FILES, SOURCE_DIR } from "../../assemble-client.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
 const client = readFileSync(join(ROOT, "lib", "client.js"), "utf8");
+const clientSource = assembleClient();
+const fragmentSource = FRAGMENT_FILES.map((name) => readFileSync(join(SOURCE_DIR, name), "utf8")).join("");
 
 let pass = 0, fail = 0;
 function check(name, actual, expected) {
@@ -25,6 +28,9 @@ function check(name, actual, expected) {
   if (ok) pass++; else fail++;
   console.log(`${ok ? "PASS" : "FAIL"} ${name}: got ${JSON.stringify(actual)}, want ${JSON.stringify(expected)}`);
 }
+
+check("assembler 输出与发布 bundle 一致", clientSource === client, true);
+check("source fragments 拼接与发布 bundle 一致", fragmentSource === client, true);
 
 // ---- 契约 1：4 皮肤亮色模式 .dshm-dim → label-secondary ----
 const cssRule = /body\[data-dsh-retro\]:not\(\[data-ds-dark-theme\]\) \.dshm-dim[\s\S]{0,60}body\[data-dsh-trading\][\s\S]{0,60}body\[data-dsh-ths\][\s\S]{0,60}body\[data-dsh-xp\][\s\S]{0,60}body\[data-dsh-miku\]/;
@@ -117,8 +123,18 @@ check("tab 未选中显式 tertiary 颜色", /tabBtn: \{ padding: "7px 16px"[^}]
 check("disclaimer 带 dshm-dim", /className: "dshm-dim", style: \{ fontSize: 11, color: "var\(--dsw-alias-label-tertiary\)", marginTop: 16/.test(client), true);
 check("已安装按钮显式 tertiary 颜色", /btnInstalled: \{ padding: "5px 14px"[^}]*color: "var\(--dsw-alias-label-tertiary\)"/.test(client), true);
 
+// ---- 契约 10：GitHub archived 状态展示（后端字段已存在，客户端只做提示）----
+check("归档徽章含中英文文案",
+  /badgeArchived: "已归档"/.test(client) && /badgeArchived: "archived"/.test(client), true);
+check("归档徽章含双语 tooltip",
+  /badgeArchivedTip: "该 GitHub 仓库已归档/.test(client) && /badgeArchivedTip: "This GitHub repository is archived/.test(client), true);
+check("归档徽章严格只匹配 true",
+  /repo\.archived === true \? h\("span", \{ style: s\.badgeArchived, title: t\("badgeArchivedTip"\) \}, t\("badgeArchived"\)\) : null/.test(client), true);
+check("归档徽章使用 warning 主题样式",
+  /badgeArchived: \{[^}]*state-warn-secondary[^}]*state-warn-primary[^}]*\}/.test(client), true);
+
 // ---- A：typeMap 契约（安装完成类型本地化）----
-// 背景：L653 曾裸拼 inst.result.type（bundle 显示英文），typeMap 修复后契约固化——
+// 背景：曾直接拼接 inst.result.type（bundle 显示英文），typeMap 修复后契约固化——
 // zh/en 双字典必须覆盖全部 6 个安装类型键（bundle 为 A 新增类型），
 // doneMsg 消费点必须用 typeMap 映射（未知类型兜底原文）。
 const TYPE_KEYS = ["cordis-plugin", "bundle", "script", "skill", "agent-preset", "instructions"];

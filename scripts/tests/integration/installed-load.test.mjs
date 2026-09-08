@@ -63,7 +63,7 @@ Date.now = () => 123456789;
 import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from "node:fs";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
-process.env.DSH_HOME = mkdtempSync(join(tmpdir(), "dsh-load-wfail-")).replace(/\\\\\\\\/g, "/");
+process.env.DSH_HOME = mkdtempSync(join(tmpdir(), "dsh-load-wfail-")).replace(/\\\\/g, "/");
 const root = join(process.env.DSH_HOME, "marketplace");
 mkdirSync(root, { recursive: true });
 writeFileSync(join(root, "installed.json"), "{broken", "utf8");
@@ -76,6 +76,51 @@ rmSync(process.env.DSH_HOME, { recursive: true, force: true });
   });
   check("备份写盘失败不抛异常（loadInstalled 不崩溃）", child.status, 0);
   check("备份写盘失败 WARN 兜底提示（路径含于文案中）", /备份损坏的 .*installed\.json 失败/.test(child.stderr), true);
+}
+
+// ---- 场景 D（独立进程）：feedback.json / envs.json 损坏 → 同样备份 + 以空恢复（readStateJson 共用）----
+// 契约退役前置（TDD）：loadFeedback/loadEnvStore 经 readStateJson 的损坏恢复
+// 此前只有 security-guards 正则保证——行为断言落地后契约可退役（分层期减正则面）。
+// 独立进程原因同场景 C：路径常量 import 时锁定，损坏恢复需隔离环境。
+{
+  const script = `
+import { mkdtempSync, mkdirSync, writeFileSync, readdirSync, rmSync } from "node:fs";
+import { join } from "node:path";
+import { tmpdir } from "node:os";
+process.env.DSH_HOME = mkdtempSync(join(tmpdir(), "dsh-load-fbenv-")).replace(/\\\\\\\\/g, "/");
+const root = join(process.env.DSH_HOME, "marketplace");
+mkdirSync(root, { recursive: true });
+writeFileSync(join(root, "feedback.json"), "{ broken feedback", "utf8");
+writeFileSync(join(root, "envs.json"), "{ broken envs", "utf8");
+const lib = await import("./lib/index.js");
+const registered = [];
+lib.apply({ get: (s) => (s === "webServer" ? { register: (r) => registered.push(r) } : undefined), logger: { warn: () => {} } });
+// 等待 loadFeedback/loadEnvStore 异步读盘完成：fs.readFile 回调在 poll 阶段，
+// setTimeout 在 timers 阶段先执行——固定延时是竞态，轮询备份文件出现
+for (let i = 0; i < 60; i++) {
+  if (readdirSync(root).some((f) => f.includes(".json.corrupt-"))) break;
+  await new Promise((r) => setTimeout(r, 50));
+}
+const backups = readdirSync(root).filter((f) => /^(feedback|envs)\\.json\\.corrupt-/.test(f)).sort();
+console.log("BACKUPS=" + backups.length);
+const pendingHandler = registered.find((h) => h.path === "/api/marketplace/feedback/pending")?.handler;
+let pBody = null;
+if (pendingHandler) {
+  await pendingHandler(
+    { method: "GET", headers: { "x-dsh-marketplace": "1", host: "127.0.0.1:3080" }, socket: { remoteAddress: "127.0.0.1" }, url: "/api/marketplace/feedback/pending" },
+    { writeHead: () => {}, end: (b) => { try { pBody = JSON.parse(b); } catch { pBody = null; } } },
+  );
+}
+console.log("PENDING=" + JSON.stringify([pBody?.status, (pBody?.pending ?? []).length]));
+rmSync(process.env.DSH_HOME, { recursive: true, force: true });
+`;
+  const child = spawnSync(process.execPath, ["--input-type=module", "-e", script], {
+    cwd: ROOT, encoding: "utf8", timeout: 30_000,
+  });
+  const backups = Number((child.stdout.match(/BACKUPS=(\d+)/) ?? [])[1] ?? -1);
+  const pending = JSON.parse((child.stdout.match(/PENDING=(\[.*\])/) ?? [])[1] ?? "null");
+  check("损坏 feedback/envs 生成 .corrupt-* 备份", backups, 2);
+  check("损坏 feedback 后 pending 以空恢复", pending, ["done", 0]);
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);

@@ -1,5 +1,5 @@
-// verify-installability.mjs 探测行为测试（B1 门控修正：trees 404 ≠ gone）。
-// 守护「空仓库/无分支」不误判 gone（2026-08-19 审计：16 个真实存在的仓库被误判删除）。
+// verify-installability.mjs 探测行为测试（trees 404 ≠ gone）。
+// 守护「空仓库/无分支」不误判 gone（曾有真实存在的仓库被误判删除）。
 // mock 全局 fetch（不执行 main——import 时 isMain 守卫跳过）。
 
 import { probeTree, confirmGone, verdictOf, fetchPkg } from "../../verify-installability.mjs";
@@ -32,7 +32,7 @@ function mockFetch(routes) {
 
 const TREE_OK = { tree: [{ type: "blob", path: "package.json" }, { type: "blob", path: "SKILL.md" }], truncated: false };
 
-// ---- B1：trees 404 行为 ----
+// ---- trees 404 行为 ----
 {
   const orig = mockFetch({
     "https://api.github.com/repos/a/b/git/trees/main?recursive=1": { status: 404 },
@@ -64,7 +64,7 @@ const TREE_OK = { tree: [{ type: "blob", path: "package.json" }, { type: "blob",
   check("403 限流 → rateLimited", sig?.rateLimited, true);
 }
 
-// ---- B1：confirmGone 二次确认 ----
+// ---- confirmGone 二次确认 ----
 {
   // repo 级 API 404 → 真 gone
   const orig = mockFetch({ "https://api.github.com/repos/a/b": { status: 404 } });
@@ -106,7 +106,7 @@ const TREE_OK = { tree: [{ type: "blob", path: "package.json" }, { type: "blob",
   check("真删除全链路：branchMissing + repo 404 → gone", sig?.branchMissing === true && c?.gone === true, true);
 }
 
-// ---- C1：bundle 声明判定（bundle-plugin 子类型）----
+// ---- bundle 声明判定（bundle-plugin 子类型）----
 {
   const rootPkg = { rootPkg: true, rootSkill: false, truncated: false, hasSkill: false };
   check("bundle 声明 → bundle-plugin", verdictOf({ ...rootPkg, bundle: true }, true, false), "bundle-plugin");
@@ -114,7 +114,7 @@ const TREE_OK = { tree: [{ type: "blob", path: "package.json" }, { type: "blob",
   check("bundle 但根无清单 → 不判 bundle（bundle 字段仅根清单生效）", verdictOf({ ...rootPkg, bundle: true }, false, false), "pkg-plain");
 }
 
-// ---- C1：fetchPkg 的 bundle 字段（mock contents API）----
+// ---- fetchPkg 的 bundle 字段（mock contents API）----
 {
   const orig = mockFetch({
     "https://api.github.com/repos/bundle/repo/contents/package.json": {

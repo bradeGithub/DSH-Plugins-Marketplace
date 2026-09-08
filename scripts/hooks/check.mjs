@@ -7,13 +7,14 @@
 //   node scripts/hooks/check.mjs --only=syntax        # 仅语法检查
 //   node scripts/hooks/check.mjs --only=secret        # 仅密钥扫描
 //   node scripts/hooks/check.mjs --only=toc           # 仅 TOC 检测
-//   node scripts/hooks/check.mjs --only=tests         # 仅 smoke-tests
+//   node scripts/hooks/check.mjs --only=tests         # 仅 unit+integration
 //   node scripts/hooks/check.mjs --help               # 用法说明
 // 纯校验逻辑在 validate.mjs（可被 smoke-tests 覆盖），本文件只做编排。
 
 import { execFileSync } from "node:child_process";
-import { readFileSync, existsSync } from "node:fs";
+import { readFileSync, existsSync, mkdtempSync, rmSync } from "node:fs";
 import { join, dirname } from "node:path";
+import { tmpdir } from "node:os";
 import { fileURLToPath } from "node:url";
 import { SYNTAX_CHECK_FILES, validateSubject, extractSubject, parseHookConfig, DEFAULT_HOOK_CONFIG, detectSecret } from "./validate.mjs";
 
@@ -25,7 +26,7 @@ const USAGE = `用法:
 
 选项:
   --stage=<pre-commit|commit-msg>  运行某个 git 阶段的检查集（默认 pre-commit）
-  --only=<name>                    仅运行单项检查（syntax|tests|toc|secret|commit-msg|coverage）
+  --only=<name>                    仅运行单项检查（syntax|tests|e2e|toc|secret|commit-msg|coverage）
   --help                           显示本帮助
 
 示例:
@@ -44,7 +45,7 @@ if (process.argv.includes("--help")) {
 
 const stage = arg("stage") ?? "pre-commit";
 const only = arg("only");
-const validOnly = ["syntax", "tests", "toc", "secret", "commit-msg", "coverage"];
+const validOnly = ["syntax", "tests", "e2e", "toc", "secret", "commit-msg", "coverage"];
 if (only && !validOnly.includes(only)) {
   console.error(`[FAIL] 未知 --only 值 "${only}"，可选: ${validOnly.join(" | ")}`);
   process.exit(1);
@@ -86,14 +87,42 @@ function checkSyntax() {
 // ---- 2. 测试金字塔（unit → integration → e2e）----
 function checkTests() {
   if (!want("tests")) return;
+  const driftDir = mkdtempSync(join(tmpdir(), "dsh-hook-drift-"));
   try {
-    // 常规提交只跑 unit+integration（快，<1s）；e2e（真实 npm 安装 ~23s）由 CI/--only=tests 全量执行
-    execFileSync("node", ["scripts/tests/run.mjs", "--level=unit,integration"], { cwd: ROOT, stdio: "inherit" });
+    // 常规提交只跑 unit+integration（快，<1s）；e2e（真实 npm 安装）由 --only=e2e 或 CI 显式执行
+    execFileSync("node", ["scripts/tests/run.mjs", "--level=unit,integration"], {
+      cwd: ROOT,
+      stdio: "inherit",
+      env: { ...process.env, DRIFT_REPORT_FILE: join(driftDir, "drift-report.json") },
+    });
     console.log("[OK] [tests] unit+integration 全部通过");
   } catch {
     fail("tests", "unit+integration 存在失败项");
+  } finally {
+    rmSync(driftDir, { recursive: true, force: true });
   }
   healBundledIndex();
+}
+
+function checkE2e() {
+  if (!want("e2e")) return;
+  const driftDir = mkdtempSync(join(tmpdir(), "dsh-hook-e2e-drift-"));
+  try {
+    execFileSync("node", ["scripts/tests/run.mjs", "--level=e2e"], {
+      cwd: ROOT,
+      stdio: "inherit",
+      env: {
+        ...process.env,
+        DSH_REQUIRE_E2E: "1",
+        DRIFT_REPORT_FILE: join(driftDir, "drift-report.json")
+      },
+    });
+    console.log("[OK] [e2e] 真实 Host/API 与安装 E2E 全部通过");
+  } catch {
+    fail("e2e", "真实 Host/API 或安装 E2E 未通过，或缺少必需前置工具");
+  } finally {
+    rmSync(driftDir, { recursive: true, force: true });
+  }
 }
 
 /** bundled 索引完整性自愈：list-cache/installed-index 的测试隔离会临时把
@@ -116,7 +145,7 @@ function healBundledIndex() {
   }
 }
 
-// ---- 3. TOC 检测（tocLevel: error 阻断 / warn 仅提示 / off 跳过，默认 warn）----
+// ---- 3. TOC 检测（tocLevel: error 阻断 / warn 仅提示 / off 跳过，默认 error）----
 function checkToc() {
   if (!want("toc")) return;
   const tocCfg = loadHookConfig(ROOT);
@@ -218,11 +247,13 @@ function checkCoverage() {
 if (stage === "pre-commit") {
   checkSyntax();
   checkTests();
+  if (only === "e2e") checkE2e();
   checkToc();
   checkSecret();
   // coverage 不在此列：耗时长（e2e 真实 npm 安装 ~25s），由 --only=coverage / CI 执行
   // --only=commit-msg 时单独执行（无 --only 时静默跳过）
   if (only === "commit-msg") checkCommitMsg();
+  if (only === "coverage") checkCoverage();
 }
 if (stage === "commit-msg") {
   checkCommitMsg();

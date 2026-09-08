@@ -56,8 +56,8 @@ function visiblePaths(paths) {
   return paths.filter((p) => !String(p).split("/").some((seg) => seg.startsWith(".")));
 }
 
-/** Phase A：单仓库 trees 探测 → 信号集。返回 null 表示不可判定（网络失败）。
- *  B1 修正：分支 404 不再直接判 gone——trees 404 也可能是
+/** 单仓库 trees 探测 → 信号集。返回 null 表示不可判定（网络失败）。
+ *  边界修正：分支 404 不再直接判 gone——trees 404 也可能是
  *  空仓库/无该分支（仓库存在但无提交树，GitHub 对空仓库 trees 返回 404），
  *  全部分支 404 时返回 branchMissing，由 confirmGone（repo 级 API）二次确认。
  *  教训：corrinehu/dsh-workbuddy-connect 等 16 个仓库被误判 gone，实测全部存在。 */
@@ -67,7 +67,7 @@ export async function probeTree(repo) {
     const url = `https://api.github.com/repos/${repo.full_name}/git/trees/${branch}?recursive=1`;
     const res = await fetchJson(url, "application/vnd.github+json");
     if (res.status === 403) return { rateLimited: true, remaining: res.remaining, resetMs: res.resetMs };
-    if (res.status === 404) continue; // B1：分支缺失/空仓库，尝试下一个分支，不判 gone
+    if (res.status === 404) continue; // 分支缺失/空仓库，尝试下一个分支，不判 gone
     if (res.status !== 200) continue;
     let tree = [];
     let truncated = false;
@@ -99,11 +99,11 @@ export async function probeTree(repo) {
     const isPreset = paths.includes("preset.yml") && paths.includes("agent.cordis.yml");
     return { rootPkg, nestedPkgs, hasSkill, rootSkill, minSkillDepth, hasScript, rootScript, isPreset, truncated, remaining: res.remaining };
   }
-  // B1：全部分支 404（空仓库 / 无该分支 / 真删除）——需 repo 级 API 二次确认
+  // 全部分支 404（空仓库 / 无该分支 / 真删除）——需 repo 级 API 二次确认
   return { branchMissing: true, remaining: null };
 }
 
-/** B1 二次确认：trees 全分支 404 时用 repo 级 API 判定仓库是否真删除（404=gone）。
+/** 二次确认：trees 全分支 404 时用 repo 级 API 判定仓库是否真删除（404=gone）。
  *  trees 404 ≠ 删除（空仓库/分支名缺失同样 404）——repo 级 404 才是真 gone。
  *  返回 { gone } 或 { rateLimited }。 */
 export async function confirmGone(repo) {
@@ -113,7 +113,7 @@ export async function confirmGone(repo) {
   return { gone: res.status === 404, remaining: res.remaining };
 }
 
-/** Phase B：读 package.json 内容判定真插件。 */
+/** 读取 package.json 内容判定真插件。 */
 export async function fetchPkg(repo, path) {
   const url = `https://api.github.com/repos/${repo.full_name}/contents/${path.split("/").map(encodeURIComponent).join("/")}`;
   const res = await fetchJson(url, "application/vnd.github.raw+json");
@@ -129,13 +129,13 @@ export async function fetchPkg(repo, path) {
 
 /** 判定（对齐 detectType 分层：preset > cordis 声明 > 根 install 脚本 > 根 skill > 嵌套包 > 嵌套 skill）。
  *  与旧版的关键差异（蹭 topic 案例修复）：
- *  - 根清单 dsh 声明优先于 install 脚本（审查 B1，防「插件+分发脚本」被劫持为 script 型）；
+ *  - 根清单 dsh 声明优先于 install 脚本（防「插件+分发脚本」被劫持为 script 型）；
  *  - 只有**根目录** SKILL.md 才算 skill（skill-with-tooling 合法形态），深层 SKILL.md 是大项目
  *    内部内容 → pkg-plain（reactive-resume/OpenViking 曾因此漏过 non-plugin 徽章）；
  *  - 只有**根目录** install 脚本才算 script 型（深层 install.sh 同理）。 */
 export function verdictOf(sig, pkgLooks, nestedLooks) {
   if (!sig) return "unknown";
-  if (sig.gone) return "gone"; // 防御：B1 后 probeTree 不再直接产 gone，保留兼容旧契约
+  if (sig.gone) return "gone"; // 防御：probeTree 不再直接产 gone，保留兼容旧契约
   if (sig.isPreset) return "agent-preset";
   if (sig.rootPkg && pkgLooks === true) return sig.bundle === true ? "bundle-plugin" : "cordis-plugin";
   if (sig.rootScript === true) return "script";
@@ -212,7 +212,7 @@ async function main() {
           continue;
         }
         if (sig.branchMissing) {
-          // B1：trees 全分支 404 → repo 级 API 二次确认（空仓库 ≠ 删除）
+          // trees 全分支 404 → repo 级 API 二次确认（空仓库 ≠ 删除）
           const confirm = await confirmGone(repo);
           if (confirm.rateLimited) {
             cursor--; // 同一仓库等待后重试
@@ -224,7 +224,7 @@ async function main() {
         }
         else if (sig.remaining != null) remaining = sig.remaining;
         if (sig.branchMissing) {
-          // B1：已由 confirmGone 定论（gone/empty），跳过形态判定
+          // 已由 confirmGone 定论（gone/empty），跳过形态判定
         } else if (sig.rootPkg || (sig.nestedPkgs?.length ?? 0) > 0) {
           // 根清单优先；仅子目录清单时读最多 3 个子包
           const paths = sig.rootPkg ? ["package.json"] : sig.nestedPkgs.slice(0, 3);

@@ -130,6 +130,7 @@ dsh plugin --profile web install bradeGithub/DSH-Plugins-Marketplace   # reinsta
 - **Search**: real-time filtering by plugin name / full repo name / tags
 - **Category**: build-time auto-categorization from description/tags (12 categories: vision / document / memory / model / notify / coding / conversation / web-ui / agent / tool / resource / other), filter chips in the UI + category badges on cards
 - **Community badge**: the build fetches awesome lists (default: [awesome-dsh-plugin](https://github.com/awesome-dsh-plugin/awesome-dsh-plugin), community-curated) and stamps a blue «Community listed» badge on intersecting repos (tooltip explains the source) — quick recognition of community-recognized plugins (listing ≠ endorsement by this marketplace)
+- **Repository status badge**: archived GitHub repositories show an «archived» hint and tooltip; archive status does not change install eligibility
 - **General Skills column**: switch to the «General Skills» tab in Settings — browse the CI-built skills index (`agent-skills` ∪ `claude-skills`, 20000+ repos) with search / paginated infinite scroll / one-click install to `~/.dsh/skills/` / installed recognition; repos with install scripts carry a 🛡 badge, unverified probes show a weak «unverified» hint
 - **Refresh feedback**: click «Refresh» to force a re-fetch, with a toast confirming «refresh succeeded / refresh failed»
 - **GitHub link**: every card links to the original repo (opens in a new tab)
@@ -212,7 +213,8 @@ When both exist and differ → the card shows an «Update» button plus `install
 │   │   ├── package.json        (dsh.client declaration + exports)
 │   │   └── lib/
 │   │       ├── index.js        (server: GitHub fetch / install pipeline / version detection)
-│   │       └── client.js       (client: marketplace page UI)
+│   │       ├── client.js       (release bundle: marketplace page UI)
+│   │       └── client-src/     (bundle source fragments, assembled during development)
 │   └── cordis.patch.yml        (plugin registration entry)
 └── marketplace/
     ├── cache/<owner>__<name>/  (clone cache; data source for install & version comparison)
@@ -316,9 +318,11 @@ Want to contribute? See [docs/CONTRIBUTING.md](docs/CONTRIBUTING.md) and the [ST
 
 ## 🛠️ Development & maintenance
 
-- Server-side logic: edit `lib/index.js` (syntax check: `node --check`)
+- Server-side logic: edit the responsible module under `lib/app/`, `lib/domain/`, `lib/http/`, or `lib/infra/`; cross-layer composition and host entry wiring remain in `lib/index.js` (syntax check: `node --check`)
+- Architecture boundary: server-side business follows `http → app → domain`, while HTTP may depend directly on `infra`; `lib/index.js` is the composition root but still contains compatibility adapters for install execution, registry/cache, patch IO, and installed indexing. Further extraction is a follow-up architecture effort, not a line-count goal
 - Log redaction: edit `lib/redact.js` (multi-layer sanitization before install logs go to public issues — keys / paths / context-adjacent / entropy fallback; rule pairs maintained in [docs/TESTING.md](docs/TESTING.md))
-- Page UI: edit `lib/client.js` (browser bundle, `window.__ModuleLoader__.load` format; `require` resolves DSH platform modules)
+- Page UI: edit `lib/client-src/*.fragment`, then run `node scripts/assemble-client.mjs --write` to generate the versioned `lib/client.js` release bundle (`window.__ModuleLoader__.load` format; `require` resolves DSH platform modules)
+- `node scripts/assemble-client.mjs` (without `--write`) checks that the source fragments and release bundle have no drift
 - Restart DSH for changes to take effect; the client bundle's revision (`rev`) is content-hashed, and the browser fetches the new version automatically after a restart
 - **Plugin authors, read [STANDARD.md](STANDARD.md)** ([English](STANDARD.en.md)): the marketplace-recognition spec — how to shape each plugin type (cordis plugin / skill / agent preset / script) so the marketplace detects, installs and updates it correctly, including the type-detection rules and known anti-patterns.
 - Install-feedback system (auto-created issue template / fields / redaction / privacy boundaries) in [docs/FEEDBACK.md](docs/FEEDBACK.md); documentation index in [docs/README.md](docs/README.md)
@@ -334,4 +338,3 @@ See [docs/CHANGELOG.md](docs/CHANGELOG.md) for the full version history (all ver
 ## 📄 License
 
 MIT
-

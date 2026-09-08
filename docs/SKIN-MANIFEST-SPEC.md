@@ -19,11 +19,11 @@
   - [8.1 五层渲染管线](#81-五层渲染管线)
   - [8.2 注册流程（manifest 分发与注册）](#82-注册流程manifest-分发与注册)
   - [8.3 试穿/应用流程](#83-试穿应用流程)
-  - [8.4 自定义面板（阶段 2）](#84-自定义面板阶段-2)
+  - [8.4 自定义面板](#84-自定义面板)
   - [8.5 入口定位](#85-入口定位)
   - [8.6 所有权与仓库结构](#86-所有权与仓库结构)
-- [9. 文档状态](#9-文档状态)
-- [附录 A：全量 token 目录（95 个，实测提取自 DSH 主题，2026-08-15）](#附录-a全量-token-目录95-个实测提取自-dsh-主题2026-08-15)
+- [9. 实现状态](#9-实现状态)
+- [附录 A：全量 token 目录（95 个，来源于 DSH 主题）](#附录-a全量-token-目录95-个来源于-dsh-主题)
 <!-- /TOC -->
 
 ## 0. 设计原则（为什么这样设计）
@@ -128,7 +128,7 @@
 
 皮肤包 bundle 导出的 DOM 资源（标题栏/状态栏/开始按钮等）。manifest 只声明**引用**，资源本体在 **bundle 内函数**（沿用现状试穿机制的 bundle 函数产出 DOM，不引入新分发管道）。
 
-**分发协议（商榷定稿）**：皮肤 bundle 导出 `{ apply, manifest }`——manifest 是 **bundle 内静态常量**（非动态生成函数）：校验器/CLI/注册流程**无需执行 bundle 即可读**（静态 JSON 解析），不引入执行期风险。skin-center 现有 `loadBundleScript → import` 流程在 import 后读取 manifest 字段即可。
+**分发协议**：皮肤 bundle 导出 `{ apply, manifest }`——manifest 是 **bundle 内静态常量**（非动态生成函数）：校验器/CLI/注册流程**无需执行 bundle 即可读**（静态 JSON 解析），不引入执行期风险。skin-center 现有 `loadBundleScript → import` 流程在 import 后读取 manifest 字段即可。
 
 **注入器已落地**（`scripts/inject-skin-manifest.mjs`）：生成器（build-skin-manifest.mjs）是 manifest 唯一权威源，注入器把生成结果写入 bundle——`exports.manifest = <JSON 常量>;`，幂等（已存在整段替换）、括号配平回读、无锚点 bundle 拒绝动（返回 null）。协议 = `injectManifestIntoBundle(bundleSrc, manifestJson)` + `extractInjectedManifest(bundleSrc)`，CLI：`node scripts/inject-skin-manifest.mjs <bundle.js> <manifest.json>`。
 
@@ -188,7 +188,7 @@
 
 字段：`id`（皮肤内唯一）、`type`（字符串分发）、`label`、`default`、`target`（用户值写入目标，**双形态**）、`scope`（`skin` 默认 | `global` 跨皮肤）。
 
-**target 双形态**（商榷定稿）：
+**target 双形态**：
 ```jsonc
 // 形态 1：css 变量写入（简写为字符串 = 变量名，缺省 = --dshm-custom-<id>）
 { "id": "accent", "type": "color", "target": { "kind": "css", "var": "--dsw-alias-brand-primary" } }
@@ -197,7 +197,7 @@
 { "id": "show-statusbar", "type": "boolean", "default": true,
   "target": { "kind": "rule", "selector": "[class*=Statusbar]",
               "on": "display:flex", "off": "display:none" } }
-// 形态 3：action（JS 回调）——阶段 2 再定
+// 形态 3：action（JS 回调）——预留扩展
 ```
 
 **type 枚举（v0.1）**：`color` / `slider` / `select` / `boolean` / `text` / `font` / `image`。未知 type 渲染器**降级为 text 输入**（forward-compat）；新 type = 注册新渲染器。
@@ -214,9 +214,9 @@
 | 模板继承/复合 | `extends` 字段启用 + schemaVersion 升级 |
 | 非皮肤个性化（字体/布局/行为） | settings `scope: "global"` 先行；独立设定域后续由 schemaVersion 引入 |
 
-**不可查问题清单**（唯一需要提前设计的风险面）：
+**边界问题清单**（需要提前设计的风险面）：
 - token 粒度错位：新皮肤需要的语义无法用现有 `--dsw-alias-*` 表达 → 需 DSH 侧加 token（协作项，不是皮肤侧问题）
-- chrome 资源形态（HTML/函数/组件）未定型 → 阶段 1 迁移时以 bundle 内函数形态落地，manifest 只存引用
+- chrome 资源形态（HTML/函数/组件）未定型 → 当前实现以 bundle 内函数形态落地，manifest 只存引用
 
 ## 8. 应用层（manifest 消费流程）
 
@@ -226,7 +226,7 @@
 ① 基础 token 层（DSH 全局）   --dsw-* 原始色板/尺寸          [已有]
 ② 语义 token 层（DSH 全局）   --dsw-alias-*                  [已有，皮肤消费面]
 ③ 皮肤模板层（manifest 实例）  palette 覆盖 + 组件样式 + chrome [本规范]
-④ 用户自定义层                userOverrides（config.json）    [阶段 2]
+④ 用户自定义层                userOverrides（config.json）    [预留]
 ⑤ Chrome 资源层               bundle 内注入资源              [已有，声明化]
 ```
 
@@ -252,7 +252,7 @@ CSS 层叠顺序：`② < ③ < ④`，全部带皮肤作用域（`body[data-dsh
 
 现有试穿机制（`loadBundleScript → import → apply(ctx)`，皮肤中心 try-on 引擎）不变；`apply(ctx)` 执行时挂 bodyAttr → 注入 ③ 层 CSS（palette 覆盖 + 组件样式）→ 挂载 chrome → 叠加 ④ 层用户覆盖。退出 = 现有 dispose 机制（还原捕获的激活皮肤视觉）。一键应用 = `dsh-skin use <id>`（服务端 /apply，热加载 + 页面重载）。
 
-### 8.4 自定义面板（阶段 2）
+### 8.4 自定义面板
 
 ```
 皮肤详情 → settings 声明解析（spec §6）→ 渲染器按 type 分发生成表单
@@ -273,17 +273,16 @@ CSS 层叠顺序：`② < ③ < ④`，全部带皮肤作用域（`body[data-dsh
 - fork（dsh-web-ui）：皮肤中心 registry 路由 + 客户端渲染（见 §8.2）；`packages/skins/manifests/` = 生成器产物入库
 - 原生设置映射（远期）：token 层是 DSH 的，个性化中心改 token = 影响原生 UI（现有效应），原生字段级映射留余地
 
-## 9. 文档状态
+## 9. 实现状态
 
-- v0.1：设计提案（2026-08-15），5 点商榷已定稿（palette 全量目录+默认值、settings target 双形态、components 核心目录、chrome bundle 内函数、checks scoped-rule）
-- **阶段 0 校验器已落地**：`lib/skin-manifest.js`（纯函数，无 IO）+ `scripts/tests/unit/skin-manifest.test.mjs`（44 断言，含 qq98 实测基线样例），覆盖率 100%。校验项与本节一一对应
-- **分发协议已落地**：`scripts/inject-skin-manifest.mjs`（注入器）——生成器输出静态注入 bundle（`exports.manifest = <常量>`，幂等），真实 bundle 演练通过；12 断言 + 覆盖率 185/185 保持 100%（2026-08-15）
-- **注册流程接入已落地（fork 5883ac1，2026-08-15）**：皮肤中心（dsh-web-ui fork）——`GET /api/skin-center/registry` 服务端读各皮肤 bundle 静态提取 manifest + 校验器输出（validation）；客户端删 SKIN_CENTER_ENTRIES，fetch registry 渲染（warn 角标）；`scripts/skin-center-bundles` 改为批量注入器（manifests/ 目录 = 本仓库生成器产物）。上游测试 72/73（唯一失败为 Windows chmod 限制，与改造无关）
-- **应用层定稿（§8）**：五层管线 + 注册流程（registry 静态提取 + 挡位）+ 试穿/应用 + 自定义面板（阶段 2）+ 入口定位 + 所有权——原独立应用层文档已并入本节
-- **10 皮肤注册记录**：`skins-manifest-record.md`（2026-08-15 全量定稿，含 harbor；部署 0.1.10 缺 harbor 待上游发布）
-- 关联：`skins-manifest-record.md`（实例注册文档）、`skin-center-fork-plan.md`（fork 改造内部设计，不提交）
+- v0.1：schema 契约包含 palette 全量目录、settings target 双形态、components 核心目录、chrome bundle 内函数和 checks scoped-rule。
+- **校验器**：`lib/skin-manifest.js` 提供纯函数校验；`scripts/tests/unit/skin-manifest.test.mjs` 覆盖 schema 规则与代表性皮肤样例。
+- **分发协议**：`scripts/inject-skin-manifest.mjs` 将生成器结果作为静态常量注入 bundle，支持幂等替换、括号配平回读和无锚点拒绝。
+- **注册流程**：皮肤中心通过静态提取 manifest、执行校验并按 manifest.order 展示；未注入 manifest 的皮肤不显示。
+- **应用层**：五层渲染管线、注册、试穿/应用、自定义面板、入口定位与所有权均在本规范中定义。
+- **皮肤注册记录**：实例数据见 `skins-manifest-record.md`；fork 改造方案见 `skin-center-fork-plan.md`（内部设计，不提交）。
 
-## 附录 A：全量 token 目录（95 个，实测提取自 DSH 主题，2026-08-15）
+## 附录 A：全量 token 目录（95 个，来源于 DSH 主题）
 
 > 键省略 `--dsw-alias-` 前缀。皮肤未声明的 token 继承 DSH 主题默认值。
 > 提取方式：页面全部样式表 + body 计算值扫描（`--dsw-alias-*` 去重）。

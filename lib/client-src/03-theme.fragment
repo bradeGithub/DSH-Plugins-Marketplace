@@ -1,0 +1,112 @@
+    // 全部使用 DSH 主题令牌（--dsw-alias-*），自动适配深色/浅色模式
+    var s = {
+      page: { maxWidth: 880, fontFamily: "var(--dsw-font-family, system-ui, sans-serif)", color: "var(--dsw-alias-label-primary)", padding: "4px 2px" },
+      head: { display: "flex", alignItems: "center", gap: 10, marginBottom: 12 },
+      title: { fontSize: 17, fontWeight: 600, margin: 0, color: "var(--dsw-alias-label-primary)" },
+      sub: { fontSize: 12, color: "var(--dsw-alias-label-tertiary)", margin: "2px 0 0" },
+      tabBar: { display: "flex", gap: 4, marginBottom: 14, borderBottom: "1px solid var(--dsw-alias-border-l2)", paddingBottom: 0 },
+      tabBtn: { padding: "7px 16px", borderRadius: "8px 8px 0 0", border: "1px solid transparent", borderBottom: "none", background: "transparent", color: "var(--dsw-alias-label-tertiary)", cursor: "pointer", fontSize: 13, whiteSpace: "nowrap" },
+      tabActive: { padding: "7px 16px", borderRadius: "8px 8px 0 0", border: "1px solid var(--dsw-alias-border-l2)", borderBottom: "2px solid var(--dsw-alias-brand-primary)", background: "var(--dsw-alias-bg-layer-2)", color: "var(--dsw-alias-label-primary)", cursor: "pointer", fontSize: 13, fontWeight: 600, whiteSpace: "nowrap" },
+      btn: { padding: "5px 14px", borderRadius: 6, border: "1px solid var(--dsw-alias-border-l3)", background: "var(--dsw-alias-bg-layer-2)", color: "var(--dsw-alias-label-primary)", cursor: "pointer", fontSize: 13, minWidth: 72, whiteSpace: "nowrap" },
+      btnPrimary: { padding: "5px 14px", borderRadius: 6, border: "1px solid transparent", background: "var(--dsw-alias-button-primary-fill)", color: "var(--dsw-alias-label-primary-foreground)", cursor: "pointer", fontSize: 13, minWidth: 72, whiteSpace: "nowrap" },
+      btnDanger: { padding: "5px 14px", borderRadius: 6, border: "1px solid var(--dsw-alias-state-error-secondary)", background: "transparent", color: "var(--dsw-alias-state-error-primary)", cursor: "pointer", fontSize: 13, minWidth: 72, whiteSpace: "nowrap" },
+      btnUninstall: { padding: "5px 14px", borderRadius: 6, border: "1px solid var(--dsw-alias-state-error-secondary)", background: "var(--dsw-alias-state-error-primary)", color: "var(--dsw-alias-label-primary-inverted, #fff)", cursor: "pointer", fontSize: 13, minWidth: 72, whiteSpace: "nowrap" },
+      btnUpdate: { padding: "5px 14px", borderRadius: 6, border: "1px solid transparent", background: "var(--dsw-alias-state-warn-primary, #d97706)", color: "var(--dsw-alias-label-primary-inverted, #fff)", cursor: "pointer", fontSize: 13, minWidth: 72, whiteSpace: "nowrap", fontWeight: 600 },
+      btnInstalled: { padding: "5px 14px", borderRadius: 6, border: "1px solid var(--dsw-alias-border-l2)", background: "var(--dsw-alias-bg-layer-1)", color: "var(--dsw-alias-label-tertiary)", cursor: "default", fontSize: 13, minWidth: 72, whiteSpace: "nowrap", opacity: 0.85 },
+      card: { border: "1px solid var(--dsw-alias-border-l2)", borderRadius: 10, padding: "12px 14px", marginBottom: 10, background: "var(--dsw-alias-bg-layer-2)" },
+      row: { display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 12 },
+      name: { fontSize: 14, fontWeight: 600, margin: 0, color: "var(--dsw-alias-label-primary)" },
+      meta: { fontSize: 12, color: "var(--dsw-alias-label-tertiary)", margin: "3px 0 0" },
+      link: { color: "var(--dsw-alias-brand-primary)", textDecoration: "none", cursor: "pointer", marginLeft: 4 },
+      updateHint: { color: "var(--dsw-alias-state-warn-primary)", marginLeft: 4 },
+      desc: { fontSize: 13, margin: "8px 0 0", lineHeight: 1.5, color: "var(--dsw-alias-label-secondary)", whiteSpace: "pre-wrap", wordBreak: "break-word" },
+      log: { background: "var(--dsw-alias-bg-base)", border: "1px solid var(--dsw-alias-border-l2)", color: "var(--dsw-alias-label-secondary)", borderRadius: 8, padding: "10px 12px", fontSize: 12, lineHeight: 1.6, maxHeight: 300, overflow: "auto", whiteSpace: "pre-wrap", wordBreak: "break-word", fontFamily: "ui-monospace, 'Cascadia Code', Consolas, monospace" },
+      input: { width: "100%", boxSizing: "border-box", padding: "7px 10px", borderRadius: 6, border: "1px solid var(--dsw-alias-border-l3)", background: "var(--dsw-alias-bg-layer-1)", color: "var(--dsw-alias-label-primary)", fontSize: 13, marginTop: 4 },
+      field: { margin: "10px 0" },
+      q: { fontSize: 13, margin: "0 0 2px", color: "var(--dsw-alias-label-secondary)", whiteSpace: "pre-wrap", wordBreak: "break-word" },
+      badge: { display: "inline-block", padding: "1px 8px", borderRadius: 10, fontSize: 11, border: "1px solid var(--dsw-alias-border-l3)", color: "var(--dsw-alias-label-tertiary)", marginLeft: 8 },
+      badgeShield: { display: "inline-block", padding: "1px 8px", borderRadius: 10, fontSize: 11, border: "1px solid var(--dsw-alias-state-warn-secondary, #b45309)", color: "var(--dsw-alias-state-warn-primary)", marginLeft: 8 },
+      badgeManual: { display: "inline-block", padding: "1px 8px", borderRadius: 10, fontSize: 11, border: "1px solid var(--dsw-alias-border-l3)", color: "var(--dsw-alias-label-secondary)", marginLeft: 8 },
+      badgeNonPlugin: { display: "inline-block", padding: "1px 8px", borderRadius: 10, fontSize: 11, border: "1px solid var(--dsw-alias-state-error-secondary, #b91c1c)", color: "var(--dsw-alias-state-error-primary)", marginLeft: 8 },
+      badgeVerifiedInstall: { display: "inline-block", padding: "1px 8px", borderRadius: 10, fontSize: 11, border: "1px solid var(--dsw-alias-state-success-secondary, #15803d)", color: "var(--dsw-alias-state-success-primary)", marginLeft: 8 },
+      badgePrereq: { display: "inline-block", padding: "1px 8px", borderRadius: 10, fontSize: 11, border: "1px solid var(--dsw-alias-state-warn-secondary, #b45309)", color: "var(--dsw-alias-state-warn-primary)", marginLeft: 8 },
+      badgeCommunityPick: { display: "inline-block", padding: "1px 8px", borderRadius: 10, fontSize: 11, border: "1px solid var(--dsw-alias-brand-primary, #4d6bfe)", color: "var(--dsw-alias-brand-primary)", marginLeft: 8 },
+      badgeBundle: { display: "inline-block", padding: "1px 8px", borderRadius: 10, fontSize: 11, border: "1px solid var(--dsw-alias-state-success-secondary, #15803d)", color: "var(--dsw-alias-state-success-primary)", marginLeft: 8, cursor: "default", textTransform: "none" },
+      badgeDesktop: { display: "inline-block", padding: "1px 8px", borderRadius: 10, fontSize: 11, border: "1px solid var(--dsw-alias-state-warn-secondary, #b45309)", color: "var(--dsw-alias-state-warn-primary)", marginLeft: 8, cursor: "default", textTransform: "none" },
+      badgeArchived: { display: "inline-block", padding: "1px 8px", borderRadius: 10, fontSize: 11, border: "1px solid var(--dsw-alias-state-warn-secondary, #b45309)", color: "var(--dsw-alias-state-warn-primary)", marginLeft: 8, cursor: "default", textTransform: "none" },
+      srcHint: { fontSize: 12, color: "var(--dsw-alias-state-warn-primary, #d97706)", margin: "0 0 8px" },
+      installOverlay: { position: "fixed", inset: 0, zIndex: 2100, display: "grid", placeItems: "center", padding: 20, background: "rgba(15,23,42,.42)", backdropFilter: "blur(4px)" },
+      panel: { boxSizing: "border-box", width: "min(620px, calc(100vw - 40px))", maxHeight: "min(720px, calc(100vh - 40px))", overflow: "auto", border: "1px solid var(--dsw-alias-border-l2)", borderRadius: 14, padding: "18px 20px", background: "var(--dsw-alias-bg-layer-2)", boxShadow: "var(--dsw-shadow-lv4, 0 24px 70px rgba(0,0,0,.3))" },
+      err: { color: "var(--dsw-alias-state-error-primary)", fontSize: 13, margin: "8px 0 0" },
+      errRow: { display: "flex", alignItems: "center", gap: 10, margin: "8px 0 0" },
+      selfUpdBanner: { border: "1px solid var(--dsw-alias-state-warn-secondary, #b45309)", background: "var(--dsw-alias-state-warn-primary-alpha, rgba(180,83,9,.10))", color: "var(--dsw-alias-state-warn-primary, #d97706)", borderRadius: 10, padding: "10px 14px", marginBottom: 12, fontSize: 13, fontWeight: 600 },
+      toast: { position: "fixed", top: 24, left: "50%", transform: "translateX(-50%)", zIndex: 2000, maxWidth: "80vw", padding: "8px 16px", borderRadius: 10, fontSize: 13, boxShadow: "var(--dsw-shadow-lv3, 0 8px 24px rgba(0,0,0,.25))", background: "var(--dsw-alias-button-contrast-fill)", color: "var(--dsw-alias-label-primary-inverted)" },
+      toastErr: { position: "fixed", top: 24, left: "50%", transform: "translateX(-50%)", zIndex: 2000, maxWidth: "80vw", padding: "8px 16px", borderRadius: 10, fontSize: 13, boxShadow: "var(--dsw-shadow-lv3, 0 8px 24px rgba(0,0,0,.25))", background: "var(--dsw-alias-state-error-primary)", color: "var(--dsw-alias-label-primary-inverted)" }
+    };
+
+    function injectStyles() {
+      var css = [
+        ".dshm-btn{transition:background .12s var(--ds-ease-in-out, ease)}",
+        ".dshm-btn:hover{background:var(--dsw-alias-interactive-bg-hover)}",
+        ".dshm-btn:disabled{opacity:.55;cursor:default}",
+        ".dshm-btn-primary:hover{background:var(--dsw-alias-button-primary-hover)}",
+        ".dshm-btn-danger:hover{background:var(--dsw-alias-interactive-bg-hover-danger)}",
+        ".dshm-btn:focus-visible{outline:2px solid var(--dsw-alias-brand-primary);outline-offset:1px}",
+        "@keyframes dshm-progress{0%{transform:translateX(-100%)}100%{transform:translateX(300%)}}",
+        ".dshm-progress{height:4px;margin:14px 0;overflow:hidden;border-radius:4px;background:var(--dsw-alias-bg-layer-3)}",
+        ".dshm-progress>span{display:block;width:34%;height:100%;border-radius:4px;background:var(--dsw-alias-brand-primary);animation:dshm-progress 1.15s ease-in-out infinite}",
+        // 亮色对比度校正（恢复 cea8b27）：qq98/trading/xp/miku 的亮色模式把 bg 层改浅但
+        // label-primary-foreground 仍是白（dark-first 失效），label-tertiary 小字在浅层上
+        // 对比度仅 ~2.2-3.4:1 不可读；这些皮肤下把 .dshm-dim（次要文本）统一提升为
+        // label-secondary（实测 ≥4.6:1）。:not([data-ds-dark-theme]) 限定亮色模式——
+        // 深色模式下 tertiary/secondary 都是浅色系，无需覆盖；CSS 选择器天然响应皮肤动态切换。
+        // 注意：皮肤中心映射表中"同花顺"(id=ths) 的 bodyAttr 是 data-dsh-ths，
+        // 而另有 id=trading 的皮肤 bodyAttr 是 data-dsh-trading——两个都保留。
+        "body[data-dsh-retro]:not([data-ds-dark-theme]) .dshm-dim,body[data-dsh-trading]:not([data-ds-dark-theme]) .dshm-dim,body[data-dsh-ths]:not([data-ds-dark-theme]) .dshm-dim,body[data-dsh-xp]:not([data-ds-dark-theme]) .dshm-dim,body[data-dsh-miku]:not([data-ds-dark-theme]) .dshm-dim{color:var(--dsw-alias-label-secondary)!important}",
+        // 皮肤包原生 UI 白字浅底修正（更深层问题，页面级）：5 皮肤亮色模式把
+        // --dsw-alias-label-primary-foreground 定义为 #fff 配浅 bg-layer（#f2f7fc 等）——
+        // DSH 原生设置面板等用该 alias 的文字不可读（皮肤包 bug，实测确认）。页面级
+        // 覆盖为皮肤自己的主文字色 var(--dsw-alias-label-primary)（亮色下为深色系，
+        // 与浅底对比度 >>4.5:1）；仅问题皮肤 + 仅亮色，深色模式不碰。
+        "body[data-dsh-retro]:not([data-ds-dark-theme]),body[data-dsh-trading]:not([data-ds-dark-theme]),body[data-dsh-ths]:not([data-ds-dark-theme]),body[data-dsh-xp]:not([data-ds-dark-theme]),body[data-dsh-miku]:not([data-ds-dark-theme]){--dsw-alias-label-primary-foreground:var(--dsw-alias-label-primary)!important}",
+        // 亮色模式 UI chrome 白字浅底（更深层问题：皮肤包规则
+        // `[data-pane=sidebar]>div>:first-child *{color:#fff}` 把侧栏入口文字染白。
+        // ths/miku 亮色下侧栏头部是浅渐变叠浅底（ths 实测像素 ~rgb(149,153,159) 2.87:1、
+        // miku ~rgb(126,132,141) 3.7:1 不可读）故覆盖；qq98/xp 侧栏为不透明深蓝渐变
+        // （实测 7~15:1 可读）不覆盖。miku 标题栏 [class*="mikuTitlebar"] 半透明浅彩虹
+        // （像素 rgb(88,109,161)）同样覆盖。
+        // 注意：qq98 的详情面板（explorer-col 头部）为深蓝渐变底 + 白字（实测 8.68:1 可读）
+        // ——曾误加覆盖导致深字深底（实测暴露），故 explorer-col 仅 miku（浅底）覆盖。
+        "body[data-dsh-ths]:not([data-ds-dark-theme]) [data-pane=\"sidebar\"] > div > :first-child,",
+        "body[data-dsh-ths]:not([data-ds-dark-theme]) [data-pane=\"sidebar\"] > div > :first-child *,",
+        "body[data-dsh-miku]:not([data-ds-dark-theme]) [data-pane=\"sidebar\"] > div > :first-child,",
+        "body[data-dsh-miku]:not([data-ds-dark-theme]) [data-pane=\"sidebar\"] > div > :first-child *,",
+        "body[data-dsh-miku]:not([data-ds-dark-theme]) [data-aionui-explorer-col] > div > :first-child,",
+        "body[data-dsh-miku]:not([data-ds-dark-theme]) [data-aionui-explorer-col] > div > :first-child *,",
+        "body[data-dsh-miku]:not([data-ds-dark-theme]) [class*=\"mikuTitlebar\"],",
+        "body[data-dsh-miku]:not([data-ds-dark-theme]) [class*=\"mikuTitlebar\"] *{color:var(--dsw-alias-label-primary)!important}",
+        // qq98 body 根色重绑：皮肤包 `body[data-dsh-retro]{color:#dcebfa}`（浅蓝白）——
+        // body 自身深蓝渐变底上可读，但主区域容器覆盖浅色背景后文字仍继承 #dcebfa
+        // （实测浅字浅底 ~1.5:1 不可读，用户实测暴露）；亮色下重绑为深色 label-primary，
+        // 继承链文字全部修正；深色模式 body 浅字深底本就正确，不碰。
+        "body[data-dsh-retro]:not([data-ds-dark-theme]){color:var(--dsw-alias-label-primary)!important}",
+        // qq98/xp 设置面板溢出染白：皮肤包 `[data-pane=sidebar]>div>:first-child *{color:#fff}`
+        // 通配规则命中侧栏内所有元素——设置面板（hs7_7G_panel overlay，浅底 rgb(232,241,250)）
+        // 挂在侧栏 :first-child DOM 内，文字被溢出染白（qq98 实测白字浅底、xp 同款
+        // rgb(255,255,255)，用户实测暴露）；侧栏深蓝渐变底部分白字可读（7:1）不受影响
+        // （选择器只命中 panel 类）。实测页面可见 [class*="panel"] 仅设置面板一个，覆盖无副作用。
+        // ths/miku 的侧栏通配覆盖规则已含 * 通配，设置面板自然被覆盖，无需此规则。
+        "body[data-dsh-retro]:not([data-ds-dark-theme]) [class*=\"panel\"],",
+        "body[data-dsh-retro]:not([data-ds-dark-theme]) [class*=\"panel\"] *,",
+        "body[data-dsh-xp]:not([data-ds-dark-theme]) [class*=\"panel\"],",
+        "body[data-dsh-xp]:not([data-ds-dark-theme]) [class*=\"panel\"] *{color:var(--dsw-alias-label-primary)!important}"
+      ].join("\n");
+      var el = document.getElementById("dshm-styles");
+      // 覆写式（幂等）：HMR/重复加载时旧 style 标签已存在——直接更新内容，
+      // 新 CSS 必须生效（此前 return 跳过导致 bundle 更新后 CSS 永不刷新——实测暴露）
+      if (el) { el.textContent = css; return; }
+      el = document.createElement("style");
+      el.id = "dshm-styles";
+      el.textContent = css;
+      document.head.appendChild(el);
+    }

@@ -1,4 +1,4 @@
-import { compareVersions, shouldUpdate, isTrustedRequest, isTrustedHost, isSensitiveEnvKey, buildMinimalEnv, buildFilteredEnv, looksLikeDshPlugin, wslPosixPath, normalizeRepoRef, dedupeReposByPkgName, slugify, SCRIPT_ENV_KEYS, sanitizeLog, buildFeedbackLogSnapshot, buildEnvProfile } from "../../../lib/index.js";
+import { compareVersions, shouldUpdate, isTrustedRequest, isTrustedHost, isSensitiveEnvKey, buildMinimalEnv, buildFilteredEnv, looksLikeDshPlugin, wslPosixPath, normalizeRepoRef, dedupeReposByPkgName, slugify, SCRIPT_ENV_KEYS, sanitizeLog, buildFeedbackLogSnapshot, buildEnvProfile, safeAssign } from "../../../lib/index.js";
 
 let pass = 0, fail = 0;
 function check(name, actual, expected) {
@@ -117,7 +117,8 @@ check("dedupe 无已装时高星优先", dedupeReposByPkgName(
   () => false
 ).repos[0].full_name, "b/new");
 check("dedupe 不同 pkg_name 不去重", dedupeReposByPkgName(
-  [{ full_name: "a/x", pkg_name: "x" }, { full_name: "a/y", pkg_name: "y" }]
+  [{ full_name: "a/x", pkg_name: "x" }, { full_name: "a/y", pkg_name: "y" }],
+  () => false
 ).repos.length, 2);
 // 性质测试发现：已装条目 stargazers_count 非数值（NaN）时 rank = 1e12 + NaN = NaN，
 // 与未装条目比较恒不成立 → 已装条目被顶掉（1e12 保底只在 stars 数值时成立）。
@@ -210,6 +211,15 @@ check("无依赖无字段 → 非插件", looksLikeDshPlugin({ name: "x" }), fal
 check("空对象 → 非插件", looksLikeDshPlugin({}), false);
 check("null → 未知", looksLikeDshPlugin(null), null);
 check("非对象 → 未知", looksLikeDshPlugin("str"), null);
+
+// ---- safeAssign 原型污染防护 ----
+{
+  const source = JSON.parse('{"__proto__":{"polluted":true},"ok":1}');
+  const merged = safeAssign({}, source);
+  check("safeAssign 不改变目标原型", Object.getPrototypeOf(merged), Object.prototype);
+  check("safeAssign 不创建 __proto__ 自有键", Object.hasOwn(merged, "__proto__"), false);
+  check("safeAssign 保留普通字段", merged.ok, 1);
+}
 
 
 console.log(`\n${pass} passed, ${fail} failed`);

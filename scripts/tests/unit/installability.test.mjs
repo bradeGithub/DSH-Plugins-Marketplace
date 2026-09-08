@@ -1,6 +1,6 @@
-// verify-installability.mjs 判定纯函数测试——重点守护「深层 SKILL.md 不算 skill」：
+// verify-installability.mjs 判定纯函数测试——重点验证「深层 SKILL.md 不算 skill」：
 // reactive-resume（skills/resume-builder/SKILL.md）/ OpenViking（bot/workspace/skills/*/SKILL.md）
-// 蹭 topic 案例曾因 SKILL_RE 命中任意路径 SKILL.md 被误判 skill 而漏过 non-plugin 徽章。
+// 深层路径曾因 SKILL_RE 命中任意路径 SKILL.md 被误判 skill 而漏过 non-plugin 徽章。
 import { verdictOf } from "../../verify-installability.mjs";
 import { isBundlePackage, classifyEcoType } from "../../build-registry.mjs";
 
@@ -11,11 +11,11 @@ function check(name, actual, expected) {
   console.log(`${ok ? "PASS" : "FAIL"} ${name}: got ${actual}, want ${expected}`);
 }
 
-// 根 package.json + 无 dsh 声明 + 深层 SKILL.md → pkg-plain（蹭 topic 案例）
-check("根清单无 dsh 声明 + 深层 SKILL.md → pkg-plain（reactive-resume 案例）",
+// 根 package.json + 无 dsh 声明 + 深层 SKILL.md → pkg-plain（深层路径场景）
+check("根清单无 dsh 声明 + 深层 SKILL.md → pkg-plain（reactive-resume 场景）",
   verdictOf({ rootPkg: true, hasSkill: true, rootSkill: false, truncated: false }, false, false),
   "pkg-plain");
-check("根清单无 dsh 声明 + 深层 SKILL.md → pkg-plain（OpenViking 案例）",
+check("根清单无 dsh 声明 + 深层 SKILL.md → pkg-plain（OpenViking 场景）",
   verdictOf({ rootPkg: true, hasSkill: true, rootSkill: false, truncated: false }, false, false),
   "pkg-plain");
 // 根 SKILL.md 才是 skill（skill-with-tooling 合法形态）
@@ -43,10 +43,10 @@ check("preset → agent-preset",
 check("根 install 脚本 → script",
   verdictOf({ rootScript: true, rootPkg: true, hasSkill: false }, false, false),
   "script");
-check("深层 install.sh + 根清单无声明 → pkg-plain（OpenViking 案例）",
+check("深层 install.sh + 根清单无声明 → pkg-plain（OpenViking 场景）",
   verdictOf({ rootPkg: true, hasScript: true, rootScript: false, truncated: false }, false, false),
   "pkg-plain");
-check("dsh 声明优先于根脚本（B1）→ cordis-plugin",
+check("dsh 声明优先于根脚本→ cordis-plugin",
   verdictOf({ rootPkg: true, rootScript: true }, true, false),
   "cordis-plugin");
 // truncated 保守路径
@@ -63,7 +63,7 @@ check("gone → gone",
   verdictOf({ gone: true }, false, false),
   "gone");
 
-// ---- C1：bundle 声明判定（bundle-plugin 子类型）----
+// bundle 声明判定（bundle-plugin 子类型）----
 check("bundle 声明 + 根清单 → bundle-plugin",
   verdictOf({ rootPkg: true, bundle: true, truncated: false }, true, false),
   "bundle-plugin");
@@ -77,7 +77,7 @@ check("bundle + 根 SKILL.md 无 dsh 声明 → skill（bundle 仅随 dsh 声明
   verdictOf({ rootPkg: true, rootSkill: true, bundle: true, truncated: false }, false, false),
   "skill");
 
-// ---- C1：isBundlePackage 判定（build-registry 脚本侧来源）----
+// isBundlePackage 判定（build-registry 脚本侧来源）----
 check("dsh.bundle.patch 非空 → bundle",
   isBundlePackage({ dsh: { bundle: { patch: "./cordis.patch.yml" } } }), true);
 check("dsh.bundle.patch 空字符串 → 非 bundle",
@@ -91,7 +91,7 @@ check("无 dsh → 非 bundle",
 check("null/非对象 → 非 bundle",
   isBundlePackage(null), false);
 
-// ---- T3：classifyEcoType 生态件类型（eco_type 字段）----
+// classifyEcoType 生态件类型（eco_type 字段）----
 check("eco_type bundle：dsh.bundle.patch 非空",
   classifyEcoType({ dsh: { bundle: { patch: "./cordis.patch.yml" } } }), "bundle");
 check("eco_type plugin：dsh 声明无 bundle",
@@ -101,7 +101,7 @@ check("eco_type null：无 dsh 声明",
 check("eco_type null：非对象",
   classifyEcoType(null), null);
 
-// ---- T1：desktop 形态判定（eco_type="desktop"，安装器/客户端/启动器）----
+// desktop 形态判定（eco_type="desktop"，安装器/客户端/启动器）----
 check("desktop：名称命中 launcher 且无 dsh 声明",
   classifyEcoType({ name: "x" }, { name: "dsh-launcher", description: "lightweight launcher" }), "desktop");
 check("desktop：描述命中 桌面客户端",

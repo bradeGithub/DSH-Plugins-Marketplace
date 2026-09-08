@@ -6,18 +6,25 @@
 // 前置：git 可用（`git --version`）；npm 缺失时跳过 cordis-plugin 分支。
 // 运行：node scripts/tests/e2e/install.e2e.mjs
 
-import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, existsSync, rmSync, renameSync } from "node:fs";
+import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, existsSync, rmSync, renameSync, chmodSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { tmpdir } from "node:os";
 import { execFileSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 
+const requireE2e = process.env.DSH_REQUIRE_E2E === "1" || process.env.CI === "true";
+function reportMissingPrerequisite(message) {
+  const status = requireE2e ? 1 : 0;
+  const label = requireE2e ? "FAIL" : "SKIP";
+  console.error(`${label}: ${message}`);
+  process.exit(status);
+}
+
 // 检查 git
 try {
   execFileSync("git", ["--version"], { stdio: "pipe" });
 } catch {
-  console.log("SKIP: git 不可用，跳过 e2e");
-  process.exit(0);
+  reportMissingPrerequisite("git 不可用，无法执行真实安装 E2E");
 }
 
 // 检查 npm（cordis-plugin 分支需要真实 npm；不可用则只跳过该分支）。
@@ -33,6 +40,9 @@ try {
 } catch {
   npmAvailable = false;
 }
+if (!npmAvailable && requireE2e) {
+  reportMissingPrerequisite("npm 不可用，无法执行 cordis-plugin 安装 E2E");
+}
 
 // 检查 pnpm（pnpm 分支需要真实 pnpm；缺失时该分支断言为失败路径）。
 // Windows 上 pnpm 是 .cmd 垫片——与 lib 的 runPnpm 同款（cmd.exe /c pnpm）。
@@ -43,6 +53,9 @@ try {
     { stdio: "pipe" });
 } catch {
   pnpmAvailable = false;
+}
+if (!pnpmAvailable && requireE2e) {
+  reportMissingPrerequisite("pnpm 不可用，无法执行 pnpm 安装分支 E2E");
 }
 
 // 临时 DSH_HOME + fixture 目录（必须在 lib 加载前设置——用动态 import 控制顺序）
@@ -87,7 +100,8 @@ function setupUrlRewrite(owner, repoName) {
   const repoPath = join(FIXTURE_BASE, repoName).replace(/\\/g, "/");
   const cfgPath = join(HOME, "gitconfig");
   const entry = `[url "${repoPath}"]\n\tinsteadOf = https://github.com/${owner}/${repoName}.git\n`;
-  writeFileSync(cfgPath, (existsSync(cfgPath) ? readFileSync(cfgPath, "utf8") : "") + entry, "utf8");
+  const current = existsSync(cfgPath) ? readFileSync(cfgPath, "utf8") : "[core]\n\tautocrlf = false\n\n";
+  writeFileSync(cfgPath, current + entry, "utf8");
   process.env.GIT_CONFIG_GLOBAL = cfgPath;
   console.log(`[e2e] ${repoPath} <- https://github.com/${owner}/${repoName}.git`);
 }
@@ -524,7 +538,7 @@ function setupUrlRewrite(owner, repoName) {
 
   // ---- cordis-plugin 分支：真实 npm 安装（runNpm / npmInstallWithFallback）----
   if (!npmAvailable) {
-    console.log("SKIP: npm 不可用，跳过 cordis-plugin e2e");
+    console.error("SKIP: npm 不可用，跳过 cordis-plugin e2e（非严格本地模式）");
   } else {
     // 离线安装：file: 依赖 + npm_config_offline，杜绝对 npm registry 的网络依赖
     process.env.npm_config_offline = "true";
@@ -776,6 +790,8 @@ function setupUrlRewrite(owner, repoName) {
     `if [ -f "${failFlagPosix}" ]; then exit 1; fi`,
     "exit 0"
   ].join("\n"), "utf8");
+  // POSIX 下 runDsh 直接 spawn `dsh`，脚本必须可执行，否则 ENOENT 回退 cordis-plugin。
+  if (process.platform !== "win32") chmodSync(join(fakeBin, "dsh"), 0o755);
   writeFileSync(join(fakeBin, "dsh.cmd"), [
     "@echo off",
     `echo %* >> "${argsLog}"`,

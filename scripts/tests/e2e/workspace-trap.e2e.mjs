@@ -116,7 +116,8 @@ if (npmAvailable) {
   }), "utf8");
   let npmOk = false, npmErr = "";
   try {
-    await execFileAsync("cmd.exe", ["/d", "/s", "/c", "npm", "install", "--no-audit", "--no-fund"],
+    await execFileAsync(process.platform === "win32" ? "cmd.exe" : "npm",
+      process.platform === "win32" ? ["/d", "/s", "/c", "npm", "install", "--no-audit", "--no-fund"] : ["install", "--no-audit", "--no-fund"],
       { cwd: npmSub, maxBuffer: 32 * 1024 * 1024, windowsHide: true, timeout: 600000 });
     npmOk = true;
   } catch (e) { npmErr = String(e?.message ?? e).slice(0, 120); }

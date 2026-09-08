@@ -23,6 +23,7 @@ mkdirSync(join(home, "profiles", "desktop"), { recursive: true });
 const configFile = join(marketRoot, "config.json");
 
 const lib = await import("../../../lib/index.js");
+const profileDomain = await import("../../../lib/domain/profile.js");
 
 let pass = 0, fail = 0;
 function check(name, actual, expected) {
@@ -30,6 +31,26 @@ function check(name, actual, expected) {
   if (ok) pass++; else fail++;
   console.log(`${ok ? "PASS" : "FAIL"} ${name}: got ${JSON.stringify(actual)}, want ${JSON.stringify(expected)}`);
 }
+
+// ---- profile domain 访问器与切换订阅 ----
+check("profile 域默认 profile", profileDomain.profileName(), "web");
+check("profileNodeModules 访问器与当前 profile 同步", profileDomain.profileNodeModules(), lib.getProfileNodeModules(), true);
+check("profileDir 访问器指向当前 profile", profileDomain.profileDir(), join(home, "profiles", "web"));
+check("profilePatchFile 访问器指向当前 profile", profileDomain.profilePatchFile(), join(home, "profiles", "web", "cordis.patch.yml"));
+check("profilePackageFile 访问器指向当前 profile", profileDomain.profilePackageFile(), join(home, "profiles", "web", "package.json"));
+let profileChanges = 0;
+const unsubscribe = profileDomain.onProfileChange(() => { profileChanges++; });
+check("profile 订阅返回取消函数", typeof unsubscribe, "function");
+profileDomain.setTargetProfile("desktop");
+check("profile 域切换后访问器更新", profileDomain.profileNodeModules().includes(join("profiles", "desktop", "node_modules")), true);
+check("profileDir 随切换更新", profileDomain.profileDir().includes(join("profiles", "desktop")), true);
+check("profilePatchFile 随切换更新", profileDomain.profilePatchFile().includes(join("profiles", "desktop", "cordis.patch.yml")), true);
+check("profilePackageFile 随切换更新", profileDomain.profilePackageFile().includes(join("profiles", "desktop", "package.json")), true);
+profileDomain.setTargetProfile("desktop");
+check("同 profile 设置仍触发订阅", profileChanges, 2);
+unsubscribe();
+profileDomain.setTargetProfile("web");
+check("取消订阅后不再通知", profileChanges, 2);
 
 // ---- setTargetProfile 白名单 ----
 check("setTargetProfile 合法名生效", lib.setTargetProfile("desktop"), "desktop");
@@ -60,8 +81,8 @@ check("readTargetProfile 合法配置生效", await lib.readTargetProfile(), { p
 writeFileSync(configFile, "{ broken", "utf8");
 check("readTargetProfile 损坏 JSON 回退 web", await lib.readTargetProfile(), { profile: "web", fromConfig: false });
 
-// ---- 切换 profile 后扫描缓存失效（五轮审计）----
-// profileScanCache 按 PROFILE_NM 构建（列表「已安装」标注来源）。切换后必须重扫：
+// ---- 切换 profile 后扫描缓存失效----
+// profileScanCache 按当前 profile 的 node_modules 构建（列表「已安装」标注来源）。切换后必须重扫：
 // 否则 desktop 已装插件在 web 列表仍标「已装」，切回时旧标注反向残留。
 {
   mkdirSync(join(home, "profiles", "web", "node_modules", "alpha-pkg"), { recursive: true });

@@ -11,14 +11,14 @@
 <type>(<scope>): <描述>
 ```
 
-- `type` 白名单：`feat / fix / chore / ci / docs / style / refactor / test / perf / assets / revert`
+- `type` 白名单：`feat / fix / chore / ci / docs / style / refactor / test / perf / assets / revert / merge`
 - `scope` 可选：小写字母 + 连字符，如 `fix(install)`
 - 描述：中文为主，技术细节可用括号补充
 - 全行无表情符号（emoji）
 
 样例（来自仓库历史）：
 ```
-feat: 通用 Skills 栏目前端 tab（步骤 5）
+feat: 通用 Skills 栏目前端 tab
 fix: getList 参数错位导致列表加载崩溃（undefined.length）
 fix(install): 剥离 pnpm 专用 link:/workspace: 依赖后再 npm install
 chore: update registry.json
@@ -32,13 +32,18 @@ chore: update registry.json
 
 ### 1.3 禁止事项
 
-- 主题与正文禁止 emoji（commit-msg hook 检查；等级按 `.hooksrc` 分级，当前 warn 仅提醒）
+- 主题与正文禁止 emoji（commit-msg hook 检查；`.hooksrc` 当前为 error，命中即阻断）
 - 禁止无 type 的提交（commit-msg hook 强制）
 
 ## 2. 代码规范
 
-- 语言：JavaScript（ESM），无构建步骤，纯 node 可跑
+- 语言：JavaScript（ESM），Node 脚本无通用构建步骤，纯 node 可跑
+- 浏览器市场 bundle 由 `lib/client-src/*.fragment` 经 `node scripts/assemble-client.mjs` 确定性拼接到 `lib/client.js`；发布仍只有单一 bundle
+- 服务端依赖方向固定为 `http → app → domain`，HTTP 可直接依赖 `infra`；`lib/index.js` 是组合入口与宿主启动编排点，不是唯一业务实现位置
+- 当前架构边界：`lib/index.js` 是宿主启动编排与兼容导出入口，`lib/client.js` 保持单 factory 发布 bundle；profile/index、list runtime、安装执行和安全扫描等职责由对应的 app/domain/infra 模块承接。
+- 新增或调整职责时，必须以单一职责边界为单位先补契约测试，再复跑完整质量门
 - 注释：**中文**，`/** */` 块注释解释"为什么"，行内注释补充边界条件
+- 公共文本：代码注释、测试说明和 `docs/` 只描述稳定的技术原因、行为和架构边界；不得写内部推进编号、轮次、内部评审记录或迁移过程。语义化版本、issue 编号以及 mutation/fixture 标识在确有追溯或复现价值时可以保留；私有工作区的 `_` 记录不受此限制
 - 注释说明行为动机而非复述代码
 - 函数：纯函数优先，便于 unit 测试覆盖
 - 新增逻辑需同步补充 unit 断言
@@ -47,13 +52,13 @@ chore: update registry.json
 
 - **架构**：测试金字塔（unit → integration → e2e），完整规范见 [TESTING.md](TESTING.md)
 - 统一运行器：`node scripts/tests/run.mjs`
-- 覆盖率：`node scripts/coverage.mjs`（lib/index.js 非豁免 100%，口径见 TESTING.md §4；当前 303/303）
+- 覆盖率：`node scripts/coverage.mjs`（lib 与 Node 脚本非豁免函数 100%，当前 584/584；client bundle 由 VM 运行时契约和 assembler 无漂移契约守护）
 - 新增纯函数必须配套断言；hook 校验逻辑必须可测（放 validate.mjs）
 - 日志脱敏（`lib/redact.js`）与安装反馈（`docs/FEEDBACK.md`）属正式能力：改脱敏规则须同步
   redact.test.mjs 泄漏/误报面断言（成对维护，见 TESTING.md §5.4）；workspace 吞依赖陷阱
   回归由 `scripts/tests/e2e/workspace-trap.e2e.mjs` 守护（见 TESTING.md §5）
 - 真实安装验收（手动）：`scripts/tests/manual/real-install-verify.mjs`（不进自动金字塔，见 TESTING.md §5）
-- CI：`node --check` 语法检查 + 金字塔测试同步执行（见 registry.yml）
+- CI/推送前：快速门执行 `node --check` + unit/integration；完整 Node E2E、coverage、mutation 和浏览器 E2E 分别通过显式命令执行，缺少 E2E 前置工具时严格模式失败（见 [GIT_HOOKS.md](GIT_HOOKS.md) 与 [TESTING.md](TESTING.md)）
 
 ## 4. 文档规范
 
@@ -94,12 +99,12 @@ chore: update registry.json
 - [7. 新规范落地流程](#7-新规范落地流程)
 <!-- /TOC -->`
 - 标题带 emoji 时，TOC 锚点按 GitHub slug 规则去除 emoji
-- pre-commit hook 检测：TOC 缺失或过期 → 按 `.hooksrc` 分级拦截（当前 warn 仅提醒；运行 `node scripts/toc.mjs --check`）
+- pre-commit hook 检测：TOC 缺失或过期 → 按 `.hooksrc` 分级拦截（当前为 error；运行 `node scripts/toc.mjs --check`）
 
 ### 4.4 禁止事项
 
 - 新增/修改内容禁止 emoji（含 README 标题、CHANGELOG 条目、commit）
-- 历史内容暂不清理，后续优化迭代中逐步移除
+- 历史文档可保留版本发布记录、issue 追踪和可复现测试事实；不应新增只描述内部推进过程的阶段、轮次和评审标签，已有公共文本应在维护时改写为稳定语义
 
 ### 4.5 文档链接
 
@@ -113,9 +118,9 @@ chore: update registry.json
 
 ## 6. Git Hook 体系
 
-| Hook | 阶段 | 检查内容 |
+| Hook | 执行时机 | 检查内容 |
 |---|---|---|
-| `pre-commit` | 提交前 | 语法检查、测试金字塔、TOC 检测、敏感密钥扫描、覆盖率 |
+| `pre-commit` | 提交前 | 语法检查、unit/integration、TOC 检测、敏感密钥扫描 |
 | `commit-msg` | 提交信息 | 主题格式、type 白名单、禁 emoji |
 
 安装：`.\scripts\install-hooks.ps1`（Windows）或手动复制 `.git/hooks/`。

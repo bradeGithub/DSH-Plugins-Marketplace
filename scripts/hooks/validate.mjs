@@ -82,11 +82,29 @@ export function hasEmoji(text) {
 /** 需要语法检查的文件清单（与 CI registry.yml 保持一致）。 */
 export const SYNTAX_CHECK_FILES = [
   "lib/index.js",
+  "lib/app/install-exec.js",
+  "lib/app/installed-state.js",
+  "lib/infra/bundle-register.js",
+  "lib/domain/security-scan.js",
+  "lib/infra/security-scan.js",
+  "lib/infra/adaptor.js",
+  "lib/infra/marketplace-metadata.js",
+  "lib/domain/adaptor.js",
+  "lib/domain/scan.js",
+  "lib/http/marketplace-contract.js",
   "lib/client.js",
+  "scripts/assemble-client.mjs",
   "scripts/build-registry.mjs",
+  "scripts/registry/validate-categories.mjs",
+  "scripts/registry/refresh-audit-snapshots.mjs",
+  "scripts/validate-categories.mjs",
+  "scripts/refresh-audit-snapshots.mjs",
   "scripts/smoke-tests.mjs",
   "scripts/toc.mjs",
   "scripts/coverage.mjs",
+  "scripts/benchmarks/marketplace.mjs",
+  "scripts/provenance.mjs",
+  "scripts/tests/run.mjs",
   "scripts/hooks/check.mjs",
   "scripts/hooks/validate.mjs",
 ];
@@ -94,10 +112,10 @@ export const SYNTAX_CHECK_FILES = [
 /** 有效等级集合。 */
 export const LEVELS = ["error", "warn", "off"];
 
-/** Hook 配置默认值（仓库默认降级：emoji/TOC 只提醒不阻断，密钥扫描保持 error）。 */
+/** Hook 配置默认值（emoji、TOC 和密钥扫描均严格阻断）。 */
 export const DEFAULT_HOOK_CONFIG = {
-  emojiLevel: "warn",              // error | warn | off（提交信息 emoji 检查，默认 warn 不阻断）
-  tocLevel: "warn",                // error | warn | off（README TOC 检查，默认 warn 不阻断）
+  emojiLevel: "error",             // error | warn | off（提交信息 emoji 检查，默认 error）
+  tocLevel: "error",               // error | warn | off（README TOC 检查，默认 error）
   requireCommitMsg: true,
   secretLevel: "error",            // error | warn | off（密钥扫描）
   secretExclusions: [],            // 排除路径片段（如 ".env.example"）

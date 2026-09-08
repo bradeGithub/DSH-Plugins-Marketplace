@@ -1,0 +1,215 @@
+    function RepoCard(props) {
+      var repo = props.repo;
+      var busy = props.busy;        // 全局互斥：任何安装进行中 → 所有安装按钮禁用
+      var selfBusy = props.selfBusy; // 本卡片正在安装 → 显示「安装中...」
+      var installed = !!props.installed;
+      var updateAvailable = !!props.updateAvailable;
+      // v1.4.11：npm 型 cli 已安装 → 「检测更新」手动按钮（checkSt: null / "checking" / "update:vX"）
+      var npmCli = installed && !!repo.cliNpm;
+      var checkState = useState(null);
+      var checkSt = checkState[0];
+      var setCheckSt = checkState[1];
+      var checkReady = npmCli && typeof checkSt === "string" && checkSt.indexOf("update:") === 0;
+      var checking = npmCli && checkSt === "checking";
+      var done = installed && !updateAvailable && !npmCli;
+      // skills 索引专属标识：含安装脚本（🛡）/ 探测未知（弱提示）
+      var shield = repo.has_install_script === true;
+      var unverified = repo.has_skill === null;
+      // 可安装性徽标（registry 构建期盖章）：非 DSH 插件 / 仅手动安装
+      var manualOnly = repo.installable === "manual";
+      var nonPlugin = repo.installable === "non-plugin";
+      // 人工验证标注（registry 构建期注入）：实测可一键安装 / 需前置内容
+      var verifiedInstall = Array.isArray(repo.market_tags) && repo.market_tags.indexOf("verified-install") >= 0;
+      var prereq = Array.isArray(repo.market_tags) && repo.market_tags.indexOf("prereq") >= 0;
+      // 社区精选（registry 构建期抓取 awesome 聚合页收录打标）
+      var communityPick = Array.isArray(repo.market_tags) && repo.market_tags.indexOf("community-pick") >= 0;
+      // 运行时验证徽章（discussion #2269 对接：qing3a/dsh-plugin-verify 构建期盖章，verdict=pass）
+      var verifiedPass = repo.verdict === "pass";
+      var verifiedUrl = /^https:\/\/github\.com\//.test(String(repo.reportUrl || "")) ? repo.reportUrl : null;
+      var verifiedEvidence = [];
+      if (typeof repo.waterfall === "string" && repo.waterfall) verifiedEvidence.push("waterfall " + repo.waterfall);
+      if (typeof repo.toolsResult === "boolean") verifiedEvidence.push("tools " + (repo.toolsResult ? "✓" : "✗"));
+      var verifiedTip = verifiedPass
+        ? t("badgeVerifiedTip", {
+            by: repo.verifiedBy || "dsh-plugin-verify",
+            at: String(repo.verifiedAt || "").slice(0, 10),
+            ev: verifiedEvidence.length > 0 ? "· " + verifiedEvidence.join(" · ") : ""
+          })
+        : "";
+      // 披露徽章（discussion #2269 合规层：wwumit/skills-catalog 开放数据层构建期盖章）
+      var hasDisclosure = repo.disclosure && typeof repo.disclosure === "object";
+      var disclosureTip = "";
+      if (hasDisclosure) {
+        var d = repo.disclosure;
+        var discParts = [d.cloud === true ? t("discCloud") : t("discLocal")];
+        if (Array.isArray(d.network) && d.network.length > 0) discParts.push(t("discNetwork", { n: d.network.join(", ") }));
+        if (Array.isArray(d.apiKeys) && d.apiKeys.length > 0) discParts.push(t("discApiKeys", { n: d.apiKeys.map(function (k) { return k && k.env ? k.env : "?"; }).join(", ") }));
+        if (Array.isArray(d.jurisdiction) && d.jurisdiction.length > 0) discParts.push(t("discJurisdiction", { n: d.jurisdiction.join(", ") }));
+        if (typeof d.retention === "string" && d.retention) discParts.push(t("discRetention", { n: d.retention }));
+        disclosureTip = discParts.join(" · ");
+      }
+      // 只渲染 https://github.com 链接，杜绝 javascript: 等协议注入
+      var safeUrl = /^https:\/\/github\.com\//.test(String(repo.html_url || "")) ? repo.html_url : null;
+      return h("div", { style: s.card },
+        h("div", { style: s.row },
+          h("div", { style: { flex: 1, minWidth: 0, marginRight: 12 } },
+            h("p", { style: s.name }, repo.name,
+              h("span", { className: "dshm-dim", style: s.badge }, repo.stargazers_count > 0 ? "★ " + repo.stargazers_count : t("badgeNew")),
+              repo.category && repo.category !== "other" ? h("span", { className: "dshm-dim", style: s.badge }, t("cat" + String(repo.category).split("-").map(function (p) { return p.charAt(0).toUpperCase() + p.slice(1); }).join(""))) : null,
+              shield ? h("span", { style: s.badgeShield }, t("badgeShield")) : null,
+              manualOnly ? h("span", { style: s.badgeManual }, t("badgeManual")) : null,
+              nonPlugin ? h("span", { style: s.badgeNonPlugin }, t("badgeNonPlugin")) : null,
+              unverified ? h("span", { style: s.badge }, t("badgeUnverified")) : null,
+              verifiedInstall ? h("span", { style: s.badgeVerifiedInstall }, t("badgeVerifiedInstall")) : null,
+              repo.eco_type === "bundle" ? h("span", { style: s.badgeBundle, title: t("badgeBundleTip") }, t("badgeBundle")) : null,
+              repo.eco_type === "desktop" ? h("span", { style: s.badgeDesktop, title: t("badgeDesktopTip") }, t("badgeDesktop")) : null,
+              repo.archived === true ? h("span", { style: s.badgeArchived, title: t("badgeArchivedTip") }, t("badgeArchived")) : null,
+              prereq ? h("span", { style: s.badgePrereq }, t("badgePrereq")) : null,
+              communityPick ? h("span", { style: s.badgeCommunityPick, title: t("badgeCommunityPickTip") }, t("badgeCommunityPick")) : null,
+              verifiedPass ? h("span", { style: s.badgeVerifiedInstall, title: verifiedTip },
+                verifiedUrl ? h("a", { href: verifiedUrl, target: "_blank", rel: "noopener noreferrer", style: { color: "inherit", textDecoration: "none" } }, t("badgeVerified")) : t("badgeVerified")) : null,
+              hasDisclosure ? h("span", { style: s.badgeVerifiedInstall, title: disclosureTip }, t("badgeDisclosure")) : null),
+            h("p", { style: s.meta }, repo.full_name + " · " + t("updatedAt", { d: (repo.updated_at || "").slice(0, 10) }) + (repo.license ? " · " + repo.license : "") + " · ",
+              safeUrl ? h("a", { href: safeUrl, target: "_blank", rel: "noopener noreferrer", style: s.link }, t("githubLink")) : null,
+              updateAvailable ? h("span", { style: s.updateHint }, t("updateHint", { old: repo.installedVersion, new: repo.latestVersion })) : null),
+            repo.description ? h("p", { style: s.desc }, repo.description) : null,
+            repo.topics && repo.topics.length > 0 ? h("p", { className: "dshm-dim", style: s.meta }, t("tags", { tags: repo.topics.slice(0, 6).join(", ") })) : null
+          ),
+          h("div", { style: { flex: "none", display: "flex", flexDirection: "column", gap: 6, alignItems: "stretch" } },
+            h("button", {
+              className: "dshm-btn" + (done || npmCli ? "" : " dshm-btn-primary"),
+              style: checkReady ? s.btnUpdate : (npmCli ? s.btn : (done ? s.btnInstalled : (updateAvailable ? s.btnUpdate : s.btnPrimary))),
+              disabled: busy || done || nonPlugin || checking || props.uninstalling === repo.full_name,
+              title: nonPlugin ? t("installDisabledTip") : undefined,
+              onClick: function () {
+                // npm 型 cli：先「检测更新」；检测到新版后按钮变「更新」走安装管线重装
+                if (npmCli && !checkReady) { props.onCheckUpdate(repo, setCheckSt); return; }
+                props.onInstall(repo.full_name);
+              }
+            }, selfBusy ? t("installing")
+              : (updateAvailable ? t("update")
+                : (checkReady ? t("updateTo", { new: checkSt.slice("update:".length) })
+                  : (checking ? t("checkingUpdate")
+                    : (npmCli ? t("checkUpdate")
+                      : (installed ? t("installed")
+                        : (nonPlugin ? t("installDisabled") : t("install")))))))),
+            installed ? h("button", {
+              className: "dshm-btn",
+              style: Object.assign({}, s.btn, { border: "1px solid var(--dsw-alias-border-l3)" }),
+              disabled: busy || props.uninstalling === repo.full_name,
+              onClick: function () { props.onEdit(repo.full_name); }
+            }, t("editBtn")) : null,
+            installed ? h("button", {
+              className: "dshm-btn dshm-btn-danger",
+              style: s.btnUninstall,
+              disabled: busy || props.uninstalling === repo.full_name,
+              onClick: function () { props.onUninstall(repo.full_name); }
+            }, props.uninstalling === repo.full_name ? t("uninstallingBtn") : t("uninstall")) : null
+          )
+        )
+      );
+    }
+
+    /** 把 question 文本中的 http(s) URL 渲染为可点击链接（弹窗里给仓库链接方便自行安装）。 */
+    function linkify(text) {
+      return String(text).split(/(https?:\/\/[^\s]+)/g).map(function (part, i) {
+        if (/^https?:\/\//.test(part)) {
+          return h("a", { key: i, href: part, target: "_blank", rel: "noopener noreferrer", style: s.link }, part);
+        }
+        return h("span", { key: i }, part);
+      });
+    }
+
+    function InstallPanel(props) {
+      var inst = props.inst;
+      var inputValues = props.inputValues;
+      var setInputValues = props.setInputValues;
+      // README CLI 指令复制反馈（顶层声明，遵守 hooks 调用顺序）
+      var copyState = useState(false); var copied = copyState[0]; var setCopied = copyState[1];
+      if (inst.phase === "input") {
+        var hasTextQuestion = inst.questions.some(function (q) { return !(q.options && q.options.length > 0); });
+        return h("div", { id: "dshm-install-panel", style: s.panel },
+          h("p", { style: s.title, margin: "0 0 8px" }, t("inputTitle", { repo: inst.repo })),
+          h("div", { style: s.log }, inst.log.map(function (l, i) { return h("div", { key: i }, l); })),
+          inst.questions.map(function (q) {
+            var value = inputValues[q.id] || "";
+            if (q.options && q.options.length > 0) {
+              return h("div", { style: s.field, key: q.id },
+                h("p", { style: s.q }, linkify(q.question)),
+                h("div", { style: { display: "flex", gap: 8, marginTop: 6 } },
+                  q.options.map(function (opt) {
+                    var primary = opt.value === "continue" || opt.value === "allow";
+                    return h("button", {
+                      key: opt.value || opt.label,
+                      className: primary ? "dshm-btn dshm-btn-primary" : "dshm-btn dshm-btn-danger",
+                      style: primary ? s.btnPrimary : s.btnDanger,
+                      onClick: function () {
+                        var next = Object.assign({}, inputValues); next[q.id] = opt.value || opt.label; setInputValues(next);
+                        props.submit(next);
+                      }
+                    }, opt.label);
+                  })
+                )
+              );
+            }
+            return h("div", { style: s.field, key: q.id },
+              h("p", { style: s.q }, linkify(q.question)),
+              h("input", {
+                style: s.input,
+                type: "password",
+                autoComplete: "off",
+                placeholder: t("placeholder", { name: q.id }),
+                value: value,
+                onChange: function (e) { var next = Object.assign({}, inputValues); next[q.id] = e.target.value; setInputValues(next); }
+              })
+            );
+          }),
+          h("div", { style: { display: "flex", gap: 8, marginTop: 12 } },
+            hasTextQuestion ? h("button", { className: "dshm-btn dshm-btn-primary", style: s.btnPrimary, onClick: function () { props.submit(inputValues); } }, t("submitContinue")) : null,
+            h("button", { className: "dshm-btn", style: s.btn, onClick: props.cancel }, t("cancel"))
+          )
+        );
+      }
+      var phaseName = t("phase." + inst.phase) || inst.phase;
+      return h("div", { id: "dshm-install-panel", style: s.panel },
+        h("p", { style: s.title, margin: "0 0 8px" }, t("panelTitle", { repo: inst.repo, phase: phaseName })),
+        inst.phase === "running" ? h("div", null,
+          h("p", { style: s.sub }, t("runningMsg")),
+          h("div", { className: "dshm-progress", "aria-label": t("installing") }, h("span", null))
+        ) : null,
+        inst.log.length > 0 ? h("div", { style: s.log }, inst.log.map(function (l, i) { return h("div", { key: i }, l); })) : null,
+        inst.result && (inst.result.status === "done") && h("p", { style: { fontSize: 13, margin: "10px 0 0", color: "var(--dsw-alias-state-success-primary)" } },
+          (inst.result.count > 1
+            ? (inst.result.type === "skill" ? t("doneSkills", { count: inst.result.count }) : t("donePlugins", { count: inst.result.count }))
+            : t("doneMsg", { type: inst.result.type === "cli" ? t("typeCli") : (t("typeMap")[inst.result.type] ?? inst.result.type) })) + (inst.result.location ? t("doneMsgLoc", { loc: inst.result.location }) : "")),
+        inst.result && (inst.result.status === "manual") && h("p", { style: s.err }, linkify(t("manualMsg", { url: inst.result.url || "" }))),
+        inst.result && inst.result.cliCommand ? (function () {
+          // README 官方 CLI 安装指令：显示 + 一键复制（navigator.clipboard 不可用时降级 execCommand）
+          function copyCmd() {
+            var text = inst.result.cliCommand;
+            function fallback() {
+              var ta = document.createElement("textarea");
+              ta.value = text;
+              document.body.appendChild(ta);
+              ta.select();
+              try { document.execCommand("copy"); setCopied(true); } catch (e) { /* ignore */ }
+              ta.remove();
+            }
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+              navigator.clipboard.writeText(text).then(function () { setCopied(true); }, fallback);
+            } else fallback();
+            setTimeout(function () { setCopied(false); }, 2000);
+          }
+          return h("div", { style: { margin: "10px 0 0", padding: "10px 12px", borderRadius: 8, background: "var(--dsw-alias-bg-base)", border: "1px solid var(--dsw-alias-border-l2)" } },
+            h("div", { style: { display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8 } },
+              h("span", { style: { fontSize: 12, color: "var(--dsw-alias-label-secondary)", fontWeight: 600 } }, t("cliHintLabel")),
+              h("button", { className: "dshm-btn", style: Object.assign({}, s.btn, { padding: "2px 10px", fontSize: 12 }), onClick: copyCmd }, copied ? t("cliHintCopied") : t("cliHintCopy"))
+            ),
+            h("code", { style: { display: "block", marginTop: 6, fontSize: 12, color: "var(--dsw-alias-label-primary)", wordBreak: "break-all", userSelect: "all" } }, inst.result.cliCommand)
+          );
+        })() : null,
+        inst.result && (inst.result.status === "aborted") && h("p", { style: s.err }, t("abortedMsg")),
+        inst.result && (inst.result.status === "failed") && h("p", { style: s.err }, t("failedMsg", { err: (inst.result.error || "unknown") })),
+        inst.phase !== "running" ? h("button", { className: "dshm-btn", style: Object.assign({}, s.btn, { marginTop: 12 }), onClick: props.cancel }, t("backToList")) : h("button", { className: "dshm-btn", style: Object.assign({}, s.btn, { marginTop: 12 }), onClick: props.cancel }, t("cancelRunning"))
+      );
+    }

@@ -1,4 +1,4 @@
-// list 磁盘缓存（list-cache）修复测试（L1）：
+// list 磁盘缓存行为测试：
 // 1. fetchAllRepos 全失败走 search 兜底时**不写盘**——残缺结果（单 query 上限 1000 条）
 //    只作当次响应，绝不落盘污染磁盘缓存；
 // 2. readListCache 读取时校验——generated_at 缺失（旧格式）/过期/坏条目 → 视为无效
