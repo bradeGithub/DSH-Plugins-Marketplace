@@ -1,20 +1,34 @@
 {
-  "generated_at": "2026-09-08T09:43:28.648Z",
-  "count": 2,
+  "generated_at": "2026-09-08T14:22:40.091Z",
+  "count": 4,
   "items": [
     {
-      "full_name": "Blackman99/codsh",
-      "previous": "coding",
+      "full_name": "Nagi-ovo/voyager",
+      "previous": "web-ui",
       "current": "tool",
-      "desc_now": "You deserve a better cli",
-      "desc_prev": "One sentence to shipped — a terminal coding agent built around /ship, on the DeepSeek Harness"
+      "desc_now": "Enhancement suite for Gemini, AI Studio, Claude & ChatGPT — plus a prompt manager for any websites, DeepSeek Harness included. / 面向 Gemini、AI Studio、Claude 与 ChatGPT 的增强套件；其中的提示词管理器可用于任意网站，如 DeepSeek Harness。",
+      "desc_prev": "Enhancement suite for Gemini, AI Studio, Claude & ChatGPT — plus a prompt manager for any web UI, DeepSeek Harness included. / 面向 Gemini、AI Studio、Claude 与 ChatGPT 的增强套件；其中的提示词管理器可用于任意 Web UI，含 DeepSeek Harness。"
     },
     {
-      "full_name": "Asuna486-desuwa/dsh-safety-net",
-      "previous": "tool",
+      "full_name": "zhu1090093659/dsh-trading",
+      "previous": "web-ui",
       "current": "coding",
-      "desc_now": "给自主运行的 Coding Agent 加的自我保护护栏：拦截对受保护路径的写入、破坏性操作前自动备份、CLI 自恢复命令",
-      "desc_prev": "Self-protection guardrails for the DeepSeek Harness: protected-path interception, backup-before-destroy, CLI self-recovery commands, and strict sandbox defaulting"
+      "desc_now": "Agent-native trading terminal built on DeepSeek Harness. Crypto, US, CN and HK in one three-column GUI, 19+ hot-swappable connectors, dry-run by default with human approval on every live order. BYOK, no data redistribution.",
+      "desc_prev": "Agent-native trading terminal built on DeepSeek Harness. Crypto, US, CN and HK in one three-column GUI, 19+ hot-swappable connectors, dry-run by default with human approval on every live order. BYOK, no data redistribution."
+    },
+    {
+      "full_name": "Jiyr0119/dsh-workspace-explorer",
+      "previous": "tool",
+      "current": "resource",
+      "desc_now": "DeepSeek Harness 工作区文件资源管理器:右侧目录树面板,点击/拖拽文件引用进输入框,UI 对齐 DSH 原生风格 | Workspace file explorer plugin for DeepSeek Harness: right-side file tree panel, click or drag file references into the composer, native DSH look",
+      "desc_prev": "DeepSeek Harness 工作区文件资源管理器:右侧目录树面板,点击/拖拽文件引用进输入框,UI 对齐 DSH 原生风格 | Workspace file explorer plugin for DeepSeek Harness: right-side file tree panel, click or drag file references into the composer, native DSH look"
+    },
+    {
+      "full_name": "biliye/dsh-voice-call",
+      "previous": "other",
+      "current": "document",
+      "desc_now": "这是一个deepseek专属的语音通话插件",
+      "desc_prev": "这是一个deepseek专属的语音通话插件"
     }
   ]
 }
