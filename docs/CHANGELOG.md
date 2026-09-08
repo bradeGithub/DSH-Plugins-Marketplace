@@ -3,6 +3,11 @@
 本仓库的版本迭代记录。**v1.0.0 之前的版本均为 beta 系列**（开发期迭代，未单独打 tag）。/ Version history of this repository. **All versions before v1.0.0 are part of the beta series** (development iterations, not individually tagged).
 ---
 
+## 未发布 / Unreleased（架构：分层解耦 / Architecture: layered decoupling）
+
+- **服务端按 http/app/domain/infra 分层（PR #216）**：`lib/index.js` 收敛为组合根（composition root），只做跨层装配与宿主入口；`lib/app/` 持有各 use case owner（install/uninstall/update/feedback/backup/env-edit/installed/profile/list/diagnostics），`lib/domain/` 是纯规则（无 IO），`lib/infra/` 是 fs/network/proc/queue/adapters 注入层。HTTP 响应统一附加 `schemaVersion: 1`，结构化事件环（`pushEvent`/`getRecentEvents`）承载 event/level/error_code/trace_id/duration_ms，确定性性能基准与只读 CI 质量门（`quality.yml`）落地 / the server is now layered http/app/domain/infra with lib/index.js as a pure composition root; app/ holds use-case owners, domain/ holds IO-free rules, infra/ holds injected fs/network/proc/queue/adapters. HTTP responses carry schemaVersion 1, a structured event ring carries event/level/error_code/trace_id/duration_ms, and a deterministic benchmark plus a read-only CI quality gate (quality.yml) are in place
+- **client 列表消费逻辑抽为纯函数（`lib/client-src/05a-logic.fragment`）**：`fingerprintOf`/`filterRepos`/`appendSkillsPage`/`shouldLoadMore` 无 React/fetch/DOM 依赖，由 `client-logic.test.mjs` 直接 eval 测行为；Skills 触底加载跨页去重、真实响应契约桥（real-dsh 对 list/skills/profile/install/uninstall 做形状断言）补齐 / client list-consumption logic is extracted to IO-free pure functions in 05a-logic.fragment, unit-tested directly; Skills infinite-scroll cross-page dedupe and a real-response contract bridge (real-dsh shape assertions) close the browser-mock gap
+
 ## v1.5.5 — 2026-08-19（修复：GitHub-only bundle 包注册 404 / Fix: GitHub-only bundle packages 404 on registration）
 
 - **修复只发 GitHub 不发 npm 的 bundle 包安装失败（dsh-theme-endfield 案例）**：v1.5.4 的 bundle 注册固定用「版本号」做依赖声明——仓库克隆来源且未发布到 npm 的 bundle 包，pnpm 去 registry 解析 `name@1.0.0` 必然 404。现在区分来源：npm 等价回退来源用精确版本（registry 可解析）；仓库克隆来源用 `github:<owner>/<repo>` 声明（与官方 CLI 指令同形，pnpm 直接拉 GitHub tarball）/ bundle dependency specifiers now follow the install source: exact published versions for npm-fallback installs, `github:<owner>/<repo>` for repo-clone installs of GitHub-only packages (previously pnpm 404'd resolving a version that was never published)

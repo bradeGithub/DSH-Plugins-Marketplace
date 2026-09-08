@@ -319,7 +319,7 @@ GitHub Actions（每 2 小时，仓库自带 token）
 ## 🛠️ 开发与维护
 
 - 修改服务端逻辑：按职责编辑 `lib/app/`、`lib/domain/`、`lib/http/` 或 `lib/infra/`；跨层装配与宿主入口仍在 `lib/index.js`（语法检查：`node --check`）
-- 架构边界：服务端业务按 `http → app → domain` 分层，HTTP 可直接依赖 `infra`；`lib/index.js` 是组合入口，但当前仍保留安装执行器、registry/cache、patch IO 和已安装索引等兼容适配逻辑；继续抽取属于后续架构优化，不以压低文件行数为目标
+- 架构边界：服务端业务按 `http → app → domain` 分层，HTTP 可直接依赖 `infra`；`lib/index.js` 是组合根（composition root），只做跨层装配与宿主入口，不承载业务逻辑。`lib/app/` 持有各 use case owner（install/uninstall/update/feedback/backup/env-edit/installed/profile/list/diagnostics），`lib/domain/` 是纯规则（无 IO），`lib/infra/` 是 fs/network/proc/queue/adapters 注入层
 - 修改日志脱敏：编辑 `lib/redact.js`（安装日志附公开 issue 前的多层净化——密钥/路径/上下文邻近/高熵兜底；规则成对维护见 [docs/TESTING.md](docs/TESTING.md)）
 - 修改页面 UI：编辑 `lib/client-src/*.fragment`，运行 `node scripts/assemble-client.mjs --write` 生成受版本控制的 `lib/client.js`（浏览器 bundle，`window.__ModuleLoader__.load` 格式；`require` 可解析 DSH 平台模块）
 - `node scripts/assemble-client.mjs`（不带 `--write`）检查 source fragments 与发布 bundle 是否无漂移
