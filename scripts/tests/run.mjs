@@ -7,9 +7,9 @@
 //   node scripts/tests/run.mjs --level=e2e
 // 每层失败即退出非零；--json 输出结构化结果（CI 用）。
 //
-// 并行：层内文件用并发池（默认 4，DSH_TEST_CONCURRENCY 可调）异步 spawn，层间保持
-// unit → integration → e2e 顺序。每个子测试在未显式设置 DRIFT_REPORT_FILE 时获得
-// 独立的临时报告路径（避免并行写同一文件竞争）；显式设置时原样透传（调用方持有）。
+// 并行：层内文件用并发池（unit 默认 4，integration 默认 2，e2e 默认 1；DSH_TEST_CONCURRENCY 可覆盖），
+// 层间保持 unit → integration → e2e 顺序。integration/e2e fork 真实 pnpm/git/npm 子进程，低并发防 CI OOM。
+// 每个子测试在未显式设置 DRIFT_REPORT_FILE 时获得独立的临时报告路径（避免并行写同一文件竞争）；显式设置时原样透传（调用方持有）。
 
 import { spawn } from "node:child_process";
 import { readdirSync, existsSync, mkdtempSync, rmSync } from "node:fs";
@@ -23,7 +23,12 @@ const LEVELS = ["unit", "integration", "e2e"];
 const levelArg = process.argv.find((a) => a.startsWith("--level="));
 const level = levelArg ? levelArg.split("=")[1] : "all";
 const jsonOut = process.argv.includes("--json");
-const CONCURRENCY = Math.max(1, Number(process.env.DSH_TEST_CONCURRENCY ?? "4"));
+// 并发池大小按层区分：unit 轻量可高并发；integration/e2e fork 真实子进程（pnpm/git/npm），
+// 并发过高会在 CI 低内存 runner 上 OOM-kill 父进程（并行化的间歇性失败），默认降为 2/1。
+// 环境变量 DISH_TEST_CONCURRENCY 可整体覆盖（单值应用全部层）。
+const DEFAULT_CONCURRENCY = { unit: 4, integration: 2, e2e: 1 };
+const envConcurrency = Number(process.env.DSH_TEST_CONCURRENCY);
+const concurrencyFor = (lv) => (Number.isFinite(envConcurrency) && envConcurrency > 0 ? envConcurrency : (DEFAULT_CONCURRENCY[lv] ?? 2));
 
 const levelList = level === "all" ? LEVELS : level.split(",").map((s) => s.trim()).filter(Boolean);
 for (const lv of levelList) {
@@ -85,7 +90,7 @@ async function runLevel(lv) {
   const files = readdirSync(dir).filter((f) => f.endsWith(".test.mjs") || f.endsWith(".e2e.mjs")).sort();
   const results = [];
   let idx = 0;
-  const workers = Array.from({ length: Math.min(CONCURRENCY, files.length) }, async () => {
+  const workers = Array.from({ length: Math.min(concurrencyFor(lv), files.length) }, async () => {
     while (idx < files.length) {
       const file = files[idx++];
       const r = await runFile(lv, file);
