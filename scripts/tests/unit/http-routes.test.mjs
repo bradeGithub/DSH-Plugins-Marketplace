@@ -276,6 +276,87 @@ check("routes 统一通过正式版本响应包装器", (routesSource.match(/\bj
   check("skills 加载失败返回 500", res.status, 500);
 }
 
+// skills 200 成功分支：非分页（无 page/pageSize/q）→ flagWorker 并发标注 + dedupe + 排序
+{
+  const skillRepos = [
+    { full_name: "a/skill-a", name: "skill-a", has_skill: true, stargazers_count: 5 },
+    { full_name: "b/skill-b", name: "skill-b", has_skill: true, stargazers_count: 10 },
+    { full_name: "c/not-skill", name: "not-skill", has_skill: false, stargazers_count: 100 }
+  ];
+  let annotateCalls = 0;
+  const { deps, registered } = makeDeps({
+    list: {
+      ...makeDeps().deps.list,
+      getList: async () => skillRepos,
+      detectSkillInstalled: async () => { annotateCalls++; return true; }
+    }
+  });
+  registerRoutes(deps);
+  const route = registered.find((item) => item.path === "/api/marketplace/skills");
+  const res = makeResponse();
+  await route.handler({ method: "GET", url: "/api/marketplace/skills" }, res);
+  check("skills 非分页 200", res.status, 200);
+  check("skills 非分页过滤 has_skill=false", res.value?.repos?.length, 2);
+  check("skills 非分页标注 installed", res.value?.repos?.every((r) => r.installed === true), true);
+  check("skills 非分页并发标注调用", annotateCalls, 2);
+  check("skills 非分页已装优先排序", res.value?.repos?.[0]?.full_name, "b/skill-b");
+  check("skills 非分页 total 与 filtered", [res.value?.total, res.value?.filtered], [2, 2]);
+}
+
+// skills 200 分页分支（page/pageSize）→ 分页切片 + annotateSkillInstalled 标注
+{
+  const skillRepos = Array.from({ length: 5 }, (_, i) => ({
+    full_name: `a/skill-${i}`, name: `skill-${i}`, has_skill: true, stargazers_count: i
+  }));
+  let annotateCalls = 0;
+  const { deps, registered } = makeDeps({
+    list: {
+      ...makeDeps().deps.list,
+      getList: async () => skillRepos,
+      annotateSkillInstalled: async () => { annotateCalls++; return false; }
+    }
+  });
+  registerRoutes(deps);
+  const route = registered.find((item) => item.path === "/api/marketplace/skills");
+  const res = makeResponse();
+  await route.handler({ method: "GET", url: "/api/marketplace/skills?page=1&pageSize=2" }, res);
+  check("skills 分页 200", res.status, 200);
+  check("skills 分页每页≤2", res.value?.repos?.length, 2);
+  check("skills 分页 total=5", res.value?.total, 5);
+  check("skills 分页 page/pageSize 回显", [res.value?.page, res.value?.pageSize], [1, 2]);
+  check("skills 分页 annotateSkillInstalled 调用", annotateCalls, 2);
+}
+
+// skills 200 q 过滤分支（?q=）→ 过滤回调 + 分页 dedupe 回调（hasInstalledRecord 命中）
+{
+  const { dedupeReposByPkgName } = await import("../../../lib/domain/list.js");
+  const skillRepos = [
+    { full_name: "a/pdf-tool", name: "pdf-tool", has_skill: true, stargazers_count: 5, pkg_name: "shared-pdf" },
+    { full_name: "b/image-tool", name: "image-tool", has_skill: true, stargazers_count: 10 },
+    { full_name: "c/pdf-helper", name: "pdf-helper", has_skill: true, stargazers_count: 1, pkg_name: "shared-pdf" }
+  ];
+  const { deps, registered } = makeDeps({
+    list: {
+      ...makeDeps().deps.list,
+      getList: async () => skillRepos,
+      dedupeReposByPkgName
+    },
+    installed: {
+      ...makeDeps().deps.installed,
+      hasInstalledRecord: (fullName) => fullName === "a/pdf-tool"
+    }
+  });
+  registerRoutes(deps);
+  const route = registered.find((item) => item.path === "/api/marketplace/skills");
+  const res = makeResponse();
+  await route.handler({ method: "GET", url: "/api/marketplace/skills?q=pdf&page=1&pageSize=10" }, res);
+  check("skills q 过滤 200", res.status, 200);
+  check("skills q 过滤 dedupe 去重同 pkg", res.value?.repos?.map((r) => r.full_name), ["a/pdf-tool"]);
+  check("skills q 过滤 total=1", res.value?.total, 1);
+  check("skills q 过滤 dropped=1", res.value?.dropped, 1);
+  check("skills q 过滤 filtered=2", res.value?.filtered, 2);
+}
+
 {
   const { deps, registered } = makeDeps();
   registerRoutes(deps);
