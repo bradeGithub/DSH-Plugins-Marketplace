@@ -27,6 +27,7 @@
   - [install executor behavior contract](#install-executor-behavior-contract)
   - [installed state behavior contract](#installed-state-behavior-contract)
   - [diagnostics runtime contract](#diagnostics-runtime-contract)
+  - [client 列表消费逻辑契约](#client-列表消费逻辑契约)
   - [repository scan adapter](#repository-scan-adapter)
   - [repository classification contract](#repository-classification-contract)
   - [security scan contract](#security-scan-contract)
@@ -43,12 +44,12 @@
 - [6. 编写清单](#6-编写清单)
 - [7. 已知 lib API 问题](#7-已知-lib-api-问题)
 <!-- /TOC -->
-| **unit** | `scripts/tests/unit/` | 纯函数、app 用例/执行器、bundle assembler、VM 运行时契约和静态契约 | 65 个测试文件 |
+| **unit** | `scripts/tests/unit/` | 纯函数、app 用例/执行器、bundle assembler、VM 运行时契约和静态契约 | 68 个测试文件 |
 | **integration** | `scripts/tests/integration/` | 临时 DSH_HOME/真实临时目录、mock fetch/proc、真实测试运行器子进程 | 18 个测试文件 |
 | **e2e** | `scripts/tests/e2e/` | 真实 git 流程、fixture 仓库与真实 DSH | 3 个测试文件 |
-| **frontend browser e2e** | `scripts/tests/browser/` | 真实 DSH Web UI/marketplace bundle、Playwright context 与确定性 API fixture | 8 个行为契约 |
+| **frontend browser e2e** | `scripts/tests/browser/` | 真实 DSH Web UI/marketplace bundle、Playwright context 与确定性 API fixture | 9 个行为契约 |
 
-统一 Node 运行器：`node scripts/tests/run.mjs`（`--level=unit|integration|e2e`、`--json`）。当前共 86 个 Node 测试入口；精确通过数以每文件末尾 `N passed` 和运行器汇总为准。前端浏览器层是独立质量门，不计入该 86 个入口、Node coverage 或 mutation 数字。
+统一 Node 运行器：`node scripts/tests/run.mjs`（`--level=unit|integration|e2e`、`--json`）。当前共 89 个 Node 测试入口；精确通过数以每文件末尾 `N passed` 和运行器汇总为准。前端浏览器层是独立质量门，不计入该 89 个入口、Node coverage 或 mutation 数字。
 
 ## 2. 命名与位置
 
@@ -80,7 +81,7 @@ process.exit(fail === 0 ? 0 : 1);
 
 - 目标：**hook 校验逻辑（validate.mjs、toc.mjs）100%**
 - `lib` 与纳入清单的 Node 脚本：**非豁免函数 100%**（当前为 584/584）
-- `lib/client.js` 是浏览器 bundle，不计入 Node V8 函数口径；由 `client-runtime.test.mjs` 的 VM 执行契约和 `client-assembler.test.mjs` 的字节无漂移契约守护
+- `lib/client.js` 是浏览器 bundle，不计入 Node V8 函数口径；由 `client-runtime.test.mjs` 的 VM 执行契约、`client-assembler.test.mjs` 的字节无漂移契约和 `client-logic.test.mjs` 的消费纯函数契约守护
 - 检查：`node scripts/coverage.mjs`（NODE_V8_COVERAGE 零依赖）
 - coverage 不在 pre-commit 自动检查中；由 `node scripts/hooks/check.mjs --only=coverage` 或 CI 显式执行
 - **行覆盖 ≠ 健壮**：语义正确性由机械化检查族补充（见 §5.5）
@@ -152,6 +153,10 @@ process.exit(fail === 0 ? 0 : 1);
 
 完整 unit/integration 为 **69/69**；测试金字塔为 **72/72**（unit 56、integration 13、e2e 3）；覆盖率为 **550/550 函数（100%）**，其中 `lib/app/diagnostics.js` 为 **8/8**；mutation 为 **197/197**（181 行为 + 16 静态契约，0 survivor、0 skip），新增 m191–m198 锁定缓存、坏 package 容错、工具探测参数、截断、环边界、快照隔离和响应 count。syntax、TOC、secret、hooks、diff check、client assembler drift 与 real-dsh **8/8** 均通过。
 
+### client 列表消费逻辑契约
+
+`lib/client-src/05a-logic.fragment` 承载 client 的列表消费纯函数（`fingerprintOf`、`filterRepos`、`appendSkillsPage`、`shouldLoadMore`），无 React/fetch/DOM 依赖，由 `scripts/tests/unit/client-logic.test.mjs` 直接 eval 测行为：fp 门控（服务端 fp 优先 / 无 fp 回退 source+cached_at+total）、插件分类+搜索过滤、Skills 跨页去重（第 1 页替换 / 后续页按 full_name 去重拼接）、触底加载门控（未加载完且非加载中）。该层与 browser E2E（壳行为）互补——测的是内层消费逻辑本身，不依赖浏览器；当前 **24/24**。`client-assembler.test.mjs` 锁定 fragment 清单与 bundle 字节无漂移。
+
 ### repository scan adapter
 
 `lib/infra/repository-scan.js` 的 `createRepositoryScanAdapter()` 只承接 marketplace cache 仓库目录的扫描与读取 IO；`fs.readdir`、`fs.readFile`、`path.joinPath` 和 `looksLikeDshPlugin` 均由组合入口显式注入。adapter 提供 skill、plugin、preset 根查找，以及 skill manifest 和 lifecycle script 读取；不持有类型判定优先级、安全扫描、安装状态或入口状态。
@@ -184,7 +189,7 @@ repository-scan adapter 的行为契约覆盖完整 unit/integration、测试金
 
 `scripts/tests/unit/domain-adaptor.test.mjs` 与 `scripts/tests/unit/infra-adaptor.test.mjs` 直接验证输入不别名、空转回退、显式能力注入和配置加载失败；`lib.test.mjs` 与 list/route integration 继续通过兼容出口和生产 `adaptor.json` 验证 MuseAI 重定向、列表移除/补入及安装目标保持不变。domain 不导入 Node IO、环境或入口，routes 只消费注入的两个能力。
 
-adaptor 规则新增行为突变 m251–m260 共 10 个，全部被行为测试锁定；与 metadata 突变合计后，完整 mutation 为 **269/269**（246 行为 + 23 静态契约，0 survivor、0 skip）。完整 unit/integration 为 **82/82**，测试金字塔为 **85/85**，coverage 为 **584/584 函数（100%）**；property-based **8/8**、smoke **192/192**、frontend browser E2E **6/6**、真实 host/API E2E **15/15**、install E2E **180/180** 均通过。
+adaptor 规则新增行为突变 m251–m260 共 10 个，全部被行为测试锁定；与 metadata 突变合计后，完整 mutation 为 **269/269**（246 行为 + 23 静态契约，0 survivor、0 skip）。完整 unit/integration 为 **82/82**，测试金字塔为 **85/85**，coverage 为 **584/584 函数（100%）**；property-based **8/8**、smoke **192/192**、frontend browser E2E **9/9**、真实 host/API E2E **20/20**、install E2E **180/180** 均通过。
 
 ### marketplace metadata contract
 
@@ -216,7 +221,7 @@ marketplace metadata 新增行为突变 m261–m270 共 10 个，全部被行为
 
 **质量门分层：** 默认 `pre-commit` 只执行快速的 syntax、unit/integration、TOC 和 secret 检查；完整 Node E2E 通过 `node scripts/hooks/check.mjs --only=e2e` 执行，浏览器 E2E 通过 `node scripts/tests/frontend-e2e.mjs` 执行，coverage 和 mutation 使用各自显式命令。严格 E2E 模式下缺少 git、npm、pnpm 或 DSH CLI 会失败，不会把未执行计为通过。
 
-**当前质量边界：** `584/584` 函数覆盖、`269/269` mutation、`8/8` property、`192/192` smoke、Node E2E `180/180` + `15/15` + `9/9` 和浏览器 E2E `8/8` 提供了独立行为证据，但函数覆盖不代表分支或语义完备。`.github/workflows/quality.yml` 以 `contents: read` 建立可复现的只读 CI 质量门：安装 Node 24、pnpm/DSH CLI、browser lockfile 依赖和 Playwright 托管 Chromium，并显式执行严格 Node E2E、浏览器 E2E、coverage、property、smoke 和 mutation。
+**当前质量边界：** `584/584` 函数覆盖、`269/269` mutation、`8/8` property、`192/192` smoke、Node E2E `180/180` + `20/20` + `9/9` 和浏览器 E2E `9/9` 提供了独立行为证据，但函数覆盖不代表分支或语义完备。`.github/workflows/quality.yml` 以 `contents: read` 建立可复现的只读 CI 质量门：安装 Node 24、pnpm/DSH CLI、browser lockfile 依赖和 Playwright 托管 Chromium，并显式执行严格 Node E2E、浏览器 E2E、coverage、property、smoke 和 mutation。
 
 **HTTP/浏览器响应契约兼容：** 当前生产 HTTP marketplace 响应由 `lib/http/marketplace-contract.js` 统一附加 `schemaVersion: 1`；它只复制顶层对象，不删除未知字段。缺少 `schemaVersion` 的 legacy producer 仍按旧字段消费，新增字段对旧 consumer 保持可忽略；破坏性字段/状态变更必须提升主版本，新增字段先保持可选。Node route Oracle 与 browser E2E 覆盖 legacy producer（允许缺失版本和可选字段）及 forward producer（版本字段、未知顶层和列表项字段），未知状态不得被当作 `done`，consumer 必须进入失败/人工处理路径。日志事件版本不复用 HTTP payload 版本。
 
@@ -277,14 +282,14 @@ node scripts/tests/frontend-e2e.mjs
 
 每个测试拥有独立 browser context、独立临时 `DSH_HOME`/profile/端口和独立 API fixture 状态。页面真实加载 DSH UI 与 `lib/client.js`，仅通过 page route 固定 `/api/marketplace/*` 响应；fixture 不访问线上 registry、Skills、GitHub 或第三方安装。测试结束只清理测试创建的 context、DSH 子进程树和临时目录，不触碰用户 profile、静态索引或 `drift-report.json`。
 
-行为契约覆盖：市场挂载与安装状态、插件/Skills 标签切换、失败重试与搜索空结果、生命周期确认取消、legacy 响应兼容、forward 未知字段兼容、网络中断后重试恢复、刷新请求进行中按钮禁用、profile 保存后 reload 重新挂载。定位优先使用 role + accessible name，断言使用 Playwright web-first assertions；不使用固定 sleep、CSS 实现细节或全量截图。当前独立 browser suite **8/8** 通过；失败时保留 trace/screenshot 供诊断，但不作为通过标准。
+行为契约覆盖：市场挂载与安装状态、插件/Skills 标签切换、Skills 触底加载下一页并跨页去重、失败重试与搜索空结果、生命周期确认取消、legacy 响应兼容、forward 未知字段兼容、网络中断后重试恢复、刷新请求进行中按钮禁用、profile 保存后 reload 重新挂载。定位优先使用 role + accessible name，断言使用 Playwright web-first assertions；不使用固定 sleep、CSS 实现细节或全量截图。当前独立 browser suite **9/9** 通过；失败时保留 trace/screenshot 供诊断，但不作为通过标准。
 
 ### 部署黄金路径行为契约
 
 部署黄金路径由两层互补行为契约覆盖：
 
 - `scripts/tests/integration/runtime-closure.test.mjs` 在导入入口前设置临时 `DSH_HOME`，通过真实 `apply()` 路由接线与确定性 fixture 验证 list/Skills、skill/preset/plugin 类型识别、三类安装卸载、installed 标注、lifecycle 确认链、重复等待复用缓存和 profile 隔离；当前 **38/38**。
-- `scripts/tests/e2e/real-dsh.e2e.mjs` 启动真实 `dsh --profile web --no-open`，使用专用端口、临时 profile、临时 `DSH_HOME` 和本地 git fixture 的 `GIT_CONFIG_GLOBAL` URL rewrite，通过真实 HTTP 验证 list、Skills、skill 安装→卸载、lifecycle cancel、profile 标注/fingerprint 切换与非法 profile；当前 **15/15**。
+- `scripts/tests/e2e/real-dsh.e2e.mjs` 启动真实 `dsh --profile web --no-open`，使用专用端口、临时 profile、临时 `DSH_HOME` 和本地 git fixture 的 `GIT_CONFIG_GLOBAL` URL rewrite，通过真实 HTTP 验证 list、Skills、skill 安装→卸载、lifecycle cancel、profile 标注/fingerprint 切换与非法 profile；并对 list/skills/profile/install/uninstall 的真实响应做契约形状断言（`inspectMarketplacePayload`），封住「browser mock 掩盖真实输出漂移」的缺口；当前 **20/20**。
 - 真实宿主测试只回收测试创建的进程树和临时目录；不把用户 profile、`installed.json`、patch、真实 `node_modules` 或 `drift-report.json` 当作清理对象。三类安装的完整确定性结果仍由 integration 契约负责，避免复制安装实现。
 
 ### workspace 吞依赖陷阱（issue #146/#147/#168 同源根因）
