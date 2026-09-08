@@ -1,4 +1,5 @@
 import { compareVersions, shouldUpdate, isTrustedRequest, isTrustedHost, isSensitiveEnvKey, buildMinimalEnv, buildFilteredEnv, looksLikeDshPlugin, wslPosixPath, normalizeRepoRef, dedupeReposByPkgName, slugify, SCRIPT_ENV_KEYS, sanitizeLog, buildFeedbackLogSnapshot, buildEnvProfile, safeAssign } from "../../../lib/index.js";
+import { isBootstrapOnlyEnvKey, isValidEnvKey } from "../../../lib/domain/validation.js";
 
 let pass = 0, fail = 0;
 function check(name, actual, expected) {
@@ -211,6 +212,21 @@ check("无依赖无字段 → 非插件", looksLikeDshPlugin({ name: "x" }), fal
 check("空对象 → 非插件", looksLikeDshPlugin({}), false);
 check("null → 未知", looksLikeDshPlugin(null), null);
 check("非对象 → 未知", looksLikeDshPlugin("str"), null);
+
+// ---- isBootstrapOnlyEnvKey / isValidEnvKey（env 键校验纯函数）----
+check("DSH_HOME 是 bootstrap-only", isBootstrapOnlyEnvKey("DSH_HOME"), true);
+check("DSH_API_KEY 是 bootstrap-only", isBootstrapOnlyEnvKey("DSH_API_KEY"), true);
+check("OPENAI_API_KEY 非 bootstrap-only", isBootstrapOnlyEnvKey("OPENAI_API_KEY"), false);
+check("小写 dsh_ 非 bootstrap-only", isBootstrapOnlyEnvKey("dsh_home"), false);
+check("非字符串 null 非 bootstrap-only", isBootstrapOnlyEnvKey(null), false);
+check("UPPER_SNAKE 合法", isValidEnvKey("MY_API_KEY"), true);
+check("驼峰 ApiKey 合法", isValidEnvKey("openaiApiKey"), true);
+check("驼峰 Token 合法", isValidEnvKey("githubToken"), true);
+check("DSH_ 保留前缀非法", isValidEnvKey("DSH_HOME"), false);
+check("小写开头非法", isValidEnvKey("mykey"), false);
+check("含空格非法", isValidEnvKey("BAD KEY"), false);
+check("空串非法", isValidEnvKey(""), false);
+check("非字符串非法", isValidEnvKey(42), false);
 
 // ---- safeAssign 原型污染防护 ----
 {

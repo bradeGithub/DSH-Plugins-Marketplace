@@ -50,6 +50,9 @@ const EXEMPT_LIB_FUNCS = [
   // 内部 execFileAsync 真实 npm 二进制（与 runNpm 同例）；其 cmd 包装形态由
   // security-guards 静态契约间接锁定
   "installNpmTargetToTemp",
+  // 源码型插件构建（真实 npm/pnpm install + build 脚本）：与 runNpm 同例，深集成
+  // 无法在 unit/integration 用 mock 覆盖；由 e2e demo-build 场景覆盖，此处不重复统计
+  "buildPluginPackage",
 ];
 
 /** lib/index.js 中防御性死代码闭包的源码特征（indexOf 定位起始偏移）。 */
@@ -99,6 +102,13 @@ const EXEMPT_LIB_MARKERS = [
   // uninstall 降级路径的 writeProfileManifest 失败兜底（manifest 已读成功，写盘失败为
   // 极小概率 IO 事件；Linux V8 将其计为独立未覆盖函数，Windows 合并进父函数）
   "writeProfileManifest(manifest, legacyManifest).catch(() => {})",
+  // 各 use case 的 readFile 失败兜底（readFile 成功时 catch 永不触发——防御死代码）：
+  // install.js manual 分支、install-exec.js instructions 分支、patch-manifest.js 读 patch
+  "readFile(joinPath(cacheDir, \"README.md\"), \"utf8\").catch(() => \"\")",
+  "readFile(targetPath, \"utf8\").catch(() => \"\")",
+  // now 默认参数（index.js 装配时总传入 now，默认参数永不执行——防御死代码）：
+  // install.js 3 处 + backup.js 1 处
+  "now = () => Date.now()",
 ];
 
 /** 计算 lib/ 下各文件豁免函数的起始偏移（函数名 + 源码特征），按文件分 Map。 */
@@ -164,7 +174,7 @@ const covDir = mkdtempSync(join(tmpdir(), "dsh-cov-"));
 const driftDir = mkdtempSync(join(tmpdir(), "dsh-drift-"));
 let testsFailed = false;
 try {
-  execFileSync("node", ["scripts/tests/run.mjs"], {
+  execFileSync("node", ["scripts/tests/run.mjs", "--level=unit,integration"], {
     cwd: ROOT,
     stdio: jsonOut ? ["inherit", "ignore", "inherit"] : "inherit",
     env: {
