@@ -1,13 +1,41 @@
 {
-  "generated_at": "2026-09-07T22:48:10.554Z",
-  "count": 1,
+  "generated_at": "2026-09-08T03:59:31.471Z",
+  "count": 5,
   "items": [
     {
-      "full_name": "gcry13067381632-jpg/dsh-qqbot",
+      "full_name": "ppy-web/dsh-plugin-xiaomi-mimo-tts",
       "previous": "tool",
-      "current": "web-ui",
-      "desc_now": "DSH 接入官方 QQ 机器人：qq群管理 · 富媒体收发 · 表情包图库 · 多预设多开 · 定时唤醒 · 远程审批 ·ai自主决定回复 · 仿qq聊天界面 ",
-      "desc_prev": "DSH 接入官方 QQ 机器人：适合qq群 · 富媒体收发 · 表情包图库 · 多预设多开 · 定时唤醒 · 远程审批 · 自主沉默"
+      "current": "resource",
+      "desc_now": "给DSH接入免费的 Xiaomi MiMo TTS API，支持使用预置/自定义/浏览器内置声音朗读正文",
+      "desc_prev": "给DSH接入免费的 Xiaomi MiMo TTS API，支持使用预置/自定义/浏览器内置声音朗读正文"
+    },
+    {
+      "full_name": "duhu2000/dsh-data-cleaning-agent",
+      "previous": "agent",
+      "current": "document",
+      "desc_now": "Data cleaning and data enrichment for CSV/XLSX/JSON enterprise lists in DeepSeek Harness, including spreadsheet cleaning, deduplication, profiling, optional Qichacha MCP and exports.",
+      "desc_prev": "Data cleaning and enterprise enrichment agent plugin for DeepSeek Harness."
+    },
+    {
+      "full_name": "kaixinguo360/dsh-script-manager",
+      "previous": "model",
+      "current": "tool",
+      "desc_now": "DSH 自定义操作脚本管理器，将验证过的操作流程固化为可复用的脚本，用 /script 直接运行或注册为 Agent 工具，支持参数化脚本、执行预期声明、执行历史记录。",
+      "desc_prev": "DSH 自定义操作脚本管理插件，将验证过的操作流程固化为可复用脚本，不耗 token、支持参数化和执行验收。"
+    },
+    {
+      "full_name": "duhu2000/dsh-pre-duediligence",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "Pre-visit due diligence and company research in DeepSeek Harness for customer background checks and risk briefs, with Qichacha MCP tool-call budget approval and entity confirmation.",
+      "desc_prev": "Pre Due Diligence"
+    },
+    {
+      "full_name": "hellogit2021/avoid-ai-writing-cn",
+      "previous": "tool",
+      "current": "resource",
+      "desc_now": "知乎\"去AI味写作技巧\"社区免费提供：中文写作去 AI 味插件。说\"去掉AI味\"即重写，说\"写的不错\"自动学习新 AI 词。",
+      "desc_prev": "知乎\"去AI味写作技巧\"社区免费提供：中文写作去 AI 味插件（AI-isms / AI writing / humanize）。说\"去掉AI味\"即重写，说\"写的不错\"自动学习新 AI 词。安装：dsh plugin --profile web add github:hellogit2021/avoid-ai-writing-cn"
     }
   ]
 }
