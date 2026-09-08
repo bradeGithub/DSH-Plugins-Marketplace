@@ -2,7 +2,7 @@
 // 守护「空仓库/无分支」不误判 gone（曾有真实存在的仓库被误判删除）。
 // mock 全局 fetch（不执行 main——import 时 isMain 守卫跳过）。
 
-import { probeTree, confirmGone, verdictOf, fetchPkg } from "../../verify-installability.mjs";
+import { probeTree, confirmGone, verdictOf, fetchPkg, fetchJson } from "../../verify-installability.mjs";
 
 let pass = 0, fail = 0;
 function check(name, actual, expected) {
@@ -138,6 +138,35 @@ const TREE_OK = { tree: [{ type: "blob", path: "package.json" }, { type: "blob",
   globalThis.fetch = orig;
   check("fetchPkg 无 bundle 声明 → bundle:false", r?.bundle, false);
   check("fetchPkg 无 dsh → looksLike:false", r?.looksLike, false);
+}
+
+// ---- SSRF 防护：非白名单主机被拒绝（CWE-918）----
+// fetchJson 只允许 https://api.github.com；URL 拼自 registry.json 的 full_name
+// （外部可被 PR 篡改），恶意条目不得让探测脚本带 token 访问内网/其他主机。
+{
+  // 内网 IP（云元数据）→ 拒绝
+  let threw = false;
+  try { await fetchJson("http://169.254.169.254/latest/meta-data/"); } catch { threw = true; }
+  check("SSRF: 内网 IP 主机被拒绝", threw, true);
+}
+{
+  // 非 https 协议 → 拒绝
+  let threw = false;
+  try { await fetchJson("http://api.github.com/repos/a/b"); } catch { threw = true; }
+  check("SSRF: 非 https 协议被拒绝", threw, true);
+}
+{
+  // 非白名单 https 主机 → 拒绝
+  let threw = false;
+  try { await fetchJson("https://registry.npmjs.org/valid-package"); } catch { threw = true; }
+  check("SSRF: 非白名单 https 主机被拒绝", threw, true);
+}
+{
+  // 合法 api.github.com → 正常放行（不误伤）
+  const orig = mockFetch({ "https://api.github.com/repos/a/b": { status: 200, body: { full_name: "a/b" } } });
+  const r = await fetchJson("https://api.github.com/repos/a/b");
+  globalThis.fetch = orig;
+  check("SSRF: 合法 api.github.com 放行", r?.status, 200);
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);
