@@ -23,6 +23,7 @@ docs/
 ├── CHANGELOG.md          ← 版本迭代记录（双语）
 ├── SKIN-MANIFEST-SPEC.md ← 皮肤清单格式规范（实现：lib/skin-manifest.js）
 ├── SKIN-MANIFEST-RECORD.md ← 皮肤清单维护记录（生成器输出/验证）
+├── REFERENCE.md         ← 参考项目记录（平行生态/可借鉴的外部项目）
 └── LIB-ISSUES.md         ← 测试发现的 lib API 问题（待商讨提交 upstream）
 ```
 
