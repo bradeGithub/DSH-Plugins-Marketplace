@@ -28,7 +28,8 @@ export function createMarketplaceApi() {
     variants: new Map(),
     requests: [],
     installRequests: [],
-    browserErrors: []
+    browserErrors: [],
+    skillsPages: null // 多页 skills fixture：{ total, repos: [[page1], [page2], ...] }
   };
 
   function response(kind, payload) {
@@ -65,10 +66,22 @@ export function createMarketplaceApi() {
     }
     if (method === "GET" && path === "/api/marketplace/skills") {
       if (state.failNext.delete("skills")) return json(route, 503, { error: "fixture skills unavailable" });
+      const page = Number(url.searchParams.get("page") || "1");
+      const pageSize = Number(url.searchParams.get("pageSize") || "20");
+      if (state.skillsPages) {
+        const pageRepos = state.skillsPages.repos[page - 1] || [];
+        return json(route, 200, response("skills", {
+          ...fixtures.skills,
+          repos: pageRepos,
+          total: state.skillsPages.total,
+          page,
+          pageSize
+        }));
+      }
       return json(route, 200, response("skills", {
         ...fixtures.skills,
-        page: Number(url.searchParams.get("page") || "1"),
-        pageSize: Number(url.searchParams.get("pageSize") || "20")
+        page,
+        pageSize
       }));
     }
     if (method === "POST" && path === "/api/marketplace/install") {
@@ -116,6 +129,9 @@ export function createMarketplaceApi() {
     setVariant(kind, variant) {
       if (variant === null) state.variants.delete(kind);
       else state.variants.set(kind, variant);
+    },
+    setSkillsPages(total, pageRepos) {
+      state.skillsPages = { total, repos: pageRepos };
     },
     requests: state.requests,
     installRequests: state.installRequests,

@@ -74,6 +74,38 @@ test.describe("DSH 插件市场 frontend browser contract", () => {
     await expect(page.getByText(/fixture-ready\s*★/)).toBeVisible();
   });
 
+  test("characterize: Skills 触底加载下一页并跨页去重", async ({ page, host, marketplaceApi }) => {
+    // 多页 skills：第 1 页 2 个，第 2 页含 1 个重复 + 1 个新 → 去重后共 3 个
+    marketplaceApi.setSkillsPages(3, [
+      [
+        { full_name: "fixture-owner/fixture-skill", name: "fixture-skill", description: "page1", category: "other", topics: ["skill"], installable: true, installed: false, stargazers_count: 4, updated_at: "2026-01-04T00:00:00Z" },
+        { full_name: "fixture-owner/fixture-skill-two", name: "fixture-skill-two", description: "page1", category: "other", topics: ["skill"], installable: true, installed: false, stargazers_count: 2, updated_at: "2026-01-05T00:00:00Z" }
+      ],
+      [
+        { full_name: "fixture-owner/fixture-skill-two", name: "fixture-skill-two", description: "page2 dup", category: "other", topics: ["skill"], installable: true, installed: false, stargazers_count: 2, updated_at: "2026-01-05T00:00:00Z" },
+        { full_name: "fixture-owner/fixture-skill-three", name: "fixture-skill-three", description: "page2 new", category: "other", topics: ["skill"], installable: true, installed: false, stargazers_count: 1, updated_at: "2026-01-06T00:00:00Z" }
+      ]
+    ]);
+    await openMarketplace(page, host.authUrl);
+
+    await page.getByRole("button", { name: "通用 Skills", exact: true }).click();
+    await expect(page.getByRole("heading", { name: "通用 Skills", exact: true })).toBeVisible();
+    await expect(page.getByText("共 3 个 Skills", { exact: true })).toBeVisible();
+    await expect(page.getByText(/fixture-skill\s*★\s*4/)).toBeVisible();
+    await expect(page.getByText(/fixture-skill-two\s*★\s*2/)).toBeVisible();
+    await expect(page.getByText(/fixture-skill-three\s*★\s*1/)).toHaveCount(0);
+
+    // 滚动到触底 sentinel → 触发下一页加载
+    await page.locator("#dshm-skills-sentinel").scrollIntoViewIfNeeded();
+    await expect(page.getByText(/fixture-skill-three\s*★\s*1/)).toBeVisible();
+    // 跨页去重：fixture-skill-two 只出现一次
+    await expect(page.getByText(/fixture-skill-two\s*★\s*2/)).toHaveCount(1);
+    // 请求了第 2 页（挂载时 tick+query 两个 effect 各发一次第 1 页）
+    const skillsRequests = marketplaceApi.requests.filter((request) => request.path === "/api/marketplace/skills");
+    expect(skillsRequests.map((r) => r.query.page)).toContain("2");
+    expect(marketplaceApi.browserErrors).toEqual([]);
+  });
+
   test("characterize: 搜索空结果并从失败状态重试", async ({ page, host, marketplaceApi }) => {
     marketplaceApi.setVariant("list", "forward");
     marketplaceApi.failNext("list");

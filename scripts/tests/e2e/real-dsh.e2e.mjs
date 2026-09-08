@@ -16,6 +16,7 @@ import {
 import { dirname, join } from "node:path";
 import { tmpdir } from "node:os";
 import { fileURLToPath } from "node:url";
+import { inspectMarketplacePayload } from "../contracts/marketplace.mjs";
 
 const isWin = process.platform === "win32";
 const port = Number(process.env.DSH_E2E_PORT ?? "3098");
@@ -146,6 +147,19 @@ function check(name, actual, expected) {
   if (ok) console.log(`PASS ${name}`);
 }
 
+// 契约桥：真实 handler 的响应形状必须满足 client 期望的 marketplace 契约。
+// 这是「壳(浏览器 mock) 与 内层(真实 handler)」之间的唯一缺口——browser E2E 用 mock
+// 掩盖了真实输出，real-dsh 只验状态码，此处封住「真实响应形状漂移」。
+function checkContract(name, kind, payload) {
+  const { ok, missing } = inspectMarketplacePayload(kind, payload);
+  if (ok) pass++;
+  else {
+    fail++;
+    console.log(`FAIL ${name}: 契约缺字段 ${JSON.stringify(missing)}`);
+  }
+  if (ok) console.log(`PASS ${name}`);
+}
+
 const api = async (path, options = {}) => {
   const response = await fetch(host + path, {
     method: options.method ?? "GET",
@@ -185,17 +199,22 @@ try {
 
   const profile0 = await api("/api/marketplace/profile");
   check("真实宿主 profile 初始为 web", [profile0.status, profile0.body?.profile], [200, "web"]);
+  checkContract("真实宿主 profile 响应符合契约", "profile", profile0.body);
 
   const list0 = await api("/api/marketplace/list?lang=zh-CN");
   check("真实宿主 list 返回仓库与指纹", [list0.status, (list0.body?.repos ?? []).length > 0, typeof list0.body?.fp === "string"], [200, true, true]);
+  checkContract("真实宿主 list 响应符合契约", "list", list0.body);
   const skills0 = await api("/api/marketplace/skills?page=1&pageSize=5&lang=zh-CN");
   check("真实宿主 Skills 返回分页列表", [skills0.status, skills0.body?.page, (skills0.body?.repos ?? []).length <= 5, skills0.body?.total > 0], [200, 1, true, true]);
+  checkContract("真实宿主 skills 响应符合契约", "skills", skills0.body);
 
   const skillInstall = await api("/api/marketplace/install", { method: "POST", body: { repo: skillRepo, answers: {} } });
   check("真实宿主 skill 类型识别并安装", [skillInstall.status, skillInstall.body?.status, skillInstall.body?.type], [200, "done", "skill"]);
+  checkContract("真实宿主 install 响应符合契约", "install", skillInstall.body);
   check("真实宿主 skill 文件落入临时 DSH_HOME", existsSync(join(home, "skills", "real-host-skill", "SKILL.md")), true);
   const skillUninstall = await api("/api/marketplace/uninstall", { method: "POST", body: { repo: skillRepo } });
   check("真实宿主 skill 卸载返回 done", [skillUninstall.status, skillUninstall.body?.status], [200, "done"]);
+  checkContract("真实宿主 uninstall 响应符合契约", "uninstall", skillUninstall.body);
   check("真实宿主 skill 卸载后文件删除", existsSync(join(home, "skills", "real-host-skill")), false);
 
   const lifecycleFirst = await api("/api/marketplace/install", { method: "POST", body: { repo: lifecycleRepo, answers: {} } });
