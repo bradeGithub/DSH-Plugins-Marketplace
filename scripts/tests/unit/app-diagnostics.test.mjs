@@ -166,4 +166,28 @@ assert.equal(eventCapacity.getRecentEvents().length, 400);
 assert.equal(eventCapacity.getRecentEvents()[0].event, "e-1");
 assert.equal(eventCapacity.getRecentEvents().at(-1).event, "e-400");
 
+// ---- 事件字段边界归一化 ----
+const edge = createDiagnosticsRuntime({
+  platform: "test",
+  nodeVersion: "v1",
+  readOwnVersion: () => "market",
+  readFile: async () => "{}",
+  joinPath: (...parts) => parts.join("/"),
+  profileNodeModules: () => "/profile/node_modules",
+  probe: async () => "missing",
+  now: () => new Date("2026-09-05T03:04:05.000Z")
+});
+edge.pushEvent({ event: "install.done", duration_ms: "12.5" }); // 字符串数字 → Number
+edge.pushEvent({ event: "install.failed", duration_ms: "abc" }); // 非数字 → NaN
+edge.pushEvent({ event: "x", level: 42, error_code: 7, trace_id: 9 }); // 非字符串 → String
+edge.pushEvent({ event: "long", message: "m".repeat(5000) }); // 超长 message → 截断
+const edgeEvents = edge.getRecentEvents();
+assert.equal(edgeEvents[0].duration_ms, 12.5);
+assert.equal(Number.isNaN(edgeEvents[1].duration_ms), true);
+assert.equal(edgeEvents[2].level, "42");
+assert.equal(edgeEvents[2].error_code, "7");
+assert.equal(edgeEvents[2].trace_id, "9");
+assert.equal(edgeEvents[3].message.length, 4096);
+assert.equal(edgeEvents[3].message.includes("m".repeat(4097)), false);
+
 console.log("\napp/diagnostics: all assertions passed");

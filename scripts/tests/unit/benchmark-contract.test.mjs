@@ -85,5 +85,19 @@ check("benchmark 不把绝对耗时当断言", !/assert|check\(.*median|expect.*
 check("benchmark 使用确定性 PRNG", /mulberry32/.test(benchmarkSource), true);
 check("benchmark 有 warmup", /warmup/.test(benchmarkSource), true);
 
+// 实际运行 benchmark（小迭代数）→ 输出必须是合法 JSON 且含全部规模维度
+{
+  const { execFileSync } = await import("node:child_process");
+  const out = execFileSync(process.execPath, [join(ROOT, "scripts", "benchmarks", "marketplace.mjs"), "--iterations=5"], {
+    cwd: ROOT, encoding: "utf8", timeout: 120000, windowsHide: true
+  });
+  let report = null;
+  try { report = JSON.parse(out); } catch { /* 非 JSON */ }
+  check("benchmark 实际运行输出合法 JSON", report !== null, true);
+  check("benchmark 输出含全部规模维度", report && ["dedupe_1000", "dedupe_5000", "dedupe_20000", "fingerprint_1000", "index_build_1000", "profile_hit_1000"].every((k) => k in report.results), true);
+  check("benchmark 每个维度含 median/p95/samples", report && Object.values(report.results).every((r) => typeof r.median === "number" && typeof r.p95 === "number" && r.samples === 5), true);
+  check("benchmark 输出含 git revision", report && typeof report.git_revision === "string", true);
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail === 0 ? 0 : 1);

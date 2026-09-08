@@ -117,6 +117,31 @@ try {
     const r = run(["--only=secret"], { CHECK_WORKTREE: work });
     check("secretExclusions 排除 vendor/ 退出码 0", r.status, 0);
   }
+
+  // 场景 F：syntax 检查可运行且通过（真实仓库全绿）
+  {
+    const r = run(["--only=syntax"]);
+    check("syntax 检查退出码 0", r.status, 0);
+  }
+
+  // 场景 G：toc 检查可运行且通过（真实仓库 TOC 有效）
+  {
+    const r = run(["--only=toc"]);
+    check("toc 检查退出码 0", r.status, 0);
+  }
+
+  // 场景 H：commit-msg 合法格式通过 / 非法格式拦截
+  {
+    const okMsg = join(work, "ok-msg.txt");
+    writeFileSync(okMsg, "feat(scope): 合法提交信息\n", "utf8");
+    const okR = run(["--only=commit-msg", okMsg]);
+    check("commit-msg 合法格式退出码 0", okR.status, 0);
+
+    const badMsg = join(work, "bad-msg.txt");
+    writeFileSync(badMsg, "bad subject no type\n", "utf8");
+    const badR = run(["--only=commit-msg", badMsg]);
+    check("commit-msg 非法格式退出码 1", badR.status, 1);
+  }
 } finally {
   rmSync(work, { recursive: true, force: true });
 }
