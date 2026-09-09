@@ -34,6 +34,8 @@
   - [adaptor contract](#adaptor-contract)
   - [marketplace metadata contract](#marketplace-metadata-contract)
   - [test runner drift report isolation](#test-runner-drift-report-isolation)
+  - [test runner 并行化与 coverage 快速门](#test-runner-并行化与-coverage-快速门)
+  - [http 请求工具直接单测](#http-请求工具直接单测)
 - [5.5 机械化质量检查（行覆盖之外）](#55-机械化质量检查行覆盖之外)
 - [5.4 脱敏测试（redact）](#54-脱敏测试redact)
 - [5. 端到端（e2e）策略](#5-端到端e2e策略)
@@ -205,6 +207,16 @@ marketplace metadata 新增行为突变 m261–m270 共 10 个，全部被行为
 `scripts/tests/run.mjs` 的 `DRIFT_REPORT_FILE` 隔离由 `scripts/tests/integration/test-runner-drift-isolation.test.mjs` 通过真实子进程验证，而非只检查源码字面量或函数类型。未显式提供报告路径时，runner 为子测试创建 invocation-scoped 临时目录并在成功/失败退出后清理；显式路径原样传递且不由 runner 删除。Oracle 同时断言 runner 的成功/失败退出码、子进程环境、临时报告生命周期，以及仓库根 `drift-report.json` 的 hash 不变。
 
 该契约属于测试基础设施的 integration 行为门；`run.mjs` 已纳入语法检查清单。`check.mjs`、`coverage.mjs` 和直接 runner 调用均应优先使用仓库外报告路径，保护报告的当前基线不得被质量门改写。
+
+### test runner 并行化与 coverage 快速门
+
+`scripts/tests/run.mjs` 层内文件用并发池（unit 默认 4、integration 默认 2、e2e 默认 1；`DSH_TEST_CONCURRENCY` 可整体覆盖），层间保持 unit→integration→e2e 顺序；integration/e2e fork 真实 pnpm/git/npm 子进程，低并发防 CI OOM。每个子测试在未显式设置 `DRIFT_REPORT_FILE` 时获得独立临时报告路径；每文件有超时（unit/integration 秒级、e2e 600s）防死锁，超时终止该文件并继续后续层。`--json` 抑制子测试 stdout/stderr、结果按层序+文件名排序保证 CI 输出确定性。
+
+`scripts/coverage.mjs` 只跑 `--level=unit,integration`（跳过重型 e2e，2m41s→58s），把此前 e2e 独享的分支分移到 unit/integration 补测试；深集成/防御死代码函数加入豁免（见 §4 豁免表）。coverage 不在 pre-commit 自动检查中，由 `--only=coverage` 或 CI 显式执行。
+
+### http 请求工具直接单测
+
+`lib/http/request.js` 由 `scripts/tests/unit/http-request.test.mjs` 直接锁定安全敏感路径：`readJsonBody` 的 1MB 上限 413 / 非法 JSON 400 / 空体 / UTF-8 跨分片、`readBodyLimited` 的 chunked 流式累计超限 cancel / 无 reader 回退 arrayBuffer、`responseTooLarge` 的 32MB 边界、`json` 序列化。`readJsonBody`/`json` 有直接覆盖后移出 coverage 豁免（request.js 3/3→5/5 仍 100%）。
 
 
 ## 5.5 机械化质量检查（行覆盖之外）
