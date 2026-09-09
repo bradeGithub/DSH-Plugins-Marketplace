@@ -301,6 +301,7 @@ Also, [awesome-dsh-plugin](https://github.com/awesome-dsh-plugin/awesome-dsh-plu
 
 - [lgnorant-lu](https://github.com/lgnorant-lu) — write-endpoint auth (loopback socket check), security hardening (PR #63, twelve fixes), the mechanized testing system (PR #66: mutation/property/i18n), SkillsTab fixes, and many more core contributions
 - [baiyuscc13724-max](https://github.com/baiyuscc13724-max) — Harness Desktop marketplace integration and install-flow simplifications (#1/#2)
+- [anupamme](https://github.com/anupamme) (OrbisAI Security) — SSRF allowlist hardening for verify-installability (#213, adopted into #217)
 - any / bubble / tatakaria — early contributions
 
 **Ecosystem collaborators** (discussion #2269, recognition/verification/compliance alignment):
