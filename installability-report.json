@@ -1,17 +1,17 @@
 {
-  "generated_at": "2026-09-08T22:44:59.958Z",
+  "generated_at": "2026-09-09T04:11:55.576Z",
   "counts": {
-    "bundle-plugin": 3170,
-    "cordis-plugin": 7879,
+    "bundle-plugin": 3179,
+    "cordis-plugin": 7880,
     "pkg-plain": 1080,
-    "manual": 761,
+    "manual": 762,
     "script": 236,
     "skill": 382,
     "multi-plugin": 441,
     "gone": 57,
     "agent-preset": 51,
     "unknown": 55,
-    "empty": 15
+    "empty": 20
   },
   "repos": [
     {
@@ -1933,6 +1933,10 @@
     {
       "full_name": "aga-j/dsh-mini-games",
       "verdict": "cordis-plugin"
+    },
+    {
+      "full_name": "agent-mobile/dsh-mobile",
+      "verdict": "manual"
     },
     {
       "full_name": "agent-mobile/dsh-mobile-gateway",
@@ -6859,6 +6863,10 @@
       "verdict": "cordis-plugin"
     },
     {
+      "full_name": "chengzhicao/llm-capture",
+      "verdict": "bundle-plugin"
+    },
+    {
       "full_name": "chenhaolove89/dsh-ccswitch-import",
       "verdict": "manual"
     },
@@ -7599,6 +7607,10 @@
       "verdict": "bundle-plugin"
     },
     {
+      "full_name": "cjm-m/dsh-paste-code-block",
+      "verdict": "bundle-plugin"
+    },
+    {
       "full_name": "CJYLZS/dsh-commandcode-plan-autosync",
       "verdict": "bundle-plugin"
     },
@@ -7705,6 +7717,10 @@
     {
       "full_name": "clearkurt/dsh-win-terminal-inspector",
       "verdict": "pkg-plain"
+    },
+    {
+      "full_name": "ClickPM/dsh-acp-interactive",
+      "verdict": "cordis-plugin"
     },
     {
       "full_name": "climpea/daily-news-digest",
@@ -8128,6 +8144,10 @@
     },
     {
       "full_name": "CoolTea001/dsh-cool-theme",
+      "verdict": "bundle-plugin"
+    },
+    {
+      "full_name": "CooperZhuang/dsh-context-window",
       "verdict": "bundle-plugin"
     },
     {
@@ -19355,6 +19375,10 @@
       "verdict": "multi-plugin"
     },
     {
+      "full_name": "jockiller/dsh-translator",
+      "verdict": "bundle-plugin"
+    },
+    {
       "full_name": "Joe-rq/dsh-research-agent",
       "verdict": "agent-preset"
     },
@@ -28539,6 +28563,10 @@
       "verdict": "bundle-plugin"
     },
     {
+      "full_name": "nateyu/dsh-session-vault",
+      "verdict": "bundle-plugin"
+    },
+    {
       "full_name": "Nath-Vikky/dsh-codekin",
       "verdict": "bundle-plugin"
     },
@@ -36041,6 +36069,10 @@
     {
       "full_name": "ShenpingDD/wooden-fish-dsh",
       "verdict": "cordis-plugin"
+    },
+    {
+      "full_name": "ShenXuAkaEkstasis/dsh-ai-saas-deal-finder",
+      "verdict": "bundle-plugin"
     },
     {
       "full_name": "ShenXuAkaEkstasis/dsh-ai-shopping-assistant",
@@ -48243,6 +48275,10 @@
       "verdict": "bundle-plugin"
     },
     {
+      "full_name": "weibaohui/dsh-webdav-server",
+      "verdict": "bundle-plugin"
+    },
+    {
       "full_name": "weibaohui/dsh-xiuxian",
       "verdict": "bundle-plugin"
     },
@@ -49951,6 +49987,10 @@
       "verdict": "cordis-plugin"
     },
     {
+      "full_name": "Wzh0718/dsh-minimal-transcript",
+      "verdict": "bundle-plugin"
+    },
+    {
       "full_name": "wzwnolook/dsh-safe",
       "verdict": "pkg-plain"
     },
@@ -50315,6 +50355,22 @@
       "verdict": "bundle-plugin"
     },
     {
+      "full_name": "xby-skill/xby-detect-aigc",
+      "verdict": "empty"
+    },
+    {
+      "full_name": "xby-skill/xby-detect-fake",
+      "verdict": "empty"
+    },
+    {
+      "full_name": "xby-skill/xby-detect-fake-certificate",
+      "verdict": "empty"
+    },
+    {
+      "full_name": "xby-skill/xby-detect-fake-face",
+      "verdict": "empty"
+    },
+    {
       "full_name": "xby-skill/xby-detect-vehicle",
       "verdict": "bundle-plugin"
     },
@@ -50353,6 +50409,10 @@
     {
       "full_name": "xby-skill/xby-extract-image",
       "verdict": "bundle-plugin"
+    },
+    {
+      "full_name": "xby-skill/xby-fake",
+      "verdict": "empty"
     },
     {
       "full_name": "xby-skill/xby-fantasynbaleague",
@@ -53589,6 +53649,10 @@
     {
       "full_name": "yth1120/dsh-web-workbench",
       "verdict": "multi-plugin"
+    },
+    {
+      "full_name": "ytmaps/dsh-flowtext",
+      "verdict": "bundle-plugin"
     },
     {
       "full_name": "ytmaps/dsh-subagent-flowtext",
