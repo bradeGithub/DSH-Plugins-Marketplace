@@ -1,27 +1,34 @@
 {
-  "generated_at": "2026-09-09T04:00:58.976Z",
-  "count": 3,
+  "generated_at": "2026-09-09T09:45:30.698Z",
+  "count": 4,
   "items": [
     {
-      "full_name": "MichaelShii/dsh-plugin-teamflow",
+      "full_name": "Jimmy0123-ux/dsh-token-pet",
+      "previous": "web-ui",
+      "current": "model",
+      "desc_now": "Bilingual floating DeepSeek Harness pet with live context, lifetime token ledger, trends, opt-in completion sound, and editable Prompt Optimizer enhancement.",
+      "desc_prev": "DeepSeek Harness Desktop 悬浮用量小宠物：12 个正式逐帧动作反馈请求、工具、上下文压缩、归档与提示词增强；展示实时上下文占用、跨会话 Lifetime Ledger、服务商/模型统计和小时 Token 趋势；支持可编辑提示词增强、拖拽缩放、低性能模式与后台增量索引。"
+    },
+    {
+      "full_name": "AngelosZou/dsh-github-router",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "Read-only GitHub access for agents, wrapping several tools. Inside the tool it automatically probes and selects whichever GitHub access method works locally, and tries network proxies on its own. That cuts down the network and parsing problems an agent may hit when accessing GitHub, and the overhead of it repeatedly trying different approaches.",
+      "desc_prev": null
+    },
+    {
+      "full_name": "songofhawk/dsh-alpha",
       "previous": "other",
       "current": "agent",
-      "desc_now": "dsh plugin teamflow",
-      "desc_prev": "dsh plugin teamflow"
+      "desc_now": "Multi-machine, multi-agent orchestration and control platform for DSH: route tasks across devices, workspaces, and Agent runtimes with streaming, approvals, and recovery.",
+      "desc_prev": null
     },
     {
-      "full_name": "ac0033/dsh-ctm",
-      "previous": "coding",
-      "current": "model",
-      "desc_now": "DeepSeek Harness 上下文管理插件：上下文可视化、token 用量、编辑、回退与快照恢复",
-      "desc_prev": "dsh 插件：CTM 上下文/终端管理，把模型上下文变成可见、可编辑、可评分的一等对象"
-    },
-    {
-      "full_name": "linxsy-code/dsh-plugin-window-input",
-      "previous": "other",
-      "current": "vision",
-      "desc_now": "Windows input plugin for deepseek harness",
-      "desc_prev": "Windows input plugin for deepseek harness"
+      "full_name": "wuxiangru915/dsh-plugins",
+      "previous": "agent",
+      "current": "other",
+      "desc_now": "DeepSeek Harness plugins by wuxiangru915",
+      "desc_prev": "DeepSeek Harness plugins by wuxiangru915: session manager, review loop, session navigator"
     }
   ]
 }
