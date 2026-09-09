@@ -16,7 +16,7 @@ import { readFileSync, existsSync, mkdtempSync, rmSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { tmpdir } from "node:os";
 import { fileURLToPath } from "node:url";
-import { SYNTAX_CHECK_FILES, validateSubject, extractSubject, parseHookConfig, DEFAULT_HOOK_CONFIG, detectSecret } from "./validate.mjs";
+import { SYNTAX_CHECK_FILES, validateSubject, extractSubject, parseHookConfig, DEFAULT_HOOK_CONFIG, detectSecret, classifyPrecommitTier } from "./validate.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
 // 检查目标工作树：本地默认仓库根；测试（hook-check.test.mjs）与 CI 场景可覆盖。
@@ -63,6 +63,30 @@ function loadHookConfig(root) {
   }
 }
 
+/** 获取 staged 改动文件列表（本地）或相对基线的增量（CI）。 */
+function stagedFiles() {
+  const diffBase = process.env.CHECK_DIFF_BASE;
+  const args = diffBase
+    ? ["diff", "--name-only", `${diffBase}...HEAD`]
+    : ["diff", "--cached", "--name-only"];
+  const out = execFileSync("git", args, { cwd: WORKTREE, encoding: "utf8" });
+  return out.split("\n").map((s) => s.trim()).filter(Boolean);
+}
+
+/**
+ * 计算本次 pre-commit 的测试运行集（按改动内容分级，fail-safe 保守）：
+ * docs/generated 跳过测试；tests-only 跑 unit 快层；命中核心/无法判定/hook 自改全量。
+ * CI（CHECK_DIFF_BASE 或 DSH_REQUIRE_E2E）强制全量不降级。
+ */
+function resolveTestRun() {
+  const cfg = loadHookConfig(WORKTREE);
+  if (process.env.CHECK_DIFF_BASE || process.env.CI === "true") {
+    return { runTests: "unit,integration", tier: "ci-full" };
+  }
+  const { runTests, tier } = classifyPrecommitTier(stagedFiles(), cfg);
+  return { runTests, tier };
+}
+
 let failed = false;
 const fail = (label, msg) => {
   console.error(`[FAIL] [${label}] ${msg}`);
@@ -88,14 +112,33 @@ function checkSyntax() {
 function checkTests() {
   if (!want("tests")) return;
   const driftDir = mkdtempSync(join(tmpdir(), "dsh-hook-drift-"));
+  let resolved;
+  // --only=tests 是显式全量请求，不走内容分级，恒跑 unit+integration
+  if (only === "tests") {
+    resolved = { runTests: "unit,integration", tier: "explicit-tests" };
+  } else {
+    try {
+      resolved = resolveTestRun();
+      console.log(`[tier] ${resolved.tier} → run.mjs --level=${resolved.runTests || "(skip)"}`);
+    } catch (e) {
+      // 无法读取 staged（非 git 工作树等）→ 保守退回全量快速门
+      resolved = { runTests: "unit,integration", tier: "core" };
+      console.warn(`[WARN] [tests] staged 读取失败，回退全量快速门: ${e.message}`);
+    }
+  }
   try {
-    // 常规提交只跑 unit+integration（快，<1s）；e2e（真实 npm 安装）由 --only=e2e 或 CI 显式执行
-    execFileSync("node", ["scripts/tests/run.mjs", "--level=unit,integration"], {
-      cwd: ROOT,
-      stdio: "inherit",
-      env: { ...process.env, DRIFT_REPORT_FILE: join(driftDir, "drift-report.json") },
-    });
-    console.log("[OK] [tests] unit+integration 全部通过");
+    if (resolved.runTests === "none") {
+      console.log("[OK] [tests] 仅文档/生成物改动，跳过测试快速门（CI 全量门兜底）");
+    } else {
+      // 常规提交只跑 unit（tests-only 快层）或 unit+integration（核心全量）；
+      // e2e（真实 npm 安装）由 --only=e2e 或 CI 显式执行
+      execFileSync("node", ["scripts/tests/run.mjs", `--level=${resolved.runTests}`], {
+        cwd: ROOT,
+        stdio: "inherit",
+        env: { ...process.env, DRIFT_REPORT_FILE: join(driftDir, "drift-report.json") },
+      });
+      console.log("[OK] [tests] unit+integration 全部通过");
+    }
   } catch {
     fail("tests", "unit+integration 存在失败项");
   } finally {

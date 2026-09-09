@@ -1,41 +1,27 @@
 {
-  "generated_at": "2026-09-08T03:59:31.471Z",
-  "count": 5,
+  "generated_at": "2026-09-09T04:00:58.976Z",
+  "count": 3,
   "items": [
     {
-      "full_name": "ppy-web/dsh-plugin-xiaomi-mimo-tts",
-      "previous": "tool",
-      "current": "resource",
-      "desc_now": "给DSH接入免费的 Xiaomi MiMo TTS API，支持使用预置/自定义/浏览器内置声音朗读正文",
-      "desc_prev": "给DSH接入免费的 Xiaomi MiMo TTS API，支持使用预置/自定义/浏览器内置声音朗读正文"
-    },
-    {
-      "full_name": "duhu2000/dsh-data-cleaning-agent",
-      "previous": "agent",
-      "current": "document",
-      "desc_now": "Data cleaning and data enrichment for CSV/XLSX/JSON enterprise lists in DeepSeek Harness, including spreadsheet cleaning, deduplication, profiling, optional Qichacha MCP and exports.",
-      "desc_prev": "Data cleaning and enterprise enrichment agent plugin for DeepSeek Harness."
-    },
-    {
-      "full_name": "kaixinguo360/dsh-script-manager",
-      "previous": "model",
-      "current": "tool",
-      "desc_now": "DSH 自定义操作脚本管理器，将验证过的操作流程固化为可复用的脚本，用 /script 直接运行或注册为 Agent 工具，支持参数化脚本、执行预期声明、执行历史记录。",
-      "desc_prev": "DSH 自定义操作脚本管理插件，将验证过的操作流程固化为可复用脚本，不耗 token、支持参数化和执行验收。"
-    },
-    {
-      "full_name": "duhu2000/dsh-pre-duediligence",
+      "full_name": "MichaelShii/dsh-plugin-teamflow",
       "previous": "other",
-      "current": "tool",
-      "desc_now": "Pre-visit due diligence and company research in DeepSeek Harness for customer background checks and risk briefs, with Qichacha MCP tool-call budget approval and entity confirmation.",
-      "desc_prev": "Pre Due Diligence"
+      "current": "agent",
+      "desc_now": "dsh plugin teamflow",
+      "desc_prev": "dsh plugin teamflow"
     },
     {
-      "full_name": "hellogit2021/avoid-ai-writing-cn",
-      "previous": "tool",
-      "current": "resource",
-      "desc_now": "知乎\"去AI味写作技巧\"社区免费提供：中文写作去 AI 味插件。说\"去掉AI味\"即重写，说\"写的不错\"自动学习新 AI 词。",
-      "desc_prev": "知乎\"去AI味写作技巧\"社区免费提供：中文写作去 AI 味插件（AI-isms / AI writing / humanize）。说\"去掉AI味\"即重写，说\"写的不错\"自动学习新 AI 词。安装：dsh plugin --profile web add github:hellogit2021/avoid-ai-writing-cn"
+      "full_name": "ac0033/dsh-ctm",
+      "previous": "coding",
+      "current": "model",
+      "desc_now": "DeepSeek Harness 上下文管理插件：上下文可视化、token 用量、编辑、回退与快照恢复",
+      "desc_prev": "dsh 插件：CTM 上下文/终端管理，把模型上下文变成可见、可编辑、可评分的一等对象"
+    },
+    {
+      "full_name": "linxsy-code/dsh-plugin-window-input",
+      "previous": "other",
+      "current": "vision",
+      "desc_now": "Windows input plugin for deepseek harness",
+      "desc_prev": "Windows input plugin for deepseek harness"
     }
   ]
 }
