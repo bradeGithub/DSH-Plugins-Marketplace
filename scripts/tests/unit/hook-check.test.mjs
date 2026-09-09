@@ -67,6 +67,11 @@ try {
   check("默认 pre-commit 不隐式运行 e2e", /if \(only === "e2e"\) checkE2e\(\);/.test(CHECK_SOURCE), true);
   check("e2e 检查实际运行 e2e 层", /\["scripts\/tests\/run\.mjs", "--level=e2e"\]/.test(CHECK_SOURCE), true);
   check("e2e 检查严格处理缺少前置工具", /DSH_REQUIRE_E2E: "1"/.test(CHECK_SOURCE), true);
+  // 提交内容感知分级：checkTests 调用 classifyPrecommitTier，CI/显式全量不降级
+  check("分级判定函数被 checkTests 调用", /classifyPrecommitTier\(stagedFiles\(\), cfg\)/.test(CHECK_SOURCE), true);
+  check("CI 环境强制全量不降级", /process\.env\.CI === "true"/.test(CHECK_SOURCE), true);
+  check("--only=tests 显式全量不走分级", /only === "tests"/.test(CHECK_SOURCE) && /explicit-tests/.test(CHECK_SOURCE), true);
+  check("分级日志输出 tier 标签", /\[tier\]/.test(CHECK_SOURCE), true);
 
   // 场景 A：干净文件 staged → secret 通过
   {
