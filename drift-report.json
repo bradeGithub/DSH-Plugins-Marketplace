@@ -1,34 +1,34 @@
 {
-  "generated_at": "2026-09-09T09:45:30.698Z",
+  "generated_at": "2026-09-09T14:23:37.848Z",
   "count": 4,
   "items": [
     {
-      "full_name": "Jimmy0123-ux/dsh-token-pet",
-      "previous": "web-ui",
-      "current": "model",
-      "desc_now": "Bilingual floating DeepSeek Harness pet with live context, lifetime token ledger, trends, opt-in completion sound, and editable Prompt Optimizer enhancement.",
-      "desc_prev": "DeepSeek Harness Desktop 悬浮用量小宠物：12 个正式逐帧动作反馈请求、工具、上下文压缩、归档与提示词增强；展示实时上下文占用、跨会话 Lifetime Ledger、服务商/模型统计和小时 Token 趋势；支持可编辑提示词增强、拖拽缩放、低性能模式与后台增量索引。"
+      "full_name": "Jason-skd/dsh-session-fork",
+      "previous": "tool",
+      "current": "memory",
+      "desc_now": "Makes the branch the building block of AI conversation management — parallel workflows, continuous and mergeable conversation memory",
+      "desc_prev": "Makes the branch the building block of AI conversation management — parallel workflows, continuous and mergeable conversation memory"
     },
     {
-      "full_name": "AngelosZou/dsh-github-router",
+      "full_name": "Andy8647/dsh-auto-approval",
       "previous": "other",
       "current": "tool",
-      "desc_now": "Read-only GitHub access for agents, wrapping several tools. Inside the tool it automatically probes and selects whichever GitHub access method works locally, and tries network proxies on its own. That cuts down the network and parsing problems an agent may hit when accessing GitHub, and the overhead of it repeatedly trying different approaches.",
+      "desc_now": "Automode for DeepSeek Harness: a fourth permission preset — full access with an LLM classifier as the only gate before every tool call.",
       "desc_prev": null
     },
     {
-      "full_name": "songofhawk/dsh-alpha",
-      "previous": "other",
-      "current": "agent",
-      "desc_now": "Multi-machine, multi-agent orchestration and control platform for DSH: route tasks across devices, workspaces, and Agent runtimes with streaming, approvals, and recovery.",
-      "desc_prev": null
+      "full_name": "Blackman99/codsh",
+      "previous": "tool",
+      "current": "coding",
+      "desc_now": "/ship takes one sentence to verified code. Terminal coding agent for DeepSeek and any compatible endpoint.",
+      "desc_prev": "Yet another agent cli create for a better UX on the Deepseek Harness"
     },
     {
-      "full_name": "wuxiangru915/dsh-plugins",
-      "previous": "agent",
-      "current": "other",
-      "desc_now": "DeepSeek Harness plugins by wuxiangru915",
-      "desc_prev": "DeepSeek Harness plugins by wuxiangru915: session manager, review loop, session navigator"
+      "full_name": "yindf/taskfold",
+      "previous": "coding",
+      "current": "memory",
+      "desc_now": "Context folding for DeepSeek Harness (DSH): wrap work in named tasks, fold finished spans into short summaries, recall originals on demand.",
+      "desc_prev": "effectively infinite context for your coding agent.  Keep long AI coding sessions fast, cheap, and readable: finished work is folded into a short summary, and the full original content is always one call away.  For DeepSeek Harness (DSH)."
     }
   ]
 }
