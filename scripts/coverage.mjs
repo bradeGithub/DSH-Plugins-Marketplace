@@ -43,8 +43,8 @@ const jsonOut = process.argv.includes("--json");
 // - lib/ 下各模块：runNpm 等命名深集成函数（按函数名），以及
 //   防御性死代码闭包（按源码特征子串定位——比行号鲁棒，lib 增删行不受影响）
 const EXEMPT_LIB_FUNCS = [
-  "runNpm", "npmInstallWithFallback", "readJsonBody",
-  "exists", "json", "readPackageVersion", "readPackageName",
+  "runNpm", "npmInstallWithFallback",
+  "exists", "readPackageVersion", "readPackageName",
   "readPackageJsonObject", "copyFilter",
   // 上游 v1.5.0 npm 等价回退（dsh CLI 失败时 npm install --ignore-scripts 到临时目录）：
   // 内部 execFileAsync 真实 npm 二进制（与 runNpm 同例）；其 cmd 包装形态由

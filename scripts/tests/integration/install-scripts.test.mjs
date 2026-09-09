@@ -65,14 +65,22 @@ if (shBash) {
     // 必失败。stub exit 1 → 官方分支失败 → 回退手动分支（与 ps1 的 stub 语义一致）。
     const stubDir = mkdtempSync(join(tmpdir(), "dsh-sh-stub-"));
     writeFileSync(join(stubDir, "dsh"), "#!/bin/sh\nexit 1\n", "utf8");
+    // 最小 fixture 目录：不直接跑仓库根 install.sh——$SCRIPT_DIR=仓库根 → SRC=整个仓库，
+    // `cp -r` 复制 2.2G（含 .git）再删，单次 ~82s。复制脚本 + 占位 package.json 到
+    // 临时目录，$src 只复制 KB 级内容（与 ps1 侧 fixture 化对称；install.sh 的 patch
+    // 注册只读 $HOME/.dsh/profiles/web/，不依赖仓库根文件，行为完全一致）。
+    const srcDir = mkdtempSync(join(tmpdir(), "dsh-sh-src-"));
+    copyFileSync(join(ROOT, "install.sh"), join(srcDir, "install.sh"));
+    writeFileSync(join(srcDir, "package.json"), JSON.stringify({ name: "fixture-market", version: "1.0.0" }), "utf8");
     try {
-      execFileSync(shBash, [join(ROOT, "install.sh")], {
+      execFileSync(shBash, [join(srcDir, "install.sh")], {
         env: { ...process.env, HOME: home, PATH: `${stubDir}:${process.env.PATH ?? ""}` },
-        cwd: ROOT,
+        cwd: srcDir,
         stdio: "pipe"
       });
     } finally {
       rmSync(stubDir, { recursive: true, force: true });
+      rmSync(srcDir, { recursive: true, force: true });
     }
   }
 

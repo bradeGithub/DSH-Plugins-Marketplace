@@ -93,7 +93,7 @@ process.exit(fail === 0 ? 0 : 1);
 | 豁免项 | 原因 |
 |---|---|
 | `runNpm`、`npmInstallWithFallback` | 依赖真实 npm 二进制，mock 不稳定 |
-| `readJsonBody`、`exists`、`json` 等内部辅助 | 通过 handler 间接触发 |
+| `exists` 等内部辅助 | 通过 handler 间接触发 |
 | `readPackageVersion`、`readPackageName`、`readPackageJsonObject`、`copyFilter` | 深集成依赖解析路径，经调用链间接覆盖 |
 | 防御性死代码闭包（`rm(...).catch(`、启动预热 `getList().catch(`） | 仅 fs 权限/占用等异常态触发（markers 见 coverage.mjs） |
 | toc.mjs `isMain` 主循环 | 仅 CLI 运行时执行 |
