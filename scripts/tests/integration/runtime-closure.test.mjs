@@ -232,6 +232,17 @@ try {
   const skillsInstalled = await invoke(skillsHandler, "GET", "/api/marketplace/skills?refresh=1");
   check("Skills 标注已安装 skill", installedMap(skillsInstalled.body)[skillRepo], true);
 
+  // 分页 skills 请求触发 annotateSkillInstalled 包装（index.js 闭包）
+  const skillsPaged = await invoke(skillsHandler, "GET", "/api/marketplace/skills?page=1&pageSize=5&refresh=1");
+  check("Skills 分页标注已安装 skill", installedMap(skillsPaged.body)[skillRepo], true);
+  check("Skills 分页 total 与 pageSize", [skillsPaged.body?.total, skillsPaged.body?.pageSize], [1, 5]);
+
+  // backup 请求触发 getInstalledEntries 闭包（index.js 装配）
+  const backupHandler = handler("/api/marketplace/backup");
+  const backupRes = await invoke(backupHandler, "GET", "/api/marketplace/backup");
+  check("backup 返回安装记录", [backupRes.status, Array.isArray(backupRes.body?.backup?.repos)], [200, true]);
+  check("backup 含已安装 skill", backupRes.body?.backup?.repos?.some((r) => r.repo === skillRepo), true);
+
   const profileInitial = await invoke(profileHandler, "GET", "/api/marketplace/profile");
   check("profile 初始为 web", [profileInitial.status, profileInitial.body?.profile], [200, "web"]);
   check("非法 profile 被拒绝", (await invoke(profileHandler, "POST", "/api/marketplace/profile", { profile: "../evil" })).status, 400);
