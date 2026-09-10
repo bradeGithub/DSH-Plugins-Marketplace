@@ -98,7 +98,16 @@ function check(name, actual, expected) {
   }
 }
 
-const originalDigest = digest(DRIFT_REPORT);
+// 仓库根 drift-report.json 是构建产物、允许不存在（新架构默认把 drift 写临时目录；
+// CI 的 chore 提交也曾提交过它的删除）。因此基准摘要必须"存在才算"：
+// 有基线 → 断言哈希不变；无基线 → 断言 runner 也不新建该文件（同样是隔离验证）。
+// 严禁在模块顶层无条件 readFileSync 该路径——否则全新 checkout 直接 ENOENT 挂掉（2026-09-10 CI 事故）。
+const hadRepoDrift = existsSync(DRIFT_REPORT);
+const originalDigest = hadRepoDrift ? digest(DRIFT_REPORT) : null;
+function checkRepoDriftUntouched(name) {
+  if (hadRepoDrift) check(name, digest(DRIFT_REPORT), originalDigest);
+  else check(`${name}（无基线时不得新建）`, existsSync(DRIFT_REPORT), false);
+}
 
 const defaultSandbox = makeSandbox();
 try {
@@ -108,7 +117,7 @@ try {
   check("未设置 drift 路径时 sandbox runner 成功", result.status, 0);
   check("未设置 drift 路径注入临时报告", isAutoDriftPath(observed), true);
   check("默认报告临时路径退出后已清理", existsSync(observed), false);
-  check("未设置 drift 路径不改写仓库报告", digest(DRIFT_REPORT), originalDigest);
+  checkRepoDriftUntouched("未设置 drift 路径不改写仓库报告");
   check("默认 drift 临时目录退出后清理", autoDriftDirs(defaultSandbox.tempRoot), originalDirs);
 } finally {
   rmSync(defaultSandbox.root, { recursive: true, force: true });
@@ -128,7 +137,7 @@ try {
   check("显式 drift 路径原样传入子测试", observedPath(explicitSandbox), explicitReportPath);
   check("显式 drift 报告不被 runner 删除", readFileSync(explicitReportPath, "utf8"), "caller-owned");
   check("显式 drift 路径不创建默认临时目录", autoDriftDirs(explicitSandbox.tempRoot), originalDirs);
-  check("显式 drift 路径不改写仓库报告", digest(DRIFT_REPORT), originalDigest);
+  checkRepoDriftUntouched("显式 drift 路径不改写仓库报告");
 } finally {
   rmSync(explicitSandbox.root, { recursive: true, force: true });
 }
@@ -141,7 +150,7 @@ try {
   check("子测试失败时 runner 保留非零退出码", result.status, 1);
   check("子测试失败仍注入临时报告", isAutoDriftPath(observed), true);
   check("子测试失败时临时报告仍被清理", existsSync(observed), false);
-  check("子测试失败时不改写仓库报告", digest(DRIFT_REPORT), originalDigest);
+  checkRepoDriftUntouched("子测试失败时不改写仓库报告");
   check("子测试失败时默认 drift 目录仍清理", autoDriftDirs(failureSandbox.tempRoot), originalDirs);
 } finally {
   rmSync(failureSandbox.root, { recursive: true, force: true });
