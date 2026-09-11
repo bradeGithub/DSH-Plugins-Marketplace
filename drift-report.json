@@ -1,27 +1,13 @@
 {
-  "generated_at": "2026-09-11T08:53:42.394Z",
-  "count": 3,
+  "generated_at": "2026-09-11T14:17:20.359Z",
+  "count": 1,
   "items": [
     {
-      "full_name": "kovey/dsh-nvim-tui",
-      "previous": "other",
-      "current": "coding",
-      "desc_now": "Neovim-style TUI for DeepSeek Harness (dsh): nvim renders the terminal, a Node runner bridges DSH agent events over msgpack-RPC — sessions, tool cards, reasoning panel, approvals, markdown tables",
-      "desc_prev": "TUI of DeepSeek Harness with Neovim"
-    },
-    {
-      "full_name": "yu502950715yang/dsh-use-wallpaper",
+      "full_name": "wszhoho/dsh-file-attachment",
       "previous": "web-ui",
-      "current": "coding",
-      "desc_now": "把 Wallpaper Engine 动态壁纸搬进 DeepSeek Harness 的 Web GUI：浏览器内实时渲染 scene 壁纸（three.js + Rust/WASM 粒子模拟），支持视频与 web 壁纸，无需 Wallpaper Engine 运行时。",
-      "desc_prev": "DSH Web GUI 壁纸背景插件：从本机 Wallpaper Engine 壁纸库加载背景，wasm 渲染 scene 壁纸"
-    },
-    {
-      "full_name": "zzy6-a/dsh-upgrade-guard",
-      "previous": "tool",
-      "current": "other",
-      "desc_now": "DSH 兼容卫士：宿主升级后自动巡检插件兼容性，支持修复/禁用；宿主启动失败时由宿主外 supervisor 自动救援或回滚到上一个宿主版本。",
-      "desc_prev": "DSH 升级安全网：宿主升级后自动巡检插件兼容性，支持修复/禁用；宿主启动失败时由宿主外 supervisor 自动救援或回滚到上一个宿主版本。"
+      "current": "vision",
+      "desc_now": "支持拖入/粘贴 图片、文件，替换dsh本体上传按钮，支持文本模型调用多模态模型识别图片。",
+      "desc_prev": "拖入 / 粘贴 / 工具栏上传按钮（📎，可多选）为输入框附加文件：图片走既有草稿图片流程（不落盘）；文档全文落盘到会话工作区 .dsh-file-attachment/ 并插入 @绝对路径引用"
     }
   ]
 }
