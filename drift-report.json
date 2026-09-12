@@ -1,20 +1,20 @@
 {
-  "generated_at": "2026-09-12T17:00:02.228Z",
+  "generated_at": "2026-09-12T20:34:04.486Z",
   "count": 2,
   "items": [
     {
-      "full_name": "KhalilYamber/dsh-tidewatch",
-      "previous": "other",
-      "current": "model",
-      "desc_now": "DeepSeek 峰谷时刻悬浮徽章 · dsh plugin：实时峰谷档位、下一阶段倒计时、本次会话 API 花费（含三段历史价格档）| A floating tide badge for DeepSeek Harness: live peak/off-peak phase, countdown and session cost.",
-      "desc_prev": null
+      "full_name": "wldxiaobai/dsh-project-mcp-manager",
+      "previous": "tool",
+      "current": "other",
+      "desc_now": "基于原版 DSH 扩展，提供项目层、用户层更完整 MCP 管理 || Extended from the original DSH code, providing more complete MCP management at both project and user levels",
+      "desc_prev": "Project-level MCP manager for DSH: auto-mount MCP servers from each project's .dsh/mcp.yml, hot-reload config changes, and scope tools to the active session's project."
     },
     {
-      "full_name": "sakuraqqq/dsh-auto-paste",
+      "full_name": "GooDAnDReaDY/dsh-dsml-artifact-guard",
       "previous": "tool",
-      "current": "web-ui",
-      "desc_now": "A DeepSeek Harness plugin that auto-saves large pasted text as attachment files",
-      "desc_prev": "A DeepSeek Harness plugin that auto-saves large pasted text as attachment files"
+      "current": "other",
+      "desc_now": "Sanitizes leaked DeepSeek DSML closing tags from model text streams",
+      "desc_prev": "DeepSeek Harness DSML artifact sanitizer for leaked protocol tags"
     }
   ]
 }
