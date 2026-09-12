@@ -1,13 +1,34 @@
 {
-  "generated_at": "2026-09-12T04:00:09.472Z",
-  "count": 1,
+  "generated_at": "2026-09-12T10:50:05.174Z",
+  "count": 4,
   "items": [
     {
-      "full_name": "GooDAnDReaDY/dsh-tts",
-      "previous": "other",
-      "current": "web-ui",
-      "desc_now": "Text-to-Speech for DeepSeek Harness with fallback provider chains, offline neural models and streaming UI",
-      "desc_prev": "Text-to-speech for DeepSeek Harness: neural voice read-aloud with multi-provider fallback chains"
+      "full_name": "STARDUSTLC666/dsh-ffmpeg",
+      "previous": "coding",
+      "current": "tool",
+      "desc_now": "DSH 视频处理工具插件：ffmpeg_probe/cut/concat/encode/subtitle/extract/gif/frames/adjust/health 十工具（探测摘要、批量抽帧、GIF、变速/音量/静音/旋转调整），进程走官方 subprocess 服务，超时树级终止、环境变量路径回退与多视频流探测，零运行时依赖（ffmpeg 本体除外）。",
+      "desc_prev": "DeepSeek Harness 视频处理插件：十工具（探测/剪辑/拼接/转码/字幕烧录/抽帧/批量抽帧/GIF/调整/健康自检），调整=变速/音量/静音/旋转，官方 subprocess 服务、argv 无 shell 注入、零运行时依赖；纯 Node 全平台。· Video processing tools for DeepSeek Harness agents. 已验证兼容 DeepSeek Harness v0.1.3-alpha.2。"
+    },
+    {
+      "full_name": "STARDUSTLC666/dsh-slack",
+      "previous": "tool",
+      "current": "notify",
+      "desc_now": "DSH 社区插件：Slack 通知/桥接（v0.2 支持 Socket Mode 双向：收件箱 + 线程回复）",
+      "desc_prev": "DeepSeek Harness Slack 插件：slack_notify/channels/inbox/reply/health 五工具，Socket Mode 免公网回调，收件箱队列 + 线程回复，可自定义 slackApiUrl 对接代理网关。· Two-way Slack messaging for DeepSeek Harness agents. 已验证兼容 DeepSeek Harness v0.1.2-alpha.5。"
+    },
+    {
+      "full_name": "STARDUSTLC666/dsh-dingtalk",
+      "previous": "tool",
+      "current": "notify",
+      "desc_now": "钉钉群机器人单向通知工具（DeepSeek Harness 插件）：agent 推送 Markdown / 纯文本消息到钉钉群，支持加签安全模式。",
+      "desc_prev": "DeepSeek Harness 钉钉群机器人插件：dingtalk_notify/text/health 三工具，自定义机器人 webhook + HMAC 加签，手写签名实现、零运行时依赖；纯 Node 全平台。· DingTalk group-robot notifications for DeepSeek Harness agents. 已验证兼容 DeepSeek Harness v0.1.2-alpha.5。"
+    },
+    {
+      "full_name": "STARDUSTLC666/dsh-minimal-ptc",
+      "previous": "tool",
+      "current": "coding",
+      "desc_now": "DeepSeek Harness 极简 PTC 预设：简洁提示词、run_code 工具编排、完整插件工具，以及 Windows Git Bash 和持久 PowerShell。",
+      "desc_prev": "Minimal prompt x full PTC tools for DeepSeek Harness - aligned with the Project2 we/let's trajectory (Minimal 99/96). 已验证兼容 DeepSeek Harness v0.1.2-alpha.5。"
     }
   ]
 }
