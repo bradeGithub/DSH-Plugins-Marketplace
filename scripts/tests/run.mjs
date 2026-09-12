@@ -10,9 +10,15 @@
 // 并行：层内文件用并发池（unit 默认 4，integration 默认 2，e2e 默认 1；DSH_TEST_CONCURRENCY 可覆盖），
 // 层间保持 unit → integration → e2e 顺序。integration/e2e fork 真实 pnpm/git/npm 子进程，低并发防 CI OOM。
 // 每个子测试在未显式设置 DRIFT_REPORT_FILE 时获得独立的临时报告路径（避免并行写同一文件竞争）；显式设置时原样透传（调用方持有）。
+//
+// 独占执行（@runner-exclusive）：部分集成测试会改动**仓库根共享文件**（registry.json / skills.json
+// 的「内置索引隔离」——把随包索引搬走以覆盖降级路径）。这类文件与任何其他文件并行都会互相踩：
+// 一方把文件改名/换掉的瞬间，另一方 rename 得到 ENOENT 或断言翻转（2026-09-11/12 的间歇性 CI 失败根因）。
+// 约定：文件头部注释含 `@runner-exclusive` 标记即视为独占——先跑完普通文件，再逐个串行跑独占文件，
+// 保证独占文件运行期间没有任何其他测试进程。新增此类文件时必须打标记。
 
 import { spawn } from "node:child_process";
-import { readdirSync, existsSync, mkdtempSync, rmSync } from "node:fs";
+import { readdirSync, existsSync, mkdtempSync, rmSync, readFileSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { tmpdir } from "node:os";
 import { fileURLToPath } from "node:url";
@@ -83,26 +89,44 @@ function runFile(lv, file) {
   });
 }
 
-/** 运行一层：并发池内并行执行该层所有文件，返回结果数组（文件顺序）。 */
+/** 是否声明独占执行：文件头部注释含 @runner-exclusive（改动仓库根共享状态的文件必须标记）。 */
+function isExclusive(lv, file) {
+  try {
+    return readFileSync(join(TESTS, lv, file), "utf8").slice(0, 4096).includes("@runner-exclusive");
+  } catch {
+    return false;
+  }
+}
+
+/** 运行一层：普通文件走并发池，独占文件（@runner-exclusive）随后逐个串行执行。返回结果数组。 */
 async function runLevel(lv) {
   const dir = join(TESTS, lv);
   if (!existsSync(dir)) return [];
-  const files = readdirSync(dir).filter((f) => f.endsWith(".test.mjs") || f.endsWith(".e2e.mjs")).sort();
+  const all = readdirSync(dir).filter((f) => f.endsWith(".test.mjs") || f.endsWith(".e2e.mjs")).sort();
+  const shared = all.filter((f) => !isExclusive(lv, f));
+  const exclusive = all.filter((f) => isExclusive(lv, f));
   const results = [];
+  const report = (r, tagNote = "") => {
+    results.push(r);
+    if (!jsonOut) {
+      const tag = r.ok ? "[OK]" : "[FAIL]";
+      const timeoutNote = r.timedOut ? ` —— 超时（${(FILE_TIMEOUT_MS[lv] ?? 300_000) / 1000}s 未结束，疑似死锁，已终止）` : "";
+      console.log(`${tag} [${lv}] ${r.file} (${(r.duration / 1000).toFixed(1)}s)${timeoutNote}${tagNote}`);
+    }
+  };
+  // 阶段 1：普通文件并发池
   let idx = 0;
-  const workers = Array.from({ length: Math.min(concurrencyFor(lv), files.length) }, async () => {
-    while (idx < files.length) {
-      const file = files[idx++];
-      const r = await runFile(lv, file);
-      results.push(r);
-      if (!jsonOut) {
-        const tag = r.ok ? "[OK]" : "[FAIL]";
-        const timeoutNote = r.timedOut ? ` —— 超时（${(FILE_TIMEOUT_MS[lv] ?? 300_000) / 1000}s 未结束，疑似死锁，已终止）` : "";
-        console.log(`${tag} [${lv}] ${file} (${(r.duration / 1000).toFixed(1)}s)${timeoutNote}`);
-      }
+  const workers = Array.from({ length: Math.min(concurrencyFor(lv), shared.length) }, async () => {
+    while (idx < shared.length) {
+      const file = shared[idx++];
+      report(await runFile(lv, file));
     }
   });
   await Promise.all(workers);
+  // 阶段 2：独占文件串行（此刻普通文件已全部结束，独占文件之间也不重叠）
+  for (const file of exclusive) {
+    report(await runFile(lv, file), " —— 独占执行（改动仓库根共享状态）");
+  }
   return results;
 }
 

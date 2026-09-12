@@ -1,3 +1,6 @@
+// @runner-exclusive —— 本文件会替换仓库根 registry.json / skills.json（内置索引隔离），
+// 与 lib.test.mjs / installed-index.test.mjs 并行会互相踩（ENOENT / 「隔离残留」误判）。
+// 运行器据此把本文件放在独占阶段串行执行（见 scripts/tests/run.mjs）。
 // list 磁盘缓存行为测试：
 // 1. fetchAllRepos 全失败走 search 兜底时**不写盘**——残缺结果（单 query 上限 1000 条）
 //    只作当次响应，绝不落盘污染磁盘缓存；

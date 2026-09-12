@@ -1,4 +1,7 @@
 #!/usr/bin/env node
+// @runner-exclusive —— 本文件会把仓库根 registry.json 改名让路（内置索引隔离），
+// 与 installed-index / list-cache 等同样动内置索引的文件并行会互相踩（ENOENT / 断言翻转）。
+// 运行器据此把本文件放在独占阶段串行执行（见 scripts/tests/run.mjs）。
 // lib/index.js 导出函数全覆盖测试：mock fetch + 临时 DSH_HOME + 假 ctx。
 // 运行：node scripts/tests/integration/lib.test.mjs（或 node scripts/tests/run.mjs --level=integration）
 // 与 smoke-tests.mjs 共用 check() 风格；coverage.mjs 同时统计两者。
@@ -1021,7 +1024,13 @@ function mockFetchCapture(payload, status = 200) {
   // 更深层路径）→ 磁盘缓存（清空）→ 搜索 API → fetchJson 抛错被捕获（含
   // res.text() 失败时的 .catch(() => "") 分支）→ 降级返回空数组。
   const bundledDsh = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..", "registry.json");
-  renameSync(bundledDsh, bundledDsh + ".bak");
+  const bundledDshBak = bundledDsh + ".bak";
+  // 防御：本文件已标 @runner-exclusive（独占执行），但仍显式校验——缺失时给出可操作的错误，
+  // 而不是抛裸 ENOENT 崩栈（历史上的 CI 失败就是这条 renameSync 报 ENOENT 无法自证原因）。
+  if (!existsSync(bundledDsh)) {
+    throw new Error("registry.json 缺失（内置索引隔离残留或并行冲突）——请先 git checkout -- registry.json 再重跑");
+  }
+  renameSync(bundledDsh, bundledDshBak);
   try {
     // 前文 fetchAllRepos 的内置索引兜底会 fire-and-forget 落盘 list-cache/dsh.json，
     // 先观察目标缓存写完再清空，否则磁盘缓存层会先命中、覆盖不了搜索兜底路径。
@@ -1042,7 +1051,8 @@ function mockFetchCapture(payload, status = 200) {
     globalThis.fetch = orig5;
     check("fetchAllRepos 全失败降级空数组", Array.isArray(degraded) && degraded.length === 0, true);
   } finally {
-    renameSync(bundledDsh + ".bak", bundledDsh);
+    // 还原只在确实由本文件搬走时执行（避免 .bak 不存在时二次崩栈，掩盖真实失败原因）
+    if (existsSync(bundledDshBak)) renameSync(bundledDshBak, bundledDsh);
   }
 
   // apply(ctx) mock：验证路由注册（install handler 依赖真实 git/npm 子进程，属 e2e 覆盖）

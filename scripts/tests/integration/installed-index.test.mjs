@@ -1,3 +1,6 @@
+// @runner-exclusive —— 本文件会替换仓库根 registry.json / skills.json（内置索引隔离），
+// 与 lib.test.mjs / list-cache.test.mjs 并行会互相踩（ENOENT / 「隔离残留」误判）。
+// 运行器据此把本文件放在独占阶段串行执行（见 scripts/tests/run.mjs）。
 // InstalledIndex（已安装索引）行为测试：
 // 列表标注从「逐仓库五重探测」改为查索引（O(1)），语义必须与 detectInstalled 对齐。
 // 通过 list / skills handler 的 installed 标注行为断言：

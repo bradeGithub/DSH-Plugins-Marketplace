@@ -97,11 +97,33 @@ jobs:
           # （rebase 中 ours = 正在 replay 的 CI commit，theirs = 远端基线——
           # 注意与 merge 语义相反，勿改回 theirs，否则冲突时 CI 产物会被远端覆盖）。
           for i in 1 2 3; do
-            if git pull --rebase -X ours origin main >/dev/null 2>&1 && git push origin main >/dev/null 2>&1; then
-              echo "已提交更新"
-              exit 0
+            # 诊断要求（2026-09-12 复盘）：**不得吞掉 git 输出**。这里原本是
+            #   `git pull --rebase ... >/dev/null 2>&1 && git push ... >/dev/null 2>&1`
+            # 于是失败只剩一句「推送被远端新提交拒绝」，而实测那两次远端根本没动过——
+            # 真因（rebase 冲突 / push 超时 / 认证）完全不可考。故：捕获并打印输出，
+            # 失败时附带 status/log 现场；重试前先 rebase --abort 清中间态
+            #（否则第一次失败后仓库卡在 rebase 中，后两次必然一起失败）。
+            git rebase --abort >/dev/null 2>&1 || true
+            pull_log=""
+            if pull_log=$(git pull --rebase -X ours origin main 2>&1); then
+              push_log=""
+              if push_log=$(git push origin main 2>&1); then
+                echo "已提交更新"
+                exit 0
+              fi
+              echo "第 $i 次：git push 失败，输出如下："
+              printf '%s\n' "$push_log"
+            else
+              echo "第 $i 次：git pull --rebase 失败，输出如下："
+              printf '%s\n' "$pull_log"
             fi
-            echo "推送被远端新提交拒绝（第 $i 次），10 秒后重试..."
+            echo "--- 工作区状态（前 10 行）---"
+            git status --short 2>&1 | head -10 || true
+            echo "--- 最近 3 个提交 ---"
+            git log --oneline -3 2>&1 || true
+            echo "--- 落后/领先远端（left=remote right=local）---"
+            git rev-list --left-right --count origin/main...HEAD 2>&1 || true
+            echo "10 秒后重试..."
             sleep 10
           done
           echo "推送失败：多次重试后仍被拒绝" >&2
