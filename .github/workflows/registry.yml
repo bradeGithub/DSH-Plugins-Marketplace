@@ -81,12 +81,17 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add registry.json registry.json.gz skills.json skills.json.gz installability-report.json
-          # drift-report.json 是条件产物（0 漂移时可能不生成）：存在才 add，**绝不 stage 删除**。
-          # 旧写法 `git add -A drift-report.json` 的 -A 会把「产物本次没生成」提交成「仓库删除该文件」
-          # ——2026-09-09 的 chore 提交（defa425）就是这样删掉了 drift-report.json，随后依赖它的
-          # 集成测试在全新 checkout 上 ENOENT，CI 连续失败（事故复盘见 docs/TESTING.md）。
-          # 同时保留对「文件不存在」的容忍：普通 git add 在缺失时报 pathspec 错误（exit 128）。
-          if [ -f drift-report.json ]; then git add drift-report.json; fi
+          # drift-report.json 是「有漂移才存在」的产物：build-registry.mjs 在 0 漂移时**故意删除**它
+          # （见该脚本的分类漂移段：driftItems 为空 → await rm(reportPath)），所以「删除」是合法状态。
+          # 必须用 -A 把新增/修改/**删除**三种状态都入暂存：只 add 存在的文件（2026-09-10 的写法）
+          # 会让删除残留在工作区（未暂存）→ 下面 git pull --rebase 被
+          # 「error: cannot pull with rebase: You have unstaged changes」直接拒绝 → 三次重试全废。
+          # 这才是 2026-09-12 那次「push 失败」的真因（诊断改造后由日志确证：`D drift-report.json`）。
+          # 测试侧已改为容忍该文件缺失（见 test-runner-drift-isolation.test.mjs），故删除可安全提交。
+          git add -A drift-report.json 2>/dev/null || true
+          # 兜底：rebase 拒绝在脏工作区上运行——把跟踪文件的其余改动/删除（构建或探测写入的其它文件）
+          # 也一并入暂存并提交，避免「产物之外的残留」再次把 rebase 卡死。
+          git add -u
           if git diff --cached --quiet; then
             echo "索引无变化，跳过提交"
             exit 0
