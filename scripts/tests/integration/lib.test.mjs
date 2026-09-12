@@ -1035,21 +1035,56 @@ function mockFetchCapture(payload, status = 200) {
     // 前文 fetchAllRepos 的内置索引兜底会 fire-and-forget 落盘 list-cache/dsh.json，
     // 先观察目标缓存写完再清空，否则磁盘缓存层会先命中、覆盖不了搜索兜底路径。
     const dshCachePath = join(process.env.DSH_HOME, "marketplace", "list-cache", "dsh.json");
-    const cacheReady = await waitFor(() => {
+    const cacheRepos = () => {
       try {
         const cached = JSON.parse(readFileSync(dshCachePath, "utf8"));
-        return Array.isArray(cached.repos) && cached.repos.length > 100;
+        return Array.isArray(cached.repos) ? cached.repos.length : -1;
       } catch {
-        return false;
+        return -1; // 不存在 / 未写完
       }
-    });
+    };
+    const cacheReady = await waitFor(() => cacheRepos() > 100);
     check("内置索引回退缓存写入可观察完成", cacheReady, true);
-    rmSync(dshCachePath, { force: true });
-    const orig5 = globalThis.fetch;
-    globalThis.fetch = async () => ({ ok: false, status: 403, json: async () => ({}), text: async () => { throw new Error("text boom"); } });
-    const degraded = await lib.fetchAllRepos("dsh");
-    globalThis.fetch = orig5;
-    check("fetchAllRepos 全失败降级空数组", Array.isArray(degraded) && degraded.length === 0, true);
+    // 排空在途写入再断言：writeListCache 是 **fire-and-forget**（lib/infra/registry-cache.js
+    // 的 `void writeListCache(...)`），且写的是 10-25MB 的 JSON（registry.json 10.2MB /
+    // skills.json 24.6MB）——本文件此前有 15 处成功 load，各自调度过一次这种大文件写入。
+    // 单次「清空」远不足以排空：在途写入会在清空后落地，使下面这次「全失败」调用命中磁盘
+    // 缓存返回非空，被误判成降级失败。这正是本断言在 CI 间歇性翻转（同一提交时红时绿）的
+    // 根因——回退链上「网络源（mock 403）→ 内置索引（已改名移走）→ 磁盘缓存 → 搜索 API
+    // （mock 403）」里，非空只可能来自磁盘缓存，而是否有缓存纯取决写在时序。
+    // 做法：要求「连续 3 次观察都为空（每次间隔 200ms）」才算排空完成；随后再带一轮兜底重试。
+    async function drainListCache() {
+      let quiet = 0;
+      for (let i = 0; i < 40 && quiet < 3; i++) {
+        rmSync(dshCachePath, { force: true });
+        await new Promise((resolve) => setTimeout(resolve, 200));
+        quiet = existsSync(dshCachePath) ? 0 : quiet + 1;
+      }
+      return quiet >= 3;
+    }
+    const drained = await drainListCache();
+    check("磁盘缓存排空完成（等平在途 writeListCache 大文件写入）", drained, true);
+    let degraded = null;
+    for (let attempt = 1; attempt <= 3; attempt++) {
+      if (attempt > 1) await drainListCache();
+      const cacheBefore = cacheRepos();
+      const orig5 = globalThis.fetch;
+      globalThis.fetch = async () => ({ ok: false, status: 403, json: async () => ({}), text: async () => { throw new Error("text boom"); } });
+      try {
+        degraded = await lib.fetchAllRepos("dsh");
+      } finally {
+        globalThis.fetch = orig5;
+      }
+      if (Array.isArray(degraded) && degraded.length === 0) break;
+      if (attempt < 3) {
+        console.log(
+          `[诊断] 第 ${attempt} 轮「全失败降级」仍返回 ${Array.isArray(degraded) ? degraded.length : "非数组"} 条` +
+          `（调用前缓存条目=${cacheBefore}）——疑似仍有在途 writeListCache 落地，重新排空后重试`
+        );
+      }
+    }
+    // 断言值用条数而非布尔：失败时日志直接显示是 0 还是命中了缓存（可诊断性）
+    check("fetchAllRepos 全失败降级空数组", Array.isArray(degraded) ? degraded.length : "非数组", 0);
   } finally {
     // 还原只在确实由本文件搬走时执行（避免 .bak 不存在时二次崩栈，掩盖真实失败原因）
     if (existsSync(bundledDshBak)) renameSync(bundledDshBak, bundledDsh);
