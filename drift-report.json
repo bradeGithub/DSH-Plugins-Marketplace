@@ -1,13 +1,20 @@
 {
-  "generated_at": "2026-09-13T11:31:41.919Z",
-  "count": 1,
+  "generated_at": "2026-09-13T16:07:13.834Z",
+  "count": 2,
   "items": [
     {
-      "full_name": "wowyuarm/dsh-agent-team",
-      "previous": "agent",
-      "current": "memory",
-      "desc_now": "Give DeepSeek Harness a persistent agent team: durable Member identities with private memory, notes and skills across sessions. You set the direction — agents coordinate through Channels and Tasks, and manage their own context.",
-      "desc_prev": "Give DeepSeek Harness a persistent agent team for long-running collaboration"
+      "full_name": "zhengjy01/dsh-task-dispatcher",
+      "previous": "other",
+      "current": "notify",
+      "desc_now": "Task dispatcher for DeepSeek Harness: use TickTick (滴答清单) as the daily task dispatcher — a cordis timer pulls today's due tasks, writes them to the task file, and notifies (WeChat via ClawBot / flomo / macOS); optional auto-execute with result receipts",
+      "desc_prev": "Task dispatcher for DeepSeek Harness: use TickTick (滴答清单) 5️⃣AI as daily task dispatcher (timer + auto-execute + flomo/macOS notify)"
+    },
+    {
+      "full_name": "converk/dsh-tweaks",
+      "previous": "tool",
+      "current": "other",
+      "desc_now": "让 DSH（DeepSeek Harness）更顺手的一套小改动",
+      "desc_prev": "让 DSH（DeepSeek Harness）更顺手的一套小改动：prompt-history / model-capabilities / turn-file-revert 三个独立插件"
     }
   ]
 }
