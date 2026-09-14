@@ -1,20 +1,13 @@
 {
-  "generated_at": "2026-09-14T19:20:25.528Z",
-  "count": 2,
+  "generated_at": "2026-09-14T23:08:25.705Z",
+  "count": 1,
   "items": [
     {
-      "full_name": "OMSociety/kimi-ppt-skill",
-      "previous": "document",
-      "current": "other",
-      "desc_now": "DeepSeek Harness 插件 —— 内含 kimi-ppt 技能：创建 / 编辑 / 复刻 / 导出 PPT，DSH 内纯本地导出",
-      "desc_prev": "DSH (DeepSeek Harness) presentation skill: PPT/演示文稿生成与导出，含 DSH 内纯本地导出 (python-pptx) 与本地预览渲染 (Pillow)。"
-    },
-    {
-      "full_name": "webkubor/dsh-llm-hub",
-      "previous": "model",
-      "current": "resource",
-      "desc_now": "给 DSH 模型页补上官方适配器缺的那半：网关可达性探测、模型目录拉取、DeepSeek 余额常驻。零运行时依赖，不改动 DSH 安装。",
-      "desc_prev": "DSH 官方直连的 LLM 配置补强：模型发现（Models 页「获取可用模型」对 deepseek-official 生效）+ provider 卡片上的 DeepSeek 余额与可用性。零依赖，不改动 DSH 安装。"
+      "full_name": "GooDAnDReaDY/dsh-issue-reporter",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "Issue reporter and diagnostic telemetry tool for DeepSeek Harness with AI optimization, issue watcher, and one-click updater",
+      "desc_prev": "DSH plugin that turns installed plugin problems into safe, reviewable GitHub issues."
     }
   ]
 }
