@@ -93,6 +93,9 @@ mkdirSync(root, { recursive: true });
 writeFileSync(join(root, "feedback.json"), "{ broken feedback", "utf8");
 writeFileSync(join(root, "envs.json"), "{ broken envs", "utf8");
 const lib = await import("./lib/index.js");
+// 禁真实网络：apply() 会 detached 触发 getList() 预热与自更新 check()，
+// 真实 socket 会拖住子进程事件循环直到 TCP 超时（本场景曾因此逼近 30s 上限）。
+globalThis.fetch = () => Promise.reject(new Error("integration test: real network forbidden"));
 const registered = [];
 lib.apply({ get: (s) => (s === "webServer" ? { register: (r) => registered.push(r) } : undefined), logger: { warn: () => {} } });
 // 等待 loadFeedback/loadEnvStore 异步读盘完成：fs.readFile 回调在 poll 阶段，

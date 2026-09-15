@@ -45,6 +45,9 @@ const fakeCtx = {
   } : undefined),
   logger: { warn: () => {} },
 };
+// 禁真实网络：apply() 会 detached 触发 getList() 预热与自更新 check()，
+// 不拦的话真实 socket 拖住事件循环直到 TCP 超时（被拒后由调用方 catch 兜底）。
+globalThis.fetch = () => Promise.reject(new Error("integration test: real network forbidden"));
 lib.apply(fakeCtx);
 const uninstallHandler = registered.find((h) => h.path === "/api/marketplace/uninstall")?.handler;
 check("uninstall 路由已注册", !!uninstallHandler, true);

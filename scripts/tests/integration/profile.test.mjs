@@ -108,6 +108,9 @@ const fakeCtx = {
   get: (s) => (s === "webServer" ? { register: (r) => registered.push(r) } : undefined),
   logger: { warn: () => {}, info: () => {} },
 };
+// 禁真实网络：apply() 会 detached 触发 getList() 预热与自更新 check()，
+// 不拦的话真实 socket 拖住事件循环直到 TCP 超时（被拒后由调用方 catch 兜底）。
+globalThis.fetch = () => Promise.reject(new Error("integration test: real network forbidden"));
 lib.apply(fakeCtx);
 const profileHandler = registered.find((h) => h.path === "/api/marketplace/profile")?.handler;
 check("profile 路由已注册", !!profileHandler, true);

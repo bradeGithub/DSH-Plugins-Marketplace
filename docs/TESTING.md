@@ -58,6 +58,9 @@
 - 文件名：`<module>.test.mjs`（unit/integration）、`<feature>.e2e.mjs`（e2e）
 - unit 放纯函数模块对应测试；integration 放依赖 IO 的；e2e 放跨模块真实流程
 - 相对 import 路径按层级调整（unit 在 `tests/unit/`，lib 需 `../../../lib/index.js`）
+- integration 隔离硬规则（run.mjs 并行执行测试文件，以下两条违例会跨文件互踩）：
+  - **不触碰仓库根文件**：bundled 索引「缺失」场景用 `DSH_MARKETPLACE_BUNDLED_DIR` 指向空临时目录覆盖（`lib/index.js` 的 `bundledFile` 读该 env），禁止 rename/unlink 仓库根 `registry.json`/`skills.json`——并行窗口内其他文件会读到缺失而崩溃；
+  - **禁真实网络**：调用 `lib.apply()` 等会 detached 触发 `getList()` 预热/自更新检测的入口前，先装 `globalThis.fetch = () => Promise.reject(...)` 拒绝桩——漏出的真实 socket 会拖住事件循环直到 TCP 超时，单文件耗时可从秒级膨胀到分钟级且随网络抖动。
 
 ## 3. 断言框架
 

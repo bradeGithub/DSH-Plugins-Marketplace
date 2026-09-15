@@ -1,6 +1,3 @@
-// @runner-exclusive —— 本文件会替换仓库根 registry.json / skills.json（内置索引隔离），
-// 与 lib.test.mjs / installed-index.test.mjs 并行会互相踩（ENOENT / 「隔离残留」误判）。
-// 运行器据此把本文件放在独占阶段串行执行（见 scripts/tests/run.mjs）。
 // list 磁盘缓存行为测试：
 // 1. fetchAllRepos 全失败走 search 兜底时**不写盘**——残缺结果（单 query 上限 1000 条）
 //    只作当次响应，绝不落盘污染磁盘缓存；
@@ -11,10 +8,9 @@
 // 必须在本文件内先构造临时 DSH_HOME 再动态 import；且本文件独占控制 list-cache 目录
 // 状态（构造/清空/断言），避免与其他测试的缓存写入互相干扰。
 
-import { mkdtempSync, mkdirSync, writeFileSync, readdirSync, readFileSync, rmSync, existsSync, copyFileSync, unlinkSync } from "node:fs";
-import { join, dirname, basename } from "node:path";
+import { mkdtempSync, mkdirSync, writeFileSync, readdirSync, readFileSync, rmSync } from "node:fs";
+import { join } from "node:path";
 import { tmpdir } from "node:os";
-import { fileURLToPath } from "node:url";
 
 // 必须在 import lib 之前设置临时 DSH_HOME
 process.env.DSH_HOME = mkdtempSync(join(tmpdir(), "dsh-listcache-")).replace(/\\/g, "/");
@@ -23,36 +19,14 @@ const listCacheDir = join(home, "marketplace", "list-cache");
 const cacheFile = (kind) => join(listCacheDir, `${kind}.json`);
 const listCacheFiles = () => { try { return readdirSync(listCacheDir); } catch { return null; } }; // null = 目录不存在
 
-const lib = await import("../../../lib/index.js");
-
-// ---- 隔离：内置索引（随包 registry.json / skills.json，readBundledIndex 直接读仓库根）----
+// ---- 隔离：内置索引（随包 registry.json / skills.json，readBundledIndex 默认读仓库根）----
 // mockFetch 只拦网络 fetch，而 bundled 索引是本地文件读取——不隔离的话 registry 全挂时
 // 兜底链命中真实内置索引（数千条），永远走不到 search/磁盘缓存分支，断言必然失败。
-// 测试期间把两个 bundled 文件临时移出仓库根（同名备份到临时目录），exit 时恢复。
-const repoRoot = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
-const bundledBackupDir = mkdtempSync(join(tmpdir(), "dsh-listcache-bundled-"));
-const bundledMoved = []; // [原路径, 备份路径]
-for (const name of ["registry.json", "skills.json"]) {
-  const src = join(repoRoot, name);
-  if (existsSync(src)) {
-    // 备份有效性校验（fail-fast）：若文件已是坏 JSON（上次测试 kill/崩溃残留），
-    // 备份坏内容会在 exit 恢复时「写回坏内容」自增强残留——直接报错并给恢复命令。
-    const content = readFileSync(src);
-    try { JSON.parse(content); } catch {
-      throw new Error(`${name} 已是损坏状态（bundled 隔离残留）——请运行 git checkout -- registry.json skills.json 恢复后重跑`);
-    }
-    const dst = join(bundledBackupDir, name);
-    copyFileSync(src, dst); // 跨盘（仓库 D: vs tmp C:）不能用 renameSync，复制后删原
-    unlinkSync(src);
-    bundledMoved.push([src, dst]);
-  }
-}
-process.on("exit", () => {
-  for (const [src, dst] of bundledMoved) {
-    try { if (existsSync(dst)) copyFileSync(dst, src); } catch { /* 尽力恢复 */ }
-  }
-  try { rmSync(bundledBackupDir, { recursive: true, force: true }); } catch { /* 尽力清理 */ }
-});
+// 经 DSH_MARKETPLACE_BUNDLED_DIR 指向空临时目录实现隔离——不触碰仓库根文件，
+// 并行 runner 下与同跑的 lib.test.mjs 等互不干扰（此前物理移文件曾造成竞态崩溃）。
+process.env.DSH_MARKETPLACE_BUNDLED_DIR = mkdtempSync(join(tmpdir(), "dsh-listcache-bundled-"));
+
+const lib = await import("../../../lib/index.js");
 
 let pass = 0, fail = 0;
 function check(name, actual, expected) {
