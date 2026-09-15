@@ -11,7 +11,7 @@ function check(name, actual, expected) {
   }
 }
 
-function makeFlow({ cliCommand = null, externalCliHint = null, cliInstall = null, installed = null, latest = null, dshError = null, npmDir = null }) {
+function makeFlow({ cliCommand = null, externalCliHint = null, cliInstall = null, installed = null, latest = null, dshError = null, npmDir = null, isCliInstallTarget = () => true }) {
   const calls = [];
   const logs = [];
   const flow = createInstallCliFlow({
@@ -33,6 +33,7 @@ function makeFlow({ cliCommand = null, externalCliHint = null, cliInstall = null
       return npmDir;
     },
     isNpmCliTarget: (target) => !target.includes("/"),
+    isCliInstallTarget,
     saveInstalled: async (...args) => calls.push(["saveInstalled", ...args]),
     queueFeedbackSafe: async (...args) => calls.push(["queueFeedbackSafe", ...args]),
     buildEnvProfile: async () => ({ platform: "test" }),
@@ -80,7 +81,8 @@ function makeFlow({ cliCommand = null, externalCliHint = null, cliInstall = null
     installProfile: "desktop",
     log,
     logLine: (line) => { logs.push(line); log.push(line); },
-    lang: "en"
+    lang: "en",
+    answers: { __confirm_cli__: "continue" }
   });
   check("CLI 成功返回 done", result.status, "done");
   check("CLI 成功返回安装信息", result, {
@@ -112,7 +114,8 @@ function makeFlow({ cliCommand = null, externalCliHint = null, cliInstall = null
     installProfile: "web",
     log: [],
     logLine: (line) => logs.push(line),
-    lang: "en"
+    lang: "en",
+    answers: { __confirm_cli__: "continue" }
   });
   check("CLI 失败 npm 回退返回 continue", result, {
     status: "continue",
@@ -136,7 +139,8 @@ function makeFlow({ cliCommand = null, externalCliHint = null, cliInstall = null
     installProfile: "web",
     log: [],
     logLine: (line) => logs.push(line),
-    lang: "en"
+    lang: "en",
+    answers: { __confirm_cli__: "continue" }
   });
   check("仓库 CLI 失败回到原缓存", result, {
     status: "continue",
@@ -160,7 +164,8 @@ function makeFlow({ cliCommand = null, externalCliHint = null, cliInstall = null
     installProfile: "web",
     log: [],
     logLine: (line) => logs.push(line),
-    lang: "en"
+    lang: "en",
+    answers: { __confirm_cli__: "continue" }
   });
   check("npm 回退失败保留原缓存", result, {
     status: "continue",
@@ -170,6 +175,76 @@ function makeFlow({ cliCommand = null, externalCliHint = null, cliInstall = null
   });
   check("npm 回退失败仍完成尝试", calls.map(([name]) => name), ["runDsh", "installNpmTargetToTemp"]);
   check("npm 回退失败不记录成功日志", logs, ["cliHint:dsh plugin install demo-package", "cliExec:dsh plugin install demo-package", "cliFailFallback"]);
+}
+
+{
+  // README 恶意/畸形 target（cmd.exe /c 注入面：`a&calc` 会被解释为命令分隔）——
+  // 白名单门拦截：不执行 dsh、不打 cliExec 日志，回退常规安装流程
+  const { flow, calls, logs } = makeFlow({
+    cliInstall: { command: "dsh plugin install a&calc", verb: "install", target: "a&calc" },
+    isCliInstallTarget: () => false
+  });
+  const result = await flow({
+    repo: "owner/demo",
+    cacheDir: "/cache/demo",
+    installProfile: "web",
+    log: [],
+    logLine: (line) => logs.push(line),
+    lang: "en"
+  });
+  check("不安全 target 返回 continue", result, {
+    status: "continue",
+    cacheDir: "/cache/demo",
+    npmTargetUsed: null,
+    cliCommand: "dsh plugin install a&calc"
+  });
+  check("不安全 target 不执行任何副作用", calls, []);
+  check("不安全 target 记跳过日志（不打 cliExec）", logs, ["cliUnsafeTarget:dsh plugin install a&calc"]);
+}
+
+// __confirm_cli__ 确认门：白名单只保证形态安全，「是否代执行」必须用户确认
+{
+  const { flow, calls, logs } = makeFlow({
+    cliCommand: "dsh plugin install demo-package",
+    cliInstall: { command: "dsh plugin install demo-package", verb: "install", target: "demo-package" }
+  });
+  const result = await flow({
+    repo: "owner/demo",
+    cacheDir: "/cache/demo",
+    installProfile: "web",
+    log: [],
+    logLine: (line) => logs.push(line),
+    lang: "en"
+  });
+  check("未确认时返回 awaiting-input", result.status, "awaiting-input");
+  check("确认门问题 id", result.questions[0].id, "__confirm_cli__");
+  check("确认门提供 continue/cancel 选项", result.questions[0].options.map((o) => o.value), ["continue", "cancel"]);
+  check("未确认时不执行任何副作用", calls, []);
+  check("未确认时不打 cliExec", logs.includes("cliExec:dsh plugin install demo-package"), false);
+}
+
+{
+  const { flow, calls, logs } = makeFlow({
+    cliCommand: "dsh plugin install demo-package",
+    cliInstall: { command: "dsh plugin install demo-package", verb: "install", target: "demo-package" }
+  });
+  const result = await flow({
+    repo: "owner/demo",
+    cacheDir: "/cache/demo",
+    installProfile: "web",
+    log: [],
+    logLine: (line) => logs.push(line),
+    lang: "en",
+    answers: { __confirm_cli__: "cancel" }
+  });
+  check("拒绝代执行回退常规安装", result, {
+    status: "continue",
+    cacheDir: "/cache/demo",
+    npmTargetUsed: null,
+    cliCommand: "dsh plugin install demo-package"
+  });
+  check("拒绝代执行不执行副作用", calls, []);
+  check("拒绝代执行记 cliSkipped", logs.includes("cliSkipped"), true);
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);

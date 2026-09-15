@@ -122,6 +122,29 @@ check("MAX_BODY_BYTES = 1MB（突变测试 m11：唯一漏掉的上限常量）"
 const safeOptionsBody = lib.match(/function safeOptions\(opts = \{\}\) \{[\s\S]*?\n\}/)?.[0] ?? "";
 check("proc 统一注入 maxBuffer 与 windowsHide", /return \{ \.\.\.opts, maxBuffer: MAX_EXEC_BUFFER, windowsHide: true \};/.test(safeOptionsBody), true);
 
+// ---- README CLI 指令代执行目标白名单（cmd.exe /c 注入面）----
+// win32 下 runDsh/runNpm 经 cmd.exe /c 拼接 argv：README 提取的 `dsh plugin
+// install/add <target>` 中 `& | ; % ! ^ ( )` 等元字符会被解释为命令分隔/
+// 变量展开/转义逃脱（实测 `a&calc` 无空格不加引号，& 直接分隔执行）。
+// 契约：①validation 提供 isCliInstallTarget 白名单（仅 npm 包名/owner-repo 形态，
+// 段首字母数字防 flag 注入）；②scanCliCommands 提取即过滤（hint 与 exec 同源）；
+// ③runInstallCli 执行前复查（findCliInstall 为注入依赖，不信任其内部实现）。
+check("validation 提供 isCliInstallTarget 白名单", /function isCliInstallTarget\(target\) \{/.test(lib), true);
+check("scanCliCommands 提取即过滤不安全目标", /if \(!isCliInstallTarget\(raw\)\) continue;/.test(indexLib), true);
+check("runInstallCli 执行前过目标白名单", /if \(!isCliInstallTarget\(cliInstall\.target\)\)/.test(lib), true);
+check("白名单门先于 cliExec 日志与 runDsh", /cliUnsafeTarget[\s\S]*?cliExec[\s\S]*?runDsh/.test(lib), true);
+check("白名单 npm 形态字符集（无 cmd 元字符）", lib.includes("(@[a-z0-9][\\w.-]*\\/)?[a-z0-9][\\w.-]*(@[\\w.*~+-]+)?$"), true);
+
+// ---- 安装确认门补全（CLI 代执行 + bundle 依赖注册）----
+// CLI 代执行在 preflight 之前短路整条管线，白名单只保证 target 形态安全，
+// 「是否代执行第三方命令」必须显式确认：__confirm_cli__ 未答 → awaiting-input；
+// cancel → cliSkipped 回退常规安装（不中止）；confirm 门必须先于 cliExec/runDsh。
+// bundle 类型此前绕过全部 consent 门——registerBundlePackage 写 profile 依赖 +
+// pnpm install，git/file 依赖 prepare 行为不确定：__confirm_bundle__ deny → aborted。
+check("CLI 确认门先于执行", /__confirm_cli__ === void 0[\s\S]*?awaiting-input[\s\S]*?cliExec[\s\S]*?runDsh/.test(lib), true);
+check("CLI 确认 cancel 回退常规安装", /String\(answers\.__confirm_cli__\) !== "continue"\) \{[\s\S]*?cliSkipped[\s\S]*?status: "continue"/.test(lib), true);
+check("bundle 确认门存在且 deny 中止", /type === "bundle" && answers\.__confirm_bundle__ === void 0[\s\S]*?awaiting-input[\s\S]*?__confirm_bundle__\) === "deny"[\s\S]*?status: "aborted"/.test(lib), true);
+
 // ---- 解压边界：压缩炸弹（gz 源解压后膨胀）----
 // readBodyLimited 限制的是压缩后字节——100MB 重复数据 gzip 后仅 ~100KB 全量放行，
 // gunzipSync 解压出 100MB 内存膨胀（zip bomb）。zlib 的 maxOutputLength 选项在解压
