@@ -1,5 +1,5 @@
 import { compareVersions, shouldUpdate, isTrustedRequest, isTrustedHost, isSensitiveEnvKey, buildMinimalEnv, buildFilteredEnv, looksLikeDshPlugin, wslPosixPath, normalizeRepoRef, dedupeReposByPkgName, slugify, SCRIPT_ENV_KEYS, sanitizeLog, buildFeedbackLogSnapshot, buildEnvProfile, safeAssign } from "../../../lib/index.js";
-import { isBootstrapOnlyEnvKey, isValidEnvKey } from "../../../lib/domain/validation.js";
+import { isBootstrapOnlyEnvKey, isValidEnvKey, isSafeWebdavUrl } from "../../../lib/domain/validation.js";
 
 let pass = 0, fail = 0;
 function check(name, actual, expected) {
@@ -64,6 +64,85 @@ check("172.15.0.1 拒绝（网段下界外）", isTrustedHost("172.15.0.1"), fal
 check("172.16.0.0 允许（网段下界）", isTrustedHost("172.16.0.0"), true);
 check("172.32.0.1 拒绝（网段上界外）", isTrustedHost("172.32.0.1"), false);
 check("isTrustedHost 域名 → 拒绝", isTrustedHost("evil.com:3080"), false);
+
+// ---- S3: isSafeWebdavUrl（SSRF + 凭证明文外发防护，fail-closed 表驱动）----
+// 合法：公网 https / 局域网 http(s)（NAS 场景）/ ULA IPv6 / mDNS / 单标签内网名
+const WEBDAV_URL_CASES = [
+  ["https 公网域名", "https://dav.example.com/backup.json", true],
+  ["https 公网自定义端口", "https://dav.example.com:8443/backup.json", true],
+  ["https 公网 IP", "https://8.8.8.8/x", true],
+  ["http 私网 192.168（NAS）", "http://192.168.1.5:5005/bk.json", true],
+  ["http 私网 10/8", "http://10.0.0.2/dav", true],
+  ["http 私网 172.16/12 下界", "http://172.16.0.9/dav", true],
+  ["http 私网 172.16/12 上界", "http://172.31.255.255/dav", true],
+  ["https 私网 192.168", "https://192.168.1.5/dav", true],
+  ["http mDNS .local", "http://nas.local:5005/dav", true],
+  ["http 单标签内网名", "http://nas/dav", true],
+  ["http ULA IPv6", "http://[fd00::1]/dav", true],
+  ["https 全局 IPv6", "https://[2606:4700::1111]/dav", true],
+  // http 公网一律拒绝（Basic 凭据禁走明文）
+  ["http 公网域名拒绝", "http://dav.example.com/backup", false],
+  ["http 公网 IP 拒绝", "http://8.8.8.8/x", false],
+  ["http 172.15（私网段外）拒绝", "http://172.15.0.1/x", false],
+  ["http 172.32（私网段外）拒绝", "http://172.32.0.1/x", false],
+  // 受限网段：链路本地（云元数据）/ 回环 / 未指定 / CGNAT / 文档段 / 组播保留
+  ["http 169.254 元数据端点拒绝", "http://169.254.169.254/latest/meta-data", false],
+  ["https 169.254 同拒（scheme 不豁免网段）", "https://169.254.169.254/", false],
+  ["http 回环 127.0.0.1 拒绝", "http://127.0.0.1:8080/x", false],
+  ["http 回环 127.1 短式拒绝", "http://127.1/x", false],
+  ["http 整数 IPv4 混淆拒绝", "http://2130706433/x", false],
+  ["http 十六进制 IPv4 混淆拒绝", "http://0x7f.0.0.1/x", false],
+  ["http 0.0.0.0 拒绝", "http://0.0.0.0/x", false],
+  ["http CGNAT 100.64/10 拒绝", "http://100.64.1.1/x", false],
+  ["http CGNAT 边界 100.127 拒绝", "http://100.127.255.254/x", false],
+  ["http CGNAT 边界外 100.128 属公网（http 拒）", "http://100.128.0.1/x", false],
+  ["http 文档段 192.0.2 拒绝", "http://192.0.2.1/x", false],
+  ["http 文档段 198.51.100 拒绝", "http://198.51.100.1/x", false],
+  ["http 文档段 203.0.113 拒绝", "http://203.0.113.9/x", false],
+  ["http 基准测试段 198.18 拒绝", "http://198.18.0.1/x", false],
+  ["http IETF 分配段 192.0.0 拒绝", "http://192.0.0.9/x", false],
+  ["http 6to4 anycast 192.88.99 拒绝", "http://192.88.99.1/x", false],
+  ["http 组播 224/4 拒绝", "http://224.0.0.1/x", false],
+  ["http 保留段 240/4 拒绝", "http://240.0.0.1/x", false],
+  ["http 广播 255.255.255.255 拒绝", "http://255.255.255.255/x", false],
+  // IPv6 受限：回环 / 链路本地 / 内嵌 v4 走私 / 过渡机制 / 文档段
+  ["http [::1] 回环拒绝", "http://[::1]:8080/x", false],
+  ["http [::] 未指定拒绝", "http://[::]/x", false],
+  ["http [fe80::1] 链路本地拒绝", "http://[fe80::1]/x", false],
+  ["http [fe80::1%zone] 解析失败拒绝", "http://[fe80::1%25eth0]/x", false],
+  ["http v4-mapped 回环（点分写法）拒绝", "http://[::ffff:127.0.0.1]/x", false],
+  ["http v4-mapped 回环（hex 序列化）拒绝", "http://[::ffff:7f00:1]/x", false],
+  ["http v4-mapped 链路本地拒绝", "http://[::ffff:a9fe:a9fe]/x", false],
+  ["http v4-mapped 私网放行（与 v4 同规则）", "http://[::ffff:0a00:1]/x", true],
+  ["http Teredo 前缀拒绝", "http://[2001::7f00:1]/x", false],
+  ["http 6to4 前缀拒绝", "http://[2002:a9fe:a9fe::]/x", false],
+  ["http NAT64 前缀拒绝", "http://[64:ff9b::a9fe:a9fe]/x", false],
+  ["http 文档段 2001:db8 拒绝", "http://[2001:db8::1]/x", false],
+  ["http 组播 ff02 拒绝", "http://[ff02::1]/x", false],
+  // 凭据内嵌 / 非 http(s) / 无 scheme / 空值 / 畸形
+  ["内嵌 user:pass 拒绝", "http://user:pass@192.168.1.5/x", false],
+  ["内嵌 user 拒绝", "https://user@dav.example.com/x", false],
+  ["javascript: 拒绝", "javascript:alert(1)", false],
+  ["file: 拒绝", "file:///etc/passwd", false],
+  ["ftp: 拒绝", "ftp://x/y", false],
+  ["无 scheme 相对地址拒绝", "//dav.example.com/x", false],
+  ["裸主机名拒绝", "dav.example.com/x", false],
+  ["空串拒绝", "", false],
+  ["null 拒绝", null, false],
+  ["undefined 拒绝", undefined, false],
+  ["畸形字符串拒绝", "not a url", false],
+  ["localhost 域名拒绝", "http://localhost/dav", false],
+  ["*.localhost 拒绝", "http://x.localhost/dav", false],
+  // 端口不限制（NAS 自定义端口场景）
+  ["http 私网非常用端口放行", "http://192.168.1.5:5005/dav", true],
+  ["https 公网高位端口放行", "https://dav.example.com:4443/dav", true],
+  // 大小写 / 首尾空白归一
+  ["scheme 大小写归一", "HTTPS://DAV.EXAMPLE.COM/x", true],
+  ["首尾空白裁剪", "  https://dav.example.com/x  ", true]
+];
+for (const [name, url, expected] of WEBDAV_URL_CASES) {
+  check(`isSafeWebdavUrl ${name}`, isSafeWebdavUrl(url), expected);
+}
 
 // ---- R2: 敏感键过滤 ----
 check("GITHUB_TOKEN 敏感", isSensitiveEnvKey("GITHUB_TOKEN"), true);
