@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import assert from "node:assert/strict";
+import { execFileSync } from "node:child_process";
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
@@ -95,6 +96,11 @@ function putCache(repo, files) {
     mkdirSync(join(target, ".."), { recursive: true });
     writeFileSync(target, content, "utf8");
   }
+  // 预置缓存必须带可验证的 clone 来源：slug 碰撞防护（S13）后 prepareInstall 会比对
+  // 目录的 git remote，识别不出属主的目录不复用（顺延 ~N 后缀）。fixture 语义是
+  // 「本仓库刚 clone 完」，故补一个指向该仓库的 origin remote（纯本地操作，无网络）。
+  execFileSync("git", ["init", "-q", root], { stdio: "ignore" });
+  execFileSync("git", ["-C", root, "config", "remote.origin.url", `https://github.com/${repo}.git`], { stdio: "ignore" });
   return root;
 }
 

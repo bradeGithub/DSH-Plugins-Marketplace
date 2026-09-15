@@ -30,5 +30,15 @@ check("CI 执行 coverage 与 mutation", /--only=coverage/.test(workflow) && /sc
 check("CI 执行性能基准并上传趋势", /scripts\/benchmarks\/marketplace\.mjs --json=benchmark-results\.json/.test(workflow) && /benchmark-trend/.test(workflow), true);
 check("CI 上传 browser 诊断产物", /actions\/upload-artifact@[0-9a-f]{40}/.test(workflow) && /test-results/.test(workflow), true);
 
+// ---- registry.yml：写权限 workflow（contents: write + GITHUB_TOKEN）----
+// tag 引用可被强制移动，权限倒挂（写权限 job 用可变 tag 比只读 job 用 tag 更危险）——
+// 全部 actions/* 引用必须 pin 到不可变 commit SHA。
+const registryPath = join(ROOT, ".github", "workflows", "registry.yml");
+const registry = existsSync(registryPath) ? readFileSync(registryPath, "utf8") : "";
+check("registry workflow 存在", registry.length > 0, true);
+check("registry workflow checkout 使用 immutable SHA", /actions\/checkout@[0-9a-f]{40}/.test(registry), true);
+check("registry workflow setup-node 使用 immutable SHA", /actions\/setup-node@[0-9a-f]{40}/.test(registry), true);
+check("registry workflow 无 tag 引用 action", /uses:\s*[^\s]+@v\d/.test(registry), false);
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail === 0 ? 0 : 1);

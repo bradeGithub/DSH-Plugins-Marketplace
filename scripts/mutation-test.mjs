@@ -668,7 +668,7 @@ const MUTATIONS = [
     id: "m73",
     name: "auth 回环 socket 判定失效",
     type: "behavior",
-    pattern: /if \(remote === "127\.0\.0\.1" \|\| remote === "localhost" \|\| remote === "::1"\) return true;/g,
+    pattern: /if \(remote === "127\.0\.0\.1" \|\| remote === "::1"\) return true;/g,
     replacement: "if (false) return true;",
     note: "回环写操作必须基于 socket 远端地址直接放行"
   },
@@ -2092,7 +2092,7 @@ const MUTATIONS = [
     id: "m252",
     name: "adaptor Map 改用 to 作为查询键",
     type: "behavior",
-    pattern: /for \(const entry of entries\) fromMap\.set\(entry\.from, entry\);/g,
+    pattern: /for \(const entry of entries\) fromMap\.set\(keyOf\(entry\.from\), entry\);/g,
     replacement: "for (const entry of entries) fromMap.set(entry.to, entry);",
     note: "重定向查询必须按原始 from 精确命中"
   },
@@ -2100,16 +2100,16 @@ const MUTATIONS = [
     id: "m253",
     name: "adaptor nullish fullName 不再归一为空串",
     type: "behavior",
-    pattern: /String\(fullName \?\? \"\"\)/g,
-    replacement: "String(fullName)",
+    pattern: /String\(value \?\? \"\"\)/g,
+    replacement: "String(value)",
     note: "null 与 undefined 查询必须保持未命中语义"
   },
   {
     id: "m254",
     name: "adaptor 列表错误保留 from 条目",
     type: "behavior",
-    pattern: /repos\.filter\(\(repo\) => !fromMap\.has\(repo\.full_name\)\)/g,
-    replacement: "repos.filter((repo) => fromMap.has(repo.full_name))",
+    pattern: /repos\.filter\(\(repo\) => !fromMap\.has\(keyOf\(repo\?\.full_name\)\)\)/g,
+    replacement: "repos.filter((repo) => fromMap.has(keyOf(repo?.full_name)))",
     note: "列表投影必须移除被重定向的源条目"
   },
   {
@@ -2124,8 +2124,8 @@ const MUTATIONS = [
     id: "m256",
     name: "adaptor 目标去重条件反转",
     type: "behavior",
-    pattern: /!out\.some\(\(repo\) => repo\.full_name === entry\.meta\.full_name\)/g,
-    replacement: "out.some((repo) => repo.full_name === entry.meta.full_name)",
+    pattern: /!out\.some\(\(repo\) => keyOf\(repo\?\.full_name\) === keyOf\(entry\.meta\.full_name\)\)/g,
+    replacement: "out.some((repo) => keyOf(repo?.full_name) === keyOf(entry.meta.full_name))",
     note: "已有目标不应重复补入，缺失目标必须补入"
   },
   {
