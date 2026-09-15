@@ -193,6 +193,34 @@ function mockFetchCapture(payload, status = 200) {
   check("findCliInstall 相对路径不采用", await lib.findCliInstall(cliRelDir, "owner/demo-rel"), null);
   check("scanCliInstallHint 相对路径不提示", await lib.scanCliInstallHint(cliRelDir, "owner/demo-rel"), null);
 
+  // 元字符/畸形目标拒绝（win32 runDsh 经 cmd.exe /c 传参——`a&calc`/`p%CD%x`/
+  // `x|y` 会被解释为命令分隔/变量展开；target 直达 argv，提取层必须过滤）
+  const cliMetaDir = join(process.env.DSH_HOME, "cli-metachar");
+  mkdirSync(cliMetaDir, { recursive: true });
+  writeFileSync(join(cliMetaDir, "README.md"), [
+    "```bash",
+    "dsh plugin install a&calc",
+    "dsh plugin install p%CD%x",
+    "dsh plugin install x|whoami",
+    "dsh plugin install y;calc",
+    "dsh plugin install --profile-evil",
+    "```",
+  ].join("\n"), "utf8");
+  check("findCliInstall 元字符目标全部拒绝", await lib.findCliInstall(cliMetaDir, "owner/demo-meta"), null);
+  check("scanCliInstallHint 元字符目标不提示", await lib.scanCliInstallHint(cliMetaDir, "owner/demo-meta"), null);
+  // 混合 README：不安全指令被过滤后，后续安全指令仍按序采用
+  const cliMixedDir = join(process.env.DSH_HOME, "cli-mixed");
+  mkdirSync(cliMixedDir, { recursive: true });
+  writeFileSync(join(cliMixedDir, "package.json"), JSON.stringify({ name: "demo-mixed", version: "1.0.0", dsh: {} }), "utf8");
+  writeFileSync(join(cliMixedDir, "README.md"), [
+    "```bash",
+    "dsh plugin install a&calc",
+    "dsh plugin install owner/demo-mixed",
+    "```",
+  ].join("\n"), "utf8");
+  const cliMixed = await lib.findCliInstall(cliMixedDir, "owner/demo-mixed");
+  check("混合 README 过滤后采用安全指令", cliMixed && cliMixed.target, "owner/demo-mixed");
+
   // ---- scanExternalCliHint（第三方 CLI 官方 DSH 接入指令识别，open-design 场景：
   // README 提供 `od agent setup deepseek-harness`，但市场无法代执行——只作展示提示）----
   const extCliDir = join(process.env.DSH_HOME, "cli-external");

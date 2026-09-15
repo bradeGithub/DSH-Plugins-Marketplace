@@ -1,4 +1,4 @@
-import { compareVersions, shouldUpdate, isTrustedRequest, isTrustedHost, isSensitiveEnvKey, buildMinimalEnv, buildFilteredEnv, looksLikeDshPlugin, wslPosixPath, normalizeRepoRef, dedupeReposByPkgName, slugify, SCRIPT_ENV_KEYS, sanitizeLog, buildFeedbackLogSnapshot, buildEnvProfile, safeAssign } from "../../../lib/index.js";
+import { compareVersions, shouldUpdate, isTrustedRequest, isTrustedHost, isSensitiveEnvKey, buildMinimalEnv, buildFilteredEnv, looksLikeDshPlugin, wslPosixPath, normalizeRepoRef, dedupeReposByPkgName, slugify, SCRIPT_ENV_KEYS, sanitizeLog, buildFeedbackLogSnapshot, buildEnvProfile, isCliInstallTarget, safeAssign } from "../../../lib/index.js";
 import { isBootstrapOnlyEnvKey, isValidEnvKey } from "../../../lib/domain/validation.js";
 
 let pass = 0, fail = 0;
@@ -227,6 +227,37 @@ check("小写开头非法", isValidEnvKey("mykey"), false);
 check("含空格非法", isValidEnvKey("BAD KEY"), false);
 check("空串非法", isValidEnvKey(""), false);
 check("非字符串非法", isValidEnvKey(42), false);
+
+// ---- isCliInstallTarget（README dsh plugin 指令代执行目标白名单）----
+// 安全契约：进入 runDsh argv 的 target 只允许 npm 包名（[@scope/]name[@ver]）或
+// owner/repo 形态；win32 下经 cmd.exe /c 拼接，元字符 = 命令注入原语。
+check("npm 裸包名", isCliInstallTarget("dsh-market"), true);
+check("npm scope 包", isCliInstallTarget("@linxin666/dsh-web-ui-all"), true);
+check("npm 包带版本", isCliInstallTarget("pkg@1.2.3"), true);
+check("npm 包带 dist-tag", isCliInstallTarget("pkg@latest"), true);
+check("npm scope+版本", isCliInstallTarget("@scope/name@2.0.0-beta.1"), true);
+check("仓库 owner/repo", isCliInstallTarget("owner/repo"), true);
+check("仓库名带下划线点", isCliInstallTarget("some_owner/re.po-x"), true);
+check("& 命令分隔拒绝", isCliInstallTarget("a&calc"), false);
+check("| 管道拒绝", isCliInstallTarget("a|whoami"), false);
+check("; 分隔拒绝", isCliInstallTarget("a;b"), false);
+check("% 变量展开拒绝", isCliInstallTarget("p%CD%x"), false);
+check("! 延迟展开拒绝", isCliInstallTarget("a!b"), false);
+check("> 重定向拒绝", isCliInstallTarget("a>b"), false);
+check("() 子命令拒绝", isCliInstallTarget("a(b)"), false);
+check("^ 转义组合拒绝（^^& 仍可逃逸）", isCliInstallTarget("a^^&b"), false);
+check("^ 范围版本拒绝（fail-closed）", isCliInstallTarget("pkg@^1.2.3"), false);
+check("$ 展开拒绝", isCliInstallTarget("a$PATH"), false);
+check("反引号拒绝", isCliInstallTarget("a`id`"), false);
+check("flag 注入拒绝", isCliInstallTarget("--force"), false);
+check("仓库段 flag 注入拒绝", isCliInstallTarget("-x/repo"), false);
+check("缺 repo 段拒绝", isCliInstallTarget("owner/"), false);
+check("相对路径拒绝", isCliInstallTarget("../x/y"), false);
+check("绝对路径拒绝", isCliInstallTarget("/etc/passwd"), false);
+check("空值拒绝", isCliInstallTarget(""), false);
+check("null 拒绝", isCliInstallTarget(null), false);
+check("超长拒绝（>214）", isCliInstallTarget("a".repeat(215)), false);
+check("前后空白容忍（trim）", isCliInstallTarget("  owner/repo  "), true);
 
 // ---- safeAssign 原型污染防护 ----
 {
