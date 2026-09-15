@@ -35,7 +35,9 @@ async function test(name, fn) {
 await test("合法 redirect 过滤并保持重复 from 的最后规则", () => {
   assert.equal(rules.adaptorRedirectRepo("owner/wrong"), "owner/real");
   assert.equal(rules.adaptorRedirectRepo("owner/other"), "owner/target");
-  assert.equal(rules.adaptorRedirectRepo("Owner/wrong"), null);
+  // 大小写漂移：GitHub 仓库名大小写不敏感——map 键与查询统一小写归一后必须命中
+  assert.equal(rules.adaptorRedirectRepo("Owner/wrong"), "owner/real");
+  assert.equal(rules.adaptorRedirectRepo("OWNER/WRONG"), "owner/real");
   assert.equal(rules.adaptorRedirectRepo("bad/from"), null);
   assert.equal(rules.adaptorRedirectRepo(null), null);
   const nullishRules = createAdaptorRules({
@@ -79,6 +81,28 @@ await test("缺失 meta.full_name 不会补入列表", () => {
   });
   const result = local.applyAdaptorList([{ full_name: "owner/wrong" }]);
   assert.deepEqual(result, []);
+});
+
+await test("map 键大小写混合时小写查询命中，列表过滤与去重同款归一", () => {
+  const local = createAdaptorRules({
+    redirects: [{
+      from: "Owner/Mixed-Case",
+      to: "owner/real",
+      meta: { full_name: "Owner/Real", name: "real" },
+    }],
+    normalizeRepo,
+  });
+  // from 是大写键：任意大小写形态的查询都应命中重定向
+  assert.equal(local.adaptorRedirectRepo("owner/mixed-case"), "owner/real");
+  assert.equal(local.adaptorRedirectRepo("OWNER/MIXED-CASE"), "owner/real");
+  // 列表 full_name 大小写漂移（Owner/Mixed-Case vs OWNER/mixed-case）→ 仍按 from 移除
+  const result = local.applyAdaptorList([
+    { full_name: "OWNER/mixed-case", name: "drifted" },
+    { full_name: "owner/real", name: "present" },
+    { full_name: "keep/this", name: "keep" },
+  ]);
+  // meta.full_name 是 Owner/Real，列表已有 owner/real（小写形态）→ 去重不重复补入
+  assert.deepEqual(result.map((repo) => repo.full_name), ["owner/real", "keep/this"]);
 });
 
 console.log(`\n${passed} passed, ${failed} failed`);
