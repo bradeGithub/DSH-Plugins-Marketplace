@@ -2,6 +2,7 @@ import { readFileSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { registerRoutes } from "../../../lib/http/routes.js";
+import { createMutex } from "../../../lib/infra/queue.js";
 import { MARKETPLACE_RESPONSE_SCHEMA_VERSION } from "../../../lib/http/marketplace-contract.js";
 import { inspectMarketplacePayload } from "../contracts/marketplace.mjs";
 
@@ -28,6 +29,12 @@ function makeResponse() {
       try { this.value = JSON.parse(body); } catch { this.value = body; }
     }
   };
+}
+
+function deferred() {
+  let resolve;
+  const promise = new Promise((release) => { resolve = release; });
+  return { promise, resolve };
 }
 
 function makeDeps(overrides = {}) {
@@ -274,6 +281,71 @@ check("routes 统一通过正式版本响应包装器", (routesSource.match(/\bj
   const res = makeResponse();
   await route.handler({ method: "GET", url: "/api/marketplace/skills" }, res);
   check("skills 加载失败返回 500", res.status, 500);
+}
+
+// ---- ?refresh=1 特权修饰（触发上游强拉）必须过 isTrustedRequest ----
+// 跨站 simple-request（<img>/form 发 GET 无需自定义头）可借此刷爆未认证
+// GitHub API 限流——非 trusted 一律 403 而非静默降级（取舍见 routes.js 注释）。
+{
+  const calls = [];
+  let invalidated = 0;
+  const { deps, registered } = makeDeps({
+    auth: { isTrustedRequest: () => false, isWriteAllowed: async () => false }
+  });
+  deps.list.getList = async (kind, force) => { calls.push([kind, force]); return []; };
+  deps.list.invalidateProfileCaches = () => { invalidated++; };
+  registerRoutes(deps);
+  const route = registered.find((item) => item.path === "/api/marketplace/list");
+  const res = makeResponse();
+  await route.handler({ method: "GET", url: "/api/marketplace/list?refresh=1", headers: {} }, res);
+  check("list refresh=1 非 trusted 返回 403", res.status, 403);
+  check("list refresh=1 非 trusted 文案 forbidden", res.value?.error, "forbidden");
+  check("list refresh=1 非 trusted 不触发上游拉取/缓存失效", [calls.length, invalidated], [0, 0]);
+  // 普通读取（无 refresh）保持公开可读
+  const res2 = makeResponse();
+  await route.handler({ method: "GET", url: "/api/marketplace/list", headers: {} }, res2);
+  check("list 普通读取无 trusted 头仍 200", res2.status, 200);
+  check("list 普通读取走缓存路径（force=false）", calls, [["dsh", false]]);
+}
+
+{
+  const calls = [];
+  const { deps, registered } = makeDeps({
+    auth: { isTrustedRequest: () => false, isWriteAllowed: async () => false }
+  });
+  deps.list.getList = async (kind, force) => { calls.push([kind, force]); return []; };
+  registerRoutes(deps);
+  const route = registered.find((item) => item.path === "/api/marketplace/skills");
+  const res = makeResponse();
+  await route.handler({ method: "GET", url: "/api/marketplace/skills?refresh=1", headers: {} }, res);
+  check("skills refresh=1 非 trusted 返回 403", res.status, 403);
+  check("skills refresh=1 非 trusted 不触发上游拉取", calls.length, 0);
+}
+
+{
+  const calls = [];
+  let invalidated = 0;
+  const { deps, registered } = makeDeps();
+  deps.list.getList = async (kind, force) => { calls.push([kind, force]); return []; };
+  deps.list.invalidateProfileCaches = () => { invalidated++; };
+  registerRoutes(deps);
+  const route = registered.find((item) => item.path === "/api/marketplace/list");
+  const res = makeResponse();
+  await route.handler({ method: "GET", url: "/api/marketplace/list?refresh=1", headers: {} }, res);
+  check("list refresh=1 trusted 正常刷新", res.status, 200);
+  check("list refresh=1 trusted 传递 force=true 并失效缓存", [calls, invalidated], [[["dsh", true]], 1]);
+}
+
+{
+  const calls = [];
+  const { deps, registered } = makeDeps();
+  deps.list.getList = async (kind, force) => { calls.push([kind, force]); return []; };
+  registerRoutes(deps);
+  const route = registered.find((item) => item.path === "/api/marketplace/skills");
+  const res = makeResponse();
+  await route.handler({ method: "GET", url: "/api/marketplace/skills?refresh=1", headers: {} }, res);
+  check("skills refresh=1 trusted 正常刷新", res.status, 200);
+  check("skills refresh=1 trusted 传递 force=true", calls, [["skills", true]]);
 }
 
 // skills 200 成功分支：非分页（无 page/pageSize/q）→ flagWorker 并发标注 + dedupe + 排序
@@ -810,6 +882,74 @@ check("routes 统一通过正式版本响应包装器", (routesSource.match(/\bj
   await route.handler({ method: "POST", url: route.path, body: { repo: "a/b" } }, res);
   check("uninstall 互斥时返回 409", res.status, 409);
   check("uninstall 409 不发事件", events.length, 0);
+}
+
+// ---- installMutex TOCTOU：isBusy() 预检通过、run() 取锁时竞争失败 → 409 而非 500 ----
+// mock run 直接抛带 code=MUTEX_BUSY 的 busy 错误（模拟预检→取锁之间被抢先的窗口）。
+{
+  const busyError = () => Object.assign(new Error("mutex is busy"), { code: "MUTEX_BUSY" });
+  for (const [path, body] of [
+    ["/api/marketplace/install", { repo: "a/b" }],
+    ["/api/marketplace/uninstall", { repo: "a/b" }],
+    ["/api/marketplace/self-update", undefined]
+  ]) {
+    const { deps, registered } = makeDeps({
+      state: {
+        ...makeDeps().deps.state,
+        installMutex: { isBusy: () => false, run: async () => { throw busyError(); } }
+      }
+    });
+    registerRoutes(deps);
+    const route = registered.find((item) => item.path === path);
+    const res = makeResponse();
+    await route.handler({ method: "POST", url: path, body }, res);
+    check(`${path} 互斥竞态失败返回 409 而非 500`, res.status, 409);
+  }
+}
+
+// 真实互斥竞态：deferred 持锁后第二个 run 竞争失败——走真实 MUTEX_BUSY 错误
+// 标记全链路（queue.js 抛出 → routes 捕获映射 409）。
+{
+  const realMutex = createMutex();
+  const gate = deferred();
+  const holder = realMutex.run(() => gate.promise); // 持锁任务
+  const { deps, registered, events } = makeDeps({
+    state: {
+      ...makeDeps().deps.state,
+      // isBusy 谎报空闲（等效于预检与取锁之间被抢先的竞态），run 走真实互斥
+      installMutex: { isBusy: () => false, run: (fn) => realMutex.run(fn) }
+    }
+  });
+  registerRoutes(deps);
+  const route = registered.find((item) => item.path === "/api/marketplace/install");
+  const res = makeResponse();
+  await route.handler({ method: "POST", url: "/api/marketplace/install", body: { repo: "a/b" } }, res);
+  check("install 真实互斥竞争返回 409（非 500）", res.status, 409);
+  check("install 真实竞态 409 文案 installBusy", res.value?.error, "installBusy");
+  check("install 竞态 409 不发 install 事件", events.length, 0);
+  gate.resolve();
+  await holder;
+}
+
+// 非 busy 错误不按 409 吞掉：run 抛出无 MUTEX_BUSY code 的错误原样上抛。
+{
+  const { deps, registered } = makeDeps({
+    state: {
+      ...makeDeps().deps.state,
+      installMutex: { isBusy: () => false, run: async () => { throw new Error("disk gone"); } }
+    }
+  });
+  registerRoutes(deps);
+  const route = registered.find((item) => item.path === "/api/marketplace/uninstall");
+  const res = makeResponse();
+  let caught = null;
+  try {
+    await route.handler({ method: "POST", url: route.path, body: { repo: "a/b" } }, res);
+  } catch (error) {
+    caught = error;
+  }
+  check("uninstall 非 busy 错误原样上抛（不吞为 409）", String(caught?.message), "disk gone");
+  check("uninstall 非 busy 错误未写 409 响应", res.status, 0);
 }
 
 {
