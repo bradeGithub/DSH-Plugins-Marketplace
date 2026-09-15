@@ -11,7 +11,7 @@ function check(name, actual, expected) {
   }
 }
 
-function makeFlow({ cliCommand = null, externalCliHint = null, cliInstall = null, installed = null, latest = null, dshError = null, npmDir = null }) {
+function makeFlow({ cliCommand = null, externalCliHint = null, cliInstall = null, installed = null, latest = null, dshError = null, npmDir = null, isCliInstallTarget = () => true }) {
   const calls = [];
   const logs = [];
   const flow = createInstallCliFlow({
@@ -33,6 +33,7 @@ function makeFlow({ cliCommand = null, externalCliHint = null, cliInstall = null
       return npmDir;
     },
     isNpmCliTarget: (target) => !target.includes("/"),
+    isCliInstallTarget,
     saveInstalled: async (...args) => calls.push(["saveInstalled", ...args]),
     queueFeedbackSafe: async (...args) => calls.push(["queueFeedbackSafe", ...args]),
     buildEnvProfile: async () => ({ platform: "test" }),
@@ -170,6 +171,31 @@ function makeFlow({ cliCommand = null, externalCliHint = null, cliInstall = null
   });
   check("npm 回退失败仍完成尝试", calls.map(([name]) => name), ["runDsh", "installNpmTargetToTemp"]);
   check("npm 回退失败不记录成功日志", logs, ["cliHint:dsh plugin install demo-package", "cliExec:dsh plugin install demo-package", "cliFailFallback"]);
+}
+
+{
+  // README 恶意/畸形 target（cmd.exe /c 注入面：`a&calc` 会被解释为命令分隔）——
+  // 白名单门拦截：不执行 dsh、不打 cliExec 日志，回退常规安装流程
+  const { flow, calls, logs } = makeFlow({
+    cliInstall: { command: "dsh plugin install a&calc", verb: "install", target: "a&calc" },
+    isCliInstallTarget: () => false
+  });
+  const result = await flow({
+    repo: "owner/demo",
+    cacheDir: "/cache/demo",
+    installProfile: "web",
+    log: [],
+    logLine: (line) => logs.push(line),
+    lang: "en"
+  });
+  check("不安全 target 返回 continue", result, {
+    status: "continue",
+    cacheDir: "/cache/demo",
+    npmTargetUsed: null,
+    cliCommand: "dsh plugin install a&calc"
+  });
+  check("不安全 target 不执行任何副作用", calls, []);
+  check("不安全 target 记跳过日志（不打 cliExec）", logs, ["cliUnsafeTarget:dsh plugin install a&calc"]);
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);
