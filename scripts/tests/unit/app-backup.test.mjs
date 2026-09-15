@@ -1,4 +1,5 @@
 import { createBackupUseCase } from "../../../lib/app/backup.js";
+import { isSafeWebdavUrl } from "../../../lib/domain/validation.js";
 
 let pass = 0;
 let fail = 0;
@@ -41,7 +42,9 @@ function makeBackup(overrides = {}) {
     readBodyLimited: async (res) => Buffer.from(JSON.stringify(res.body)),
     responseTooLarge: (res) => Boolean(res.tooLarge),
     timeoutSignal: () => "signal",
-    isSafeWebdavUrl: (url) => /^https?:\/\//i.test(String(url ?? "").trim()),
+    // 注入真实校验（domain 层纯函数）——用例层行为断言必须连同实际网段策略一起验证，
+    // 弱桩（只测 scheme）会让「链路本地/回环放行」回归无声通过。
+    isSafeWebdavUrl,
     translate: (_lang, key, params) => params?.err !== undefined ? `${key}:${params.err}` : params?.n !== undefined && params?.m !== undefined ? `${key}:${params.n}:${params.m}` : params?.n !== undefined ? `${key}:${params.n}` : params?.m !== undefined ? `${key}:${params.m}` : key,
     now: () => 300
   };
@@ -168,6 +171,81 @@ function makeBackup(overrides = {}) {
   check("恢复差异无 missing 文案", flow.buildDiffResult({ missing: [], already: [] }, "zh"), {
     missing: [], already: [], log: ["restoreDiffNone"]
   });
+}
+
+// ---- S3：受限 WebDAV 地址 fail-closed——拦截必须发生在发请求之前 ----
+{
+  for (const url of [
+    "http://169.254.169.254/latest/meta-data",   // 云元数据端点（链路本地）
+    "https://169.254.169.254/",                  // 同段 https 也不豁免
+    "http://127.0.0.1:9/x",                      // 回环
+    "http://[::1]/x",                            // IPv6 回环
+    "http://[::ffff:7f00:1]/x",                  // v4-mapped 回环
+    "http://100.64.1.1/x",                       // CGNAT 共享段
+    "http://dav.example.com/bk.json",            // 公网 http 明文（凭据禁走明文）
+    "http://user:pass@192.168.1.5/x",            // 内嵌凭据
+    "not-a-url"
+  ]) {
+    const { flow, calls } = makeBackup();
+    const result = await flow.pushWebdav({ url, username: "u", password: "p", lang: "zh" });
+    check(`WebDAV 受限地址拒绝 ${url}`, result, { status: "invalid-url" });
+    check(`WebDAV 受限地址零请求 ${url}`, calls, []);
+  }
+  const { flow, calls } = makeBackup();
+  const result = await flow.restoreWebdav({ url: "http://169.254.169.254/latest/meta-data" });
+  check("WebDAV 恢复受限地址拒绝", result, { status: "invalid-url" });
+  check("WebDAV 恢复受限地址零请求", calls, []);
+}
+
+// 局域网 http 明文放行（NAS 场景）：私网 IPv4 + 自定义端口
+{
+  const { flow, requests } = makeBackup();
+  const result = await flow.pushWebdav({ url: "http://192.168.1.5:5005/bk.json", lang: "zh" });
+  check("WebDAV 局域网 http 放行", result.status, "done");
+  check("WebDAV 局域网请求已发出", [requests[0].url, requests[0].init.method], ["http://192.168.1.5:5005/bk.json", "PUT"]);
+  check("WebDAV 请求声明 manual redirect", requests[0].init.redirect, "manual");
+}
+
+// ---- 重定向：手动跟随 + 逐跳校验（堵「校验 A 实际打到 B」）----
+// 302 相对路径同 origin → 跟随且保留凭据
+{
+  const { flow, requests, setResponse } = makeBackup();
+  setResponse((url) => url.endsWith("/a.json")
+    ? { status: 302, ok: false, headers: new Map([["location", "/b.json"]]) }
+    : { status: 200, ok: true, body: { repos: [] } });
+  const result = await flow.restoreWebdav({ url: "https://dav.example/a.json", username: "alice", password: "secret" });
+  check("WebDAV 302 相对路径跟随", result.status, "done");
+  check("WebDAV 302 跟随目标解析", requests.map((r) => r.url), ["https://dav.example/a.json", "https://dav.example/b.json"]);
+  check("WebDAV 同 origin 保留凭据", requests[1].init.headers.Authorization, `Basic ${Buffer.from("alice:secret").toString("base64")}`);
+}
+
+// 302 跨 origin → 跟随但剥掉 Authorization（fetch 规范语义）
+{
+  const { flow, requests, setResponse } = makeBackup();
+  setResponse((url) => url.startsWith("https://dav.example/")
+    ? { status: 302, ok: false, headers: new Map([["location", "https://other.example/b.json"]]) }
+    : { status: 200, ok: true, body: { repos: [] } });
+  const result = await flow.restoreWebdav({ url: "https://dav.example/a.json", username: "alice", password: "secret" });
+  check("WebDAV 跨 origin 重定向跟随", result.status, "done");
+  check("WebDAV 跨 origin 剥 Authorization", requests[1].init.headers.Authorization, undefined);
+}
+
+// 302 → 受限目标：不跟随，只发出首跳请求
+{
+  const { flow, requests, setResponse } = makeBackup();
+  setResponse(() => ({ status: 302, ok: false, headers: new Map([["location", "http://169.254.169.254/latest/meta-data"]]) }));
+  const result = await flow.restoreWebdav({ url: "https://dav.example/a.json" });
+  check("WebDAV 重定向到受限地址拒绝跟随", result.status, "failed");
+  check("WebDAV 重定向受限目标零跟随（仅首跳）", requests.length, 1);
+}
+
+// 重定向环：跟随次数封顶（首发 + 4 跳）
+{
+  const { flow, requests, setResponse } = makeBackup();
+  setResponse(() => ({ status: 301, ok: false, headers: new Map([["location", "/loop"]]) }));
+  const result = await flow.pushWebdav({ url: "https://dav.example/a.json", lang: "zh" });
+  check("WebDAV 重定向环超限失败", result.status, "failed");
+  check("WebDAV 重定向环请求数封顶", requests.length, 5);
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);
