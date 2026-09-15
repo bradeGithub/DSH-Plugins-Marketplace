@@ -1,55 +1,48 @@
 {
-  "generated_at": "2026-09-15T10:14:43.747Z",
-  "count": 7,
+  "generated_at": "2026-09-15T16:43:41.215Z",
+  "count": 6,
   "items": [
     {
       "full_name": "WestFox-AwA/dsh-prompt-optimizer",
-      "previous": "model",
-      "current": "conversation",
-      "desc_now": "DSH Web 插件 v0.2.1-beta.1（适用于 dsh-0.1.6-alpha.1）：按回车先由『传话 AI』把提示词改写成可直接发给工作 AI 的命令——四档强度、按难度定流程长度、按会话隔离，确认后再发送",
-      "desc_prev": "DSH Web 插件：在输入框按回车时，先由『传话 AI』把你的话改写成一条可直接发给工作 AI 的命令——档位/权限/上下文可调，并按任务难度自行决定编排强度，确认后再发送"
+      "previous": "conversation",
+      "current": "tool",
+      "desc_now": "DSH Web 输入框接管（v0.3.0-beta.4 · 复杂任务能力包：3D/法向量/交互/数据/并发/性能细节逐项过关 + 可自动化验收 + 中英双语 · 适用于 dsh-0.1.6-alpha.1）：发送前用独立 AI（传话者）把提示词优化成可直接发给工作 AI 的命令（四档强度、按难度定流程长度、按会话隔离、极简迷你窗）",
+      "desc_prev": "DSH Web 插件 v0.2.1-beta.1（适用于 dsh-0.1.6-alpha.1）：按回车先由『传话 AI』把提示词改写成可直接发给工作 AI 的命令——四档强度、按难度定流程长度、按会话隔离，确认后再发送"
     },
     {
-      "full_name": "v587d/capital-generation",
-      "previous": "tool",
-      "current": "agent",
-      "desc_now": "面向中国股市散户的金融投资智能体。Next-Gen AI-Driven Capital Generation.",
-      "desc_prev": "面向中国股市散户的金融投资智能体。Next-Gen AI-Driven Capital Generation."
-    },
-    {
-      "full_name": "zeng6125-rgb/dsh-llm-retry-settings",
-      "previous": "model",
-      "current": "web-ui",
-      "desc_now": "DSH 插件：LLM 自动重试设置卡片——重试次数/退避/抖动与 25 个错误码可勾选（也能自己输入），可按 provider/model 单独设策略、回答被输出 token 上限截断时自动续写且提示词可改，内置重试观测面板，改完实时生效。",
-      "desc_prev": "DSH 插件：LLM 自动重试设置卡片——重试次数/退避/抖动与 25 个错误码可勾选（也能自己输入），回答被输出 token 上限截断时自动续写且提示词可改，改完实时生效。"
-    },
-    {
-      "full_name": "wycto/dsh-dock",
-      "previous": "web-ui",
-      "current": "vision",
-      "desc_now": "dsh-dock · DeepSeek Harness 功能坞插件：一张面板统一注册/开关所有小功能——用量记账（自定义单价·分时价）、模型设置与余额、19 种任务动画、任务通知（钉钉/飞书）、运行状态、图片理解代理、账号密码远程访问、10 款小游戏。每个功能独立模块，可开关、错误隔离、即插即用。",
-      "desc_prev": "dsh-dock · DeepSeek Harness 功能中枢：用一张管理面板统一注册、开关所有小功能（模型余额、Token 用量记录、任务动画等）。每个功能独立模块，支持开关与错误隔离，新功能即插即用。0.1.0 为基础框架，功能接入按 README 路线图迭代。"
-    },
-    {
-      "full_name": "hoyyang/dsh-concise",
+      "full_name": "tianmingwan/dsh-balanced-search",
       "previous": "other",
-      "current": "conversation",
-      "desc_now": "One-click Concise output style for DeepSeek Harness (dsh): per-session toggle + plain-language digest card on every reply. 结果先行、少废话，每轮回答开头附「摘要」卡，划选即复制。",
-      "desc_prev": "One-click Concise output style for DeepSeek Harness: results first, no filler — Claude Code's built-in Concise style as a dsh plugin. Toggle right of the model picker, global, persistent, zero-config."
+      "current": "tool",
+      "desc_now": "Balanced web search plugin/MCP server for DeepSeek Harness: Keenable / Exa / Tavily round-robin with failover. / 均衡搜索插件：Keenable / Exa / Tavily 轮流调用，自动故障切换。",
+      "desc_prev": "Balanced web search plugin/MCP server for DeepSeek Harness: Keenable / Exa / Tavily round-robin with failover. / 均衡搜索插件：Keenable / Exa / Tavily 轮流调用，自动故障切换。"
     },
     {
-      "full_name": "CosmoSail/DSH_Launch_Console",
-      "previous": "web-ui",
-      "current": "coding",
-      "desc_now": "DSH Launch Console是Deepseek Harness的桌面外壳，无需终端命令即可静默启动 DSH 服务，固定窗口显示 Web UI。DSH Launch Console is the desktop shell for Deepseek Harness. It silently starts the DSH service without terminal commands and displays the Web UI in a fixed window.",
-      "desc_prev": "DSH 的桌面外壳：静默启动 DSH 服务，并用锁定式窗口承载其 Web UI。"
+      "full_name": "orangeshinee/dsh-mem0",
+      "previous": "memory",
+      "current": "resource",
+      "desc_now": null,
+      "desc_prev": null
     },
     {
-      "full_name": "BonovaVanro/dsh-mega-settings",
+      "full_name": "GooDAnDReaDY/dsh-clinebot",
+      "previous": "resource",
+      "current": "other",
+      "desc_now": "Native ClineBot / ClinePass provider companion plugin for DeepSeek Harness (DSH)",
+      "desc_prev": "DeepSeek Harness companion for ClineBot / ClinePass: dedicated settings page, live quota dashboard, in-UI key saving, curated & custom models, /cline command."
+    },
+    {
+      "full_name": "LeeLee592/dsh-obsidian-plugin",
       "previous": "other",
+      "current": "tool",
+      "desc_now": "Provides DeepSeek Harness (DSH) agents with Obsidian plugin development capabilities: scaffolding, validation, version syncing, plus a development-guidelines skill.",
+      "desc_prev": null
+    },
+    {
+      "full_name": "shengyvself/dsh-prompt-only-forge",
+      "previous": "conversation",
       "current": "web-ui",
-      "desc_now": "dsh设置面板增强、mega 系列插件的统一设置收纳宿主、提供多项dsh优化设置",
-      "desc_prev": "mega 系列插件的统一设置收纳宿主。"
+      "desc_now": "DSH plugin: pure injection prompt polish (no send action). Renamed from narrative-prompt-polish.",
+      "desc_prev": "dsh-prompt-only-forge — 点输入框右座 ✨ 把「打磨提示词」写进输入栏（当前草稿自动嵌进 <内容> 位置），不发送、不联网、不调模型"
     }
   ]
 }
