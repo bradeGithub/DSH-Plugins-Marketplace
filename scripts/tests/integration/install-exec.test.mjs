@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
-import { mkdtempSync, mkdirSync, writeFileSync, existsSync, readFileSync, rmSync } from "node:fs";
-import { mkdir, rm, cp, readFile, writeFile, readdir, stat } from "node:fs/promises";
+import { mkdtempSync, mkdirSync, writeFileSync, existsSync, readFileSync, rmSync, symlinkSync } from "node:fs";
+import { mkdir, rm, cp, readFile, writeFile, readdir, stat, lstat } from "node:fs/promises";
 import { join, resolve, sep } from "node:path";
 import { tmpdir } from "node:os";
 import { createInstallExecutor } from "../../../lib/app/install-exec.js";
@@ -34,7 +34,7 @@ const copyFilter = (source, excludeNodeModules) => {
 };
 
 const executor = createInstallExecutor({
-  fs: { mkdir, rm, cp, readFile, writeFile, readdir, exists },
+  fs: { mkdir, rm, cp, readFile, writeFile, readdir, exists, lstat },
   path: { joinPath: join, resolvePath: resolve, pathSep: sep },
   proc: {
     runScript: async (...args) => calls.push(["runScript", ...args]),
@@ -156,6 +156,44 @@ try {
     JSON.parse(readFileSync(join(nodeModules, "real-plugin", "package.json"), "utf8")).version
   ], [true, "4.5.6"]);
   check("真实目录 plugin 使用显式 patch 快照", calls.find((call) => call[0] === "appendPatchEntry")?.slice(1), ["real-plugin", "real-plugin", patchFile]);
+
+  // fs.cp 默认解引用 symlink：源目录放一个指向宿主文件的链接，验证拷出的不是宿主内容
+  const linkRoot = join(cache, "link-skill");
+  mkdirSync(linkRoot, { recursive: true });
+  writeFileSync(join(linkRoot, "SKILL.md"), "---\nname: link-skill\n---\n# s\n");
+  writeFileSync(join(linkRoot, "keep.txt"), "normal");
+  const hostSecret = join(root, "host-secret.txt");
+  writeFileSync(hostSecret, "HOST-SECRET");
+  let symlinkMade = false;
+  try {
+    symlinkSync(hostSecret, join(linkRoot, "leak.txt"));
+    symlinkMade = true;
+  } catch { /* Windows 无 symlink 权限时跳过真实链路验证 */ }
+  skillRoots = [linkRoot];
+  await run({ type: "skill", repo: "owner/link" });
+  if (symlinkMade) {
+    check("真实拷贝拒拷 symlink（宿主内容不落地）", [
+      existsSync(join(skillsDir, "link-skill", "leak.txt")),
+      existsSync(join(skillsDir, "link-skill", "keep.txt")),
+    ], [false, true]);
+  } else {
+    check("真实拷贝拒拷 symlink（环境无法创建 symlink，跳过）", true, true);
+  }
+
+  // answers 值来自 HTTP body JSON——对象/数字/布尔必须收口为字符串 env
+  const scriptRoot = join(cache, "scripted");
+  mkdirSync(scriptRoot, { recursive: true });
+  writeFileSync(join(scriptRoot, "install.sh"), "echo hi");
+  const callsBefore = calls.length;
+  await run({
+    type: "script",
+    cacheDir: scriptRoot,
+    answers: { KEY: { nested: 1 }, NUM: 42, FLAG: true },
+    envAllowList: ["KEY", "NUM", "FLAG"],
+  });
+  check("script env 非字符串 answers 收口为字符串", calls.slice(callsBefore).find((call) => call[0] === "runScript")?.[2]?.env, {
+    PATH: "minimal", KEY: "[object Object]", NUM: "42", FLAG: "true"
+  });
 } finally {
   rmSync(root, { recursive: true, force: true });
 }

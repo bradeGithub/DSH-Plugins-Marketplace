@@ -6,9 +6,11 @@ const joinPath = (...parts) => pathPosix.join(...parts);
 const resolvePath = (path) => pathPosix.resolve(path);
 const pathSep = "/";
 
-function makeHarness({ files: initialFiles = {}, dirs: initialDirs = [], overrides = {} } = {}) {
+function makeHarness({ files: initialFiles = {}, dirs: initialDirs = [], links: initialLinks = {}, overrides = {} } = {}) {
   const files = new Map(Object.entries(initialFiles));
   const dirs = new Set(initialDirs);
+  // links：path -> 目标路径，模拟 git 检出的 symlink（目标可在源目录外，即宿主文件）
+  const links = new Map(Object.entries(initialLinks));
   const calls = [];
   const logs = [];
   const removeTree = (target) => {
@@ -18,8 +20,11 @@ function makeHarness({ files: initialFiles = {}, dirs: initialDirs = [], overrid
     for (const path of [...dirs]) {
       if (path === target || path.startsWith(`${target}/`)) dirs.delete(path);
     }
+    for (const path of [...links.keys()]) {
+      if (path === target || path.startsWith(`${target}/`)) links.delete(path);
+    }
   };
-  const hasPath = (path) => files.has(path) || dirs.has(path);
+  const hasPath = (path) => files.has(path) || dirs.has(path) || links.has(path);
   const fs = {
     mkdir: async (path, options) => {
       calls.push(["mkdir", path, options]);
@@ -33,18 +38,21 @@ function makeHarness({ files: initialFiles = {}, dirs: initialDirs = [], overrid
       calls.push(["cp", source, target, options]);
       dirs.add(target);
       const filter = options?.filter;
-      for (const [path, content] of files) {
+      for (const path of [...files.keys(), ...links.keys()]) {
         if (path !== source && !path.startsWith(`${source}/`)) continue;
-        if (filter && !filter(path)) continue;
         const relative = path.slice(source.length).replace(/^\//, "");
         const destination = relative ? joinPath(target, relative) : target;
-        files.set(destination, content);
+        if (filter && !(await filter(path, destination))) continue;
+        // 模拟 fs.cp 默认 verbatimSymlinks:false 的解引用语义：
+        // symlink 若通过 filter，拷入的是链接目标（宿主）文件内容。
+        files.set(destination, links.has(path) ? (files.get(links.get(path)) ?? "<dangling>") : files.get(path));
       }
       for (const path of dirs) {
         if (path !== source && !path.startsWith(`${source}/`)) continue;
-        if (filter && !filter(path)) continue;
         const relative = path.slice(source.length).replace(/^\//, "");
-        dirs.add(relative ? joinPath(target, relative) : target);
+        const destination = relative ? joinPath(target, relative) : target;
+        if (filter && !(await filter(path, destination))) continue;
+        dirs.add(destination);
       }
     },
     readFile: async (path) => {
@@ -67,6 +75,15 @@ function makeHarness({ files: initialFiles = {}, dirs: initialDirs = [], overrid
       return [...names];
     },
     exists: async (path) => hasPath(path),
+    lstat: async (path) => {
+      calls.push(["lstat", path]);
+      if (!hasPath(path)) throw new Error(`ENOENT:${path}`);
+      return {
+        isSymbolicLink: () => links.has(path),
+        isDirectory: () => dirs.has(path),
+        isFile: () => files.has(path),
+      };
+    },
   };
   const readPackageJsonObject = async (dir) => {
     try {
@@ -228,6 +245,44 @@ function check(name, actual, expected) {
 }
 
 {
+  // fs.cp 默认解引用 symlink：源目录里指向宿主文件的链接会把宿主内容拷进安装目录
+  const { run, calls, files } = makeHarness({
+    files: {
+      "/cache/repo/SKILL.md": "---\nname: link-skill\n---\n# s\n",
+      "/cache/repo/notes.txt": "normal",
+      "/cache/repo/.git/config": "git",
+      "/host/id_rsa": "HOST-SECRET",
+    },
+    links: { "/cache/repo/leak.txt": "/host/id_rsa" },
+    dirs: ["/cache/repo", "/cache/repo/.git"],
+    overrides: {
+      scan: {
+        findSkillRoots: async () => ["/cache/repo"],
+        findPluginRoots: async () => [],
+        findPresetRoots: async () => [],
+        readSkillManifest: async () => "---\nname: link-skill\n---\n# s\n",
+        needsPluginBuild: async () => false,
+      }
+    }
+  });
+  const result = await run({ type: "skill", repo: "owner/source" });
+  check("symlink skill 正常完成安装", result.name, "link-skill");
+  check("skill 拷贝拒拷 symlink（宿主内容/链接文本均不落地）", [
+    files.has("/managed/skills/link-skill/leak.txt"),
+    files.get("/managed/skills/link-skill/leak.txt"),
+    files.get("/managed/skills/link-skill/notes.txt"),
+    files.has("/managed/skills/link-skill/SKILL.md"),
+  ], [false, undefined, "normal", true]);
+  const cpCall = calls.find((call) => call[0] === "cp");
+  check("拷贝过滤器拒 symlink 且保留 .git/node_modules 过滤", [
+    await cpCall?.[3]?.filter("/cache/repo/leak.txt", "/dest/leak.txt"),
+    await cpCall?.[3]?.filter("/cache/repo/notes.txt", "/dest/notes.txt"),
+    await cpCall?.[3]?.filter("/cache/repo/.git/config", "/dest/.git/config"),
+    await cpCall?.[3]?.filter("/cache/repo/missing", "/dest/missing"),
+  ], [false, true, false, false]);
+}
+
+{
   const { run, calls, files } = makeHarness({
     files: {
       "/cache/repo/preset/preset.yml": "preset",
@@ -364,6 +419,32 @@ function check(name, actual, expected) {
 }
 
 {
+  // answers 来自 HTTP body JSON——值可能是对象/数字/布尔/null，进程 env 只接受字符串
+  const { run, calls } = makeHarness({
+    overrides: {
+      platform: "linux",
+      fs: {
+        exists: async (path) => path === "/cache/repo/install.sh",
+      },
+    }
+  });
+  await run({
+    type: "script",
+    answers: { OBJ: { nested: 1 }, NUM: 42, BOOL: true, NIL: null, STR: "v", EXTRA: { skip: 1 }, __confirm_script__: "continue" },
+    envAllowList: ["OBJ", "NUM", "BOOL", "NIL", "STR"]
+  });
+  check("answers 非字符串值收口为字符串 env 且不抛错", calls.find((call) => call[0] === "runScript")?.[2]?.env, {
+    PATH: "minimal",
+    HOME: "/safe",
+    OBJ: "[object Object]",
+    NUM: "42",
+    BOOL: "true",
+    NIL: "",
+    STR: "v",
+  });
+}
+
+{
   const { run } = makeHarness();
   await assert.rejects(() => run({ type: "script" }), /noScript/);
   check("缺少脚本拒绝执行", true, true);
@@ -481,6 +562,34 @@ function check(name, actual, expected) {
     "/profile/node_modules/plugin-a",
     "/profile/node_modules/plugin-b"
   ]);
+}
+
+{
+  // cordis-plugin 走 copyFilter(root, false)——symlink 拒拷同样生效
+  const { run, files } = makeHarness({
+    files: {
+      "/cache/repo/package.json": JSON.stringify({ name: "link-plugin", version: "1.0.0", main: "index.js" }),
+      "/cache/repo/index.js": "module.exports = {}",
+      "/host/secret": "HOST-SECRET",
+    },
+    links: { "/cache/repo/host-secret": "/host/secret" },
+    dirs: ["/cache/repo"],
+    overrides: {
+      scan: {
+        findSkillRoots: async () => [],
+        findPluginRoots: async () => ["/cache/repo"],
+        findPresetRoots: async () => [],
+        readSkillManifest: async () => "",
+        needsPluginBuild: async () => false,
+      }
+    }
+  });
+  const result = await run({ type: "cordis-plugin" });
+  check("cordis 含 symlink 仓库正常完成安装", result.name, "link-plugin");
+  check("cordis 拷贝拒拷 symlink（excludeNodeModules=false 同样拒）", [
+    files.has("/profile/node_modules/link-plugin/host-secret"),
+    files.get("/profile/node_modules/link-plugin/index.js"),
+  ], [false, "module.exports = {}"]);
 }
 
 {
