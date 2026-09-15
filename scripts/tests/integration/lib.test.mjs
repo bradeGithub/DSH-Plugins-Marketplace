@@ -1168,8 +1168,103 @@ function mockFetchCapture(payload, status = 200) {
     r = await call(mkPostReq({ url: "https://example.com/bk.json" }));
     globalThis.fetch = origBad;
     check("restore/webdav badBackup 400", r.s, 400);
+    // S3：受限目标（SSRF 网段）→ 400 且**不发出任何 fetch**（计数桩断言零调用）。
+    {
+    // 计数桩仍返回合法响应——若拦截失效打出请求，会拿到 200 done 而非 400。
+    let fetchCount = 0;
+    const origCount = globalThis.fetch;
+    globalThis.fetch = async () => {
+      fetchCount++;
+      return { ok: true, status: 200, arrayBuffer: async () => Buffer.from(JSON.stringify({ repos: [] })) };
+    };
+    try {
+      for (const badUrl of [
+        "http://169.254.169.254/latest/meta-data", // 云元数据端点（链路本地）
+        "https://169.254.169.254/",                // 同段 https 不豁免
+        "http://127.0.0.1:9/bk.json",              // 回环
+        "http://[::ffff:7f00:1]/bk.json",          // v4-mapped 回环
+        "http://100.64.1.1/bk.json",               // CGNAT 共享段
+        "http://dav.example.com/bk.json",          // 公网 http 明文（凭据禁走明文）
+        "http://user:pass@192.168.1.5/bk.json",    // 内嵌凭据
+      ]) {
+        r = await call(mkPostReq({ url: badUrl }));
+        check(`restore/webdav 受限 URL 400 ${badUrl}`, r.s, 400);
+      }
+      check("restore/webdav 受限 URL 零外发请求", fetchCount, 0);
+      // 302 → 受限目标：手动重定向逐跳校验——只允许发出首跳，目标不过校验即 failed
+      globalThis.fetch = async () => {
+        fetchCount++;
+        return { ok: false, status: 302, headers: new Map([["location", "http://169.254.169.254/latest/meta-data"]]), arrayBuffer: async () => Buffer.from("x") };
+      };
+      r = await call(mkPostReq({ url: "https://example.com/bk.json" }));
+      check("restore/webdav 重定向受限目标 200 failed", [r.s, r.b && r.b.status], [200, "failed"]);
+      check("restore/webdav 重定向受限目标仅首跳", fetchCount, 1);
+      // 302 → 合法相对路径：正常跟随（同 origin 保留凭据由 unit 覆盖）
+      globalThis.fetch = async (u) => {
+        fetchCount++;
+        return String(u).endsWith("/a.json")
+          ? { ok: false, status: 302, headers: new Map([["location", "/bk.json"]]), arrayBuffer: async () => Buffer.from("x") }
+          : { ok: true, status: 200, arrayBuffer: async () => Buffer.from(JSON.stringify({ repos: [] })) };
+      };
+      fetchCount = 0;
+      r = await call(mkPostReq({ url: "https://example.com/a.json" }));
+      check("restore/webdav 合法 302 跟随成功", [r.s, r.b && r.b.status], [200, "done"]);
+      check("restore/webdav 合法 302 两跳请求", fetchCount, 2);
+    } finally {
+      globalThis.fetch = origCount;
+    }
+    }
   } else {
     check("restore/webdav handler 存在", false, true);
+  }
+
+  // ---- backup/webdav handler：URL 校验 + 受限地址零请求 ----
+  const backupWdHandler = registered.find((h) => h.path === "/api/marketplace/backup/webdav")?.handler;
+  if (backupWdHandler) {
+    const mkWdPostReq = (bodyObj) => {
+      const bodyStr = JSON.stringify(bodyObj);
+      let sent = false;
+      return {
+        method: "POST",
+        headers: { "x-dsh-marketplace": "1", host: "127.0.0.1:3080" },
+        socket: { remoteAddress: "127.0.0.1" },
+        url: "/api/marketplace/backup/webdav",
+        [Symbol.asyncIterator]() {
+          return {
+            next: async () => sent ? { value: undefined, done: true } : (sent = true, { value: Buffer.from(bodyStr), done: false }),
+          };
+        },
+      };
+    };
+    const callWd = async (req) => {
+      let s = 0, b = null;
+      await backupWdHandler(req, { writeHead: (x) => { s = x; }, end: (x) => { try { b = JSON.parse(x); } catch { b = null; } } });
+      return { s, b };
+    };
+    let fetchCount = 0;
+    const origWd = globalThis.fetch;
+    globalThis.fetch = async () => {
+      fetchCount++;
+      return { ok: true, status: 200, arrayBuffer: async () => Buffer.from("{}") };
+    };
+    try {
+      // 局域网 http 明文放行（NAS 场景）→ 200 done，fetch 发出
+      let r = await callWd(mkWdPostReq({ url: "http://192.168.50.4:5005/bk.json", username: "u", password: "p" }));
+      check("backup/webdav 局域网 http 200 done", [r.s, r.b && r.b.status], [200, "done"]);
+      check("backup/webdav 局域网请求已发出", fetchCount, 1);
+      // 云元数据端点 → 400 且零外发
+      fetchCount = 0;
+      r = await callWd(mkWdPostReq({ url: "http://169.254.169.254/latest/meta-data" }));
+      check("backup/webdav 元数据端点 400", r.s, 400);
+      check("backup/webdav 元数据端点零请求", fetchCount, 0);
+      r = await callWd(mkWdPostReq({ url: "http://127.0.0.1:3080/api" }));
+      check("backup/webdav 回环 400", r.s, 400);
+      check("backup/webdav 回环零请求", fetchCount, 0);
+    } finally {
+      globalThis.fetch = origWd;
+    }
+  } else {
+    check("backup/webdav handler 存在", false, true);
   }
 
   // ---- feedback：GitHub 自动建 issue（doCreate 闭包——token 已配置 + fetch mock）----
