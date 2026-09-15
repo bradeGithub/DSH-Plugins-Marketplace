@@ -35,7 +35,7 @@ function check(name, actual, expected) {
 const fnBody = auth.match(/async function isWriteAllowed\(req\) \{[\s\S]*?\n\}/)?.[0] ?? "";
 check("isWriteAllowed 存在", fnBody.length > 0, true);
 check("先过 isTrustedRequest（CSRF+Host+Origin）", fnBody.includes("if (!isTrustedRequest(req)) return false;"), true);
-check("回环 socket 地址直接放行（不可伪造）", fnBody.includes('remote === "127.0.0.1" || remote === "localhost" || remote === "::1"'), true);
+check("回环 socket 地址直接放行（不可伪造；remoteAddress 恒为 IP 字面量，无 localhost 形态）", fnBody.includes('remote === "127.0.0.1" || remote === "::1"'), true);
 check("回环判定用 socket 而非 Host 头", fnBody.includes("req.socket?.remoteAddress"), true);
 check("IPv4-mapped IPv6 归一", fnBody.includes("::ffff:"), true);
 

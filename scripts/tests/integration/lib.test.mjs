@@ -5,7 +5,8 @@
 // 注意：必须用动态 import 控制加载顺序——静态 import 会被提升，lib/index.js
 // 求值时 process.env.DSH_HOME 尚未设置，模块级常量会回退到真实 ~/.dsh（污染主目录）。
 
-import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, existsSync, rmSync, chmodSync } from "node:fs";
+import { execFileSync } from "node:child_process";
+import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, existsSync, renameSync, rmSync, chmodSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { join, dirname, sep } from "node:path";
 import { tmpdir } from "node:os";
@@ -918,6 +919,10 @@ globalThis.fetch = () => Promise.reject(new Error("integration test: real networ
           dependencies: { "fake-route-dep": "1.2.3" },
         }, null, 2), "utf8");
         writeFileSync(join(routeCache, "cordis.patch.yml"), "- insert:\n    - id: fake-route\n      name: fake-route-bundle\n", "utf8");
+        // slug 碰撞防护（S13）后预置缓存必须带可验证的 clone 来源才会被复用——
+        // 补一个指向本仓库的 origin remote（纯本地 git 操作，无网络）。
+        execFileSync("git", ["init", "-q", routeCache], { stdio: "ignore" });
+        execFileSync("git", ["-C", routeCache, "config", "remote.origin.url", "https://github.com/fake/route-bundle.git"], { stdio: "ignore" });
 
         const registeredRoute = [];
         lib.apply({ get: (s) => (s === "webServer" ? { register: (r) => registeredRoute.push(r) } : undefined), logger: { warn: () => {} }, slots: { inject: () => {} } });
