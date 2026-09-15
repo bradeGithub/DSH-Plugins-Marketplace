@@ -668,7 +668,7 @@ const MUTATIONS = [
     id: "m73",
     name: "auth 回环 socket 判定失效",
     type: "behavior",
-    pattern: /if \(remote === "127\.0\.0\.1" \|\| remote === "localhost" \|\| remote === "::1"\) return true;/g,
+    pattern: /if \(remote === "127\.0\.0\.1" \|\| remote === "::1"\) return true;/g,
     replacement: "if (false) return true;",
     note: "回环写操作必须基于 socket 远端地址直接放行"
   },
