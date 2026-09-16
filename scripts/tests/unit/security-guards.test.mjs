@@ -55,7 +55,7 @@ function check(name, actual, expected) {
 check("profile scan 通过注入 fs", /fs: \{ readdir \}/.test(profileScanLib), true);
 check("bundle register 通过注入 fs 与 resolver", /fs: \{ readFile, writeFile, rename, rm, realpath, exists \}/.test(bundleRegisterLib) && /resolvePackage/.test(bundleRegisterLib), true);
 check("bundle register 无 IO/环境/入口反向依赖", !/(node:fs|node:path|process\.env|index\.js)/.test(bundleRegisterLib), true);
-check("install executor 通过注入 fs/扫描/适配器", /fs: \{ mkdir, rm, cp, readFile, writeFile, readdir, exists \}/.test(installExecLib)
+check("install executor 通过注入 fs/扫描/适配器", /fs: \{ mkdir, rm, cp, readFile, writeFile, readdir, exists, lstat \}/.test(installExecLib)
   && /scan: \{ findSkillRoots, findPluginRoots, findPresetRoots, readSkillManifest, needsPluginBuild \}/.test(installExecLib)
   && /adapters: \{ registerBundlePackage, appendPatchEntry \}/.test(installExecLib), true);
 check("install executor 无 IO/环境/入口反向依赖", !/(node:fs|node:path|process\.env|from\s+["'][^"']*index\.js)/.test(installExecLib), true);
@@ -211,6 +211,18 @@ check("HTTP 不直接持有 list cache", !/listCaches/.test(readFileSync(join(RO
 // 进文件分支被 readFile 读取：恶意仓库可提交指向仓库外任意文件的 symlink（如
 // install.sh → ~/.ssh/config），键名扫描就会读取仓库外内容。契约：扫描前显式跳过。
 check("scanRequirements 显式跳过 symlink", /if \(entry\.isSymbolicLink\(\)\) continue;/.test(securityScanLib), true);
+
+// ---- 拷贝边界：cp filter 拒拷 symlink（防 fs.cp 解引用越界读宿主文件）----
+// fs.cp 默认 verbatimSymlinks:false 解引用符号链接：恶意仓库放一个指向
+// ~/.ssh/id_rsa 的 symlink，unix 下会把宿主文件内容拷进安装目录。契约：三个 cp
+// 调用点的 filter 必须先 lstat 拒拷一切 symlink，再交给注入的 copyFilter。
+check("install executor cp filter 拒拷 symlink", (installExecLib.match(/withoutSymlinks\(copyFilter\(root/g) ?? []).length === 3
+  && /isSymbolicLink\(\)/.test(installExecLib), true);
+
+// ---- 进程 env 边界：answers 值必须字符串化 ----
+// answers 来自 HTTP body JSON，值可能是对象/数字/布尔——进程 env 只接受字符串，
+// 非字符串会被隐式 stringify 成 "[object Object]" 这类垃圾值。契约：env 赋值经 String() 收口。
+check("install executor env 值强制字符串", /env\[key\] = String\(answers\[key\]/.test(installExecLib), true);
 
 // ---- 消费侧路径注入防护：installed.json 可被篡改（readStateJson 只校验 JSON 合法性）----
 // record.name / record.location 拼路径前必须校验（uninstall 已有 resolve 受管目录防线，
