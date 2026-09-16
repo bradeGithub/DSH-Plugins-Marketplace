@@ -76,7 +76,7 @@ One sentence to hand to an AI (any AI with command execution works):
 
 | Capability | This marketplace | Manual search & clone |
 |---|---|---|
-| Distribution | CI-built static index served via the jsDelivr CDN — zero GitHub API usage on the browsing side; falls back to the search API (10 req/min unauthenticated) only when the index is unreachable | Every browse and page-turn spends unauthenticated API quota |
+| Distribution | CI-built static index with multi-level fallback: Contents API → jsDelivr → raw → bundled index → disk cache; zero requests inside the 10-min TTL, search API (10 req/min unauthenticated) only when all sources fail | Every browse and page-turn spends unauthenticated API quota |
 | Ingestion | CI scans the `dsh-plugin` topic every 2 hours and merges results into the index | Depends on awesome lists or keyword searches — coverage is luck |
 | Type adaptation | Auto-detects cordis plugin / SKILL.md / agent preset / install script, then installs dependencies and registers entries | You identify the plugin type, install deps, and write registration entries by hand |
 | Risk confirmation | Third-party install scripts and npm lifecycle scripts ask for confirmation first; material is passed as env vars only and never persisted | You execute scripts from unknown repos directly |
@@ -92,10 +92,11 @@ Tag your repository with the `dsh-plugin` topic — CI merges it into the index 
 ```mermaid
 flowchart LR
   CI["GitHub Actions<br/>incremental topic:dsh-plugin scan every 2 h"] -->|committed back to main| REG["registry.json / skills.json<br/>static index"]
-  REG -->|jsDelivr CDN| UI["marketplace list page"]
-  REG -.->|"raw.githubusercontent fallback"| UI
-  UI -.->|"only when both sources fail"| API["GitHub Search API<br/>10 req/min · 10-min cache"]
-  UI --> CMP{"compare against installed.json<br/>five-way installed detection"}
+  REG -->|"① Contents API .gz"| UI["marketplace list page"]
+  REG -->|"② jsDelivr → raw (.gz first)"| UI
+  REG -.->|"③ bundled index → disk cache"| UI
+  UI -.->|"only when all fail"| API["GitHub Search API<br/>10 req/min · 10-min TTL"]
+  UI --> CMP{"compare against installed.json<br/>six-stage installed detection"}
   CMP -->|"not installed / update needed"| INS["clone → detect type → env-var scan"]
   INS --> GATE{"install script or<br/>npm lifecycle script?"}
   GATE -->|yes| OK["runs after in-page confirmation"]
@@ -105,8 +106,10 @@ flowchart LR
 ```
 
 - The index contains repo metadata only (name / description / stars / updated_at / topics / license); installs still clone directly from `github.com`.
-- Five-way installed detection: install manifest → directory heuristics → package-name mapping (incl. `pkg_name` and scoped packages) → bidirectional `repository` check → self-identification; `@deepseek-ai/*` official plugins are auto-excluded.
+- Six-stage installed detection: install manifest → managed-directory heuristics (`dirOwners`) → self-identification → profile-mapping hit (slug/repo name/`pkg_name` with bidirectional `repository` check) → script cache → cached package-name mapping re-checked against profiles; `@deepseek-ai/*` official plugins are auto-excluded.
 - Marketplace self-update only accepts maintainer SSH-signed release tags (local verification + tag↔version↔commit SHA binding; unverifiable updates fail closed).
+
+Layering, the index-build algorithm, the version-source table, and detection details: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md); the security model: [docs/SECURITY.md](docs/SECURITY.md).
 
 </details>
 
@@ -136,7 +139,7 @@ flowchart LR
 | `/api/marketplace/backup` · `restore/diff` · `backup/webdav` · `restore/webdav` | GET / POST | backup export / restore diff / WebDAV push & pull |
 | `/api/marketplace/logs` | GET | sanitized install-log export |
 
-All write operations share one auth model: loopback requests pass directly; LAN requests require `lanWrite: true` plus the `x-dsh-marketplace-token` session header. Uninstall relies on the `installed.json` record — only plugins **installed via this marketplace** can be fully uninstalled. Full field reference: [docs/README.md](docs/README.md).
+All write operations share one auth model: loopback requests pass directly; LAN requests require `lanWrite: true` plus the `x-dsh-marketplace-token` session header. Uninstall relies on the `installed.json` record — only plugins **installed via this marketplace** can be fully uninstalled. Full contract (body fields / return values / status machine): [docs/HTTP-API.md](docs/HTTP-API.md).
 
 </details>
 
@@ -146,14 +149,16 @@ All write operations share one auth model: loopback requests pass directly; LAN 
 - An install is a single long-lived POST (clone + build + material-confirmation rounds); a short-timeout reverse proxy may cut the connection — the backend keeps running, refresh the page to confirm the result.
 - Version detection only applies to cordis plugins with a `package.json`; skills / presets / script types have no version concept.
 - «Installed» detection for script-type plugins relies on the cache directory; deleting the cache makes them installable again.
-- Every plugin in the marketplace comes from a third-party repository and is not affiliated with DSH or this marketplace; listing is not a recommendation or endorsement. The marketplace is provided AS-IS with no warranty on plugin quality, security, or compatibility — evaluate each repository yourself before installing.
+- Every plugin in the marketplace comes from a third-party repository maintained by its own authors and is not affiliated with DSH or this marketplace; listing is not a recommendation or endorsement. The marketplace is provided AS-IS with no warranty on plugin quality, security, or compatibility, and accepts no liability for any direct or indirect loss (including data loss, system damage, or privacy leaks) caused by installing or using third-party plugins — evaluate each repository yourself before installing. Full limitation list: [docs/USAGE.md](docs/USAGE.md) §7-8.
 
 <details>
 <summary>Ecosystem and acknowledgements</summary>
 
-[Harness Desktop](https://github.com/baiyuscc13724-max/deepseek-harness-desktop): a third-party, community-maintained Windows desktop app whose stable release bundles this marketplace; [awesome-dsh-plugin](https://github.com/awesome-dsh-plugin/awesome-dsh-plugin): the community-curated list that powers the «community listed» badge, cross-linked with this marketplace. Neither is affiliated with DeepSeek.
+[Harness Desktop](https://github.com/baiyuscc13724-max/deepseek-harness-desktop): a third-party, community-maintained Windows desktop app whose stable release bundles this marketplace (entry submitted by the desktop author, who also maintains the marketplace fork shipped with the desktop app); [awesome-dsh-plugin](https://github.com/awesome-dsh-plugin/awesome-dsh-plugin): the community-curated list that powers the «community listed» badge, cross-linked with this marketplace. Neither is affiliated with DeepSeek.
 
-Code contributors: [lgnorant-lu](https://github.com/lgnorant-lu) (endpoint auth, security hardening, testing system), [baiyuscc13724-max](https://github.com/baiyuscc13724-max) (desktop integration), [anupamme](https://github.com/anupamme) (SSRF allowlist hardening), and others; ecosystem collaborators: [qing3a](https://github.com/qing3a) (dsh-plugin-verify), [wwumit](https://github.com/wwumit) (skills-catalog), [ylwl1997](https://github.com/ylwl1997) (dshbase).
+Code contributors: [lgnorant-lu](https://github.com/lgnorant-lu) (write-endpoint auth, security hardening PR #63, mechanized testing system PR #66, and more core work), [baiyuscc13724-max](https://github.com/baiyuscc13724-max) (Harness Desktop integration and install-flow simplification #1/#2), [anupamme](https://github.com/anupamme) (OrbisAI Security — verify-installability SSRF allowlist #213); any / bubble / tatakaria — early contributions. Ecosystem collaborators: [qing3a](https://github.com/qing3a) (dsh-plugin-verify, powering the "✓ verified" badge), [wwumit](https://github.com/wwumit) (skills-catalog, powering the "disclosed ✓" badge), [ylwl1997](https://github.com/ylwl1997) (dshbase listing mutual recognition), the awesome-dsh-plugin maintainers (mutual listing PR #994).
+
+Thanks to every user who reported issues through marketplace feedback or GitHub issues — your reports directly drive the fix cadence. To contribute, see [docs/CONTRIBUTING.md](docs/CONTRIBUTING.md) and the [STANDARD.en.md §7 self-check list](STANDARD.en.md).
 
 </details>
 

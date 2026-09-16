@@ -76,7 +76,7 @@ dsh plugin --profile web install bradeGithub/DSH-Plugins-Marketplace   # 重装�
 
 | 能力 | 本市场 | 手动搜索与克隆 |
 |---|---|---|
-| 分发 | 静态索引（CI 生成）经 jsDelivr CDN 分发，浏览侧不消耗 GitHub API；索引不可用时回退搜索 API（未认证 10 次/分） | 每次浏览翻页都消耗未认证 API 配额 |
+| 分发 | 静态索引（CI 生成）多级降级分发：Contents API → jsDelivr → raw → 内置索引 → 磁盘缓存；10 分钟 TTL 内零请求，全失败才回退搜索 API（未认证 10 次/分） | 每次浏览翻页都消耗未认证 API 配额 |
 | 收录 | CI 每 2 小时增量扫描 `dsh-plugin` topic 并合并进索引 | 依赖 awesome 列表或关键词搜索，覆盖靠运气 |
 | 类型适配 | 自动识别 cordis 插件 / SKILL.md / agent 预设 / 安装脚本四型，并完成依赖安装与注册 | 手动判断插件类型、装依赖、写注册条目 |
 | 风险确认 | 第三方安装脚本与 npm 生命周期脚本执行前弹窗确认；安装材料仅作环境变量传入、不落盘 | 本地直接执行陌生仓库脚本 |
@@ -92,10 +92,11 @@ dsh plugin --profile web install bradeGithub/DSH-Plugins-Marketplace   # 重装�
 ```mermaid
 flowchart LR
   CI["GitHub Actions<br/>每 2 小时增量扫描 topic:dsh-plugin"] -->|提交回 main| REG["registry.json / skills.json<br/>静态索引"]
-  REG -->|jsDelivr CDN| UI["市场列表页"]
-  REG -.->|"raw.githubusercontent 兜底"| UI
-  UI -.->|"两源均不可用时"| API["GitHub Search API<br/>10 次/分 · 缓存 10 分钟"]
-  UI --> CMP{"与 installed.json 比对<br/>五重已安装判定"}
+  REG -->|"① Contents API .gz"| UI["市场列表页"]
+  REG -->|"② jsDelivr → raw（.gz 优先）"| UI
+  REG -.->|"③ 内置索引 → 磁盘缓存"| UI
+  UI -.->|"全失败才兜底"| API["GitHub Search API<br/>10 次/分 · TTL 10 分钟"]
+  UI --> CMP{"与 installed.json 比对<br/>六段已安装判定"}
   CMP -->|"未安装 / 需更新"| INS["克隆 → 类型识别 → 环境变量扫描"]
   INS --> GATE{"含安装脚本或<br/>npm 生命周期脚本？"}
   GATE -->|是| OK["弹窗确认后执行"]
@@ -105,8 +106,10 @@ flowchart LR
 ```
 
 - 索引只含仓库元数据（名称 / 描述 / Star / 更新时间 / 标签 / 许可）；安装仍直连 `github.com` 克隆。
-- 已安装判定五重：安装清单 → 目录启发式 → 包名映射（含 `pkg_name` 与 scoped 包）→ `repository` 字段双向校验 → 本体识别；`@deepseek-ai/*` 官方插件自动排除。
+- 已安装判定六段管线：安装清单 → 托管目录启发式（`dirOwners`）→ 本体识别 → profile 映射命中（slug/仓库名/`pkg_name` 与 `repository` 双向校验）→ 脚本缓存 → 缓存包名映射再回查 profile；`@deepseek-ai/*` 官方插件自动排除。
 - 市场本体自更新仅采纳维护者 SSH 签名的 release tag（本地验签 + tag↔版本↔commit SHA 绑定，验不过 fail-closed 拒更）。
+
+分层架构、索引构建算法、版本检测来源表与判定细节见 [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)；安全模型见 [docs/SECURITY.md](docs/SECURITY.md)。
 
 </details>
 
@@ -136,7 +139,7 @@ flowchart LR
 | `/api/marketplace/backup` · `restore/diff` · `backup/webdav` · `restore/webdav` | GET / POST | 备份导出 / 恢复差异 / WebDAV 推拉 |
 | `/api/marketplace/logs` | GET | 脱敏安装日志导出 |
 
-写操作鉴权一致：回环请求直接放行；LAN 请求需 `lanWrite: true` 配置 + `x-dsh-marketplace-token` 会话头。卸载依赖 `installed.json` 记录——仅「通过本市场安装」的插件可完整卸载。完整字段说明见 [docs/README.md](docs/README.md)。
+写操作鉴权一致：回环请求直接放行；LAN 请求需 `lanWrite: true` 配置 + `x-dsh-marketplace-token` 会话头。卸载依赖 `installed.json` 记录——仅「通过本市场安装」的插件可完整卸载。完整接口契约（body 字段 / 返回值 / 状态机）见 [docs/HTTP-API.md](docs/HTTP-API.md)。
 
 </details>
 
@@ -146,14 +149,16 @@ flowchart LR
 - 安装任务是单个长 POST（克隆 + 构建 + 材料确认多轮），短超时反向代理可能切断连接——后端仍继续执行，刷新页面确认结果。
 - 版本检测仅对含 `package.json` 的 cordis 插件生效；skill / 预设 / 脚本类无版本概念。
 - 脚本类插件的「已安装」判定基于缓存目录存在性，删除缓存后恢复可安装状态。
-- 市场中的插件均来自第三方仓库，与 DSH 及本市场无关联；收录不构成推荐或背书。本市场按「现状」提供，不对插件质量、安全性与兼容性作担保——安装前请自行评估仓库可信度。
+- 市场中的插件均来自第三方仓库，由各仓库作者独立维护，与 DSH 及本市场无关联；收录不构成推荐或背书。本市场按「现状」（AS-IS）提供，不对插件质量、安全性与兼容性作担保；因安装或使用第三方插件造成的任何直接或间接损失（含数据丢失、系统损坏、隐私泄露），本市场及开发者不承担责任——安装前请自行评估仓库可信度。完整限制清单见 [docs/USAGE.md](docs/USAGE.md) §7-8。
 
 <details>
 <summary>生态与致谢</summary>
 
-[Harness Desktop](https://github.com/baiyuscc13724-max/deepseek-harness-desktop)：第三方维护的 Windows 桌面版，稳定版内置本市场；[awesome-dsh-plugin](https://github.com/awesome-dsh-plugin/awesome-dsh-plugin)：社区精选列表，「社区收录」徽章数据源，与本市场互链收录。两者与 DeepSeek 官方均无关联。
+[Harness Desktop](https://github.com/baiyuscc13724-max/deepseek-harness-desktop)：第三方维护的 Windows 桌面版，稳定版内置本市场（该条目由桌面版作者提交，其同时维护桌面端使用的市场分支）；[awesome-dsh-plugin](https://github.com/awesome-dsh-plugin/awesome-dsh-plugin)：社区精选列表，「社区收录」徽章数据源，与本市场互链收录。两者与 DeepSeek 官方均无关联。
 
-代码贡献者：[lgnorant-lu](https://github.com/lgnorant-lu)（端点鉴权、安全加固、测试体系）、[baiyuscc13724-max](https://github.com/baiyuscc13724-max)（桌面版集成）、[anupamme](https://github.com/anupamme)（SSRF 白名单防护）等；生态协作者：[qing3a](https://github.com/qing3a)（dsh-plugin-verify）、[wwumit](https://github.com/wwumit)（skills-catalog）、[ylwl1997](https://github.com/ylwl1997)（dshbase）。
+代码贡献者：[lgnorant-lu](https://github.com/lgnorant-lu)（写端点鉴权、安全健壮性修复 PR #63、机械化测试体系 PR #66 等核心贡献）、[baiyuscc13724-max](https://github.com/baiyuscc13724-max)（Harness Desktop 集成与安装流程简化 #1/#2）、[anupamme](https://github.com/anupamme)（OrbisAI Security，verify-installability SSRF 白名单防护 #213）；any / bubble / tatakaria——早期贡献。生态协作者：[qing3a](https://github.com/qing3a)（dsh-plugin-verify，驱动「✓ 已验证」徽章）、[wwumit](https://github.com/wwumit)（skills-catalog，驱动「披露 ✓」徽章）、[ylwl1997](https://github.com/ylwl1997)（dshbase 收录互认）、awesome-dsh-plugin 维护者（互链收录 PR #994）。
+
+感谢每一位通过市场反馈与 issue 报告问题的用户——你们的报告直接驱动修复节奏。参与贡献见 [docs/CONTRIBUTING.md](docs/CONTRIBUTING.md) 与 [STANDARD.md §7 自测清单](STANDARD.md)。
 
 </details>
 
