@@ -52,12 +52,16 @@ const m4First = m4.run(async () => {
 });
 await m4Started.promise;
 let m4SecondThrew = false;
+let m4BusyCode = null;
 try {
   await m4.run(async () => "second");
 } catch (e) {
   m4SecondThrew = true;
+  m4BusyCode = e?.code ?? null;
 }
 check("mutex 忙时 run 抛错", m4SecondThrew, true);
+// busy 错误带 code 标记是调用侧契约：routes.js 据此把 TOCTOU 竞态失败映射为 409
+check("mutex busy 错误带 MUTEX_BUSY code", m4BusyCode, "MUTEX_BUSY");
 m4Release.resolve();
 check("mutex 忙时不影响首个任务", await m4First, "first");
 

@@ -163,7 +163,13 @@ check("uninstall 路由已注册", !!uninstallHandler, true);
 const compatibilityIndex = await lib.ensureInstalledIndex();
 check("兼容 ensureInstalledIndex 导出仍返回索引", compatibilityIndex instanceof Object && compatibilityIndex.profile instanceof Map, true);
 
-const mkReq = (url) => ({ method: "GET", url });
+// GET 也带 trusted 头（与真实客户端一致——client.js 全部 fetch 都带 X-DSH-Marketplace: 1）：
+// ?refresh=1 属触发上游拉取的特权修饰，缺 trusted 头会被 isTrustedRequest 拦成 403。
+const mkReq = (url) => ({
+  method: "GET",
+  url,
+  headers: { "x-dsh-marketplace": "1", host: "127.0.0.1:3080" }
+});
 const mkRes = () => {
   let status = 0;
   let body = null;
