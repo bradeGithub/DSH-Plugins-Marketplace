@@ -8,7 +8,8 @@ set -e
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 REPO="$(cd "$SCRIPT_DIR/.." && pwd)"
 SRC="$SCRIPT_DIR/hooks"
-DST="$REPO/.git/hooks"
+# worktree 下 .git 是文件而非目录；hooks 共享主仓 git-common-dir
+DST="$(git -C "$REPO" rev-parse --path-format=absolute --git-common-dir)/hooks"
 
 if [ ! -d "$DST" ]; then
   echo "error: .git/hooks not found; run from repository root" >&2

@@ -34,6 +34,7 @@
   git config tag.gpgSign true   # 之后 git tag vX.Y.Z -m ... 即自动签名
   ```
 - 硬门控：`pre-push` hook（`scripts/hooks/pre-push`）拦截未通过验签的 `v*` tag 推送及 `v*` tag 删除；`tag-verify.yml` CI 在 tag 推送后服务端复核告警。本地可用 `node scripts/verify-tag.mjs vX.Y.Z` 预验。
+- 私钥带密码时，先装进 ssh-agent 再签名（`scripts/dev/load-release-keys.{sh,ps1}`）：Windows 需先启用 `ssh-agent` 服务（`Set-Service ssh-agent -StartupType Automatic; Start-Service ssh-agent`）并把 `gpg.ssh.program` 指向系统 `ssh-keygen.exe`（Git 自带 msys 版够不到 Windows agent）；macOS 用 `ssh-add --apple-use-keychain` 一次即永久（Keychain 持久化）；Linux 交给桌面 keyring。每次开机/登录装载一次即可，agent 会话内任意进程签名免交互。
 - Tag 主题短标题：`vX.Y.Z — <一句主题> / <English subtitle>`。
 - 只给已合并进上游 main 的提交打 Tag，不打分支上未发布的中间态。
 

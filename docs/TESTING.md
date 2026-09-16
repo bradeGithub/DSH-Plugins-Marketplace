@@ -46,12 +46,12 @@
 - [6. 编写清单](#6-编写清单)
 - [7. 已知 lib API 问题](#7-已知-lib-api-问题)
 <!-- /TOC -->
-| **unit** | `scripts/tests/unit/` | 纯函数、app 用例/执行器、bundle assembler、VM 运行时契约和静态契约 | 68 个测试文件 |
+| **unit** | `scripts/tests/unit/` | 纯函数、app 用例/执行器、bundle assembler、VM 运行时契约和静态契约 | 72 个测试文件 |
 | **integration** | `scripts/tests/integration/` | 临时 DSH_HOME/真实临时目录、mock fetch/proc、真实测试运行器子进程 | 18 个测试文件 |
 | **e2e** | `scripts/tests/e2e/` | 真实 git 流程、fixture 仓库与真实 DSH | 3 个测试文件 |
 | **frontend browser e2e** | `scripts/tests/browser/` | 真实 DSH Web UI/marketplace bundle、Playwright context 与确定性 API fixture | 9 个行为契约 |
 
-统一 Node 运行器：`node scripts/tests/run.mjs`（`--level=unit|integration|e2e`、`--json`）。当前共 89 个 Node 测试入口；精确通过数以每文件末尾 `N passed` 和运行器汇总为准。前端浏览器层是独立质量门，不计入该 89 个入口、Node coverage 或 mutation 数字。
+统一 Node 运行器：`node scripts/tests/run.mjs`（`--level=unit|integration|e2e`、`--json`）。当前共 93 个 Node 测试入口；精确通过数以每文件末尾 `N passed` 和运行器汇总为准。前端浏览器层是独立质量门，不计入该 93 个入口、Node coverage 或 mutation 数字。
 
 ## 2. 命名与位置
 
@@ -60,7 +60,8 @@
 - 相对 import 路径按层级调整（unit 在 `tests/unit/`，lib 需 `../../../lib/index.js`）
 - integration 隔离硬规则（run.mjs 并行执行测试文件，以下两条违例会跨文件互踩）：
   - **不触碰仓库根文件**：bundled 索引「缺失」场景用 `DSH_MARKETPLACE_BUNDLED_DIR` 指向空临时目录覆盖（`lib/index.js` 的 `bundledFile` 读该 env），禁止 rename/unlink 仓库根 `registry.json`/`skills.json`——并行窗口内其他文件会读到缺失而崩溃；
-  - **禁真实网络**：调用 `lib.apply()` 等会 detached 触发 `getList()` 预热/自更新检测的入口前，先装 `globalThis.fetch = () => Promise.reject(...)` 拒绝桩——漏出的真实 socket 会拖住事件循环直到 TCP 超时，单文件耗时可从秒级膨胀到分钟级且随网络抖动。
+  - **禁真实网络**：调用 `lib.apply()` 等会 detached 触发 `getList()` 预热/自更新检测的入口前，先装 `globalThis.fetch = () => Promise.reject(...)` 拒绝桩——漏出的真实 socket 会拖住事件循环直到 TCP 超时，单文件耗时可从秒级膨胀到分钟级且随网络抖动；
+  - **自更新验签注入面**：`DSH_MARKETPLACE_UPDATE_REPO_URL` 把更新源指向本地 `git init` fixture 仓库（配合 `ssh-keygen` 可造真实 `git tag -s` 签名 tag，走真 git 对象零网络）；`DSH_MARKETPLACE_UPDATE_EXTRA_SIGNERS` 追加测试公钥进信任根（**只追加不替换**，生产 `ALLOWED_SIGNERS` 永远在列）——两个 env 都在 `apply()` 装配 updateUseCase 时一次性读取，须在 **apply 调用之前**设置（测试里通常即 import 前），且绝不向注入面写入真实私钥。
 
 ## 3. 断言框架
 
@@ -85,7 +86,7 @@ process.exit(fail === 0 ? 0 : 1);
 ## 4. 覆盖率要求
 
 - 目标：**hook 校验逻辑（validate.mjs、toc.mjs）100%**
-- `lib` 与纳入清单的 Node 脚本：**非豁免函数 100%**（当前为 584/584）
+- `lib` 与纳入清单的 Node 脚本：**非豁免函数 100%**（当前为 622/622）
 - `lib/client.js` 是浏览器 bundle，不计入 Node V8 函数口径；由 `client-runtime.test.mjs` 的 VM 执行契约、`client-assembler.test.mjs` 的字节无漂移契约和 `client-logic.test.mjs` 的消费纯函数契约守护
 - 检查：`node scripts/coverage.mjs`（NODE_V8_COVERAGE 零依赖）
 - coverage 不在 pre-commit 自动检查中；由 `node scripts/hooks/check.mjs --only=coverage` 或 CI 显式执行
@@ -135,7 +136,7 @@ process.exit(fail === 0 ? 0 : 1);
 
 `lib/app/install-exec.js` 的 `createInstallExecutor()` 将 `installRepo` 六类执行分支从入口移出，但只接收显式 fs/path/proc/scan/package/adapters/env 能力，不读取 HTTP、入口状态或 profile 全局变量。`lib/index.js` 保留原 `installRepo` 签名和默认 profile snapshot wrapper；`createInstallUseCase()` 继续负责 installed/feedback 持久化、失败清理和结果映射。
 
-`app-install-exec.test.mjs` 不是类型检测测试：独立 Oracle 直接断言 skill/preset 的真实复制与过滤、bundle 注册参数和无 patch 副作用、script 的平台选择/cwd/env、cordis-plugin 的依赖清洗与 build/npm 顺序、多包聚合/入口 warnings/patch path，以及 manual 的 README 截断和零安装副作用。`integration/install-exec.test.mjs` 再用真实临时目录验证 skill/preset/plugin 的文件结果。当前 focused 行为 Oracle 为 **28/28**，真实目录 integration 为 **7/7**；入口 `lib.test.mjs` 为 **345/345**，install E2E 为 **180/180**。
+`app-install-exec.test.mjs` 不是类型检测测试：独立 Oracle 直接断言 skill/preset 的真实复制与过滤、bundle 注册参数和无 patch 副作用、script 的平台选择/cwd/env、cordis-plugin 的依赖清洗与 build/npm 顺序、多包聚合/入口 warnings/patch path，以及 manual 的 README 截断和零安装副作用。`integration/install-exec.test.mjs` 再用真实临时目录验证 skill/preset/plugin 的文件结果。当前 focused 行为 Oracle 为 **34/34**，真实目录 integration 为 **9/9**；入口 `lib.test.mjs` 为 **376/376**，install E2E 为 **180/180**。
 
 安装执行器 mutation 覆盖 m151–m164 共 14 个行为突变，涵盖分支选择、复制过滤、bundle spec、平台脚本、环境构建、依赖清洗、构建/npm 顺序、入口 warnings、patch 快照、README 截断、错误传播和版本结果；完整 mutation 结果为 **269/269**（246 行为 + 23 静态契约，0 survivor、0 skip）。新增 executor 不使用 coverage 豁免。
 
@@ -194,7 +195,7 @@ repository-scan adapter 的行为契约覆盖完整 unit/integration、测试金
 
 `scripts/tests/unit/domain-adaptor.test.mjs` 与 `scripts/tests/unit/infra-adaptor.test.mjs` 直接验证输入不别名、空转回退、显式能力注入和配置加载失败；`lib.test.mjs` 与 list/route integration 继续通过兼容出口和生产 `adaptor.json` 验证 MuseAI 重定向、列表移除/补入及安装目标保持不变。domain 不导入 Node IO、环境或入口，routes 只消费注入的两个能力。
 
-adaptor 规则新增行为突变 m251–m260 共 10 个，全部被行为测试锁定；与 metadata 突变合计后，完整 mutation 为 **269/269**（246 行为 + 23 静态契约，0 survivor、0 skip）。完整 unit/integration 为 **82/82**，测试金字塔为 **85/85**，coverage 为 **584/584 函数（100%）**；property-based **8/8**、smoke **192/192**、frontend browser E2E **9/9**、真实 host/API E2E **20/20**、install E2E **180/180** 均通过。
+adaptor 规则新增行为突变 m251–m260 共 10 个，全部被行为测试锁定；与 metadata 突变合计后，完整 mutation 为 **269/269**（246 行为 + 23 静态契约，0 survivor、0 skip）。完整 unit/integration 为 **89/89**，测试金字塔为 **92/92**，coverage 为 **622/622 函数（100%）**；property-based **8/8**、smoke **192/192**、frontend browser E2E **9/9**、真实 host/API E2E **20/20**、install E2E **180/180** 均通过。
 
 ### marketplace metadata contract
 
@@ -236,7 +237,7 @@ marketplace metadata 新增行为突变 m261–m270 共 10 个，全部被行为
 
 **质量门分层：** 默认 `pre-commit` 只执行快速的 syntax、unit/integration、TOC 和 secret 检查；完整 Node E2E 通过 `node scripts/hooks/check.mjs --only=e2e` 执行，浏览器 E2E 通过 `node scripts/tests/frontend-e2e.mjs` 执行，coverage 和 mutation 使用各自显式命令。严格 E2E 模式下缺少 git、npm、pnpm 或 DSH CLI 会失败，不会把未执行计为通过。
 
-**当前质量边界：** `584/584` 函数覆盖、`269/269` mutation、`8/8` property、`192/192` smoke、Node E2E `180/180` + `20/20` + `9/9` 和浏览器 E2E `9/9` 提供了独立行为证据，但函数覆盖不代表分支或语义完备。`.github/workflows/quality.yml` 以 `contents: read` 建立可复现的只读 CI 质量门：安装 Node 24、pnpm/DSH CLI、browser lockfile 依赖和 Playwright 托管 Chromium，并显式执行严格 Node E2E、浏览器 E2E、coverage、property、smoke 和 mutation。
+**当前质量边界：** `622/622` 函数覆盖、`269/269` mutation、`8/8` property、`192/192` smoke、Node E2E `180/180` + `20/20` + `9/9` 和浏览器 E2E `9/9` 提供了独立行为证据，但函数覆盖不代表分支或语义完备。`.github/workflows/quality.yml` 以 `contents: read` 建立可复现的只读 CI 质量门：安装 Node 24、pnpm/DSH CLI、browser lockfile 依赖和 Playwright 托管 Chromium，并显式执行严格 Node E2E、浏览器 E2E、coverage、property、smoke 和 mutation。
 
 **HTTP/浏览器响应契约兼容：** 当前生产 HTTP marketplace 响应由 `lib/http/marketplace-contract.js` 统一附加 `schemaVersion: 1`；它只复制顶层对象，不删除未知字段。缺少 `schemaVersion` 的 legacy producer 仍按旧字段消费，新增字段对旧 consumer 保持可忽略；破坏性字段/状态变更必须提升主版本，新增字段先保持可选。Node route Oracle 与 browser E2E 覆盖 legacy producer（允许缺失版本和可选字段）及 forward producer（版本字段、未知顶层和列表项字段），未知状态不得被当作 `done`，consumer 必须进入失败/人工处理路径。日志事件版本不复用 HTTP payload 版本。
 

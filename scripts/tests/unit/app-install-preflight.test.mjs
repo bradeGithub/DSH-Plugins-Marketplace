@@ -132,7 +132,7 @@ function makePreflight(overrides = {}) {
   check("脚本问题 id", result.questions[0].id, "__confirm_script__");
   const cancelled = await run({ answers: { __confirm_script__: "cancel" } });
   check("脚本拒绝返回 aborted", cancelled.status, "aborted");
-  check("脚本拒绝不清理缓存（保留确认重试上下文）", calls, []);
+  check("脚本拒绝清理缓存（与其他门一致；残留缓存会被判为已安装）", calls, [["cleanupCache", "/cache/demo"]]);
 }
 
 {
@@ -202,6 +202,18 @@ function makePreflight(overrides = {}) {
   const allowed = await run({ answers: { __confirm_bundle__: "allow" } });
   check("bundle 允许返回 continue", allowed.status, "continue");
   check("bundle 允许回传类型", allowed.type, "bundle");
+}
+
+{
+  // bundle 门内复读 package.json 失败（文件在分类后被删等竞态）：catch 归 null →
+  // 用 repo 名兜底、patch 置空，确认门照常弹出而非崩溃
+  const { run } = makePreflight({
+    detectTypeDetail: async () => ({ type: "bundle", reasonKey: "reason.bundle", hintKey: "hint.bundle" }),
+    readPackageJsonObject: async () => { throw new Error("mid-flight delete"); }
+  });
+  const asked = await run();
+  check("bundle 门读包失败仍弹门", asked.status, "awaiting-input");
+  check("bundle 门读包失败问题 id", asked.questions[0].id, "__confirm_bundle__");
 }
 
 {

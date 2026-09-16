@@ -386,5 +386,34 @@ for (const file of [
 }
 check("公共文档与源码注释不含内部推进标识", publicTextFindings, []);
 
+// ── 文档漂移守卫：文档中的人工计数/登记表必须与实际状态一致，防再次过时 ──
+const testingDoc = readFileSync(join(ROOT, "docs", "TESTING.md"), "utf8");
+const countTestFiles = (dir, re) =>
+  readdirSync(join(ROOT, dir)).filter((f) => re.test(f)).length;
+const unitCount = countTestFiles("scripts/tests/unit", /\.test\.mjs$/);
+const integrationCount = countTestFiles("scripts/tests/integration", /\.test\.mjs$/);
+const e2eCount = countTestFiles("scripts/tests/e2e", /\.e2e\.mjs$/);
+const docRowCount = (row) => Number(testingDoc.match(new RegExp(`\\*\\*${row}\\*\\*[^\\n]*?(\\d+) 个测试文件`))?.[1]);
+check("TESTING.md unit 计数与实际一致", docRowCount("unit"), unitCount);
+check("TESTING.md integration 计数与实际一致", docRowCount("integration"), integrationCount);
+check("TESTING.md e2e 计数与实际一致", docRowCount("e2e"), e2eCount);
+check("TESTING.md Node 入口总数与实际一致", Number(testingDoc.match(/(\d+) 个 Node 测试入口/)?.[1]), unitCount + integrationCount + e2eCount);
+
+// lib 源码中的 DSH_MARKETPLACE_* 环境变量必须在公开文档登记（README/标准/测试/发布文档之一）
+const docsCorpus = ["README.md", "README.en.md", "STANDARD.md", "STANDARD.en.md"]
+  .map((f) => readFileSync(join(ROOT, f), "utf8"))
+  .concat(collectPublicFiles(join(ROOT, "docs"), [".md"]).map((f) => readFileSync(f, "utf8")))
+  .join("\n");
+const libEnvVars = [...new Set(lib.match(/DSH_MARKETPLACE_[A-Z_]+/g) ?? [])].sort();
+check("lib 环境变量全部有文档登记", libEnvVars.filter((v) => !docsCorpus.includes(v)), []);
+
+// install-hooks 登记的每个 hook 必须在 DEVELOPMENT.md 与 GIT_HOOKS.md 中出现
+const hooksList = readFileSync(join(ROOT, "scripts", "install-hooks.sh"), "utf8")
+  .match(/HOOKS="([^"]+)"/)?.[1]?.split(" ") ?? [];
+const devDoc = readFileSync(join(ROOT, "docs", "DEVELOPMENT.md"), "utf8");
+const hooksDoc = readFileSync(join(ROOT, "docs", "GIT_HOOKS.md"), "utf8");
+check("install-hooks 的 hook 全部写入 DEVELOPMENT.md", hooksList.filter((h) => !devDoc.includes(h)), []);
+check("install-hooks 的 hook 全部写入 GIT_HOOKS.md", hooksList.filter((h) => !hooksDoc.includes(h)), []);
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail === 0 ? 0 : 1);

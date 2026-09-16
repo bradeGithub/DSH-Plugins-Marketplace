@@ -3,6 +3,7 @@
 # 推送 refs/tags/v* 必须通过 lib/allowed-signers.js 信任根验签（git tag -s 签名）；
 # 删除 v* tag 一律拒绝。分支与非 v* tag 推送不拦截。
 # 由 scripts/install-hooks.sh 安装，可被 git push --no-verify 跳过（不推荐）。
-# hook 位于 .git/hooks/，仓库根在其上两级。stdin 携带推送 refs，直接透传给 node。
-ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
+# hook 位于共享 .git/hooks/，不能用 $0 上溯（linked worktree 下会解析到主仓）。
+# git 保证 hook 的 cwd = 当前工作树顶，rev-parse 取其绝对路径。stdin 携带推送 refs，直接透传给 node。
+ROOT="$(git rev-parse --show-toplevel)"
 node "$ROOT/scripts/hooks/check.mjs" --stage=pre-push

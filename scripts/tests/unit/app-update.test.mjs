@@ -309,5 +309,56 @@ function makeUpdate(overrides = {}) {
   check("closeState 优先用 result.latestVersion", flow.getState().latestVersion, "1.3.0");
 }
 
+{
+  // 候选 tag 取证失败（fetch/cat-file 抛错）→ catch 归 null → 跳过验下一个
+  const { flow } = makeUpdate({
+    listTagRefs: async () => [
+      { name: "v9.9.9", sha: TAG_SHA, type: "tag" },
+      { name: "v1.2.0", sha: TAG_SHA, type: "tag" }
+    ],
+    runGit: async (args) => {
+      if (args.includes("cat-file")) {
+        const name = args[args.length - 1];
+        if (name === "v9.9.9") throw new Error("object gone");
+        return { stdout: tagFor(name) };
+      }
+      return { stdout: "" };
+    }
+  });
+  await flow.check();
+  check("tag 取证失败跳过验下一个", flow.getState().latestVersion, "1.2.0");
+  check("取证失败不阻塞更新判定", flow.getState().updateAvailable, true);
+}
+
+{
+  // ALLOW_UNSIGNED 逃生口内：未签名 tag 的版本绑定拉取失败 → 不放行
+  const { flow } = makeUpdate({
+    allowUnsigned: true,
+    runGit: async (args) => args.includes("cat-file") ? { stdout: makeTagText({ tag: "v1.2.0" }) } : { stdout: "" },
+    fetchVersionAtRef: async () => { throw new Error("version fetch down"); }
+  });
+  await flow.check();
+  check("逃生口版本取证失败不放行", flow.getState().error, "no maintainer-signed release tag found");
+}
+
+{
+  // 已签名 tag 的版本绑定拉取失败 → 绑定判不过 → 不放行
+  const { flow } = makeUpdate({
+    fetchVersionAtRef: async () => { throw new Error("version fetch down"); }
+  });
+  await flow.check();
+  check("已签名版本绑定取证失败不放行", flow.getState().error, "no maintainer-signed release tag found");
+}
+
+{
+  // 取证记录写失败（盘满等）：.catch 吞掉，更新结果仍返回 done
+  const { flow, setOwnVersion } = makeUpdate({
+    recordSelfUpdate: async () => { throw new Error("disk full"); },
+    rename: async (from, to) => { if (to === DEST) setOwnVersion("1.2.0"); }
+  });
+  const result = await flow.run();
+  check("取证写失败不影响更新结果", result, { status: "done", installedVersion: "1.2.0" });
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail === 0 ? 0 : 1);

@@ -25,6 +25,18 @@ import { fileURLToPath } from "node:url";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
 const TESTS = join(ROOT, "scripts", "tests");
+
+// 与 check.mjs 同款防护：本运行器若经 git hook（linked worktree 注入 GIT_DIR/
+// GIT_INDEX_FILE）或其他带污染 GIT_* 的上下文启动，fixture 仓库的 git 调用会
+// 穿透写进真实仓库。先删干净再 spawn 子测试。
+for (const k of [
+  "GIT_DIR", "GIT_WORK_TREE", "GIT_INDEX_FILE", "GIT_OBJECT_DIRECTORY",
+  "GIT_ALTERNATE_OBJECT_DIRECTORIES", "GIT_QUARANTINE_PATH", "GIT_PREFIX",
+  "GIT_LITERAL_PATHSPECS", "GIT_AUTHOR_NAME", "GIT_AUTHOR_EMAIL", "GIT_AUTHOR_DATE",
+  "GIT_COMMITTER_NAME", "GIT_COMMITTER_EMAIL", "GIT_COMMITTER_DATE", "GIT_EDITOR",
+]) {
+  delete process.env[k];
+}
 const LEVELS = ["unit", "integration", "e2e"];
 const levelArg = process.argv.find((a) => a.startsWith("--level="));
 const level = levelArg ? levelArg.split("=")[1] : "all";

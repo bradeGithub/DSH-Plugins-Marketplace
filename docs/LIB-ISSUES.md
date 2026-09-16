@@ -29,6 +29,7 @@ API 设计层面的入参风格 / async 边界 / 副作用 / Map 依赖**本质�
 | 8 | `loadOwnRepo()` | async，依赖 DSH_HOME 目录结构 | 仍成立。直接断言（lib.test 返回对象或 null） | 测试需构造目录 |
 | 9 | `detectInstalled(repo)` | 入参 repo（对象）非字符串 | **内部已演进，签名仍成立**：#157 多路径判定加强（dirOwners 属主校验、包名映射 repository 撞名拦截、官方包排除、name-null 语义）。直接断言（installed-index.test 25+ 场景） | 与 normalizeRepo 相同风格（对象入参） |
 | 10 | `fetchJson` 错误路径 | 403 时 `res.text()` 后再 throw | **描述已更新（已演进）**：现 `(url, extraHeaders={})` + timeout + `responseTooLarge` 超限防护 + content-length 快路径 / 流式计数兜底；错误路径统一 `!res.ok` 抛错（非仅 403）。未导出 → 经 `fetchAllRepos` 内部触发间接测试；security-guards 静态锁「超限抛错」契约 | 错误信息包含响应体，测试要完整 mock |
+| 11 | `__confirm_script__` 中止分支 | 不调用 `cleanup`（其余各门中止均清理克隆缓存）；unit 测试以「保留确认重试上下文」锁定 | **已修复**（文档审计发现并裁定）：保留的缓存被 `scanCacheEntries` 判为 script 型 → `cacheScripts` 命中 → 仓库误显「已安装」且 UI 锁定安装按钮，「保留重试」目的反而无法从 UI 达成。修复：中止分支补 `await cleanup(cacheDir)` 与其他门一致；`app-install-preflight.test` 断言同步更新，`install.e2e` 注释归位 | 用户明确拒绝执行后仓库曾被误标已安装，无 UI 补救路径（无安装记录 → 无卸载入口，需手删缓存目录） |
 
 ## 汇总观察
 

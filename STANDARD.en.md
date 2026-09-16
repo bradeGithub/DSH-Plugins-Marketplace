@@ -79,6 +79,9 @@ The marketplace scans feature files in the repo root in a **fixed order** — **
 > 1. **Rule #2 precedes #3/#4 (explicit declaration wins, enforced mechanically)** — a repo declaring `dsh` plugin capability is never treated as script type even with install scripts at the root; shipping convenience scripts alongside a cordis plugin is a legitimate shape. Still, scripts at the root mislead manual execution — move them into a `scripts/` subdirectory (see §6.1).
 > 2. The `dsh` field in `package.json` (or `@deepseek-ai/*` dependencies) is the **plugin capability declaration** — without it, a root package.json is treated as a plain npm project.
 
+> ⚠️ **Official CLI commands in the README take precedence (delegated-install channel)**: after cloning, if the README contains `dsh plugin install <target>` / `dsh plugin add <target>`, the marketplace prefers the command whose target points at this repository (including its `package.json` name), falling back to the first command when none match; it asks the user for confirmation, then runs the official CLI install (success completes the install; failure falls back to the regular pipeline above).
+> **Target allowlist** — only two forms: an npm package name `[@scope/]name[@version|dist-tag]`, or a GitHub `owner/repo`; targets containing shell metacharacters (``& | ; < > ( ) % ! ^ $ ` " '`` or whitespace) or flag shapes (`-x`/`--flag`) are rejected and fall back to the regular pipeline (on win32 the command is joined through `cmd.exe /c`, so the allowlist is the command-injection boundary). Make sure the `dsh plugin` commands in your README target this repository or the correct npm package name — a non-matching command is only used as a last-resort fallback when nothing matches.
+
 ---
 
 ## 2. Type A: cordis plugin (recommended primary form)
