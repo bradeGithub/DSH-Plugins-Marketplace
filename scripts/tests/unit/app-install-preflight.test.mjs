@@ -186,5 +186,29 @@ function makePreflight(overrides = {}) {
   check("手动取消返回 aborted", cancelled.status, "aborted");
 }
 
+// bundle 确认门：registerBundlePackage 写 profile 依赖 + pnpm install，
+// 依赖生命周期脚本行为不确定——与 npm 生命周期门同级，需显式 allow
+{
+  const { run, calls } = makePreflight({
+    detectTypeDetail: async () => ({ type: "bundle", reasonKey: "reason.bundle", hintKey: "hint.bundle" }),
+    readPackageJsonObject: async () => ({ name: "fake-bundle", dsh: { bundle: { patch: "patches/x.cordis.patch.yml" } } })
+  });
+  const asked = await run();
+  check("bundle 问题 id", asked.questions[0].id, "__confirm_bundle__");
+  check("bundle 提供 allow/deny", asked.questions[0].options.map((o) => o.value), ["allow", "deny"]);
+  const denied = await run({ answers: { __confirm_bundle__: "deny" } });
+  check("bundle 拒绝返回 aborted", denied.status, "aborted");
+  check("bundle 拒绝清理缓存", calls.map(([name]) => name).includes("cleanupCache"), true);
+  const allowed = await run({ answers: { __confirm_bundle__: "allow" } });
+  check("bundle 允许返回 continue", allowed.status, "continue");
+  check("bundle 允许回传类型", allowed.type, "bundle");
+}
+
+{
+  const { run } = makePreflight();
+  const result = await run({ answers: { API_KEY: "secret" } });
+  check("cordis-plugin 不弹 bundle 门", (result.questions ?? []).some((q) => q.id === "__confirm_bundle__"), false);
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail === 0 ? 0 : 1);

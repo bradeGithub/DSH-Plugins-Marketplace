@@ -135,6 +135,16 @@ check("runInstallCli 执行前过目标白名单", /if \(!isCliInstallTarget\(cl
 check("白名单门先于 cliExec 日志与 runDsh", /cliUnsafeTarget[\s\S]*?cliExec[\s\S]*?runDsh/.test(lib), true);
 check("白名单 npm 形态字符集（无 cmd 元字符）", lib.includes("(@[a-z0-9][\\w.-]*\\/)?[a-z0-9][\\w.-]*(@[\\w.*~+-]+)?$"), true);
 
+// ---- 安装确认门补全（CLI 代执行 + bundle 依赖注册）----
+// CLI 代执行在 preflight 之前短路整条管线，白名单只保证 target 形态安全，
+// 「是否代执行第三方命令」必须显式确认：__confirm_cli__ 未答 → awaiting-input；
+// cancel → cliSkipped 回退常规安装（不中止）；confirm 门必须先于 cliExec/runDsh。
+// bundle 类型此前绕过全部 consent 门——registerBundlePackage 写 profile 依赖 +
+// pnpm install，git/file 依赖 prepare 行为不确定：__confirm_bundle__ deny → aborted。
+check("CLI 确认门先于执行", /__confirm_cli__ === void 0[\s\S]*?awaiting-input[\s\S]*?cliExec[\s\S]*?runDsh/.test(lib), true);
+check("CLI 确认 cancel 回退常规安装", /String\(answers\.__confirm_cli__\) !== "continue"\) \{[\s\S]*?cliSkipped[\s\S]*?status: "continue"/.test(lib), true);
+check("bundle 确认门存在且 deny 中止", /type === "bundle" && answers\.__confirm_bundle__ === void 0[\s\S]*?awaiting-input[\s\S]*?__confirm_bundle__\) === "deny"[\s\S]*?status: "aborted"/.test(lib), true);
+
 // ---- 解压边界：压缩炸弹（gz 源解压后膨胀）----
 // readBodyLimited 限制的是压缩后字节——100MB 重复数据 gzip 后仅 ~100KB 全量放行，
 // gunzipSync 解压出 100MB 内存膨胀（zip bomb）。zlib 的 maxOutputLength 选项在解压

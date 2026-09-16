@@ -566,6 +566,11 @@ function setupUrlRewrite(owner, repoName) {
 
     let r = await postInstall("e2e-owner/demo-plugin", {});
     check("e2e cordis 安装状态 200", r.status, 200);
+    // CLI 代执行确认门：README 含 CLI 指令 → 首次返回 awaiting-input；
+    // cancel 不中止安装，回退常规市场流程
+    check("e2e CLI 确认门 awaiting-input", r.body && r.body.status, "awaiting-input");
+    check("e2e CLI 确认门问题 id", r.body && r.body.questions && r.body.questions[0] && r.body.questions[0].id, "__confirm_cli__");
+    r = await postInstall("e2e-owner/demo-plugin", { __confirm_cli__: "cancel" });
     check("e2e cordis 响应 done", r.body && r.body.status, "done");
     check("e2e cordis installed", r.body && r.body.installed, true);
     check("e2e cordis 类型", r.body && r.body.type, "cordis-plugin");
@@ -807,6 +812,9 @@ function setupUrlRewrite(owner, repoName) {
     "package.json": JSON.stringify({ name: "demo-cli-pkg", version: "1.0.0", dsh: {} }),
   });
   r = await postInstall("e2e-owner/demo-cli", {});
+  check("e2e CLI 确认门 awaiting-input", r.body && r.body.status, "awaiting-input");
+  check("e2e CLI 确认门问题 id", r.body && r.body.questions && r.body.questions[0] && r.body.questions[0].id, "__confirm_cli__");
+  r = await postInstall("e2e-owner/demo-cli", { __confirm_cli__: "continue" });
   check("e2e CLI 安装 done", r.body && r.body.status, "done");
   check("e2e CLI 安装类型 cli", r.body && r.body.type, "cli");
   check("e2e CLI 安装 cliCommand", r.body && r.body.cliCommand, "dsh plugin --profile web add demo-cli-pkg");
