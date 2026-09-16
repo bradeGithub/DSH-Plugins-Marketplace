@@ -334,7 +334,15 @@ const MUTATIONS = [
     type: "behavior",
     pattern: /if \(type === "script" && String\(answers\.__confirm_script__\) !== "continue"\) \{/g,
     replacement: "if (false) {",
-    note: "script 类型非 continue 必须返回 aborted 且保留缓存（确认重试上下文）"
+    note: "script 类型非 continue 必须清理克隆缓存并返回 aborted"
+  },
+  {
+    id: "m31b",
+    name: "script 取消不清理缓存",
+    type: "behavior",
+    pattern: /logLine\(message\(lang, "scriptCancelled"\)\);\n      await cleanup\(cacheDir\);/g,
+    replacement: "logLine(message(lang, \"scriptCancelled\"));",
+    note: "script 取消必须清理克隆缓存——残留会被 scanCacheEntries 判为已安装并锁死安装按钮"
   },
   {
     id: "m32",

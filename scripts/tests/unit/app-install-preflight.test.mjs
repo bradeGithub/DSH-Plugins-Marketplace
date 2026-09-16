@@ -132,7 +132,7 @@ function makePreflight(overrides = {}) {
   check("脚本问题 id", result.questions[0].id, "__confirm_script__");
   const cancelled = await run({ answers: { __confirm_script__: "cancel" } });
   check("脚本拒绝返回 aborted", cancelled.status, "aborted");
-  check("脚本拒绝不清理缓存（保留确认重试上下文）", calls, []);
+  check("脚本拒绝清理缓存（与其他门一致；残留缓存会被判为已安装）", calls, [["cleanupCache", "/cache/demo"]]);
 }
 
 {
