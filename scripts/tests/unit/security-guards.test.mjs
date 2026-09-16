@@ -283,6 +283,28 @@ check("全部响应读取经 readBodyLimited（≥8 处）", (lib.match(/readBod
 // prototype（own 检查）」「保留正常字段」等 7 处覆盖执行行为。
 // 契约已随行为覆盖退役——不为此保留源码正则面。
 
+// ---- 自更新完整性锚（签名 tag → sha 取证 → 原子替换）----
+// 威胁模型：上游仓库/账号被接管时，main HEAD 与未签名 tag 都不可信；唯一锚是
+// 维护者离线私钥对 annotated tag 的 SSHSIG 签名。契约：
+// ① 验签函数在 rename 替换之前被调用（updateByFetchTag 内 binding 先于原子替换）；
+// ② 验签信任根是注入的编译期常量（allowed-signers.js），staged 树内容不参与验签输入；
+// ③ 不采信 GitHub API 的 verification.verified（同域观点可被被接管账号伪造）；
+// ④ tag 对象只经 cat-file 本地取证（fetchTagObjectText），不从 API 字段拼 payload；
+// ⑤ 失败一律中止，不存在「验签失败仍替换」的路径。
+const updateLib = readFileSync(join(ROOT, "lib", "app", "update.js"), "utf8");
+const signersLib = readFileSync(join(ROOT, "lib", "allowed-signers.js"), "utf8");
+const sshsigLib = readFileSync(join(ROOT, "lib", "domain", "sshsig.js"), "utf8");
+check("自更新验签在原子替换之前",
+  updateLib.indexOf("verifySshSig") > -1 && updateLib.indexOf("rename(destRoot, backup)") > updateLib.indexOf("resolveVerifiedRelease"), true);
+check("自更新按已验 sha 取证（fetch 目标含 rel.sha）", /fetch", "--depth", "1", "origin", rel\.sha/.test(updateLib), true);
+check("staged HEAD 与签名 commit 绑定", /head !== rel\.sha/.test(updateLib), true);
+check("tag 名与 package.json version 绑定", /stagedVersion !== rel\.version/.test(updateLib), true);
+check("验签信任根来自编译期常量", /import \{ ALLOWED_SIGNERS, REVOKED_KEYS \} from "\.\/allowed-signers\.js"/.test(indexLib), true);
+check("allowed-signers 含双 release key", (signersLib.match(/ssh-ed25519 AAAA/g) ?? []).length >= 2, true);
+check("不采信 GitHub verification.verified", !/verification\.verified/.test(updateLib) && !/verification\.verified/.test(sshsigLib), true);
+check("tag 对象经本地 cat-file 取证", /cat-file", "tag"/.test(updateLib), true);
+check("SSHSIG 限定 git namespace 与 sha512", /ns\.toString\("utf8"\) !== "git"/.test(sshsigLib) && /hashalg\.toString\("utf8"\) !== "sha512"/.test(sshsigLib), true);
+
 const PUBLIC_TEXT_RULES = [
   ["内部编号", /\b(?:P|Q|T|A|B|C|H|K|M)\d+(?:-[A-Za-z0-9]+)?\b/],
   ["轮次标记", /第[一二三四五六七八九十0-9]+(?:轮|阶段)|首批|本轮|本批次/],
