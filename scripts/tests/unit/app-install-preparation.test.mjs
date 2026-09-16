@@ -76,7 +76,7 @@ function makePreparation({ stat, exists = async () => false, readFile = async ()
   });
   check("新鲜缓存返回 reused", result, { cacheDir: "/cache/owner__demo", reused: true });
   check("新鲜缓存不 clone（只做 remote 归属探测）", calls.map(([name]) => name), ["mkdir", "runGit"]);
-  check("remote 归属探测参数", calls[1], ["runGit", ["-C", "/cache/owner__demo", "remote", "get-url", "origin"], { timeout: 10000 }]);
+  check("remote 归属探测参数（字面 URL，不走 insteadOf 重写）", calls[1], ["runGit", ["-C", "/cache/owner__demo", "config", "--get", "remote.origin.url"], { timeout: 10000 }]);
   check("新鲜缓存日志", logs, ["step1", "cacheReuse"]);
 }
 
