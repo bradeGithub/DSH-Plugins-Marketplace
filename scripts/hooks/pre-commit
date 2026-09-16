@@ -2,6 +2,7 @@
 # Git Hook: pre-commit —— 提交前运行质量检查（语法 + smoke 测试）
 # 提交信息规范由 commit-msg hook 负责（COMMIT_EDITMSG 在该阶段才可靠）。
 # 由 scripts/install-hooks.sh 安装，可被 git commit --no-verify 跳过（不推荐）。
-# hook 位于 .git/hooks/，仓库根在其上两级。
-ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
+# hook 位于共享 .git/hooks/，不能用 $0 上溯（linked worktree 下会解析到主仓）。
+# git 保证 hook 的 cwd = 当前工作树顶，rev-parse 取其绝对路径。
+ROOT="$(git rev-parse --show-toplevel)"
 node "$ROOT/scripts/hooks/check.mjs" --stage=pre-commit

@@ -1,11 +1,14 @@
-# PowerShell 安装 Git Hooks（Windows 用户）
+﻿# PowerShell 安装 Git Hooks（Windows 用户）
 # 用法: .\scripts\install-hooks.ps1
 # 原理: 把 scripts/hooks/ 下的 hook 脚本复制到 .git/hooks/ 并设为可执行（Windows 下由 git 直接调用 sh 脚本）。
 
 $ErrorActionPreference = "Stop"
-$repo = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
+$repo = Split-Path -Parent $PSScriptRoot
 $src = Join-Path $PSScriptRoot "hooks"
-$dst = Join-Path $repo ".git\hooks"
+# worktree 下 .git 是文件而非目录；hooks 共享主仓 git-common-dir
+$common = git -C $repo rev-parse --path-format=absolute --git-common-dir
+if ($LASTEXITCODE -ne 0) { Write-Error "无法解析 git-common-dir，确认在仓库内运行。" }
+$dst = Join-Path $common "hooks"
 
 if (-not (Test-Path $dst)) {
   Write-Error "未找到 .git/hooks，确认在仓库根目录运行。"

@@ -19,6 +19,21 @@ import { fileURLToPath } from "node:url";
 import { SYNTAX_CHECK_FILES, validateSubject, extractSubject, parseHookConfig, DEFAULT_HOOK_CONFIG, detectSecret, classifyPrecommitTier } from "./validate.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
+
+// git 在 linked worktree 下调 hook 时会注入 GIT_DIR/GIT_INDEX_FILE（绝对路径指向
+// 发起 worktree 的 gitdir/index）等内部变量；它们经 process.env 遗传给测试进程后，
+// fixture 仓库的 git init/config/add/commit 会穿透写进主仓（实锤：fixture git add
+// 把文件 stage 进主仓 index、config 落进主仓配置、git init 把 core.bare 写成 true）。
+// 本进程的 git 调用靠 cwd 解析即可，直接删干净再 spawn 任何子进程。
+for (const k of [
+  "GIT_DIR", "GIT_WORK_TREE", "GIT_INDEX_FILE", "GIT_OBJECT_DIRECTORY",
+  "GIT_ALTERNATE_OBJECT_DIRECTORIES", "GIT_QUARANTINE_PATH", "GIT_PREFIX",
+  "GIT_LITERAL_PATHSPECS", "GIT_AUTHOR_NAME", "GIT_AUTHOR_EMAIL", "GIT_AUTHOR_DATE",
+  "GIT_COMMITTER_NAME", "GIT_COMMITTER_EMAIL", "GIT_COMMITTER_DATE", "GIT_EDITOR",
+]) {
+  delete process.env[k];
+}
+
 // 检查目标工作树：本地默认仓库根；测试（hook-check.test.mjs）与 CI 场景可覆盖。
 const WORKTREE = process.env.CHECK_WORKTREE ?? ROOT;
 const USAGE = `用法:
