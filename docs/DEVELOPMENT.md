@@ -122,9 +122,10 @@ chore: update registry.json
 |---|---|---|
 | `pre-commit` | 提交前 | 语法检查、unit/integration、TOC 检测、敏感密钥扫描 |
 | `commit-msg` | 提交信息 | 主题格式、type 白名单、禁 emoji |
+| `pre-push` | 推送前 | `v*` 发布 tag 签名验证（信任根 = `lib/allowed-signers.js`）、`v*` tag 删除拦截 |
 
-安装：`.\scripts\install-hooks.ps1`（Windows）或手动复制 `.git/hooks/`。
-跳过（不推荐）：`git commit --no-verify`。
+安装：`.\scripts\install-hooks.ps1`（Windows）或 `bash scripts/install-hooks.sh`（Linux/macOS），安装 pre-commit / commit-msg / pre-push 三个 hook。
+跳过（不推荐）：`git commit --no-verify` / `git push --no-verify`。
 
 ## 7. 新规范落地流程
 

@@ -109,6 +109,15 @@ const EXEMPT_LIB_MARKERS = [
   // now 默认参数（index.js 装配时总传入 now，默认参数永不执行——防御死代码）：
   // install.js 3 处 + backup.js 1 处
   "now = () => Date.now()",
+  // index.js recordSelfUpdate 取证写入器真身：仅「真实更新成功」路径触发，而成功路径
+  // 会把 staging rename 到 destRoot（仓库目录本身不可注入替身）——apply() 层覆盖会真实
+  // 改写安装目录，无法在 unit/integration 安全执行；记录语义由 app-update 单测经注入
+  // mock 断言（含写入失败 .catch 吞掉分支），此处豁免真身
+  "recordSelfUpdate: async (entry) => {",
+  // validation.js parseIpv6Bytes 的 v4 尾段 octet 校验箭头：唯一调用方 isSafeWebdavUrl
+  // 先经 `new URL` 解析——WHATWG 会把 ::ffff:8.8.8.8 规范化为 hex 组（::ffff:808:808），
+  // parseIpv6Bytes 永远收不到点分四段尾段，该分支对 URL 来源不可达（防御死代码）
+  "oct.some((o) => o > 255)",
 ];
 
 /** 计算 lib/ 下各文件豁免函数的起始偏移（函数名 + 源码特征），按文件分 Map。 */

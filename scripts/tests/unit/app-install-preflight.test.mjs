@@ -205,6 +205,18 @@ function makePreflight(overrides = {}) {
 }
 
 {
+  // bundle 门内复读 package.json 失败（文件在分类后被删等竞态）：catch 归 null →
+  // 用 repo 名兜底、patch 置空，确认门照常弹出而非崩溃
+  const { run } = makePreflight({
+    detectTypeDetail: async () => ({ type: "bundle", reasonKey: "reason.bundle", hintKey: "hint.bundle" }),
+    readPackageJsonObject: async () => { throw new Error("mid-flight delete"); }
+  });
+  const asked = await run();
+  check("bundle 门读包失败仍弹门", asked.status, "awaiting-input");
+  check("bundle 门读包失败问题 id", asked.questions[0].id, "__confirm_bundle__");
+}
+
+{
   const { run } = makePreflight();
   const result = await run({ answers: { API_KEY: "secret" } });
   check("cordis-plugin 不弹 bundle 门", (result.questions ?? []).some((q) => q.id === "__confirm_bundle__"), false);

@@ -106,7 +106,7 @@ try {
 
   for (const [name, status, type, question, reason, hint] of [
     ["declared", "continue", "cordis-plugin", undefined, "dshDeclared", "dshDeclared"],
-    ["bundle", "continue", "bundle", undefined, "bundleDeclared", "bundle"],
+    ["bundle", "awaiting-input", "bundle", "__confirm_bundle__", "bundleDeclared", "bundle"],
     ["ordinary", "awaiting-input", "cordis-plugin", "__confirm_non_plugin__", "pkgOnly", "pkgOnly"],
     ["script", "awaiting-input", "script", "__confirm_script__", "ps1", "script"],
     ["empty", "awaiting-input", "instructions", "__confirm_manual__", "none", "none"],

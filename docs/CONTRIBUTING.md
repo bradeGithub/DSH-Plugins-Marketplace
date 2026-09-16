@@ -15,7 +15,7 @@
 
 - **版本号**：SemVer。新特性/架构升 minor，破坏性变更升 major，修复升 patch。
 - **发布分支**：基于最新 `upstream/main` 建 `release/vX.Y.Z`，升 `package.json` 版本并把 CHANGELOG「未发布」区定版。
-- **Tag / Release**：合并后打 annotated tag + `gh release create`，正文按 RELEASE.md §3 分段。
+- **Tag / Release**：合并后打 **SSH 签名 annotated tag**（`git tag -s`，签名配置见 RELEASE.md §2）+ `gh release create`，正文按 RELEASE.md §3 分段。
 
 <!-- TOC -->
 - [发布 / Release](#发布-release)

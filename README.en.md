@@ -232,7 +232,7 @@ When both exist and differ → the card shows an «Update» button plus `install
 | `/api/marketplace/install` | POST | Install / update, body: `{ "repo": "owner/name", "answers": { "ENV_NAME": "value" } }`; returns `done` / `awaiting-input` / `aborted` / `failed` / `manual` status + step-by-step log |
 | `/api/marketplace/uninstall` | POST | Uninstall, body: `{ "repo": "owner/name" }`; removes the install dir / package dir + `cordis.patch.yml` entry + install record; returns `done` (with `removed` count and log) |
 | `/api/marketplace/self-update` | GET | Marketplace self-update check (`{ installedVersion, latestVersion, updateAvailable, checkedAt }`) |
-| `/api/marketplace/self-update` | POST | Perform the marketplace self-update (official CLI install + post-install version verification); returns `no-update` / `done` / `failed` |
+| `/api/marketplace/self-update` | POST | Perform the marketplace self-update (only accepts maintainer SSH-signed release tags: local signature verification + tag↔version↔commit SHA binding, then SHA-checked-out staging with atomic swap); returns `no-update` / `done` / `failed` |
 | `/api/marketplace/check-update` | POST | Manual version check for npm-type cli plugins (body `{ repo }`; queries the npm registry, npmmirror first); returns `done` + `updateAvailable` / `latestVersion` |
 | `/api/marketplace/feedback` | POST | Submit install feedback (body `{ repo, ok, note }`) → dequeued and synced into a GitHub issue; returns `done` (with `issueUrl` / `manualUrl`) |
 | `/api/marketplace/feedback/pending` | GET | Pending feedback queue (`{ pending: [...] }`) |
@@ -257,6 +257,8 @@ When both exist and differ → the card shows an «Update» button plus `install
 - API keys and other material you provide are passed only as **environment variables for that installation** and are never written to any persistent file (except what the install script itself does)
 - Third-party install scripts run with a **minimal environment** (basic system variables + the material you submitted); npm dependency installs strip all secret-class variables — `process.env` is never leaked wholesale to plugin code
 - The install endpoint only accepts trusted origins: requests must carry the `X-DSH-Marketplace` header and the Host must be in the **allowlist** (loopback / private LAN ranges / extra hosts via the `DSH_MARKETPLACE_ALLOWED_HOSTS` env var), protecting against cross-site forgery and DNS rebinding
+- **Marketplace self-update runs over a signature-verified channel**: only release tags signed by a maintainer's SSH key are accepted (the public-key allowlist is compiled into the bundle; `signedBy` attributes the signer); verification happens on local git objects, candidates are tried newest-first and the first verified one wins — an unsigned higher-version tag cannot block updates, and write access to the GitHub repo alone cannot silently push a malicious update. Unverifiable updates fail closed
+- Self-update env vars (set to `1` to enable): `DSH_MARKETPLACE_UPDATE_PRERELEASE` (opt-in prerelease channel; only `MAJOR.MINOR.PATCH` stable tags are accepted by default), `DSH_MARKETPLACE_ALLOW_UNSIGNED_UPDATE` (explicit escape hatch that skips signature verification — **not recommended**)
 - Plugin packages are copied into the web profile and registered in `cordis.patch.yml` — they load with every DSH startup, so only install repos you trust
 
 ---

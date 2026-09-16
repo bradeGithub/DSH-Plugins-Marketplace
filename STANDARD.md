@@ -84,6 +84,12 @@
 > 2. `package.json` 的 `dsh` 字段（或 `@deepseek-ai/*` 依赖）是「插件能力声明」——有它才算 cordis 插件，
 >    否则根 package.json 会被当成普通 npm 项目处理。
 
+> ⚠️ **README 官方 CLI 指令优先（代执行通道）**：克隆后若 README 含 `dsh plugin install <target>` / `dsh plugin add <target>`，
+> 市场优先提取 target 指向本仓库（含本仓库 `package.json` name）的指令、无匹配时取首条，弹用户确认后执行官方 CLI 安装（成功即完成，失败回退上表常规管线）。
+> **target 白名单**仅两种形态——npm 包名 `[@scope/]name[@version|dist-tag]`，或 GitHub `owner/repo`；
+> 含 shell 元字符（``& | ; < > ( ) % ! ^ $ ` " '`` 及空白）或 flag 形态（`-x`/`--flag`）的 target 一律拒绝并回退常规管线
+> （win32 下经 `cmd.exe /c` 拼接，白名单是命令注入防线）。请确保 README 中 `dsh plugin` 指令的 target 指向本仓库或正确的 npm 包名——不匹配本仓库的指令只有在没有匹配项时才会被兜底采用。
+
 ---
 
 ## 2. 类型 A：cordis 插件（推荐主形态）

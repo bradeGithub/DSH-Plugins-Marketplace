@@ -11,7 +11,7 @@
 - [1. Hook 清单](#1-hook-清单)
   - [1.1 pre-commit 检查项](#11-pre-commit-检查项)
   - [1.2 TOC 自动扫描](#12-toc-自动扫描)
-  - [1.2 commit-msg 检查项](#12-commit-msg-检查项)
+  - [1.3 commit-msg 检查项](#13-commit-msg-检查项)
 - [2. Hook 分级机制（.hooksrc）](#2-hook-分级机制hooksrc)
   - [2.1 配置项](#21-配置项)
   - [2.2 等级语义](#22-等级语义)
@@ -52,7 +52,7 @@ TOC 维护采用**自动发现**而非手动注册：
 - 追加排除：`.hooksrc` 的 `tocExclude`（逗号分隔路径片段）
 - 结果按路径排序（跨平台稳定），无 h2 标题的文档不要求 TOC
 
-### 1.2 commit-msg 检查项
+### 1.3 commit-msg 检查项
 
 1. **主题格式**：`<type>(<scope>): <描述>`（正则 `^(feat|fix|...)(\([a-z][a-z0-9-]*\))?: .+`）——**恒为 error，不可降级**
 2. **type 白名单**：`feat / fix / chore / ci / docs / style / refactor / test / perf / assets / revert / merge`
@@ -126,7 +126,7 @@ bash scripts/install-hooks.sh
 
 ## 5. 跳过策略
 
-- 不推荐：`git commit --no-verify`（跳过全部 hook）
+- 不推荐：`git commit --no-verify`（跳过提交侧 hook）/ `git push --no-verify`（绕过 pre-push 的 `v*` tag 验签——未签名 tag 推上去后 `tag-verify.yml` CI 会复核告警，但请勿依赖服务端兜底）
 - 例外场景：紧急修复、CI 自动提交（registry.json 更新）、hook 自身迭代调试
 - 跳过时请在提交信息中注明原因（如 `ci: update registry.json (--no-verify 自动提交)`）
 - **底线在 CI**：`.github/workflows/lint.yml` 对每次 push/PR 重跑语法/单元/集成/TOC/密钥扫描——本地 `--no-verify` 绕不过 PR 门禁

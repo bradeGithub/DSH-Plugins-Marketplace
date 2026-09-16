@@ -232,7 +232,7 @@ GitHub Actions（每 2 小时，仓库自带 token）
 | `/api/marketplace/install` | POST | 安装 / 更新，body：`{ "repo": "owner/name", "answers": { "ENV_NAME": "值" } }`；返回 `done` / `awaiting-input` / `aborted` / `failed` / `manual` 状态 + 逐步日志 |
 | `/api/marketplace/uninstall` | POST | 卸载，body：`{ "repo": "owner/name" }`；删除安装目录 / 包目录 + `cordis.patch.yml` 注册条目 + 安装记录；返回 `done`（含 `removed` 计数与日志） |
 | `/api/marketplace/self-update` | GET | 市场本体自更新检测（`{ installedVersion, latestVersion, updateAvailable, checkedAt }`） |
-| `/api/marketplace/self-update` | POST | 执行市场本体更新（官方 CLI 安装 + 装后版本校验）；返回 `no-update` / `done` / `failed` |
+| `/api/marketplace/self-update` | POST | 执行市场本体更新（仅采纳经维护者 SSH 签名的 release tag：本地验签 + tag↔版本↔commit SHA 三重绑定后按 SHA 检出 staging 原子替换）；返回 `no-update` / `done` / `failed` |
 | `/api/marketplace/check-update` | POST | npm 型 cli 插件手动版本检测（body `{ repo }`；查 npm registry，npmmirror 优先）；返回 `done` + `updateAvailable` / `latestVersion` |
 | `/api/marketplace/feedback` | POST | 提交安装反馈（body `{ repo, ok, note }`）→ 移除队列并同步创建 GitHub issue；返回 `done`（含 `issueUrl` / `manualUrl`） |
 | `/api/marketplace/feedback/pending` | GET | 待确认反馈队列（`{ pending: [...] }`） |
@@ -257,6 +257,8 @@ GitHub Actions（每 2 小时，仓库自带 token）
 - 你提供的 API Key 等材料只作为**本次安装的环境变量**传入，不会写入任何持久化文件（安装脚本自身的行为除外）
 - 第三方安装脚本运行时只获得**最小化环境变量**（基础系统变量 + 你提交的材料）；npm 依赖安装会剔除全部密钥类变量——`process.env` 不会全量外泄给插件代码
 - 安装端点仅接受可信来源：请求必须携带 `X-DSH-Marketplace` 头，且 Host 在**白名单**内（本机回环 / 局域网私有网段 / 环境变量 `DSH_MARKETPLACE_ALLOWED_HOSTS` 显式追加），防跨站伪造与 DNS rebinding
+- **市场本体自更新走签名验证通道**：仅采纳经维护者 SSH 私钥签名的 release tag（公钥白名单编译期内置，按人归因 `signedBy`）；验签在本地 git 对象上进行、候选版本降序逐个验、首个通过者生效——未签名的更高版本 tag 不会阻塞更新，GitHub 仓库写权限被夺也无法静默推送恶意更新。验不过则 fail-closed 拒绝更新
+- 自更新相关环境变量（置 `1` 生效）：`DSH_MARKETPLACE_UPDATE_PRERELEASE`（opt-in 预发布通道，默认只认 `MAJOR.MINOR.PATCH` 稳定版）、`DSH_MARKETPLACE_ALLOW_UNSIGNED_UPDATE`（显式跳过签名验证的逃生口，**不建议开启**）
 - 插件包会被复制到 web profile 并注册到 `cordis.patch.yml`——这意味着它会随 DSH 启动加载，请只安装你信任的仓库
 
 ---
