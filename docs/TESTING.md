@@ -46,12 +46,12 @@
 - [6. 编写清单](#6-编写清单)
 - [7. 已知 lib API 问题](#7-已知-lib-api-问题)
 <!-- /TOC -->
-| **unit** | `scripts/tests/unit/` | 纯函数、app 用例/执行器、bundle assembler、VM 运行时契约和静态契约 | 71 个测试文件 |
+| **unit** | `scripts/tests/unit/` | 纯函数、app 用例/执行器、bundle assembler、VM 运行时契约和静态契约 | 72 个测试文件 |
 | **integration** | `scripts/tests/integration/` | 临时 DSH_HOME/真实临时目录、mock fetch/proc、真实测试运行器子进程 | 18 个测试文件 |
 | **e2e** | `scripts/tests/e2e/` | 真实 git 流程、fixture 仓库与真实 DSH | 3 个测试文件 |
 | **frontend browser e2e** | `scripts/tests/browser/` | 真实 DSH Web UI/marketplace bundle、Playwright context 与确定性 API fixture | 9 个行为契约 |
 
-统一 Node 运行器：`node scripts/tests/run.mjs`（`--level=unit|integration|e2e`、`--json`）。当前共 92 个 Node 测试入口；精确通过数以每文件末尾 `N passed` 和运行器汇总为准。前端浏览器层是独立质量门，不计入该 92 个入口、Node coverage 或 mutation 数字。
+统一 Node 运行器：`node scripts/tests/run.mjs`（`--level=unit|integration|e2e`、`--json`）。当前共 93 个 Node 测试入口；精确通过数以每文件末尾 `N passed` 和运行器汇总为准。前端浏览器层是独立质量门，不计入该 93 个入口、Node coverage 或 mutation 数字。
 
 ## 2. 命名与位置
 
