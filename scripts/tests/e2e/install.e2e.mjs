@@ -952,6 +952,9 @@ function setupUrlRewrite(owner, repoName) {
     "package.json": JSON.stringify({ name: "demo-cli-fail-pkg", version: "1.0.0", dsh: {} }),
   });
   r = await postInstall("e2e-owner/demo-cli-fail", {});
+  check("e2e CLI 失败回退先经确认门", r.body && r.body.status, "awaiting-input");
+  check("e2e CLI 失败回退问题 id", r.body && r.body.questions && r.body.questions[0] && r.body.questions[0].id, "__confirm_cli__");
+  r = await postInstall("e2e-owner/demo-cli-fail", { __confirm_cli__: "continue" });
   check("e2e CLI 失败回退 done", r.body && r.body.status, "done");
   check("e2e CLI 失败回退 cordis-plugin", r.body && r.body.type, "cordis-plugin");
   rmSync(failFlag, { force: true });
