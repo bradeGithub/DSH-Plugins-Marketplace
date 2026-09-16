@@ -25,7 +25,14 @@
 
 ## 2. Tag 命名
 
-- 格式：`v` + SemVer（`v1.6.0`），**annotated tag**（`git tag -a`），含一句主题。
+- 格式：`v` + SemVer（`v1.6.0`），**SSH 签名的 annotated tag**（`git tag -s`，非 `-a`）——自更新完整性锚依赖签名验证（客户端 `lib/allowed-signers.js` 信任根，namespace=`git`）。
+- 签名私钥：维护者本机离线 release key（`~/.ssh/dsh-release-{1,2}`），首次签名前配置：
+  ```bash
+  git config gpg.format ssh
+  git config user.signingkey ~/.ssh/dsh-release-1.pub
+  git config tag.gpgSign true   # 之后 git tag vX.Y.Z -m ... 即自动签名
+  ```
+- 硬门控：`pre-push` hook（`scripts/hooks/pre-push`）拦截未通过验签的 `v*` tag 推送及 `v*` tag 删除；`tag-verify.yml` CI 在 tag 推送后服务端复核告警。本地可用 `node scripts/verify-tag.mjs vX.Y.Z` 预验。
 - Tag 主题短标题：`vX.Y.Z — <一句主题> / <English subtitle>`。
 - 只给已合并进上游 main 的提交打 Tag，不打分支上未发布的中间态。
 
@@ -54,5 +61,5 @@
 1. 基于最新 `upstream/main` 建 `release/vX.Y.Z` 分支。
 2. 升 `package.json` 版本；把 CHANGELOG「未发布」区标题改为 `## vX.Y.Z — <日期>（<主题> / <English>）`，内容下移定版。
 3. 规范批次提交（version bump / CHANGELOG 各一个 commit，见 [CONTRIBUTING.md](CONTRIBUTING.md)），推到 fork，建 PR 合入上游。
-4. 合并后打 annotated tag：`git tag -a vX.Y.Z -m "<主题>"`，推上游。
+4. 合并后打签名 tag：`git tag -s vX.Y.Z -m "<主题>"`（需 §2 的 gpg.format=ssh + signingkey 配置；未签名的 tag 会被 pre-push hook 拒绝），推上游。
 5. `gh release create vX.Y.Z --notes "<正文>"`（正文按 §3 结构），标记为 Latest（若非旧版热修复）。

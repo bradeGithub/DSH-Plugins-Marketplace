@@ -25,7 +25,7 @@ const USAGE = `用法:
   node scripts/hooks/check.mjs [选项]
 
 选项:
-  --stage=<pre-commit|commit-msg>  运行某个 git 阶段的检查集（默认 pre-commit）
+  --stage=<pre-commit|commit-msg|pre-push>  运行某个 git 阶段的检查集（默认 pre-commit）
   --only=<name>                    仅运行单项检查（syntax|tests|e2e|toc|secret|commit-msg|coverage）
   --help                           显示本帮助
 
@@ -298,8 +298,43 @@ if (stage === "pre-commit") {
   if (only === "commit-msg") checkCommitMsg();
   if (only === "coverage") checkCoverage();
 }
+// ---- 7. 发布 tag 签名硬门控（pre-push）----
+// git pre-push stdin 逐行喂 `<local ref> <local sha> <remote ref> <remote sha>`。
+// 命中 refs/tags/v* 的推送必须是通过 lib/allowed-signers.js 信任根验签的
+// annotated tag（verify-tag.mjs 复用 lib/domain/sshsig.js）；
+// 删除 v* tag 一律拒绝（可用性保护，服务端删除走 GitHub 管理面不经本地 hook）。
+// 非 v* tag 与分支推送不拦截。
+function checkTagSignatures() {
+  let stdinText = "";
+  try {
+    stdinText = readFileSync(0, "utf8"); // fd 0 = pre-push refs
+  } catch {
+    stdinText = ""; // 非 hook 手动执行且无管道输入：无可校验对象，放行
+  }
+  const tagRefs = stdinText.split("\n").map((l) => l.trim()).filter(Boolean)
+    .map((l) => l.split(/\s+/))
+    .filter((p) => (p[0] ?? "").startsWith("refs/tags/v"));
+  if (tagRefs.length === 0) return;
+  for (const [localRef, localSha] of tagRefs) {
+    const tag = localRef.slice("refs/tags/".length);
+    if (/^0+$/.test(localSha ?? "")) {
+      fail("tags", `禁止推送删除发布 tag ${tag}（可用性保护；确需删除请走 GitHub 管理面）`);
+      continue;
+    }
+    try {
+      execFileSync("node", [join(ROOT, "scripts", "verify-tag.mjs"), tag], { cwd: WORKTREE, stdio: "inherit" });
+      console.log(`[OK] [tags] ${tag} 签名验证通过`);
+    } catch {
+      fail("tags", `发布 tag ${tag} 未通过签名验证（须 git tag -s 用 release 私钥签 annotated tag，见 docs/RELEASE.md）`);
+    }
+  }
+}
+
 if (stage === "commit-msg") {
   checkCommitMsg();
+}
+if (stage === "pre-push") {
+  checkTagSignatures();
 }
 
 if (failed) {

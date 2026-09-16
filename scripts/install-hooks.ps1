@@ -11,7 +11,7 @@ if (-not (Test-Path $dst)) {
   Write-Error "未找到 .git/hooks，确认在仓库根目录运行。"
 }
 
-$hooks = @("pre-commit", "commit-msg")
+$hooks = @("pre-commit", "commit-msg", "pre-push")
 foreach ($h in $hooks) {
   $target = Join-Path $dst $h
   Copy-Item (Join-Path $src $h) $target -Force

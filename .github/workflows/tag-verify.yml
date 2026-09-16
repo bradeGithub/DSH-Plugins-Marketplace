@@ -1,0 +1,32 @@
+name: release-tag-verify
+
+# 发布 tag 签名硬警报：v* tag 推送后立即验证签名（namespace=git / sha512 /
+# ssh-ed25519，信任根 = lib/allowed-signers.js 编译期常量）。
+# 注意：CI 无法阻止已推送的 tag——本 workflow 是服务端复核告警；
+# 真正的阻断门在本机 pre-push hook（scripts/hooks/pre-push）与未来的
+# tag protection ruleset（需仓库 admin 权限配置）。
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 24
+
+      - name: Fetch pushed tag object
+        run: git fetch --depth 1 origin "+refs/tags/${{ github.ref_name }}:refs/tags/${{ github.ref_name }}"
+
+      - name: Verify SSH signature on tag object
+        run: node scripts/verify-tag.mjs "${{ github.ref_name }}"

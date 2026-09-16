@@ -105,6 +105,7 @@ export const SYNTAX_CHECK_FILES = [
   "scripts/benchmarks/marketplace.mjs",
   "scripts/provenance.mjs",
   "scripts/tests/run.mjs",
+  "scripts/verify-tag.mjs",
   "scripts/hooks/check.mjs",
   "scripts/hooks/validate.mjs",
 ];
