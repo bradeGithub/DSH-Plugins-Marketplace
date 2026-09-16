@@ -15,7 +15,7 @@ if [ ! -d "$DST" ]; then
   exit 1
 fi
 
-HOOKS="pre-commit commit-msg"
+HOOKS="pre-commit commit-msg pre-push"
 for h in $HOOKS; do
   if [ -f "$SRC/$h" ]; then
     cp "$SRC/$h" "$DST/$h"

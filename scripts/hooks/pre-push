@@ -1,0 +1,8 @@
+#!/bin/sh
+# Git Hook: pre-push —— 推送前检查（发布 tag 签名硬门控）
+# 推送 refs/tags/v* 必须通过 lib/allowed-signers.js 信任根验签（git tag -s 签名）；
+# 删除 v* tag 一律拒绝。分支与非 v* tag 推送不拦截。
+# 由 scripts/install-hooks.sh 安装，可被 git push --no-verify 跳过（不推荐）。
+# hook 位于 .git/hooks/，仓库根在其上两级。stdin 携带推送 refs，直接透传给 node。
+ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
+node "$ROOT/scripts/hooks/check.mjs" --stage=pre-push

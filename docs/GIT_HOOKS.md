@@ -31,6 +31,7 @@
 <!-- /TOC -->
 | `pre-commit` | 提交前 | 语法检查、unit+integration、TOC 检测、敏感密钥扫描 | 语法/测试/密钥为 error 级；TOC 按 `.hooksrc` 分级（当前 error）；完整 E2E、coverage 和 mutation 使用显式质量门 |
 | `commit-msg` | 提交信息 | 主题格式、type 白名单、禁 emoji | 主题格式/type 恒为 error；emoji 按 `.hooksrc` 分级（当前 error） |
+| `pre-push` | 推送前 | `v*` 发布 tag 签名验证（信任根 = `lib/allowed-signers.js`）、`v*` tag 删除拦截 | 恒 error 级；分支与非 `v*` tag 推送不拦截 |
 
 ### 1.1 pre-commit 检查项
 
