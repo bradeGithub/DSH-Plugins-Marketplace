@@ -1,14 +1,11 @@
 #!/usr/bin/env node
-// @runner-exclusive —— 本文件会把仓库根 registry.json 改名让路（内置索引隔离），
-// 与 installed-index / list-cache 等同样动内置索引的文件并行会互相踩（ENOENT / 断言翻转）。
-// 运行器据此把本文件放在独占阶段串行执行（见 scripts/tests/run.mjs）。
 // lib/index.js 导出函数全覆盖测试：mock fetch + 临时 DSH_HOME + 假 ctx。
 // 运行：node scripts/tests/integration/lib.test.mjs（或 node scripts/tests/run.mjs --level=integration）
 // 与 smoke-tests.mjs 共用 check() 风格；coverage.mjs 同时统计两者。
 // 注意：必须用动态 import 控制加载顺序——静态 import 会被提升，lib/index.js
 // 求值时 process.env.DSH_HOME 尚未设置，模块级常量会回退到真实 ~/.dsh（污染主目录）。
 
-import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, existsSync, renameSync, rmSync, chmodSync } from "node:fs";
+import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, existsSync, rmSync, chmodSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { join, dirname, sep } from "node:path";
 import { tmpdir } from "node:os";
@@ -96,6 +93,12 @@ function mockFetchCapture(payload, status = 200) {
   };
   return { orig, bodies };
 }
+
+// 基线：integration 层禁止真实网络——未被各段落显式 mock 覆盖的调用
+// （典型如 apply() 启动预热的 getList()/check() detached fetch）立即被拒，
+// 调用方均有 .catch 兜底只留 warn 日志；否则未挂起的真实 socket 会拖住
+// 事件循环直到 TCP 超时，单文件耗时从秒级膨胀到分钟级且随网络环境抖动。
+globalThis.fetch = () => Promise.reject(new Error("integration test: real network forbidden"));
 
 (async () => {
   const lib = await import("../../../lib/index.js");
@@ -1051,14 +1054,10 @@ function mockFetchCapture(payload, status = 200) {
   // 所有 registry 源返回 403 → （内置索引存在会先兜底，#12——临时移开以覆盖
   // 更深层路径）→ 磁盘缓存（清空）→ 搜索 API → fetchJson 抛错被捕获（含
   // res.text() 失败时的 .catch(() => "") 分支）→ 降级返回空数组。
-  const bundledDsh = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..", "registry.json");
-  const bundledDshBak = bundledDsh + ".bak";
-  // 防御：本文件已标 @runner-exclusive（独占执行），但仍显式校验——缺失时给出可操作的错误，
-  // 而不是抛裸 ENOENT 崩栈（历史上的 CI 失败就是这条 renameSync 报 ENOENT 无法自证原因）。
-  if (!existsSync(bundledDsh)) {
-    throw new Error("registry.json 缺失（内置索引隔离残留或并行冲突）——请先 git checkout -- registry.json 再重跑");
-  }
-  renameSync(bundledDsh, bundledDshBak);
+  // 内置索引缺失分支用 env 重定向覆盖（DSH_MARKETPLACE_BUNDLED_DIR 指向空临时目录），
+  // 不物理移走仓库根 registry.json——并行 runner 下移文件会让同跑测试读到缺失造成竞态。
+  const bundledDirBak = process.env.DSH_MARKETPLACE_BUNDLED_DIR;
+  process.env.DSH_MARKETPLACE_BUNDLED_DIR = mkdtempSync(join(tmpdir(), "dsh-libtest-bundled-"));
   try {
     // 前文 fetchAllRepos 的内置索引兜底会 fire-and-forget 落盘 list-cache/dsh.json，
     // 先观察目标缓存写完再清空，否则磁盘缓存层会先命中、覆盖不了搜索兜底路径。
@@ -1078,8 +1077,8 @@ function mockFetchCapture(payload, status = 200) {
     // skills.json 24.6MB）——本文件此前有 15 处成功 load，各自调度过一次这种大文件写入。
     // 单次「清空」远不足以排空：在途写入会在清空后落地，使下面这次「全失败」调用命中磁盘
     // 缓存返回非空，被误判成降级失败。这正是本断言在 CI 间歇性翻转（同一提交时红时绿）的
-    // 根因——回退链上「网络源（mock 403）→ 内置索引（已改名移走）→ 磁盘缓存 → 搜索 API
-    // （mock 403）」里，非空只可能来自磁盘缓存，而是否有缓存纯取决写在时序。
+    // 根因——回退链上「网络源（mock 403）→ 内置索引（env 重定向为空目录）→ 磁盘缓存 →
+    // 搜索 API（mock 403）」里，非空只可能来自磁盘缓存，而是否有缓存纯取决写在时序。
     // 做法：要求「连续 3 次观察都为空（每次间隔 200ms）」才算排空完成；随后再带一轮兜底重试。
     async function drainListCache() {
       let quiet = 0;
@@ -1114,8 +1113,8 @@ function mockFetchCapture(payload, status = 200) {
     // 断言值用条数而非布尔：失败时日志直接显示是 0 还是命中了缓存（可诊断性）
     check("fetchAllRepos 全失败降级空数组", Array.isArray(degraded) ? degraded.length : "非数组", 0);
   } finally {
-    // 还原只在确实由本文件搬走时执行（避免 .bak 不存在时二次崩栈，掩盖真实失败原因）
-    if (existsSync(bundledDshBak)) renameSync(bundledDshBak, bundledDsh);
+    if (bundledDirBak === undefined) delete process.env.DSH_MARKETPLACE_BUNDLED_DIR;
+    else process.env.DSH_MARKETPLACE_BUNDLED_DIR = bundledDirBak;
   }
 
   // apply(ctx) mock：验证路由注册（install handler 依赖真实 git/npm 子进程，属 e2e 覆盖）
@@ -1598,6 +1597,26 @@ function mockFetchCapture(payload, status = 200) {
     check("readBundledIndex 去重", new Set(names).size === names.length, true);
     const bundledSkills = await lib.readBundledIndex("skills");
     check("readBundledIndex skills 非空", Array.isArray(bundledSkills) && bundledSkills.length > 1000, true);
+  }
+
+  // DSH_MARKETPLACE_BUNDLED_DIR 接缝：指向带假索引的临时目录 → readBundledIndex
+  // 读到假数据；指向空目录 → null。锁住该 seam 防回退成固定仓库根路径（那样
+  // 测试只能物理移文件，并行 runner 下跨文件互踩——本文件因此崩过一次）。
+  {
+    const bak = process.env.DSH_MARKETPLACE_BUNDLED_DIR;
+    const fakeDir = mkdtempSync(join(tmpdir(), "dsh-libtest-bundled-"));
+    writeFileSync(join(fakeDir, "registry.json"), JSON.stringify({ repos: [{ full_name: "t/fake-bundled", name: "fake-bundled" }] }), "utf8");
+    process.env.DSH_MARKETPLACE_BUNDLED_DIR = fakeDir;
+    try {
+      const fake = await lib.readBundledIndex("dsh");
+      check("bundled env 重定向读假索引", fake?.some((r) => r.full_name === "t/fake-bundled"), true);
+      process.env.DSH_MARKETPLACE_BUNDLED_DIR = mkdtempSync(join(tmpdir(), "dsh-libtest-bundled-"));
+      check("bundled env 指向空目录返回 null", await lib.readBundledIndex("dsh"), null);
+    } finally {
+      if (bak === undefined) delete process.env.DSH_MARKETPLACE_BUNDLED_DIR;
+      else process.env.DSH_MARKETPLACE_BUNDLED_DIR = bak;
+    }
+    check("bundled env 复原后回真实索引", (await lib.readBundledIndex("dsh")).length > 100, true);
   }
 
   // ==================== #10 / #11 回归 ====================

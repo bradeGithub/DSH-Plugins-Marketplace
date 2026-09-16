@@ -1,6 +1,3 @@
-// @runner-exclusive —— 本文件会替换仓库根 registry.json / skills.json（内置索引隔离），
-// 与 lib.test.mjs / list-cache.test.mjs 并行会互相踩（ENOENT / 「隔离残留」误判）。
-// 运行器据此把本文件放在独占阶段串行执行（见 scripts/tests/run.mjs）。
 // InstalledIndex（已安装索引）行为测试：
 // 列表标注从「逐仓库五重探测」改为查索引（O(1)），语义必须与 detectInstalled 对齐。
 // 通过 list / skills handler 的 installed 标注行为断言：
@@ -17,13 +14,19 @@
 // 必须在本文件内先构造临时 DSH_HOME 再动态 import；且独占控制 list-cache 目录状态
 // （预置有效缓存避免网络）。
 
-import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, rmSync, existsSync } from "node:fs";
+import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, rmSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { tmpdir } from "node:os";
 import { fileURLToPath } from "node:url";
 
 // 必须在 import lib 之前设置临时 DSH_HOME
 process.env.DSH_HOME = mkdtempSync(join(tmpdir(), "dsh-idx-test-")).replace(/\\/g, "/");
+// bundled 源隔离（同 list-cache.test.mjs）：readBundledIndex 默认读仓库根
+// registry.json/skills.json——本测试预置了磁盘缓存，但 bundled 兜底仍会返回
+// 真实索引数据，虚构仓库（t1/recorded 等）的 installed 标注断言会被污染。
+// 经 DSH_MARKETPLACE_BUNDLED_DIR 指向空临时目录实现隔离——不触碰仓库根文件，
+// 并行 runner 下与 lib.test.mjs 等互不干扰（此前物理改文件曾造成竞态崩溃）。
+process.env.DSH_MARKETPLACE_BUNDLED_DIR = mkdtempSync(join(tmpdir(), "dsh-idx-bundled-"));
 const home = process.env.DSH_HOME;
 const marketRoot = join(home, "marketplace");
 const cacheDir = join(marketRoot, "cache");
@@ -136,33 +139,6 @@ for (const [kind, repos] of [["dsh", dshRepos], ["skills", skillsRepos]]) {
 }
 
 const lib = await import("../../../lib/index.js");
-
-// bundled 源隔离（同 list-cache.test.mjs）：readBundledIndex 读仓库根 registry.json
-// （固定路径、不走 fetch）——registry mock 失败时 bundled 会兜底返回真实索引，
-// 列表数据全是真实仓库，测试的虚构仓库（t1/recorded 等）installed 标注全 undefined。
-// 临时替换为坏 JSON 使 bundled 失败；exit 钩子保证任何退出路径都恢复。
-const bundledPath = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..", "registry.json");
-const bundledSkillsPath = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..", "skills.json");
-const bundledBackup = existsSync(bundledPath) ? readFileSync(bundledPath) : null;
-const bundledSkillsBackup = existsSync(bundledSkillsPath) ? readFileSync(bundledSkillsPath) : null;
-// 备份有效性校验（fail-fast）：若 bundled 文件已是坏 JSON（上次测试 kill/崩溃的残留，
-// exit 钩子未触发），备份坏内容会在恢复时「写回坏内容」自增强残留——直接报错并给
-// 恢复命令，不再静默污染（残留根因排查见 _todo.md：uncaughtException 恢复加固）。
-for (const [label, content] of [["registry.json", bundledBackup], ["skills.json", bundledSkillsBackup]]) {
-  if (content !== null) {
-    try { JSON.parse(content); } catch {
-      throw new Error(`${label} 已是损坏状态（bundled 隔离残留）——请运行 git checkout -- registry.json skills.json 恢复后重跑`);
-    }
-  }
-}
-writeFileSync(bundledPath, "{broken", "utf8");
-writeFileSync(bundledSkillsPath, "{broken", "utf8");
-process.on("exit", () => {
-  if (bundledBackup !== null) writeFileSync(bundledPath, bundledBackup, "utf8");
-  else rmSync(bundledPath, { force: true });
-  if (bundledSkillsBackup !== null) writeFileSync(bundledSkillsPath, bundledSkillsBackup, "utf8");
-  else rmSync(bundledSkillsPath, { force: true });
-});
 
 let pass = 0, fail = 0;
 function check(name, actual, expected) {
