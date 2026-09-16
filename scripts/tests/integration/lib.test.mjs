@@ -44,6 +44,56 @@ writeFileSync(join(process.env.DSH_HOME, "marketplace", "feedback.json"), JSON.s
   token: ""
 }, null, 2), "utf8");
 
+// ---- 自更新签名 fixture（必须在 import lib 之前）：本地 git 仓库 + ssh-keygen
+// 真签名 tag——验签路径走真 git 对象、零网络。UPDATE_REPO_URL 把 tag 取证重定向到
+// fixture；EXTRA_SIGNERS 把测试公钥追加进信任根（只追加不替换）。工具缺失则降级：
+// 自更新断言改走「无签名 release 拒更」分支。
+let suRepoReady = false;
+let suOwnVersion = null;
+try {
+  suOwnVersion = JSON.parse(readFileSync(join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..", "package.json"), "utf8")).version;
+  const suRepo = mkdtempSync(join(tmpdir(), "dsh-su-repo-")).replace(/\\/g, "/");
+  const keyPath = join(suRepo, "test-release-key");
+  execFileSync("ssh-keygen", ["-t", "ed25519", "-f", keyPath, "-N", "", "-q"]);
+  const suPub = readFileSync(`${keyPath}.pub`, "utf8").trim();
+  const sgit = (a) => execFileSync("git", a, { cwd: suRepo, stdio: ["ignore", "pipe", "pipe"] });
+  sgit(["init", "-q"]);
+  sgit(["config", "user.email", "t@t"]);
+  sgit(["config", "user.name", "T"]);
+  sgit(["config", "gpg.format", "ssh"]);
+  sgit(["config", "user.signingkey", `${keyPath}.pub`]);
+  writeFileSync(join(suRepo, "package.json"), JSON.stringify({ version: suOwnVersion }));
+  sgit(["add", "package.json"]);
+  sgit(["commit", "-qm", "c1"]);
+  sgit(["tag", "-s", "-m", `release v${suOwnVersion}`, `v${suOwnVersion}`]);
+  writeFileSync(join(suRepo, "package.json"), JSON.stringify({ version: "99.0.0" }));
+  sgit(["add", "package.json"]);
+  sgit(["commit", "-qm", "c2"]);
+  sgit(["tag", "-s", "-m", "release v99.0.0", "v99.0.0"]);
+  process.env.DSH_MARKETPLACE_UPDATE_REPO_URL = suRepo;
+  process.env.DSH_MARKETPLACE_UPDATE_EXTRA_SIGNERS = suPub;
+  suRepoReady = true;
+} catch (e) {
+  console.log("SKIP 自更新签名 fixture 构建失败（git/ssh-keygen 缺失）:", e.message);
+}
+// URL 分发 mock：matching-refs → tag 引用列表；contents?ref → package.json。
+function mockUpdateFetch(version) {
+  const orig = globalThis.fetch;
+  const refs = [{ ref: `refs/tags/v${version}`, object: { sha: "", type: "tag" } }];
+  globalThis.fetch = async (url) => {
+    const isRefs = String(url).includes("matching-refs");
+    const payload = isRefs ? refs : { version };
+    return {
+      ok: true,
+      status: 200,
+      json: async () => payload,
+      text: async () => JSON.stringify(payload),
+      arrayBuffer: async () => Buffer.from(JSON.stringify(payload))
+    };
+  };
+  return orig;
+}
+
 let pass = 0, fail = 0;
 function check(name, actual, expected) {
   const ok = JSON.stringify(actual) === JSON.stringify(expected);
@@ -1443,12 +1493,19 @@ globalThis.fetch = () => Promise.reject(new Error("integration test: real networ
         { writeHead: (x) => { s = x; }, end: (x) => { try { b = JSON.parse(x); } catch { b = null; } } });
       return { s, b };
     };
-    // mock 远端与本地同版本 → compareVersions >= 0 → no-update（不 clone 不替换）
-    const origSu = mockFetch({ version: ownVersion });
+    // mock 远端与本地同版本 → compareVersions >= 0 → no-update（不 clone 不替换）。
+    // 签名 tag 模型下：fixture 就绪走「已验签同版本 tag → no-update」；
+    // 未就绪（无 git/ssh-keygen）则断言 fail-closed 拒更。
+    const origSu = suRepoReady ? mockUpdateFetch(ownVersion) : mockFetch({ version: ownVersion });
     let r = await suCall("POST");
     globalThis.fetch = origSu;
-    check("self-update POST 同版本 200", r.s, 200);
-    check("self-update POST no-update", r.b && r.b.status, "no-update");
+    if (suRepoReady) {
+      check("self-update POST 同版本 200", r.s, 200);
+      check("self-update POST no-update", r.b && r.b.status, "no-update");
+    } else {
+      check("self-update POST 无签名 tag fail-closed", r.b && r.b.status, "failed");
+      check("self-update POST 拒更原因", /maintainer-signed|signing keys/.test(r.b?.error ?? ""), true);
+    }
     // 非 GET/POST → 405
     r = await suCall("DELETE");
     check("self-update DELETE 405", r.s, 405);
@@ -1467,12 +1524,15 @@ globalThis.fetch = () => Promise.reject(new Error("integration test: real networ
         mkdirSync(join(fakeAppData, "npm"), { recursive: true });
         writeFileSync(join(fakeAppData, "npm", "dsh.cmd"), "@echo off\r\nexit /b 0\r\n", "utf8");
         process.env.APPDATA = fakeAppData;
-        const origSu2 = mockFetch({ version: "99.0.0" }); // 远高于本地 → 走执行更新路径
+        const origSu2 = suRepoReady ? mockUpdateFetch("99.0.0") : mockFetch({ version: "99.0.0" }); // 远高于本地 → 走执行更新路径
         let r2 = await suCall("POST");
         globalThis.fetch = origSu2;
         check("self-update Windows dsh.cmd 经 cmd.exe 启动（无 EINVAL，含空格路径）",
           r2.b?.status === "failed" && !/EINVAL/.test(r2.b?.error ?? ""), true);
-        check("self-update Windows 执行路径走到版本验证", /verification failed/.test(r2.b?.error ?? ""), true);
+        // 签名模型下主路径在 staging 缺核心文件处失败 → CLI 回退 → pin 无观测面中止；
+        // fixture 未就绪时更早被拒（无已验签 tag）。两者都属 fail-closed 如实上报。
+        check("self-update Windows 执行路径如实失败",
+          /aborted|verification failed|maintainer-signed/.test(r2.b?.error ?? ""), true);
       } finally {
         if (savedAppData !== undefined) process.env.APPDATA = savedAppData; else delete process.env.APPDATA;
         rmSync(fakeAppData, { recursive: true, force: true });
@@ -1491,12 +1551,13 @@ globalThis.fetch = () => Promise.reject(new Error("integration test: real networ
         process.env.APPDATA = fakeAppData; // 不含 npm/dsh.cmd
         writeFileSync(join(stubDir, "dsh.cmd"), "@echo off\r\nexit /b 0\r\n", "utf8");
         process.env.PATH = `${stubDir};${savedPath ?? ""}`;
-        const origSu3 = mockFetch({ version: "99.0.0" });
+        const origSu3 = suRepoReady ? mockUpdateFetch("99.0.0") : mockFetch({ version: "99.0.0" });
         let r3 = await suCall("POST");
         globalThis.fetch = origSu3;
         check("self-update PATH 回退分支经 cmd /c 启动（无 ENOENT）",
           r3.b?.status === "failed" && !/ENOENT|不是内部或外部命令/.test(r3.b?.error ?? ""), true);
-        check("self-update PATH 回退分支走到版本验证", /verification failed/.test(r3.b?.error ?? ""), true);
+        check("self-update PATH 回退分支如实失败",
+          /aborted|verification failed|maintainer-signed/.test(r3.b?.error ?? ""), true);
       } finally {
         if (savedAppData !== undefined) process.env.APPDATA = savedAppData; else delete process.env.APPDATA;
         if (savedPath !== undefined) process.env.PATH = savedPath; else delete process.env.PATH;
@@ -1519,7 +1580,7 @@ globalThis.fetch = () => Promise.reject(new Error("integration test: real networ
       const savedPath = process.env.PATH;
       process.env.PATH = `${gitStub}${process.platform === "win32" ? ";" : ":"}${savedPath ?? ""}`;
       try {
-        const origSuHigh = mockFetch({ version: "999.0.0" });
+        const origSuHigh = suRepoReady ? mockUpdateFetch("99.0.0") : mockFetch({ version: "999.0.0" });
         r = await suCall("POST");
         globalThis.fetch = origSuHigh;
       } finally {

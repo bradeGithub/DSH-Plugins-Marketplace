@@ -5,6 +5,7 @@
 // （覆盖率：find/sort 回调只在数组非空/长度 >1 时被调用，见 coverage.mjs 豁免记录）。
 
 import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, rmSync } from "node:fs";
+import { execFileSync } from "node:child_process";
 import { join, dirname } from "node:path";
 import { tmpdir } from "node:os";
 import { fileURLToPath } from "node:url";
@@ -12,6 +13,33 @@ import { fileURLToPath } from "node:url";
 // 必须在 import lib 之前设置临时 DSH_HOME
 process.env.DSH_HOME = mkdtempSync(join(tmpdir(), "dsh-selfupdate-")).replace(/\\/g, "/");
 const home = process.env.DSH_HOME;
+
+// 自更新签名 fixture：本地 git 仓库 + ssh-keygen 真签名 tag（版本=本体当前版本 → no-update）。
+// 工具缺失则降级：互斥用例的释放分支断言「无签名 release 拒更」fail-closed。
+let suReady = false;
+let suOwn = null;
+try {
+  suOwn = JSON.parse(readFileSync(join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..", "package.json"), "utf8")).version;
+  const suRepo = mkdtempSync(join(tmpdir(), "dsh-su-repo-")).replace(/\\/g, "/");
+  const keyPath = join(suRepo, "test-release-key");
+  execFileSync("ssh-keygen", ["-t", "ed25519", "-f", keyPath, "-N", "", "-q"]);
+  const suPub = readFileSync(`${keyPath}.pub`, "utf8").trim();
+  const sgit = (a) => execFileSync("git", a, { cwd: suRepo, stdio: ["ignore", "pipe", "pipe"] });
+  sgit(["init", "-q"]);
+  sgit(["config", "user.email", "t@t"]);
+  sgit(["config", "user.name", "T"]);
+  sgit(["config", "gpg.format", "ssh"]);
+  sgit(["config", "user.signingkey", `${keyPath}.pub`]);
+  writeFileSync(join(suRepo, "package.json"), JSON.stringify({ version: suOwn }));
+  sgit(["add", "package.json"]);
+  sgit(["commit", "-qm", "c1"]);
+  sgit(["tag", "-s", "-m", `release v${suOwn}`, `v${suOwn}`]);
+  process.env.DSH_MARKETPLACE_UPDATE_REPO_URL = suRepo;
+  process.env.DSH_MARKETPLACE_UPDATE_EXTRA_SIGNERS = suPub;
+  suReady = true;
+} catch (e) {
+  console.log("SKIP 自更新签名 fixture 构建失败:", e.message);
+}
 
 // mock 网络：registry/search 全失败 → list 走磁盘缓存、checkSelfUpdate 走自检缓存兜底
 const origFetch = globalThis.fetch;
@@ -85,14 +113,18 @@ if (handler) {
   check("self-update PUT → 405", r2.status, 405);
 }
 
-// 运行时互斥：让自更新版本查询保持 pending，profile POST 必须在写配置前返回 409。
-let releaseVersion;
+// 运行时互斥：让自更新的 tag 候选列表查询保持 pending，profile POST 必须在写配置前返回 409。
+let releaseTags;
 const profileHandler = registered.find((h) => h.path === "/api/marketplace/profile")?.handler;
 if (profileHandler) {
-  const pendingVersion = new Promise((resolve) => { releaseVersion = resolve; });
+  const pendingTags = new Promise((resolve) => { releaseTags = resolve; });
   const origBusyFetch = globalThis.fetch;
   globalThis.fetch = async (url) => {
-    if (String(url).includes("/contents/package.json")) return await pendingVersion;
+    if (String(url).includes("matching-refs")) return await pendingTags;
+    if (String(url).includes("/contents/package.json")) {
+      const payload = { version: suOwn ?? "0.0.0" };
+      return { ok: true, status: 200, text: async () => JSON.stringify(payload), arrayBuffer: async () => Buffer.from(JSON.stringify(payload)) };
+    }
     return { ok: false, status: 403, text: async () => "" };
   };
   const updateRes = mkRes();
@@ -110,14 +142,21 @@ if (profileHandler) {
     url: "/api/marketplace/profile"
   }, profileRes.res);
   check("self-update 运行中 profile 切换拒绝 409", profileRes.status, 409);
-  releaseVersion({
+  // 释放：返回候选 tag 引用列表——fixture 就绪时解析出已验签同版本 tag → no-update；
+  // 未就绪时 listTagRefs 之后仍无可验 release → fail-closed 500。
+  releaseTags({
     ok: true,
     status: 200,
-    text: async () => JSON.stringify({ version: "0.0.0" }),
-    arrayBuffer: async () => Buffer.from(JSON.stringify({ version: "0.0.0" }))
+    text: async () => JSON.stringify(suReady ? [{ ref: `refs/tags/v${suOwn}`, object: { sha: "", type: "tag" } }] : []),
+    arrayBuffer: async () => Buffer.from(JSON.stringify(suReady ? [{ ref: `refs/tags/v${suOwn}`, object: { sha: "", type: "tag" } }] : []))
   });
   await updatePromise;
-  check("self-update 互斥释放后 no-update 完成", updateRes.status, 200);
+  if (suReady) {
+    check("self-update 互斥释放后 no-update 完成", updateRes.status, 200);
+    check("self-update 互斥释放后 no-update 语义", updateRes.body?.status, "no-update");
+  } else {
+    check("self-update 互斥释放后无签名 fail-closed", updateRes.status, 500);
+  }
   globalThis.fetch = origBusyFetch;
 } else {
   check("profile handler 存在", false, true);
