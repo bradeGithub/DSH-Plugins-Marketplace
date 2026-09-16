@@ -6,6 +6,7 @@
 <!-- TOC -->
 - [1. 版本号（SemVer）](#1-版本号semver)
 - [2. Tag 命名](#2-tag-命名)
+  - [2.1 维护者签名 key 管理（per-maintainer 信任根）](#21-维护者签名-key-管理per-maintainer-信任根)
 - [3. Release 正文结构](#3-release-正文结构)
 - [4. 发布流程](#4-发布流程)
 <!-- /TOC -->
@@ -35,6 +36,18 @@
 - 硬门控：`pre-push` hook（`scripts/hooks/pre-push`）拦截未通过验签的 `v*` tag 推送及 `v*` tag 删除；`tag-verify.yml` CI 在 tag 推送后服务端复核告警。本地可用 `node scripts/verify-tag.mjs vX.Y.Z` 预验。
 - Tag 主题短标题：`vX.Y.Z — <一句主题> / <English subtitle>`。
 - 只给已合并进上游 main 的提交打 Tag，不打分支上未发布的中间态。
+
+### 2.1 维护者签名 key 管理（per-maintainer 信任根）
+
+`lib/allowed-signers.js` 的 `ALLOWED_SIGNERS` 按**维护者**建模（不按机器）：每行 = 一位可独立发版的人，`signedBy` 即署名归因。
+
+| 场景 | 流程 |
+|---|---|
+| 新维护者获得发版权 | 对方本机 `ssh-keygen -t ed25519 -f ~/.ssh/dsh-release-<id>` → 把 `.pub` 整行经普通 PR 追加进 `ALLOWED_SIGNERS` → **下一个由任一已信 key 签名的 release 起生效**。此后独立 `git tag -s` 发版，无需他人再签——信任委托是一次性入职，不是每次发版 |
+| key 失窃 / 维护者退出 | 把该 key 的 base64 blob 移入 `REVOKED_KEYS`（同 PR 可一并加替换 key），由另一把仍可信的 key 签名的 release 下发 |
+| 多机/主备 | 同一人可持多行（如 `release-lu` / `release-lu-backup`）；私钥分散存放，任一生效 |
+
+约束（不可削弱）：私钥永不入库、永不跨人共享；信任根只读已安装 bundle 的这份常量（远端同名文件概不采信）；新增/吊销的生效点恒为「已信 key 签名的 release」——这是防信任自传播的语义本身，不是流程负担。
 
 ## 3. Release 正文结构
 
