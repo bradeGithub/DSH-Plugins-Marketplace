@@ -1,41 +1,13 @@
 {
-  "generated_at": "2026-09-17T16:41:21.587Z",
-  "count": 5,
+  "generated_at": "2026-09-17T21:13:27.987Z",
+  "count": 1,
   "items": [
     {
-      "full_name": "Vithrive/Deepseek-Harness-for-VS-Code",
-      "previous": "web-ui",
-      "current": "other",
-      "desc_now": "Deepseek Harness for VS Code",
-      "desc_prev": "Deepseek Harness for VS Code"
-    },
-    {
-      "full_name": "Duskriver/dsh-opencode-go",
-      "previous": "coding",
-      "current": "tool",
-      "desc_now": "让你的DSH完美适配opencodeg-go套餐",
-      "desc_prev": "让你的DSH完美适配opencodeg-go套餐"
-    },
-    {
-      "full_name": "weekitmo/oh-my-dsh-plugins",
-      "previous": "other",
-      "current": "resource",
-      "desc_now": "A curated collection of awesome plugins for DeepSeek Harness (DSH) — task notifications, LLM trace inspection, keybindings with a built-in terminal, and local agent delegation.",
-      "desc_prev": null
-    },
-    {
-      "full_name": "john-walks-slow/dsh-proactive",
-      "previous": "other",
-      "current": "web-ui",
-      "desc_now": "Proactive follow-ups for DeepSeek Harness: the model schedules host-level alarms (once/every/cron with jitter, quiet hours, daily budget) that resume cold sessions, with tombstone compaction and a live web panel.",
-      "desc_prev": null
-    },
-    {
-      "full_name": "akvi0921/dsh-console-tap",
-      "previous": "web-ui",
-      "current": "other",
-      "desc_now": "【已停止维护/归档】旧版控制台显形插件 → 新插件见 akvi0921/dsh-build-progress",
-      "desc_prev": "DSH 控制台显形插件:把助手执行的命令与完整控制台输出实时推给前端(官方 WebUI 悬浮控制台)"
+      "full_name": "john-walks-slow/dsh-simulated-life",
+      "previous": "tool",
+      "current": "memory",
+      "desc_now": "Simulated life context for DeepSeek Harness: reads .life/<date> events into agent context with dedup, and a life_react tool to write feelings, thoughts and actions back for world-evolution workflows.",
+      "desc_prev": "Simulated life context and world evolution for DeepSeek Harness: injects past 24h simulated events and provides life_react tool."
     }
   ]
 }
