@@ -119,17 +119,20 @@ function check(name, actual, expected) {
 {
   const log = [];
   const calls = [];
+  const feedback = [];
   const runInstall = createInstallUseCase({
     installRepo: async () => { throw Object.assign(new Error("network failed"), { stderr: "fatal: unable to access" }); },
     saveInstalled: async () => calls.push("saveInstalled"),
-    queueFeedbackSafe: async () => calls.push("queueFeedbackSafe"),
+    queueFeedbackSafe: async (entry) => feedback.push(entry),
     getInstalledRecord: () => null,
-    buildEnvProfile: async () => ({}),
-    buildFeedbackLogSnapshot: () => "",
+    buildEnvProfile: async () => ({ platform: "test" }),
+    buildFeedbackLogSnapshot: () => "snapshot",
     readPackageVersion: async () => "",
     classifyInstallFailure: () => "network hint",
+    classifyInstallFailureKind: () => "git-connectivity",
     cleanupCache: async (dir) => calls.push(["cleanupCache", dir]),
-    translate: (_lang, key) => key === "step5" ? "installing" : "failure"
+    translate: (_lang, key) => key === "step5" ? "installing" : "failure",
+    now: () => 555
   });
   const result = await runInstall({
     type: "skill",
@@ -144,6 +147,20 @@ function check(name, actual, expected) {
   check("install 失败保留错误提示", result.error, "network failed\n\nnetwork hint");
   check("install 失败清理缓存", calls, [["cleanupCache", "/cache/fail"]]);
   check("install 失败写入原错误与分类", log, ["installing", "failure", "network hint"]);
+  // 失败也入队反馈：outcome=install-failed + errorClass 结构化分类 + 日志快照
+  check("install 失败反馈入队一次", feedback.length, 1);
+  check("install 失败反馈 entry", feedback[0], {
+    repo: "owner/fail",
+    name: "owner/fail",
+    type: "skill",
+    version: null,
+    installedAt: 555,
+    method: "market-direct",
+    outcome: "install-failed",
+    errorClass: "git-connectivity",
+    envProfile: { platform: "test" },
+    logSnapshot: "snapshot"
+  });
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);

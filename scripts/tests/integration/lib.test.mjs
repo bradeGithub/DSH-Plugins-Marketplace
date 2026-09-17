@@ -1417,13 +1417,34 @@ globalThis.fetch = () => Promise.reject(new Error("integration test: real networ
     // 保存 token
     let r = await fbCall(fbToken, { token: "ghp_fake-token" });
     check("feedback token 保存 hasToken", r.b && r.b.hasToken, true);
-    // 422 路径返回 manualUrl——手动预填链接不带日志（URL 长度限制 + 额外暴露面）
+    // 422 路径返回 manualUrl——手动预填链接恢复有界日志：阈值内带日志块，超阈值降级无日志版
     const orig422 = mockFetch({}, 422);
     r = await fbCall(fbSubmit, { repo: "none/feedback-repo", ok: true, note: "x" });
     globalThis.fetch = orig422;
     check("feedback 422 重试后 manualUrl", typeof (r.b && r.b.manualUrl) === "string", true);
     check("feedback 422 重试后 error 含 422", r.b && r.b.error && r.b.error.includes("422"), true);
-    check("manualUrl 不含日志快照（URL 暴露面）", decodeURIComponent(r.b.manualUrl).includes("安装日志（已脱敏测试样本）"), false);
+    // manualUrl 分级：短快照编码后 <MANUAL_URL_MAX → 保留日志块（客户端另有 logSnapshot 兜底）
+    await lib.queueFeedback({
+      repo: "none/feedback-repo4", name: "fb-manual", type: "skill", version: "1.0.0",
+      installedAt: Date.now(),
+      logSnapshot: "安装日志（已脱敏测试样本）",
+    });
+    const orig422b = mockFetch({}, 422);
+    r = await fbCall(fbSubmit, { repo: "none/feedback-repo4", ok: false, note: "x" });
+    globalThis.fetch = orig422b;
+    check("manualUrl 阈值内含日志快照", decodeURIComponent(r.b.manualUrl).includes("安装日志（已脱敏测试样本）"), true);
+    check("manualUrl 响应带 logSnapshot 兜底", r.b && r.b.logSnapshot, "安装日志（已脱敏测试样本）");
+    // CJK 密集快照（≥2000 字符）：编码膨胀 ~9x 超阈值 → manualUrl 降级不含 details 日志块
+    await lib.queueFeedback({
+      repo: "none/feedback-repo5", name: "fb-cjk", type: "skill", version: "1.0.0",
+      installedAt: Date.now(),
+      logSnapshot: "安装失败日志详情行".repeat(300),
+    });
+    const orig422c = mockFetch({}, 422);
+    r = await fbCall(fbSubmit, { repo: "none/feedback-repo5", ok: false, note: "x" });
+    globalThis.fetch = orig422c;
+    check("CJK 快照超阈值 manualUrl 降级无日志块", decodeURIComponent(r.b.manualUrl).includes("<details>"), false);
+    check("CJK 降级响应仍带 logSnapshot 供剪贴板", typeof (r.b && r.b.logSnapshot) === "string" && r.b.logSnapshot.length >= 2000, true);
     // 提交：fetch 返回 200 + html_url → 自动创建成功 → issueUrl
     // 捕获请求体断言模板渲染（异常反馈带 details 折叠日志 + 双语标记；正常反馈零日志）。
     // 先经 queueFeedback 入队带快照的 entry（对齐真实链路：安装时入队 → 反馈时取出）。

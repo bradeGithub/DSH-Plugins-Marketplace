@@ -141,6 +141,10 @@ function makeDeps(overrides = {}) {
       scanRequirements: async () => [],
       sanitizeLog: (value) => value,
       classifyInstallFailure: () => null,
+      classifyInstallFailureKind: () => "unclassified",
+      queueFeedbackSafe: async () => {},
+      buildEnvProfile: async () => ({}),
+      buildFeedbackLogSnapshot: () => "",
       compareVersions: (a, b) => (a === b ? 0 : a < b ? -1 : 1),
       pushLog: () => {},
       pushEvent: (event) => events.push(event),
@@ -586,6 +590,64 @@ check("routes 统一通过正式版本响应包装器", (routesSource.match(/\bj
   }, res);
   check("install 抛错时事件为 install.failed", events[0]?.event, "install.failed");
   check("install 抛错时 error_code=install_failed", events[0]?.error_code, "install_failed");
+}
+
+// 外层 catch（useCase 内部 throw 逃逸）同样入队反馈：outcome=install-failed + errorClass，
+// type 在 catch 作用域不可见记 null，method 按 npmTargetUsed 判定。
+{
+  const feedback = [];
+  const { deps, registered } = makeDeps({
+    useCases: {
+      ...makeDeps().deps.useCases,
+      install: async () => { throw new Error("Command failed: pnpm install"); }
+    },
+    helpers: {
+      ...makeDeps().deps.helpers,
+      classifyInstallFailureKind: () => "command-failed",
+      queueFeedbackSafe: async (entry) => { feedback.push(entry); },
+      buildEnvProfile: async () => ({ platform: "test" }),
+      buildFeedbackLogSnapshot: () => "snapshot"
+    }
+  });
+  registerRoutes(deps);
+  const route = registered.find((item) => item.path === "/api/marketplace/install");
+  const res = makeResponse();
+  await route.handler({
+    method: "POST",
+    url: "/api/marketplace/install",
+    body: { repo: "bad/throw" }
+  }, res);
+  check("install 抛错入队反馈一次", feedback.length, 1);
+  check("install 抛错反馈 outcome/errorClass", [feedback[0]?.outcome, feedback[0]?.errorClass], ["install-failed", "command-failed"]);
+  check("install 抛错反馈 repo/name/method", [feedback[0]?.repo, feedback[0]?.name, feedback[0]?.method], ["bad/throw", "bad/throw", "market-direct"]);
+  check("install 抛错反馈 type/version 记 null", [feedback[0]?.type, feedback[0]?.version], [null, null]);
+  check("install 抛错反馈 envProfile/logSnapshot", [feedback[0]?.envProfile, feedback[0]?.logSnapshot], [{ platform: "test" }, "snapshot"]);
+  check("install 抛错反馈 installedAt 为时间戳", typeof feedback[0]?.installedAt, "number");
+}
+
+// cli-flow 走到 npm 回退（npmTargetUsed 非空）后 install 抛错 → method=cli-npm-fallback
+{
+  const feedback = [];
+  const { deps, registered } = makeDeps({
+    useCases: {
+      ...makeDeps().deps.useCases,
+      installCli: async () => ({ status: "continue", cacheDir: "/dsh/cache/x", cliCommand: "dsh plugin add x", npmTargetUsed: "npm-pkg" }),
+      install: async () => { throw new Error("boom"); }
+    },
+    helpers: {
+      ...makeDeps().deps.helpers,
+      queueFeedbackSafe: async (entry) => { feedback.push(entry); }
+    }
+  });
+  registerRoutes(deps);
+  const route = registered.find((item) => item.path === "/api/marketplace/install");
+  const res = makeResponse();
+  await route.handler({
+    method: "POST",
+    url: "/api/marketplace/install",
+    body: { repo: "bad/npmfb" }
+  }, res);
+  check("install npm 回退后抛错反馈 method", feedback[0]?.method, "cli-npm-fallback");
 }
 
 {

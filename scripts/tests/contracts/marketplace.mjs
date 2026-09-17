@@ -61,7 +61,7 @@ const CONTRACTS = {
   },
   feedback: {
     required: ["status"],
-    optional: ["issueUrl", "manualUrl", "error", "repo", "log"]
+    optional: ["issueUrl", "manualUrl", "error", "repo", "log", "logSnapshot"]
   },
   feedbackToken: {
     required: ["status", "hasToken"],

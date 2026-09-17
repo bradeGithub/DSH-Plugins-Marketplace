@@ -538,11 +538,11 @@ const MUTATIONS = [
   },
   {
     id: "m56",
-    name: "手动反馈链接包含诊断日志",
+    name: "manualUrl 长度阈值偏移",
     type: "behavior",
-    pattern: /const manualBody = withLog \? buildIssue\(entry, ok, note, false\)\.body : body;/g,
-    replacement: "const manualBody = body;",
-    note: "manualUrl 会经历史和代理，必须排除诊断日志"
+    pattern: /MANUAL_URL_MAX = 6000/g,
+    replacement: "MANUAL_URL_MAX = 0",
+    note: "manualUrl 阈值归零 = 永不带日志——「阈值内含日志」断言必须捕获（反向永不降级见 m271）"
   },
   {
     id: "m57",
@@ -2247,6 +2247,38 @@ const MUTATIONS = [
     pattern: /catch \{\n      ownRepo = null;\n    \}/g,
     replacement: "catch {\n      ownRepo = \"failed\";\n    }",
     note: "package.json 读取失败必须保持 null 语义并允许重试"
+  },
+  {
+    id: "m271",
+    name: "manualUrl 永不降级",
+    type: "behavior",
+    pattern: /if \(manualUrl\.length > MANUAL_URL_MAX\)/g,
+    replacement: "if (false)",
+    note: "manualUrl 编码后超 6000 必须降级为无日志 body（CJK 快照膨胀 9x 实测 ~13.7KB 触 GitHub 长 URL 问题）"
+  },
+  {
+    id: "m272",
+    name: "manualUrl 不含日志",
+    type: "behavior",
+    pattern: /let manualUrl = manualUrlFor\(body\);/g,
+    replacement: "let manualUrl = manualUrlFor(buildIssue(entry, ok, note, false).body);",
+    note: "阈值内 manualUrl 必须含有界日志快照——无 token 主流路径丢失全部诊断信息（#218/#232 实证回归）"
+  },
+  {
+    id: "m273",
+    name: "runInstall 失败不入队",
+    type: "behavior",
+    pattern: /outcome: "install-failed",/g,
+    replacement: "outcome: \"installed\",",
+    note: "失败 entry 的 outcome 必须标记 install-failed——成功语义会让弹窗话术/issue 分类全错"
+  },
+  {
+    id: "m274",
+    name: "失败分类丢失",
+    type: "behavior",
+    pattern: /classifyInstallFailureKind\?\.?(errText)|classifyInstallFailureKind\(errText\)/g,
+    replacement: "\"unclassified\"",
+    note: "errorClass 必须来自分类器——常量化会让全部失败反馈失去类标签，transient 噪声无法下游过滤"
   }
 ];
 
@@ -2521,7 +2553,11 @@ const MUTATION_FILE_HINTS = {
   m267: "lib/infra/marketplace-metadata.js",
   m268: "lib/infra/marketplace-metadata.js",
   m269: "lib/infra/marketplace-metadata.js",
-  m270: "lib/infra/marketplace-metadata.js"
+  m270: "lib/infra/marketplace-metadata.js",
+  m271: "lib/app/feedback.js",
+  m272: "lib/app/feedback.js",
+  m273: "lib/app/install.js",
+  m274: "lib/app/install.js"
 };
 
 function collectLibFiles(dir) {

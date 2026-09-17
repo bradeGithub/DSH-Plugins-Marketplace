@@ -210,6 +210,10 @@
         })() : null,
         inst.result && (inst.result.status === "aborted") && h("p", { style: s.err }, t("abortedMsg")),
         inst.result && (inst.result.status === "failed") && h("p", { style: s.err }, t("failedMsg", { err: (inst.result.error || "unknown") })),
-        inst.phase !== "running" ? h("button", { className: "dshm-btn", style: Object.assign({}, s.btn, { marginTop: 12 }), onClick: props.cancel }, t("backToList")) : h("button", { className: "dshm-btn", style: Object.assign({}, s.btn, { marginTop: 12 }), onClick: props.cancel }, t("cancelRunning"))
+        h("div", { style: { display: "flex", gap: 8, marginTop: 12, flexWrap: "wrap" } },
+          // 失败就地反馈（v2）：服务端 catch 已把该 repo 入待反馈队——按钮走 pending 确认 → POST ok=false
+          (inst.result && inst.result.status === "failed" && typeof props.onReportFail === "function") ? h("button", { className: "dshm-btn", style: s.btn, disabled: !!props.fbBusy, onClick: function () { props.onReportFail(inst.repo); } }, props.fbBusy ? t("fbSubmitting") : t("fbSubmitReport")) : null,
+          inst.phase !== "running" ? h("button", { className: "dshm-btn", style: s.btn, onClick: props.cancel }, t("backToList")) : h("button", { className: "dshm-btn", style: s.btn, onClick: props.cancel }, t("cancelRunning"))
+        )
       );
     }

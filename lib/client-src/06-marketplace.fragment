@@ -13,11 +13,21 @@
       var fbNoteState = useState(""); var fbNote = fbNoteState[0]; var setFbNote = fbNoteState[1];
       var fbBusyState = useState(false); var fbBusy = fbBusyState[0]; var setFbBusy = fbBusyState[1];
       var fbTokenState = useState(""); var fbTokenInput = fbTokenState[0]; var setFbTokenInput = fbTokenState[1];
-      // 反馈开关（v1.4.6）：默认开启；关闭后不拉取/不弹「是否正常」确认弹窗。偏好存 localStorage。
-      var fbEnabledState = useState(function () {
-        try { return localStorage.getItem("dshm.fb.enabled") !== "0"; } catch (e) { return true; }
+      // 反馈偏好三态（v2）：dshm.fb.mode = "ask"（默认）| "ask-failed" | "off"。
+      // 读取顺序：新 key → 旧 key dshm.fb.enabled（"0"→"off"，其余→"ask"；读到旧值后迁移写回并删除旧 key）。
+      // mode=off 不拉取/不弹确认弹窗；ask-failed 只弹安装失败的 entry。全部 try/catch 容错
+      // （localStorage 不可用时退回默认 "ask"，仅会话内生效）。
+      var fbModeState = useState(function () {
+        try {
+          var r = resolveFbMode(localStorage.getItem("dshm.fb.mode"), localStorage.getItem("dshm.fb.enabled"));
+          if (r.migrated) {
+            try { localStorage.setItem("dshm.fb.mode", r.mode); } catch (e) { /* ignore */ }
+            try { localStorage.removeItem("dshm.fb.enabled"); } catch (e) { /* ignore */ }
+          }
+          return r.mode;
+        } catch (e) { return "ask"; }
       });
-      var fbEnabled = fbEnabledState[0]; var setFbEnabled = fbEnabledState[1];
+      var fbMode = fbModeState[0]; var setFbMode = fbModeState[1];
       // 环境变量编辑（issue #18）：弹窗表单 state
       var editState = useState(null); var editRepo = editState[0]; var setEditRepo = editState[1];
       var editRowsState = useState([]); var editRows = editRowsState[0]; var setEditRows = editRowsState[1];
@@ -139,17 +149,47 @@
       // 打开市场时拉取待确认反馈（安装完成后服务端写入队列）
       useEffect(function () {
         var cancelled = false;
-        if (fbDismissed || !fbEnabled) return function () { cancelled = true; };
+        if (fbDismissed || fbMode === "off") return function () { cancelled = true; };
         fetch("/api/marketplace/feedback/pending", { headers: { "X-DSH-Marketplace": "1" } })
           .then(function (r) { return r.json(); })
           .then(function (data) { if (!cancelled && Array.isArray(data.pending) && data.pending.length > 0) setFbPending(data.pending); })
           .catch(function () { /* 网络失败：静默，不打扰 */ });
         return function () { cancelled = true; };
-      }, [tick, fbEnabled]);
+      }, [tick, fbMode]);
+
+      /** 当前应弹的反馈 entry：mode=ask-failed 时跳过成功 entry（成功 entry 留队列不展示）。 */
+      function fbCurrentEntry() {
+        for (var i = 0; i < fbPending.length; i++) {
+          var e = fbPending[i];
+          if (!e) continue;
+          if (fbMode === "ask-failed" && e.outcome !== "install-failed") continue;
+          return e;
+        }
+        return null;
+      }
+
+      /** 反馈提交响应处理（v2）：issueUrl 直接打开；manualUrl 打开预填页——
+       *  带非空 logSnapshot 时先把安装日志复制进剪贴板（clipboard 不可用最力兜底，不阻塞打开）。 */
+      function handleFeedbackResponse(data) {
+        if (!data || data.status !== "done") {
+          showToast(t("fbFail", { err: (data && data.error) || "unknown" }), false);
+          return false;
+        }
+        showToast(t("fbSent"), true);
+        if (data.issueUrl) { window.open(data.issueUrl, "_blank"); }
+        else if (data.manualUrl) {
+          var snap = typeof data.logSnapshot === "string" && data.logSnapshot.length > 0 ? data.logSnapshot : null;
+          if (snap) { try { navigator.clipboard.writeText(snap).catch(function () {}); } catch (e) { /* 剪贴板不可用：忽略 */ } }
+          window.open(data.manualUrl, "_blank");
+          showToast(t(snap ? "fbManualLog" : "fbManual"), true);
+        }
+        else if (data.error) { showToast(t("fbFail", { err: data.error }), false); }
+        return true;
+      }
 
       /** 提交反馈：POST 服务端（移除队列 + 同步 GitHub issue），返回 issueUrl/manualUrl。 */
       function submitFeedback(ok) {
-        var entry = fbPending[0];
+        var entry = fbCurrentEntry();
         if (!entry || fbBusy) return;
         setFbBusy(true);
         fetch("/api/marketplace/feedback", {
@@ -158,17 +198,10 @@
           body: JSON.stringify({ repo: entry.repo, ok: ok, note: fbNote, lang: langCurrent })
         }).then(function (r) { return r.json(); }).then(function (data) {
           setFbBusy(false);
-          if (data && data.status === "done") {
-            showToast(t("fbSent"), true);
-            // 同步结果：自动创建的 issue 或预填手动提交链接 → 打开浏览器
-            if (data.issueUrl) { window.open(data.issueUrl, "_blank"); }
-            else if (data.manualUrl) { window.open(data.manualUrl, "_blank"); showToast(t("fbManual"), true); }
-            else if (data.error) { showToast(t("fbFail", { err: data.error }), false); }
+          if (handleFeedbackResponse(data)) {
             setFbNote("");
-            var rest = fbPending.slice(1);
-            setFbPending(rest);
-          } else {
-            showToast(t("fbFail", { err: (data && data.error) || "unknown" }), false);
+            // 移除已提交的 entry（按引用匹配——ask-failed 模式下当前弹的不一定是队列首项）
+            setFbPending(fbPending.filter(function (e) { return e !== entry; }));
           }
         }).catch(function (err) {
           setFbBusy(false);
@@ -206,12 +239,57 @@
         });
       }
 
-      /** 反馈开关切换：写 localStorage；关闭时清空已拉取的待确认队列（重新打开会自动重拉）。 */
-      function toggleFbEnabled() {
-        var next = !fbEnabled;
-        try { localStorage.setItem("dshm.fb.enabled", next ? "1" : "0"); } catch (e) { /* 存储不可用：仅会话内生效 */ }
-        setFbEnabled(next);
-        if (!next) setFbPending([]);
+      /** 反馈偏好切换（v2 三态）：写 dshm.fb.mode；off 时清空已拉取的待确认队列（切回会自动重拉）。 */
+      function changeFbMode(next) {
+        if (next !== "ask" && next !== "ask-failed" && next !== "off") next = "ask";
+        try { localStorage.setItem("dshm.fb.mode", next); } catch (e) { /* 存储不可用：仅会话内生效 */ }
+        setFbMode(next);
+        if (next === "off") setFbPending([]);
+      }
+
+      /** 「不再询问」：mode 写 "off"，清空待弹队列并关弹窗。 */
+      function fbNeverAsk() {
+        changeFbMode("off");
+        setFbNote("");
+      }
+
+      /** 失败 entry 重试安装：复用 install 触发路径（answers={}）；
+       *  面板弹层随 inst 置位自动接管，409/忙态由 runInstall 写日志 + toast。 */
+      function retryInstall(repo) {
+        setInputValues({});
+        runInstall(repo, {}, []);
+      }
+
+      /** 失败就地反馈（v2）：先 GET pending 确认该 repo 在队（服务端 catch 已入队），
+       *  再 POST ok=false；响应处理与弹窗反馈同路径。复用 fbBusy 防连点。 */
+      function reportFailedInstall(repo) {
+        if (fbBusy) return;
+        setFbBusy(true);
+        fetch("/api/marketplace/feedback/pending", { headers: { "X-DSH-Marketplace": "1" } })
+          .then(function (r) { return r.json(); })
+          .then(function (data) {
+            var found = !!(data && Array.isArray(data.pending) && data.pending.some(function (e) { return e && e.repo === repo; }));
+            if (!found) {
+              setFbBusy(false);
+              showToast(t("fbFail", { err: "not-found" }), false);
+              return;
+            }
+            fetch("/api/marketplace/feedback", {
+              method: "POST",
+              headers: mpHeaders({ "Content-Type": "application/json" }),
+              body: JSON.stringify({ repo: repo, ok: false, note: "", lang: langCurrent })
+            }).then(function (r2) { return r2.json(); }).then(function (data2) {
+              setFbBusy(false);
+              handleFeedbackResponse(data2);
+            }).catch(function (err) {
+              setFbBusy(false);
+              showToast(t("fbFail", { err: String(err) }), false);
+            });
+          })
+          .catch(function (err) {
+            setFbBusy(false);
+            showToast(t("fbFail", { err: String(err) }), false);
+          });
       }
 
       // 小优待：打开页面时拉取市场本体自更新检测结果（服务端启动时已直链 GitHub 查过，
@@ -274,6 +352,9 @@
           headers: mpHeaders({ "Content-Type": "application/json" }),
           body: JSON.stringify({ repo: repo, answers: answers || {}, lang: langCurrent })
         }).then(function (r) { return r.json(); }).then(function (data) {
+          // 403/409（并发安装中/忙态）等无 status 错误：除写进面板日志外同步 toast
+          // （反馈弹窗「重试安装」等路径下弹层已让位给安装面板，toast 保证可见反馈）
+          if (!data.status && data.error) showToast(t("failedMsg", { err: data.error }), false);
           setInst(function (prev) {
             // 面板可能已被另一个安装占用：过期响应直接丢弃，避免旧日志覆盖新面板
             if (!prev || prev.repo !== repo) return prev;
@@ -475,13 +556,7 @@
         ) : null,
         h("div", { style: s.tabBar },
           h("button", { style: activeTab === "plugins" ? s.tabActive : s.tabBtn, onClick: function () { setActiveTab("plugins"); } }, t("tabPlugins")),
-          h("button", { style: activeTab === "skills" ? s.tabActive : s.tabBtn, onClick: function () { setActiveTab("skills"); } }, t("tabSkills")),
-          h("div", { style: { display: "flex", alignItems: "center", gap: 6, marginLeft: "auto", marginBottom: 6 } },
-            h("label", { style: { display: "flex", alignItems: "center", gap: 6, fontSize: 12, color: "var(--dsw-alias-label-secondary)", cursor: "pointer", whiteSpace: "nowrap" } },
-              h("input", { type: "checkbox", checked: fbEnabled, onChange: toggleFbEnabled, style: { accentColor: "var(--dsw-alias-brand-primary)", cursor: "pointer", margin: 0 } }),
-              t("fbToggle")
-            )
-          )
+          h("button", { style: activeTab === "skills" ? s.tabActive : s.tabBtn, onClick: function () { setActiveTab("skills"); } }, t("tabSkills"))
         ),
         h("div", { key: "profile-cfg", style: { border: "1px solid var(--dsw-alias-border-l2)", borderRadius: 10, padding: "10px 14px", margin: "0 0 12px" } },
           h("p", { style: { fontSize: 12, fontWeight: 600, margin: "0 0 8px", color: "var(--dsw-alias-label-secondary)" } }, t("profileTitle")),
@@ -509,6 +584,18 @@
         ),
         h("div", { key: "feedback-cfg", style: { border: "1px solid var(--dsw-alias-border-l2)", borderRadius: 10, padding: "10px 14px", margin: "0 0 12px" } },
           h("p", { style: { fontSize: 12, fontWeight: 600, margin: "0 0 8px", color: "var(--dsw-alias-label-secondary)" } }, t("fbTitle")),
+          h("div", { style: { display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap", margin: "0 0 8px" } },
+            h("span", { style: { fontSize: 12, color: "var(--dsw-alias-label-secondary)" } }, t("fbToggle")),
+            h("select", {
+              style: Object.assign({}, s.input, { width: "auto", marginTop: 0, padding: "4px 8px", fontSize: 12 }),
+              value: fbMode,
+              onChange: function (e) { changeFbMode(e.target.value); }
+            },
+              h("option", { value: "ask" }, t("fbModeAsk")),
+              h("option", { value: "ask-failed" }, t("fbModeFailed")),
+              h("option", { value: "off" }, t("fbModeOff"))
+            )
+          ),
           h("div", { style: { display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" } },
             h("span", { style: { fontSize: 12, color: "var(--dsw-alias-label-secondary)" } }, t("fbTokenLabel")),
             h("input", { style: Object.assign({}, wdInputStyle, { width: 220 }), type: "password", placeholder: "ghp_...", value: fbTokenInput, onChange: function (e) { setFbTokenInput(e.target.value); } }),
@@ -516,7 +603,7 @@
           ),
           h("p", { style: { fontSize: 11, color: "var(--dsw-alias-label-tertiary)", margin: "6px 0 0" } }, t("fbTokenNote"))
         ),
-        inst ? h("div", { style: s.installOverlay }, h(InstallPanel, { inst: inst, inputValues: inputValues, setInputValues: setInputValues, submit: submit, cancel: cancelInstall })) : null,
+        inst ? h("div", { style: s.installOverlay }, h(InstallPanel, { inst: inst, inputValues: inputValues, setInputValues: setInputValues, submit: submit, cancel: cancelInstall, fbBusy: fbBusy, onReportFail: reportFailedInstall })) : null,
         editRepo ? h("div", { style: s.installOverlay }, h("div", { style: s.panel },
           h("h3", { style: { margin: "0 0 8px", fontSize: 15 } }, t("editTitle")),
           h("p", { style: { fontSize: 12, margin: "0 0 12px", color: "var(--dsw-alias-label-secondary)" } }, t("editHint", { repo: editRepo })),
@@ -536,18 +623,38 @@
             )
           )
         )) : null,
-        (!inst && fbEnabled && fbPending.length > 0) ? h("div", { style: s.installOverlay }, (function () {
-          var entry = fbPending[0];
+        (!inst && fbMode !== "off" && fbCurrentEntry()) ? h("div", { style: s.installOverlay }, (function () {
+          var entry = fbCurrentEntry();
+          var failed = entry.outcome === "install-failed";
+          // 网络/连通性失败的失败 entry：主按钮换成「重试安装」（复用 install 触发路径）
+          var retryable = failed && (entry.errorClass === "network" || entry.errorClass === "git-connectivity");
+          var btnLater = h("button", { key: "later", className: "dshm-btn", style: s.btn, disabled: fbBusy, onClick: dismissFeedback }, t("fbLater"));
+          var btnNoAsk = h("button", { key: "noask", className: "dshm-btn", style: s.btn, disabled: fbBusy, onClick: fbNeverAsk }, t("fbNoAsk"));
+          var btnReport = h("button", { key: "report", className: "dshm-btn", style: s.btn, disabled: fbBusy, onClick: function () { submitFeedback(false); } }, fbBusy ? t("fbSubmitting") : t("fbSubmitReport"));
+          var buttons;
+          if (retryable) {
+            buttons = [
+              h("button", { key: "retry", className: "dshm-btn dshm-btn-primary", style: s.btnPrimary, disabled: fbBusy, onClick: function () { retryInstall(entry.repo); } }, t("fbRetry")),
+              btnReport, btnLater, btnNoAsk
+            ];
+          } else if (failed) {
+            buttons = [
+              h("button", { key: "report", className: "dshm-btn dshm-btn-primary", style: s.btnPrimary, disabled: fbBusy, onClick: function () { submitFeedback(false); } }, fbBusy ? t("fbSubmitting") : t("fbSubmitReport")),
+              btnLater, btnNoAsk
+            ];
+          } else {
+            buttons = [
+              h("button", { key: "ok", className: "dshm-btn", style: Object.assign({}, s.btn, { border: "1px solid var(--dsw-alias-state-success-secondary, #15803d)", color: "var(--dsw-alias-state-success-primary)" }), disabled: fbBusy, onClick: function () { submitFeedback(true); } }, fbBusy ? t("fbSubmitting") : t("fbOk")),
+              h("button", { key: "bad", className: "dshm-btn", style: Object.assign({}, s.btn, { border: "1px solid var(--dsw-alias-state-error-secondary, #b91c1c)", color: "var(--dsw-alias-state-error-primary)" }), disabled: fbBusy, onClick: function () { submitFeedback(false); } }, fbBusy ? t("fbSubmitting") : t("fbBad")),
+              btnLater, btnNoAsk
+            ];
+          }
           return h("div", { style: s.panel },
             h("h3", { style: { margin: "0 0 8px", fontSize: 15 } }, t("fbTitle")),
-            h("p", { style: { fontSize: 13, margin: "0 0 4px", color: "var(--dsw-alias-label-primary)", whiteSpace: "pre-wrap", wordBreak: "break-word" } }, t("fbAsk", { name: entry.name || entry.repo })),
+            h("p", { style: { fontSize: 13, margin: "0 0 4px", color: "var(--dsw-alias-label-primary)", whiteSpace: "pre-wrap", wordBreak: "break-word" } }, failed ? t("fbAskFailed", { name: entry.name || entry.repo }) : t("fbAsk", { name: entry.name || entry.repo })),
             h("p", { style: { fontSize: 12, margin: "0 0 10px", color: "var(--dsw-alias-label-tertiary)" } }, entry.repo + (entry.version ? " · v" + entry.version : "")),
             h("input", { style: Object.assign({}, s.input, { marginTop: 0 }), type: "text", placeholder: t("fbNote"), value: fbNote, onChange: function (e) { setFbNote(e.target.value); } }),
-            h("div", { style: { display: "flex", gap: 8, justifyContent: "flex-end", marginTop: 14 } },
-              h("button", { className: "dshm-btn", style: Object.assign({}, s.btn, { border: "1px solid var(--dsw-alias-state-success-secondary, #15803d)", color: "var(--dsw-alias-state-success-primary)" }), disabled: fbBusy, onClick: function () { submitFeedback(true); } }, fbBusy ? t("fbSubmitting") : t("fbOk")),
-              h("button", { className: "dshm-btn", style: Object.assign({}, s.btn, { border: "1px solid var(--dsw-alias-state-error-secondary, #b91c1c)", color: "var(--dsw-alias-state-error-primary)" }), disabled: fbBusy, onClick: function () { submitFeedback(false); } }, fbBusy ? t("fbSubmitting") : t("fbBad")),
-              h("button", { className: "dshm-btn", style: s.btn, disabled: fbBusy, onClick: dismissFeedback }, t("fbLater"))
-            )
+            h("div", { style: { display: "flex", gap: 8, justifyContent: "flex-end", flexWrap: "wrap", marginTop: 14 } }, buttons)
           );
         })()) : null,
         activeTab === "plugins" ? h(PluginTab, tabProps) : h(SkillsTab, tabProps),

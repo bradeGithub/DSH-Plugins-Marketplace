@@ -1,4 +1,4 @@
-import { compareVersions, shouldUpdate, isTrustedRequest, isTrustedHost, isSensitiveEnvKey, buildMinimalEnv, buildFilteredEnv, looksLikeDshPlugin, wslPosixPath, normalizeRepoRef, dedupeReposByPkgName, slugify, SCRIPT_ENV_KEYS, sanitizeLog, buildFeedbackLogSnapshot, buildEnvProfile, isCliInstallTarget, safeAssign } from "../../../lib/index.js";
+import { compareVersions, shouldUpdate, isTrustedRequest, isTrustedHost, isSensitiveEnvKey, buildMinimalEnv, buildFilteredEnv, looksLikeDshPlugin, wslPosixPath, normalizeRepoRef, dedupeReposByPkgName, slugify, SCRIPT_ENV_KEYS, sanitizeLog, buildFeedbackLogSnapshot, buildEnvProfile, isCliInstallTarget, safeAssign, classifyInstallFailure, classifyInstallFailureKind } from "../../../lib/index.js";
 import { isBootstrapOnlyEnvKey, isValidEnvKey, isSafeWebdavUrl } from "../../../lib/domain/validation.js";
 
 let pass = 0, fail = 0;
@@ -343,6 +343,36 @@ check("空值拒绝", isCliInstallTarget(""), false);
 check("null 拒绝", isCliInstallTarget(null), false);
 check("超长拒绝（>214）", isCliInstallTarget("a".repeat(215)), false);
 check("前后空白容忍（trim）", isCliInstallTarget("  owner/repo  "), true);
+
+// ---- classifyInstallFailure / classifyInstallFailureKind（共享 INSTALL_FAILURE_RULES 规则表）----
+// 8 条规则各造一例 + 未命中兜底 unclassified；key 即反馈入队的 errorClass。
+const KIND_CASES = [
+  ["network", "fetch failed: ENOTFOUND registry.npmjs.org"],
+  ["git-connectivity", "fatal: unable to access 'https://github.com/a/b.git/': Failed to connect to github.com port 443"],
+  ["integrity", "npm ERR! code EINTEGRITY\nintegrity checksum failed"],
+  ["version-missing", "No matching version found for dep@9.9.9"],
+  ["native-build", "gyp ERR! stack Error: not found: python3"],
+  ["module-missing", "internal/modules/cjs/loader: Cannot find module 'foo'"],
+  ["command-failed", "ERR_PNPM_LOCKFILE_UP_TO_DATE Command failed with exit code 1"],
+  ["permission", "npm ERR! code EACCES\nnpm ERR! syscall mkdir"]
+];
+for (const [kind, sample] of KIND_CASES) {
+  check(`kind ${kind}`, classifyInstallFailureKind(sample), kind);
+}
+check("kind 未命中 → unclassified", classifyInstallFailureKind("just a normal error"), "unclassified");
+check("kind null 输入 → unclassified", classifyInstallFailureKind(null), "unclassified");
+// 规则顺序锁定：git clone 失败文本同时含「Command failed」与 git 连接签名，
+// git-connectivity 必须先于 command-failed 命中（否则归类被笼统化为构建失败）。
+check("kind git clone 复合文本 → git-connectivity", classifyInstallFailureKind(
+  "Command failed: git clone --depth 1 https://github.com/a/b.git\nfatal: unable to access 'https://github.com/a/b.git/': Couldn't connect to server"
+), "git-connectivity");
+// classifyInstallFailure 返回值回归：规则表化后 hint 文案与 null 语义不变
+check("hint 网络 zh", classifyInstallFailure("ENOTFOUND x", "zh").includes("网络"), true);
+check("hint 网络 en", classifyInstallFailure("ENOTFOUND x", "en").includes("Network"), true);
+check("hint git en 含 proxy", classifyInstallFailure("fatal: unable to access: Couldn't connect to server", "en").includes("proxy"), true);
+check("hint 完整性 zh", classifyInstallFailure("EINTEGRITY", "zh").includes("完整性"), true);
+check("hint 权限 en", classifyInstallFailure("EPERM: operation not permitted", "en").includes("Permission"), true);
+check("hint 无匹配 → null", classifyInstallFailure("just a normal error"), null);
 
 // ---- safeAssign 原型污染防护 ----
 {
