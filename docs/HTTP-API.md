@@ -57,12 +57,12 @@
 
 | 端点 | 方法 | body | 返回 |
 |---|---|---|---|
-| `/api/marketplace/feedback` | POST | `{ "repo", "ok": true|false, "note": "≤2000 字符" }` | `done`（含 `issueUrl` / `manualUrl`）；repo 未安装时 `issueUrl: null` + `error` |
-| `/api/marketplace/feedback/pending` | GET | — | `{ pending: [...] }` 待确认反馈队列 |
+| `/api/marketplace/feedback` | POST | `{ "repo", "ok": true|false, "note": "≤2000 字符" }` | `done`（含 `issueUrl` / `manualUrl` + `logSnapshot`）；repo 未安装时 `issueUrl: null` + `error` |
+| `/api/marketplace/feedback/pending` | GET | — | `{ pending: [...] }` 待确认反馈队列；entry 含 `outcome`（installed/install-failed）与 `errorClass` 可选字段 |
 | `/api/marketplace/feedback/token` | GET | — | `{ status:"done", hasToken }`（token 本身不回显） |
 | `/api/marketplace/feedback/token` | POST | `{ "token": "…" }`（空串清除） | `{ status:"done", hasToken }`；token 用于反馈自动建 issue |
 
-反馈链路与脱敏机制见 [FEEDBACK.md](FEEDBACK.md)。
+`manualUrl` 说明：body 含有界日志快照（≤2000 字符）；编码后 URL 超 6000 字符时降级为无日志 body，客户端应将 `logSnapshot` 复制到剪贴板提示用户粘贴。反馈链路、失败分类与脱敏机制见 [FEEDBACK.md](FEEDBACK.md)。
 
 ### 环境变量
 

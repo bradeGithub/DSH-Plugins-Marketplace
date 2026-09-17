@@ -1,7 +1,7 @@
 # 安装反馈系统规范
 
 > 本文固化安装反馈系统的模板结构、诊断字段、脱敏机制与隐私边界。
-> 实现：`lib/index.js`（queueFeedback / buildFeedbackLogSnapshot / submitFeedbackToGitHub）+ `lib/redact.js`（脱敏模块）。
+> 实现：`lib/app/feedback.js`（队列/issue 构造/提交）+ `lib/app/install.js`（成功与失败入队点）+ `lib/index.js`（buildFeedbackLogSnapshot / sanitizeLog / 失败分类器）+ `lib/redact.js`（脱敏模块）。
 
 <!-- TOC -->
 - [反馈链路](#反馈链路)
@@ -18,16 +18,22 @@
 ## 反馈链路
 
 ```
-安装成功 → queueFeedback 入队（元数据 + 环境画像 + 日志快照，feedback.json 持久化）
-  → 用户下次打开市场，客户端弹窗「插件是否正常」
-    → 用户点「正常 / 不正常」（可附备注）
-      → submitFeedbackToGitHub：
-          有 token → 自动创建 issue（label: install-feedback；异常加 install-failed）
-          无 token → 预填 issue 新建链接（手动提交；不带日志——URL 长度受限）
+安装成功或失败 → queueFeedback 入队（元数据 + 环境画像 + 日志快照，feedback.json 持久化）
+  成功 entry：用户下次打开市场，客户端弹窗「插件是否正常」
+    → 用户点「正常 / 不正常 / 稍后 / 不再询问」（可附备注）
+  失败 entry（outcome: install-failed）：安装面板就地展开「提交反馈」入口；
+    用户关闭面板后，下次打开市场仍弹窗「上次安装失败」（队列兜底）
+    → 提交后 submitFeedbackToGitHub：
+        有 token → 自动创建 issue（label: install-feedback；异常/失败加 install-failed）
+        无 token → 预填 issue 新建链接（body 含有界日志快照；
+                    编码后 URL >6000 字符时降级为无日志 body，
+                    客户端自动把完整快照复制到剪贴板提示粘贴）
 ```
 
-- 同 repo 只保留最新一条待反馈（重装覆盖旧条目）
+- 同 repo 只保留最新一条待反馈（重装覆盖旧条目；**重试成功自动顶掉失败条目**——最新结果为准）
 - 反馈队列持久化失败不影响安装结果（queueFeedbackSafe 容错，日志提示）
+- 反馈偏好三态（`dshm.fb.mode`）：`ask` 每次询问（默认）/ `ask-failed` 仅失败才问 / `off` 关闭；设置卡随时可改，弹窗内「不再询问」等效 off
+- **不做全自动提交**：issue 以用户身份公开发出（token 通道以用户账号发帖；manualUrl 需用户在 GitHub 表单点提交），per-incident 同意是底线
 
 ## issue 模板结构
 
@@ -48,6 +54,7 @@
 | 重装 / Reinstall | yes（仅重装时出现）|
 | 时间 / Time | 2026-08-21 03:12 UTC |
 | 结果 / Result | 异常 / Broken |
+| 错误类 / Error Class | version-missing（仅 install-failed 且分类命中时出现）|
 
 **环境 / Environment**: win32 · Node 22 · DSH 0.1.0-rc.8 · 市场 / Marketplace v1.5.5 · pnpm 9.15 · git 2.45
 
@@ -61,8 +68,9 @@
 
 要点：
 - 首行 HTML 注释是自动化锚点（可脚本批量统计/关闭正常项）
-- **正常反馈零日志**——90% 反馈是正常，噪音源头掐掉；异常才带 details 折叠日志
+- **正常反馈零日志**——90% 反馈是正常，噪音源头掐掉；异常/安装失败才带 details 折叠日志
 - details 折叠让 issue 流里异常反馈也只占 1 行摘要
+- 标题三分：`正常` / `异常` / `安装失败`——维护者一眼分层；失败条目带 Error Class 行可按类批量过滤（网络类多为用户环境抖动）
 
 ## 诊断字段字典
 
@@ -76,6 +84,8 @@
 | envProfile.dsh | profile node_modules 的 @deepseek-ai/dsh 版本 | rc.7/rc.8 行为分叉点 |
 | envProfile.pnpm / git | 安装期 spawn --version 探测（进程内缓存一次）| cli/bundle 失败头号嫌疑 |
 | logSnapshot | 安装日志锚点行（类型判定）+ 尾 40 行，≤2000 字符 | pnpm 报错/clone 失败/类型误判 |
+| outcome | 安装结果 | installed（装后反馈）/ install-failed（安装即失败） |
+| errorClass | `classifyInstallFailureKind`（仅 install-failed 携带） | transient 类（network/git-connectivity）多为用户环境；deterministic 类（version-missing/module-missing/command-failed 等）是收录/插件真信号；unclassified 诚实标注 |
 | 用户备注 | 客户端弹窗输入 | 用户主观描述 |
 
 ## 脱敏机制
@@ -127,4 +137,7 @@ AI 推理厂商（Groq/xAI/Perplexity/Fireworks/Cerebras/Mistral/Ollama）官方
 2. **异常反馈**（Result: 异常，label `install-failed`）：
    - 先看 details 日志——pnpm 报错/clone 失败/类型误判通常已可见
    - 需要更多信息时在 issue 里请用户「市场设置页 → 导出日志」（导出日志走独立的 sanitizeLog 全量脱敏）
-3. **规则维护**：新增密钥形态 → `lib/redact.js` KNOWN_KEY_RULES 加规则 + redact.test.mjs 加泄漏断言
+3. **安装失败反馈**（Result: 安装失败）：
+   - 按 Error Class 分流：`network`/`git-connectivity` 多为用户网络/代理问题，可批量归并；`version-missing`/`module-missing`/`command-failed` 指向收录或插件自身问题，优先排查
+   - `unclassified` 条目看 details 日志人工归因——新形态失败同时反哺分类规则表
+4. **规则维护**：新增密钥形态 → `lib/redact.js` KNOWN_KEY_RULES 加规则 + redact.test.mjs 加泄漏断言

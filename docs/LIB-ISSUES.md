@@ -30,6 +30,8 @@ API 设计层面的入参风格 / async 边界 / 副作用 / Map 依赖**本质�
 | 9 | `detectInstalled(repo)` | 入参 repo（对象）非字符串 | **内部已演进，签名仍成立**：#157 多路径判定加强（dirOwners 属主校验、包名映射 repository 撞名拦截、官方包排除、name-null 语义）。直接断言（installed-index.test 25+ 场景） | 与 normalizeRepo 相同风格（对象入参） |
 | 10 | `fetchJson` 错误路径 | 403 时 `res.text()` 后再 throw | **描述已更新（已演进）**：现 `(url, extraHeaders={})` + timeout + `responseTooLarge` 超限防护 + content-length 快路径 / 流式计数兜底；错误路径统一 `!res.ok` 抛错（非仅 403）。未导出 → 经 `fetchAllRepos` 内部触发间接测试；security-guards 静态锁「超限抛错」契约 | 错误信息包含响应体，测试要完整 mock |
 | 11 | `__confirm_script__` 中止分支 | 不调用 `cleanup`（其余各门中止均清理克隆缓存）；unit 测试以「保留确认重试上下文」锁定 | **已修复**（文档审计发现并裁定）：保留的缓存被 `scanCacheEntries` 判为 script 型 → `cacheScripts` 命中 → 仓库误显「已安装」且 UI 锁定安装按钮，「保留重试」目的反而无法从 UI 达成。修复：中止分支补 `await cleanup(cacheDir)` 与其他门一致；`app-install-preflight.test` 断言同步更新，`install.e2e` 注释归位 | 用户明确拒绝执行后仓库曾被误标已安装，无 UI 补救路径（无安装记录 → 无卸载入口，需手删缓存目录） |
+| 12 | `submitToGitHub` manualUrl 路径 | v1.6.0 分层重构（5b99ac1）起手动预填链接整体剥离日志块（`manualBody = buildIssue(..., false)`），测试以「URL 长度限制+暴露面」锁定 | **已修复**（远端 issue 审计发现并裁定）：实测全量快照 URL ≈3.7KB 远低于 VS Code 同类 7500 阈值，剥离属过度收紧——无 token 用户（主流路径）的异常反馈丢全部诊断信息（#218/#232 实证）。修复：manualUrl 恢复有界日志快照 + 编码后长度感知降级（>6000 退无日志 body）+ 客户端剪贴板兜底完整快照 | 维护者收到零上下文「异常」issue，无法初查 |
+| 13 | install `status:"failed"` 路径 | `queueFeedbackSafe` 仅成功路径入队（install.js / routes.js 两层 catch 均不入队）——安装直接失败的用户无反馈通道，submitFeedback 命中 not-found | **已修复**（同批）：两层 catch 均入队 `outcome:"install-failed"` + `errorClass`（`classifyInstallFailureKind` 规则 key）+ 失败日志快照；同 repo 去重使重试成功自动顶掉失败条目。弹窗话术分支 + transient 类主按钮「重试安装」 | 最高价值信号（装不上的收录=坏收录）从未到达 issue 流 |
 
 ## 汇总观察
 

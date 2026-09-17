@@ -27,3 +27,15 @@
     function shouldLoadMore(repos, total, loading) {
       return Boolean(!loading && repos && repos.length < total);
     }
+    // 反馈偏好三态（v2）：合法 mode 值（"ask" 默认 / "ask-failed" / "off"）直用；
+    // 否则回退旧开关值 dshm.fb.enabled（"0"→"off"，其余→"ask"）。
+    // migrated=true 表示结论来自旧 key——调用方应把新值写回 dshm.fb.mode 并删除旧 key。
+    function resolveFbMode(modeValue, enabledValue) {
+      if (modeValue === "ask" || modeValue === "ask-failed" || modeValue === "off") {
+        return { mode: modeValue, migrated: false };
+      }
+      if (enabledValue !== null && enabledValue !== undefined) {
+        return { mode: enabledValue === "0" ? "off" : "ask", migrated: true };
+      }
+      return { mode: "ask", migrated: false };
+    }

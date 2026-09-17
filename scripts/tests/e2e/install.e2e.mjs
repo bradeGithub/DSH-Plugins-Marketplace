@@ -1046,6 +1046,19 @@ function setupUrlRewrite(owner, repoName) {
 
   r = await postInstall("e2e-owner/demo-plugin-patch-fail", {});
   check("e2e patch 写失败安装 failed", r.body && r.body.status, "failed");
+  // 失败入队：patch 写失败走 runInstall 内层 catch → pending 应含 install-failed entry
+  fbRes = await callHandler(fbPendingHandler);
+  const patchFailEntry = (fbRes.body.pending || []).find((p) => p.repo === "e2e-owner/demo-plugin-patch-fail");
+  check("e2e 失败入队 outcome", patchFailEntry && patchFailEntry.outcome, "install-failed");
+  check("e2e 失败入队 errorClass 非空", typeof (patchFailEntry && patchFailEntry.errorClass) === "string", true);
+  check("e2e 失败入队含日志快照", typeof (patchFailEntry && patchFailEntry.logSnapshot) === "string" && patchFailEntry.logSnapshot.length > 0, true);
+  // 提交失败反馈：manualUrl 应含有界日志块（短快照在编码阈值内）
+  fbRes = await callHandler(fbSubmitHandler, { repo: "e2e-owner/demo-plugin-patch-fail", ok: false }, "POST");
+  check("e2e 失败反馈提交 done", fbRes.body && fbRes.body.status, "done");
+  const patchFailBody = decodeURIComponent(new URL(fbRes.body.manualUrl).searchParams.get("body"));
+  check("e2e 失败 manualUrl 含日志块", patchFailBody.includes("安装日志"), true);
+  check("e2e 失败 manualUrl 标题", patchFailBody.includes("安装失败"), true);
+  check("e2e 失败响应带 logSnapshot", typeof fbRes.body.logSnapshot === "string" && fbRes.body.logSnapshot.length > 0, true);
   rmSync(patchPath, { recursive: true, force: true });
 
   // ---- installed.json 写队列错误分支：首次写失败（installed.json 是目录）→
@@ -1061,11 +1074,18 @@ function setupUrlRewrite(owner, repoName) {
 
   r = await postInstall("e2e-owner/demo-skill-3", {});
   check("e2e installed 写失败安装 failed", r.body && r.body.status, "failed");
+  fbRes = await callHandler(fbPendingHandler);
+  const skill3FailEntry = (fbRes.body.pending || []).find((p) => p.repo === "e2e-owner/demo-skill-3");
+  check("e2e 写失败入队 outcome", skill3FailEntry && skill3FailEntry.outcome, "install-failed");
 
   rmSync(installedPath, { recursive: true, force: true });
 
   r = await postInstall("e2e-owner/demo-skill-3", {});
   check("e2e installed 队列恢复后 done", r.body && r.body.status, "done");
+  // 去重语义：重试成功顶掉同 repo 失败条目（最新结果为准）
+  fbRes = await callHandler(fbPendingHandler);
+  const skill3After = (fbRes.body.pending || []).find((p) => p.repo === "e2e-owner/demo-skill-3");
+  check("e2e 重试成功顶掉失败条目", skill3After && skill3After.outcome !== "install-failed", true);
 
   // ---- 点目录 SKILL.md 不误判为 skill（iPolloWork 类仓库回归）：
   //      .codex/.opencode 等 agent 配置目录里的 SKILL.md 是项目自身开发流程技能，

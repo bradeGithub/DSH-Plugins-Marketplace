@@ -123,9 +123,10 @@ function makeFeedback(overrides = {}) {
   check("无 token 不请求 GitHub", requests.length, 0);
   check("提交后先持久化移除队列", writes.at(-1).data.pending, []);
   check("manualUrl 不含诊断日志", decodeURIComponent(result.manualUrl).includes("安装日志（已脱敏）"), false);
+  check("manualUrl 响应带 logSnapshot 兜底", result.logSnapshot, "安装日志（已脱敏）");
   await flow.queueFeedback({ ...ENTRY, repo: "owner/broken" });
   const broken = await flow.submitFeedback({ repo: "owner/broken", ok: false, note: "broken" });
-  check("异常 feedback 的 manualUrl 也不含诊断日志", decodeURIComponent(broken.manualUrl).includes("安装日志（已脱敏）"), false);
+  check("异常 feedback 的 manualUrl 阈值内含诊断日志", decodeURIComponent(broken.manualUrl).includes("安装日志（已脱敏）"), true);
 }
 
 {
@@ -148,7 +149,7 @@ function makeFeedback(overrides = {}) {
   await flow.queueFeedback(ENTRY);
   await flow.setToken("ghp_test");
   const result = await flow.submitFeedback({ repo: ENTRY.repo, ok: false, note: "broken" });
-  check("GitHub 成功返回 issueUrl", result, { status: "done", issueUrl: "https://github.com/bradeGithub/DSH-Plugins-Marketplace/issues/1" });
+  check("GitHub 成功返回 issueUrl", result, { status: "done", issueUrl: "https://github.com/bradeGithub/DSH-Plugins-Marketplace/issues/1", logSnapshot: "安装日志（已脱敏）" });
   const body = JSON.parse(requests[0].init.body).body;
   check("异常反馈带 details 日志", body.includes("<details>") && body.includes("安装日志（尾部 40 行，已脱敏）") && body.includes("安装日志（已脱敏）"), true);
   check("issue body 含双语标题和画像", body.includes("安装反馈 / Install Feedback") && body.includes("test") && body.includes("v22.0.0"), true);
@@ -159,6 +160,32 @@ function makeFeedback(overrides = {}) {
     const normal = await fixture.flow.submitFeedback({ repo: ENTRY.repo, ok: true, note: "" });
     return JSON.parse(fixture.requests[0].init.body).body.includes("不应出现") || Boolean(normal.error);
   })()), false);
+}
+
+// outcome / errorClass 新字段（表驱动）：install-failed 改标题与 Result 行、追加错误类行；旧 entry 行为不变
+for (const tc of [
+  { repo: "owner/failed", entry: { outcome: "install-failed", errorClass: "native-build" },
+    title: "[安装反馈] 安装失败: owner/failed",
+    resultRow: "| 结果 / Result | 安装失败 / Install failed |",
+    errorClassRow: "| 错误类 / Error Class | native-build |" },
+  { repo: "owner/legacy-bad", entry: {},
+    title: "[安装反馈] 异常: owner/legacy-bad",
+    resultRow: "| 结果 / Result | 异常 / Broken |",
+    errorClassRow: null },
+  { repo: "owner/legacy-ok", entry: {}, ok: true,
+    title: "[安装反馈] 正常: owner/legacy-ok",
+    resultRow: "| 结果 / Result | 正常 / Works |",
+    errorClassRow: null }
+]) {
+  const { flow, requests } = makeFeedback();
+  await flow.queueFeedback({ ...ENTRY, repo: tc.repo, ...tc.entry });
+  await flow.setToken("ghp_test");
+  await flow.submitFeedback({ repo: tc.repo, ok: tc.ok === true, note: "" });
+  const payload = JSON.parse(requests[0].init.body);
+  check(`${tc.repo} 标题`, payload.title, tc.title);
+  check(`${tc.repo} Result 行`, payload.body.includes(tc.resultRow), true);
+  check(`${tc.repo} errorClass 行`, payload.body.includes("错误类 / Error Class"), tc.errorClassRow !== null);
+  if (tc.errorClassRow) check(`${tc.repo} errorClass 值`, payload.body.includes(tc.errorClassRow), true);
 }
 
 {
