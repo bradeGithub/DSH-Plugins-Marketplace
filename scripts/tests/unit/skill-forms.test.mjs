@@ -1,7 +1,7 @@
 // C 技能安装形态判定测试：classifyTree 扩展（单技能/合集/深层埋藏/根脚本）+ 增量继承。
 // 守护：skills 条目能区分「市场可装的技能形态」与「大项目内部 SKILL.md 埋藏」。
 
-import { classifyTree, shouldInheritProbe } from "../../build-registry.mjs";
+import { classifyTree, shouldInheritProbe, applyStarDeltas } from "../../build-registry.mjs";
 
 let pass = 0, fail = 0;
 function check(name, actual, expected) {
@@ -72,6 +72,44 @@ const blob = (path) => ({ type: "blob", path });
   const repo = { full_name: "a/b", updated_at: "2026-08-01" };
   const old = { full_name: "a/b", updated_at: "2026-08-01", has_skill: null };
   check("C 旧结果 null（未知）→ 不继承（重跑探测收敛）", shouldInheritProbe(repo, old), false);
+}
+
+// ---- S1：applyStarDeltas 基线 diff（Map<小写 full_name, stars>）----
+{
+  const mk = (extra) => ({ full_name: "O/R", stargazers_count: 100, ...extra });
+  const b7 = new Map([["o/r", 60]]);
+  const b30 = new Map([["o/r", 30]]);
+
+  // 正常差值：cur - prev，大小写不敏感
+  const r1 = mk();
+  applyStarDeltas([r1], [{ days: 7, map: b7 }, { days: 30, map: b30 }]);
+  check("delta 7d 差值", r1.stars_delta_7d, 40);
+  check("delta 30d 差值", r1.stars_delta_30d, 70);
+
+  // 基线缺失该仓库（新收录）→ null（诚实未知，不编造 0）
+  const r2 = mk({ full_name: "New/Repo" });
+  applyStarDeltas([r2], [{ days: 7, map: b7 }]);
+  check("delta 新收录 → null", r2.stars_delta_7d, null);
+
+  // 基线整表缺失（无 token/API 失败）→ null
+  const r3 = mk();
+  applyStarDeltas([r3], [{ days: 7, map: null }]);
+  check("delta 基线 null → null", r3.stars_delta_7d, null);
+
+  // 负增长（掉星）如实反映
+  const r4 = mk({ stargazers_count: 10 });
+  applyStarDeltas([r4], [{ days: 7, map: b7 }]);
+  check("delta 负增长如实", r4.stars_delta_7d, -50);
+
+  // 零星仓库 delta 可为 0（基线存在 → 真实差值，非编造）
+  const r5 = mk({ stargazers_count: 0 });
+  applyStarDeltas([r5], [{ days: 7, map: new Map([["o/r", 0]]) }]);
+  check("delta 零星 → 0", r5.stars_delta_7d, 0);
+
+  // stargazers_count 缺失按 0 处理
+  const r6 = { full_name: "O/R" };
+  applyStarDeltas([r6], [{ days: 7, map: b7 }]);
+  check("delta 缺 stars → -prev", r6.stars_delta_7d, -60);
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);

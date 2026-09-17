@@ -3,6 +3,7 @@ import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { registerRoutes } from "../../../lib/http/routes.js";
 import { createMutex } from "../../../lib/infra/queue.js";
+import { LIST_SORT_KEYS, listComparator, repoListFilter } from "../../../lib/domain/list.js";
 import { MARKETPLACE_RESPONSE_SCHEMA_VERSION } from "../../../lib/http/marketplace-contract.js";
 import { inspectMarketplacePayload } from "../contracts/marketplace.mjs";
 
@@ -100,7 +101,10 @@ function makeDeps(overrides = {}) {
       detectSkillInstalled: async () => false,
       dedupeReposByPkgName: (repos) => ({ repos, dropped: [] }),
       warnDroppedPackageConflicts: () => {},
-      listFingerprint: () => "fp"
+      listFingerprint: () => "fp",
+      LIST_SORT_KEYS,
+      listComparator,
+      repoListFilter
     },
     useCases: {
       update: {
@@ -431,6 +435,93 @@ check("routes 统一通过正式版本响应包装器", (routesSource.match(/\bj
   check("skills q 过滤 total=1", res.value?.total, 1);
   check("skills q 过滤 dropped=1", res.value?.dropped, 1);
   check("skills q 过滤 filtered=2", res.value?.filtered, 2);
+}
+
+// skills S1 信号面：sort=trending/updated/name、verified=1、hideArchived=1（过滤先于分页，total 诚实）
+{
+  const skillRepos = [
+    { full_name: "a/skill-a", name: "skill-a", has_skill: true, stargazers_count: 5, stars_delta_7d: 2, market_tags: ["verified-install"], updated_at: "2026-01-01" },
+    { full_name: "b/skill-b", name: "skill-b", has_skill: true, stargazers_count: 50, stars_delta_7d: 40, archived: true, updated_at: "2026-03-01" },
+    { full_name: "c/skill-c", name: "skill-c", has_skill: true, stargazers_count: 30, stars_delta_7d: null, updated_at: "2026-02-01" }
+  ];
+  const { deps, registered } = makeDeps({
+    list: {
+      ...makeDeps().deps.list,
+      getList: async () => skillRepos
+    }
+  });
+  registerRoutes(deps);
+  const route = registered.find((item) => item.path === "/api/marketplace/skills");
+
+  const r1 = makeResponse();
+  await route.handler({ method: "GET", url: "/api/marketplace/skills?sort=trending" }, r1);
+  check("skills sort=trending 增速降序 null 垫底", r1.value?.repos?.map((r) => r.full_name), ["b/skill-b", "a/skill-a", "c/skill-c"]);
+
+  const r2 = makeResponse();
+  await route.handler({ method: "GET", url: "/api/marketplace/skills?sort=name" }, r2);
+  check("skills sort=name 升序", r2.value?.repos?.map((r) => r.full_name), ["a/skill-a", "b/skill-b", "c/skill-c"]);
+
+  const r3 = makeResponse();
+  await route.handler({ method: "GET", url: "/api/marketplace/skills?sort=updated" }, r3);
+  check("skills sort=updated 降序", r3.value?.repos?.map((r) => r.full_name), ["b/skill-b", "c/skill-c", "a/skill-a"]);
+
+  const r4 = makeResponse();
+  await route.handler({ method: "GET", url: "/api/marketplace/skills?sort=bogus" }, r4);
+  check("skills 非法 sort 回退 stars", r4.value?.repos?.[0]?.full_name, "b/skill-b");
+
+  const r5 = makeResponse();
+  await route.handler({ method: "GET", url: "/api/marketplace/skills?verified=1" }, r5);
+  check("skills verified=1 仅已验证", r5.value?.repos?.map((r) => r.full_name), ["a/skill-a"]);
+  check("skills verified=1 total 诚实", r5.value?.total, 1);
+
+  const r6 = makeResponse();
+  await route.handler({ method: "GET", url: "/api/marketplace/skills?hideArchived=1" }, r6);
+  check("skills hideArchived=1 去归档", r6.value?.repos?.map((r) => r.full_name), ["c/skill-c", "a/skill-a"]);
+
+  // 过滤先于分页：page=1&pageSize=1 + hideArchived → 拿到 a（不是先分页后过滤出空）
+  const r7 = makeResponse();
+  await route.handler({ method: "GET", url: "/api/marketplace/skills?hideArchived=1&sort=name&page=1&pageSize=1" }, r7);
+  check("skills 过滤先于分页", [r7.value?.repos?.[0]?.full_name, r7.value?.total], ["a/skill-a", 2]);
+}
+
+// /list S1：sort 参数（已装优先不变，组内按 sort 排）
+{
+  const repos = [
+    { full_name: "z/low", name: "low", stargazers_count: 1, stars_delta_7d: 99 },
+    { full_name: "a/high", name: "high", stargazers_count: 100, stars_delta_7d: 1 }
+  ];
+  const { deps, registered } = makeDeps({
+    list: { ...makeDeps().deps.list, getList: async () => repos }
+  });
+  registerRoutes(deps);
+  const route = registered.find((item) => item.path === "/api/marketplace/list");
+
+  const r1 = makeResponse();
+  await route.handler({ method: "GET", url: "/api/marketplace/list?sort=name" }, r1);
+  check("list sort=name 升序", r1.value?.repos?.map((r) => r.full_name), ["a/high", "z/low"]);
+
+  const r2 = makeResponse();
+  await route.handler({ method: "GET", url: "/api/marketplace/list?sort=trending" }, r2);
+  check("list sort=trending 增速优先", r2.value?.repos?.map((r) => r.full_name), ["z/low", "a/high"]);
+
+  // /list 过滤参数（与 /skills 同套语义，先于 installed 标注）
+  const filtered = [
+    { full_name: "a/verified", name: "v", stargazers_count: 1, market_tags: ["verified-install"] },
+    { full_name: "b/arch", name: "a", stargazers_count: 9, archived: true }
+  ];
+  const { deps: deps2, registered: reg2 } = makeDeps({
+    list: { ...makeDeps().deps.list, getList: async () => filtered }
+  });
+  registerRoutes(deps2);
+  const route2 = reg2.find((item) => item.path === "/api/marketplace/list");
+
+  const r3 = makeResponse();
+  await route2.handler({ method: "GET", url: "/api/marketplace/list?verified=1" }, r3);
+  check("list verified=1 仅已验证", r3.value?.repos?.map((r) => r.full_name), ["a/verified"]);
+
+  const r4 = makeResponse();
+  await route2.handler({ method: "GET", url: "/api/marketplace/list?hideArchived=1" }, r4);
+  check("list hideArchived=1 去归档", r4.value?.repos?.map((r) => r.full_name), ["a/verified"]);
 }
 
 {

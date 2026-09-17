@@ -11,6 +11,10 @@
       var state7 = useState(null); var lastFp = state7[0]; var setLastFp = state7[1];
       var state8 = useState(false); var refreshing = state8[0]; var setRefreshing = state8[1];
       var state9 = useState(PLUGIN_PAGE_SIZE); var visible = state9[0]; var setVisible = state9[1];
+      // S1 信号面：排序 + 信号过滤状态（stars 默认；verifiedOnly/hideArchived 关闭默认）
+      var stateSort = useState("stars"); var sort = stateSort[0]; var setSort = stateSort[1];
+      var stateFv = useState(false); var verifiedOnly = stateFv[0]; var setVerifiedOnly = stateFv[1];
+      var stateFa = useState(false); var hideArchived = stateFa[0]; var setHideArchived = stateFa[1];
 
 
       function doRefresh(force) {
@@ -44,8 +48,8 @@
         return function () { cancelled = true; };
       }, [props.tick]);
 
-      // 搜索词/分类变化时重置分页（搜索在完整数组 filter 后重新分页）
-      useEffect(function () { setVisible(PLUGIN_PAGE_SIZE); }, [query, category]);
+      // 搜索词/分类/过滤变化时重置分页（搜索在完整数组 filter 后重新分页）
+      useEffect(function () { setVisible(PLUGIN_PAGE_SIZE); }, [query, category, sort, verifiedOnly, hideArchived]);
 
       // 触底加载：sentinel 进入视口 → 追加一页（与 Skills tab 相同的交互）
       useEffect(function () {
@@ -75,6 +79,27 @@
           value: query,
           onChange: function (e) { setQuery(e.target.value); }
         }),
+        h("div", { style: { display: "flex", flexWrap: "wrap", gap: 8, alignItems: "center", marginBottom: 8 } },
+          h("span", { style: { fontSize: 12, color: "var(--dsw-alias-label-tertiary)" } }, t("sortLabel")),
+          h("select", {
+            style: Object.assign({}, s.input, { width: "auto", marginTop: 0, padding: "4px 8px", fontSize: 12 }),
+            value: sort,
+            onChange: function (e) { setSort(e.target.value); }
+          },
+            h("option", { value: "stars" }, t("sortStars")),
+            h("option", { value: "trending" }, t("sortTrending")),
+            h("option", { value: "updated" }, t("sortUpdated")),
+            h("option", { value: "name" }, t("sortName"))
+          ),
+          h("label", { style: { display: "flex", alignItems: "center", gap: 4, fontSize: 12, color: "var(--dsw-alias-label-secondary)", cursor: "pointer" } },
+            h("input", { type: "checkbox", checked: verifiedOnly, onChange: function () { setVerifiedOnly(!verifiedOnly); }, style: { accentColor: "var(--dsw-alias-brand-primary)", cursor: "pointer", margin: 0 } }),
+            t("filterVerified")
+          ),
+          h("label", { style: { display: "flex", alignItems: "center", gap: 4, fontSize: 12, color: "var(--dsw-alias-label-secondary)", cursor: "pointer" } },
+            h("input", { type: "checkbox", checked: hideArchived, onChange: function () { setHideArchived(!hideArchived); }, style: { accentColor: "var(--dsw-alias-brand-primary)", cursor: "pointer", margin: 0 } }),
+            t("filterHideArchived")
+          )
+        ),
         h("div", { style: { display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 12 } },
           ["all"].concat(CATEGORY_KEYS).map(function (key) {
             var active = category === key;
@@ -95,12 +120,12 @@
         repos === null ? h("p", { style: { fontSize: 13, color: "var(--dsw-alias-label-tertiary)" } }, t("loading")) : null,
         repos ? (function () {
           var q = query.trim().toLowerCase();
-          var list = filterRepos(repos, query, category);
+          var list = filterRepos(repos, query, category, { verifiedOnly: verifiedOnly, hideArchived: hideArchived }).sort(repoComparator(sort));
           var shown = list.slice(0, visible);
           var hasMore = shown.length < list.length;
           return [
             h("p", { key: "count", className: "dshm-dim", style: Object.assign({}, s.meta, { margin: "0 0 8px" }) },
-              t("countTotal", { n: repos.length }) + ((q || category !== "all") ? t("countMatch", { n: list.length }) : "")),
+              t("countTotal", { n: repos.length }) + ((q || category !== "all" || verifiedOnly || hideArchived) ? t("countMatch", { n: list.length }) : "")),
             dropped > 0 ? h("p", { key: "dedupe", style: s.srcHint }, t("dedupeHint", { n: dropped })) : null,
             shown.map(function (repo) {
               // 全局互斥：任何安装进行中 → 所有按钮禁用；只有正在安装的那个显示「安装中...」
@@ -132,11 +157,18 @@
       // refreshing 独立声明于 SkillsTab 自身作用域（不能引用 PluginTab 内的同名 state——
       // SkillsTab 是顶层函数，顶层函数引用缺失会导致渲染 disabled: refreshing 即崩）
       var state9 = useState(false); var refreshing = state9[0]; var setRefreshing = state9[1];
+      // S1 信号面：排序/过滤下推服务端（分页在服务端，参数先于切片，total 计数诚实）
+      var stateSort = useState("stars"); var sort = stateSort[0]; var setSort = stateSort[1];
+      var stateFv = useState(false); var verifiedOnly = stateFv[0]; var setVerifiedOnly = stateFv[1];
+      var stateFa = useState(false); var hideArchived = stateFa[0]; var setHideArchived = stateFa[1];
 
-      function fetchPage(pg, q, refresh) {
+      function fetchPage(pg, q, refresh, sortKey, fVerified, fHideArchived) {
         var mySeq = ++skillsFetchSeq;
         setLoading(true);
-        return fetch("/api/marketplace/skills?lang=" + langCurrent + "&page=" + pg + "&pageSize=" + SKILL_PAGE_SIZE + "&q=" + encodeURIComponent(q || "") + (refresh ? "&refresh=1" : ""), { headers: { "X-DSH-Marketplace": "1" } })
+        var sigParams = "&sort=" + encodeURIComponent(sortKey || "stars")
+          + (fVerified ? "&verified=1" : "")
+          + (fHideArchived ? "&hideArchived=1" : "");
+        return fetch("/api/marketplace/skills?lang=" + langCurrent + "&page=" + pg + "&pageSize=" + SKILL_PAGE_SIZE + "&q=" + encodeURIComponent(q || "") + sigParams + (refresh ? "&refresh=1" : ""), { headers: { "X-DSH-Marketplace": "1" } })
           .then(function (r) { return r.json(); })
           .then(function (data) {
             if (mySeq !== skillsFetchSeq) return; // 已被更新的请求取代
@@ -159,13 +191,13 @@
       function doRefresh(force) {
         setRefreshing(true);
         props.showToast(t("refreshing"), true);
-        fetchPage(1, query, true).finally(function () { setRefreshing(false); });
+        fetchPage(1, query, true, sort, verifiedOnly, hideArchived).finally(function () { setRefreshing(false); });
       }
 
       // 初始加载 / 外部 tick（安装卸载后刷新第一页）
-      useEffect(function () { fetchPage(1, "", false); }, [props.tick]);
-      // 搜索词变化 → 重置并加载第 1 页（搜索已下推服务端）
-      useEffect(function () { fetchPage(1, query, false); }, [query]);
+      useEffect(function () { fetchPage(1, "", false, sort, verifiedOnly, hideArchived); }, [props.tick]);
+      // 搜索词/排序/过滤变化 → 重置并加载第 1 页（搜索与信号面均已下推服务端）
+      useEffect(function () { fetchPage(1, query, false, sort, verifiedOnly, hideArchived); }, [query, sort, verifiedOnly, hideArchived]);
 
       // 触底加载：sentinel 进入视口且未加载完 → 下一页
       useEffect(function () {
@@ -174,13 +206,13 @@
         var observer = new IntersectionObserver(function (entries) {
           entries.forEach(function (entry) {
             if (entry.isIntersecting && shouldLoadMore(repos, total, loading)) {
-              fetchPage(page + 1, query, false);
+              fetchPage(page + 1, query, false, sort, verifiedOnly, hideArchived);
             }
           });
         }, { rootMargin: "300px" });
         observer.observe(el);
         return function () { observer.disconnect(); };
-      }, [repos, query, total, loading]);
+      }, [repos, query, total, loading, sort, verifiedOnly, hideArchived]);
 
       var q = query.trim().toLowerCase();
 
@@ -199,6 +231,27 @@
           value: query,
           onChange: function (e) { setQuery(e.target.value); }
         }),
+        h("div", { style: { display: "flex", flexWrap: "wrap", gap: 8, alignItems: "center", marginBottom: 8 } },
+          h("span", { style: { fontSize: 12, color: "var(--dsw-alias-label-tertiary)" } }, t("sortLabel")),
+          h("select", {
+            style: Object.assign({}, s.input, { width: "auto", marginTop: 0, padding: "4px 8px", fontSize: 12 }),
+            value: sort,
+            onChange: function (e) { setSort(e.target.value); }
+          },
+            h("option", { value: "stars" }, t("sortStars")),
+            h("option", { value: "trending" }, t("sortTrending")),
+            h("option", { value: "updated" }, t("sortUpdated")),
+            h("option", { value: "name" }, t("sortName"))
+          ),
+          h("label", { style: { display: "flex", alignItems: "center", gap: 4, fontSize: 12, color: "var(--dsw-alias-label-secondary)", cursor: "pointer" } },
+            h("input", { type: "checkbox", checked: verifiedOnly, onChange: function () { setVerifiedOnly(!verifiedOnly); }, style: { accentColor: "var(--dsw-alias-brand-primary)", cursor: "pointer", margin: 0 } }),
+            t("filterVerified")
+          ),
+          h("label", { style: { display: "flex", alignItems: "center", gap: 4, fontSize: 12, color: "var(--dsw-alias-label-secondary)", cursor: "pointer" } },
+            h("input", { type: "checkbox", checked: hideArchived, onChange: function () { setHideArchived(!hideArchived); }, style: { accentColor: "var(--dsw-alias-brand-primary)", cursor: "pointer", margin: 0 } }),
+            t("filterHideArchived")
+          )
+        ),
         (dataSource === "cache" || dataSource === "search" || dataSource === "bundled") ? h("p", { style: s.srcHint }, t(dataSource === "cache" ? "dataSourceCache" : (dataSource === "search" ? "dataSourceSearch" : "dataSourceBundled"))) : null,
         error ? h("div", { style: s.errRow },
           h("p", { style: s.err, margin: 0 }, t("loadFail", { err: error })),

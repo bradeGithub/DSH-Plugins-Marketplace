@@ -39,7 +39,7 @@
  */
 import { readFile, writeFile, mkdir, rm } from "node:fs/promises";
 import { gzipSync } from "node:zlib";
-import { join, dirname } from "node:path";
+import { join, dirname, basename } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { normalizeRegistryRepo as normalize } from "../lib/domain/normalize.js";
 import { hasDshPluginDeclaration, isBundlePackage } from "../lib/domain/validation.js";
@@ -941,6 +941,52 @@ export function shouldInheritProbe(repo, old) {
   return Boolean(old && old.updated_at === repo.updated_at && typeof old.has_skill === "boolean");
 }
 
+// ── S1 信号面：star 增速字段 ──
+// 本索引每次构建提交回 main——git 历史本身就是快照库，不需要额外存储：
+// commits API（until=目标日期, per_page=1）定位基线提交，contents API（ref=sha）
+// 取当时索引文件 → {full_name: stars} 基线表，diff 出 7d/30d 增量。
+// 仅 CI（GITHUB_REPOSITORY 存在）且有 token 时启用；任何一步失败返回 null，
+// 该窗口的 delta 字段写 null（诚实未知，不编造 0）。
+const STAR_DELTA_WINDOWS = [7, 30];
+const SELF_REPO = process.env.GITHUB_REPOSITORY ?? process.env.REGISTRY_SELF_REPO ?? "";
+
+/** 回查 daysAgo 天前最后一次提交本索引文件时的 star 基线表（Map<小写 full_name, stars>）。 */
+async function fetchStarBaseline(daysAgo) {
+  if (!SELF_REPO || !TOKEN) return null;
+  const fileName = basename(OUT_FILE);
+  try {
+    const until = new Date(Date.now() - daysAgo * 86400000).toISOString();
+    const commitsUrl = `https://api.github.com/repos/${SELF_REPO}/commits?path=${encodeURIComponent(fileName)}&until=${encodeURIComponent(until)}&per_page=1`;
+    const commitsRes = await fetch(commitsUrl, { headers: ghHeaders(), signal: AbortSignal.timeout(15000) });
+    if (!commitsRes.ok) return null;
+    const commits = await commitsRes.json();
+    const sha = Array.isArray(commits) ? commits[0]?.sha : null;
+    if (typeof sha !== "string" || !sha) return null;
+    const contentRes = await fetch(`https://api.github.com/repos/${SELF_REPO}/contents/${fileName}?ref=${sha}`, {
+      headers: { ...ghHeaders(), Accept: "application/vnd.github.raw" },
+      signal: AbortSignal.timeout(30000)
+    });
+    if (!contentRes.ok) return null;
+    const idx = JSON.parse(await contentRes.text());
+    const map = new Map();
+    for (const r of idx.repos ?? []) {
+      if (r && typeof r.full_name === "string") map.set(r.full_name.toLowerCase(), Number(r.stargazers_count ?? 0) || 0);
+    }
+    return map;
+  } catch { return null; }
+}
+
+/** 写 star 增速字段（纯函数）：baselines = [{ days, map }]；基线缺失或条目新收录 → null。 */
+export function applyStarDeltas(repos, baselines) {
+  for (const repo of repos) {
+    const cur = Number(repo.stargazers_count ?? 0) || 0;
+    for (const { days, map } of baselines) {
+      const prev = map instanceof Map ? map.get(String(repo.full_name ?? "").toLowerCase()) : undefined;
+      repo[`stars_delta_${days}d`] = typeof prev === "number" ? cur - prev : null;
+    }
+  }
+}
+
 /**
  * 探测单个仓库（Trees API；爬虫来源无 default_branch 信息，按 main→master 顺序尝试）。
  * 一次调用同时拿到 has_skill / has_install_script。失败容忍：null 表示未知。
@@ -1255,6 +1301,20 @@ async function main() {
 
   // 清理内部判定标记（不进索引产物）
   for (const repo of repos) delete repo.__plainPkg;
+
+  // S1 信号面：star 增速（stars_delta_7d / stars_delta_30d）。
+  // 基线回查本索引文件的 git 历史（commits+contents API，每轮 2 次调用/窗口），
+  // 无 token / 无 GITHUB_REPOSITORY / 基线不可得 → 该窗口字段为 null（诚实缺失）。
+  {
+    const baselines = [];
+    for (const days of STAR_DELTA_WINDOWS) {
+      baselines.push({ days, map: await fetchStarBaseline(days) });
+    }
+    applyStarDeltas(repos, baselines);
+    if (baselines.every((b) => b.map === null)) {
+      log("star 基线不可得（无 token/GITHUB_REPOSITORY 或 API 失败）：delta 字段写 null");
+    }
+  }
 
   const out = {
     generated_at: new Date().toISOString(),

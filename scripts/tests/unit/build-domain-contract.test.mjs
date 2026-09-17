@@ -24,6 +24,8 @@ const fullRepo = {
   html_url: "https://github.com/owner/repo",
   stargazers_count: 42,
   updated_at: "2026-09-01T00:00:00Z",
+  created_at: "2020-01-01T00:00:00Z",
+  open_issues_count: 7,
   default_branch: "trunk",
   topics: ["dsh-plugin", "tool"],
   license: { spdx_id: "MIT" },
@@ -37,6 +39,8 @@ const expectedFullRepo = {
   html_url: "https://github.com/owner/repo",
   stargazers_count: 42,
   updated_at: "2026-09-01T00:00:00Z",
+  created_at: "2020-01-01T00:00:00Z",
+  open_issues_count: 7,
   default_branch: "trunk",
   topics: ["dsh-plugin", "tool"],
   license: "MIT",
@@ -44,7 +48,7 @@ const expectedFullRepo = {
   archived: false
 };
 
-check("registry 投影完整字段保持旧语义", normalizeRegistryRepo(fullRepo), expectedFullRepo);
+check("registry 投影完整字段保持新语义（含 S1 信号字段）", normalizeRegistryRepo(fullRepo), expectedFullRepo);
 check("build normalize 与 domain 投影相同", normalize(fullRepo), expectedFullRepo);
 check("registry 投影保留 html_url 原值", normalizeRegistryRepo({ html_url: "https://example.invalid/a" }).html_url, "https://example.invalid/a");
 check("registry 投影缺省可选字段", normalizeRegistryRepo({ full_name: "a/b", name: "b" }), {
@@ -54,6 +58,8 @@ check("registry 投影缺省可选字段", normalizeRegistryRepo({ full_name: "a
   html_url: undefined,
   stargazers_count: undefined,
   updated_at: undefined,
+  created_at: null,
+  open_issues_count: null,
   default_branch: "main",
   topics: [],
   license: null,

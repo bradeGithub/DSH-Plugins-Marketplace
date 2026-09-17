@@ -49,7 +49,7 @@ check("backup keeps detached installed entries", /getInstalledEntries: \(\) => i
 check("listFingerprint implementation remains", /function listFingerprint\(repos\) \{[\s\S]*?\n\}/.test(indexLib), true);
 check("client fingerprint prefers server fp", /if \(typeof data\.fp === "string"\) return data\.fp;/.test(client), true);
 check("skills client keeps local refreshing state", /function SkillsTab\(props\) \{[\s\S]{0,1200}var state9 = useState\(false\); var refreshing = state9\[0\]; var setRefreshing = state9\[1\];/.test(client), true);
-check("skills refresh resets state", /fetchPage\(1, query, true\)\.finally\(function \(\) \{ setRefreshing\(false\); \}\)/.test(client), true);
+check("skills refresh resets state", /fetchPage\(1, query, true, sort, verifiedOnly, hideArchived\)\.finally\(function \(\) \{ setRefreshing\(false\); \}\)/.test(client), true);
 check("fp includes list length", /function listFingerprint\(repos\) \{[\s\S]{0,400}repos\.length/.test(indexLib), true);
 check("fp includes installed bit", /function listFingerprint\(repos\) \{[\s\S]{0,400}installed === true/.test(indexLib), true);
 

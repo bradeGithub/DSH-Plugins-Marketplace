@@ -14,7 +14,7 @@ const fragment = readFileSync(join(ROOT, "lib", "client-src", "05a-logic.fragmen
 const sandbox = {};
 vm.createContext(sandbox);
 vm.runInContext(fragment, sandbox, { filename: "05a-logic.fragment" });
-const { fingerprintOf, filterRepos, appendSkillsPage, shouldLoadMore } = sandbox;
+const { fingerprintOf, filterRepos, appendSkillsPage, shouldLoadMore, isVerifiedRepo, repoComparator } = sandbox;
 
 let pass = 0, fail = 0;
 function check(name, actual, expected) {
@@ -48,6 +48,18 @@ check("filterRepos 分类+搜索叠加", filterRepos(repos, "pdf", "tool").map((
 check("filterRepos 大小写不敏感", filterRepos(repos, "PDF", "all").length, 2);
 check("filterRepos 空结果", filterRepos(repos, "zzz", "all").length, 0);
 check("filterRepos 缺 topics 不崩", filterRepos([{ name: "x", full_name: "a/x", category: "other" }], "x", "all").length, 1);
+
+// ---- S1：isVerifiedRepo / filterRepos opts / repoComparator ----
+check("isVerifiedRepo 命中", isVerifiedRepo({ market_tags: ["verified-install"] }), true);
+check("isVerifiedRepo 未命中", isVerifiedRepo({ market_tags: [] }), false);
+check("filterRepos verifiedOnly", filterRepos(repos, "", "all", { verifiedOnly: true }).length, 0);
+check("filterRepos hideArchived", filterRepos([{ name: "x", full_name: "a/x", category: "other", archived: true }], "", "all", { hideArchived: true }).length, 0);
+check("repoComparator stars 降序", [{ stargazers_count: 1 }, { stargazers_count: 9 }].sort(repoComparator("stars"))[0].stargazers_count, 9);
+check("repoComparator 未知键回退 stars", [{ stargazers_count: 1 }, { stargazers_count: 9 }].sort(repoComparator("x"))[0].stargazers_count, 9);
+check("repoComparator name 升序", [{ full_name: "b/y" }, { full_name: "a/x" }].sort(repoComparator("name"))[0].full_name, "a/x");
+check("repoComparator trending null 垫底",
+  [{ full_name: "a/n", stargazers_count: 9, stars_delta_7d: null }, { full_name: "b/h", stargazers_count: 1, stars_delta_7d: 3 }]
+    .sort(repoComparator("trending"))[0].full_name, "b/h");
 
 // ---- appendSkillsPage：第 1 页替换 / 后续页跨页去重 ----
 const p1 = [
