@@ -1,48 +1,41 @@
 {
-  "generated_at": "2026-09-17T10:14:03.989Z",
-  "count": 6,
+  "generated_at": "2026-09-17T16:41:21.587Z",
+  "count": 5,
   "items": [
     {
-      "full_name": "ZSeven-W/dsh-android",
-      "previous": "conversation",
-      "current": "web-ui",
-      "desc_now": "DeepSeek Harness plugin for Android — build, run, and interact with a live emulator or USB device stream inside a conversation, driven entirely through adb.",
-      "desc_prev": "DeepSeek Harness plugin for Android — build, run, and interact with a live emulator or USB device stream inside a conversation, driven entirely through adb."
+      "full_name": "Vithrive/Deepseek-Harness-for-VS-Code",
+      "previous": "web-ui",
+      "current": "other",
+      "desc_now": "Deepseek Harness for VS Code",
+      "desc_prev": "Deepseek Harness for VS Code"
     },
     {
-      "full_name": "KongFangXun/sofagent",
+      "full_name": "Duskriver/dsh-opencode-go",
       "previous": "coding",
       "current": "tool",
-      "desc_now": "FDE Harness — on entry, write your business judgment into files (business flows, ontology, AI nodes); after departure, audit every change against them. 24 git-diff rules, tamper-evident chain, snapshots (104 tools, 11 plugins).",
-      "desc_prev": "Audit-first governance layer for AI coding agents — 24 git-diff rules, HMAC tamper-evident chain, snapshot rollback (104 tools, 11 plugins)"
+      "desc_now": "让你的DSH完美适配opencodeg-go套餐",
+      "desc_prev": "让你的DSH完美适配opencodeg-go套餐"
     },
     {
-      "full_name": "v587d/capital-generation",
-      "previous": "agent",
-      "current": "tool",
-      "desc_now": "面向中国股市散户的金融投资智能体。Next-Gen AI-Driven Capital Generation.",
-      "desc_prev": "面向中国股市散户的金融投资智能体。Next-Gen AI-Driven Capital Generation."
-    },
-    {
-      "full_name": "orangeshinee/dsh-mem0",
-      "previous": "resource",
-      "current": "other",
-      "desc_now": null,
+      "full_name": "weekitmo/oh-my-dsh-plugins",
+      "previous": "other",
+      "current": "resource",
+      "desc_now": "A curated collection of awesome plugins for DeepSeek Harness (DSH) — task notifications, LLM trace inspection, keybindings with a built-in terminal, and local agent delegation.",
       "desc_prev": null
     },
     {
-      "full_name": "GTC2080/dsh-APEX_Plugin",
-      "previous": "agent",
-      "current": "other",
-      "desc_now": "DeepSeek Harness 的 APEX 实验插件",
-      "desc_prev": "DeepSeek Harness 的 APEX 实验插件：Minimal 锚定、Pro 主导、视觉版 Flash Max 有界协作与宿主级 Web 验收。"
+      "full_name": "john-walks-slow/dsh-proactive",
+      "previous": "other",
+      "current": "web-ui",
+      "desc_now": "Proactive follow-ups for DeepSeek Harness: the model schedules host-level alarms (once/every/cron with jitter, quiet hours, daily budget) that resume cold sessions, with tombstone compaction and a live web panel.",
+      "desc_prev": null
     },
     {
-      "full_name": "He2way/dsh-task-console",
-      "previous": "agent",
-      "current": "conversation",
-      "desc_now": "DSH client plugin: flip the page over to a glass task console — live jobs, subagents, session and workspace cards, an infinite canvas that unrolls a card into its own controls, embedded web apps, and a conversation box that edits the canvas.",
-      "desc_prev": "DSH client plugin: a floating glass task console on the back of the page — live background jobs, subagents, session overview and workspace for the current session, with mouse-draggable cards."
+      "full_name": "akvi0921/dsh-console-tap",
+      "previous": "web-ui",
+      "current": "other",
+      "desc_now": "【已停止维护/归档】旧版控制台显形插件 → 新插件见 akvi0921/dsh-build-progress",
+      "desc_prev": "DSH 控制台显形插件:把助手执行的命令与完整控制台输出实时推给前端(官方 WebUI 悬浮控制台)"
     }
   ]
 }
