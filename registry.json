@@ -1067,6 +1067,28 @@
       ]
     },
     {
+      "full_name": "Tencent/BrowserSkill",
+      "name": "BrowserSkill",
+      "description": "Let AI agents use your real, logged-in browser without interrupting your work. CLI + extension for browser automation across any shell-capable AI agent.",
+      "html_url": "https://github.com/Tencent/BrowserSkill",
+      "stargazers_count": 3558,
+      "updated_at": "2026-09-17T11:30:40Z",
+      "default_branch": "main",
+      "topics": [
+        "agent",
+        "browser-use",
+        "dsh-plugin"
+      ],
+      "license": "MIT",
+      "fork": false,
+      "archived": false,
+      "registry_seen_at": "2026-09-17T11:33:57.961Z",
+      "pkg_name": "browser-skill",
+      "npm_version": "0.2.0",
+      "npm_pkg_name": "browser-skill",
+      "category": "coding"
+    },
+    {
       "full_name": "agentscope-ai/ReMe",
       "name": "ReMe",
       "description": "ReMe: Memory Management Kit for Agents - Remember Me, Refine Me.",
@@ -1951,6 +1973,28 @@
       "npm_version": "0.1.0",
       "npm_pkg_name": "aegis",
       "category": "coding"
+    },
+    {
+      "full_name": "YuJunZhiXue/dsh-purge",
+      "name": "dsh-purge",
+      "description": "DeepSeek Harness 破甲：让所有模型都能破甲，不同模型可换不同提示词；默认提示词面向国模「小码酱」。Jailbreak for every model — swap prompts per model. 求 Star 收藏 ⭐",
+      "html_url": "https://github.com/YuJunZhiXue/dsh-purge",
+      "stargazers_count": 1204,
+      "updated_at": "2026-09-17T11:27:45Z",
+      "default_branch": "master",
+      "topics": [
+        "dsh-plugin",
+        "dsh-plugins",
+        "harness-jailbreak",
+        "llm-jailbreak"
+      ],
+      "license": "MIT",
+      "fork": false,
+      "archived": false,
+      "registry_seen_at": "2026-09-17T11:33:57.961Z",
+      "pkg_name": "dsh-purge",
+      "version": "1.0.0",
+      "category": "conversation"
     },
     {
       "full_name": "OpenPetsHQ/openpets",
@@ -2889,8 +2933,8 @@
       "name": "Minke",
       "description": "🐳 DeepSeek Harness Desktop",
       "html_url": "https://github.com/lencx/Minke",
-      "stargazers_count": 653,
-      "updated_at": "2026-09-17T03:36:20Z",
+      "stargazers_count": 655,
+      "updated_at": "2026-09-17T09:39:47Z",
       "default_branch": "main",
       "topics": [
         "agent",
@@ -3568,7 +3612,7 @@
       "description": "Structural memory for AI coding agents. Bi-temporal graph, MCP-native, zero LLM calls. Cursor · Claude Code · Codex · DeepSeek Harness · Hermes · VS Code · Windsurf.",
       "html_url": "https://github.com/syncable-dev/memtrace-public",
       "stargazers_count": 472,
-      "updated_at": "2026-09-17T02:15:34Z",
+      "updated_at": "2026-09-17T11:24:54Z",
       "default_branch": "main",
       "topics": [
         "agent-memory",
@@ -4501,6 +4545,25 @@
       "category": "coding"
     },
     {
+      "full_name": "flizzywine/dsh-tavern",
+      "name": "dsh-tavern",
+      "description": "基于 DeepSeek Harness（DSH）的 SillyTavern 类文字游戏 Agent，支持候选项生成、对话式人物卡编辑、剧本模式与素材抽取。",
+      "html_url": "https://github.com/flizzywine/dsh-tavern",
+      "stargazers_count": 349,
+      "updated_at": "2026-09-17T11:25:37Z",
+      "default_branch": "main",
+      "topics": [
+        "dsh-plugin"
+      ],
+      "license": "AGPL-3.0",
+      "fork": false,
+      "archived": false,
+      "registry_seen_at": "2026-09-17T11:33:57.962Z",
+      "pkg_name": "dsh-profile-tavern",
+      "version": "1.9.0",
+      "category": "web-ui"
+    },
+    {
       "full_name": "tingly-dev/tingly-box",
       "name": "tingly-box",
       "description": "Your Intelligence, Orchestrated. Every builder. Every team. Every agent. For Everyone.",
@@ -4822,7 +4885,7 @@
       "description": "DeepSeek Harness session cost meter plugin: session/daily cost, budget, history, OpenCode Go quota, official & custom-provider balance, Codex-like token heatmap, peak/off-peak pricing with pre-switch popup & system-notification alerts, official price sync, 90+ model pricing catalog, Coding Plan quota queries (7 vendors), bilingual zh/en UI",
       "html_url": "https://github.com/Han-1413141/dsh-cost-meter",
       "stargazers_count": 306,
-      "updated_at": "2026-09-16T14:08:07Z",
+      "updated_at": "2026-09-17T11:29:11Z",
       "default_branch": "master",
       "topics": [
         "cost-tracking",
@@ -4842,8 +4905,8 @@
       "archived": false,
       "registry_seen_at": "2026-09-17T10:04:42.939Z",
       "pkg_name": "dsh-cost-meter",
-      "version": "1.7.28",
-      "npm_version": "1.7.28",
+      "version": "1.7.29",
+      "npm_version": "1.7.29",
       "npm_pkg_name": "dsh-cost-meter",
       "category": "notify",
       "market_tags": [
@@ -4880,6 +4943,36 @@
       "registry_seen_at": "2026-09-17T10:04:42.939Z",
       "category": "web-ui",
       "installable": "manual"
+    },
+    {
+      "full_name": "elysia395/dsh-wallpaper-engine",
+      "name": "dsh-wallpaper-engine",
+      "description": "把本机 Wallpaper Engine 的壁纸变成 DSH 网页界面的背景：Video 动态播放、Web 以 iframe 加载、Scene 壁纸提取主纹理作为静态帧；iOS 液态玻璃设置窗口（配色 / 玻璃颜色 / 透明度）、内容分级与类型过滤、自定义壁纸上传、紧凑 CD 架布局、黑胶唱片展示、隐藏 / 恢复、倍速 / 翻转与自动轮播。感谢 Jerry 维护 macOS 版。",
+      "html_url": "https://github.com/elysia395/dsh-wallpaper-engine",
+      "stargazers_count": 296,
+      "updated_at": "2026-09-17T11:11:53Z",
+      "default_branch": "main",
+      "topics": [
+        "deepseek-harness",
+        "dsh-plugin",
+        "dsh-plugin-market",
+        "dsh-plugins",
+        "liquid-glass",
+        "theme",
+        "wallpaper-engine"
+      ],
+      "license": "MIT",
+      "fork": false,
+      "archived": false,
+      "registry_seen_at": "2026-09-17T11:33:57.962Z",
+      "pkg_name": "dsh-plugin-wallpaper-engine",
+      "version": "0.7.3",
+      "npm_version": "0.7.3",
+      "npm_pkg_name": "dsh-plugin-wallpaper-engine",
+      "category": "web-ui",
+      "market_tags": [
+        "community-pick"
+      ]
     },
     {
       "full_name": "nutshellai-tech/mobius",
@@ -4935,8 +5028,8 @@
       "name": "dsh-ios",
       "description": "DeepSeek Harness (DSH) plugin: a live iOS Simulator — and a USB-connected iPhone — inside the conversation. 22 agent tools for booting, building, driving the UI by accessibility identity, OCR text or list rows, plus a streaming sidebar panel you can tap and drag on.",
       "html_url": "https://github.com/ZSeven-W/dsh-ios",
-      "stargazers_count": 294,
-      "updated_at": "2026-09-16T20:16:54Z",
+      "stargazers_count": 295,
+      "updated_at": "2026-09-17T11:13:19Z",
       "default_branch": "main",
       "topics": [
         "accessibility",
@@ -5096,6 +5189,39 @@
       "archived": false,
       "registry_seen_at": "2026-09-17T10:04:42.939Z",
       "category": "vision"
+    },
+    {
+      "full_name": "Mars-Sea/dsh-commandcode-provider",
+      "name": "dsh-commandcode-provider",
+      "description": "Command Code provider plugin for DeepSeek Harness (dsh). Adds Command Code model access, live model catalog, plan-aware model selection, reasoning effort, image input, web search, and multi-account support.",
+      "html_url": "https://github.com/Mars-Sea/dsh-commandcode-provider",
+      "stargazers_count": 274,
+      "updated_at": "2026-09-17T11:05:42Z",
+      "default_branch": "main",
+      "topics": [
+        "command-code",
+        "commandcode",
+        "deepseek-harness",
+        "dsh",
+        "dsh-plugin",
+        "llm",
+        "llm-provider",
+        "plugin",
+        "provider",
+        "typescript"
+      ],
+      "license": "MIT",
+      "fork": false,
+      "archived": false,
+      "registry_seen_at": "2026-09-17T11:33:57.962Z",
+      "pkg_name": "@mars-sea/dsh-commandcode-provider",
+      "version": "0.11.4",
+      "npm_version": "0.11.4",
+      "npm_pkg_name": "@mars-sea/dsh-commandcode-provider",
+      "category": "resource",
+      "market_tags": [
+        "community-pick"
+      ]
     },
     {
       "full_name": "Ariestar/sivtr",
@@ -5322,6 +5448,45 @@
       "npm_version": "0.1.44",
       "npm_pkg_name": "acryl",
       "category": "coding",
+      "installable": "non-plugin"
+    },
+    {
+      "full_name": "imsai-sh/awesome-deepseek-harness-plugins",
+      "name": "awesome-deepseek-harness-plugins",
+      "description": "DeepSeek Harness plugin store, marketplace and hub — 11,000+ dsh plugins with search, rankings, install commands and a free public API. DeepSeek Harness 插件市场 / 插件商店：自动收集与格式校验，免费搜索 API。deepseek1024.com",
+      "html_url": "https://github.com/imsai-sh/awesome-deepseek-harness-plugins",
+      "stargazers_count": 239,
+      "updated_at": "2026-09-17T09:12:10Z",
+      "default_branch": "main",
+      "topics": [
+        "awesome-list",
+        "catalog",
+        "deepseek",
+        "deepseek-harness",
+        "deepseek-harness-plugins",
+        "deepseek1024",
+        "dsh",
+        "dsh-1024store",
+        "dsh-bundle",
+        "dsh-plugin",
+        "dsh-plugin-market",
+        "dsh-plugin-verify",
+        "dsh-plugins",
+        "dsh-skill",
+        "marketplace",
+        "plugin-directory",
+        "plugin-hub",
+        "plugin-store",
+        "plugins",
+        "registry"
+      ],
+      "license": "MIT",
+      "fork": false,
+      "archived": false,
+      "registry_seen_at": "2026-09-17T11:33:57.962Z",
+      "pkg_name": "awesome-deepseek-harness-plugins",
+      "version": "0.5.0",
+      "category": "resource",
       "installable": "non-plugin"
     },
     {
@@ -5874,26 +6039,8 @@
       "updated_at": "2026-09-17T07:35:25Z",
       "default_branch": "main",
       "topics": [
-        "ai-agents",
-        "automated-theorem-proving",
-        "computer-algebra",
-        "cordis",
-        "dsh",
         "dsh-plugin",
-        "erdos",
-        "erdos-problem",
-        "formal-methods",
-        "formal-verification",
-        "lean4",
-        "math",
-        "mcp",
-        "mcp-server",
-        "model-context-protocol",
-        "proof-assistant",
-        "python",
-        "symbolic-math",
-        "sympy",
-        "theorem-proving"
+        "pi"
       ],
       "license": "MIT",
       "fork": false,
@@ -6012,8 +6159,8 @@
       "name": "dsh-trading",
       "description": "Agent-native trading terminal built on DeepSeek Harness. Crypto, US, CN and HK in one three-column GUI, 19+ hot-swappable connectors, dry-run by default with human approval on every live order. BYOK, no data redistribution.",
       "html_url": "https://github.com/zhu1090093659/dsh-trading",
-      "stargazers_count": 177,
-      "updated_at": "2026-09-16T09:56:46Z",
+      "stargazers_count": 178,
+      "updated_at": "2026-09-17T11:07:33Z",
       "default_branch": "main",
       "topics": [
         "agent-native",
@@ -6209,7 +6356,7 @@
       "description": "The DeepSeek Harness plugin for OpenPencil — preview, inspect, and edit real .op documents inside a conversation.",
       "html_url": "https://github.com/ZSeven-W/dsh-openpencil",
       "stargazers_count": 172,
-      "updated_at": "2026-09-16T08:23:19Z",
+      "updated_at": "2026-09-17T09:39:07Z",
       "default_branch": "main",
       "topics": [
         "deepseek-harness",
@@ -6481,8 +6628,8 @@
       "name": "dsh-plugin-bridge",
       "description": "DeepSeek Harness plugin for previewable cross-preset session migration. Fixed-schema handoffs preserve state, source-model intent, and unresolved images; the original session stays untouched.",
       "html_url": "https://github.com/Totoro-qaq/dsh-plugin-bridge",
-      "stargazers_count": 166,
-      "updated_at": "2026-09-16T14:54:05Z",
+      "stargazers_count": 165,
+      "updated_at": "2026-09-17T11:26:09Z",
       "default_branch": "main",
       "topics": [
         "context-migration",
@@ -7313,7 +7460,7 @@
       "description": "Self-evolving skills lib for coding agents",
       "html_url": "https://github.com/SkillNerds/xskill",
       "stargazers_count": 126,
-      "updated_at": "2026-09-15T08:18:49Z",
+      "updated_at": "2026-09-17T11:17:20Z",
       "default_branch": "main",
       "topics": [
         "claude-code",
@@ -7496,6 +7643,31 @@
       "npm_version": "0.3.10",
       "npm_pkg_name": "dsh-research-report",
       "category": "tool"
+    },
+    {
+      "full_name": "omdsh-dev/dsh-annotation",
+      "name": "dsh-annotation",
+      "description": "DSH Web 选中批注插件：选文字→批注→回车随消息发送；气泡隐藏批注块（零闪烁）；回复按 Annotation N 逐条对照（可悬浮芯片）。官方 bundle，零核心改动",
+      "html_url": "https://github.com/omdsh-dev/dsh-annotation",
+      "stargazers_count": 122,
+      "updated_at": "2026-09-17T11:09:22Z",
+      "default_branch": "main",
+      "topics": [
+        "dsh",
+        "dsh-plugin"
+      ],
+      "license": "MIT",
+      "fork": false,
+      "archived": false,
+      "registry_seen_at": "2026-09-17T11:33:57.962Z",
+      "pkg_name": "@changfenhuang/dsh-annotation",
+      "version": "1.4.11-preview.1",
+      "npm_version": "1.4.10",
+      "npm_pkg_name": "@changfenhuang/dsh-annotation",
+      "category": "conversation",
+      "market_tags": [
+        "community-pick"
+      ]
     },
     {
       "full_name": "jigjoy-ai/baro",
@@ -7686,7 +7858,7 @@
       "description": "RikkaHub fork，Android AI 客户端。支持 ChatGPT 订阅登录使用、跨应用划词悬浮翻译、助手工作区文件隔离、工作区 Skills 自动发现、文档与 HTML 预览、可定制动态角色。",
       "html_url": "https://github.com/Ayuilos/Miffan",
       "stargazers_count": 115,
-      "updated_at": "2026-09-14T05:12:27Z",
+      "updated_at": "2026-09-17T11:21:28Z",
       "default_branch": "master",
       "topics": [
         "ai-assistant",
@@ -8494,6 +8666,34 @@
       ]
     },
     {
+      "full_name": "Leslie-SSS/seeWxapkg",
+      "name": "seeWxapkg",
+      "description": "极简实用的微信小程序反编译 Web 工具",
+      "html_url": "https://github.com/Leslie-SSS/seeWxapkg",
+      "stargazers_count": 102,
+      "updated_at": "2026-09-17T07:57:32Z",
+      "default_branch": "main",
+      "topics": [
+        "decompile",
+        "decompiler",
+        "dsh-plugin",
+        "mini-program",
+        "reverse-engineering",
+        "unpack",
+        "wechat",
+        "wechat-app",
+        "wechat-mini-program",
+        "wexin",
+        "wxapkg"
+      ],
+      "license": "MIT",
+      "fork": false,
+      "archived": false,
+      "registry_seen_at": "2026-09-17T11:33:57.962Z",
+      "category": "notify",
+      "installable": "non-plugin"
+    },
+    {
       "full_name": "XieRW/dsh-beauty-skins",
       "name": "dsh-beauty-skins",
       "description": "给 DeepSeek Harness 用的美女系列皮肤：设置里从 哲风壁纸 拉预览网格，点一张即应用，配色从壁纸提取。支持动态壁纸，也保留自定义选图。",
@@ -8668,6 +8868,39 @@
       "npm_pkg_name": "dsh-launcher",
       "category": "coding",
       "installable": "non-plugin"
+    },
+    {
+      "full_name": "PerryLink/dsh-memento",
+      "name": "dsh-memento",
+      "description": "Bounded, layered, approval-gated, auditable cross-session memory for DeepSeek Harness (capability seam: ctx.memory + SQLite provider + memory tool + frozen snapshot injection)",
+      "html_url": "https://github.com/PerryLink/dsh-memento",
+      "stargazers_count": 99,
+      "updated_at": "2026-09-17T04:16:33Z",
+      "default_branch": "main",
+      "topics": [
+        "agent-memory",
+        "approval",
+        "audit",
+        "cordis",
+        "deepseek-harness",
+        "dsh",
+        "dsh-plugin",
+        "llm",
+        "memory",
+        "sqlite"
+      ],
+      "license": "Apache-2.0",
+      "fork": false,
+      "archived": false,
+      "registry_seen_at": "2026-09-17T11:33:57.962Z",
+      "pkg_name": "dsh-memento",
+      "version": "0.5.12",
+      "npm_version": "0.5.12",
+      "npm_pkg_name": "dsh-memento",
+      "category": "memory",
+      "market_tags": [
+        "community-pick"
+      ]
     },
     {
       "full_name": "Jackywxsz/DSH-Creator",
@@ -9280,6 +9513,45 @@
       "category": "web-ui"
     },
     {
+      "full_name": "diqierjia/StrataGate-AgentMemory",
+      "name": "StrataGate-AgentMemory",
+      "description": "Local-first cross-session memory for DeepSeek Harness (DSH): automatic capture, Event/Element cards, evidence-gated recall, source tracing. 本地跨会话长期记忆。",
+      "html_url": "https://github.com/diqierjia/StrataGate-AgentMemory",
+      "stargazers_count": 86,
+      "updated_at": "2026-09-17T10:29:33Z",
+      "default_branch": "main",
+      "topics": [
+        "agent-memory",
+        "ai-agents",
+        "cross-session-memory",
+        "deepseek-harness",
+        "dsh",
+        "dsh-plugin",
+        "evidence-gate",
+        "layered-memory",
+        "llm",
+        "local-first",
+        "long-term-memory",
+        "memory",
+        "persistent-memory",
+        "rag",
+        "source-tracing",
+        "sqlite",
+        "temporal-memory",
+        "typescript"
+      ],
+      "license": "MIT",
+      "fork": false,
+      "archived": false,
+      "registry_seen_at": "2026-09-17T11:33:57.962Z",
+      "pkg_name": "stratagate-dsh",
+      "version": "0.2.71",
+      "npm_version": "0.2.71",
+      "npm_pkg_name": "stratagate-dsh",
+      "category": "memory",
+      "installable": "non-plugin"
+    },
+    {
       "full_name": "PensiveFei/dsh-secure-audit",
       "name": "dsh-secure-audit",
       "description": "Read-only security & compliance plugin for DeepSeek Harness: prompt-injection detection, Chinese-PII redaction, and local configuration audit with redacted, reproducible reports.",
@@ -9794,7 +10066,7 @@
       "description": "A temporal context graph, a memory API, retrieval primitives, and a multiple-platform integration mesh — designed to be embedded into any host process.",
       "html_url": "https://github.com/melandlabs/opencontext",
       "stargazers_count": 76,
-      "updated_at": "2026-09-16T14:58:19Z",
+      "updated_at": "2026-09-17T11:31:22Z",
       "default_branch": "main",
       "topics": [
         "ai",
@@ -10048,25 +10320,26 @@
       "updated_at": "2026-09-17T06:58:32Z",
       "default_branch": "main",
       "topics": [
-        "agent-plugins",
-        "agent-skills",
-        "ai-agents",
-        "claude-code",
-        "codex",
-        "cordis",
-        "cursor",
+        "ai-assistant",
+        "ai-companion",
+        "cute",
+        "deepseek",
+        "deepseek-harness",
+        "desktop-app",
+        "desktop-mascot",
+        "desktop-pet",
+        "desktop-widget",
         "dsh",
         "dsh-plugin",
-        "github-copilot-cli",
-        "integration-discovery",
-        "kimi-code",
-        "mcp",
-        "mcp-server",
-        "openclaw",
-        "opencode",
-        "web-fetch",
-        "web-search",
-        "youdotcom"
+        "dsh-plugin-market",
+        "kanban-musume",
+        "local-first",
+        "mascot",
+        "no-telemetry",
+        "open-source",
+        "productivity",
+        "virtual-assistant",
+        "whale-girl"
       ],
       "license": "MIT",
       "fork": false,
@@ -10246,29 +10519,19 @@
       "description": "DeepSeek Harness 桌宠插件：元气鲸鱼娘陪你写代码 🐋",
       "html_url": "https://github.com/Sutera-Diffusus/dsh-whale-musume",
       "stargazers_count": 71,
-      "updated_at": "2026-09-16T10:25:39Z",
+      "updated_at": "2026-09-17T10:59:16Z",
       "default_branch": "main",
       "topics": [
-        "ai-assistant",
-        "ai-companion",
-        "cute",
-        "deepseek",
+        "agent",
+        "ai",
+        "claude",
         "deepseek-harness",
-        "desktop-app",
-        "desktop-mascot",
-        "desktop-pet",
-        "desktop-widget",
         "dsh",
+        "dsh-better-sidebar",
         "dsh-plugin",
-        "dsh-plugin-market",
-        "kanban-musume",
-        "local-first",
-        "mascot",
-        "no-telemetry",
-        "open-source",
-        "productivity",
-        "virtual-assistant",
-        "whale-girl"
+        "github-issues",
+        "skills",
+        "wayfinder"
       ],
       "license": "MIT",
       "fork": false,
@@ -12748,6 +13011,43 @@
       "installable": "non-plugin"
     },
     {
+      "full_name": "sjh9714/dsh-win32",
+      "name": "dsh-win32",
+      "description": "Fix and diagnose DeepSeek Harness on native Windows. Official PowerShell, Workspace Write, shortcuts, and legacy preset repair. No WSL.",
+      "html_url": "https://github.com/sjh9714/dsh-win32",
+      "stargazers_count": 47,
+      "updated_at": "2026-09-17T11:05:32Z",
+      "default_branch": "master",
+      "topics": [
+        "ai-agent",
+        "deepseek",
+        "deepseek-harness",
+        "deepseek-harness-plugin",
+        "deepseek-v4",
+        "doctor",
+        "dsh",
+        "dsh-plugin",
+        "dsh-plugins",
+        "native-windows",
+        "no-wsl",
+        "powershell",
+        "sandbox",
+        "win32",
+        "windows",
+        "windows-fix",
+        "workspace-write"
+      ],
+      "license": "MIT",
+      "fork": false,
+      "archived": false,
+      "registry_seen_at": "2026-09-17T11:33:57.962Z",
+      "pkg_name": "dsh-win32",
+      "version": "0.17.9",
+      "npm_version": "0.17.9",
+      "npm_pkg_name": "dsh-win32",
+      "category": "tool"
+    },
+    {
       "full_name": "Meredith2328/dsh-sticky-note",
       "name": "dsh-sticky-note",
       "description": "左下角便签：随手记点子/感想/TODO，实时保存到归档目录，清单+悬浮归档",
@@ -14545,7 +14845,7 @@
       "description": " Claude-Code-style TUI bundle for DeepSeek Harness. 充分结合 DSH 的核心机制和高级特性与Codex CLI 、Claude Code 等主流交互机制，打造的 DSH-Code. （对齐DSH官方上游最新版本！持续更新中！支持DSH 特殊模式，插件系统，模型管理，子代理管理，切换模型特殊动画）注：自 DSH-Code 1.0.0起，代码由DSH-Code 自迭代完善，不使用外部 agent /CLI 完成！",
       "html_url": "https://github.com/UNLINEARITY/dsh-code",
       "stargazers_count": 34,
-      "updated_at": "2026-09-16T06:49:23Z",
+      "updated_at": "2026-09-17T09:28:30Z",
       "default_branch": "main",
       "topics": [
         "claude-code",
@@ -16143,7 +16443,7 @@
       "description": "面向 DeepSeek Harness 的交互式 K 线分析插件，支持多市场行情、技术指标、支撑压力位、新闻与基本面分析，并在原生侧栏中直接展示。",
       "html_url": "https://github.com/FTShare-Lab/dsh_kline",
       "stargazers_count": 28,
-      "updated_at": "2026-09-17T01:57:27Z",
+      "updated_at": "2026-09-17T10:20:39Z",
       "default_branch": "main",
       "topics": [
         "awesome-deepseek-harness",
@@ -16163,7 +16463,7 @@
       "archived": false,
       "registry_seen_at": "2026-09-17T10:04:42.940Z",
       "pkg_name": "@ftshare-lab/dsh-kline",
-      "version": "0.3.1",
+      "version": "0.3.2",
       "category": "resource",
       "market_tags": [
         "community-pick"
@@ -16798,22 +17098,21 @@
       ]
     },
     {
-      "full_name": "chouxiaohuai/dsh-uiskin-theme",
-      "name": "dsh-uiskin-theme",
-      "description": "Blue Glass Theme (ocean fantasy) for DeepSeek Harness Web — static profile bundle. 海洋幻想主题:海洋背景、玻璃气泡、海洋侧边栏、鲸鱼设置按钮、炫彩模型文字。安装: dsh plugin --profile web add github:chouxiaohuai/uiskin-theme",
-      "html_url": "https://github.com/chouxiaohuai/dsh-uiskin-theme",
+      "full_name": "Vithrive/Deepseek-Harness-for-VS-Code",
+      "name": "Deepseek-Harness-for-VS-Code",
+      "description": "Deepseek Harness for VS Code",
+      "html_url": "https://github.com/Vithrive/Deepseek-Harness-for-VS-Code",
       "stargazers_count": 26,
-      "updated_at": "2026-09-16T19:27:42Z",
+      "updated_at": "2026-09-17T09:16:12Z",
       "default_branch": "main",
       "topics": [
+        "deepseek",
         "deepseek-harness",
-        "deepseek-harness-plugin",
-        "dsh",
         "dsh-plugin",
-        "theme",
-        "theme-ui"
+        "dsh-plugin-market",
+        "dsh-plugins"
       ],
-      "license": "NOASSERTION",
+      "license": "MIT",
       "fork": false,
       "archived": false,
       "registry_seen_at": "2026-09-17T10:04:42.940Z",
@@ -17201,16 +17500,14 @@
       "installable": "non-plugin"
     },
     {
-      "full_name": "Vithrive/Deepseek-Harness-for-VS-Code",
-      "name": "Deepseek-Harness-for-VS-Code",
-      "description": "Deepseek Harness for VS Code",
-      "html_url": "https://github.com/Vithrive/Deepseek-Harness-for-VS-Code",
+      "full_name": "nevertoday/dsh-theme-plugin",
+      "name": "dsh-theme-plugin",
+      "description": "Chinese traditional colors as a DeepSeek Harness theme pack. ",
+      "html_url": "https://github.com/nevertoday/dsh-theme-plugin",
       "stargazers_count": 25,
-      "updated_at": "2026-09-16T04:52:53Z",
+      "updated_at": "2026-09-17T05:09:27Z",
       "default_branch": "main",
       "topics": [
-        "deepseek",
-        "deepseek-harness",
         "dsh-plugin",
         "dsh-plugin-market",
         "dsh-plugins"
@@ -17515,7 +17812,7 @@
       "description": "A formal workflow protocol that keeps AI coding agents on track through machine-enforced invariants, verified evidence, and structured context. Designed to keep deep, long-running projects coherent across sessions, agents, and months.",
       "html_url": "https://github.com/alxshelepenok/grove",
       "stargazers_count": 24,
-      "updated_at": "2026-09-16T10:10:12Z",
+      "updated_at": "2026-09-17T11:14:21Z",
       "default_branch": "main",
       "topics": [
         "agent-tooling",
@@ -18258,10 +18555,10 @@
     {
       "full_name": "Ultronen/dsh-archived-chats",
       "name": "dsh-archived-chats",
-      "description": "Local-first session lifecycle for DeepSeek Harness: safely bulk-archive workspaces, search and preview archived chats, restore history as copies, manage backups, recycle protection, retention, and lineage.",
+      "description": "Local-first Session Archive for DeepSeek Harness: bulk archive, full-text search and native preview, tags and notes, ZIP backups, snapshot-protected Recycle Bin, storage and retention, lineage, and preserved legacy recovery data.",
       "html_url": "https://github.com/Ultronen/dsh-archived-chats",
       "stargazers_count": 22,
-      "updated_at": "2026-09-16T21:01:42Z",
+      "updated_at": "2026-09-17T10:42:41Z",
       "default_branch": "main",
       "topics": [
         "archive",
@@ -18283,7 +18580,7 @@
       "version": "1.1.2",
       "npm_version": "1.1.1",
       "npm_pkg_name": "dsh-archived-chats",
-      "category": "tool",
+      "category": "memory",
       "market_tags": [
         "community-pick"
       ]
@@ -18507,24 +18804,11 @@
         "connection-manager",
         "deepseek",
         "deepseek-harness",
-        "dsh",
         "dsh-plugin",
-        "mcp",
-        "mcp-client",
-        "mcp-connector",
-        "mcp-hub",
-        "mcp-manager",
-        "mcp-marketplace",
-        "mcp-registry",
-        "mcp-server",
-        "model-context-protocol",
-        "oauth2",
-        "pkce",
-        "qichacha",
-        "stdio",
-        "streamable-http"
+        "epistemic-loop",
+        "scientific-discovery"
       ],
-      "license": "MIT",
+      "license": "Apache-2.0",
       "fork": false,
       "archived": false,
       "registry_seen_at": "2026-09-17T10:04:42.940Z",
@@ -19627,7 +19911,7 @@
       "description": "让 DeepSeek Harness 的 agent 跑在手机里，通过 Magisk root 原生操作安卓系统（截图/点击/滑动/开应用）+ 移动端布局 + WebView APK",
       "html_url": "https://github.com/railgun0325/dsh-phone",
       "stargazers_count": 20,
-      "updated_at": "2026-09-16T17:23:31Z",
+      "updated_at": "2026-09-17T11:23:28Z",
       "default_branch": "master",
       "topics": [
         "agent",
@@ -19991,7 +20275,7 @@
       "description": "流镜 Flowglass — DeepSeek Harness session flowgraph，实时可视化消息、工具组、子代理分支与步骤详情。",
       "html_url": "https://github.com/Iwctwbh/dsh-flowglass",
       "stargazers_count": 19,
-      "updated_at": "2026-09-15T08:31:20Z",
+      "updated_at": "2026-09-17T09:30:19Z",
       "default_branch": "main",
       "topics": [
         "ai-agents",
@@ -20652,7 +20936,7 @@
       "description": "DeepSeek Harness 主程序与插件更新管理：npm/GitHub 双源 semver 比对、多语言横幅、一键更新（主程序自动备份/校验/回滚，插件临时目录安装）、更新后看门狗重启。Update management for DeepSeek Harness and its plugins: dual-source semver checks, locale banner, one-click updates with backup/rollback, watchdog restart.",
       "html_url": "https://github.com/Airmetro/dsh-update-checker",
       "stargazers_count": 18,
-      "updated_at": "2026-09-16T02:07:50Z",
+      "updated_at": "2026-09-17T10:34:29Z",
       "default_branch": "main",
       "topics": [
         "cordis",
@@ -20666,8 +20950,8 @@
       "archived": false,
       "registry_seen_at": "2026-09-17T10:04:42.940Z",
       "pkg_name": "dsh-update-checker",
-      "version": "1.4.23",
-      "npm_version": "1.4.23",
+      "version": "1.5.0",
+      "npm_version": "1.5.0",
       "npm_pkg_name": "dsh-update-checker",
       "category": "resource"
     },
@@ -23383,7 +23667,7 @@
       "description": "deepseek harness plugin obsidian memory",
       "html_url": "https://github.com/detongz/dsh-client-ui-obsidian-memory",
       "stargazers_count": 14,
-      "updated_at": "2026-09-17T01:58:07Z",
+      "updated_at": "2026-09-17T10:33:56Z",
       "default_branch": "main",
       "topics": [
         "dsh-plugin",
@@ -24740,7 +25024,7 @@
       "description": "SGME 拾光记忆引擎——AI 无缝切换：记忆、WIKI 知识库、技能库全面接管。换模型不失忆，多智能体共享同一大脑。ShiGuang Memory Engine · seamless AI switching, memory/wiki/skills fully managed.",
       "html_url": "https://github.com/freehul/sgme",
       "stargazers_count": 13,
-      "updated_at": "2026-09-15T13:44:21Z",
+      "updated_at": "2026-09-17T10:39:16Z",
       "default_branch": "main",
       "topics": [
         "agent-memory",
@@ -25423,12 +25707,38 @@
       "category": "tool"
     },
     {
+      "full_name": "yj-liuzepeng/dsh-project-brain",
+      "name": "dsh-project-brain",
+      "description": "Persistent project intelligence and memory plugin for DSH: architecture analysis, cross-session context, TODOs, and optional hybrid retrieval",
+      "html_url": "https://github.com/yj-liuzepeng/dsh-project-brain",
+      "stargazers_count": 13,
+      "updated_at": "2026-09-17T10:10:45Z",
+      "default_branch": "main",
+      "topics": [
+        "ai-assistant",
+        "deepseek-harness",
+        "developer-tools",
+        "dsh-plugin",
+        "local-first",
+        "project-memory"
+      ],
+      "license": "MIT",
+      "fork": false,
+      "archived": false,
+      "registry_seen_at": "2026-09-17T11:33:57.962Z",
+      "pkg_name": "dsh-project-brain",
+      "version": "1.3.1",
+      "npm_version": "1.3.0",
+      "npm_pkg_name": "dsh-project-brain",
+      "category": "memory"
+    },
+    {
       "full_name": "MicroMilo/upstream-radar",
       "name": "upstream-radar",
       "description": "Always-on compatibility testing for DeepSeek Harness plugins: exact releases, isolated runners, and fixable upstream issues.",
       "html_url": "https://github.com/MicroMilo/upstream-radar",
-      "stargazers_count": 13,
-      "updated_at": "2026-09-16T12:15:26Z",
+      "stargazers_count": 12,
+      "updated_at": "2026-09-17T09:48:38Z",
       "default_branch": "main",
       "topics": [
         "agent-security",
@@ -28745,26 +29055,15 @@
       ]
     },
     {
-      "full_name": "Lenonss/DSH_VsCodeMode",
-      "name": "DSH_VsCodeMode",
-      "description": "VSCode-style coding for DeepSeek Harness: Monaco editor (tabs/QuickOpen), agent edit-diff review (keep/reject/archive/rollback), LSP intelligence with VSIX installs",
-      "html_url": "https://github.com/Lenonss/DSH_VsCodeMode",
+      "full_name": "Duskriver/dsh-opencode-go",
+      "name": "dsh-opencode-go",
+      "description": "让你的DSH完美适配opencodeg-go套餐",
+      "html_url": "https://github.com/Duskriver/dsh-opencode-go",
       "stargazers_count": 11,
-      "updated_at": "2026-09-16T12:41:18Z",
+      "updated_at": "2026-09-17T09:17:55Z",
       "default_branch": "main",
       "topics": [
-        "code-review",
-        "deepseek-harness",
-        "deepseek-harness-plugin",
-        "deepseek-harness-plugins",
-        "diff",
-        "dsh",
-        "dsh-plugin",
-        "editor",
-        "monaco",
-        "monaco-editor",
-        "plugin",
-        "vscode"
+        "dsh-plugin"
       ],
       "license": "MIT",
       "fork": false,
@@ -30239,15 +30538,18 @@
       "installable": "manual"
     },
     {
-      "full_name": "Duskriver/dsh-opencode-go",
-      "name": "dsh-opencode-go",
-      "description": "让你的DSH完美适配opencodeg-go套餐",
-      "html_url": "https://github.com/Duskriver/dsh-opencode-go",
+      "full_name": "morlay/better-session",
+      "name": "better-session",
+      "description": "better session",
+      "html_url": "https://github.com/morlay/better-session",
       "stargazers_count": 10,
-      "updated_at": "2026-09-16T19:58:16Z",
+      "updated_at": "2026-09-17T10:59:17Z",
       "default_branch": "main",
       "topics": [
-        "dsh-plugin"
+        "dsh-plugin",
+        "session",
+        "session-branch",
+        "session-persistence"
       ],
       "license": "MIT",
       "fork": false,
@@ -34073,7 +34375,7 @@
       "description": "Deepseek Harness plugin that allows automatic delegation of subtasks to different models based on user preferences",
       "html_url": "https://github.com/CypherNaught-0x/DSH-Subagent-Model-Router",
       "stargazers_count": 8,
-      "updated_at": "2026-09-12T14:36:18Z",
+      "updated_at": "2026-09-17T09:56:33Z",
       "default_branch": "main",
       "topics": [
         "deepseek-harness",
@@ -34096,7 +34398,7 @@
       "description": "Self-evolving memory + skill lifecycle for DeepSeek Harness — durable cross-session memory with zero-token deterministic recall, tiered approval, reinforcement learning from repetition, and anti-bloat convergence for both skills and memory.",
       "html_url": "https://github.com/chenzheshushi-commits/dsh-evolve",
       "stargazers_count": 8,
-      "updated_at": "2026-09-17T03:21:40Z",
+      "updated_at": "2026-09-17T10:59:47Z",
       "default_branch": "main",
       "topics": [
         "ai-agent",
@@ -34113,7 +34415,7 @@
       "archived": false,
       "registry_seen_at": "2026-09-17T10:04:42.941Z",
       "pkg_name": "dsh-evolve",
-      "version": "0.6.2",
+      "version": "0.6.3",
       "category": "memory",
       "market_tags": [
         "community-pick"
@@ -34324,7 +34626,7 @@
       "description": "Turn DeepSeek Harness into a phone app you can securely reach from anywhere: minimal mobile UI rework + pairing-code gateway + PWA + Web Push. 让 DSH 变成可公网安全访问的手机 App",
       "html_url": "https://github.com/KyoMio/dsh-zen-remote",
       "stargazers_count": 8,
-      "updated_at": "2026-09-11T06:16:30Z",
+      "updated_at": "2026-09-17T10:38:31Z",
       "default_branch": "main",
       "topics": [
         "deepseek-harness",
@@ -34339,8 +34641,8 @@
       "archived": false,
       "registry_seen_at": "2026-09-17T10:04:42.941Z",
       "pkg_name": "dsh-zen-remote",
-      "version": "1.1.14",
-      "npm_version": "1.1.14",
+      "version": "1.1.15",
+      "npm_version": "1.1.15",
       "npm_pkg_name": "dsh-zen-remote",
       "category": "web-ui"
     },
@@ -36012,19 +36314,22 @@
       "installable": "non-plugin"
     },
     {
-      "full_name": "kendu76/dsh-music-player",
-      "name": "dsh-music-player",
-      "description": "music player plugin for deepseek harness",
-      "html_url": "https://github.com/kendu76/dsh-music-player",
+      "full_name": "jiangnanquan/dsh-ux",
+      "name": "dsh-ux",
+      "description": "DSH web UI 增强插件 + 无边框 Electron 桌面壳",
+      "html_url": "https://github.com/jiangnanquan/dsh-ux",
       "stargazers_count": 8,
-      "updated_at": "2026-09-17T03:01:26Z",
+      "updated_at": "2026-09-17T11:19:14Z",
       "default_branch": "main",
       "topics": [
+        "cordis",
+        "deepseek",
+        "deepseek-harness",
+        "desktop",
         "dsh",
-        "dsh-bundle",
         "dsh-plugin",
-        "dsh-plugin-market",
-        "dsh-plugins"
+        "electron",
+        "theme"
       ],
       "license": "MIT",
       "fork": false,
@@ -36032,9 +36337,95 @@
       "registry_seen_at": "2026-09-17T10:04:42.941Z",
       "pkg_name": "dsh-music-player",
       "version": "1.0.1",
-      "npm_version": "1.0.1",
-      "npm_pkg_name": "dsh-music-player",
-      "category": "other"
+      "npm_version": "1.1.1",
+      "npm_pkg_name": "dsh-network-proxy",
+      "category": "web-ui"
+    },
+    {
+      "full_name": "yoza10635/dsh-argp",
+      "name": "dsh-argp",
+      "description": "Guarded context compaction for DeepSeek Harness (dsh): the LLM proposes, deterministic guards dispose — eager per-atom shrink (extract/summary/false under verbatim guards) + lazy reference-graph eviction (0-LLM) + byte-exact recall from an append-only log. 守卫式上下文压缩：LLM 只提议、确定性守卫裁决——逐原子缩放 + 惰性引用图剪枝（0-LLM）+ 追加式日志逐字节召回；压缩率精确兑现，历史永不销毁。",
+      "html_url": "https://github.com/yoza10635/dsh-argp",
+      "stargazers_count": 8,
+      "updated_at": "2026-09-17T09:24:43Z",
+      "default_branch": "main",
+      "topics": [
+        "agent",
+        "compaction",
+        "context-compression",
+        "cordis",
+        "deepseek-harness",
+        "dsh",
+        "dsh-plugin",
+        "llm"
+      ],
+      "license": "MIT",
+      "fork": false,
+      "archived": false,
+      "registry_seen_at": "2026-09-17T11:33:57.962Z",
+      "pkg_name": "dsh-argp",
+      "version": "1.2.0",
+      "npm_version": "1.2.0",
+      "npm_pkg_name": "dsh-argp",
+      "category": "memory",
+      "market_tags": [
+        "community-pick"
+      ]
+    },
+    {
+      "full_name": "Yunado/dsh-qwen38-local-qol",
+      "name": "dsh-qwen38-local-qol",
+      "description": "DeepSeek Harness QoL plugin for the local Qwen3.8 line (27B/Flash-Next): per-request thinking budgets, a compaction backend that stops burning the output cap on thinking, and a settings tab. 本地 Qwen3.8 线的 DSH QoL 插件：逐请求 thinking 预算、不再把输出帽烧在 thinking 上的压缩后端、设置 tab。",
+      "html_url": "https://github.com/Yunado/dsh-qwen38-local-qol",
+      "stargazers_count": 8,
+      "updated_at": "2026-09-17T09:22:48Z",
+      "default_branch": "main",
+      "topics": [
+        "dsh-plugin"
+      ],
+      "license": "MIT",
+      "fork": false,
+      "archived": false,
+      "registry_seen_at": "2026-09-17T11:33:57.962Z",
+      "pkg_name": "dsh-qwen38-local-qol",
+      "version": "0.1.0",
+      "category": "web-ui",
+      "market_tags": [
+        "community-pick"
+      ]
+    },
+    {
+      "full_name": "PerryLink/dsh-budget",
+      "name": "dsh-budget",
+      "description": "Cost governance for DeepSeek Harness: aggregated token/cost metering per model, session and day, budget caps with threshold alerts and over-limit policies, carbon footprint estimation, per-model latency benchmarks, a Settings budget tab, and the /budget command",
+      "html_url": "https://github.com/PerryLink/dsh-budget",
+      "stargazers_count": 8,
+      "updated_at": "2026-09-17T09:56:43Z",
+      "default_branch": "main",
+      "topics": [
+        "budget",
+        "carbon-footprint",
+        "cordis",
+        "cost-tracking",
+        "deepseek",
+        "deepseek-harness",
+        "dsh",
+        "dsh-plugin",
+        "latency-benchmark",
+        "token-usage"
+      ],
+      "license": "Apache-2.0",
+      "fork": false,
+      "archived": false,
+      "registry_seen_at": "2026-09-17T11:33:57.962Z",
+      "pkg_name": "dsh-budget",
+      "version": "0.4.9",
+      "npm_version": "0.4.9",
+      "npm_pkg_name": "dsh-budget",
+      "category": "notify",
+      "market_tags": [
+        "community-pick"
+      ]
     },
     {
       "full_name": "EricXu20266/dsh-gui",
@@ -37467,7 +37858,7 @@
       "description": "DSH Web 模型余量与用量监控插件",
       "html_url": "https://github.com/licyer/dsh-token-monitor",
       "stargazers_count": 7,
-      "updated_at": "2026-09-14T10:09:06Z",
+      "updated_at": "2026-09-17T10:29:55Z",
       "default_branch": "main",
       "topics": [
         "deepseek",
@@ -39634,7 +40025,7 @@
       "description": "A drop-in DeepSeek Harness agent loop whose context engine is a bounded slice instead of a growing transcript",
       "html_url": "https://github.com/TT-Wang/dsh-slice-agent-loop",
       "stargazers_count": 7,
-      "updated_at": "2026-09-17T02:28:49Z",
+      "updated_at": "2026-09-17T09:30:52Z",
       "default_branch": "main",
       "topics": [
         "dsh-plugin"
@@ -44995,7 +45386,7 @@
       "description": "Use AI agents from the DSH session UI.",
       "html_url": "https://github.com/zaimokuza-yoshiteru/dsh-acp-adapter",
       "stargazers_count": 6,
-      "updated_at": "2026-09-16T18:18:26Z",
+      "updated_at": "2026-09-17T11:28:36Z",
       "default_branch": "main",
       "topics": [
         "acp",
@@ -45785,20 +46176,20 @@
       "installable": "non-plugin"
     },
     {
-      "full_name": "aosi526/dsh-workbuddy-xdpool",
-      "name": "dsh-workbuddy-xdpool",
-      "description": "将 WorkBuddy 桌面 App 里登录过的所有账号自动并入一个 DeepSeek Harness 模型池：无需任何手动配置，你在 WorkBuddy 桌面登录的每个账号都会成为一个池成员；某个账号被限流（429）时，请求会自动切换到下一个可用账号，实现多账号自动容错轮换。",
-      "html_url": "https://github.com/aosi526/dsh-workbuddy-xdpool",
+      "full_name": "jiesou/dsh-opencode-zen-free-provider",
+      "name": "dsh-opencode-zen-free-provider",
+      "description": "OpenCode Zen 免费模型接入 DeepSeek Harness。1M 上下文，同步全部元数据",
+      "html_url": "https://github.com/jiesou/dsh-opencode-zen-free-provider",
       "stargazers_count": 6,
-      "updated_at": "2026-09-17T01:15:53Z",
+      "updated_at": "2026-09-17T10:30:44Z",
       "default_branch": "main",
       "topics": [
-        "codebuddy",
+        "deepseek-harness",
+        "dsh",
+        "dsh-bundle",
         "dsh-plugin",
-        "failover",
-        "model-provider",
-        "multi-account",
-        "workbuddy"
+        "llm-provider",
+        "opencode"
       ],
       "license": "MIT",
       "fork": false,
@@ -49453,7 +49844,7 @@
       "description": "DeepSeek Harness plugins market｜DSH 插件市场",
       "html_url": "https://github.com/losebird/dsh-plugin-market",
       "stargazers_count": 5,
-      "updated_at": "2026-09-17T02:50:33Z",
+      "updated_at": "2026-09-17T09:51:02Z",
       "default_branch": "main",
       "topics": [
         "dsh",
@@ -63867,7 +64258,7 @@
       "description": "给 DSH 模型页补上官方适配器缺的那半：网关可达性探测、模型目录拉取并勾选写回、余额/配额常驻、协议与接入地址可见。零运行时依赖，不改动 DSH 安装。",
       "html_url": "https://github.com/webkubor/dsh-llm-hub",
       "stargazers_count": 4,
-      "updated_at": "2026-09-17T02:58:05Z",
+      "updated_at": "2026-09-17T09:47:54Z",
       "default_branch": "main",
       "topics": [
         "anthropic-api",
@@ -63923,7 +64314,7 @@
       "description": "A foundation for self-evolving AI agents, built on DeepSeek Harness.",
       "html_url": "https://github.com/mozi-desk/mozi-forge",
       "stargazers_count": 4,
-      "updated_at": "2026-09-17T04:09:44Z",
+      "updated_at": "2026-09-17T10:30:13Z",
       "default_branch": "main",
       "topics": [
         "agentic-ai",
@@ -63949,7 +64340,7 @@
       "description": null,
       "html_url": "https://github.com/PPawnsir/task-board-plugin",
       "stargazers_count": 4,
-      "updated_at": "2026-09-17T02:20:37Z",
+      "updated_at": "2026-09-17T09:27:52Z",
       "default_branch": "main",
       "topics": [
         "dsh-plugin",
@@ -73522,7 +73913,7 @@
       "description": null,
       "html_url": "https://github.com/sandcn/DeepSeek-cli",
       "stargazers_count": 3,
-      "updated_at": "2026-09-16T19:47:56Z",
+      "updated_at": "2026-09-17T09:20:56Z",
       "default_branch": "main",
       "topics": [
         "cli",
@@ -77583,7 +77974,7 @@
       "description": "DSH browser tab favicon reflecting session state: idle / running / asking / done. · DSH 标签页 favicon 实时反映会话状态：待机 / 运行中 / 提问 / 完成",
       "html_url": "https://github.com/waknow/dsh-web-icon-indicator",
       "stargazers_count": 3,
-      "updated_at": "2026-09-10T02:41:58Z",
+      "updated_at": "2026-09-17T09:25:09Z",
       "default_branch": "main",
       "topics": [
         "deepseek",
@@ -79722,7 +80113,7 @@
       "description": "A DeepSeek Harness plugin that auto-saves large pasted text as attachment files",
       "html_url": "https://github.com/sakuraqqq/dsh-auto-paste",
       "stargazers_count": 3,
-      "updated_at": "2026-09-16T05:40:49Z",
+      "updated_at": "2026-09-17T09:49:48Z",
       "default_branch": "main",
       "topics": [
         "better-sidebar",
@@ -80452,7 +80843,7 @@
       "description": "DSH (DeepSeek Harness) plugin: per-session cost line + cost attribution report, priced by llm-pricing",
       "html_url": "https://github.com/Jannchie/dsh-bill",
       "stargazers_count": 3,
-      "updated_at": "2026-09-14T03:37:43Z",
+      "updated_at": "2026-09-17T10:29:29Z",
       "default_branch": "main",
       "topics": [
         "cost-attribution",
@@ -80471,8 +80862,8 @@
       "archived": false,
       "registry_seen_at": "2026-09-17T10:04:42.946Z",
       "pkg_name": "dsh-bill",
-      "version": "0.16.0",
-      "npm_version": "0.16.0",
+      "version": "0.17.0",
+      "npm_version": "0.17.0",
       "npm_pkg_name": "dsh-bill",
       "category": "model",
       "market_tags": [
@@ -81719,7 +82110,7 @@
       "description": null,
       "html_url": "https://github.com/kirkchinese/claude2dsh",
       "stargazers_count": 3,
-      "updated_at": "2026-09-15T03:00:27Z",
+      "updated_at": "2026-09-17T11:00:37Z",
       "default_branch": "main",
       "topics": [
         "dsh",
@@ -81731,8 +82122,8 @@
       "archived": false,
       "registry_seen_at": "2026-09-17T10:04:42.947Z",
       "pkg_name": "claude2dsh",
-      "version": "0.2.0-rc.5",
-      "npm_version": "0.2.0-rc.5",
+      "version": "0.3.0",
+      "npm_version": "0.3.0",
       "npm_pkg_name": "claude2dsh",
       "category": "other",
       "market_tags": [
@@ -86442,7 +86833,7 @@
       "registry_seen_at": "2026-09-17T10:04:42.950Z",
       "pkg_name": "dsh-mcmp",
       "version": "3.1.2",
-      "npm_version": "3.1.1",
+      "npm_version": "3.1.2",
       "npm_pkg_name": "dsh-mcmp",
       "category": "document"
     },
@@ -96036,7 +96427,7 @@
       "description": "Discover The Best DSH plugins",
       "html_url": "https://github.com/coderPerseus/dsh-hub",
       "stargazers_count": 2,
-      "updated_at": "2026-09-16T10:08:40Z",
+      "updated_at": "2026-09-17T10:04:07Z",
       "default_branch": "main",
       "topics": [
         "awesome",
@@ -96499,7 +96890,7 @@
       "description": "DSH Web GUI plugin: a browsable, searchable, stats-driven directory of GitHub DeepSeek Harness plugins (dsh-plugin topic), with CDN hot update, README-gated install, and live search.",
       "html_url": "https://github.com/dingzhenyao/dsh-plugin-directory",
       "stargazers_count": 2,
-      "updated_at": "2026-09-17T04:06:19Z",
+      "updated_at": "2026-09-17T11:16:53Z",
       "default_branch": "main",
       "topics": [
         "deepseek-harness",
@@ -103662,7 +104053,7 @@
       "description": "A agentic factor mining plugin for DSH, suitable for small llm like qwen.Its core package could also work independently.",
       "html_url": "https://github.com/Rtyyy233/dsh-factor-mining-plugin",
       "stargazers_count": 2,
-      "updated_at": "2026-08-28T18:43:51Z",
+      "updated_at": "2026-09-17T10:12:12Z",
       "default_branch": "main",
       "topics": [
         "deepseek-harness",
@@ -107682,7 +108073,7 @@
       "description": "DSH 免费联网搜索插件（Parallel 后端，零依赖）",
       "html_url": "https://github.com/ExplorerZYzhou/DSH-freeweb",
       "stargazers_count": 2,
-      "updated_at": "2026-08-31T07:21:25Z",
+      "updated_at": "2026-09-17T10:02:45Z",
       "default_branch": "main",
       "topics": [
         "deepseek",
@@ -122932,7 +123323,7 @@
       "description": "让分布在不同设备与网络中的个人 Agent，在各自的工作区与权限边界内组成可持久委派的团队。 DSH-native delegation for personal Agents across devices and networks, without giving up local workspaces, credentials, or control.",
       "html_url": "https://github.com/zhouCode/dsh-squad",
       "stargazers_count": 1,
-      "updated_at": "2026-09-09T10:30:26Z",
+      "updated_at": "2026-09-17T10:32:34Z",
       "default_branch": "main",
       "topics": [
         "dsh-plugin"
@@ -122942,7 +123333,7 @@
       "archived": false,
       "registry_seen_at": "2026-09-17T10:04:42.969Z",
       "pkg_name": "dsh-squad",
-      "version": "0.9.1",
+      "version": "0.9.2",
       "npm_version": "0.0.1",
       "npm_pkg_name": "dsh-squad",
       "category": "tool",
@@ -146478,7 +146869,7 @@
       "description": "插件管理器：插件档案库（清单/用途/工具/配置认知）+ 生命周期管理（创建/挂载/启停/卸载/配置），host 工具面 + 官方设置页「插件管理」tab。",
       "html_url": "https://github.com/jonah791/dsh-agent-plugin-manager",
       "stargazers_count": 1,
-      "updated_at": "2026-09-14T08:43:49Z",
+      "updated_at": "2026-09-17T10:04:01Z",
       "default_branch": "main",
       "topics": [
         "dsh-plugin"
@@ -152268,7 +152659,7 @@
       "description": "一款dsh的插件市场，点击链接一键直达：",
       "html_url": "https://github.com/YureWright/dsh-plgstore",
       "stargazers_count": 1,
-      "updated_at": "2026-09-16T09:48:59Z",
+      "updated_at": "2026-09-17T09:55:26Z",
       "default_branch": "main",
       "topics": [
         "deepseek",
@@ -173108,7 +173499,7 @@
       "description": "支持拖入/粘贴 图片、文件，替换dsh本体上传按钮，支持文本模型调用多模态模型识别图片。",
       "html_url": "https://github.com/wszhoho/dsh-file-attachment",
       "stargazers_count": 1,
-      "updated_at": "2026-09-17T04:04:25Z",
+      "updated_at": "2026-09-17T10:39:46Z",
       "default_branch": "master",
       "topics": [
         "deepseek-harness",
@@ -184404,7 +184795,7 @@
       "description": "Real-time X (Twitter) search, author profiling, trends, and fact-checking tool suite powered by SuperGrok OAuth for DeepSeek Harness.",
       "html_url": "https://github.com/GooDAnDReaDY/dsh-grok-xsearch",
       "stargazers_count": 1,
-      "updated_at": "2026-09-16T21:29:03Z",
+      "updated_at": "2026-09-17T10:49:58Z",
       "default_branch": "main",
       "topics": [
         "deepseek-harness",
@@ -184420,8 +184811,8 @@
       "archived": false,
       "registry_seen_at": "2026-09-17T10:04:42.951Z",
       "pkg_name": "@goodandready/dsh-grok-xsearch",
-      "version": "0.3.12",
-      "npm_version": "0.3.12",
+      "version": "0.3.13",
+      "npm_version": "0.3.13",
       "npm_pkg_name": "@goodandready/dsh-grok-xsearch",
       "category": "tool",
       "market_tags": [
@@ -188116,7 +188507,7 @@
       "description": "\"DeepSeek Harness 本地模型插件：设置里独立的「本地模型」页，首条对话自动拉起 llama.cpp，空闲 5 分钟自动卸载释放资源。\"",
       "html_url": "https://github.com/DZQJOKER/dsh-plugin-local-model",
       "stargazers_count": 1,
-      "updated_at": "2026-09-17T03:56:57Z",
+      "updated_at": "2026-09-17T11:03:51Z",
       "default_branch": "main",
       "topics": [
         "dsh-plugin"
@@ -188126,7 +188517,7 @@
       "archived": false,
       "registry_seen_at": "2026-09-17T10:04:42.959Z",
       "pkg_name": "dsh-plugin-local-model",
-      "version": "0.5.0",
+      "version": "0.5.1",
       "category": "conversation",
       "market_tags": [
         "community-pick"
@@ -190246,7 +190637,7 @@
       "description": null,
       "html_url": "https://github.com/drscrewdriver/dsh-perm-gate",
       "stargazers_count": 1,
-      "updated_at": "2026-09-16T21:31:42Z",
+      "updated_at": "2026-09-17T10:35:33Z",
       "default_branch": "main",
       "topics": [
         "deepseek-harness",
@@ -190651,7 +191042,7 @@
       "description": "给 DeepSeek Harness（DSH）做的教学动画制作工作台插件：一套内置在教学会话里的\"教学视频 agent\"。",
       "html_url": "https://github.com/YJLTF/dsh-animation-studio",
       "stargazers_count": 1,
-      "updated_at": "2026-09-16T02:25:40Z",
+      "updated_at": "2026-09-17T09:30:21Z",
       "default_branch": "main",
       "topics": [
         "dsh-plugin"
@@ -236577,7 +236968,7 @@
       "description": "Search the dshbase plugin directory from inside DeepSeek Harness",
       "html_url": "https://github.com/ylwl1997/dshbase-catalog",
       "stargazers_count": 0,
-      "updated_at": "2026-09-16T10:15:26Z",
+      "updated_at": "2026-09-17T10:21:16Z",
       "default_branch": "main",
       "topics": [
         "dsh-plugin"
@@ -236587,8 +236978,8 @@
       "archived": false,
       "registry_seen_at": "2026-09-17T10:04:42.954Z",
       "pkg_name": "dshbase-catalog",
-      "version": "0.3.29",
-      "npm_version": "0.3.29",
+      "version": "0.3.30",
+      "npm_version": "0.3.30",
       "npm_pkg_name": "dshbase-catalog",
       "category": "resource"
     },
@@ -238145,7 +238536,7 @@
       "description": null,
       "html_url": "https://github.com/dsh-pulse/dsh-daily-pulse",
       "stargazers_count": 0,
-      "updated_at": "2026-09-16T23:59:49Z",
+      "updated_at": "2026-09-17T10:55:16Z",
       "default_branch": "main",
       "topics": [
         "daily-report",
@@ -241089,7 +241480,7 @@
       "description": "DSH git 自动提交推送插件：扫描仓库 + 一键 commit/push（工具 + HTTP API）",
       "html_url": "https://github.com/EIGHTfs/dsh-git-push",
       "stargazers_count": 0,
-      "updated_at": "2026-09-16T17:41:01Z",
+      "updated_at": "2026-09-17T10:07:13Z",
       "default_branch": "master",
       "topics": [
         "dsh-plugin"
@@ -274415,7 +274806,7 @@
       "description": "Billing widget plugin for the DeepSeek Harness Web GUI: current-session cost and API balance at the sidebar foot (dsh-plugin)",
       "html_url": "https://github.com/HenryHwong/dsh-ui-billing",
       "stargazers_count": 0,
-      "updated_at": "2026-09-15T06:42:24Z",
+      "updated_at": "2026-09-17T10:46:51Z",
       "default_branch": "main",
       "topics": [
         "deepseek-harness",
@@ -274426,8 +274817,8 @@
       "archived": false,
       "registry_seen_at": "2026-09-17T10:04:42.954Z",
       "pkg_name": "@huanghanheng/dsh-ui-billing",
-      "version": "0.2.2",
-      "npm_version": "0.2.2",
+      "version": "0.2.3",
+      "npm_version": "0.2.3",
       "npm_pkg_name": "@huanghanheng/dsh-ui-billing",
       "category": "web-ui"
     },
@@ -291281,7 +291672,7 @@
       "description": "File-backed development workflow for DeepSeek Harness: durable cards, artifact and agent checks, human approvals, and a read-only web board.",
       "html_url": "https://github.com/zhchxiao123/dsh-devflow-plugins",
       "stargazers_count": 0,
-      "updated_at": "2026-09-16T09:05:34Z",
+      "updated_at": "2026-09-17T11:09:17Z",
       "default_branch": "main",
       "topics": [
         "deepseek-harness",
@@ -293596,7 +293987,7 @@
       "description": "Interactive Visual Frontend Studio, Retool-Style CRUD Engine, Time-Travel Debugger, 31 Agent Tools for DeepSeek Harness",
       "html_url": "https://github.com/GooDAnDReaDY/dsh-live-canvas",
       "stargazers_count": 0,
-      "updated_at": "2026-09-13T17:28:34Z",
+      "updated_at": "2026-09-17T11:04:10Z",
       "default_branch": "main",
       "topics": [
         "deepseek-harness",
@@ -296252,7 +296643,7 @@
       "description": "DSH plugin for AST context compression, test log filtering, and token budget guard",
       "html_url": "https://github.com/GooDAnDReaDY/dsh-context-lens",
       "stargazers_count": 0,
-      "updated_at": "2026-09-16T20:46:57Z",
+      "updated_at": "2026-09-17T10:31:49Z",
       "default_branch": "main",
       "topics": [
         "context",
@@ -305672,7 +306063,7 @@
       "description": "守护运行时服务：runtime 环境发现（bin/port/profile 单一来源）+ webman 进程管理（spawn/kill/portOwner），消除 sentinel/guardian 重复",
       "html_url": "https://github.com/jonah791/dsh-agent-runtime",
       "stargazers_count": 0,
-      "updated_at": "2026-09-14T06:01:47Z",
+      "updated_at": "2026-09-17T10:01:09Z",
       "default_branch": "main",
       "topics": [
         "dsh-plugin"
@@ -305935,7 +306326,7 @@
       "description": "守卫插件（从 dsh-agent-watch 拆分）：web 保活——启动时端口空闲拉起 web、崩溃自愈（快速退出计数+落盘事故）、收养外部 dsh web（零互踢）。崩溃自愈/拉起前也调用沙盒预检（ctx.preflight.run q",
       "html_url": "https://github.com/jonah791/dsh-agent-guardian",
       "stargazers_count": 0,
-      "updated_at": "2026-09-14T06:04:03Z",
+      "updated_at": "2026-09-17T10:01:04Z",
       "default_branch": "main",
       "topics": [
         "dsh-plugin"
@@ -305994,7 +306385,7 @@
       "description": "沙盒预检插件（从 dsh-agent-watch 拆分）：重启/启动前强制预检服务——插件静态健康（lib/src 时效/schema DSL）、磁盘、profile manifest 校验、patch 文件校验、peer 依赖、环境变量、",
       "html_url": "https://github.com/jonah791/dsh-agent-preflight",
       "stargazers_count": 0,
-      "updated_at": "2026-09-14T06:00:16Z",
+      "updated_at": "2026-09-17T10:50:01Z",
       "default_branch": "main",
       "topics": [
         "dsh-plugin"
@@ -306004,7 +306395,7 @@
       "archived": false,
       "registry_seen_at": "2026-09-17T10:04:42.954Z",
       "pkg_name": "dsh-agent-preflight",
-      "version": "0.1.2",
+      "version": "0.1.3",
       "category": "tool"
     },
     {
@@ -310836,7 +311227,7 @@
       "description": "Zero-dependency static + sandbox smoke detector for DeepSeek Harness plugins (R/K/D/CC layers)",
       "html_url": "https://github.com/PerryLink/dsh-plugin-doctor",
       "stargazers_count": 0,
-      "updated_at": "2026-09-16T10:18:07Z",
+      "updated_at": "2026-09-17T10:24:51Z",
       "default_branch": "main",
       "topics": [
         "cordis",
@@ -315229,7 +315620,7 @@
       "description": "AstrBot plugin: forward selected IM conversations to a local DeepSeek Harness agent (needs dsh-astrbot-ingress)",
       "html_url": "https://github.com/CCYellowStar2/astrbot_plugin_dsh",
       "stargazers_count": 0,
-      "updated_at": "2026-09-12T14:15:56Z",
+      "updated_at": "2026-09-17T10:46:43Z",
       "default_branch": "main",
       "topics": [
         "astrbot",
@@ -315249,7 +315640,7 @@
       "description": "HTTP ingress plugin: let AstrBot (QQ / OneBot / official IM) drive a local DeepSeek Harness agent",
       "html_url": "https://github.com/CCYellowStar2/dsh-astrbot-ingress",
       "stargazers_count": 0,
-      "updated_at": "2026-09-13T07:37:52Z",
+      "updated_at": "2026-09-17T10:46:36Z",
       "default_branch": "main",
       "topics": [
         "astrbot",
@@ -315262,8 +315653,8 @@
       "archived": false,
       "registry_seen_at": "2026-09-17T10:04:42.946Z",
       "pkg_name": "dsh-astrbot-ingress",
-      "version": "0.3.10",
-      "npm_version": "0.3.10",
+      "version": "0.3.11",
+      "npm_version": "0.3.11",
       "npm_pkg_name": "dsh-astrbot-ingress",
       "category": "notify"
     },
@@ -318558,7 +318949,7 @@
       "description": "DSH Desktop plugin: usage stats, plan quotas, custom HTTPS balance, 26-week heatmap",
       "html_url": "https://github.com/qxcool/dsh-usage-plus",
       "stargazers_count": 0,
-      "updated_at": "2026-09-15T08:57:50Z",
+      "updated_at": "2026-09-17T11:29:47Z",
       "default_branch": "main",
       "topics": [
         "deepseek-harness",
@@ -319891,7 +320282,7 @@
       "description": "简单的纯依赖MD文件的记忆插件，实现思路参考CodeBuddy和WorkBuddy的实现",
       "html_url": "https://github.com/s867968286/dsh-memory-md",
       "stargazers_count": 0,
-      "updated_at": "2026-09-14T03:42:10Z",
+      "updated_at": "2026-09-17T11:12:24Z",
       "default_branch": "main",
       "topics": [
         "dsh",
@@ -322312,7 +322703,7 @@
       "description": "Session memory archive + prompt viewer for DeepSeek Harness: read back what compaction folded away, and inspect the prompt each turn actually sent.",
       "html_url": "https://github.com/vv5v5/dsh-memory-archive",
       "stargazers_count": 0,
-      "updated_at": "2026-09-16T07:04:04Z",
+      "updated_at": "2026-09-17T10:41:35Z",
       "default_branch": "main",
       "topics": [
         "dsh-plugin"
@@ -325021,7 +325412,7 @@
       "description": "DeepSeek Harness 插件：侧边栏底部本地/远程状态芯片 + 远程镜像工作区标题自动标记（目录 ⇄ 机器名）",
       "html_url": "https://github.com/HandsYe/dsh-remote-status",
       "stargazers_count": 0,
-      "updated_at": "2026-09-17T02:59:50Z",
+      "updated_at": "2026-09-17T09:33:28Z",
       "default_branch": "main",
       "topics": [
         "deepseek-harness",
@@ -325969,7 +326360,7 @@
       "description": "A git panel inside the DSH session: repository chip, branch tree, commit graph, working tree and commit detail, Settings page, and 8 git model tools.",
       "html_url": "https://github.com/mays-hi/dsh-git-idea",
       "stargazers_count": 0,
-      "updated_at": "2026-09-17T01:54:36Z",
+      "updated_at": "2026-09-17T09:38:54Z",
       "default_branch": "main",
       "topics": [
         "deepseek-harness",
@@ -326641,7 +327032,7 @@
       "description": "Control how the DeepSeek Harness Web GUI is reachable: local only, Tailscale, all local networks, or off.",
       "html_url": "https://github.com/czhzz/dsh-net-access",
       "stargazers_count": 0,
-      "updated_at": "2026-09-17T02:29:37Z",
+      "updated_at": "2026-09-17T10:00:04Z",
       "default_branch": "main",
       "topics": [
         "cordis",
