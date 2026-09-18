@@ -14,7 +14,7 @@ const fragment = readFileSync(join(ROOT, "lib", "client-src", "05a-logic.fragmen
 const sandbox = {};
 vm.createContext(sandbox);
 vm.runInContext(fragment, sandbox, { filename: "05a-logic.fragment" });
-const { fingerprintOf, filterRepos, appendSkillsPage, shouldLoadMore, isVerifiedRepo, repoComparator } = sandbox;
+const { fingerprintOf, filterRepos, appendSkillsPage, shouldLoadMore, isVerifiedRepo, repoComparator, repoMatchScore } = sandbox;
 
 let pass = 0, fail = 0;
 function check(name, actual, expected) {
@@ -60,6 +60,16 @@ check("repoComparator name 升序", [{ full_name: "b/y" }, { full_name: "a/x" }]
 check("repoComparator trending null 垫底",
   [{ full_name: "a/n", stargazers_count: 9, stars_delta_7d: null }, { full_name: "b/h", stargazers_count: 1, stars_delta_7d: 3 }]
     .sort(repoComparator("trending"))[0].full_name, "b/h");
+
+// ---- S2：repoMatchScore 镜像（name=8/full_name=4/topics=2/description=1）----
+check("score name 命中", repoMatchScore({ name: "pdf-tool", full_name: "a/pdf-tool" }, "pdf"), 12);
+check("score full_name 仅 owner", repoMatchScore({ name: "x", full_name: "pdf-owner/x" }, "pdf"), 4);
+check("score topics 命中", repoMatchScore({ name: "x", full_name: "a/x", topics: ["pdf"] }, "pdf"), 2);
+check("score description 命中", repoMatchScore({ name: "x", full_name: "a/x", description: "A pdf helper" }, "pdf"), 1);
+check("score 不命中 → 0", repoMatchScore({ name: "x", full_name: "a/x" }, "zzz"), 0);
+check("score 空 query → 0", repoMatchScore({ name: "pdf" }, ""), 0);
+check("filterRepos q 用记分制（description 也命中）",
+  filterRepos([{ name: "x", full_name: "a/x", category: "other", description: "pdf helper" }], "pdf", "all").length, 1);
 
 // ---- appendSkillsPage：第 1 页替换 / 后续页跨页去重 ----
 const p1 = [

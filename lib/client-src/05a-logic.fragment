@@ -7,6 +7,21 @@
       if (typeof data.fp === "string") return data.fp;
       return JSON.stringify([data.source || "", data.cached_at || "", data.total || 0]);
     }
+    // S2 字段加权匹配分（镜像 lib/domain/list.js 语义，ES5 无依赖）：
+    // name=8 / full_name=4 / topics=2 / description=1，命中字段累加；不命中返回 0。
+    function repoMatchScore(r, query) {
+      var q = String(query || "").trim().toLowerCase();
+      if (!q || !r) return 0;
+      var score = 0;
+      if (String(r.name || "").toLowerCase().indexOf(q) !== -1) score += 8;
+      if (String(r.full_name || "").toLowerCase().indexOf(q) !== -1) score += 4;
+      var topics = r.topics || [];
+      for (var i = 0; i < topics.length; i++) {
+        if (String(topics[i]).toLowerCase().indexOf(q) !== -1) { score += 2; break; }
+      }
+      if (String(r.description || "").toLowerCase().indexOf(q) !== -1) score += 1;
+      return score;
+    }
     // 插件 tab 的搜索/分类/信号过滤（在完整数组 filter 后重新分页）。
     // opts.verifiedOnly=仅已验证徽章；opts.hideArchived=隐藏归档仓库。
     function filterRepos(repos, query, category, opts) {
@@ -18,7 +33,7 @@
         if (verifiedOnly && !isVerifiedRepo(r)) return false;
         if (hideArchived && r.archived === true) return false;
         if (!q) return true;
-        return (r.name + " " + r.full_name + " " + (r.topics || []).join(" ")).toLowerCase().indexOf(q) !== -1;
+        return repoMatchScore(r, q) > 0;
       });
     }
     // S1 信号面：已验证徽章判定（market_tags 含 verified-install）。

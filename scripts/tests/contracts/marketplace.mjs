@@ -197,7 +197,7 @@ export function createMarketplaceFixtures() {
     {
       full_name: "fixture-owner/fixture-installed",
       name: "fixture-installed",
-      description: "An already installed fixture plugin",
+      description: "A previously installed fixture plugin",
       category: "coding",
       topics: ["fixture", "installed"],
       installable: true,
