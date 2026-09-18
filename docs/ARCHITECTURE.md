@@ -96,6 +96,7 @@ dsh 冷加载 / 任意 refresh=1：          skills 普通加载（非 force）�
 - **skills 特例**：普通加载跳过远端链直接走内置索引（大索引避免每次冷启下载），`?refresh=1` 才拉远端
 - **增量与全量节奏**：CI 每 2 小时增量（`INCREMENTAL_DAYS=3`，只拉最近 3 天 pushed 的仓库）并与旧索引合并；每天 04:00 UTC 全量重建刷新 star 数
 - **pkg_name 富化**：构建期读仓库 `package.json` 补 `pkg_name` 字段（`SKIP_ENRICH=1` 可跳过）；`has_skill` 探测按 Core API 额度分批补齐（增量续跑，未探测仓库显示「未验证」）
+- **star 增速（S1 信号面）**：索引每次构建提交回 main——git 历史本身即快照库。构建期 `commits?path=<index>&until=<7d/30d前>` 定位基线提交 → `contents?ref=<sha>` 取当时索引 → 写 `stars_delta_7d`/`stars_delta_30d`（`null` = 基线不可得，诚实未知非 0）。每轮构建 +4 次 API 调用，零存储增长；仅 CI 环境（`GITHUB_REPOSITORY` + token）启用。列表端点 `sort=trending` 按 7d 增速排序（null 垫底），`verified=1`/`hideArchived=1` 过滤先于分页，`total` 计数诚实
 - **API 消耗口径**：10 分钟内存 TTL + single-flight 内零请求；冷加载首击 Contents API（计入 Core 限流：未认证 60 次/时）；Search API 只在远端五源 + 内置 + 磁盘缓存全失败时兜底（未认证 10 次/分）；索引内容只含仓库元数据，安装仍直连 `github.com` 克隆
 - **测试接缝**：`DSH_MARKETPLACE_BUNDLED_DIR` 覆盖内置索引目录
 

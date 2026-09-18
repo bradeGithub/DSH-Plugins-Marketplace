@@ -1,5 +1,5 @@
 // domain/list.js 直接导入测试（分层重构契约：行为断言 + 直接导入被测模块）。
-import { dedupeReposByPkgName } from "../../../lib/domain/list.js";
+import { dedupeReposByPkgName, LIST_SORT_KEYS, isVerifiedRepo, listComparator, repoListFilter } from "../../../lib/domain/list.js";
 
 let pass = 0, fail = 0;
 function check(name, actual, expected) {
@@ -83,5 +83,55 @@ check("返回值含 repos 和 dropped", (() => {
   check("domain 去重不产生 console.warn", warningCount, 0);
 }
 
+// ---- S1 信号面：listComparator / repoListFilter / isVerifiedRepo ----
+
+// isVerifiedRepo：market_tags 含 verified-install 才为真
+check("isVerifiedRepo 命中", isVerifiedRepo({ market_tags: ["verified-install", "x"] }), true);
+check("isVerifiedRepo 未命中", isVerifiedRepo({ market_tags: ["community-pick"] }), false);
+check("isVerifiedRepo 无 tags", isVerifiedRepo({}), false);
+check("isVerifiedRepo null 输入", isVerifiedRepo(null), false);
+
+// LIST_SORT_KEYS 白名单
+check("sort keys 白名单", [...LIST_SORT_KEYS].sort(), ["name", "stars", "trending", "updated"]);
+
+// listComparator：stars 默认降序
+check("cmp stars 降序", [{ stargazers_count: 1 }, { stargazers_count: 9 }].sort(listComparator("stars"))[0].stargazers_count, 9);
+// 未知键回退 stars
+check("cmp 未知键回退 stars", [{ stargazers_count: 1 }, { stargazers_count: 9 }].sort(listComparator("bogus"))[0].stargazers_count, 9);
+// trending：stars_delta_7d 降序，null 垫底，同值回退 stars
+{
+  const list = [
+    { full_name: "a/no-delta", stargazers_count: 999, stars_delta_7d: null },
+    { full_name: "b/hot", stargazers_count: 10, stars_delta_7d: 42 },
+    { full_name: "c/warm", stargazers_count: 50, stars_delta_7d: 7 }
+  ].sort(listComparator("trending")).map((r) => r.full_name);
+  check("cmp trending 增速降序 null 垫底", list, ["b/hot", "c/warm", "a/no-delta"]);
+}
+{
+  const list = [
+    { full_name: "a/low", stargazers_count: 5, stars_delta_7d: 10 },
+    { full_name: "b/high", stargazers_count: 50, stars_delta_7d: 10 }
+  ].sort(listComparator("trending")).map((r) => r.full_name);
+  check("cmp trending 同 delta 回退 stars", list, ["b/high", "a/low"]);
+}
+// updated：updated_at 降序，无日期垫底
+{
+  const list = [
+    { full_name: "a/old", updated_at: "2020-01-01" },
+    { full_name: "b/new", updated_at: "2026-01-01" },
+    { full_name: "c/none", updated_at: null }
+  ].sort(listComparator("updated")).map((r) => r.full_name);
+  check("cmp updated 降序无日期垫底", list, ["b/new", "a/old", "c/none"]);
+}
+// name：full_name 升序
+check("cmp name 升序", [{ full_name: "b/y" }, { full_name: "a/x" }].sort(listComparator("name"))[0].full_name, "a/x");
+// NaN stars 不崩（性质测试先例：NaN 比较恒不成立）
+check("cmp stars NaN 不崩", [{ stargazers_count: NaN }, { stargazers_count: 1 }].sort(listComparator("stars")).length, 2);
+
+// repoListFilter：无 opts 恒真；verified / hideArchived 各规则
+check("filter 无 opts 恒真", repoListFilter()({ archived: true }), true);
+check("filter verified 留已验证", [{ market_tags: ["verified-install"] }, { market_tags: [] }].filter(repoListFilter({ verified: true })).length, 1);
+check("filter hideArchived 去归档", [{ archived: true }, { archived: false }].filter(repoListFilter({ hideArchived: true })).length, 1);
+check("filter 双条件叠加", [{ archived: true, market_tags: ["verified-install"] }, { archived: false, market_tags: ["verified-install"] }].filter(repoListFilter({ verified: true, hideArchived: true })).length, 1);
 
 process.exit(fail === 0 ? 0 : 1);

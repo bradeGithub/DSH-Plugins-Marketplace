@@ -172,6 +172,14 @@ globalThis.fetch = () => Promise.reject(new Error("integration test: real networ
   check("normalizeRepo 透传 market_tags", JSON.stringify(lib.normalizeRepo({ full_name: "a/b", market_tags: ["verified-install"] }).market_tags), JSON.stringify(["verified-install"]));
   check("normalizeRepo 透传 installable", lib.normalizeRepo({ full_name: "a/b", installable: "manual" }).installable, "manual");
   check("normalizeRepo 忽略无关 installable", lib.normalizeRepo({ full_name: "a/b", installable: "cordis-plugin" }).installable, undefined);
+  // S1 信号面透传：archived / created_at / open_issues_count / stars_delta_*
+  check("normalizeRepo 透传 archived", lib.normalizeRepo({ full_name: "a/b", archived: true }).archived, true);
+  check("normalizeRepo 默认 archived=false", lib.normalizeRepo({ full_name: "a/b" }).archived, false);
+  check("normalizeRepo 透传 created_at", lib.normalizeRepo({ full_name: "a/b", created_at: "2020-01-01" }).created_at, "2020-01-01");
+  check("normalizeRepo 缺 created_at → null", lib.normalizeRepo({ full_name: "a/b" }).created_at, null);
+  check("normalizeRepo 透传 open_issues_count", lib.normalizeRepo({ full_name: "a/b", open_issues_count: 7 }).open_issues_count, 7);
+  check("normalizeRepo 透传 stars_delta_7d", lib.normalizeRepo({ full_name: "a/b", stars_delta_7d: 42 }).stars_delta_7d, 42);
+  check("normalizeRepo 缺 stars_delta_7d → null", lib.normalizeRepo({ full_name: "a/b" }).stars_delta_7d, null);
   check("compareVersions 基础", lib.compareVersions("1.0.0", "1.0.1"), -1);
   check("isTrustedHost 本地", lib.isTrustedHost("127.0.0.1:3080"), true);
   check("isTrustedHost 外网", lib.isTrustedHost("evil.com:3080"), false);

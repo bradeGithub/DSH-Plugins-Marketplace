@@ -7,14 +7,52 @@
       if (typeof data.fp === "string") return data.fp;
       return JSON.stringify([data.source || "", data.cached_at || "", data.total || 0]);
     }
-    // 插件 tab 的搜索/分类过滤（在完整数组 filter 后重新分页）。
-    function filterRepos(repos, query, category) {
+    // 插件 tab 的搜索/分类/信号过滤（在完整数组 filter 后重新分页）。
+    // opts.verifiedOnly=仅已验证徽章；opts.hideArchived=隐藏归档仓库。
+    function filterRepos(repos, query, category, opts) {
       var q = (query || "").trim().toLowerCase();
+      var verifiedOnly = !!(opts && opts.verifiedOnly);
+      var hideArchived = !!(opts && opts.hideArchived);
       return repos.filter(function (r) {
         if (category !== "all" && (r.category || "other") !== category) return false;
+        if (verifiedOnly && !isVerifiedRepo(r)) return false;
+        if (hideArchived && r.archived === true) return false;
         if (!q) return true;
         return (r.name + " " + r.full_name + " " + (r.topics || []).join(" ")).toLowerCase().indexOf(q) !== -1;
       });
+    }
+    // S1 信号面：已验证徽章判定（market_tags 含 verified-install）。
+    function isVerifiedRepo(r) {
+      return !!(r && Array.isArray(r.market_tags) && r.market_tags.indexOf("verified-install") !== -1);
+    }
+    // S1 信号面：列表比较器（镜像 lib/domain/list.js 语义，ES5 无依赖）。
+    // stars 默认 / trending=stars_delta_7d 降序（null 未知垫底，同值回退 stars）/
+    // updated=updated_at 降序 / name=full_name 升序。未知键回退 stars。
+    function repoComparator(sortKey) {
+      var key = (sortKey === "trending" || sortKey === "updated" || sortKey === "name") ? sortKey : "stars";
+      function starsOf(r) { return Number.isFinite(r && r.stargazers_count) ? r.stargazers_count : 0; }
+      if (key === "trending") {
+        return function (a, b) {
+          var da = Number.isFinite(a && a.stars_delta_7d) ? a.stars_delta_7d : -Infinity;
+          var db = Number.isFinite(b && b.stars_delta_7d) ? b.stars_delta_7d : -Infinity;
+          if (da !== db) return db - da;
+          return starsOf(b) - starsOf(a);
+        };
+      }
+      if (key === "updated") {
+        return function (a, b) {
+          var ta = Date.parse((a && a.updated_at) || "") || 0;
+          var tb = Date.parse((b && b.updated_at) || "") || 0;
+          if (ta !== tb) return tb - ta;
+          return starsOf(b) - starsOf(a);
+        };
+      }
+      if (key === "name") {
+        return function (a, b) {
+          return String((a && a.full_name) || "").localeCompare(String((b && b.full_name) || ""));
+        };
+      }
+      return function (a, b) { return starsOf(b) - starsOf(a); };
     }
     // Skills 分页追加：第 1 页直接替换；后续页按 full_name 去重后拼接（跨页去重）。
     function appendSkillsPage(prev, pg, dataRepos) {

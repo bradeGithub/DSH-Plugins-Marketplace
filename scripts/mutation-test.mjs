@@ -79,7 +79,7 @@ const BEHAVIOR_TESTS = [
 const TMP = mkdtempSync(join(tmpdir(), "dsh-mutation-"));
 const TMP_UNIT = join(TMP, "scripts", "tests", "unit");
 
-// ---- 突变清单（m01–m24：基础域/HTTP/infra；m25–m33：install preparation/use-case；m34–m40：uninstall；m41–m48：update；m49–m56：feedback；m57–m64：backup；m65–m72：env-edit；m73–m76：auth；m77–m83：routes；m84–m88：build/domain；m89–m93：client；m94–m102：patch；m103–m120：registry/cache；m121–m137：profile scan/installed index；m138–m150：bundle register；m151–m164：install executor；m165–m172：installed state；m173–m180：profile/index runtime；m181–m190：list runtime；m191–m198：diagnostics runtime；m199–m216：repository scan adapter；m217–m231：repository classification；m232–m250：security scan；m251–m260：adaptor rules/config；m261–m270：marketplace metadata）----
+// ---- 突变清单（m01–m24：基础域/HTTP/infra；m25–m33：install preparation/use-case；m34–m40：uninstall；m41–m48：update；m49–m56：feedback；m57–m64：backup；m65–m72：env-edit；m73–m76：auth；m77–m83：routes；m84–m88：build/domain；m89–m93：client；m94–m102：patch；m103–m120：registry/cache；m121–m137：profile scan/installed index；m138–m150：bundle register；m151–m164：install executor；m165–m172：installed state；m173–m180：profile/index runtime；m181–m190：list runtime；m191–m198：diagnostics runtime；m199–m216：repository scan adapter；m217–m231：repository classification；m232–m250：security scan；m251–m260：adaptor rules/config；m261–m270：marketplace metadata；m271–m274：feedback v2；m275–m280：S1 列表信号）----
 // 每个突变：{ id, name, pattern(正则), replacement, type, note }
 // pattern 未命中源码 → SKIP（语义可能已变化）；replacement 无效果 → SKIP。
 const MUTATIONS = [
@@ -2279,6 +2279,54 @@ const MUTATIONS = [
     pattern: /classifyInstallFailureKind\?\.?(errText)|classifyInstallFailureKind\(errText\)/g,
     replacement: "\"unclassified\"",
     note: "errorClass 必须来自分类器——常量化会让全部失败反馈失去类标签，transient 噪声无法下游过滤"
+  },
+  {
+    id: "m275",
+    name: "verified 过滤失效",
+    type: "behavior",
+    pattern: /if \(verifiedOnly && !isVerifiedRepo\(r\)\) return false;/g,
+    replacement: "if (false) return false;",
+    note: "verified=1 必须只留 verified-install 徽章条目——失效会让「仅已验证」筛选名存实亡"
+  },
+  {
+    id: "m276",
+    name: "hideArchived 过滤失效",
+    type: "behavior",
+    pattern: /if \(hideArchived && r\?\.archived === true\) return false;/g,
+    replacement: "if (false) return false;",
+    note: "hideArchived=1 必须隐藏归档仓库——失效会让归档条目继续出现在列表"
+  },
+  {
+    id: "m277",
+    name: "trending 未知不垫底",
+    type: "behavior",
+    pattern: /const da = Number\.isFinite\(a\?\.stars_delta_7d\) \? a\.stars_delta_7d : -Infinity;/g,
+    replacement: "const da = Number.isFinite(a?.stars_delta_7d) ? a.stars_delta_7d : 0;",
+    note: "stars_delta_7d=null（基线不可得）必须垫底而非当中游——未知≠零增长，排序语义诚实性"
+  },
+  {
+    id: "m278",
+    name: "star delta 编造零值",
+    type: "behavior",
+    pattern: /typeof prev === "number" \? cur - prev : null/g,
+    replacement: "typeof prev === \"number\" ? cur - prev : 0",
+    note: "基线缺失/新收录必须写 null（诚实未知）——编造 0 会让「无数据」伪装成「零增长」信号"
+  },
+  {
+    id: "m279",
+    name: "skills 信号过滤缺失",
+    type: "behavior",
+    pattern: /let list = repos\.filter\(\(r\) => r\.has_skill !== false\)\.filter\(signalFilter\);/g,
+    replacement: "let list = repos.filter((r) => r.has_skill !== false);",
+    note: "verified/hideArchived 必须先于分页应用——缺失会让过滤参数静默无效且 total 失真"
+  },
+  {
+    id: "m280",
+    name: "archived 透传丢失",
+    type: "behavior",
+    pattern: /archived: r\.archived === true/g,
+    replacement: "archived: false",
+    note: "normalize 必须透传 archived 真值——常量化会让归档仓库永远显示为活跃，hideArchived 失效"
   }
 ];
 
@@ -2557,7 +2605,13 @@ const MUTATION_FILE_HINTS = {
   m271: "lib/app/feedback.js",
   m272: "lib/app/feedback.js",
   m273: "lib/app/install.js",
-  m274: "lib/app/install.js"
+  m274: "lib/app/install.js",
+  m275: "lib/domain/list.js",
+  m276: "lib/domain/list.js",
+  m277: "lib/domain/list.js",
+  m278: "scripts/build-registry.mjs",
+  m279: "lib/http/routes.js",
+  m280: "lib/domain/normalize.js"
 };
 
 function collectLibFiles(dir) {
