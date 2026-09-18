@@ -1,0 +1,41 @@
+{
+  "generated_at": "2026-09-18T16:20:08.936Z",
+  "count": 5,
+  "items": [
+    {
+      "full_name": "WestFox-AwA/dsh-prompt-optimizer",
+      "previous": "conversation",
+      "current": "tool",
+      "desc_now": "DSH Web 插件 · 提示词优化器（SPEC v0.5 依据驱动架构）：把用户的一句话补成『带依据的执行指令』——依据只搬不造（原话／会话上下文／项目文件，每条事实带出处），只补五类缺口（指代定位／验收判据／约束边界／隐含决定／入口锚点），档位＝依据预算，默认面向 PTC 执行体。不写形式模板与验证套话。",
+      "desc_prev": "DSH Web 插件 · 提示词优化器：把用户的一句话补全成完整具体的要求说明（面向 PTC 模式）。0.4 = 需求补全器——只补内容，不写流程/步骤/验收清单/验证纪律/禁令。"
+    },
+    {
+      "full_name": "falling-ts/dsh-force-compact",
+      "previous": "conversation",
+      "current": "tool",
+      "desc_now": "Aggressive context compaction for local-first agents. Runs Qwen3.8‑27B on self‑hosted llama.cpp at low context, shrinking history so the live prompt stays small, fast, and private—delivering a big‑window experience without API cost or data egress. 面向本地的激进上下文压缩插件。自托管 llama.cpp 低上下文运行 Qwen3.8‑27B,不断收缩历史、保持常驻 prompt 小而快,兼顾隐私与大窗口体验,零 API 成本、数据不出本机。",
+      "desc_prev": "Aggressive context compaction for local-first agents. Runs Qwen3.8‑27B on self‑hosted llama.cpp at low context, shrinking history so the live prompt stays small, fast, and private—delivering a big‑window experience without API cost or data egress. 面向本地的激进上下文压缩插件。自托管 llama.cpp 低上下文运行 Qwen3.8‑27B,不断收缩历史、保持常驻 prompt 小而快,兼顾隐私与大窗口体验,零 API 成本、数据不出本机。"
+    },
+    {
+      "full_name": "dsh-cc/dsh-cc",
+      "previous": "conversation",
+      "current": "memory",
+      "desc_now": "A batteries-included coding agent for DeepSeek Harness — Claude Code-style workflows, your choice of models, TUI, skills, subagents, hooks, MCP, memory, and worktrees.",
+      "desc_prev": "A batteries-included coding agent for DeepSeek Harness — Claude Code-style workflows, your choice of models, TUI, skills, subagents, hooks, MCP, memory, and worktrees."
+    },
+    {
+      "full_name": "loyalchiiina/dsh-todo-float-ball",
+      "previous": "tool",
+      "current": "web-ui",
+      "desc_now": "Floating todo progress ball for DSH: live done/total + active task, status colours, draggable, Shadow-DOM isolated, dual-channel sync, history archive (cleanup/restore/copy), pinned sessions, layout switch, discipline injection + first-call gate, 128 shared skins, web + desktop. 常驻 todo 进度悬浮球：实时进度/状态色/历史归档/固定会话/布局切换/纪律注入+首调用硬门/128 皮肤统一，双端可用。",
+      "desc_prev": "Floating progress ball for DeepSeek Harness (DSH): keeps the AI agent's todo_write checklist on a persistent, draggable ball with live status colors. EN/CN bilingual."
+    },
+    {
+      "full_name": "BOWLUNA/dsh-custom-mode",
+      "previous": "conversation",
+      "current": "coding",
+      "desc_now": "Custom modes and custom prompts for DeepSeek Harness (dsh): edit a mode's system prompt in the settings page, choose its base mode, switch plugins row by row, and keep several assistants (multi-mode) side by side.",
+      "desc_prev": "Custom agent modes for DeepSeek Harness (dsh): manage many assistants from one settings page, each with its own editable system prompt, base mode and per-row plugin switches."
+    }
+  ]
+}
