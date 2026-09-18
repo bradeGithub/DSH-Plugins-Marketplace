@@ -34,7 +34,7 @@
 | 端点 | 方法 | 参数 / body | 返回 |
 |---|---|---|---|
 | `/api/marketplace/list` | GET | `?refresh=1` 强制重拉；`?sort=`（`stars` 默认/`trending`/`updated`/`name`）；`?verified=1` 仅已验证；`?hideArchived=1` 隐藏归档 | `{ repos, total, dropped, cached_at, source, fp }`；每项含 `installed` / `installedVersion` / `latestVersion` / `updateAvailable` / `cliNpm`；已安装置顶，组内按 `sort` 排 |
-| `/api/marketplace/skills` | GET | `?refresh=1` 强制重拉；`?q=&page=&pageSize=`（≤200）触发服务端分页；`?sort=`（同上）；`?verified=1` 仅 `verified-install` 徽章条目；`?hideArchived=1` 隐藏归档 | 通用 Skills 列表（`skills.json` 索引，过滤 `has_skill !== false`；每项含 `installed` / `installedAt`）。无分页参数返回全量 `{ repos, total, filtered, dropped, cached_at, source }`；带分页参数返回 `{ repos, page, pageSize, total, filtered, dropped, cached_at, source }`；`q` 服务端匹配名称/全名/标签/描述；过滤先于分页，`total` 为过滤后计数 |
+| `/api/marketplace/skills` | GET | `?refresh=1` 强制重拉；`?q=&page=&pageSize=`（≤200）触发服务端分页；`?sort=`（同上）；`?verified=1` 仅 `verified-install` 徽章条目；`?hideArchived=1` 隐藏归档 | 通用 Skills 列表（`skills.json` 索引，过滤 `has_skill !== false`；每项含 `installed` / `installedAt`）。无分页参数返回全量 `{ repos, total, filtered, dropped, cached_at, source }`；带分页参数返回 `{ repos, page, pageSize, total, filtered, dropped, cached_at, source }`；`q` 服务端字段加权匹配（name=8 > full_name=4 > topics=2 > description=1，命中字段累加，score>0 才保留），结果按相关度降序、`sort` 键做平局回退；过滤先于分页，`total` 为过滤后计数 |
 
 排序语义：`trending` = `stars_delta_7d` 降序（`null` 垫底，同值回退 `stargazers_count`）；`updated` = `updated_at` 降序（缺失垫底）；`name` = `full_name` 升序。`stars_delta_7d`/`stars_delta_30d` 由索引构建期 git 历史基线 diff 产出，`null` 表示基线不可得（诚实未知，非 0）。条目信号字段：`archived`、`created_at`、`open_issues_count`、`market_tags`（含 `verified-install` 徽章标记）。
 

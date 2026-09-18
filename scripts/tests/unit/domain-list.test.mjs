@@ -1,5 +1,5 @@
 // domain/list.js 直接导入测试（分层重构契约：行为断言 + 直接导入被测模块）。
-import { dedupeReposByPkgName, LIST_SORT_KEYS, isVerifiedRepo, listComparator, repoListFilter } from "../../../lib/domain/list.js";
+import { dedupeReposByPkgName, LIST_SORT_KEYS, isVerifiedRepo, listComparator, repoListFilter, repoMatchScore } from "../../../lib/domain/list.js";
 
 let pass = 0, fail = 0;
 function check(name, actual, expected) {
@@ -133,5 +133,18 @@ check("filter 无 opts 恒真", repoListFilter()({ archived: true }), true);
 check("filter verified 留已验证", [{ market_tags: ["verified-install"] }, { market_tags: [] }].filter(repoListFilter({ verified: true })).length, 1);
 check("filter hideArchived 去归档", [{ archived: true }, { archived: false }].filter(repoListFilter({ hideArchived: true })).length, 1);
 check("filter 双条件叠加", [{ archived: true, market_tags: ["verified-install"] }, { archived: false, market_tags: ["verified-install"] }].filter(repoListFilter({ verified: true, hideArchived: true })).length, 1);
+
+// ---- S2 字段加权搜索：repoMatchScore ----
+// 权重：name=8 / full_name=4 / topics=2 / description=1，命中累加
+check("score name 命中（连带 full_name）", repoMatchScore({ name: "pdf-tool", full_name: "a/pdf-tool" }, "pdf"), 12);
+check("score full_name 仅 owner 命中", repoMatchScore({ name: "x", full_name: "pdf-owner/x" }, "pdf"), 4);
+check("score topics 命中", repoMatchScore({ name: "x", full_name: "a/x", topics: ["pdf", "doc"] }, "pdf"), 2);
+check("score description 命中", repoMatchScore({ name: "x", full_name: "a/x", description: "A PDF helper" }, "pdf"), 1);
+check("score 多字段累加（topics+desc）", repoMatchScore({ name: "x", full_name: "a/x", topics: ["pdf"], description: "pdf tool" }, "pdf"), 3);
+check("score 不命中 → 0", repoMatchScore({ name: "x", full_name: "a/x" }, "zzz"), 0);
+check("score 空 query → 0", repoMatchScore({ name: "pdf", full_name: "a/pdf" }, ""), 0);
+check("score 大小写不敏感", repoMatchScore({ name: "PDF-Tool", full_name: "a/pdf-tool" }, "pdf"), 12);
+check("score null repo → 0", repoMatchScore(null, "pdf"), 0);
+check("score 缺字段不崩", repoMatchScore({ name: "pdf" }, "pdf"), 8);
 
 process.exit(fail === 0 ? 0 : 1);

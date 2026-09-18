@@ -3,7 +3,7 @@ import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { registerRoutes } from "../../../lib/http/routes.js";
 import { createMutex } from "../../../lib/infra/queue.js";
-import { LIST_SORT_KEYS, listComparator, repoListFilter } from "../../../lib/domain/list.js";
+import { LIST_SORT_KEYS, listComparator, repoListFilter, repoMatchScore } from "../../../lib/domain/list.js";
 import { MARKETPLACE_RESPONSE_SCHEMA_VERSION } from "../../../lib/http/marketplace-contract.js";
 import { inspectMarketplacePayload } from "../contracts/marketplace.mjs";
 
@@ -104,7 +104,8 @@ function makeDeps(overrides = {}) {
       listFingerprint: () => "fp",
       LIST_SORT_KEYS,
       listComparator,
-      repoListFilter
+      repoListFilter,
+      repoMatchScore
     },
     useCases: {
       update: {
@@ -522,6 +523,48 @@ check("routes 统一通过正式版本响应包装器", (routesSource.match(/\bj
   const r4 = makeResponse();
   await route2.handler({ method: "GET", url: "/api/marketplace/list?hideArchived=1" }, r4);
   check("list hideArchived=1 去归档", r4.value?.repos?.map((r) => r.full_name), ["a/verified"]);
+}
+
+// skills S2 字段加权搜索：q 命中按相关度降序（name>full_name>topics>description），平局回退 sort
+{
+  const skillRepos = [
+    { full_name: "a/desc-hit", name: "other-a", has_skill: true, stargazers_count: 999, description: "A pdf helper" },
+    { full_name: "b/name-hit", name: "pdf-tool", has_skill: true, stargazers_count: 1 },
+    { full_name: "c/topic-hit", name: "other-c", has_skill: true, stargazers_count: 500, topics: ["pdf"] },
+    { full_name: "pdf-owner/full-hit", name: "other-d", has_skill: true, stargazers_count: 50 }
+  ];
+  const { deps, registered } = makeDeps({
+    list: {
+      ...makeDeps().deps.list,
+      getList: async () => skillRepos
+    }
+  });
+  registerRoutes(deps);
+  const route = registered.find((item) => item.path === "/api/marketplace/skills");
+
+  // q=pdf：name(8) > full_name(4) > topics(2) > description(1)；与 stars 排序无关
+  const r1 = makeResponse();
+  await route.handler({ method: "GET", url: "/api/marketplace/skills?q=pdf&page=1&pageSize=10" }, r1);
+  check("skills q 相关度排序", r1.value?.repos?.map((r) => r.full_name), ["b/name-hit", "pdf-owner/full-hit", "c/topic-hit", "a/desc-hit"]);
+
+  // 平局回退 sort 键：两个仅 description 命中按 stars 降序
+  const tieRepos = [
+    { full_name: "a/low", name: "x1", has_skill: true, stargazers_count: 1, description: "pdf" },
+    { full_name: "b/high", name: "x2", has_skill: true, stargazers_count: 9, description: "pdf" }
+  ];
+  const { deps: deps2, registered: reg2 } = makeDeps({
+    list: { ...makeDeps().deps.list, getList: async () => tieRepos }
+  });
+  registerRoutes(deps2);
+  const route2 = reg2.find((item) => item.path === "/api/marketplace/skills");
+  const r2 = makeResponse();
+  await route2.handler({ method: "GET", url: "/api/marketplace/skills?q=pdf&sort=stars" }, r2);
+  check("skills q 平局回退 stars", r2.value?.repos?.map((r) => r.full_name), ["b/high", "a/low"]);
+
+  // q 无命中 → 空结果
+  const r3 = makeResponse();
+  await route2.handler({ method: "GET", url: "/api/marketplace/skills?q=zzz" }, r3);
+  check("skills q 无命中空结果", r3.value?.repos?.length, 0);
 }
 
 {

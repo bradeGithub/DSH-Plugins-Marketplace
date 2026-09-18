@@ -79,7 +79,7 @@ const BEHAVIOR_TESTS = [
 const TMP = mkdtempSync(join(tmpdir(), "dsh-mutation-"));
 const TMP_UNIT = join(TMP, "scripts", "tests", "unit");
 
-// ---- 突变清单（m01–m24：基础域/HTTP/infra；m25–m33：install preparation/use-case；m34–m40：uninstall；m41–m48：update；m49–m56：feedback；m57–m64：backup；m65–m72：env-edit；m73–m76：auth；m77–m83：routes；m84–m88：build/domain；m89–m93：client；m94–m102：patch；m103–m120：registry/cache；m121–m137：profile scan/installed index；m138–m150：bundle register；m151–m164：install executor；m165–m172：installed state；m173–m180：profile/index runtime；m181–m190：list runtime；m191–m198：diagnostics runtime；m199–m216：repository scan adapter；m217–m231：repository classification；m232–m250：security scan；m251–m260：adaptor rules/config；m261–m270：marketplace metadata；m271–m274：feedback v2；m275–m280：S1 列表信号）----
+// ---- 突变清单（m01–m24：基础域/HTTP/infra；m25–m33：install preparation/use-case；m34–m40：uninstall；m41–m48：update；m49–m56：feedback；m57–m64：backup；m65–m72：env-edit；m73–m76：auth；m77–m83：routes；m84–m88：build/domain；m89–m93：client；m94–m102：patch；m103–m120：registry/cache；m121–m137：profile scan/installed index；m138–m150：bundle register；m151–m164：install executor；m165–m172：installed state；m173–m180：profile/index runtime；m181–m190：list runtime；m191–m198：diagnostics runtime；m199–m216：repository scan adapter；m217–m231：repository classification；m232–m250：security scan；m251–m260：adaptor rules/config；m261–m270：marketplace metadata；m271–m274：feedback v2；m275–m280：S1 列表信号；m281–m283：S2 字段加权搜索）----
 // 每个突变：{ id, name, pattern(正则), replacement, type, note }
 // pattern 未命中源码 → SKIP（语义可能已变化）；replacement 无效果 → SKIP。
 const MUTATIONS = [
@@ -2327,6 +2327,30 @@ const MUTATIONS = [
     pattern: /archived: r\.archived === true/g,
     replacement: "archived: false",
     note: "normalize 必须透传 archived 真值——常量化会让归档仓库永远显示为活跃，hideArchived 失效"
+  },
+  {
+    id: "m281",
+    name: "name 权重丢失",
+    type: "behavior",
+    pattern: /if \(String\(r\.name \?\? ""\)\.toLowerCase\(\)\.includes\(q\)\) score \+= 8;/g,
+    replacement: "if (String(r.name ?? \"\").toLowerCase().includes(q)) score += 0;",
+    note: "name 命中必须最高权 8——归零会让名称命中退化为 full_name 级，相关度排序失真"
+  },
+  {
+    id: "m282",
+    name: "相关度排序缺失",
+    type: "behavior",
+    pattern: /const d = \(matchScore\.get\(b\) \?\? 0\) - \(matchScore\.get\(a\) \?\? 0\);/g,
+    replacement: "const d = 0;",
+    note: "q 命中必须按相关度降序（sort 键只做平局回退）——归零会让搜索结果退回裸 sort 排序"
+  },
+  {
+    id: "m283",
+    name: "q 过滤放行不命中",
+    type: "behavior",
+    pattern: /            return s > 0;/g,
+    replacement: "            return true;",
+    note: "score>0 才保留——放行不命中会让搜索返回全量列表，相关度语义整体失效"
   }
 ];
 
@@ -2611,7 +2635,10 @@ const MUTATION_FILE_HINTS = {
   m277: "lib/domain/list.js",
   m278: "scripts/build-registry.mjs",
   m279: "lib/http/routes.js",
-  m280: "lib/domain/normalize.js"
+  m280: "lib/domain/normalize.js",
+  m281: "lib/domain/list.js",
+  m282: "lib/http/routes.js",
+  m283: "lib/http/routes.js"
 };
 
 function collectLibFiles(dir) {

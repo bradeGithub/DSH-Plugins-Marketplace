@@ -120,7 +120,13 @@
         repos === null ? h("p", { style: { fontSize: 13, color: "var(--dsw-alias-label-tertiary)" } }, t("loading")) : null,
         repos ? (function () {
           var q = query.trim().toLowerCase();
-          var list = filterRepos(repos, query, category, { verifiedOnly: verifiedOnly, hideArchived: hideArchived }).sort(repoComparator(sort));
+          var list = filterRepos(repos, query, category, { verifiedOnly: verifiedOnly, hideArchived: hideArchived });
+          // S2：有搜索词时相关度优先（字段加权分降序），sort 键做平局回退
+          var cmp = repoComparator(sort);
+          list.sort(q ? function (a, b) {
+            var d = repoMatchScore(b, q) - repoMatchScore(a, q);
+            return d !== 0 ? d : cmp(a, b);
+          } : cmp);
           var shown = list.slice(0, visible);
           var hasMore = shown.length < list.length;
           return [
