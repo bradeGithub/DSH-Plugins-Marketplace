@@ -38,6 +38,8 @@
 
 排序语义：`trending` = `stars_delta_7d` 降序（`null` 垫底，同值回退 `stargazers_count`）；`updated` = `updated_at` 降序（缺失垫底）；`name` = `full_name` 升序。`stars_delta_7d`/`stars_delta_30d` 由索引构建期 git 历史基线 diff 产出，`null` 表示基线不可得（诚实未知，非 0）。条目信号字段：`archived`、`created_at`、`open_issues_count`、`market_tags`（含 `verified-install` 徽章标记）。
 
+风险记分卡字段（S3 收录初筛，构建期静态扫描）：`risk_tier` 三档 `safe`/`caution`/`risk`——覆盖安装脚本（install.sh/install.ps1）与 package.json 生命周期命令，`critical`/`high` 命中 → `risk`，`medium` → `caution`，无命中 → `safe`；`risk_flags` 为命中明细 `[{id, category, severity}]`（透明依据，badge tooltip 展示）。未评估或抓取失败的条目无 `risk_tier`（诚实未知，前端不显示徽章）；仓库推送后自动重估。注意这是静态模式扫描结果，不构成运行时安全保证。
+
 ### 安装与卸载
 
 | 端点 | 方法 | body | 返回 |

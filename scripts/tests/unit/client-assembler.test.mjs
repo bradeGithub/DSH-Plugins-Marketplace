@@ -32,7 +32,7 @@ assert.deepEqual(FRAGMENT_FILES, [
   "07-entry.fragment",
 ]);
 assert.equal(checkClientBundle().ok, true);
-assert.equal(sha256(assembled), "b83a34537d529b58bc9a58d126839beea9321b4dc315b37c342655097592941f");
+assert.equal(sha256(assembled), "889093d0a19d13fc845f4f8611c8953d613f20c6c0d52e89627033119220009a");
 assert.equal(sha256(assembleClient()), sha256(assembled));
 assert.equal(SOURCE_DIR, join(ROOT, "lib", "client-src"));
 

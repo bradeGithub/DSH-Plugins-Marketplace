@@ -31,7 +31,9 @@ const REPO_FIELDS = Object.freeze([
   "cliNpm",
   "installedVersion",
   "latestVersion",
-  "updateAvailable"
+  "updateAvailable",
+  "risk_tier",
+  "risk_flags"
 ]);
 
 const CONTRACTS = {

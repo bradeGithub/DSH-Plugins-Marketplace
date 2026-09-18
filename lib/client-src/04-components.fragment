@@ -36,6 +36,24 @@
             ev: verifiedEvidence.length > 0 ? "· " + verifiedEvidence.join(" · ") : ""
           })
         : "";
+      // S3 风险记分卡（registry 构建期静态扫描：安装脚本 + npm 生命周期）。
+      // 三档 safe/caution/risk；未评估条目无 risk_tier → 不渲染徽章（诚实未知）。
+      // tooltip 用 risk_flags 的 category 翻译名，未知类别回退原文。
+      var riskTier = repo.risk_tier === "safe" || repo.risk_tier === "caution" || repo.risk_tier === "risk" ? repo.risk_tier : null;
+      var riskFlagNames = [];
+      if (riskTier && Array.isArray(repo.risk_flags)) {
+        for (var ri = 0; ri < repo.risk_flags.length; ri++) {
+          var fl = repo.risk_flags[ri];
+          if (fl && typeof fl.category === "string" && fl.category) {
+            var catKey = "riskCat_" + fl.category;
+            var catName = t(catKey);
+            riskFlagNames.push(catName !== catKey ? catName : (typeof fl.id === "string" && fl.id ? fl.id : fl.category));
+          }
+        }
+      }
+      var riskTip = riskTier === "safe"
+        ? t("badgeRiskSafeTip")
+        : (riskFlagNames.length > 0 ? t("badgeRiskFlagsTip", { flags: riskFlagNames.join(", ") }) : null);
       // 披露徽章（discussion #2269 合规层：wwumit/skills-catalog 开放数据层构建期盖章）
       var hasDisclosure = repo.disclosure && typeof repo.disclosure === "object";
       var disclosureTip = "";
@@ -64,6 +82,9 @@
               repo.eco_type === "bundle" ? h("span", { style: s.badgeBundle, title: t("badgeBundleTip") }, t("badgeBundle")) : null,
               repo.eco_type === "desktop" ? h("span", { style: s.badgeDesktop, title: t("badgeDesktopTip") }, t("badgeDesktop")) : null,
               repo.archived === true ? h("span", { style: s.badgeArchived, title: t("badgeArchivedTip") }, t("badgeArchived")) : null,
+              riskTier === "safe" ? h("span", { style: s.badgeRiskSafe, title: riskTip }, t("badgeRiskSafe")) : null,
+              riskTier === "caution" ? h("span", { style: s.badgeRiskCaution, title: riskTip }, t("badgeRiskCaution")) : null,
+              riskTier === "risk" ? h("span", { style: s.badgeRiskRisk, title: riskTip }, t("badgeRiskRisk")) : null,
               prereq ? h("span", { style: s.badgePrereq }, t("badgePrereq")) : null,
               communityPick ? h("span", { style: s.badgeCommunityPick, title: t("badgeCommunityPickTip") }, t("badgeCommunityPick")) : null,
               verifiedPass ? h("span", { style: s.badgeVerifiedInstall, title: verifiedTip },

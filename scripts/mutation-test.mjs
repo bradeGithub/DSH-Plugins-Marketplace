@@ -79,7 +79,7 @@ const BEHAVIOR_TESTS = [
 const TMP = mkdtempSync(join(tmpdir(), "dsh-mutation-"));
 const TMP_UNIT = join(TMP, "scripts", "tests", "unit");
 
-// ---- 突变清单（m01–m24：基础域/HTTP/infra；m25–m33：install preparation/use-case；m34–m40：uninstall；m41–m48：update；m49–m56：feedback；m57–m64：backup；m65–m72：env-edit；m73–m76：auth；m77–m83：routes；m84–m88：build/domain；m89–m93：client；m94–m102：patch；m103–m120：registry/cache；m121–m137：profile scan/installed index；m138–m150：bundle register；m151–m164：install executor；m165–m172：installed state；m173–m180：profile/index runtime；m181–m190：list runtime；m191–m198：diagnostics runtime；m199–m216：repository scan adapter；m217–m231：repository classification；m232–m250：security scan；m251–m260：adaptor rules/config；m261–m270：marketplace metadata；m271–m274：feedback v2；m275–m280：S1 列表信号；m281–m283：S2 字段加权搜索）----
+// ---- 突变清单（m01–m24：基础域/HTTP/infra；m25–m33：install preparation/use-case；m34–m40：uninstall；m41–m48：update；m49–m56：feedback；m57–m64：backup；m65–m72：env-edit；m73–m76：auth；m77–m83：routes；m84–m88：build/domain；m89–m93：client；m94–m102：patch；m103–m120：registry/cache；m121–m137：profile scan/installed index；m138–m150：bundle register；m151–m164：install executor；m165–m172：installed state；m173–m180：profile/index runtime；m181–m190：list runtime；m191–m198：diagnostics runtime；m199–m216：repository scan adapter；m217–m231：repository classification；m232–m250：security scan；m251–m260：adaptor rules/config；m261–m270：marketplace metadata；m271–m274：feedback v2；m275–m280：S1 列表信号；m281–m283：S2 字段加权搜索；m284–m290：S3 风险记分卡）----
 // 每个突变：{ id, name, pattern(正则), replacement, type, note }
 // pattern 未命中源码 → SKIP（语义可能已变化）；replacement 无效果 → SKIP。
 const MUTATIONS = [
@@ -2351,6 +2351,62 @@ const MUTATIONS = [
     pattern: /            return s > 0;/g,
     replacement: "            return true;",
     note: "score>0 才保留——放行不命中会让搜索返回全量列表，相关度语义整体失效"
+  },
+  {
+    id: "m284",
+    name: "risk 档降格为 caution",
+    type: "behavior",
+    pattern: /    if \(h\.severity === "critical" \|\| h\.severity === "high"\) tier = "risk";/g,
+    replacement: "    if (h.severity === \"critical\" || h.severity === \"high\") tier = \"caution\";",
+    note: "critical/high 命中必须到 risk 档——降格会让最严重危害只显示「注意」"
+  },
+  {
+    id: "m285",
+    name: "caution 档升格为 risk",
+    type: "behavior",
+    pattern: /    else if \(h\.severity === "medium" && tier === "safe"\) tier = "caution";/g,
+    replacement: "    else if (h.severity === \"medium\" && tier === \"safe\") tier = \"risk\";",
+    note: "medium 命中只应到 caution 档——升格会把轻度命中虚标成「风险」制造告警疲劳"
+  },
+  {
+    id: "m286",
+    name: "风险失效判定失效（永不重估）",
+    type: "behavior",
+    pattern: /  return repo == null \|\| repo\.risk_at !== repo\.updated_at;/g,
+    replacement: "    return repo == null;",
+    note: "updated_at 变了必须重估——常量化会让仓库推送新恶意脚本后旧 safe 盖章永久残留"
+  },
+  {
+    id: "m287",
+    name: "脚本拉取门控反转（确证无也拉）",
+    type: "behavior",
+    pattern: /  if \(repo\.root_script === false \|\| repo\.has_install_script === false\) return false;/g,
+    replacement: "  if (repo.root_script === false || repo.has_install_script === false) return true;",
+    note: "确证无脚本必须跳过——反转会让确证无的条目白拉、确证有的逻辑语义颠倒"
+  },
+  {
+    id: "m288",
+    name: "评估失败照常盖章",
+    type: "behavior",
+    pattern: /  if \(!evaluated\) return false;/g,
+    replacement: "  if (!evaluated) { /* 仍盖章 */ }",
+    note: "抓取 error 必须不盖章下轮重试——照常盖章会把半截数据伪造成评估完成"
+  },
+  {
+    id: "m289",
+    name: "生命周期 bash 规则扫描缺失",
+    type: "behavior",
+    pattern: /    for \(const rule of SCRIPT_HAZARD_PATTERNS\.bash\) \{\n      if \(rule\.re\.test\(command\)\) \{/g,
+    replacement: "    for (const rule of []) {\n      if (rule.re.test(command)) {",
+    note: "生命周期命令必须过 bash 危害规则——抽掉后 postinstall: curl|sh 这类经典供应链向量回到盲区"
+  },
+  {
+    id: "m290",
+    name: "risk_tier 非法值放行",
+    type: "behavior",
+    pattern: /    risk_tier: r\.risk_tier === "safe" \|\| r\.risk_tier === "caution" \|\| r\.risk_tier === "risk" \? r\.risk_tier : undefined,/g,
+    replacement: "    risk_tier: r.risk_tier,",
+    note: "透传必须白名单三档——原样放行会让索引里的任意值直达客户端徽章"
   }
 ];
 
@@ -2638,7 +2694,14 @@ const MUTATION_FILE_HINTS = {
   m280: "lib/domain/normalize.js",
   m281: "lib/domain/list.js",
   m282: "lib/http/routes.js",
-  m283: "lib/http/routes.js"
+  m283: "lib/http/routes.js",
+  m284: "scripts/build-registry.mjs",
+  m285: "scripts/build-registry.mjs",
+  m286: "scripts/build-registry.mjs",
+  m287: "scripts/build-registry.mjs",
+  m288: "scripts/build-registry.mjs",
+  m289: "lib/domain/security-scan.js",
+  m290: "lib/domain/normalize.js"
 };
 
 function collectLibFiles(dir) {
