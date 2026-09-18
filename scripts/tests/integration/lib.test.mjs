@@ -180,6 +180,14 @@ globalThis.fetch = () => Promise.reject(new Error("integration test: real networ
   check("normalizeRepo 透传 open_issues_count", lib.normalizeRepo({ full_name: "a/b", open_issues_count: 7 }).open_issues_count, 7);
   check("normalizeRepo 透传 stars_delta_7d", lib.normalizeRepo({ full_name: "a/b", stars_delta_7d: 42 }).stars_delta_7d, 42);
   check("normalizeRepo 缺 stars_delta_7d → null", lib.normalizeRepo({ full_name: "a/b" }).stars_delta_7d, null);
+  // S3 风险记分卡透传：三档枚举 + flags 明细；未评估/非法值 → undefined（诚实未知，不显示徽章）
+  check("normalizeRepo 透传 risk_tier", lib.normalizeRepo({ full_name: "a/b", risk_tier: "risk" }).risk_tier, "risk");
+  check("normalizeRepo 透传 risk_flags", lib.normalizeRepo({ full_name: "a/b", risk_tier: "caution", risk_flags: [{ id: "x", category: "rcModify", severity: "medium" }] }).risk_flags.length, 1);
+  check("normalizeRepo 非法 risk_tier → undefined", lib.normalizeRepo({ full_name: "a/b", risk_tier: "danger" }).risk_tier, undefined);
+  check("normalizeRepo 未评估无 risk_tier", lib.normalizeRepo({ full_name: "a/b" }).risk_tier, undefined);
+  check("normalizeRepo 空 risk_flags → undefined", lib.normalizeRepo({ full_name: "a/b", risk_flags: [] }).risk_flags, undefined);
+  check("normalizeRepo 畸形 risk_flags 条目剔除", lib.normalizeRepo({ full_name: "a/b", risk_flags: [{ id: "x" }, { id: "y", category: "rcModify", severity: "medium" }] }).risk_flags.length, 1);
+  check("normalizeRepo risk_at 不透传（内部账本）", "risk_at" in lib.normalizeRepo({ full_name: "a/b", risk_at: "2026-01-01" }), false);
   check("compareVersions 基础", lib.compareVersions("1.0.0", "1.0.1"), -1);
   check("isTrustedHost 本地", lib.isTrustedHost("127.0.0.1:3080"), true);
   check("isTrustedHost 外网", lib.isTrustedHost("evil.com:3080"), false);

@@ -43,6 +43,7 @@ import { join, dirname, basename } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { normalizeRegistryRepo as normalize } from "../lib/domain/normalize.js";
 import { hasDshPluginDeclaration, isBundlePackage } from "../lib/domain/validation.js";
+import { classifyScriptHazards, classifyLifecycleHazards } from "../lib/domain/security-scan.js";
 
 const ROOT = dirname(fileURLToPath(import.meta.url));
 const MODE = process.env.SOURCES_MODE ?? "dsh";
@@ -987,6 +988,110 @@ export function applyStarDeltas(repos, baselines) {
   }
 }
 
+// ── S3 收录初筛：透明风险记分卡 ──
+// 安装时实际执行的攻击面就两处：根 install.sh/install.ps1（script 型仓库直接执行）、
+// package.json 生命周期命令（npm install 时执行）——复用安装期同款分类器
+// （classifyScriptHazards / classifyLifecycleHazards）在构建期预扫，输出三档徽章。
+// 设计原则与文档共识一致：不上数字分（数字假装精确，档位诚实）；未评估/评估失败
+// 不写 risk_tier（诚实未知，下轮重试）；risk_flags 保留命中明细（透明=用户看得到为什么）。
+// 失效驱动：risk_at 记录评估时的 repo.updated_at，仓库推过即失配重估；
+// 旧条目 risk_* 字段随合并继承，稳态增量只重估更新过的仓库。
+const RISK_FETCH_CONCURRENCY = 8;
+const RISK_FLAG_CAP = 6;
+const RISK_TIMEOUT_MS = 15000;
+
+/** hazard hits → 三档记分卡（纯函数）：critical/high → risk，medium → caution，无命中 → safe。
+ *  flags 按 id 去重保留前 RISK_FLAG_CAP 条（透明=徽章 tooltip 的依据）。 */
+export function riskScorecardOf(hits) {
+  const list = Array.isArray(hits) ? hits : [];
+  const flags = [];
+  const seen = new Set();
+  let tier = "safe";
+  for (const h of list) {
+    if (!h || typeof h !== "object") continue;
+    const key = typeof h.id === "string" && h.id ? h.id : String(h.category ?? "");
+    if (key && !seen.has(key)) {
+      seen.add(key);
+      if (flags.length < RISK_FLAG_CAP) flags.push({ id: h.id ?? null, category: h.category ?? null, severity: h.severity ?? null });
+    }
+    if (h.severity === "critical" || h.severity === "high") tier = "risk";
+    else if (h.severity === "medium" && tier === "safe") tier = "caution";
+  }
+  return { tier, flags };
+}
+
+/** 评估失效判定（纯函数）：未评估过或 repo.updated_at 变了（推过即可能换脚本/清单）。 */
+export function needsRiskEval(repo) {
+  return repo == null || repo.risk_at !== repo.updated_at;
+}
+
+/** 根脚本拉取判定（纯函数）：除非探测确证无脚本，否则都拉（404 便宜，漏拉是盲区）。
+ *  skills 探测：root_script===false 或 has_install_script===false → 确证无根脚本，跳过；
+ *  dsh 模式无探测字段（undefined）→ 拉；skills 探测未知（null）→ 拉（补盲区）。 */
+export function shouldScanScripts(repo) {
+  if (!repo || typeof repo !== "object") return false;
+  if (repo.root_script === false || repo.has_install_script === false) return false;
+  return true;
+}
+
+/** raw 文本抓取（三态）：ok=拿到文本 / missing=404 不存在（合法结果） / error=网络或异常（下轮重试）。 */
+async function fetchRawRepoFile(fullName, branch, file, fetchImpl = fetch) {
+  const url = `https://raw.githubusercontent.com/${fullName}/${branch}/${file}`;
+  try {
+    const res = await fetchImpl(url, {
+      headers: { "User-Agent": "dsh-plugin-marketplace-registry" },
+      signal: AbortSignal.timeout(RISK_TIMEOUT_MS)
+    });
+    if (res.status === 404) return { status: "missing", text: null };
+    if (!res.ok) return { status: "error", text: null };
+    return { status: "ok", text: await res.text() };
+  } catch {
+    return { status: "error", text: null };
+  }
+}
+
+/** 对单条目执行风险记分卡评估（纯流程，fetchImpl 可注入测试替身）。
+ *  全部抓取完成（含合法 404）才盖章并记 risk_at；任一抓取 error → 不盖章，下轮重试。 */
+export async function evalRepoRisk(repo, fetchImpl = fetch) {
+  const branch = repo.default_branch || "main";
+  const hits = [];
+  let evaluated = true;
+  const pkg = await fetchRawRepoFile(repo.full_name, branch, "package.json", fetchImpl);
+  if (pkg.status === "ok") {
+    try { hits.push(...classifyLifecycleHazards(JSON.parse(pkg.text))); } catch { /* pkg 非法 JSON：当无清单处理 */ }
+  } else if (pkg.status === "error") evaluated = false;
+  if (shouldScanScripts(repo)) {
+    for (const file of ["install.sh", "install.ps1"]) {
+      const res = await fetchRawRepoFile(repo.full_name, branch, file, fetchImpl);
+      if (res.status === "ok") hits.push(...classifyScriptHazards(res.text, file));
+      else if (res.status === "error") evaluated = false;
+    }
+  }
+  if (!evaluated) return false;
+  const card = riskScorecardOf(hits);
+  repo.risk_tier = card.tier;
+  if (card.flags.length > 0) repo.risk_flags = card.flags;
+  else delete repo.risk_flags;
+  repo.risk_at = repo.updated_at;
+  return true;
+}
+
+/** 并发风险记分卡评估（worker 模式同 enrichPkgNames；fetchImpl 注入点供测试）。 */
+export async function enrichRiskScorecards(repos, fetchImpl = fetch) {
+  const todo = repos.filter(needsRiskEval);
+  if (todo.length === 0) return { evaluated: 0, pending: 0 };
+  let cursor = 0;
+  let evaluated = 0;
+  const worker = async () => {
+    while (cursor < todo.length) {
+      const repo = todo[cursor++];
+      if (await evalRepoRisk(repo, fetchImpl)) evaluated++;
+    }
+  };
+  await Promise.all(Array.from({ length: RISK_FETCH_CONCURRENCY }, () => worker()));
+  return { evaluated, pending: todo.length - evaluated };
+}
+
 /**
  * 探测单个仓库（Trees API；爬虫来源无 default_branch 信息，按 main→master 顺序尝试）。
  * 一次调用同时拿到 has_skill / has_install_script。失败容忍：null 表示未知。
@@ -1183,6 +1288,16 @@ async function main() {
     }
     // v1.4.11：npm 版本富化（issue #26）——npm 发布型插件的升级提示数据源
     if (MODE === "dsh") await enrichNpmVersions(repos);
+
+    // S3 收录初筛：透明风险记分卡（三档徽章 + 命中明细）。raw 抓取依赖与
+    // enrichPkgNames 相同（SKIP_ENRICH 一并跳过）；失效驱动重估——
+    // 未评估过或 repo.updated_at 变了才抓，稳态增量只花更新条目的请求。
+    {
+      const risk = await enrichRiskScorecards(repos);
+      if (risk.evaluated > 0 || risk.pending > 0) {
+        log(`风险记分卡：评估 ${risk.evaluated} 个${risk.pending > 0 ? `，${risk.pending} 个抓取失败待下轮重试` : ""}`);
+      }
+    }
   }
 
   // dsh 模式：按简介/标签关键词分类（skills 模式本期不分类）。
