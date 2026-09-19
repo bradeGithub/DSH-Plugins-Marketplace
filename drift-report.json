@@ -1,13 +1,20 @@
 {
-  "generated_at": "2026-09-19T04:35:46.191Z",
-  "count": 1,
+  "generated_at": "2026-09-19T09:35:53.338Z",
+  "count": 2,
   "items": [
     {
-      "full_name": "qishuilalala/dsh-voice-mode",
-      "previous": "tool",
-      "current": "document",
-      "desc_now": "DSH 全双工语音插件：流式语音识别入草稿、语音合成按句朗读 + 实时字幕、开口即打断；本地识别免 API Key，可选唤醒词。 · Full-duplex voice plugin for DeepSeek Harness: streaming speech-to-text into an editable draft, text-to-speech read-aloud with live captions, true barge-in and wake word; on-device ASR, no API key.",
-      "desc_prev": "Full-duplex voice plugin for DeepSeek Harness: local zipformer2 streaming ASR (no API key) → editable draft; Edge TTS or local VITS / Kokoro read-aloud with live captions; true barge-in; hardened HTTP surface + model SHA256 pinning; compatible with dsh 0.1.1 → 0.1.2. · DSH 语音双工插件：流式识别入草稿、按句朗读+实时字幕、开口即打断；免 API Key、安全加固、新旧版本兼容。"
+      "full_name": "Hotsteel2901/dsh-client-ui-mobile-adapt",
+      "previous": "coding",
+      "current": "web-ui",
+      "desc_now": "该仓库将不再作为重心，请移步：https://hotsteel2901.github.io/dsh-frutiger-aero/                      Please go to: https://hotsteel2901.github.io/dsh-frutiger-aero/.",
+      "desc_prev": "Your DeepSeek Harness web UI, rebuilt for the phone in your hand. Built for developers who code in Termux on Android: single-column layout, sidebar drawer, one-line composer, fullscreen scrollable settings & trajectory details, tap-to-open session stats. Desktop untouched."
+    },
+    {
+      "full_name": "sduwall/dsh-wall-mcp-manager",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "DSH 插件：集中管理 MCP 服务配置，并展示各 MCP 的工具清单、参数与返回契约",
+      "desc_prev": null
     }
   ]
 }
