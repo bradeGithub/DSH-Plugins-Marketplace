@@ -1,62 +1,13 @@
 {
-  "generated_at": "2026-09-18T20:45:34.203Z",
-  "count": 8,
+  "generated_at": "2026-09-19T00:04:44.946Z",
+  "count": 1,
   "items": [
     {
-      "full_name": "Nwflower/dsh-chat-import",
-      "previous": "tool",
+      "full_name": "having5548/deepseek-harness-desktop",
+      "previous": "other",
       "current": "coding",
-      "desc_now": "Import conversation history from 25+ AI coding agents into DeepSeek Harness as resumable sessions — tool calls, reasoning and results kept intact, with reverse export and sync. | 把 25+ AI 编程 Agent 的聊天记录导入 DeepSeek Harness 继续对话，保留工具调用、推理与结果，支持反向导出与同步。",
-      "desc_prev": "Import 14+ external agent chat histories (Claude Code, Codex, ChatGPT, Cursor, Gemini, Reasonix, opencode, ZCode, Grok Build, OpenClaw, Pi, Hermes, Kimi CLI, DSH) into DeepSeek Harness as resumable sessions — full-fidelity, reverse export/sync, bundle backup. | 从 Claude Code、Codex、Reasonix 等 Agent 工具导入历史消息到 DeepSeek Harness 并继续对话。"
-    },
-    {
-      "full_name": "STARDUSTLC666/dsh-sql",
-      "previous": "tool",
-      "current": "other",
-      "desc_now": "DSH 数据库插件：SQLite / MySQL / PostgreSQL 查询与管理，只读模式、写操作审批与流式行数钳制。",
-      "desc_prev": "DSH 工程师级数据库插件：sql_list/query/exec/schema/stats/health 六工具，SQLite/MySQL/PostgreSQL 三引擎、多连接、只读模式与写操作审批门、词法级只读保护、流式行数钳制与可配置查询/写超时。"
-    },
-    {
-      "full_name": "STARDUSTLC666/dsh-ffmpeg",
-      "previous": "tool",
-      "current": "other",
-      "desc_now": "DSH 视频处理插件：ffmpeg 探测、裁剪、拼接、压制、字幕、GIF、抽帧与调整，走官方 subprocess 服务，零运行时依赖。",
-      "desc_prev": "DSH 视频处理工具插件：ffmpeg_probe/cut/concat/encode/subtitle/extract/gif/frames/adjust/health 十工具（探测摘要、批量抽帧、GIF、变速/音量/静音/旋转调整），进程走官方 subprocess 服务，超时树级终止、环境变量路径回退与多视频流探测，零运行时依赖（ffmpeg 本体除外）。"
-    },
-    {
-      "full_name": "STARDUSTLC666/dsh-voice",
-      "previous": "tool",
-      "current": "other",
-      "desc_now": "DSH 语音插件：edge-tts 微软神经语音合成（免费、无需密钥）+ OpenAI 兼容语音转文字，支持插件级代理。",
-      "desc_prev": "DSH 语音双件套插件：voice_tts（edge-tts 协议零成本微软神经语音合成）/ voice_stt（OpenAI 兼容 ASR 语音转文字）/ voice_list（音色列表），原生 WebSocket + 插件级代理。"
-    },
-    {
-      "full_name": "STARDUSTLC666/dsh-cite",
-      "previous": "tool",
-      "current": "other",
-      "desc_now": "DSH 参考文献插件：Crossref 元数据查询（DOI 精确解析）与 GB/T 7714 / APA / MLA / Chicago 格式化，含去重校验与自检。",
-      "desc_prev": "DSH 参考文献工具插件：cite_lookup/cite_format/cite_bibtex/cite_check/cite_health 五工具（含自检），Crossref 元数据查询（含 DOI 精确解析与并发校验），GB/T 7714 / APA / MLA / Chicago 格式化，零运行时依赖。"
-    },
-    {
-      "full_name": "STARDUSTLC666/dsh-flakefinder",
-      "previous": "tool",
-      "current": "other",
-      "desc_now": "DSH 测试稳定性插件：重复运行 vitest/jest/pytest/node:test 找出 flaky 用例，提供历史与隔离清单，零运行时依赖。",
-      "desc_prev": "DSH 测试稳定性插件：flaky_detect/history/quarantine/clear/report 五工具，支持 vitest/jest/pytest/node:test，重复运行测试并识别不稳定用例，JUnit/TAP 完整解析，JSON 历史与隔离清单，零运行时依赖。"
-    },
-    {
-      "full_name": "LyaxZ/dsh-quick-toc",
-      "previous": "resource",
-      "current": "web-ui",
-      "desc_now": "DeepSeek Harness 对话大纲插件：支持侧边面板与全屏幕布两种大纲视图；标题、全文与跨会话三档检索；点标题、点组头、跳到本节末尾等多种跳转；完整大纲与只看提问两种阅览模式可随时切换；每个会话的阅读位置可保留；界面中英双语，并提供插件配置卡片。",
-      "desc_prev": "DeepSeek Harness 对话大纲插件：按回合分组的 Markdown 标题目录、支持标题/全文搜索、悬停预览、层级筛选与阅读位置自动跟随。"
-    },
-    {
-      "full_name": "satan9394/dsh-usage-unified",
-      "previous": "tool",
-      "current": "resource",
-      "desc_now": "Machine-wide DeepSeek Harness (dsh) usage statistics: trends, a custom date range that governs every panel, one merged model panel (share + four-bucket split + calls + cost), a session ranking with call drill-down, CSV/JSON export and an optional local cost estimate. 全机 DSH 用量统计：趋势 / 自定义区间（贯穿所有面板）/ 合并模型面板 / 会话排行下钻 / 调用明细 / 导出 / 可选成本估算。",
-      "desc_prev": "Machine-wide DeepSeek Harness (dsh) token usage statistics — trends, a custom date range, per-model bucket splits, call details, CSV/JSON export. 全机 DSH 用量统计：趋势 / 自定义区间 / 模型四桶 / 调用明细 / 导出，中英双语、浅深色。"
+      "desc_now": "DeepSeek Harness 桌面客户端（Rust + Tauri 2，跨 Windows / macOS / Linux）：dsh 自动安装升级、插件市场、崩溃自愈",
+      "desc_prev": "一个基于WinUI的deepseek harness客户端"
     }
   ]
 }
