@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-09-19T18:51:30.990Z",
+  "generated_at": "2026-09-19T22:31:49.983Z",
   "counts": {
-    "bundle-plugin": 4375,
+    "bundle-plugin": 4380,
     "multi-plugin": 487,
     "cordis-plugin": 7948,
     "pkg-plain": 1175,
@@ -9,9 +9,9 @@
     "script": 260,
     "skill": 401,
     "gone": 59,
-    "agent-preset": 56,
+    "agent-preset": 57,
     "unknown": 55,
-    "empty": 28
+    "empty": 29
   },
   "repos": [
     {
@@ -12563,6 +12563,10 @@
       "verdict": "bundle-plugin"
     },
     {
+      "full_name": "EditTogether/DSH-EditApart",
+      "verdict": "agent-preset"
+    },
+    {
       "full_name": "EDMOK/claude-vision-mcp",
       "verdict": "pkg-plain"
     },
@@ -14113,6 +14117,10 @@
     {
       "full_name": "ffsszzll/dsh-sidebar-tools",
       "verdict": "pkg-plain"
+    },
+    {
+      "full_name": "ffyfox/dsh-plugin-linux-desktop",
+      "verdict": "bundle-plugin"
     },
     {
       "full_name": "ffyuuu/dsh-llm-longcat",
@@ -20143,6 +20151,10 @@
       "verdict": "pkg-plain"
     },
     {
+      "full_name": "ireza7/dsh-persian-rtl",
+      "verdict": "bundle-plugin"
+    },
+    {
       "full_name": "IriskaDev/dsh-global-memory",
       "verdict": "cordis-plugin"
     },
@@ -26115,6 +26127,10 @@
       "verdict": "bundle-plugin"
     },
     {
+      "full_name": "libre-webui/dsh-native-provider",
+      "verdict": "bundle-plugin"
+    },
+    {
       "full_name": "libukai/awesome-deepseek-harness",
       "verdict": "manual"
     },
@@ -28164,6 +28180,10 @@
     },
     {
       "full_name": "lucagiftzek/dsh-artifacts",
+      "verdict": "bundle-plugin"
+    },
+    {
+      "full_name": "lucagiftzek/dsh-mail",
       "verdict": "bundle-plugin"
     },
     {
@@ -51547,6 +51567,10 @@
       "verdict": "cordis-plugin"
     },
     {
+      "full_name": "ufiredong/dsh-interviewer",
+      "verdict": "bundle-plugin"
+    },
+    {
       "full_name": "uigdwunm/dsh-conversation-jump",
       "verdict": "bundle-plugin"
     },
@@ -58029,6 +58053,10 @@
     {
       "full_name": "yangdongzhen590/dsh-knj-session-management",
       "verdict": "bundle-plugin"
+    },
+    {
+      "full_name": "yangdongzhen590/dsh-knj-version-control",
+      "verdict": "empty"
     },
     {
       "full_name": "yangdongzhen590/dsh-knj-workflow",
