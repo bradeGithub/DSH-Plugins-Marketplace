@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-09-19T00:04:44.946Z",
+  "generated_at": "2026-09-19T04:35:46.191Z",
   "count": 1,
   "items": [
     {
-      "full_name": "having5548/deepseek-harness-desktop",
-      "previous": "other",
-      "current": "coding",
-      "desc_now": "DeepSeek Harness 桌面客户端（Rust + Tauri 2，跨 Windows / macOS / Linux）：dsh 自动安装升级、插件市场、崩溃自愈",
-      "desc_prev": "一个基于WinUI的deepseek harness客户端"
+      "full_name": "qishuilalala/dsh-voice-mode",
+      "previous": "tool",
+      "current": "document",
+      "desc_now": "DSH 全双工语音插件：流式语音识别入草稿、语音合成按句朗读 + 实时字幕、开口即打断；本地识别免 API Key，可选唤醒词。 · Full-duplex voice plugin for DeepSeek Harness: streaming speech-to-text into an editable draft, text-to-speech read-aloud with live captions, true barge-in and wake word; on-device ASR, no API key.",
+      "desc_prev": "Full-duplex voice plugin for DeepSeek Harness: local zipformer2 streaming ASR (no API key) → editable draft; Edge TTS or local VITS / Kokoro read-aloud with live captions; true barge-in; hardened HTTP surface + model SHA256 pinning; compatible with dsh 0.1.1 → 0.1.2. · DSH 语音双工插件：流式识别入草稿、按句朗读+实时字幕、开口即打断；免 API Key、安全加固、新旧版本兼容。"
     }
   ]
 }
