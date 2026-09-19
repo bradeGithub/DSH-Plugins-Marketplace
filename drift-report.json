@@ -1,20 +1,27 @@
 {
-  "generated_at": "2026-09-19T09:35:53.338Z",
-  "count": 2,
+  "generated_at": "2026-09-19T15:49:54.586Z",
+  "count": 3,
   "items": [
     {
-      "full_name": "Hotsteel2901/dsh-client-ui-mobile-adapt",
-      "previous": "coding",
-      "current": "web-ui",
-      "desc_now": "该仓库将不再作为重心，请移步：https://hotsteel2901.github.io/dsh-frutiger-aero/                      Please go to: https://hotsteel2901.github.io/dsh-frutiger-aero/.",
-      "desc_prev": "Your DeepSeek Harness web UI, rebuilt for the phone in your hand. Built for developers who code in Termux on Android: single-column layout, sidebar drawer, one-line composer, fullscreen scrollable settings & trajectory details, tap-to-open session stats. Desktop untouched."
+      "full_name": "green-dalii/dsh-plugin-dev-skill",
+      "previous": "agent",
+      "current": "tool",
+      "desc_now": "Agent skill for developing DeepSeek Harness (DSH) plugins — tools (defineTool), LLM adapters, services, events, config, packaging. Install in DSH, Claude Code, or Codex.",
+      "desc_prev": "A skill pack that enables any agent to develop DeepSeek Harness (DSH) plugins correctly, efficiently, and in accordance with the official conventions."
     },
     {
-      "full_name": "sduwall/dsh-wall-mcp-manager",
-      "previous": "other",
+      "full_name": "lyd123qw2008/pi-control-chrome",
+      "previous": "memory",
+      "current": "coding",
+      "desc_now": "Chrome and Edge browser control for Pi, Codex and DSH. Drives your real browser profile, login state and tabs through an MV3 extension and a local loopback Bridge - native CDP, AX-first semantics, no separate browser.",
+      "desc_prev": "Chrome and Edge browser control for Pi, Codex and DSH. Drives your real browser profile, login state and tabs through an MV3 extension and a local loopback Bridge - native CDP, AX-first semantics, no separate browser."
+    },
+    {
+      "full_name": "ubik-dsh/deepseek-mods",
+      "previous": "conversation",
       "current": "tool",
-      "desc_now": "DSH 插件：集中管理 MCP 服务配置，并展示各 MCP 的工具清单、参数与返回契约",
-      "desc_prev": null
+      "desc_now": "Mods and skills for DeepSeek Harness: an editable system prompt in the chat header, full Russian localization, a mod manager, and a skill-authoring toolkit with a bundled checker. Every claim verified in docs/VERIFICATION.md — including what was not covered. Bilingual docs, no build step.",
+      "desc_prev": "DSH (DeepSeek Harness) mods: an editable system prompt in the chat header, a Russian language pack, and a mod manager in Settings. Bilingual docs, one-command install."
     }
   ]
 }
