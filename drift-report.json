@@ -1,20 +1,34 @@
 {
-  "generated_at": "2026-09-20T04:17:36.980Z",
-  "count": 2,
+  "generated_at": "2026-09-20T10:05:33.064Z",
+  "count": 4,
   "items": [
     {
-      "full_name": "SCP-QQ/dsh-notice-center",
+      "full_name": "OMSociety/kimi-ppt-skill",
       "previous": "other",
-      "current": "web-ui",
-      "desc_now": "Turn the tab icon into a green/amber status light and send browser notifications when a session finishes or awaits your input, with 47 selectable notification sounds. ",
+      "current": "coding",
+      "desc_now": "基于 open-kimi-ppt 技能开发：创建 / 编辑 / 复刻 / 导出 PPT",
+      "desc_prev": "DeepSeek Harness 插件 —— 内含 kimi-ppt 技能：创建 / 编辑 / 复刻 / 导出 PPT，DSH 内纯本地导出"
+    },
+    {
+      "full_name": "yangdcm/dsh-expert-team",
+      "previous": "agent",
+      "current": "conversation",
+      "desc_now": "Role-based multi-agent expert team for DeepSeek Harness: one sentence in, a staged and gated team delivery out. 12 role subagents, 9 gated phases, shared-workspace artifacts, zero runtime dependencies.",
       "desc_prev": null
     },
     {
-      "full_name": "naitoupi/prompt-optimizer-plugin",
+      "full_name": "amwangfan/dsh-privacy-guard",
+      "previous": "tool",
+      "current": "web-ui",
+      "desc_now": "DSH 隐私保护插件：本地凭据脱敏网关的控制面板 —— 状态与审计看板、泄密探测沙箱、豁免白名单、加密密钥管理、凭据保护模型入口与部署控制。Control panel for a local credential-redaction gateway in DeepSeek Harness.",
+      "desc_prev": "DSH Web 隐私脱敏守护插件：状态监控看板、出网泄密探测沙箱与网关路由管理（配合 Privacy Gateway）"
+    },
+    {
+      "full_name": "weifa860504-droid/dsh-greet-signoff",
       "previous": "web-ui",
-      "current": "conversation",
-      "desc_now": "A ✨ button in the DeepSeek Harness composer that rewrites your draft into a clearer prompt.",
-      "desc_prev": "DeepSeek Harness (DSH) plugin: ? optimize the composer draft with the current model. Installable bundle (dsh.bundle + dsh.client); Settings tab: on/off switch, generation params, editable system prompt with reset-to-default."
+      "current": "notify",
+      "desc_now": "固定开场语/收尾语 + 会话预算导航条（DeepSeek Harness Web 插件）：输入框上方六格读数（占用/花费/时长/预算档/速率/到线约还有）、预算线口径与红底横幅、上下文构成明细、本机花费台账、交接摘要落盘 HANDOFF.md、场景与文案池。改完下一轮回复即生效。",
+      "desc_prev": "开场语与收尾语：每次回复固定开场/收尾，并在上下文接近上限时提示换新会话（DeepSeek Harness Web 插件）"
     }
   ]
 }
