@@ -1,13 +1,20 @@
 {
-  "generated_at": "2026-09-21T04:15:56.637Z",
-  "count": 1,
+  "generated_at": "2026-09-21T10:45:59.397Z",
+  "count": 2,
   "items": [
     {
-      "full_name": "bobjia/dsh-context-milvus",
-      "previous": "other",
-      "current": "tool",
-      "desc_now": "claude-context-milvus like plugin for Deepseek Harness (DSH)  and codex",
-      "desc_prev": "claude-context-milvus like plugin for Deepseek Harness (DSH) "
+      "full_name": "mr-mihu/dsh-dbhub-live",
+      "previous": "tool",
+      "current": "memory",
+      "desc_now": "DSH 数据库 MCP 桥接插件：让 AI 直接查询 MySQL / PostgreSQL / MariaDB / SQLite / SQL Server。按工作区动态配置连接（可改名、可跨工作区复制），AI 自助配置管理，密码与连接串零知识（永不进入模型上下文），每次执行独立进程。",
+      "desc_prev": "DSH 数据库 MCP 桥接插件：常驻多源 dbhub 服务 + 按工作区工具 + 临时动态连接。未装 dbhub 时自动安装并自动更新。"
+    },
+    {
+      "full_name": "DWJZ/dsh-allow",
+      "previous": "memory",
+      "current": "coding",
+      "desc_now": "按路径与能力（read/write/create/delete/execute）授予 DSH shell 调用的文件权限，并在进程真正运行其下的 macOS Seatbelt profile 里强制；会话里的「审批」标签页显示每次判定是规则、自动复核还是人拍的板。 / Filesystem permissions for DSH shell calls, granted per path and capability instead of per command name, enforced in the process sandbox, with an Approvals tab showing which layer decided each call.",
+      "desc_prev": "DeepSeek Harness 权限记忆插件：把某类命令加进允许列表，之后同类命令不再询问。 / Remember sandbox-escalation approvals so the same command prefix stops asking."
     }
   ]
 }
