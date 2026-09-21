@@ -1,20 +1,27 @@
 {
-  "generated_at": "2026-09-21T12:34:21.167Z",
-  "count": 2,
+  "generated_at": "2026-09-21T19:14:53.942Z",
+  "count": 3,
   "items": [
     {
-      "full_name": "FeatherHunter/dsh-mattpocock-skills-deck",
-      "previous": "notify",
-      "current": "coding",
-      "desc_now": "安装即自带mattpocock/skills v1.2.3的25个工程与效率技能，无需手动装技能。300亿token打造。本插件在原始技能之上提供10倍的开发效率。主力支持GitHub issue；Markdown为预览版；GitLab暂不支持。",
-      "desc_prev": "Matt Pocock 技能面板（DSH Deck）：安装即自带 25 个工程与效率技能（mattpocock/skills v1.2.3：triage、grilling、wayfinder、handoff 等），右侧面板直接调用，无需手动装技能。当前主力支持 GitHub issue；Markdown 本地文件为预览版；GitLab 暂不在支持范围。希望它能帮你把想法更快变成现实。"
+      "full_name": "ranxianglei/billion-context",
+      "previous": "coding",
+      "current": "tool",
+      "desc_now": "基本稳定可用 A context-compression plugin for small context windows (a 100K context is enough), token savings (5x fewer tokens), and month-long single sessions (billions of tokens).上下文压缩插件，兼顾小窗口(100k上下文足矣)省token(省5倍token)和超长会话(数月级别几十亿token单会话)。billion-context is all you need",
+      "desc_prev": "基本稳定可用 100K tokens is enough. Universal context-compression proxy for ALL AI coding agents,10w上下文足矣"
     },
     {
-      "full_name": "smilewhenever777/dsh-scholar",
-      "previous": "vision",
-      "current": "memory",
-      "desc_now": "DSH 科研插件集：论文精读与追问、Idea 知识库、SSH GPU 监控，以及按工作区管理的研究目标、假设、DAG 和实验台账。",
-      "desc_prev": "DSH(DeepSeek Harness) 自研插件集:学者工作台(文献库/精读/知识图谱/Idea卡片) + 服务器看板(GPU监控) + 研究主线图(DAG/实验台账)"
+      "full_name": "Ultronen/dsh-archived-chats",
+      "previous": "memory",
+      "current": "tool",
+      "desc_now": "Archive Management for DeepSeek Harness: browse, search, preview and restore archived chats, with workspace bulk archiving, ZIP backups and a Recycle Bin.",
+      "desc_prev": "Local-first Session Archive for DeepSeek Harness: bulk archive, full-text search and native preview, tags and notes, ZIP backups, snapshot-protected Recycle Bin, storage and retention, lineage, and preserved legacy recovery data."
+    },
+    {
+      "full_name": "mikugui/dsh-session-eater",
+      "previous": "model",
+      "current": "web-ui",
+      "desc_now": "会话清理（喂鱼）：把「余额小胖鱼挂件」放进左侧会话列表底部，拖一条会话到它嘴边就会被吃掉（移入回收站，可撤销）。点图标直达设置；删除前确认可在设置里关掉；15 段界面文案可自定义；撤销有回执与 12 条持久台账两条路。",
+      "desc_prev": "会话清理（喂鱼）：把不要的会话拖到余额挂件的小胖鱼身上「吃掉」（移入回收站，可撤销）——DSH Web 插件"
     }
   ]
 }
