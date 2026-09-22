@@ -1,13 +1,48 @@
 {
-  "generated_at": "2026-09-22T04:12:48.865Z",
-  "count": 1,
+  "generated_at": "2026-09-22T10:06:06.514Z",
+  "count": 6,
   "items": [
     {
-      "full_name": "STARDUSTLC666/dsh-calendar",
+      "full_name": "WestFox-AwA/dsh-prompt-optimizer",
       "previous": "tool",
-      "current": "other",
-      "desc_now": "DSH 日历插件：可视化周/月视图、拖拽改期与 CalDAV 日程管理，支持 Google OAuth2、iCloud、Nextcloud。",
-      "desc_prev": "DSH 日历插件：CalDAV 日程查询、创建、修改、删除与搜索，支持 Google OAuth2、iCloud、Nextcloud 与自建服务。"
+      "current": "web-ui",
+      "desc_now": "DSH Web 插件 · 提示词优化器 0.6（主线）：你照常说话，它在你发送前把\"这一轮到底要什么\"理清楚，再把这份理解交给工作 AI —— 原话不改写，每轮独立产目标（不遗传），条条带逐字依据。含控制界面（档位/权限/模型/上下文/只读工具）、拦截浮层（思维层+产出层）与真实 token 用量。",
+      "desc_prev": "DSH Web 插件 · 提示词优化器（SPEC v0.5 依据驱动架构）：把用户的一句话补成『带依据的执行指令』——依据只搬不造（原话／会话上下文／项目文件，每条事实带出处），只补五类缺口（指代定位／验收判据／约束边界／隐含决定／入口锚点），档位＝依据预算，默认面向 PTC 执行体。不写形式模板与验证套话。"
+    },
+    {
+      "full_name": "shiyan688/dsh-novel-craft",
+      "previous": "model",
+      "current": "resource",
+      "desc_now": "让 AI 写出你觉得对味的文字。  方法：你只点赞、点踩，模型自己总结规律。  读候选稿时顺手点一下——好段落 👍、坏段落 👎。然后让模型把这批点选总结成几条能照着做的写法，写进一份档案。下一轮写稿带着这份档案，写完再点、再总结。",
+      "desc_prev": "禁AI腔清单能让模型不像 AI，这个工作台让它像你：标好/坏段落 → 压成写作规律（只有规律进写稿上下文）→ 开新章（方向/候选/选段/合并定稿）→ 批注式微调（只改你标过的段，逐字核对）→ 张力曲线与账目体检。dsh 插件，775 条断言。"
+    },
+    {
+      "full_name": "TinyPanda168/SpecsRelay-DSH",
+      "previous": "conversation",
+      "current": "coding",
+      "desc_now": "把 DeepSeek 对话整理成开发需求，交给 DSH Agent 执行。仅支持 anywhere-labs DSH Desktop。",
+      "desc_prev": "DeepSeek 网页对话 → 自动整理与澄清需求 → 发送到 DSH 项目启动 Agent；仅支持 DSH Desktop、Pilot Harness、DataElement DSH Desktop 和 myYangyunfan DSH Desktop。"
+    },
+    {
+      "full_name": "nightosong/gord-dsh-worktree",
+      "previous": "other",
+      "current": "web-ui",
+      "desc_now": "Git worktrees for DeepSeek Harness: five agent tools (list, create, inspect, remove, prune) plus a working-location picker in the New Session row and a settings panel. Refuses to remove a worktree with uncommitted or untracked changes, and never removes the main one.",
+      "desc_prev": null
+    },
+    {
+      "full_name": "huangfuren/dsh-conversation",
+      "previous": "web-ui",
+      "current": "memory",
+      "desc_now": "DSH web plugin: conversation outline panel - user questions (index, time, per-turn stats) as root nodes with the assistant reply's Markdown headings beneath; three width tiers, density rail, search scope, bookmarks, Markdown export, section jump, keyboard nav, reading-position memory. Read-only UI.",
+      "desc_prev": "DSH web plugin: conversation outline panel - history questions (index + time) plus the assistant reply Markdown heading tree, with level slider, search, bookmarks, copy and click-to-jump."
+    },
+    {
+      "full_name": "Ryuu-64/dsh-find-all",
+      "previous": "coding",
+      "current": "tool",
+      "desc_now": "Ctrl+F find bar for the DSH desktop app: it searches the whole conversation, not just the messages already on screen.",
+      "desc_prev": "DSH web plugin: a Cmd/Ctrl+F find bar for the DeepSeek Harness desktop shell that searches the WHOLE conversation, not just the rendered tail."
     }
   ]
 }
