@@ -1,15 +1,15 @@
 {
-  "generated_at": "2026-09-22T17:03:36.654Z",
+  "generated_at": "2026-09-22T21:25:15.204Z",
   "counts": {
-    "bundle-plugin": 4708,
+    "bundle-plugin": 4723,
     "multi-plugin": 494,
     "cordis-plugin": 7961,
-    "pkg-plain": 1199,
-    "manual": 829,
+    "pkg-plain": 1200,
+    "manual": 831,
     "script": 262,
     "skill": 402,
     "gone": 59,
-    "agent-preset": 58,
+    "agent-preset": 59,
     "unknown": 55,
     "empty": 29
   },
@@ -888,6 +888,10 @@
     },
     {
       "full_name": "2327644800/dsh-usage-analytics",
+      "verdict": "bundle-plugin"
+    },
+    {
+      "full_name": "2333hutao/dsh-ls125-uv-probe",
       "verdict": "bundle-plugin"
     },
     {
@@ -2117,6 +2121,10 @@
     {
       "full_name": "Adachi-Hougetsu/dsh-api-tools",
       "verdict": "multi-plugin"
+    },
+    {
+      "full_name": "adamkhalile/luau-docs-oracle",
+      "verdict": "manual"
     },
     {
       "full_name": "AdamPlatin123/awesome-dsh-plugins",
@@ -4419,6 +4427,10 @@
       "verdict": "bundle-plugin"
     },
     {
+      "full_name": "AskTheWay/dsh-jev-interceptor",
+      "verdict": "bundle-plugin"
+    },
+    {
       "full_name": "Asong6824/dsh-llm-rate-limit",
       "verdict": "cordis-plugin"
     },
@@ -6332,6 +6344,10 @@
     },
     {
       "full_name": "boomboomxx/dsh-markstream",
+      "verdict": "bundle-plugin"
+    },
+    {
+      "full_name": "Boomerangz/dsh-openrouter-live",
       "verdict": "bundle-plugin"
     },
     {
@@ -14811,6 +14827,10 @@
       "verdict": "bundle-plugin"
     },
     {
+      "full_name": "flandre2233/dsh-recovery-resume",
+      "verdict": "bundle-plugin"
+    },
+    {
       "full_name": "flaricy/herdr-bridge",
       "verdict": "pkg-plain"
     },
@@ -15927,6 +15947,10 @@
       "verdict": "pkg-plain"
     },
     {
+      "full_name": "Gdenich/dsh-live-teams",
+      "verdict": "bundle-plugin"
+    },
+    {
       "full_name": "Gdenich/dsh-opencode-go-key-broker",
       "verdict": "bundle-plugin"
     },
@@ -16821,6 +16845,10 @@
     {
       "full_name": "gooosie/dsh-whale-bg",
       "verdict": "cordis-plugin"
+    },
+    {
+      "full_name": "Goothe13-gugu/dsh-audio-cue",
+      "verdict": "bundle-plugin"
     },
     {
       "full_name": "gorban/dsh-job-stop",
@@ -20791,6 +20819,10 @@
       "verdict": "pkg-plain"
     },
     {
+      "full_name": "IQzhan/dsh-model-caps",
+      "verdict": "pkg-plain"
+    },
+    {
       "full_name": "IQzhan/dsh-rebooter",
       "verdict": "pkg-plain"
     },
@@ -23285,6 +23317,10 @@
     {
       "full_name": "JR-JR07/dsh-modlens-installer",
       "verdict": "script"
+    },
+    {
+      "full_name": "JRJRJPRO/dsh-chat-tree",
+      "verdict": "bundle-plugin"
     },
     {
       "full_name": "JRJRJPRO/dsh-tree",
@@ -28776,6 +28812,10 @@
     },
     {
       "full_name": "LovelyDazai/dsh-dynamic-thinking-chain",
+      "verdict": "bundle-plugin"
+    },
+    {
+      "full_name": "LovelyDazai/dsh-model-selector",
       "verdict": "bundle-plugin"
     },
     {
@@ -41013,6 +41053,10 @@
     {
       "full_name": "Sean-Gao/DSH",
       "verdict": "cordis-plugin"
+    },
+    {
+      "full_name": "SeanTolstoyevski/dsh-code-review",
+      "verdict": "bundle-plugin"
     },
     {
       "full_name": "SeanWang114514/dsh-memo-notebook",
@@ -53319,6 +53363,10 @@
       "verdict": "script"
     },
     {
+      "full_name": "VDERR/dsh-echocat-skill-panel",
+      "verdict": "bundle-plugin"
+    },
+    {
       "full_name": "VDERR/echocat-skill-panel",
       "verdict": "bundle-plugin"
     },
@@ -56563,6 +56611,10 @@
       "verdict": "manual"
     },
     {
+      "full_name": "wwwangzilin/dsh-character-presets",
+      "verdict": "agent-preset"
+    },
+    {
       "full_name": "wwwangzilin/dsh-luna-preset",
       "verdict": "agent-preset"
     },
@@ -57821,6 +57873,10 @@
     {
       "full_name": "xiangrui979/foresight",
       "verdict": "bundle-plugin"
+    },
+    {
+      "full_name": "XiangSu-ce/dsh-plugin-freecodego",
+      "verdict": "manual"
     },
     {
       "full_name": "xiangyun0519/dsh-trace-narrator",
@@ -59871,6 +59927,14 @@
       "verdict": "cordis-plugin"
     },
     {
+      "full_name": "yefengliu1/dsh-agent-grid",
+      "verdict": "bundle-plugin"
+    },
+    {
+      "full_name": "yefengliu1/dsh-theme-songgrid",
+      "verdict": "bundle-plugin"
+    },
+    {
       "full_name": "yehuioc/dsh-memory-pack",
       "verdict": "manual"
     },
@@ -60980,6 +61044,10 @@
     },
     {
       "full_name": "yueyexiayu/dsh-bianji",
+      "verdict": "bundle-plugin"
+    },
+    {
+      "full_name": "yueyexiayu/dsh-chrome",
       "verdict": "bundle-plugin"
     },
     {
@@ -63244,6 +63312,14 @@
     },
     {
       "full_name": "zhuzichen362/dsh-call-shrink",
+      "verdict": "bundle-plugin"
+    },
+    {
+      "full_name": "zhxnix/dsh-sidebar-annotations",
+      "verdict": "bundle-plugin"
+    },
+    {
+      "full_name": "zhxnix/dsh-wx-preview",
       "verdict": "bundle-plugin"
     },
     {
