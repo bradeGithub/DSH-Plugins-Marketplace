@@ -1,27 +1,20 @@
 {
-  "generated_at": "2026-09-23T10:05:08.192Z",
-  "count": 3,
+  "generated_at": "2026-09-23T13:36:59.065Z",
+  "count": 2,
   "items": [
     {
-      "full_name": "Noob-stupid/dsh-plugin-gating-hub",
+      "full_name": "ManoloRemiddi/augmentor-dsh-extension-plugin",
       "previous": "web-ui",
       "current": "tool",
-      "desc_now": "DSH 框架升级安全与插件升级门控：一键框架升级、失败自动回滚、旧插件不适配自动禁用、升级后可一键回滚上版。内置多源插件市场与自定义索引（500+ 插件 / 300+ 技能）作为发现层 | Framework upgrade safety & plugin version gating for DeepSeek Harness (DSH), with a built-in multi-source plugin market as the discovery layer.",
-      "desc_prev": "DeepSeek Harness (DSH) 插件管理面板：一键启用/停用插件 + GitHub dsh-plugin 插件市场+自定义插件索引/市场，带插件详情与一键安装，一键框架升级自动回滚,插件升级门控 | Plugin manager & marketplace for DeepSeek Harness"
+      "desc_now": "Archived standalone Browser and historical releases. Active Desktop + Browser project: ManoloRemiddi/augmentor-agent.",
+      "desc_prev": "Chromium side panel and browser control for DeepSeek Harness. Includes the plugin, extension and native host."
     },
     {
-      "full_name": "YIRC99/dsh-jev-context",
+      "full_name": "Eapp1e/dsh-poker",
       "previous": "other",
-      "current": "model",
-      "desc_now": "面向 DeepSeek Harness 的 JEV 上下文管理插件：按相关度裁剪与召回历史片段，可视化追踪每轮决策和 token 变化。",
+      "current": "tool",
+      "desc_now": "DeepSeek Harness 的德州扑克插件：在对话里出牌、在浏览器里看牌，六种性格的 AI 对手与可选的随桌教练。",
       "desc_prev": null
-    },
-    {
-      "full_name": "Farewish/dsh-viewtune",
-      "previous": "tool",
-      "current": "other",
-      "desc_now": "DeepSeek Harness 的视效+小功能改进插件",
-      "desc_prev": "DeepSeek Harness 的阅读页签插件：一轮对话进行时能看到思考、工具与进度，结束后自动折叠过程、只留最终回答。"
     }
   ]
 }
