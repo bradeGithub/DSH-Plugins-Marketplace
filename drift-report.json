@@ -1,27 +1,27 @@
 {
-  "generated_at": "2026-09-23T07:40:20.203Z",
+  "generated_at": "2026-09-23T10:05:08.192Z",
   "count": 3,
   "items": [
     {
-      "full_name": "Sivan757/dsh-agent-plugins-market",
-      "previous": "tool",
-      "current": "coding",
-      "desc_now": "One-stop skills, subagent, MCP and LSP manager for DeepSeek Harness (DSH) — compatible with Claude Code, Codex, Cursor, Kimi and other agent plugin layouts.",
-      "desc_prev": "DeepSeek Harness (DSH) plugin marketplace: install & inject Claude Code / Codex / Cursor agent plugins — skills, MCP servers, hooks & slash commands — from git marketplace repos, with a Web GUI market page."
-    },
-    {
-      "full_name": "godv61/dsh-task-engine",
-      "previous": "tool",
-      "current": "resource",
-      "desc_now": "Engineering workflow plugin for DeepSeek Harness: task stages, verification records, commit checks, and skill and rule management.",
-      "desc_prev": "Engineering workflow plugin for DeepSeek Harness: task stages, verification records, commit checks, and skill and rule management."
-    },
-    {
-      "full_name": "konglong87/dsh-skills-input",
-      "previous": "conversation",
+      "full_name": "Noob-stupid/dsh-plugin-gating-hub",
+      "previous": "web-ui",
       "current": "tool",
-      "desc_now": "DSH Skill selector and skill browser for browsing user-invocable skills and inserting slash commands into the composer.",
-      "desc_prev": "Choose user-invocable DSH skills from the composer and insert their slash command into the draft."
+      "desc_now": "DSH 框架升级安全与插件升级门控：一键框架升级、失败自动回滚、旧插件不适配自动禁用、升级后可一键回滚上版。内置多源插件市场与自定义索引（500+ 插件 / 300+ 技能）作为发现层 | Framework upgrade safety & plugin version gating for DeepSeek Harness (DSH), with a built-in multi-source plugin market as the discovery layer.",
+      "desc_prev": "DeepSeek Harness (DSH) 插件管理面板：一键启用/停用插件 + GitHub dsh-plugin 插件市场+自定义插件索引/市场，带插件详情与一键安装，一键框架升级自动回滚,插件升级门控 | Plugin manager & marketplace for DeepSeek Harness"
+    },
+    {
+      "full_name": "YIRC99/dsh-jev-context",
+      "previous": "other",
+      "current": "model",
+      "desc_now": "面向 DeepSeek Harness 的 JEV 上下文管理插件：按相关度裁剪与召回历史片段，可视化追踪每轮决策和 token 变化。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "Farewish/dsh-viewtune",
+      "previous": "tool",
+      "current": "other",
+      "desc_now": "DeepSeek Harness 的视效+小功能改进插件",
+      "desc_prev": "DeepSeek Harness 的阅读页签插件：一轮对话进行时能看到思考、工具与进度，结束后自动折叠过程、只留最终回答。"
     }
   ]
 }
