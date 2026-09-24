@@ -1,20 +1,13 @@
 {
-  "generated_at": "2026-09-24T10:02:48.549Z",
-  "count": 2,
+  "generated_at": "2026-09-24T14:53:34.649Z",
+  "count": 1,
   "items": [
     {
-      "full_name": "itchenshi/dsh-ready-gui",
-      "previous": "resource",
-      "current": "web-ui",
-      "desc_now": "DeepSeek Harness 桌面壳：官方桌面端不支持 Linux，这个支持（AppImage/Linux zip）。内嵌 Web UI、引擎自动保持最新、预置 4 个插件、插件装坏能自愈。",
-      "desc_prev": "DeepSeek Harness 桌面壳 —— 内嵌 Web UI、自动保持最新引擎、自带数据目录管理与系统托盘。"
-    },
-    {
-      "full_name": "feiwell/dsh-enhance-prompt",
-      "previous": "web-ui",
+      "full_name": "latte03/dsh-select-quote",
+      "previous": "tool",
       "current": "conversation",
-      "desc_now": "这是一个提示词增强插件",
-      "desc_prev": "Rewrites the DeepSeek Harness composer draft in place, with work, code, and design modes"
+      "desc_now": "在对话里划词加批注——把选中的原文连同你的评论一起交给模型，并让它在回答里明确指出说的是哪一段。",
+      "desc_prev": "对话中划词，把选中文本作为引用带进下一条消息：划词浮动工具条（复制 / 添加到任务）、输入框内的引用卡片，以及对话记录里对应的引用卡片。"
     }
   ]
 }
