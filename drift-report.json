@@ -1,27 +1,20 @@
 {
-  "generated_at": "2026-09-24T04:04:52.174Z",
-  "count": 3,
+  "generated_at": "2026-09-24T10:02:48.549Z",
+  "count": 2,
   "items": [
     {
-      "full_name": "Jaylor-Wang/dsh-tool-antigravity",
-      "previous": "tool",
-      "current": "vision",
-      "desc_now": "Connect Google Antigravity Code Assist OAuth accounts to DeepSeek Harness for Gemini and Claude streaming LLM routing and Nano Banana 2 image generation.",
-      "desc_prev": null
+      "full_name": "itchenshi/dsh-ready-gui",
+      "previous": "resource",
+      "current": "web-ui",
+      "desc_now": "DeepSeek Harness 桌面壳：官方桌面端不支持 Linux，这个支持（AppImage/Linux zip）。内嵌 Web UI、引擎自动保持最新、预置 4 个插件、插件装坏能自愈。",
+      "desc_prev": "DeepSeek Harness 桌面壳 —— 内嵌 Web UI、自动保持最新引擎、自带数据目录管理与系统托盘。"
     },
     {
-      "full_name": "phoenixlucky/business-data-analyst-skill",
-      "previous": "other",
-      "current": "tool",
-      "desc_now": "A business analysis skill with structured diagnostic frameworks and keyword routing for growth, funnels, retention, revenue, operations, and market research.",
-      "desc_prev": null
-    },
-    {
-      "full_name": "tokai-teiodh/dsh-script-cards",
+      "full_name": "feiwell/dsh-enhance-prompt",
       "previous": "web-ui",
-      "current": "tool",
-      "desc_now": "Card grid and branch canvas for a project's Markdown cards inside DeepSeek Harness (DSH). 卡片排成方片网格和两级分支画布，改完直接写回卡片文件。",
-      "desc_prev": "Script-archive card panel for DeepSeek Harness: rounded card grid, two-level branch canvas, and a host-side Typert bridge that keeps structure inside your own project folder."
+      "current": "conversation",
+      "desc_now": "这是一个提示词增强插件",
+      "desc_prev": "Rewrites the DeepSeek Harness composer draft in place, with work, code, and design modes"
     }
   ]
 }
