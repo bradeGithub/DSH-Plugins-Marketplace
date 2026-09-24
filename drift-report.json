@@ -1,13 +1,34 @@
 {
-  "generated_at": "2026-09-24T14:53:34.649Z",
-  "count": 1,
+  "generated_at": "2026-09-24T20:01:45.096Z",
+  "count": 4,
   "items": [
     {
-      "full_name": "latte03/dsh-select-quote",
+      "full_name": "hackernotfound/dsh-tacit",
+      "previous": "conversation",
+      "current": "coding",
+      "desc_now": "DeepSeek Harness plugin that learns from coding agent retries and user corrections, then adds visible, editable directives to future conversations.",
+      "desc_prev": "Learns what you leave unsaid in your prompts and steers the DeepSeek Harness agent for you"
+    },
+    {
+      "full_name": "guangxiangwu6-cmd/dsh-llm-failover",
       "previous": "tool",
-      "current": "conversation",
-      "desc_now": "在对话里划词加批注——把选中的原文连同你的评论一起交给模型，并让它在回答里明确指出说的是哪一段。",
-      "desc_prev": "对话中划词，把选中文本作为引用带进下一条消息：划词浮动工具条（复制 / 添加到任务）、输入框内的引用卡片，以及对话记录里对应的引用卡片。"
+      "current": "coding",
+      "desc_now": "DeepSeek Harness model auto-failover plugin: quota/usage walls switch on the first failure, blips keep the retry threshold, cooldowns escalate, recovery goes through a half-open probe, and a terminal stand-down says which provider returns first. 68 checks, boot-safe.",
+      "desc_prev": "DeepSeek Harness model auto-failover plugin: retry threshold -> mark unavailable -> seamless switch to next healthy model -> cooldown auto-recover. 18-model pool, 19/19 tests, boot-safe."
+    },
+    {
+      "full_name": "GooDAnDReaDY/dsh-server-monitor",
+      "previous": "web-ui",
+      "current": "coding",
+      "desc_now": "SSH server monitor and terminal sidebar for DeepSeek Harness",
+      "desc_prev": "Standalone read-only Linux server monitoring sidebar for DeepSeek Harness"
+    },
+    {
+      "full_name": "tokai-teiodh/dsh-script-cards",
+      "previous": "tool",
+      "current": "web-ui",
+      "desc_now": "剧本卡片面板：卡片排成方片网格和两级分支画布，改完写回卡片文件。 A card grid and a two-level branch canvas for a project's Markdown cards.",
+      "desc_prev": "Card grid and branch canvas for a project's Markdown cards inside DeepSeek Harness (DSH). 卡片排成方片网格和两级分支画布，改完直接写回卡片文件。"
     }
   ]
 }
