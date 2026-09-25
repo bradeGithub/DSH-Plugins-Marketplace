@@ -1,13 +1,41 @@
 {
-  "generated_at": "2026-09-25T04:19:35.074Z",
-  "count": 1,
+  "generated_at": "2026-09-25T10:31:24.011Z",
+  "count": 5,
   "items": [
     {
-      "full_name": "anze225-max/dsh-mimo-connect",
+      "full_name": "agentrq/agentrq",
       "previous": "tool",
-      "current": "model",
-      "desc_now": "将 mimo桌面端包含的模型（内测有免费额度）自动接入 DeepSeek Harness，在 DSH 对话窗口里零配置使用。",
-      "desc_prev": "复用小米 MiMo 登录态，把 MiMo 模型接入 DeepSeek Harness。桌面端已登录即零配置，也可独立登录；无常驻进程、无开机自启。Bring Xiaomi MiMo models into DeepSeek Harness with zero configuration."
+      "current": "memory",
+      "desc_now": "AgentRQ: Human-in-loop realtime conversational task manager for AI Agents. Self-hosted! Control your own agents from wherever you want Mobile, Web, Desktop. Designed to work well with your own Claude subscriptions and any harness with ACP support.",
+      "desc_prev": "AgentRQ: Human-in-loop realtime conversational task manager for AI Agents. Self-hosted! Control your own agents from wherever you want Mobile, Web, Desktop. Designed to work well with your own Claude subscriptions and any harness with ACP support."
+    },
+    {
+      "full_name": "lyhue1991/dsh-soup",
+      "previous": "tool",
+      "current": "web-ui",
+      "desc_now": "dsh 体验增强四件套 = Jupyter风格SideBar + 中央文件预览Tab + 多行GoalBar + 实时Token流速徽标",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xbzbing/dsh-openviking-manager",
+      "previous": "tool",
+      "current": "memory",
+      "desc_now": "OpenViking 的 DSH 配置管理 UI：连接与用户 Key 配置、本机诊断、会话级记忆开关，以及记忆隔离与召回调优（分数阈值 / 注入条数 / 查询扩写 / 排除 URI）。 | DSH config UI for OpenViking: connection and user-key setup, local diagnostics, a per-session memory toggle, plus memory isolation and recall tuning (score threshold, item limit, query expansion, excluded URIs).",
+      "desc_prev": "OpenViking 的管理工具，可以配置 OV in DSH，也可以实时控制 OV 插件的启停。"
+    },
+    {
+      "full_name": "blueberrymaid/dsh-midtalk",
+      "previous": "other",
+      "current": "conversation",
+      "desc_now": "给正在跑的回合插话：/say 无损，/cut 中止当前步并留下恢复卡。Interject into a running DSH turn without losing work: /say queues losslessly at the next step boundary, /cut aborts the step and leaves a structured recovery card.",
+      "desc_prev": null
+    },
+    {
+      "full_name": "CNyaotian-Lunar/dsh-toolbox",
+      "previous": "memory",
+      "current": "vision",
+      "desc_now": "DSH 工具箱：Agent 运维与分析用的命令行脚本集（会话日志读取 / 记忆库分析 / 渲染截图 / 索引生成）",
+      "desc_prev": "DSH 工具箱：读 DSH 会话日志 / 维护 meow-memory 记忆库的常驻脚本集（由 DeepSeek 编写）"
     }
   ]
 }
