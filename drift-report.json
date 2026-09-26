@@ -1,0 +1,27 @@
+{
+  "generated_at": "2026-09-26T07:28:23.524Z",
+  "count": 3,
+  "items": [
+    {
+      "full_name": "masknull/dsh-workbuddy-connect",
+      "previous": "tool",
+      "current": "model",
+      "desc_now": "将 WorkBuddy（国内版/国际版）接入 DeepSeek Harness —— 内置登录、侧栏额度展示、模型自由开关、每日自动签到。WorkBuddy CN & Global models for DeepSeek Harness; signs itself in. 支持 DSH 0.1.5-rc.1+。",
+      "desc_prev": "将 WorkBuddy（国内版/国际版）接入 DeepSeek Harness —— 浏览器免App登录、侧栏额度展示、模型自由开关、每日自动签到。WorkBuddy CN & Global models for DeepSeek Harness; signs itself in. 支持 DSH 0.1.5-rc.1+。"
+    },
+    {
+      "full_name": "taikaikaikai-pixel/dsh-tap",
+      "previous": "tool",
+      "current": "vision",
+      "desc_now": "Unofficial upstream bundle for DeepSeek Harness (dsh): CodeBuddy + TraeWork CN + Qoder CN channels, runtime-synced model catalogue, web search/fetch, image generation, streaming bridge with OAuth & multi-Key rotation, OpenAI-compatible provider registry — all managed from a 4-block accordion settings card.",
+      "desc_prev": "CodeBuddy & Trae provider bundle for DeepSeek Harness (dsh): subscription-quota LLM access via loopback tap bridges — 18+ models, OAuth/API-key, usage metering. Unofficial, BYOC."
+    },
+    {
+      "full_name": "3289192-bot/dsh-cache-bricks",
+      "previous": "tool",
+      "current": "conversation",
+      "desc_now": "DeepSeek Harness 缓存命中率与模型请求可视化插件（默认完整版）：请求详情、对话定位、活动翻面、历史回看。Full-featured cache and request visualization for DSH 0.1.7-rc.2.",
+      "desc_prev": "Cache Bricks for DeepSeek Harness — visualize prompt-cache health and request activity."
+    }
+  ]
+}
