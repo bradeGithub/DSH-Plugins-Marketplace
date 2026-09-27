@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-09-27T10:50:08.660Z",
+  "generated_at": "2026-09-27T13:52:32.155Z",
   "count": 1,
   "items": [
     {
-      "full_name": "GY-Bai/dsh-anchored-subagent",
-      "previous": "agent",
-      "current": "resource",
-      "desc_now": "DSH plugin: start the main agent and subagents on DeepSeek's Minimal harness, then unlock the full tool catalog",
-      "desc_prev": "DS的伟哥补丁，subagent都能满血！"
+      "full_name": "donghangxunlang-cmd/dsh-attention-health",
+      "previous": "tool",
+      "current": "notify",
+      "desc_now": "DeepSeek Harness 长会话退化守卫：检测思考空转与输出复读，提醒交接时机，并从本地日志生成交接文档（不额外调用模型）",
+      "desc_prev": "会话越跑越傻、越跑越贵？用真实日志检测思考打转/复读，算清「继续 vs 交接」的账，并机械生成交接文档（零模型 / 零 token / 不联网）"
     }
   ]
 }
