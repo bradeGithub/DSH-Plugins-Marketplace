@@ -1,5 +1,15 @@
     function apply(ctx) {
       injectStyles();
+      // 0.1.7 运行时卸载契约：#dshm-styles 含全局皮肤修正（body[data-dsh-*]），
+      // 卸载后必须摘除，否则继续污染宿主其他 UI；旧宿主无 ctx.effect 时降级不收集。
+      if (typeof ctx.effect === "function") {
+        ctx.effect(function () {
+          return function () {
+            var styleEl = document.getElementById("dshm-styles");
+            if (styleEl && styleEl.parentNode) styleEl.parentNode.removeChild(styleEl);
+          };
+        }, "dsh-plugin-marketplace: styles");
+      }
       // 接入 DSH locale 服务（经 inject 注入，官方消费方式）：
       // 注册本插件字典、绑定翻译函数、订阅语言切换重渲染
       if (ctx.locale && typeof ctx.locale.register === "function") {
@@ -11,10 +21,12 @@
         try { langCurrent = ctx.locale.getLocale().active || langCurrent; } catch (e) { /* ignore */ }
         if (typeof ctx.locale.subscribe === "function") {
           try {
-            ctx.locale.subscribe(function () {
+            var unSub = ctx.locale.subscribe(function () {
               try { langCurrent = ctx.locale.getLocale().active; } catch (e) { /* ignore */ }
               notifyLocaleChange();
             });
+            // 订阅返回 disposer：卸载后不再触发重渲染（宿主类型定义：returns unsubscribe）
+            if (typeof ctx.effect === "function") ctx.effect(function () { return unSub; }, "dsh-plugin-marketplace: locale subscription");
           } catch (e) { /* ignore */ }
         }
       }

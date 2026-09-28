@@ -99,6 +99,11 @@ check("入口装配 adaptor 与 metadata 且不重新声明缓存", /const adapt
   && /const metadataAdapter = createMarketplaceMetadataAdapter\(\{/.test(indexLib)
   && !/(?:let|const) (?:officialPackagesCache|ownRepo)\s*=/.test(indexLib), true);
 check("routes 不直接读取 adaptor 配置或 metadata 缓存", !/(adaptor\.json|officialPackagesCache|ownRepo)/.test(routesLib), true);
+// 生命周期契约（DSH 0.1.7 运行时卸载）：webServer.register 返回值是 disposer，
+// 必须经统一包装收集——裸调用 = disposer 丢弃 = 卸载后路由泄漏。
+// 允许包装函数内部出现一次（`const register = (route) => { webServer.register(...) }`）。
+check("routes 仅包装函数内一处 webServer.register",
+  (routesLib.match(/webServer\.register\(/g) || []).length, 1);
 
 check("security domain 无 IO/HTTP/环境反向依赖", !/(node:fs|node:path|node:http|http\/|process\.env|index\.js)/.test(securityDomainLib), true);
 check("legacy scan shim 不重新持有 IO", !/(node:fs|node:path|node:http|process\.env)/.test(legacyScanShimLib), true);
