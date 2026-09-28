@@ -62,6 +62,9 @@ function writeProfile(name, bundles) {
     dsh: { profile: { bundles, patchReload: "startup" } },
   }, null, 2), "utf8");
   writeFileSync(join(profile, "cordis.patch.yml"), "[]\n", "utf8");
+  // 镜像宿主 initProfile 的 pnpm-workspace.yaml 模板（真实 profile 恒有；
+  // 同时是本层 workspace 根锚——pnpm 设置面与真实环境一致）
+  writeFileSync(join(profile, "pnpm-workspace.yaml"), "packages:\n  - .\n\nnodeLinker: hoisted\nautoInstallPeers: false\n", "utf8");
   return profile;
 }
 

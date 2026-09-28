@@ -128,7 +128,7 @@ process.exit(fail === 0 ? 0 : 1);
 
 ### bundle register adapter
 
-`lib/infra/bundle-register.js` 的 `createBundleRegisterAdapter()` 通过注入 fake filesystem、fake `runPnpm`、fake resolver 和显式 profile paths，独立验证 bundle manifest 更新与 profile 解析。Oracle 锁定缺失 manifest fail-closed、dependencies/profile.bundles 投影、npm/GitHub 依赖规格、`--ignore-workspace`、pnpm 非零但可解析的告警成功、manifest 回滚、main 路径越界/缺失拒绝、非法依赖名、依赖解析失败、回滚失败保留原错误、realpath 锚点和旧 profile 路径。
+`lib/infra/bundle-register.js` 的 `createBundleRegisterAdapter()` 通过注入 fake filesystem、fake `runPnpm`、fake resolver 和显式 profile paths，独立验证 bundle manifest 更新与 profile 解析。Oracle 锁定缺失 manifest fail-closed、dependencies/profile.bundles 投影、npm/GitHub 依赖规格、`--ignore-workspace` 条件判定（有/无 `pnpm-workspace.yaml` 两支）、pnpm 非零但可解析的告警成功（stderr 保尾）、manifest 回滚、main 路径越界/缺失拒绝、非法依赖名、依赖解析失败、回滚失败保留原错误、realpath 锚点和旧 profile 路径。
 
 入口通过兼容 wrapper 调用 adapter；`installRepo`、`runInstallUseCase`、安装互斥、反馈/installed 状态和 HTTP 路由分别由现有 owner 与 HTTP 层负责。直接 Oracle 为 bundle-register 12/12，静态边界契约 32/32；完整 unit/integration 60/60，测试金字塔 63/63（install 180/180、real-dsh 8/8、workspace-trap 9/9）；coverage 501/501 函数（100%）；mutation 149/149（133 行为 + 14 静态契约，0 survivor、0 skip）。提交钩子和 coverage 均将分类漂移报告写入临时目录；`build-registry.mjs` 也遵循 `DRIFT_REPORT_FILE`，保护工作区报告不被质量门改写。
 
@@ -316,7 +316,11 @@ pnpm 11 向上查找把**根目录当唯一项目** → `~/.dsh/profiles/web` �
 npm 不受影响（npm 只认 package.json 显式 workspaces 字段）。
 
 **修复**：runPnpm 的三个调用点（bundle 注册 install / bundle 卸载 remove / buildPluginPackage install）
-带 `--ignore-workspace` 跳过 workspace 发现；`pnpm run build` 保持不带（monorepo 插件需 workspace: 协议）。
+按 `lib/domain/pnpm-args.js` 的 `withPnpmWorkspaceScope` 判定——目标目录**无**自己的
+`pnpm-workspace.yaml` 时带 `--ignore-workspace` 跳过祖先 workspace 发现；**有**时该文件本身即
+workspace 根锚（上溯到它即停），且 `nodeLinker`/`allowBuilds` 等 settings 必须生效（issue #256：
+无条件带 flag 会把这些设置一并剥掉；ws 文件 settings 语义为 pnpm 10+，v9 只认 `packages:`）。
+`pnpm run build` 保持不带（monorepo 插件需 workspace: 协议）。
 
 **测试**：`scripts/tests/e2e/workspace-trap.e2e.mjs`（进金字塔，e2e 层）——构造祖先 workspace 根
 （无 packages 字段，同真实主目录形态）后：对照组裸 pnpm 被吞（判别力）/修复后依赖进 profile/

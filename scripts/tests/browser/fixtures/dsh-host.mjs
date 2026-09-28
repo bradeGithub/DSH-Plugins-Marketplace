@@ -54,6 +54,8 @@ function writeProfile(profilesRoot, name, sourceRoot) {
     }
   }, null, 2), "utf8");
   writeFileSync(join(profile, "cordis.patch.yml"), "[]\n", "utf8");
+  // 镜像宿主 initProfile 的 pnpm-workspace.yaml 模板（真实 profile 恒有）
+  writeFileSync(join(profile, "pnpm-workspace.yaml"), "packages:\n  - .\n\nnodeLinker: hoisted\nautoInstallPeers: false\n", "utf8");
   return profile;
 }
 

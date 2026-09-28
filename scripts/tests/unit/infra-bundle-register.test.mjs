@@ -189,6 +189,54 @@ await test("成功注册 bundle 并保留 manifest 字段", async () => {
   assert.equal(h.fs.renames[0].to, PACKAGE_FILE);
 });
 
+await test("profile 自带 pnpm-workspace.yaml 时不带 --ignore-workspace", async () => {
+  const h = createHarness();
+  // 宿主 initProfile 官方模板即写本文件（nodeLinker: hoisted / allowBuilds 等）：
+  // 文件存在时自身就是 workspace 根锚（pnpm 上溯在最近文件处停），--ignore-workspace
+  // 只会把 settings 一并剥掉（isolated 布局→重复 cordis 实例 / allowBuilds 失效）。
+  h.fs.files.set(`${PROFILE_DIR}/pnpm-workspace.yaml`, "packages:\n  - .\nnodeLinker: hoisted\n");
+
+  await register(h);
+
+  assert.deepEqual(h.pnpmCalls[0].args, ["install"]);
+  assert.equal(h.pnpmCalls[0].opts.cwd, PROFILE_DIR);
+});
+
+await test("profile 无 pnpm-workspace.yaml 时保留 --ignore-workspace 兜底", async () => {
+  const h = createHarness();
+
+  await register(h);
+
+  assert.deepEqual(h.pnpmCalls[0].args, ["install", "--ignore-workspace"]);
+});
+
+await test("pnpm 失败保留 stderr 尾部而非头部", async () => {
+  const h = createHarness({ includePackage: false });
+  const error = new Error(`Command failed: pnpm install\n${"x".repeat(500)}`);
+  error.stderr = `WARN noise\n${"y".repeat(500)}\nERR_PNPM_BROKEN marker-tail`;
+
+  h.setPnpmError(error);
+  await assert.rejects(register(h), /marker-tail/);
+});
+
+await test("pnpm 警告路径同样保留 stderr 尾部", async () => {
+  const h = createHarness();
+  const error = new Error(`Command failed: pnpm install\n${"x".repeat(500)}`);
+  error.stderr = `WARN noise\n${"y".repeat(500)}\nERR_PNPM_WARN marker-tail-warn`;
+
+  h.setPnpmError(error);
+  await register(h);
+
+  assert.ok(h.logs.some((line) => line.includes("marker-tail-warn")));
+});
+
+await test("无 stderr 属性时回退 error.message 尾部", async () => {
+  const h = createHarness({ includePackage: false });
+  h.setPnpmError(new Error(`${"z".repeat(500)}\nplain-msg-tail`));
+
+  await assert.rejects(register(h), /plain-msg-tail/);
+});
+
 await test("重复注册不重复追加 bundle", async () => {
   const h = createHarness();
   await register(h);
