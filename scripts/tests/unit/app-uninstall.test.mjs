@@ -46,6 +46,7 @@ function makeUninstall(overrides = {}) {
     dirnamePath: (p) => p.split("/").slice(0, -1).join("/"),
     pathSep: "/",
     rm: async (path) => calls.push(["rm", path]),
+    exists: async () => false,
     runPnpm: async (args, opts) => calls.push(["pnpm", args, opts]),
     buildFilteredEnv: () => ({ FILTERED: "1" }),
     readProfileManifest: async () => null,
@@ -263,6 +264,27 @@ function makeUninstall(overrides = {}) {
   });
   await run();
   check("跨 profile bundle pnpm cwd 用旧 profile", calls.filter((c) => c[0] === "pnpm")[0][2].cwd, "/profiles/old");
+}
+
+{
+  // profile 自带 pnpm-workspace.yaml 时它即 workspace 根锚（上溯至此即停），
+  // --ignore-workspace 只会把 nodeLinker/allowBuilds 等 settings 剥掉——不可带。
+  const { run, calls } = makeUninstall({
+    getInstalledRecord: () => ({ type: "bundle", bundle: true, name: "b1", location: `${NM}/b1` }),
+    exists: async (p) => p === "/profiles/web/pnpm-workspace.yaml"
+  });
+  await run();
+  check("bundle remove 有 workspace 文件不带 ignore", calls.filter((c) => c[0] === "pnpm"), [["pnpm", ["remove", "b1"], { cwd: "/profiles/web", env: { FILTERED: "1" }, timeout: 600000 }]]);
+}
+
+{
+  // 缺失时仍需 --ignore-workspace 兜底祖先 workspace 吞依赖（issue #146 陷阱）。
+  const { run, calls } = makeUninstall({
+    getInstalledRecord: () => ({ type: "bundle", bundle: true, name: "b1", location: `${NM}/b1` }),
+    exists: async () => false
+  });
+  await run();
+  check("bundle remove 无 workspace 文件保留 ignore", calls.filter((c) => c[0] === "pnpm"), [["pnpm", ["remove", "--ignore-workspace", "b1"], { cwd: "/profiles/web", env: { FILTERED: "1" }, timeout: 600000 }]]);
 }
 
 {

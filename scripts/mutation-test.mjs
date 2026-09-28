@@ -79,7 +79,7 @@ const BEHAVIOR_TESTS = [
 const TMP = mkdtempSync(join(tmpdir(), "dsh-mutation-"));
 const TMP_UNIT = join(TMP, "scripts", "tests", "unit");
 
-// ---- 突变清单（m01–m24：基础域/HTTP/infra；m25–m33：install preparation/use-case；m34–m40：uninstall；m41–m48：update；m49–m56：feedback；m57–m64：backup；m65–m72：env-edit；m73–m76：auth；m77–m83：routes；m84–m88：build/domain；m89–m93：client；m94–m102：patch；m103–m120：registry/cache；m121–m137：profile scan/installed index；m138–m150：bundle register；m151–m164：install executor；m165–m172：installed state；m173–m180：profile/index runtime；m181–m190：list runtime；m191–m198：diagnostics runtime；m199–m216：repository scan adapter；m217–m231：repository classification；m232–m250：security scan；m251–m260：adaptor rules/config；m261–m270：marketplace metadata；m271–m274：feedback v2；m275–m280：S1 列表信号；m281–m283：S2 字段加权搜索；m284–m290：S3 风险记分卡；m291–m295：运行时卸载生命周期）----
+// ---- 突变清单（m01–m24：基础域/HTTP/infra；m25–m33：install preparation/use-case；m34–m40：uninstall；m41–m48：update；m49–m56：feedback；m57–m64：backup；m65–m72：env-edit；m73–m76：auth；m77–m83：routes；m84–m88：build/domain；m89–m93：client；m94–m102：patch；m103–m120：registry/cache；m121–m137：profile scan/installed index；m138–m150：bundle register；m151–m164：install executor；m165–m172：installed state；m173–m180：profile/index runtime；m181–m190：list runtime；m191–m198：diagnostics runtime；m199–m216：repository scan adapter；m217–m231：repository classification；m232–m250：security scan；m251–m260：adaptor rules/config；m261–m270：marketplace metadata；m271–m274：feedback v2；m275–m280：S1 列表信号；m281–m283：S2 字段加权搜索；m284–m290：S3 风险记分卡；m291–m295：运行时卸载生命周期；m296–m300：pnpm workspace scope 判活与 stderr 保尾）----
 // 每个突变：{ id, name, pattern(正则), replacement, type, note }
 // pattern 未命中源码 → SKIP（语义可能已变化）；replacement 无效果 → SKIP。
 const MUTATIONS = [
@@ -1188,9 +1188,9 @@ const MUTATIONS = [
     id: "m138",
     name: "bundle 注册绕过 workspace 隔离",
     type: "behavior",
-    pattern: /\["install", "--ignore-workspace"\]/g,
-    replacement: "[\"install\"]",
-    note: "profile 安装不能被祖先 pnpm workspace 吞掉"
+    pattern: /await exists\(joinPath\(bundleProfileDir, "pnpm-workspace\.yaml"\)\)/g,
+    replacement: "true /* hasOwnWorkspace 恒真 → 永不带 --ignore-workspace */",
+    note: "profile 无 workspace 文件时必须保留 --ignore-workspace 兜底祖先吞依赖"
   },
   {
     id: "m139",
@@ -2447,6 +2447,46 @@ const MUTATIONS = [
     pattern: /ctx\.effect\(function \(\) \{ return unSub; \}, "dsh-plugin-marketplace: locale subscription"\);/g,
     replacement: "/* locale 订阅 disposer 丢弃 */",
     note: "locale.subscribe 返回 disposer 必须收集——丢弃则卸载后订阅残留，语言切换触发死组件重渲染"
+  },
+  {
+    id: "m296",
+    name: "bundle 注册忽略 profile 自身 workspace 文件",
+    type: "behavior",
+    pattern: /await exists\(joinPath\(bundleProfileDir, "pnpm-workspace\.yaml"\)\)/g,
+    replacement: "false /* hasOwnWorkspace 恒假 → 恒带 --ignore-workspace */",
+    note: "profile 自带 workspace 文件时仍加 flag 会剥掉 nodeLinker/allowBuilds 等 settings"
+  },
+  {
+    id: "m297",
+    name: "pnpm 错误截头而非保尾",
+    type: "behavior",
+    pattern: /pnpmErr = errText\.slice\(-400\);/g,
+    replacement: "pnpmErr = errText.slice(0, 400);",
+    note: "pnpm 真实 ERR_ 在 stderr 尾部——截头令失败报告只剩 runner 噪音（issue #256 教训）"
+  },
+  {
+    id: "m298",
+    name: "pnpm 错误不优先取 stderr",
+    type: "behavior",
+    pattern: /typeof error\?\.stderr === "string" && error\.stderr/g,
+    replacement: "false",
+    note: "execFile 错误须优先取 error.stderr 属性，回退 message 才丢 stderr 精度"
+  },
+  {
+    id: "m299",
+    name: "uninstall bundle 忽略 workspace 文件存在性",
+    type: "behavior",
+    pattern: /await exists\(joinPath\(removeCwd, "pnpm-workspace\.yaml"\)\)/g,
+    replacement: "true /* hasOwnWorkspace 恒真 */",
+    note: "pnpm remove 与 install 同样受 workspace settings 影响，缺失文件才需 --ignore-workspace"
+  },
+  {
+    id: "m300",
+    name: "构建安装忽略克隆仓库自身 workspace 文件",
+    type: "behavior",
+    pattern: /await exists\(join\(cacheDir, "pnpm-workspace\.yaml"\)\)/g,
+    replacement: "false /* hasOwnWorkspace 恒假 */",
+    note: "克隆仓库自带的 workspace 文件是根锚，workspace:* 依赖只在 workspace 模式可解析"
   }
 ];
 
@@ -2746,7 +2786,12 @@ const MUTATION_FILE_HINTS = {
   m292: "lib/http/routes.js",
   m293: "lib/http/routes.js",
   m294: "lib/index.js",
-  m295: "lib/client.js"
+  m295: "lib/client.js",
+  m296: "lib/infra/bundle-register.js",
+  m297: "lib/infra/bundle-register.js",
+  m298: "lib/infra/bundle-register.js",
+  m299: "lib/app/uninstall.js",
+  m300: "lib/index.js"
 };
 
 function collectLibFiles(dir) {

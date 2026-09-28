@@ -3,8 +3,10 @@
 // 场景：临时 DSH_HOME 的祖先目录存在 pnpm-workspace.yaml（模拟用户主目录常驻
 // DSH 的 workspace 配置）——pnpm 11 向上查找会把 profile 目录吞进 workspace，
 // `pnpm install` 变 workspace 级操作，bundle 依赖装不进 profile node_modules
-// 却静默成功（"Already up to date"）。修复：runPnpm 调用带 --ignore-workspace。
-// 本测试验证 registerBundlePackage 在祖先 workspace 存在时依赖仍进 profile。
+// 却静默成功（"Already up to date"）。修复：profile 无自己的 pnpm-workspace.yaml
+// 时 runPnpm 调用带 --ignore-workspace（有文件时文件自身即根锚，flag 反而剥掉
+// nodeLinker/allowBuilds 等 settings——issue #256）。本测试验证无文件兜底路径
+// 下 registerBundlePackage 在祖先 workspace 存在时依赖仍进 profile。
 //
 // 前置：git + pnpm 可用（真实网络解析 github: 依赖——pnpm 的 git 协议不经过
 // git URL 重写；缺失时 SKIP，与 install.e2e.mjs 同款降级）。
@@ -132,6 +134,43 @@ if (npmAvailable) {
 const profPkg = JSON.parse(readFileSync(join(PROF, "package.json"), "utf8"));
 check("wstest dependencies 记录", profPkg.dependencies?.["dsh-subagent-cwd"], "github:lynx-gt/dsh-subagent-cwd");
 check("wstest bundles 记录", (profPkg.dsh?.profile?.bundles ?? []).includes("dsh-subagent-cwd"), true);
+
+// 分支对称面：profile **自带** pnpm-workspace.yaml 时文件即根锚，不能再加
+// --ignore-workspace（否则 nodeLinker/allowBuilds 等 settings 被一并剥掉——issue #256）。
+// 用带 nodeLinker: hoisted 的 web2 实测：pnpm 在 node_modules/.modules.yaml 落账
+// 实际生效的 linker——读到 hoisted 即证明 settings 生效（flag 若被误带，pnpm 回落
+// isolated → .modules.yaml 记 isolated → 断言失败）。
+const PROF2 = join(HOME, "profiles", "web2");
+mkdirSync(join(PROF2, "node_modules"), { recursive: true });
+writeFileSync(join(PROF2, "package.json"), JSON.stringify({ name: "web2-profile", private: true }), "utf8");
+writeFileSync(join(PROF2, "cordis.patch.yml"), "# workspace-trap e2e web2\n");
+writeFileSync(join(PROF2, "pnpm-workspace.yaml"), "packages:\n  - .\nnodeLinker: hoisted\n", "utf8");
+lib.setTargetProfile("web2");
+const result2 = await lib.installRepo({
+  type: detect.type, cacheDir, repo,
+  log, answers: {}, logLine, lang: "zh-CN",
+  envAllowList: [], npmTarget: null,
+});
+check("wstest 自有 workspace profile bundle 安装成功", result2.bundle, true);
+check("wstest 自有 workspace 依赖进本 profile", existsSync(join(PROF2, "node_modules", "dsh-subagent-cwd", "package.json")), true);
+// nodeLinker 落账断言只对 pnpm ≥10 生效：v9 的 pnpm-workspace.yaml 只声明
+// packages:，settings 一律走 .npmrc（v10 起才从 ws 文件读 nodeLinker/allowBuilds）。
+// CI pin 9.15.9 → 在 v9 上无论 flag 带不带都是 isolated，该断言跳过；
+// v10+ 环境（真实部署主流）则必须见到 hoisted 落账，否则 settings 被剥（#256）。
+let pnpmMajor = 0;
+try {
+  const v = execFileSync(process.platform === "win32" ? "cmd.exe" : "pnpm",
+    process.platform === "win32" ? ["/d", "/s", "/c", "pnpm", "--version"] : ["--version"], { encoding: "utf8" });
+  pnpmMajor = parseInt(String(v).trim().split(".")[0], 10) || 0;
+} catch { /* 已在前置检查确认存在 */ }
+if (pnpmMajor >= 10) {
+  const modulesYaml = existsSync(join(PROF2, "node_modules", ".modules.yaml"))
+    ? readFileSync(join(PROF2, "node_modules", ".modules.yaml"), "utf8") : "";
+  check("wstest nodeLinker:hoisted 生效（.modules.yaml 落账）", /nodeLinker["']?:\s*["']?hoisted/.test(modulesYaml), true);
+} else {
+  console.log(`SKIP: pnpm ${pnpmMajor || "?"} 不从 pnpm-workspace.yaml 读 settings（需 v10+），跳过 linker 落账断言`);
+}
+lib.setTargetProfile("web");
 
 // 清理（临时目录系统回收，此处主动删避免磁盘堆积）
 rmSync(WS_ROOT, { recursive: true, force: true });
