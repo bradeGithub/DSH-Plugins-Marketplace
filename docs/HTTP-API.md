@@ -1,6 +1,6 @@
 # HTTP 接口参考 / HTTP API Reference
 
-插件市场服务端通过 `webServer.register({kind:"exact", path, handler})` 暴露的全部端点。鉴权模型与安全边界见 [SECURITY.md](SECURITY.md) §2。
+插件市场服务端通过 `webServer.register({kind:"exact", path, handler})` 暴露的全部端点（`lib/http/routes.js` 内经统一 `register()` 包装收集 disposer——DSH 0.1.7+ 运行时卸载契约，插件禁用/卸载时路由随 cordis fiber 摘除；注册中途失败回滚已注册路由）。鉴权模型与安全边界见 [SECURITY.md](SECURITY.md) §2。
 
 <!-- TOC -->
 - [1. 鉴权矩阵](#1-鉴权矩阵)

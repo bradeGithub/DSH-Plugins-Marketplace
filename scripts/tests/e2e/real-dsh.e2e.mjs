@@ -42,6 +42,8 @@ const fixtureRoot = join(home, "fixtures");
 const gitConfig = join(home, "gitconfig");
 let child = null;
 let childExit = null;
+const hostLog = [];
+const hostLogMax = 200;
 
 function writeProfile(name, bundles) {
   const profile = join(profilesRoot, name);
@@ -52,7 +54,12 @@ function writeProfile(name, bundles) {
     dependencies: name === "web"
       ? { "dsh-plugin-marketplace": `link:${sourceRoot.replace(/\\/g, "/")}` }
       : {},
-    dsh: { profile: { bundles } },
+    // patchReload 显式钉 "startup"：dsh ≥0.1.2 起缺省值/web 模板均为 "live"，
+    // live 档会装 cordis-plugin-hmr 服务，而该服务要求 node --expose-internals
+    // （普通 dsh 启动拿不到 loader.internal）——watchUserPatches 探测不到 hmr
+    // 会 throw 并让宿主进程退出（真实观测：dsh 0.1.2-rc.1 下启动后 ~1s 崩溃）。
+    // e2e 只验启动期 patch 生效，不依赖 live 重载；旧宿主（0.1.1）无此字段概念，自动忽略。
+    dsh: { profile: { bundles, patchReload: "startup" } },
   }, null, 2), "utf8");
   writeFileSync(join(profile, "cordis.patch.yml"), "[]\n", "utf8");
   return profile;
@@ -182,8 +189,20 @@ try {
 
   const env = { ...process.env, DSH_HOME: home.replace(/\\/g, "/"), GIT_CONFIG_GLOBAL: gitConfig };
   child = isWin
-    ? spawn("cmd.exe", ["/d", "/s", "/c", "dsh", "--profile", "web", "--no-open", "--port", String(port)], { env, stdio: "ignore", windowsHide: true })
-    : spawn("dsh", ["--profile", "web", "--no-open", "--port", String(port)], { env, stdio: "ignore", detached: true });
+    ? spawn("cmd.exe", ["/d", "/s", "/c", "dsh", "--profile", "web", "--no-open", "--port", String(port)], { env, stdio: ["ignore", "pipe", "pipe"], windowsHide: true })
+    : spawn("dsh", ["--profile", "web", "--no-open", "--port", String(port)], { env, stdio: ["ignore", "pipe", "pipe"], detached: true });
+  // 宿主 stdout/stderr 环形缓冲：真实宿主崩溃（如 patch-layer watching/hmr 缺失
+  // 直接退进程）时 stdio:"ignore" 会把临终堆栈整个吞掉，只剩 fetch failed。
+  // 保留尾部若干行，失败时随断言一起输出以便定位。
+  const capture = (chunk) => {
+    for (const line of String(chunk).split(/\r?\n/)) {
+      if (!line) continue;
+      hostLog.push(line);
+      if (hostLog.length > hostLogMax) hostLog.shift();
+    }
+  };
+  child.stdout.on("data", capture);
+  child.stderr.on("data", capture);
   child.on("exit", (code, signal) => { childExit = { code, signal }; });
 
   let ready = false;
@@ -252,6 +271,8 @@ try {
 } catch (error) {
   fail++;
   console.log(`FAIL real-host runtime closure: ${error?.stack ?? error}`);
+  if (childExit) console.log(`FAIL 宿主进程已退出: ${JSON.stringify(childExit)}`);
+  if (hostLog.length) console.log(`--- 宿主输出尾部 ---\n${hostLog.slice(-40).join("\n")}`);
 } finally {
   cleanup();
 }

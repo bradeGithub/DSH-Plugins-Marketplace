@@ -1230,6 +1230,49 @@ globalThis.fetch = () => Promise.reject(new Error("integration test: real networ
   check("apply 注册 install 路由", registered.some((r) => r.path === "/api/marketplace/install"), true);
   check("apply 注册 skills 路由", registered.some((r) => r.path === "/api/marketplace/skills"), true);
 
+  // ---- 生命周期：路由 disposer 收集（DSH 0.1.7 运行时卸载契约） ----
+  // 宿主 webServer.register / tapIndex 均返回 disposer；cordis ctx.effect 在 fiber
+  // 卸载时执行收集的 disposer。此前全部注册返回值被丢弃——禁用/卸载插件后路由泄漏
+  // （handler 持有死 fiber 的 ctx），重启用时触发宿主重复路由错误。
+  {
+    // 宿主路由表模型：跨两次 apply 共享——卸载不清理则重启用必撞重复路由错误
+    const liveRoutes = new Map();
+    const rawCalls = new Map();   // raw disposer 调用计数——幂等壳缺失会暴露成 >1
+    const collectedL = [];
+    const mkCtx = () => ({
+      get: (s) => (s === "webServer" ? {
+        register: (r) => {
+          const key = `${r.kind}:${r.path}`;
+          if (liveRoutes.has(key)) throw new Error(`duplicate route ${r.path}`);
+          liveRoutes.set(key, r);
+          rawCalls.set(key, 0);
+          return () => { rawCalls.set(key, rawCalls.get(key) + 1); liveRoutes.delete(key); };
+        },
+        tapIndex: () => () => {}
+      } : undefined),
+      logger: { warn: () => {} },
+      slots: { inject: () => {} },
+      effect: (cb) => { const d = cb(); if (typeof d === "function") collectedL.push(d); return d; }
+    });
+
+    lib.apply(mkCtx());   // 启用
+    const routeCount = liveRoutes.size;
+    check("启用后路由表就位", routeCount > 0, true);
+    // 17 条路由 + tapIndex 各收集一次
+    check("每个注册都收集 disposer（路由+tapIndex）", collectedL.length, routeCount + 1);
+
+    // BDD：禁用/卸载 → 全部 disposer 运行 → 路由表清空
+    collectedL.forEach((d) => d());
+    check("卸载后路由表清空", liveRoutes.size, 0);
+    collectedL.forEach((d) => d());
+    check("disposer 幂等（raw 不重复执行）", [...rawCalls.values()].every((c) => c === 1), true);
+
+    // BDD：重启用 → 干净重注册（任一残留都会在这里抛 duplicate route）
+    const reapplyErr = (() => { try { lib.apply(mkCtx()); return null; } catch (e) { return String(e); } })();
+    check("重启用无残留路由冲突", reapplyErr, null);
+    check("重启用路由数与首轮一致", liveRoutes.size, routeCount);
+  }
+
   // ---- 执行边界行为验证：MAX_EXEC_BUFFER（32MB）vs execFile 默认 1MB ----
   // 安装/更新链的 execFile 输出上限：2MB 输出在默认 maxBuffer(1MB) 下必炸
   // （ERR_CHILD_PROCESS_STDIO_MAXBUFFER——npm install 常见触发），32MB 下正常。

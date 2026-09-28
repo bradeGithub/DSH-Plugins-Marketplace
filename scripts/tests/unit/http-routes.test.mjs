@@ -1218,5 +1218,61 @@ check("routes 统一通过正式版本响应包装器", (routesSource.match(/\bj
   check("restore/diff 转接 app 结果并附版本", res.value, { status: "done", ...diff, schemaVersion: MARKETPLACE_RESPONSE_SCHEMA_VERSION });
 }
 
+// ---- 生命周期：注册 disposer 收集与回滚（DSH 0.1.7 运行时卸载契约） ----
+// 宿主 webServer.register 返回 disposer。registerRoutes 必须：1) 经注入的 effect
+// 收集（cordis 语义：回调返回值收作 fiber 卸载时执行的 disposer）；2) 注册中途
+// 失败时回滚已注册路由，不留半装路由表。
+
+// DDT：任一位置注册失败 → 已注册路由全部回滚摘除
+{
+  const { deps: probeDeps, registered: probeRegistered } = makeDeps();
+  registerRoutes(probeDeps);
+  const total = probeRegistered.length;
+  check("路由表非空（回滚测试前置）", total > 0, true);
+
+  for (const failAt of [0, Math.floor(total / 2), total - 1]) {
+    const live = new Set();
+    const collected = [];
+    let n = 0;
+    const { deps } = makeDeps();
+    deps.webServer = {
+      register: (r) => {
+        if (n++ === failAt) throw new Error(`duplicate route ${r.path}`);
+        live.add(r);
+        return () => { live.delete(r); };
+      }
+    };
+    deps.effect = (cb) => { const d = cb(); if (typeof d === "function") collected.push(d); return d; };
+    const err = (() => { try { registerRoutes(deps); return null; } catch (e) { return String(e); } })();
+    check(`第 ${failAt}/${total} 位注册失败向上抛`, err !== null, true);
+    check(`第 ${failAt}/${total} 位失败时已注册路由全部回滚`, live.size, 0);
+  }
+}
+
+// DDT：effect 能力矩阵——旧宿主无 ctx.effect（无运行时卸载，可降级不收集）/ 新宿主收集
+for (const withEffect of [false, true]) {
+  const live = new Map();
+  const rawCalls = new Map();   // raw disposer 调用计数——幂等壳缺失会暴露成 >1
+  const collected = [];
+  const { deps } = makeDeps();
+  deps.webServer = {
+    register: (r) => {
+      live.set(r.path, r);
+      rawCalls.set(r.path, 0);
+      return () => { rawCalls.set(r.path, rawCalls.get(r.path) + 1); live.delete(r.path); };
+    }
+  };
+  if (withEffect) deps.effect = (cb) => { const d = cb(); if (typeof d === "function") collected.push(d); return d; };
+  registerRoutes(deps);
+  check(`effect=${withEffect} 路由注册照常`, live.size > 0, true);
+  check(`effect=${withEffect} disposer 收集数匹配`, collected.length, withEffect ? live.size : 0);
+  if (withEffect) {
+    collected.forEach((d) => d());
+    check("effect 收集的 disposer 卸载后清空路由表", live.size, 0);
+    collected.forEach((d) => d());
+    check("disposer 幂等（raw 不重复执行）", [...rawCalls.values()].every((c) => c === 1), true);
+  }
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail === 0 ? 0 : 1);

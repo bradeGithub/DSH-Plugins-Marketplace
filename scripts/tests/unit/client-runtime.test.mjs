@@ -20,8 +20,14 @@ const document = {
   head: {
     appendChild(element) {
       appendedStyles++;
+      element.parentNode = this;
       styles.set(element.id, element);
       events.push("styles.append");
+    },
+    removeChild(element) {
+      styles.delete(element.id);
+      element.parentNode = null;
+      events.push("styles.remove");
     }
   },
   body: { appendChild() {}, removeChild() {} },
@@ -70,14 +76,20 @@ const locale = {
   subscribe(callback) {
     events.push("locale.subscribe");
     localeSubscribers.push(callback);
+    return () => {
+      const idx = localeSubscribers.indexOf(callback);
+      if (idx >= 0) localeSubscribers.splice(idx, 1);
+      events.push("locale.unsubscribe");
+    };
   }
 };
 
+const effectLabels = [];
 const ctx = {
   locale,
   effect(cleanupFactory, label) {
     events.push("effect");
-    assert.equal(label, "dsh-plugin-marketplace: dictionaries");
+    effectLabels.push(label);
     effectCleanups.push(cleanupFactory);
   },
   slots: {
@@ -138,13 +150,21 @@ moduleExports.apply(ctx);
 assert.deepEqual(events, [
   "styles.lookup",
   "styles.append",
+  "effect",
   "locale.register",
   "effect",
   "locale.bind",
   "locale.getLocale",
   "locale.subscribe",
+  "effect",
   "slots.inject",
   "slots.register"
+]);
+// 生命周期契约：三个注册面各收集一次（slots.inject 自带 fiber 作用域，不重复收集）
+assert.deepEqual(effectLabels, [
+  "dsh-plugin-marketplace: styles",
+  "dsh-plugin-marketplace: dictionaries",
+  "dsh-plugin-marketplace: locale subscription"
 ]);
 assert.equal(appendedStyles, 1);
 assert.equal(slotRegistrations.length, 1);
@@ -163,10 +183,26 @@ moduleExports.apply(ctx);
 assert.equal(appendedStyles, 1, "reapplying does not append a second style element");
 assert.equal(style.textContent, originalCss, "reapplying overwrites stale CSS");
 assert.equal(localeSubscribers.length, 2);
-assert.equal(effectCleanups.length, 2);
-const cleanup = effectCleanups[0]();
-assert.equal(typeof cleanup, "function");
-cleanup();
-assert.ok(events.includes("locale.dispose"));
+assert.equal(effectCleanups.length, 6);
 
-console.log("client runtime contract: 23 passed, 0 failed");
+// BDD 卸载面：逆序执行 apply-2 收集的 3 个 disposer（cordis 卸载即此序）——
+// 样式标签摘除、字典释放、locale 订阅退订，无残留。
+for (let i = 5; i >= 3; i--) {
+  const cleanup = effectCleanups[i]();
+  assert.equal(typeof cleanup, "function");
+  cleanup();
+}
+assert.equal(styles.has("dshm-styles"), false, "卸载后样式标签摘除");
+assert.equal(localeSubscribers.length, 1, "卸载后 apply-2 的 locale 订阅退订");
+assert.ok(events.includes("locale.dispose"));
+assert.ok(events.includes("locale.unsubscribe"));
+assert.ok(events.includes("styles.remove"));
+
+// apply-1 的 3 个 disposer 同样卸载 → 订阅清零（无泄漏累积）
+for (let i = 2; i >= 0; i--) {
+  const cleanup = effectCleanups[i]();
+  if (typeof cleanup === "function") cleanup();
+}
+assert.equal(localeSubscribers.length, 0, "全部卸载后无订阅残留");
+
+console.log("client runtime contract: 30 passed, 0 failed");

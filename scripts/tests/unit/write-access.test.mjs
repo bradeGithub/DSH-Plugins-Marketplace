@@ -72,7 +72,7 @@ const writePaths = [
   "/api/marketplace/install",
   "/api/marketplace/uninstall"
 ];
-const routeSegments = routes.split("  webServer.register({").slice(1);
+const routeSegments = routes.split("  register({").slice(1);
 const writeContract = writePaths.every((path) => {
   const segment = routeSegments.find((source) => source.includes(`path: "${path}"`));
   return Boolean(segment && segment.includes("await isWriteAllowed(req)"));

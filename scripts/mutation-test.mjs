@@ -79,7 +79,7 @@ const BEHAVIOR_TESTS = [
 const TMP = mkdtempSync(join(tmpdir(), "dsh-mutation-"));
 const TMP_UNIT = join(TMP, "scripts", "tests", "unit");
 
-// ---- 突变清单（m01–m24：基础域/HTTP/infra；m25–m33：install preparation/use-case；m34–m40：uninstall；m41–m48：update；m49–m56：feedback；m57–m64：backup；m65–m72：env-edit；m73–m76：auth；m77–m83：routes；m84–m88：build/domain；m89–m93：client；m94–m102：patch；m103–m120：registry/cache；m121–m137：profile scan/installed index；m138–m150：bundle register；m151–m164：install executor；m165–m172：installed state；m173–m180：profile/index runtime；m181–m190：list runtime；m191–m198：diagnostics runtime；m199–m216：repository scan adapter；m217–m231：repository classification；m232–m250：security scan；m251–m260：adaptor rules/config；m261–m270：marketplace metadata；m271–m274：feedback v2；m275–m280：S1 列表信号；m281–m283：S2 字段加权搜索；m284–m290：S3 风险记分卡）----
+// ---- 突变清单（m01–m24：基础域/HTTP/infra；m25–m33：install preparation/use-case；m34–m40：uninstall；m41–m48：update；m49–m56：feedback；m57–m64：backup；m65–m72：env-edit；m73–m76：auth；m77–m83：routes；m84–m88：build/domain；m89–m93：client；m94–m102：patch；m103–m120：registry/cache；m121–m137：profile scan/installed index；m138–m150：bundle register；m151–m164：install executor；m165–m172：installed state；m173–m180：profile/index runtime；m181–m190：list runtime；m191–m198：diagnostics runtime；m199–m216：repository scan adapter；m217–m231：repository classification；m232–m250：security scan；m251–m260：adaptor rules/config；m261–m270：marketplace metadata；m271–m274：feedback v2；m275–m280：S1 列表信号；m281–m283：S2 字段加权搜索；m284–m290：S3 风险记分卡；m291–m295：运行时卸载生命周期）----
 // 每个突变：{ id, name, pattern(正则), replacement, type, note }
 // pattern 未命中源码 → SKIP（语义可能已变化）；replacement 无效果 → SKIP。
 const MUTATIONS = [
@@ -2407,6 +2407,46 @@ const MUTATIONS = [
     pattern: /    risk_tier: r\.risk_tier === "safe" \|\| r\.risk_tier === "caution" \|\| r\.risk_tier === "risk" \? r\.risk_tier : undefined,/g,
     replacement: "    risk_tier: r.risk_tier,",
     note: "透传必须白名单三档——原样放行会让索引里的任意值直达客户端徽章"
+  },
+  {
+    id: "m291",
+    name: "路由 disposer 不经 effect 收集",
+    type: "behavior",
+    pattern: /    if \(typeof effect === "function"\) effect\(\(\) => disposer, `dsh-plugin-marketplace: route \$\{route\.path\}`\);/g,
+    replacement: "    /* effect 收集被抽掉 */",
+    note: "注册必须经 ctx.effect 收集——抽掉则 fiber 卸载不摘路由，重启用撞宿主 duplicate-route"
+  },
+  {
+    id: "m292",
+    name: "注册失败回滚缺失",
+    type: "behavior",
+    pattern: /      while \(disposers\.length\) \{ try \{ disposers\.pop\(\)\(\); \} catch \{ \/\* 尽力而为 \*\/ \} \}/g,
+    replacement: "      /* 回滚被抽掉 */",
+    note: "注册中途失败必须回滚已注册路由——缺失则留下半装路由表，宿主状态与插件状态错位"
+  },
+  {
+    id: "m293",
+    name: "disposer 幂等壳缺失",
+    type: "behavior",
+    pattern: /      if \(disposed\) return;\n      disposed = true;/g,
+    replacement: "      /* 无幂等壳 */",
+    note: "回滚与 cordis 卸载会双路径触发同一 disposer——无幂等壳则 raw disposer 被重复执行"
+  },
+  {
+    id: "m294",
+    name: "ctx.effect 能力守卫缺失",
+    type: "behavior",
+    pattern: /    effect: typeof ctx\.effect === "function" \? \(cb, label\) => ctx\.effect\(cb, label\) : undefined,/g,
+    replacement: "    effect: (cb, label) => ctx.effect(cb, label),",
+    note: "无 ctx.effect 的宿主必须降级——缺守卫则旧宿主 apply 直接 TypeError 炸掉"
+  },
+  {
+    id: "m295",
+    name: "客户端 locale 订阅不收集",
+    type: "behavior",
+    pattern: /ctx\.effect\(function \(\) \{ return unSub; \}, "dsh-plugin-marketplace: locale subscription"\);/g,
+    replacement: "/* locale 订阅 disposer 丢弃 */",
+    note: "locale.subscribe 返回 disposer 必须收集——丢弃则卸载后订阅残留，语言切换触发死组件重渲染"
   }
 ];
 
@@ -2701,7 +2741,12 @@ const MUTATION_FILE_HINTS = {
   m287: "scripts/build-registry.mjs",
   m288: "scripts/build-registry.mjs",
   m289: "lib/domain/security-scan.js",
-  m290: "lib/domain/normalize.js"
+  m290: "lib/domain/normalize.js",
+  m291: "lib/http/routes.js",
+  m292: "lib/http/routes.js",
+  m293: "lib/http/routes.js",
+  m294: "lib/index.js",
+  m295: "lib/client.js"
 };
 
 function collectLibFiles(dir) {

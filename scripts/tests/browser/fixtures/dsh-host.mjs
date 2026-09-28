@@ -48,7 +48,9 @@ function writeProfile(profilesRoot, name, sourceRoot) {
     dependencies: name === "web"
       ? { "dsh-plugin-marketplace": `link:${sourceRoot.replace(/\\/g, "/")}` }
       : {},
-    dsh: { profile: { bundles: ["@deepseek-ai/dsh-base", "@deepseek-ai/dsh-web-app", "dsh-plugin-marketplace"] }
+    // patchReload 钉 "startup"：dsh ≥0.1.2 缺省为 "live"，会加载需 --expose-internals
+    // 的 cordis-plugin-hmr，普通启动下 watchUserPatches throw 致宿主退出（详见 real-dsh e2e 注释）。
+    dsh: { profile: { bundles: ["@deepseek-ai/dsh-base", "@deepseek-ai/dsh-web-app", "dsh-plugin-marketplace"], patchReload: "startup" }
     }
   }, null, 2), "utf8");
   writeFileSync(join(profile, "cordis.patch.yml"), "[]\n", "utf8");
