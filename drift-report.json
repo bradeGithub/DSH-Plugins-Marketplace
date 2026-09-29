@@ -1,13 +1,34 @@
 {
-  "generated_at": "2026-09-29T01:42:42.547Z",
-  "count": 1,
+  "generated_at": "2026-09-29T08:18:19.460Z",
+  "count": 4,
   "items": [
     {
-      "full_name": "MovieMaker93/dsh-plugin-safe-upgrade",
+      "full_name": "nguyenduclong-ict/dsh-session-progress",
       "previous": "other",
-      "current": "resource",
-      "desc_now": "Unofficial community plugin for DeepSeek Harness (dsh): safe config history, guarded upgrades, auto-rollback. Not affiliated with or endorsed by DeepSeek.",
-      "desc_prev": "Safe config history, guarded upgrades and automatic rollback for DeepSeek Harness (dsh)"
+      "current": "web-ui",
+      "desc_now": "Session progress tracking for DeepSeek Harness: a live nested checklist with per-item weights, a progress ring in the composer, and a native right sidebar panel.",
+      "desc_prev": null
+    },
+    {
+      "full_name": "nightosong/gord-dsh-worktree",
+      "previous": "web-ui",
+      "current": "tool",
+      "desc_now": "Git worktrees for DeepSeek Harness — isolate parallel work in its own directory and branch. Ships Fast mode (快速模式).",
+      "desc_prev": "Git worktrees for DeepSeek Harness: create worktrees from the agent or Settings, start a session in one, review the uncommitted diff in the sidebar, manage archived sessions, and rename by double-click. Refuses to remove a worktree with uncommitted or untracked changes, and never removes the main one."
+    },
+    {
+      "full_name": "Ln1m/dsh-vk-suite",
+      "previous": "web-ui",
+      "current": "coding",
+      "desc_now": "DSH three-column layout skeleton: slot contract + layout shell, the prerequisite of every other suite · DSH 三栏布局骨架：槽位契约 + 布局外壳，其余家族仓的前置",
+      "desc_prev": "三栏 layout 框架（契约 + 骨架两个包）：左栏 Tab 宿主、右栏 Tab 宿主与槽位注册 API；功能插件各自独立成仓"
+    },
+    {
+      "full_name": "wanetcn/dsh-advancesearch",
+      "previous": "web-ui",
+      "current": "tool",
+      "desc_now": "DeepSeek Harness 高级搜索插件:按关键字搜索所有会话 + Claude Code / Codex / ZCode 等 agent 历史记录,工作区搜索按钮、会话跳转,内置 MCP 让 agent 自己检索历史",
+      "desc_prev": "DeepSeek Harness 高级搜索插件:按关键字搜索所有会话的名称与内容,工作区界面搜索按钮 + 会话跳转"
     }
   ]
 }
