@@ -1,20 +1,20 @@
 {
-  "generated_at": "2026-09-29T16:34:41.927Z",
+  "generated_at": "2026-09-29T22:11:56.689Z",
   "count": 2,
   "items": [
     {
-      "full_name": "evoelsewhere/evoflux",
-      "previous": "coding",
-      "current": "vision",
-      "desc_now": "Evoflux is an open-source, local-first workspace where AI agents build software, conduct deep research, automate browser tasks, and collaborate in parallel. Connect any model, keep control of your workspace and data, and take complex work from idea to completion—all in one place.",
-      "desc_prev": "Evoflux is an open-source, local-first workspace where AI agents build software, conduct deep research, automate browser tasks, and collaborate in parallel. Connect any model, keep control of your workspace and data, and take complex work from idea to completion—all in one place."
+      "full_name": "kangtsang/dsh-worktree-space",
+      "previous": "tool",
+      "current": "resource",
+      "desc_now": "Worktree Space：将一个包含一个或多个 Git 仓库的工作区任务放进独立的任务空间目录——参与的每个仓库使用同一个任务分支各开一个 worktree；空间自动注册为 DSH 工作区，会话直接在其中开工，多个任务并行推进、互不干扰。收尾时可合并回各仓库当前分支、移除 worktree，并把 Git 未跟踪的文件归档到指定目录；结束任务时可选把未处理的提交和合并冲突交给 agent 处理。",
+      "desc_prev": "dsh-worktree-space is a DSH plugin that creates isolated multi-repo workspaces for AI agents using Git worktrees. Each task gets its own workspace containing separate worktrees for every repository, enabling parallel agents to work without file conflicts, context pollution, or tangled commits."
     },
     {
-      "full_name": "jaychang1989/dsh-webchat",
-      "previous": "web-ui",
-      "current": "coding",
-      "desc_now": "Opens the official chat.deepseek.com web app inside DeepSeek Harness: one sidebar entry renders the real page in the center column through the desktop shell's native browser guest, and keeps you signed in across restarts. No chat UI, no agent tools, no runtime dependencies.",
-      "desc_prev": "Opens the official chat.deepseek.com web app inside DeepSeek Harness: one sidebar entry renders the real page in the center column, through the same native browser guest the built-in side-card browser uses. No chat UI, no agent tools, no runtime dependencies."
+      "full_name": "oliblue-evan/dsh-cli-inventory",
+      "previous": "tool",
+      "current": "resource",
+      "desc_now": "DSH 环境与能力：在「设置」里列出这个 Agent 能操作什么 —— 工具、技能、MCP，以及你自己安装的命令行工具与运行时；只读、容错，系统目录不列出",
+      "desc_prev": "DSH 环境与 CLI：在「设置」里列出这台机器装了哪些命令行工具、版本与路径；只读，仅对内置白名单执行以取版本"
     }
   ]
 }
