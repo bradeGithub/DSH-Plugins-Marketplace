@@ -1,62 +1,13 @@
 {
-  "generated_at": "2026-09-28T20:34:41.306Z",
-  "count": 8,
+  "generated_at": "2026-09-29T01:42:42.547Z",
+  "count": 1,
   "items": [
     {
-      "full_name": "SiriLee/dsh-rewind",
-      "previous": "memory",
-      "current": "tool",
-      "desc_now": "DSH 插件：便捷无感的同窗口内对话回退，从不新建分支；自带轻量工作区备份，可一并还原文件（Claude Code /rewind 语义）。 ·  DSH plugin: effortless in-window conversation rewind — never forking a new session; ships a lightweight workspace backup that restores files together with the rewind (Claude Code /rewind semantics).",
-      "desc_prev": "DSH 插件：便捷无感的同窗口内对话回退，从不新建分支；自带轻量工作区备份，可一并还原文件（Claude Code /rewind 语义）。 ·  DSH plugin: effortless in-window conversation rewind — never forking a new session; ships a lightweight workspace backup that restores files together with the rewind (Claude Code /rewind semantics)."
-    },
-    {
-      "full_name": "OMSociety/dsh-kimi-ppt",
-      "previous": "coding",
-      "current": "other",
-      "desc_now": "DSH 插件：内含 kimi-ppt 技能。创建 / 编辑 / 复刻 / 导出 PPT，DSH 内纯本地导出",
-      "desc_prev": "基于 open-kimi-ppt 技能开发：创建 / 编辑 / 复刻 / 导出 PPT"
-    },
-    {
-      "full_name": "Ln1m/dsh-vk-suite",
-      "previous": "coding",
-      "current": "web-ui",
-      "desc_now": "三栏 layout 框架（契约 + 骨架两个包）：左栏 Tab 宿主、右栏 Tab 宿主与槽位注册 API；功能插件各自独立成仓",
-      "desc_prev": "Three-column layout suite for DSH: contract + skeleton + files / composer / viewer / settings / terminal / cmdstrip (8 packages) · 三栏 layout 生态：契约 + 骨架 + 8 个功能包"
-    },
-    {
-      "full_name": "liuhange789/data-asset-inspector",
-      "previous": "tool",
-      "current": "web-ui",
-      "desc_now": "Data Asset Inspector Plugin Suite - full-chain data asset registration toolkit for DeepSeek Harness (DSH)",
-      "desc_prev": "Data Asset Inspector Plugin Suite - full-chain data asset registration toolkit for DeepSeek Harness (DSH)"
-    },
-    {
-      "full_name": "bai111111/dsh-pet-luotianyi",
-      "previous": "conversation",
-      "current": "model",
-      "desc_now": "洛天依桌宠：住在 DSH 里的虚拟歌姬。可拖动可互动，台词支持预设/AI 两种模式，内置 token 用量与费用统计栏，支持换图 + AI 自动抠图与预览微调。",
-      "desc_prev": "洛天依桌宠：住在 DSH 里的虚拟歌姬桌宠，可拖动、可互动（抚摸/喂食/睡觉/聊天），预设动作 + 接大模型的 AI 聊天。"
-    },
-    {
-      "full_name": "MerkurevSergei/dsh-notion-oauth-ui",
-      "previous": "web-ui",
-      "current": "coding",
-      "desc_now": "Connect Notion from the GUI with OAuth 2.0 + PKCE — official Notion MCP. No token, no terminal — just the Login button.",
-      "desc_prev": "Notion integration for DeepSeek Harness via the official Notion MCP (OAuth 2.0 + PKCE) with a GUI login page and a CLI `dsh notion login` fallback."
-    },
-    {
-      "full_name": "geokkjer/dsh-selfup",
+      "full_name": "MovieMaker93/dsh-plugin-safe-upgrade",
       "previous": "other",
-      "current": "tool",
-      "desc_now": "Self-update and deployment tools for DeepSeek Harness — status, update, install, and systemd management as an installable plugin bundle.",
-      "desc_prev": null
-    },
-    {
-      "full_name": "yuhhhong/dsh-skill-status",
-      "previous": "conversation",
-      "current": "web-ui",
-      "desc_now": "DeepSeek Harness（DSH）的会话技能状态插件。在会话标题栏显示已确认加载的技能数量，点击「技能」打开右侧面板，查看完整正文是否仍在当前主助手上下文中，以及各次加载的正文版本与来源。",
-      "desc_prev": "dsh插件，用于显示当前会话skill的状态"
+      "current": "resource",
+      "desc_now": "Unofficial community plugin for DeepSeek Harness (dsh): safe config history, guarded upgrades, auto-rollback. Not affiliated with or endorsed by DeepSeek.",
+      "desc_prev": "Safe config history, guarded upgrades and automatic rollback for DeepSeek Harness (dsh)"
     }
   ]
 }
