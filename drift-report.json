@@ -1,27 +1,20 @@
 {
-  "generated_at": "2026-09-30T04:58:41.545Z",
-  "count": 3,
+  "generated_at": "2026-09-30T11:36:49.503Z",
+  "count": 2,
   "items": [
     {
-      "full_name": "WSK-build/DSHBox",
+      "full_name": "Exagone313/dsh-podman",
+      "previous": "tool",
+      "current": "web-ui",
+      "desc_now": "Podman-backed execution for DeepSeek Harness (dsh)",
+      "desc_prev": "Podman-backed execution for DeepSeek Harness (dsh)"
+    },
+    {
+      "full_name": "sknagato/dsh-plugin-fc-emulator",
       "previous": "agent",
-      "current": "coding",
-      "desc_now": "DSHBox —  Run DeepSeek Harness locally on Android phones and tablets. It integrates and coordinates DSH, PRoot, WebView, Debian and Node.js, together with a terminal, a file manager and other tools, into a personal AI workbench. No root access, and no separate Termux installation.",
-      "desc_prev": "DSHBox — Run DeepSeek Harness locally on Android phones and tablets. One APK with Debian, Node.js, DSH, and WebView — no root or Termux required. 一款在安卓手机和平板上本机运行完整 DSH的app —DSHBox。"
-    },
-    {
-      "full_name": "americanjeff/modelspoke",
-      "previous": "other",
-      "current": "tool",
-      "desc_now": "Configure local models and providers with auto-discovery of reasoning effort, image input and context size. · 配置本地模型与 Provider，自动发现推理强度、图像输入与上下文大小。",
-      "desc_prev": "Local OpenAI-compatible model-server discovery + tiered reasoning-metadata resolution for DeepSeek Harness (dsh)."
-    },
-    {
-      "full_name": "wzqvip/dsh-app",
-      "previous": "web-ui",
-      "current": "tool",
-      "desc_now": "效率导向的 DeepSeek Harness 增强：不打开浏览器也能秒回 agent 提问、随时看到进度。桌宠为交互模块。Productivity-first enhancement for DeepSeek Harness.",
-      "desc_prev": "效率导向的 DeepSeek Harness 增强：不打开浏览器也能秒回 agent 提问、随时看到进度。桌宠与 galgame 仅为可选交互模块。Productivity-first enhancement for DeepSeek Harness."
+      "current": "other",
+      "desc_now": "dsh fc/nes模拟器",
+      "desc_prev": "等 Agent 出结果时玩小霸王！ DSH  FC/NES 模拟器插件"
     }
   ]
 }
