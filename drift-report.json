@@ -1,34 +1,41 @@
 {
-  "generated_at": "2026-10-01T11:20:41.687Z",
-  "count": 4,
+  "generated_at": "2026-10-01T19:39:20.220Z",
+  "count": 5,
   "items": [
     {
-      "full_name": "lpeixin/dsh-qualityforge",
-      "previous": "agent",
-      "current": "coding",
-      "desc_now": "QualityForge is an enterprise-grade DeepSeek Harness QA plugin that automates systematic end-to-end testing and delivers P0–P3 severity-based, actionable reports and quality gates to help developers identify issues and prioritize fixes. QualityForge 是一个面向企业级项目的 DeepSeek Harness QA 插件，自动执行系统性端到端测试，并通过 P0–P3 严重度分级、可勾选的测试报告与质量门禁，帮助开发者快速识别问题并确定修复优先级。",
-      "desc_prev": "Enterprise-grade QA orchestration for DSH — strategy-as-code quality gates, end-to-end test automation, and audit-ready reporting in one plugin."
-    },
-    {
-      "full_name": "nanami-0713/dsh-notifier",
-      "previous": "notify",
+      "full_name": "ding112/MoneyPal",
+      "previous": "tool",
       "current": "other",
-      "desc_now": "DSH plugin: Display a pop-up when the user needs to make a decision, web toast.",
-      "desc_prev": "DSH 插件：任务结束 / 需要用户决策时弹窗提醒（web toast + 桌面通知），类似 Codex / Claude Code 体验"
+      "desc_now": "让你的 AI 助手真正会记账。",
+      "desc_prev": "面向 DSH 的个人记账插件，基于结构化的beancount账本工具"
     },
     {
-      "full_name": "ONEOne-1v1/dsh-github-upload",
-      "previous": "other",
+      "full_name": "WTStarMark/dsh-myskin",
+      "previous": "coding",
       "current": "web-ui",
-      "desc_now": "给 DeepSeek Harness 用的动态 Cordis 插件：在界面右下角加一个按钮，把本地项目一键推送到 GitHub —— 绑定账号、选/建仓库、挑要上传的文件、改仓库公开或私密，全程点鼠标，不消耗模型 Token。",
-      "desc_prev": null
+      "desc_now": "DSH 通用皮肤框架：可视化自定义 + 实时预览 + 「皮肤管理」，可以随心设计你的专属皮肤，并通过分发皮肤包和你的小伙伴们分享",
+      "desc_prev": "DSH 皮肤插件：可视化自定义 + 实时预览 + 「皮肤管理」设置页。 非侵入式：不改 DSH 源码 / 配置、不改 DSH 进程；皮肤是完全可逆的覆盖层。  "
     },
     {
-      "full_name": "121212165/dsh-plugin-transcript",
-      "previous": "other",
-      "current": "tool",
-      "desc_now": "dsh plugin: archives every session turn to monthly JSONL sidecars and exports Markdown - the transcript layer other plugins search, render and push (/transcript /transcript-export)",
-      "desc_prev": "DeepSeek Harness (dsh) plugin"
+      "full_name": "aitcmhk-web/DSH-bot",
+      "previous": "notify",
+      "current": "memory",
+      "desc_now": "通过 TG/微信实现离家办公：发布任务、语音聊天、切换模型、升级重启、自动记忆...Telegram / WeChat bridge plugin for DeepSeek Harness (DSH): bind your bot to a DSH workspace in one command, with handoff continuity between sessions.",
+      "desc_prev": "Telegram / WeChat bridge plugin for DeepSeek Harness (DSH): bind your bot to a DSH workspace in one command, with handoff continuity between sessions."
+    },
+    {
+      "full_name": "JoblessJoe/dsh-vitals",
+      "previous": "web-ui",
+      "current": "memory",
+      "desc_now": "Live CPU, memory, temperature and GPU load tab for the DeepSeek Harness (dsh) web GUI. btop-style, zero dependencies.",
+      "desc_prev": "Live CPU, memory, temperature and GPU load tab for the DeepSeek Harness (dsh) web GUI. btop-style, zero dependencies."
+    },
+    {
+      "full_name": "Gty2408/dsh-plugin-publish",
+      "previous": "resource",
+      "current": "other",
+      "desc_now": "Publish or update a DSH plugin on GitHub in one command: validates the manifest and bundle identifiers, creates or reuses the repo, uploads the tree as one commit, honours .gitignore, and sets the required topic without dropping yours.",
+      "desc_prev": "Publish a DSH plugin to GitHub in one command: validates the manifest and bundle identifiers, creates the repo, uploads the tree, sets the required topic, and writes the plugin-market catalog entry."
     }
   ]
 }
