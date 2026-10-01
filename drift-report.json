@@ -1,13 +1,34 @@
 {
-  "generated_at": "2026-10-01T05:19:51.583Z",
-  "count": 1,
+  "generated_at": "2026-10-01T11:20:41.687Z",
+  "count": 4,
   "items": [
     {
-      "full_name": "gluztm/DSHGuard",
+      "full_name": "lpeixin/dsh-qualityforge",
+      "previous": "agent",
+      "current": "coding",
+      "desc_now": "QualityForge is an enterprise-grade DeepSeek Harness QA plugin that automates systematic end-to-end testing and delivers P0–P3 severity-based, actionable reports and quality gates to help developers identify issues and prioritize fixes. QualityForge 是一个面向企业级项目的 DeepSeek Harness QA 插件，自动执行系统性端到端测试，并通过 P0–P3 严重度分级、可勾选的测试报告与质量门禁，帮助开发者快速识别问题并确定修复优先级。",
+      "desc_prev": "Enterprise-grade QA orchestration for DSH — strategy-as-code quality gates, end-to-end test automation, and audit-ready reporting in one plugin."
+    },
+    {
+      "full_name": "nanami-0713/dsh-notifier",
+      "previous": "notify",
+      "current": "other",
+      "desc_now": "DSH plugin: Display a pop-up when the user needs to make a decision, web toast.",
+      "desc_prev": "DSH 插件：任务结束 / 需要用户决策时弹窗提醒（web toast + 桌面通知），类似 Codex / Claude Code 体验"
+    },
+    {
+      "full_name": "ONEOne-1v1/dsh-github-upload",
+      "previous": "other",
+      "current": "web-ui",
+      "desc_now": "给 DeepSeek Harness 用的动态 Cordis 插件：在界面右下角加一个按钮，把本地项目一键推送到 GitHub —— 绑定账号、选/建仓库、挑要上传的文件、改仓库公开或私密，全程点鼠标，不消耗模型 Token。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "121212165/dsh-plugin-transcript",
       "previous": "other",
       "current": "tool",
-      "desc_now": "DSH 守护壳：DeepSeek Harness 的一键启动与救援工具——改动前自动存档、出事整组回滚、本地管理插件、诊断日志导出；Web 引擎与官方桌面版双轨管理",
-      "desc_prev": "DSH ???:DeepSeek Harness ????????????????????????(Web ?? / ?????)"
+      "desc_now": "dsh plugin: archives every session turn to monthly JSONL sidecars and exports Markdown - the transcript layer other plugins search, render and push (/transcript /transcript-export)",
+      "desc_prev": "DeepSeek Harness (dsh) plugin"
     }
   ]
 }
