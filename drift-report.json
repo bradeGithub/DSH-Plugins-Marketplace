@@ -1,13 +1,132 @@
 {
-  "generated_at": "2026-10-02T10:53:59.495Z",
-  "count": 1,
+  "generated_at": "2026-10-02T19:18:57.407Z",
+  "count": 18,
   "items": [
     {
-      "full_name": "lnyuqian/dsh-quick-prompts",
-      "previous": "resource",
+      "full_name": "starsstreaming/beautiCode",
+      "previous": "coding",
+      "current": "web-ui",
+      "desc_now": "一个工具，给所有 Agent 客户端换上动态皮肤。，适用于 Codex、Cursor、豆包、Workbuddy、DSH desktop。",
+      "desc_prev": "面向 AI 编程客户端的动态、可响应环境——视频背景、氛围场景与主题，适用于 Codex、Cursor、豆包、Workbuddy、DSH desktop。"
+    },
+    {
+      "full_name": "T-Auto/dsh-ecosystem-spec",
+      "previous": "other",
+      "current": "resource",
+      "desc_now": "DSH Community Consensus & Implementation Specifications / DSH 社区共识与实施规范",
+      "desc_prev": "deepseek-harness Plugin Access and Implementation Standards / deepseek-harness交互生态插件规范与实施标准"
+    },
+    {
+      "full_name": "PerryLink/dsh-talk",
+      "previous": "tool",
+      "current": "web-ui",
+      "desc_now": "Voice-first session loop for DeepSeek Harness: a composer microphone button with browser/local speech-to-text (Web Speech, FunASR, whisper.cpp), a speak tool for text-to-speech replies (browser, edge-tts, piper), event announcements with mute, and speak-to-interrupt.",
+      "desc_prev": "Voice-first session loop for DeepSeek Harness: a composer microphone button with browser/local speech-to-text (Web Speech, FunASR, whisper.cpp), a speak tool for text-to-speech replies (browser, edge-tts, piper), event announcements with mute, and speak-to-interrupt."
+    },
+    {
+      "full_name": "dphmoblie/deepseek-harness-android",
+      "previous": "coding",
       "current": "tool",
-      "desc_now": "DSH 插件（Web 版 / 桌面版通用）：输入框上方常驻快捷条 + 闪电笔弹层，点选预设提示词追加到原有内容之后（不清空），可按条开启自动发送、可设序号排序，支持 MD 导入导出；数据存全局 ~/.dsh/quick-prompts.json 永不丢失",
-      "desc_prev": "DSH Web 插件：输入框快捷输入（闪电笔），权限切换旁一键选预设提示词直接发送，提示词可增删改并持久化到项目根目录"
+      "desc_now": "dsh安卓版：集成 DeepSeek Harness、Ubuntu 运行环境、插件与文件管理，以及用户授权的 Shizuku 和无障碍自动化。",
+      "desc_prev": "该程序是一个独立的 Capacitor Android 应用，用于管理本机 DeepSeek Harness Ubuntu 用户空间。它提供运行时安装与重置、Ubuntu 终端、可选的 Shizuku 设备 Shell 访问、设置，以及仅限回环地址的内嵌 Harness Web 界面。"
+    },
+    {
+      "full_name": "Wenaixi/dsh-ponytail",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "DietrichGebert/ponytail 的 DSH 完整移植：常驻懒人 senior 模式与七阶梯子（YAGNI 到最小实现），6 个中文原生技能（本体、评审、审计、债务、收益、帮助），零 tool 注册",
+      "desc_prev": "DSH 完整移植版 DietrichGebert/ponytail — 懒惰 senior 模式，hook注入"
+    },
+    {
+      "full_name": "STARDUSTLC666/dsh-hyperframes",
+      "previous": "tool",
+      "current": "other",
+      "desc_now": "把 HyperFrames 的 HTML 视频创作技能接入 DSH。",
+      "desc_prev": "DSH 视频创作技能插件：注册 HyperFrames by HeyGen 官方 21 个技能（HTML 即视频：动画/音频/关键帧/字幕/幻灯片/口播重剪/多路转视频/CLI/Studio），安装即用。"
+    },
+    {
+      "full_name": "STARDUSTLC666/dsh-sql",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "连接 SQLite、MySQL 或 PostgreSQL，查询数据并检查数据库结构。",
+      "desc_prev": "DSH 数据库插件：SQLite / MySQL / PostgreSQL 查询与管理，只读模式、写操作审批与流式行数钳制。"
+    },
+    {
+      "full_name": "STARDUSTLC666/dsh-ppt",
+      "previous": "document",
+      "current": "tool",
+      "desc_now": "把材料制作成 HTML 放映、可编辑 PPTX 和可继续修改的工程文件。",
+      "desc_prev": "DSH 演示文稿插件：Markdown 生成网页放映与可编辑 PPTX，长表格自动分页，内置 5 套主题、备注与转场动画。"
+    },
+    {
+      "full_name": "STARDUSTLC666/dsh-remotion",
+      "previous": "coding",
+      "current": "other",
+      "desc_now": "把 Remotion 的 React 视频创作技能接入 DSH。",
+      "desc_prev": "DSH 视频创作技能插件：注册 Remotion 官方 12 个技能（React 编程式视频：动画/音频/字幕/3D/地图/图表），安装即用。"
+    },
+    {
+      "full_name": "STARDUSTLC666/dsh-ffmpeg",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "用自然语言调用 FFmpeg，处理已有音视频文件。",
+      "desc_prev": "DSH 视频处理插件：ffmpeg 探测、裁剪、拼接、压制、字幕、GIF、抽帧与调整，走官方 subprocess 服务，零运行时依赖。"
+    },
+    {
+      "full_name": "STARDUSTLC666/dsh-docker",
+      "previous": "coding",
+      "current": "web-ui",
+      "desc_now": "在 DSH 中查看和管理本机 Docker 容器与镜像。",
+      "desc_prev": "DSH 容器与镜像管理插件：走官方 subprocess 服务，argv 无 shell 注入，exec 与破坏性操作默认审批。"
+    },
+    {
+      "full_name": "feverZHONG/dsh-liya-archives",
+      "previous": "other",
+      "current": "web-ui",
+      "desc_now": "莉娅 DSH 归档会话抽屉 —— 侧边栏「已归档 (n)」入口，按工作区分组，一键恢复 / 复制为新会话 / 移回侧边栏。抄改自 chou109/dsh-archives（MIT）。适配 DSH 0.2.0-rc.2。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "feverZHONG/dsh-puzzle",
+      "previous": "other",
+      "current": "web-ui",
+      "desc_now": "莉娅 DSH 拼图插件 —— 滑块拼图小游戏：对话面板 / 设置页 / 图库管理，agent 可发话、换图、看进度（puzzle_* 工具）。适配 DSH 0.2.0-rc.2。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "feverZHONG/dsh-chess-xq",
+      "previous": "other",
+      "current": "web-ui",
+      "desc_now": "莉娅 DSH 象棋插件 —— 天界象棋：中国象棋人机对战，AI 执黑，可悔棋 / 存档 / 调难度，带棋局状态与台词工具（chess_*）。适配 DSH 0.2.0-rc.2。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "feverZHONG/dsh-liya-workspace",
+      "previous": "other",
+      "current": "memory",
+      "desc_now": "莉娅 DSH 工作区插件 —— 在设置里展示档案速览（FILE-MAP 摘要 · memory/records/diary 统计 · 最近日记），工作区根目录可配置、即时生效。适配 DSH 0.2.0-rc.2。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "feverZHONG/dsh-dist-manager",
+      "previous": "other",
+      "current": "resource",
+      "desc_now": "莉娅 DSH 分发目录管理插件 —— 自动归档旧版本插件、保留最新版，附 WebUI 管理页。适配 DSH 0.2.0-rc.2。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "STARDUSTLC666/dsh-suite",
+      "previous": "notify",
+      "current": "tool",
+      "desc_now": "一次安装 18 个独立 DSH 插件，并统一组合它们的默认配置。",
+      "desc_prev": "DSH 插件全家桶：18 个组件覆盖邮件、日历、媒体创作、开发运维、消息通知与极简 PTC，一条命令安装。"
+    },
+    {
+      "full_name": "Nagiko0739/dsh-turn-eraser",
+      "previous": "conversation",
+      "current": "model",
+      "desc_now": "一款用于DeepSeek Harness Desktop的上下文管理插件，可删除单轮/多轮对话，可追溯，npm包同名",
+      "desc_prev": "DSH plugin: delete conversation turns (tombstone-based, traceable)"
     }
   ]
 }
