@@ -1,0 +1,34 @@
+{
+  "generated_at": "2026-10-03T10:13:41.424Z",
+  "count": 4,
+  "items": [
+    {
+      "full_name": "PerryLink/dsh-talk",
+      "previous": "web-ui",
+      "current": "tool",
+      "desc_now": "Voice-first session loop for DeepSeek Harness: a composer microphone button with browser/local speech-to-text (Web Speech, FunASR, whisper.cpp), a speak tool for text-to-speech replies (browser, edge-tts, piper), event announcements with mute, and speak-to-interrupt.",
+      "desc_prev": "Voice-first session loop for DeepSeek Harness: a composer microphone button with browser/local speech-to-text (Web Speech, FunASR, whisper.cpp), a speak tool for text-to-speech replies (browser, edge-tts, piper), event announcements with mute, and speak-to-interrupt."
+    },
+    {
+      "full_name": "STARDUSTLC666/dsh-cite",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "DeepSeek Harness 文献工作台：DOI/BibTeX 批量导入、去重、Crossref 补全与引文/原始来源备份，支持中文与 English。",
+      "desc_prev": "查询 DOI 和文献元数据，生成参考文献与 BibTeX。"
+    },
+    {
+      "full_name": "liancha22/dsh-puzzle-mode",
+      "previous": "conversation",
+      "current": "web-ui",
+      "desc_now": "DSH 插件｜拼图模式：把项目拆成主文档 + 若干模块文档，AI 主动提问把不确定项变成已定项，用五维算项目健康性。一个会话可同时绑多个项目，面板有绑定切换条；项目分小 / 中 / 大三档，条目上限随档位放宽或收紧；主文档第五节 `## 工作流` 是标准化流水线（一条 = 一个 ### 名字块 + 有序步骤），命中触发词自动注入。文档格式 v7；与 dsh-infinite-gen-5 同装时按契约共存（段序可协商、六条分工条款、verify:cross 双向核对）。",
+      "desc_prev": "DSH 插件｜拼图模式：一个会话只绑一个拼图项目（主文档 + 若干模块文档），AI 主动提问把不确定项变成已定项，用五维算项目健康性；主文档第五节 `## 工作流` 是标准化流水线（一条 = 一个 ### 名字块 + 有序步骤）。文档格式 v6。"
+    },
+    {
+      "full_name": "Sculptor815/scrna-seq-workbench",
+      "previous": "agent",
+      "current": "tool",
+      "desc_now": "One plugin, six agent skills for guided single-cell RNA-seq analysis in Codex, Claude Code, and DeepSeek Harness. And one bechmark for evaluating agent performance on scRNA-seq data analysis .",
+      "desc_prev": "Five agent skills for guided single-cell RNA-seq analysis in Codex, Claude Code, and DeepSeek Harness."
+    }
+  ]
+}
