@@ -1,20 +1,83 @@
 {
-  "generated_at": "2026-10-04T11:03:47.335Z",
-  "count": 2,
+  "generated_at": "2026-10-04T18:15:28.512Z",
+  "count": 11,
   "items": [
     {
-      "full_name": "flizzywine/dsh-tavern",
-      "previous": "tool",
-      "current": "web-ui",
-      "desc_now": "基于DSH的Agent酒馆。类酒馆文字游戏Agent。兼容SillyTavern生态，人物卡直接导入就能玩。更快、更稳、更鲜活。所有模型都能用。手机也能玩。",
-      "desc_prev": "基于DSH的Agent酒馆。兼容SillyTavern生态，人物卡直接导入就能玩。更快、更稳、更鲜活。所有模型都能用。手机也能玩。"
+      "full_name": "bychv/dsh-preset-enhance",
+      "previous": "other",
+      "current": "coding",
+      "desc_now": "SillyTavern preset mode, macro engine and editor for DeepSeek Harness",
+      "desc_prev": "SillyTavern preset mode, macro engine and editor for DeepSeek Harness"
     },
     {
-      "full_name": "HubaKing/dsh-community-plugins",
-      "previous": "agent",
-      "current": "tool",
-      "desc_now": "DeepSeek Harness (dsh) plugin pack: one skill + two audit tools. dsh_plugin_audit offline-checks installed plugins against this machine's dsh build; dsh_plugin_inspect judges a tarball before install. Adapted to DSH Desktop. | DSH 社区插件支持包：一个 skill + 两个审计工具（离线审计已装插件、安装前审计 tarball）。全面适配桌面版。",
-      "desc_prev": "DeepSeek Harness (dsh) plugin: registers a global skill that teaches agents how to discover, evaluate and install community plugins from the GitHub dsh-plugin topic, dshmarket and npm. | DSH 社区插件生态指南 skill：让 agent 学会发现、评估、安装社区插件。"
+      "full_name": "rezon-aki/dsh-streamfold",
+      "previous": "tool",
+      "current": "conversation",
+      "desc_now": "流式折叠：一个更好的 DSH 会话窗口——运行中自动展开最新思考小窗，其余过程行折成短摘要；跑完自动折起、穿插正文保留；收起/展开按 3 行一组错峰；跑完自动回到提问处。零依赖、零构建。",
+      "desc_prev": "流式折叠：一个更好的 DSH 会话窗口——最新思考小窗自动展开、旧窗与工具调用跑完自动折起；思考小窗底边与正文写头带火星特效。零依赖、零构建。"
+    },
+    {
+      "full_name": "lemonhall/asd-ste100-skill-zh",
+      "previous": "document",
+      "current": "coding",
+      "desc_now": "受控中文技术写作技能：ASD-STE100 的中文对应物，含 stdlib-only 确定性 linter。Controlled Chinese technical writing skill for agents.",
+      "desc_prev": "受控中文技术写作技能：ASD-STE100 的中文对应物，含 stdlib-only 确定性 linter。Controlled Chinese technical writing skill for agents."
+    },
+    {
+      "full_name": "LJH-snow/dsh-tool-gitlab",
+      "previous": "tool",
+      "current": "resource",
+      "desc_now": null,
+      "desc_prev": null
+    },
+    {
+      "full_name": "LJH-snow/dsh-tool-github",
+      "previous": "tool",
+      "current": "resource",
+      "desc_now": null,
+      "desc_prev": null
+    },
+    {
+      "full_name": "LJH-snow/dsh-tool-sql",
+      "previous": "tool",
+      "current": "resource",
+      "desc_now": null,
+      "desc_prev": null
+    },
+    {
+      "full_name": "LJH-snow/dsh-tool-sentry",
+      "previous": "tool",
+      "current": "resource",
+      "desc_now": null,
+      "desc_prev": null
+    },
+    {
+      "full_name": "LJH-snow/dsh-tool-jira",
+      "previous": "tool",
+      "current": "resource",
+      "desc_now": null,
+      "desc_prev": null
+    },
+    {
+      "full_name": "LJH-snow/dsh-tool-linear",
+      "previous": "tool",
+      "current": "resource",
+      "desc_now": null,
+      "desc_prev": null
+    },
+    {
+      "full_name": "LJH-snow/dsh-tool-kubernetes",
+      "previous": "tool",
+      "current": "resource",
+      "desc_now": "Kubernetes tools for DeepSeek Harness: cluster, namespace, workload, pod, log, rollout, and manifest operations",
+      "desc_prev": "Kubernetes tools for DeepSeek Harness: cluster, namespace, workload, pod, log, rollout, and manifest operations"
+    },
+    {
+      "full_name": "LJH-snow/dsh-tool-slack",
+      "previous": "tool",
+      "current": "resource",
+      "desc_now": "Slack tools for DeepSeek Harness",
+      "desc_prev": "Slack tools for DeepSeek Harness"
     }
   ]
 }
