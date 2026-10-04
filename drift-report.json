@@ -1,83 +1,13 @@
 {
-  "generated_at": "2026-10-04T18:15:28.512Z",
-  "count": 11,
+  "generated_at": "2026-10-04T23:06:04.870Z",
+  "count": 1,
   "items": [
     {
-      "full_name": "bychv/dsh-preset-enhance",
-      "previous": "other",
-      "current": "coding",
-      "desc_now": "SillyTavern preset mode, macro engine and editor for DeepSeek Harness",
-      "desc_prev": "SillyTavern preset mode, macro engine and editor for DeepSeek Harness"
-    },
-    {
-      "full_name": "rezon-aki/dsh-streamfold",
-      "previous": "tool",
-      "current": "conversation",
-      "desc_now": "流式折叠：一个更好的 DSH 会话窗口——运行中自动展开最新思考小窗，其余过程行折成短摘要；跑完自动折起、穿插正文保留；收起/展开按 3 行一组错峰；跑完自动回到提问处。零依赖、零构建。",
-      "desc_prev": "流式折叠：一个更好的 DSH 会话窗口——最新思考小窗自动展开、旧窗与工具调用跑完自动折起；思考小窗底边与正文写头带火星特效。零依赖、零构建。"
-    },
-    {
-      "full_name": "lemonhall/asd-ste100-skill-zh",
-      "previous": "document",
-      "current": "coding",
-      "desc_now": "受控中文技术写作技能：ASD-STE100 的中文对应物，含 stdlib-only 确定性 linter。Controlled Chinese technical writing skill for agents.",
-      "desc_prev": "受控中文技术写作技能：ASD-STE100 的中文对应物，含 stdlib-only 确定性 linter。Controlled Chinese technical writing skill for agents."
-    },
-    {
-      "full_name": "LJH-snow/dsh-tool-gitlab",
-      "previous": "tool",
-      "current": "resource",
-      "desc_now": null,
-      "desc_prev": null
-    },
-    {
-      "full_name": "LJH-snow/dsh-tool-github",
-      "previous": "tool",
-      "current": "resource",
-      "desc_now": null,
-      "desc_prev": null
-    },
-    {
-      "full_name": "LJH-snow/dsh-tool-sql",
-      "previous": "tool",
-      "current": "resource",
-      "desc_now": null,
-      "desc_prev": null
-    },
-    {
-      "full_name": "LJH-snow/dsh-tool-sentry",
-      "previous": "tool",
-      "current": "resource",
-      "desc_now": null,
-      "desc_prev": null
-    },
-    {
-      "full_name": "LJH-snow/dsh-tool-jira",
-      "previous": "tool",
-      "current": "resource",
-      "desc_now": null,
-      "desc_prev": null
-    },
-    {
-      "full_name": "LJH-snow/dsh-tool-linear",
-      "previous": "tool",
-      "current": "resource",
-      "desc_now": null,
-      "desc_prev": null
-    },
-    {
-      "full_name": "LJH-snow/dsh-tool-kubernetes",
-      "previous": "tool",
-      "current": "resource",
-      "desc_now": "Kubernetes tools for DeepSeek Harness: cluster, namespace, workload, pod, log, rollout, and manifest operations",
-      "desc_prev": "Kubernetes tools for DeepSeek Harness: cluster, namespace, workload, pod, log, rollout, and manifest operations"
-    },
-    {
-      "full_name": "LJH-snow/dsh-tool-slack",
-      "previous": "tool",
-      "current": "resource",
-      "desc_now": "Slack tools for DeepSeek Harness",
-      "desc_prev": "Slack tools for DeepSeek Harness"
+      "full_name": "frederico-kluser/dsh-orquestrator",
+      "previous": "agent",
+      "current": "model",
+      "desc_now": "DeepSeek Harness plugin: on task send, pick the model your subagents run on. Enforced in code on every child DSH starts, workflow agents included: the model, a reasoning-effort ceiling and an output-token cap.",
+      "desc_prev": "DeepSeek Harness plugin: on task send, pick a different model for subagents and an independent reviewer that validates each subagent's work before it reaches the main agent"
     }
   ]
 }
