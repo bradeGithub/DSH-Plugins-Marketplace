@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-10-03T23:23:29.298Z",
+  "generated_at": "2026-10-04T05:24:31.111Z",
   "counts": {
-    "bundle-plugin": 6135,
-    "multi-plugin": 542,
+    "bundle-plugin": 6169,
+    "multi-plugin": 544,
     "cordis-plugin": 8001,
-    "pkg-plain": 1298,
-    "manual": 890,
+    "pkg-plain": 1300,
+    "manual": 894,
     "script": 280,
     "empty": 32,
-    "skill": 416,
+    "skill": 418,
     "gone": 62,
     "agent-preset": 63,
     "unknown": 55
@@ -1464,6 +1464,10 @@
     },
     {
       "full_name": "483218131/dsh-composer-collapse",
+      "verdict": "bundle-plugin"
+    },
+    {
+      "full_name": "49zr664rb8-hue/dsh-codex-effort",
       "verdict": "bundle-plugin"
     },
     {
@@ -5184,6 +5188,10 @@
     },
     {
       "full_name": "AtinyFurina/dsh-memory-triage",
+      "verdict": "bundle-plugin"
+    },
+    {
+      "full_name": "atlas5301/dsh-remote-sessions",
       "verdict": "bundle-plugin"
     },
     {
@@ -11511,11 +11519,19 @@
       "verdict": "bundle-plugin"
     },
     {
+      "full_name": "d0ublecl1ck/dsh-session-watch",
+      "verdict": "bundle-plugin"
+    },
+    {
       "full_name": "d0ublecl1ck/dsh-skill-dollar",
       "verdict": "bundle-plugin"
     },
     {
       "full_name": "d0ublecl1ck/dsh-unarchived-watch",
+      "verdict": "bundle-plugin"
+    },
+    {
+      "full_name": "d0ublecl1ck/dsh-unread-helper",
       "verdict": "bundle-plugin"
     },
     {
@@ -13884,6 +13900,18 @@
     },
     {
       "full_name": "DSH-EAC/dsh-ui-skin-loader",
+      "verdict": "pkg-plain"
+    },
+    {
+      "full_name": "DSH-EAC/EAC-Desktop",
+      "verdict": "manual"
+    },
+    {
+      "full_name": "DSH-EAC/EAC-Pack",
+      "verdict": "multi-plugin"
+    },
+    {
+      "full_name": "DSH-EAC/EAC-skin-loader",
       "verdict": "pkg-plain"
     },
     {
@@ -25879,6 +25907,10 @@
       "verdict": "bundle-plugin"
     },
     {
+      "full_name": "Joker-Principal/dsh-proxy-control",
+      "verdict": "bundle-plugin"
+    },
+    {
       "full_name": "jokerwen666/dsh-bili-taskmaster",
       "verdict": "cordis-plugin"
     },
@@ -28087,6 +28119,10 @@
       "verdict": "skill"
     },
     {
+      "full_name": "kmagwenzi/dsh-ai-suplex",
+      "verdict": "bundle-plugin"
+    },
+    {
       "full_name": "knGear/dsh-AgentTask",
       "verdict": "skill"
     },
@@ -29524,6 +29560,74 @@
     },
     {
       "full_name": "lemoncat7/dsh-web-search",
+      "verdict": "bundle-plugin"
+    },
+    {
+      "full_name": "lemonhall/asd-ste100-skill-zh",
+      "verdict": "skill"
+    },
+    {
+      "full_name": "lemonhall/birefnet-cutout-skill",
+      "verdict": "skill"
+    },
+    {
+      "full_name": "lemonhall/dsh-calendar-dock",
+      "verdict": "bundle-plugin"
+    },
+    {
+      "full_name": "lemonhall/dsh-calorie-dock",
+      "verdict": "bundle-plugin"
+    },
+    {
+      "full_name": "lemonhall/dsh-dock-batch",
+      "verdict": "manual"
+    },
+    {
+      "full_name": "lemonhall/dsh-finance-dock",
+      "verdict": "bundle-plugin"
+    },
+    {
+      "full_name": "lemonhall/dsh-irc-dock",
+      "verdict": "bundle-plugin"
+    },
+    {
+      "full_name": "lemonhall/dsh-ledger-dock",
+      "verdict": "bundle-plugin"
+    },
+    {
+      "full_name": "lemonhall/dsh-lucy-companion",
+      "verdict": "bundle-plugin"
+    },
+    {
+      "full_name": "lemonhall/dsh-media-dock",
+      "verdict": "bundle-plugin"
+    },
+    {
+      "full_name": "lemonhall/dsh-pomodoro-dock",
+      "verdict": "bundle-plugin"
+    },
+    {
+      "full_name": "lemonhall/dsh-qqmail-dock",
+      "verdict": "bundle-plugin"
+    },
+    {
+      "full_name": "lemonhall/dsh-radio-dock",
+      "verdict": "bundle-plugin"
+    },
+    {
+      "full_name": "lemonhall/dsh-rss-dock",
+      "verdict": "bundle-plugin"
+    },
+    {
+      "full_name": "lemonhall/dsh-skin-crt",
+      "verdict": "manual"
+    },
+    {
+      "full_name": "lemonhall/dsh-skin-lucy",
+      "verdict": "manual"
+    },
+    {
+      "full_name": "lemonhall/dsh-tts-reader",
       "verdict": "bundle-plugin"
     },
     {
@@ -31312,6 +31416,10 @@
     },
     {
       "full_name": "liuyangdongdong/dsh-session-rerun",
+      "verdict": "bundle-plugin"
+    },
+    {
+      "full_name": "liuyu-f/dsh-plugin-session-cascade-delete",
       "verdict": "bundle-plugin"
     },
     {
@@ -35312,6 +35420,10 @@
     },
     {
       "full_name": "mikasaxin529/dsh-nightshift",
+      "verdict": "bundle-plugin"
+    },
+    {
+      "full_name": "mikazuhe13-ui/dsh-hook",
       "verdict": "bundle-plugin"
     },
     {
@@ -39535,6 +39647,10 @@
       "verdict": "bundle-plugin"
     },
     {
+      "full_name": "OMSociety/dsh-xiaoai-bridge",
+      "verdict": "bundle-plugin"
+    },
+    {
       "full_name": "OMSociety/kimi-ppt-skill",
       "verdict": "bundle-plugin"
     },
@@ -40125,6 +40241,14 @@
     {
       "full_name": "p2coder/dsh-trace-repeat",
       "verdict": "cordis-plugin"
+    },
+    {
+      "full_name": "p455enger/dsh-web-tray",
+      "verdict": "bundle-plugin"
+    },
+    {
+      "full_name": "p56568833/dsh-plugin-groups",
+      "verdict": "bundle-plugin"
     },
     {
       "full_name": "p83765295-sys/gamelike-plugin-manage",
@@ -41197,6 +41321,10 @@
     {
       "full_name": "piggy00544/dsh-upgrade-kit",
       "verdict": "script"
+    },
+    {
+      "full_name": "piggy00544/dsh-workproof",
+      "verdict": "pkg-plain"
     },
     {
       "full_name": "pilahito/dsh-locale-es",
@@ -49147,6 +49275,14 @@
       "verdict": "pkg-plain"
     },
     {
+      "full_name": "Stmol/dsh-prompt-lib",
+      "verdict": "bundle-plugin"
+    },
+    {
+      "full_name": "Stmol/dsh-rub-cost",
+      "verdict": "bundle-plugin"
+    },
+    {
       "full_name": "stnt04/dsh-msg-index",
       "verdict": "cordis-plugin"
     },
@@ -50608,6 +50744,10 @@
     },
     {
       "full_name": "tcgbp/dock-flash",
+      "verdict": "bundle-plugin"
+    },
+    {
+      "full_name": "tcgbp/dsh-flash-net-mon",
       "verdict": "bundle-plugin"
     },
     {
@@ -58535,6 +58675,10 @@
       "verdict": "skill"
     },
     {
+      "full_name": "UnitySirx/dsh-kp-notes",
+      "verdict": "multi-plugin"
+    },
+    {
       "full_name": "universe-st/dsh-game-material-master",
       "verdict": "bundle-plugin"
     },
@@ -63743,6 +63887,10 @@
       "verdict": "cordis-plugin"
     },
     {
+      "full_name": "Xeraph627/local-lite",
+      "verdict": "bundle-plugin"
+    },
+    {
       "full_name": "xerxescom/dsh-theme-inkstone",
       "verdict": "bundle-plugin"
     },
@@ -63969,6 +64117,10 @@
     {
       "full_name": "xiaochuan7/dsh-opencode-quota",
       "verdict": "manual"
+    },
+    {
+      "full_name": "xiaocxiaohai666/dsh-plugin-selfcheck",
+      "verdict": "bundle-plugin"
     },
     {
       "full_name": "xiaods/k8e",
@@ -66139,6 +66291,10 @@
       "verdict": "cordis-plugin"
     },
     {
+      "full_name": "YE-ZINAN/dsh-quiet",
+      "verdict": "bundle-plugin"
+    },
+    {
       "full_name": "yeastcloud/dsh-anchor",
       "verdict": "bundle-plugin"
     },
@@ -66461,6 +66617,10 @@
     {
       "full_name": "Yijian-quiet/dsh-mol",
       "verdict": "multi-plugin"
+    },
+    {
+      "full_name": "yijiezhong/dsh-output-setting",
+      "verdict": "bundle-plugin"
     },
     {
       "full_name": "yijigao/deepseek-harness-desktop",
@@ -67375,6 +67535,10 @@
       "verdict": "bundle-plugin"
     },
     {
+      "full_name": "yuanstarstar/dsh-maid",
+      "verdict": "bundle-plugin"
+    },
+    {
       "full_name": "YuanTutu/dsh-plugin-water-tracker",
       "verdict": "cordis-plugin"
     },
@@ -67723,6 +67887,10 @@
       "verdict": "cordis-plugin"
     },
     {
+      "full_name": "yunliya-cuter/dsh-explain-assistant",
+      "verdict": "bundle-plugin"
+    },
+    {
       "full_name": "yunliya-cuter/dsh-warm-ui",
       "verdict": "bundle-plugin"
     },
@@ -67744,6 +67912,10 @@
     },
     {
       "full_name": "YunongDai2005/dsh-theone",
+      "verdict": "bundle-plugin"
+    },
+    {
+      "full_name": "YunpengDon/dsh-hitl",
       "verdict": "bundle-plugin"
     },
     {
@@ -67788,6 +67960,10 @@
     },
     {
       "full_name": "YupegLV/dsh-chat-log",
+      "verdict": "bundle-plugin"
+    },
+    {
+      "full_name": "yuqiguang/dsh-nexus",
       "verdict": "bundle-plugin"
     },
     {
