@@ -1,27 +1,55 @@
 {
-  "generated_at": "2026-10-05T14:12:15.243Z",
-  "count": 3,
+  "generated_at": "2026-10-05T22:37:44.078Z",
+  "count": 7,
   "items": [
     {
-      "full_name": "Cristallin2006/ghidra-skill-for-dsh",
-      "previous": "tool",
-      "current": "web-ui",
-      "desc_now": "Ghidra headless daemon (persistent RPC, no JVM cold-start per call) + reverse-engineering skill family for dsh / Claude Code agents: triage → unpack → decompile → pwn → pcap → APK. Built-in circuit breakers against agent failure loops (byte-staring, re-reading the same region), distilled from real CTF postmortems. 面向 Agent 失败模式设计的逆向 skill 家族。",
-      "desc_prev": "定制化dsh (DeepSeek Harness) 逆向 agent skill 家族：Ghidra headless daemon + 分诊/脱壳/静态/漏洞/动态/流量/安卓七场景 | Reverse-engineering agent skills: triage, unpacking, decompile, pwn audit, pcap forensics, APK analysis"
-    },
-    {
-      "full_name": "cyjyyd/dsh-ssh-tui",
-      "previous": "tool",
-      "current": "coding",
-      "desc_now": "DSH Relay — remote-first terminal UI for DeepSeek Harness coding agents. SSH reconnect, Windows/ConPTY, plain ANSI, incremental redraws.",
-      "desc_prev": "SSH-friendly DeepSeek Harness TUI. Plain ANSI, incremental redraws, no browser."
-    },
-    {
-      "full_name": "daftAI2026/PDSH",
+      "full_name": "PerryLink/dsh-background-agents",
       "previous": "web-ui",
-      "current": "vision",
-      "desc_now": "DeepSeek Harness plugin for sidebar masking, display aliases, and local screenshot editing. No session isolation.",
-      "desc_prev": "DSH Private Mode: sidebar title masking, display identity, and managed plugin updates for DeepSeek Harness."
+      "current": "conversation",
+      "desc_now": "RETIRED 2026-10-05 — the official DeepSeek Harness now ships native continuable subagents (subagent with backgroundMode: continuable, plus send_message / interrupt_agent / list_agents / job_*). Use those instead.",
+      "desc_prev": "Interactive long-session background agents for DeepSeek Harness: start a durable continuable child agent, watch its progress in the Web UI sidebar, message it any time, and interrupt it - all through the official subagent seam."
+    },
+    {
+      "full_name": "YangShen-SWE/dsh-plugin-simple-pet",
+      "previous": "model",
+      "current": "web-ui",
+      "desc_now": "A Windows desktop pet for DeepSeek billing and Codex subscription quotas in DSH, with six skins and usage animations.",
+      "desc_prev": "A Windows desktop pet for official DeepSeek API balance, usage, and animated reactions in DSH."
+    },
+    {
+      "full_name": "BOWLUNA/dsh-custom-mode",
+      "previous": "conversation",
+      "current": "coding",
+      "desc_now": "Edit a DeepSeek Harness (dsh) custom mode: system prompt, base mode, and plugin switches.",
+      "desc_prev": "Edit a DeepSeek Harness (dsh) mode's system prompt, base mode, and plugin switches."
+    },
+    {
+      "full_name": "PerryLink/dsh-team-rooms",
+      "previous": "conversation",
+      "current": "agent",
+      "desc_now": "RETIRED 2026-10-05 — the official DeepSeek Harness now ships the Agent Teams subsystem (dsh-experimental-agent-team). Use native Agent Teams, or a better-adopted alternative such as @nanmicoder/dsh-agent-teams.",
+      "desc_prev": "Team rooms for DeepSeek Harness: persistent shared rooms across independent sessions - a message bus, a shared task board and a timeline. Extracted from dsh-background-agents, whose background-agent half is superseded by DSH's native continuable subagents."
+    },
+    {
+      "full_name": "xingzhen199186/dsh-advisor-group",
+      "previous": "agent",
+      "current": "memory",
+      "desc_now": "DeepSeek Harness (DSH)插件:主模型在遇到专业、长尾世界知识、高风险或不确定的问题时,召集多位专家顾问模型,在复古 CRT聊天组卡片中真流式对话。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "ClassicXTx/dsh-plugin-ctf",
+      "previous": "tool",
+      "current": "other",
+      "desc_now": "DeepSeek Harness 的 CTF 插件",
+      "desc_prev": "CTF competition mode for DeepSeek Harness: 11 attributed skills, evidence review, portable tools and isolated Playwright MCP."
+    },
+    {
+      "full_name": "kkaporn/dsh-workflow-plugins",
+      "previous": "coding",
+      "current": "conversation",
+      "desc_now": "DSH 插件：在输入框旁边给当前会话单独挑要挂载的插件 | Per-session plugin picker for DeepSeek Harness",
+      "desc_prev": "DSH (DeepSeek Harness) 插件：给单个会话挑插件、按工作区收敛能力 | Two DSH plugins: a per-session plugin picker and a workspace capability scope"
     }
   ]
 }
