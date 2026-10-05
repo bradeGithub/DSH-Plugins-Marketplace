@@ -1,13 +1,27 @@
 {
-  "generated_at": "2026-10-05T11:48:41.990Z",
-  "count": 1,
+  "generated_at": "2026-10-05T14:12:15.243Z",
+  "count": 3,
   "items": [
     {
-      "full_name": "BOWLUNA/dsh-custom-mode",
-      "previous": "coding",
-      "current": "conversation",
-      "desc_now": "Edit a DeepSeek Harness (dsh) mode's system prompt, base mode, and plugin switches.",
-      "desc_prev": "Custom mode for DeepSeek Harness (dsh): edit a mode's system prompt, base mode and plugin switches in a settings page that looks like the official one; keep several assistants side by side. 中文：dsh 自定义模式插件 —— 在设置页编辑系统提示词、基础模式与插件开关，可并存多个助手（多模式 / 多角色扮演 RP）。"
+      "full_name": "Cristallin2006/ghidra-skill-for-dsh",
+      "previous": "tool",
+      "current": "web-ui",
+      "desc_now": "Ghidra headless daemon (persistent RPC, no JVM cold-start per call) + reverse-engineering skill family for dsh / Claude Code agents: triage → unpack → decompile → pwn → pcap → APK. Built-in circuit breakers against agent failure loops (byte-staring, re-reading the same region), distilled from real CTF postmortems. 面向 Agent 失败模式设计的逆向 skill 家族。",
+      "desc_prev": "定制化dsh (DeepSeek Harness) 逆向 agent skill 家族：Ghidra headless daemon + 分诊/脱壳/静态/漏洞/动态/流量/安卓七场景 | Reverse-engineering agent skills: triage, unpacking, decompile, pwn audit, pcap forensics, APK analysis"
+    },
+    {
+      "full_name": "cyjyyd/dsh-ssh-tui",
+      "previous": "tool",
+      "current": "coding",
+      "desc_now": "DSH Relay — remote-first terminal UI for DeepSeek Harness coding agents. SSH reconnect, Windows/ConPTY, plain ANSI, incremental redraws.",
+      "desc_prev": "SSH-friendly DeepSeek Harness TUI. Plain ANSI, incremental redraws, no browser."
+    },
+    {
+      "full_name": "daftAI2026/PDSH",
+      "previous": "web-ui",
+      "current": "vision",
+      "desc_now": "DeepSeek Harness plugin for sidebar masking, display aliases, and local screenshot editing. No session isolation.",
+      "desc_prev": "DSH Private Mode: sidebar title masking, display identity, and managed plugin updates for DeepSeek Harness."
     }
   ]
 }
