@@ -1,0 +1,27 @@
+{
+  "generated_at": "2026-10-06T19:28:27.611Z",
+  "count": 3,
+  "items": [
+    {
+      "full_name": "Cristallin2006/ghidra-skill-for-dsh",
+      "previous": "web-ui",
+      "current": "tool",
+      "desc_now": "Custom-built for dsh (DeepSeek Harness): persistent Ghidra headless daemon + reverse-engineering agent skills (triage/unpack/decompile/pwn/pcap/APK) with circuit breakers against agent failure loops. 为 dsh 深度定制：会熔断、能从复盘进化的逆向 skill 家族。",
+      "desc_prev": "Ghidra headless daemon (persistent RPC, no JVM cold-start per call) + reverse-engineering skill family for dsh / Claude Code agents: triage → unpack → decompile → pwn → pcap → APK. Built-in circuit breakers against agent failure loops (byte-staring, re-reading the same region), distilled from real CTF postmortems. 面向 Agent 失败模式设计的逆向 skill 家族。"
+    },
+    {
+      "full_name": "xiaxi626/dsh-skills-nexus",
+      "previous": "tool",
+      "current": "web-ui",
+      "desc_now": "Universal DSH skill adapter. Install once, then register any git repo containing a SKILL.md as a DSH skill — one command in the CLI or a few clicks in the DSH web panel. Skill repos stay pure: no Cordis plugin code or package.json needed.",
+      "desc_prev": "Universal DSH skill adapter. Install once, then register any GitHub repo containing a SKILL.md as a DSH skill — one command per repo. No Cordis plugin code or package.json needed in the skill repo."
+    },
+    {
+      "full_name": "xienda/dsh-jev-verify",
+      "previous": "tool",
+      "current": "web-ui",
+      "desc_now": "TypeSafe Jev (System One) decision model for DeepSeek Harness: 6 tools, a two-tier position-aware auto-guard, a settings card, a local usage & quota panel with a compact composer pill, and a live 27-question benchmark (96.3%). Honest by design: measured locally, never a fabricated balance.",
+      "desc_prev": "TypeSafe Jev (System One) decision model for DeepSeek Harness: 5 tools (jev_decision / jev_choose / jev_overview / jev_guard_status / jev_verify), a full Settings card, in-chat tool views, a two-tier position-aware auto-guard, an honest usage ledger, and a live 27-question benchmark (96.3%)."
+    }
+  ]
+}
