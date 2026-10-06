@@ -1,55 +1,20 @@
 {
-  "generated_at": "2026-10-05T22:37:44.078Z",
-  "count": 7,
+  "generated_at": "2026-10-06T05:46:03.541Z",
+  "count": 2,
   "items": [
     {
-      "full_name": "PerryLink/dsh-background-agents",
-      "previous": "web-ui",
-      "current": "conversation",
-      "desc_now": "RETIRED 2026-10-05 — the official DeepSeek Harness now ships native continuable subagents (subagent with backgroundMode: continuable, plus send_message / interrupt_agent / list_agents / job_*). Use those instead.",
-      "desc_prev": "Interactive long-session background agents for DeepSeek Harness: start a durable continuable child agent, watch its progress in the Web UI sidebar, message it any time, and interrupt it - all through the official subagent seam."
-    },
-    {
-      "full_name": "YangShen-SWE/dsh-plugin-simple-pet",
-      "previous": "model",
-      "current": "web-ui",
-      "desc_now": "A Windows desktop pet for DeepSeek billing and Codex subscription quotas in DSH, with six skins and usage animations.",
-      "desc_prev": "A Windows desktop pet for official DeepSeek API balance, usage, and animated reactions in DSH."
-    },
-    {
-      "full_name": "BOWLUNA/dsh-custom-mode",
-      "previous": "conversation",
-      "current": "coding",
-      "desc_now": "Edit a DeepSeek Harness (dsh) custom mode: system prompt, base mode, and plugin switches.",
-      "desc_prev": "Edit a DeepSeek Harness (dsh) mode's system prompt, base mode, and plugin switches."
-    },
-    {
-      "full_name": "PerryLink/dsh-team-rooms",
-      "previous": "conversation",
-      "current": "agent",
-      "desc_now": "RETIRED 2026-10-05 — the official DeepSeek Harness now ships the Agent Teams subsystem (dsh-experimental-agent-team). Use native Agent Teams, or a better-adopted alternative such as @nanmicoder/dsh-agent-teams.",
-      "desc_prev": "Team rooms for DeepSeek Harness: persistent shared rooms across independent sessions - a message bus, a shared task board and a timeline. Extracted from dsh-background-agents, whose background-agent half is superseded by DSH's native continuable subagents."
-    },
-    {
-      "full_name": "xingzhen199186/dsh-advisor-group",
-      "previous": "agent",
+      "full_name": "BotHarness/BotHarness",
+      "previous": "other",
       "current": "memory",
-      "desc_now": "DeepSeek Harness (DSH)插件:主模型在遇到专业、长尾世界知识、高风险或不确定的问题时,召集多位专家顾问模型,在复古 CRT聊天组卡片中真流式对话。",
+      "desc_now": "DeepSeekBot: the open-source GrokBot alternative, built on DeepSeek Harness (DSH). PersonaBots with their own identity, persona and Git-backed memory you can share via GitHub; group chat, task delegation, and IM identities on Lark/Feishu, Slack, Discord and WeChat. Works with other DSH plugins. Bot marketplace: market.botharness.ai. MIT.",
       "desc_prev": null
     },
     {
-      "full_name": "ClassicXTx/dsh-plugin-ctf",
-      "previous": "tool",
-      "current": "other",
-      "desc_now": "DeepSeek Harness 的 CTF 插件",
-      "desc_prev": "CTF competition mode for DeepSeek Harness: 11 attributed skills, evidence review, portable tools and isolated Playwright MCP."
-    },
-    {
-      "full_name": "kkaporn/dsh-workflow-plugins",
-      "previous": "coding",
-      "current": "conversation",
-      "desc_now": "DSH 插件：在输入框旁边给当前会话单独挑要挂载的插件 | Per-session plugin picker for DeepSeek Harness",
-      "desc_prev": "DSH (DeepSeek Harness) 插件：给单个会话挑插件、按工作区收敛能力 | Two DSH plugins: a per-session plugin picker and a workspace capability scope"
+      "full_name": "121212165/dsh-plugin-token-telemetry",
+      "previous": "model",
+      "current": "web-ui",
+      "desc_now": "dsh plugin: token throughput telemetry from real harness projections - per-turn cards plus a dual thinking/output TPS curve as a conversation tab",
+      "desc_prev": "DeepSeek Harness (dsh) plugin: token throughput telemetry — per-turn cards + aggregate TPS view from real harness data"
     }
   ]
 }
