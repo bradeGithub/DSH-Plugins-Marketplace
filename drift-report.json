@@ -1,0 +1,20 @@
+{
+  "generated_at": "2026-10-07T05:15:33.110Z",
+  "count": 2,
+  "items": [
+    {
+      "full_name": "PolinniZhong/dsh-knit",
+      "previous": "web-ui",
+      "current": "coding",
+      "desc_now": "面向 AI Coding Agent 的任务感知工作区上下文检索与生命周期追踪：按当前任务找到、组织并持续追踪最相关的文档、代码与媒体。纯本地、零模型调用、零网络。  Task-aware workspace context retrieval and lifecycle tracking for AI coding agents. Find, organize, and track the workspace context most relevant to the task at hand — locally, deterministically, zero model calls, zero network.",
+      "desc_prev": "面向 DeepSeek Harness 的任务上下文检索：根据当前对话，从项目工作区找到最相关的上下文，组织为主要 / 辅助 / 相关内容，并通过 Knit 面板与 knit_docs 提供给人和 Agent。纯本地、确定性、零模型调用、零网络。  Task-aware workspace context retrieval for DeepSeek Harness. Knit finds the project context most relevant to the current task, organizes it into primary / supporting / related context, and exposes the same context to humans a"
+    },
+    {
+      "full_name": "xienda/dsh-jev-verify",
+      "previous": "web-ui",
+      "current": "tool",
+      "desc_now": "TypeSafe Jev (System One) for DeepSeek Harness: 7 tools (decide, choose, batch), a two-tier auto-guard with metered verdicts, a settings card, a money-first usage pill, a local ledger that survives restarts, a derived remaining balance, per-turn auto-triage, and a live 27-question benchmark (96.3%).",
+      "desc_prev": "TypeSafe Jev (System One) decision model for DeepSeek Harness: 6 tools, a two-tier position-aware auto-guard, a settings card, a local usage & quota panel with a compact composer pill, and a live 27-question benchmark (96.3%). Honest by design: measured locally, never a fabricated balance."
+    }
+  ]
+}
