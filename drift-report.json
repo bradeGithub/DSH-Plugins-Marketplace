@@ -1,48 +1,27 @@
 {
-  "generated_at": "2026-10-07T11:36:18.311Z",
-  "count": 6,
+  "generated_at": "2026-10-07T19:55:46.595Z",
+  "count": 3,
   "items": [
     {
-      "full_name": "rebornace/dsh-tracescope",
-      "previous": "coding",
-      "current": "web-ui",
-      "desc_now": "基于 Git 差异生成功能影响清单，以 Figma / 蓝湖设计稿为真源静态对比 UI 差异，可选 AI 协助分析；能力经 MCP 复用于任意客户端。Git-diff impact checklists + static UI-diff against Figma / Lanhu specs, with optional AI-assisted review; the same capabilities are reusable via MCP in any client.",
-      "desc_prev": "基于 Git 代码差异智能缩减手工测试范围，支持 Web / 移动端操作录制与崩溃日志采集，依托 DSH AI 自动生成可复现缺陷流程，实现变更驱动的手工测试闭环提效插件。A DSH native test assistant plugin. It intelligently narrows manual test scope via Git diff, records web & mobile operation tracks and crash logs, and generates reproducible bug steps through AI analysis to close manual testing workflow efficiently."
-    },
-    {
-      "full_name": "ddtcorex/dsh-maestro-remote",
-      "previous": "notify",
-      "current": "tool",
-      "desc_now": "Remote access for DeepSeek Harness: cloudflared tunnel, LAN and public proxies with a PIN gate, QR pairing and Maestro PWA branding",
-      "desc_prev": "Remote access for DeepSeek Harness via cloudflared tunnel + proxy, with PIN auth and Telegram notifications."
-    },
-    {
-      "full_name": "shuxidemosheng/dsh-tool-todo-plus",
-      "previous": "web-ui",
-      "current": "memory",
-      "desc_now": "DeepSeek Harness 任务清单插件：官方 todo_write 的增强 fork —— 优先级标签、完整清单渲染、可拖动的会话内浮动任务面板（位置记忆 / 双击复位 / 当前动作显示）",
-      "desc_prev": "Enhanced todo_write plugin for DeepSeek Harness: floating task panel with capsule mode, priority tags, full checklist rendering. Fork of @deepseek-ai/dsh-tool-todo."
-    },
-    {
-      "full_name": "ddtcorex/dsh-maestro-core",
-      "previous": "other",
-      "current": "tool",
-      "desc_now": "Maestro core for DeepSeek Harness: shared settings store and Settings card, approval gate, cross-machine sync and the DSH web supervisor daemon",
-      "desc_prev": "Supervisor daemon for DSH Web resilience — auto-detect crashes, rollback to LKG, report"
-    },
-    {
-      "full_name": "qlheric/dsh-cvm",
-      "previous": "model",
-      "current": "vision",
-      "desc_now": "Runtime supervision for DeepSeek Harness agents: 4 cognitive guards (task contract / loop detection / evidence-before-done / single injection) + 1 cost guard. No core changes. Measured: cuts stalls -48% at only +2% cost.",
-      "desc_prev": "Keep DSH agents from stalling, fake-finishing, or overspending: 4 cognitive guards (task contract / loop detection / evidence-before-done / single injection point) + 1 cost guard (budget nudge). No core changes - official seams only."
-    },
-    {
-      "full_name": "mazov2love/dsh-remote-control",
+      "full_name": "Duskriver/dsh-opencode-go",
       "previous": "tool",
       "current": "web-ui",
-      "desc_now": "为 Agent 提供直接操控本机完整 DSH 实例的能力：目标 DSH 无需安装任何插件或额外组件，零侵入，开箱即用、无需手动配置，并提供接近用户的操作语义、增量读取、引用保存以及远端会话与工作区搜索等功能。",
-      "desc_prev": "给dsh像user一样以后端逻辑操控另一个本机dsh实例的能力"
+      "desc_now": "用于deepseek-harness的opencode-go套餐增强插件。多账号管理、额度UI面板、自动更新模型。An opencode-go subscription enhancement plugin for deepseek-harness — featuring multi-account management, a quota UI panel, and automatic model updates.",
+      "desc_prev": "让你的DSH完美适配opencodeg-go套餐"
+    },
+    {
+      "full_name": "gcry13067381632-jpg/dsh-qqbot",
+      "previous": "tool",
+      "current": "document",
+      "desc_now": "AI 统管 QQ 群组：审核放行、群发文件、沟通其他 web 会话的 AI！ ；气氛组担当：表情包自动入库、AI 自己决定开口、多预设多人格轮班陪聊！； 远程办公：权限审批、提问卡片转发到 QQ。； 自定义互动按钮：AI 帮你轻松搭文字游戏 —— 卡片逻辑由 AI 帮你写 ；省 token 设计：群聊价值评分后才唤醒 AI，上下文自动压缩。",
+      "desc_prev": "AI 统管 QQ 群组：审核放行、群发文件、沟通其他 web 会话的 AI！ ；气氛组担当：表情包自动入库、AI 自己决定开口、多预设多人格轮班陪聊！； 远程办公：权限审批、提问卡片转发到 QQ。； 自定义互动按钮：AI 帮你轻松搭文字游戏 —— 卡片逻辑由 AI 帮你写 ；省 token 设计：群聊价值评分后才唤醒 AI，上下文自动压缩。"
+    },
+    {
+      "full_name": "KurohaneKaoruko/DSH-Novelist",
+      "previous": "tool",
+      "current": "agent",
+      "desc_now": "小说作家智能体预设，用于在DeepSeek Herness里让AI写小说。",
+      "desc_prev": "小说作家智能体预设，用于在DeepSeek Herness里让AI写小说。"
     }
   ]
 }
