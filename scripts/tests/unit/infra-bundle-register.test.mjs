@@ -35,7 +35,10 @@ function createFakeFs({
   failRenameAt = null,
   realPath = null,
 } = {}) {
-  const files = new Map([[packageFile, JSON.stringify(manifest)]])
+  const files = new Map();
+  // manifest 传 null 表示「profile 目录里根本没有 package.json」（应用自有 profile 未初始化：
+  // 见安装反馈 #265/#272/#273/#276），用于验证自建最小清单与回滚删除
+  if (manifest !== null) files.set(packageFile, JSON.stringify(manifest));
   const writes = [];
   const renames = [];
   const removals = [];
@@ -357,6 +360,39 @@ await test("显式旧 profile 路径优先于默认路径", async () => {
   assert.equal(h.pnpmCalls[0].opts.cwd, oldProfile);
   assert.equal(h.fs.files.has(PACKAGE_FILE), false);
   assert.equal(JSON.parse(h.fs.files.get(oldPackageFile)).dependencies["fake-bundle"], "1.2.3");
+});
+
+await test("profile 没有 package.json 时自建最小清单并完成注册", async () => {
+  const h = createHarness({ manifest: null });
+
+  const result = await register(h);
+
+  assert.equal(result, `${NODE_MODULES}/fake-bundle`);
+  const manifest = JSON.parse(h.fs.files.get(PACKAGE_FILE));
+  assert.equal(manifest.name, "dsh-profile");
+  assert.equal(manifest.private, true);
+  assert.equal(manifest.dependencies["fake-bundle"], "1.2.3");
+  assert.deepEqual(manifest.dsh.profile.bundles, ["fake-bundle"]);
+  assert.equal(h.logs.some((line) => line.includes("bundleCreatedProfilePkg")), true);
+});
+
+await test("自建清单后安装失败 → 回滚删除自建文件（不留半成品）", async () => {
+  const h = createHarness({ manifest: null, includePackage: false });
+  h.setPnpmError(new Error("pnpm exploded"));
+
+  await assert.rejects(() => register(h), /bundleResolveFail/);
+
+  assert.equal(h.fs.files.has(PACKAGE_FILE), false);
+  assert.equal(h.fs.removals.includes(PACKAGE_FILE), true);
+  assert.equal(h.logs.some((line) => line.includes("bundleRollbackWarn")), false);
+});
+
+await test("package.json 存在但损坏时不自建（仍报错，避免静默丢内容）", async () => {
+  const h = createHarness({ manifest: null });
+  h.fs.files.set(PACKAGE_FILE, "{ not json");
+
+  await assert.rejects(() => register(h), /bundleNoProfilePkg/);
+  assert.equal(h.fs.files.get(PACKAGE_FILE), "{ not json");
 });
 
 console.log(`\n${passed} passed, ${failed} failed`);

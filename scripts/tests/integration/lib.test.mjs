@@ -362,6 +362,11 @@ globalThis.fetch = () => Promise.reject(new Error("integration test: real networ
   check("分类 版本不存在", lib.classifyInstallFailure("No matching version found for dep@9.9.9").includes("版本不存在"), true);
   check("分类 缺少模块", lib.classifyInstallFailure("internal/modules/cjs/loader: Cannot find module 'foo'", "zh").includes("缺少模块"), true);
   check("分类 构建命令失败", lib.classifyInstallFailure("ERR_PNPM_LOCKFILE_UP_TO_DATE Command failed with exit code 1", "zh").includes("构建"), true);
+  // 安装反馈 #270 / #277：缺可执行文件（spawn git ENOENT / spawn pwsh ENOENT）此前落到
+  // unclassified 且只回显原始报错；现在必须命中 command-missing 并给出可操作提示
+  check("分类 缺少命令行程序 git", lib.classifyInstallFailure("spawn git ENOENT", "zh").includes("PATH"), true);
+  check("分类 缺少命令行程序 pwsh en", lib.classifyInstallFailure("spawn pwsh ENOENT", "en").includes("PATH"), true);
+  check("分类 key command-missing", lib.classifyInstallFailureKind("spawn git ENOENT"), "command-missing");
   // issue #21：git clone 网络失败（`Command failed: git clone ... unable to access ... Couldn't connect`）
   // 必须命中网络类而非笼统的「构建/包管理命令失败」
   check("分类 git clone 网络", lib.classifyInstallFailure("Command failed: git clone --depth 1 https://github.com/a/b.git\nfatal: unable to access 'https://github.com/a/b.git/': Failed to connect to github.com port 443: Couldn't connect to server").includes("网络"), true);

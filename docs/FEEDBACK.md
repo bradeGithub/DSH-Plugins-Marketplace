@@ -138,6 +138,6 @@ AI 推理厂商（Groq/xAI/Perplexity/Fireworks/Cerebras/Mistral/Ollama）官方
    - 先看 details 日志——pnpm 报错/clone 失败/类型误判通常已可见
    - 需要更多信息时在 issue 里请用户「市场设置页 → 导出日志」（导出日志走独立的 sanitizeLog 全量脱敏）
 3. **安装失败反馈**（Result: 安装失败）：
-   - 按 Error Class 分流：`network`/`git-connectivity` 多为用户网络/代理问题，可批量归并；`version-missing`/`module-missing`/`command-failed` 指向收录或插件自身问题，优先排查
+   - 按 Error Class 分流：`network`/`git-connectivity` 多为用户网络/代理问题，可批量归并；`version-missing`/`module-missing`/`command-failed`/`command-missing`（缺 git/pwsh 等命令行程序）指向收录或插件自身问题，优先排查
    - `unclassified` 条目看 details 日志人工归因——新形态失败同时反哺分类规则表
 4. **规则维护**：新增密钥形态 → `lib/redact.js` KNOWN_KEY_RULES 加规则 + redact.test.mjs 加泄漏断言
