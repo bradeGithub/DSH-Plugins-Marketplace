@@ -13,6 +13,11 @@ import { join } from "node:path";
 import { tmpdir } from "node:os";
 
 // 必须在 import lib 之前设置临时 DSH_HOME
+// 启动器环境隔离：在桌面端里跑测试时进程会带 DSH_PROFILE=desktop / DSH_PROFILE_DIR=…，
+// 会让「无配置回退 web」的断言随宿主机变化（本文件断言的是无启动器信息时的老环境行为）。
+// 启动器识别本身的用例见文件末尾「启动器 profile 识别」段与 unit/desktop-adaptation.test.mjs。
+delete process.env.DSH_PROFILE;
+delete process.env.DSH_PROFILE_DIR;
 process.env.DSH_HOME = mkdtempSync(join(tmpdir(), "dsh-profile-test-")).replace(/\\/g, "/");
 const home = process.env.DSH_HOME;
 const marketRoot = join(home, "marketplace");
@@ -63,23 +68,47 @@ check("setTargetProfile 含点回退 web", lib.setTargetProfile("web.profile"), 
 lib.setTargetProfile("web");
 
 // ---- readTargetProfile：config.json 缺失 → web（fromConfig=false，启动回调不覆盖显式设置）----
-check("readTargetProfile 无配置回退 web", await lib.readTargetProfile(), { profile: "web", fromConfig: false });
+check("readTargetProfile 无配置回退 web", await lib.readTargetProfile(), { profile: "web", fromConfig: false, source: "default" });
 
 // ---- readTargetProfile：非法名 → web ----
 writeFileSync(configFile, JSON.stringify({ targetProfile: "../evil" }), "utf8");
-check("readTargetProfile 非法名回退 web", await lib.readTargetProfile(), { profile: "web", fromConfig: false });
+check("readTargetProfile 非法名回退 web", await lib.readTargetProfile(), { profile: "web", fromConfig: false, source: "default" });
 
 // ---- readTargetProfile：目录不存在 → web ----
 writeFileSync(configFile, JSON.stringify({ targetProfile: "ghost" }), "utf8");
-check("readTargetProfile 目录不存在回退 web", await lib.readTargetProfile(), { profile: "web", fromConfig: false });
+check("readTargetProfile 目录不存在回退 web", await lib.readTargetProfile(), { profile: "web", fromConfig: false, source: "default" });
 
 // ---- readTargetProfile：合法 + 目录存在 → 生效（fromConfig=true）----
 writeFileSync(configFile, JSON.stringify({ targetProfile: "desktop" }), "utf8");
-check("readTargetProfile 合法配置生效", await lib.readTargetProfile(), { profile: "desktop", fromConfig: true });
+check("readTargetProfile 合法配置生效", await lib.readTargetProfile(), { profile: "desktop", fromConfig: true, source: "config" });
 
 // ---- readTargetProfile：损坏 JSON → web ----
 writeFileSync(configFile, "{ broken", "utf8");
-check("readTargetProfile 损坏 JSON 回退 web", await lib.readTargetProfile(), { profile: "web", fromConfig: false });
+check("readTargetProfile 损坏 JSON 回退 web", await lib.readTargetProfile(), { profile: "web", fromConfig: false, source: "default" });
+
+// ---- 启动器 profile 识别（桌面端）：无有效配置时目标跟随启动器给的 profile ----
+{
+  process.env.DSH_PROFILE_DIR = join(home, "profiles", "desktop");
+  delete process.env.DSH_PROFILE;
+  profileDomain.refreshCurrentProfile();
+  check("启动器 profile 被识别", profileDomain.currentProfile()?.name, "desktop");
+  check("isCurrentProfile 命中当前 profile", profileDomain.isCurrentProfile("desktop"), true);
+  check("profileDir 按名字解析到启动器给的目录", profileDomain.profileDir("desktop"), join(home, "profiles", "desktop"));
+  // 配置仍是损坏状态 → 回退到「当前 profile」而不是 web
+  check("无有效配置时跟随启动器 profile", await lib.readTargetProfile(),
+    { profile: "desktop", fromConfig: false, source: "current" });
+  // 显式配置（且目录存在）仍然优先
+  lib.setTargetProfile("desktop");
+  check("目标切到当前 profile 后 profileDir 跟随启动器目录", profileDomain.profileDir(), join(home, "profiles", "desktop"));
+  writeFileSync(configFile, JSON.stringify({ targetProfile: "web" }), "utf8");
+  check("显式配置优先于启动器 profile", await lib.readTargetProfile(),
+    { profile: "web", fromConfig: true, source: "config" });
+  // 还原：无启动器信息（老环境）
+  delete process.env.DSH_PROFILE_DIR;
+  profileDomain.refreshCurrentProfile();
+  check("还原后无当前 profile", profileDomain.currentProfile(), null);
+  lib.setTargetProfile("web");
+}
 
 // ---- 切换 profile 后扫描缓存失效----
 // profileScanCache 按当前 profile 的 node_modules 构建（列表「已安装」标注来源）。切换后必须重扫：

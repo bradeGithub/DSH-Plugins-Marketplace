@@ -1,14 +1,16 @@
 {
   "name": "dsh-plugin-marketplace",
-  "version": "1.6.0",
+  "version": "1.7.0",
   "description": "DSH插件市场 / DSH Plugin Marketplace: browse & install plugins from the GitHub topic:dsh-plugin",
   "type": "module",
   "main": "lib/index.js",
   "exports": {
     ".": "./lib/index.js",
     "./client": "./lib/client.js",
-    "./package.json": "./package.json"
+    "./package.json": "./package.json",
+    "./locale/*.json": "./locale/*.json"
   },
+  "icon": "./assets/icon.svg",
   "dsh": {
     "bundle": {
       "patch": "./cordis.patch.yml"

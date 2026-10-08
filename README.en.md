@@ -17,6 +17,9 @@ A plugin marketplace for [DeepSeek Harness](https://github.com/deepseek-ai/deeps
 
 <!-- TOC -->
 - [Install](#install)
+  - [Desktop app (DeepSeek Harness desktop): just paste the address](#desktop-app-deepseek-harness-desktop-just-paste-the-address)
+  - [Web / CLI (`dsh web`, `headless`, …)](#web-cli-dsh-web-headless)
+  - [Desktop behavior (after installing)](#desktop-behavior-after-installing)
 - [What you do in the settings page](#what-you-do-in-the-settings-page)
 - [Versus searching GitHub yourself](#versus-searching-github-yourself)
 - [How plugin authors get listed](#how-plugin-authors-get-listed)
@@ -24,6 +27,24 @@ A plugin marketplace for [DeepSeek Harness](https://github.com/deepseek-ai/deeps
 <!-- /TOC -->
 
 ## Install
+
+The two surfaces install **completely differently** — pick your side first.
+
+### Desktop app (DeepSeek Harness desktop): just paste the address
+
+1. Copy this repository's address:
+
+   ```
+   https://github.com/bradeGithub/DSH-Plugins-Marketplace
+   ```
+
+2. Open the desktop app → **Plugins** in the sidebar → **Add plugin**, paste the address into the field → click **Install**.
+3. After installing, **restart DeepSeek Harness** (compositions with HMR recompose immediately).
+
+> [!IMPORTANT]
+> On desktop **do not** use `dsh plugin --profile desktop …`: the `desktop` profile is owned exclusively by the Electron application and the CLI refuses it (`error: profile "desktop" is managed exclusively by the Electron application`).
+
+### Web / CLI (`dsh web`, `headless`, …)
 
 Official CLI (recommended — installed and registered by Harness's own mechanism):
 
@@ -64,6 +85,18 @@ One sentence to hand to an AI (any AI with command execution works):
 > Install the DSH plugin marketplace (dsh-plugin-marketplace): run `dsh plugin --profile web install bradeGithub/DSH-Plugins-Marketplace`; if there is no dsh CLI, clone https://github.com/bradeGithub/DSH-Plugins-Marketplace into ~/.dsh/profiles/web/node_modules/dsh-plugin-marketplace and register it in ~/.dsh/profiles/web/cordis.patch.yml (id: plugin-marketplace, name: dsh-plugin-marketplace), then restart dsh web.
 
 </details>
+
+### Desktop behavior (after installing)
+
+The marketplace is adapted to the desktop app (DSH 0.2.0+):
+
+| Item | Desktop behavior |
+|---|---|
+| Target profile | **Follows the launcher automatically** (`DSH_PROFILE_DIR` / `DSH_PROFILE`, i.e. `desktop`) with no configuration; an explicit choice in the panel still wins |
+| Bundle-form plugins (`dsh.bundle.patch`) | Install/uninstall is handed to **the host's built-in plugin manager** (`pluginManager.installBundle` / `removeBundle`) — the same pnpm path as `dsh plugin`, with the profile write lock, registry fallback, DSH peer compatibility check, and rollback. A host rejection (e.g. an incompatible version) is **never** bypassed by falling back to the marketplace's own copy path |
+| Plain cordis plugins / skills / agent presets / scripts | Still installed by the marketplace's own pipeline (the desktop **Plugins** panel only manages bundle dependencies; these are not bundles, so they are not listed there, but they do load) |
+| Presentation | Ships `locale/*.json` metadata and an `icon`, so the desktop Plugins panel and Settings show a localized title/description and artwork |
+| Taking effect | A hot-reloading composition recomposes immediately; otherwise **restart DeepSeek Harness** (not `dsh web`) |
 
 ## What you do in the settings page
 
