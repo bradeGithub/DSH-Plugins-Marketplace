@@ -113,6 +113,7 @@
 4. staging 目录按 commit SHA 检出（`fetch --depth 1 origin <sha>`，免疫「验签后 tag 被拧走」）、核心文件校验后原子替换（`destRoot → backup → staging → destRoot`，第二步失败回滚）；任一步失败 fail-closed 拒更
 5. 信任根 `ALLOWED_SIGNERS` 按**维护者**建模编译进 bundle（远端同名文件概不采信），`signedBy` 署名归因；吊销走 `REVOKED_KEYS`，生效点恒为「已信 key 签名的 release」——防信任自传播
 6. GitHub 仓库写权限被夺也无法静默推送恶意更新——验签不依赖仓库信任
+7. **信任根重建（2026-10-08）**：原 `release-lu` / `release-lu-backup` 两把发布 key 的私钥丢失且无备份，无任何已信 key 可签署补发——正常规程（「新增 key 的生效点恒为已信 key 签名的 release」）此时不可满足，故由维护者**显式破例**直接加入 `release-wu`。后果如实记录：已安装旧 bundle 的客户端内置的是旧信任根常量（不采信远端同名文件），因此不会采信 `release-wu` 签署的 release，需一次手动更新（或用 `DSH_MARKETPLACE_UPDATE_EXTRA_SIGNERS` 追加该公钥行）后才回到自动更新链
 
 签名与发版操作细节见 [RELEASE.md](RELEASE.md) §2。
 
