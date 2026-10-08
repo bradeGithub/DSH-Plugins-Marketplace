@@ -17,6 +17,9 @@
 
 <!-- TOC -->
 - [安装](#安装)
+  - [桌面端（DeepSeek Harness 桌面版）：复制地址粘贴即可](#桌面端deepseek-harness-桌面版复制地址粘贴即可)
+  - [Web 端 / CLI（`dsh web`、`headless` 等）](#web-端-clidsh-webheadless-等)
+  - [桌面端适配说明（安装后行为）](#桌面端适配说明安装后行为)
 - [在设置页里做什么](#在设置页里做什么)
 - [和自己搜 GitHub 差在哪](#和自己搜-github-差在哪)
 - [插件作者如何被收录](#插件作者如何被收录)
@@ -24,6 +27,24 @@
 <!-- /TOC -->
 
 ## 安装
+
+两种形态的安装方式**完全不同**，先确认你在哪个端。
+
+### 桌面端（DeepSeek Harness 桌面版）：复制地址粘贴即可
+
+1. 复制本仓库地址：
+
+   ```
+   https://github.com/bradeGithub/DSH-Plugins-Marketplace
+   ```
+
+2. 打开桌面端 → 侧栏 **插件** → **添加插件**，把地址粘进输入框 → 点 **安装**。
+3. 完成后**重启 DeepSeek Harness**（支持热重载的组合会立即重组生效）。
+
+> [!IMPORTANT]
+> 桌面端**不要**用 `dsh plugin --profile desktop …`：`desktop` profile 由 Electron 应用独占，CLI 会直接拒绝（`error: profile "desktop" is managed exclusively by the Electron application`）。
+
+### Web 端 / CLI（`dsh web`、`headless` 等）
 
 官方 CLI（推荐，由 Harness 官方机制安装并注册）：
 
@@ -64,6 +85,18 @@ dsh plugin --profile web install bradeGithub/DSH-Plugins-Marketplace   # 重装�
 > 安装 DSH 插件市场插件（dsh-plugin-marketplace）：运行 `dsh plugin --profile web install bradeGithub/DSH-Plugins-Marketplace`；若没有 dsh CLI，则克隆 https://github.com/bradeGithub/DSH-Plugins-Marketplace 到 ~/.dsh/profiles/web/node_modules/dsh-plugin-marketplace，在 ~/.dsh/profiles/web/cordis.patch.yml 中注册（id: plugin-marketplace，name: dsh-plugin-marketplace）。完成后重启 dsh web。
 
 </details>
+
+### 桌面端适配说明（安装后行为）
+
+市场按桌面端（DSH 0.2.0+）的要求做了适配：
+
+| 项 | 桌面端行为 |
+|---|---|
+| 目标 profile | **自动跟随启动器**（`DSH_PROFILE_DIR` / `DSH_PROFILE`，即 `desktop`），无需任何配置；面板里显式切换仍优先 |
+| bundle 形态插件（声明 `dsh.bundle.patch`） | 安装/卸载交给**宿主内置插件管理器**（`pluginManager.installBundle` / `removeBundle`）——与 `dsh plugin` 同一套 pnpm 路径、profile 写锁、注册表回退、DSH peer 兼容检查与失败回滚；宿主拒绝（如版本不兼容）时**不会**回退到市场自己的复制路径 |
+| 普通 cordis 插件 / skill / agent 预设 / 脚本 | 仍走市场自带管线（桌面端**插件**面板只管理 bundle 依赖，这类内容不是 bundle，不出现在那里，但会正常加载） |
+| 插件展示 | 带 `locale/*.json` 元数据与 `icon`，在桌面端**插件**面板与设置里显示本地化标题/描述与图标 |
+| 生效方式 | 支持 HMR 的组合立即重组生效；否则**重启 DeepSeek Harness**（不是 `dsh web`） |
 
 ## 在设置页里做什么
 
