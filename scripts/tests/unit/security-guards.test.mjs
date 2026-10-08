@@ -57,7 +57,7 @@ check("bundle register 通过注入 fs 与 resolver", /fs: \{ readFile, writeFil
 check("bundle register 无 IO/环境/入口反向依赖", !/(node:fs|node:path|process\.env|index\.js)/.test(bundleRegisterLib), true);
 check("install executor 通过注入 fs/扫描/适配器", /fs: \{ mkdir, rm, cp, readFile, writeFile, readdir, exists, lstat \}/.test(installExecLib)
   && /scan: \{ findSkillRoots, findPluginRoots, findPresetRoots, readSkillManifest, needsPluginBuild \}/.test(installExecLib)
-  && /adapters: \{ registerBundlePackage, appendPatchEntry \}/.test(installExecLib), true);
+  && /adapters: \{ registerBundlePackage, appendPatchEntry, pluginManager = null \}/.test(installExecLib), true);
 check("install executor 无 IO/环境/入口反向依赖", !/(node:fs|node:path|process\.env|from\s+["'][^"']*index\.js)/.test(installExecLib), true);
 check("repository scan adapter 通过注入 fs/path/领域判定", /export function createRepositoryScanAdapter\(\{/.test(repositoryScanLib)
   && /fs: \{ readdir, readFile \}/.test(repositoryScanLib)
