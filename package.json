@@ -7,8 +7,10 @@
   "exports": {
     ".": "./lib/index.js",
     "./client": "./lib/client.js",
-    "./package.json": "./package.json"
+    "./package.json": "./package.json",
+    "./locale/*.json": "./locale/*.json"
   },
+  "icon": "./assets/icon.svg",
   "dsh": {
     "bundle": {
       "patch": "./cordis.patch.yml"

@@ -6,11 +6,17 @@
     2) 一行命令（推荐）：irm https://raw.githubusercontent.com/bradeGithub/DSH-Plugins-Marketplace/main/install.ps1 | iex
     3) 由 DSH 插件市场执行（repo 被识别为 script 类型时自动调用）
 
-  安装内容：
-    - 复制本体到 ~/.dsh/profiles/web/node_modules/dsh-plugin-marketplace/
-    - 在 ~/.dsh/profiles/web/cordis.patch.yml 中注册（已存在则跳过）
-  完成后需重启 DSH（重新运行 dsh web）再刷新页面。
+  安装内容（目标 profile 见下）：
+    - 复制本体到 <DSH_HOME>/profiles/<profile>/node_modules/dsh-plugin-marketplace/
+    - 在 <DSH_HOME>/profiles/<profile>/cordis.patch.yml 中注册（已存在则跳过）
+
+  目标 profile 解析（桌面端适配）：-Profile 参数 > 环境变量 DSH_PROFILE_DIR 的目录名
+  （桌面端启动器会给这个变量，如 …\profiles\desktop）> DSH_PROFILE > web。
+  注意：桌面端的 profile 由 Electron 应用独占，dsh CLI 会拒绝操作它——那时脚本自动回退到
+  手动安装分支；桌面端更推荐直接在应用内的插件面板安装本插件。
+  完成后需重启 DSH（桌面端重启应用；web 重新运行 dsh web）再刷新页面。
 #>
+param([string]$Profile = "")
 $ErrorActionPreference = "Stop"
 # PowerShell 7.3+ 默认不把外部命令非零退出视为异常（即使 ErrorActionPreference=Stop）——
 # 不开启则下方 catch 回退分支永远不可达：dsh 官方安装失败时会「假成功」。旧版 PS 无此变量，忽略即可。
@@ -18,16 +24,26 @@ $PSNativeCommandUseErrorActionPreference = $true
 
 $RepoUrl = "https://github.com/bradeGithub/DSH-Plugins-Marketplace"
 
+# ---- 目标 profile（桌面端适配）----
+# 桌面端启动器会带 DSH_PROFILE_DIR（如 …\profiles\desktop）；解析优先级见文件头注释。
+$DshHome = if ($env:DSH_HOME) { $env:DSH_HOME } else { Join-Path $env:USERPROFILE ".dsh" }
+$ProfileName = $Profile
+if (-not $ProfileName -and $env:DSH_PROFILE_DIR) { $ProfileName = Split-Path $env:DSH_PROFILE_DIR -Leaf }
+if (-not $ProfileName -and $env:DSH_PROFILE) { $ProfileName = $env:DSH_PROFILE }
+if (-not $ProfileName) { $ProfileName = "web" }
+$ProfileDir = Join-Path $DshHome "profiles/$ProfileName"
+Write-Host "目标 profile / Target profile: $ProfileName ($ProfileDir)"
+
 # 优先使用官方安装方式：dsh CLI 可用时由 harness 完成安装与 reconcile（免手工拷贝/注册）；
 # 失败则回退手动安装。
 if (Get-Command dsh -ErrorAction SilentlyContinue) {
-  Write-Host "检测到 dsh CLI，使用官方安装方式：dsh plugin --profile web install bradeGithub/DSH-Plugins-Marketplace"
+  Write-Host "检测到 dsh CLI，使用官方安装方式：dsh plugin --profile $ProfileName install bradeGithub/DSH-Plugins-Marketplace"
   try {
-    dsh plugin --profile web install "bradeGithub/DSH-Plugins-Marketplace"
+    dsh plugin --profile $ProfileName install "bradeGithub/DSH-Plugins-Marketplace"
     Write-Host ""
     Write-Host "✔ dsh-plugin-marketplace installed via official CLI"
-    Write-Host "  请重启 DSH（重新运行 dsh web）后刷新页面生效。"
-    Write-Host "  Restart DSH (re-run dsh web), then refresh the page."
+    Write-Host "  请重启 DSH 后刷新页面生效（桌面端重启应用；web 重新运行 dsh web）。"
+    Write-Host "  Restart DSH, then refresh the page (desktop: restart the app; web: re-run dsh web)."
     exit 0
   } catch {
     Write-Host "官方 CLI 安装失败，回退到手动安装方式..." -ForegroundColor Yellow
@@ -46,7 +62,7 @@ if (-not $src -or -not (Test-Path (Join-Path $src "package.json"))) {
   $src = Get-ChildItem (Join-Path $tmp "src") -Directory | Select-Object -First 1
 }
 
-$dest = Join-Path $env:USERPROFILE ".dsh\profiles\web\node_modules\dsh-plugin-marketplace"
+$dest = Join-Path $ProfileDir "node_modules\dsh-plugin-marketplace"
 New-Item -ItemType Directory -Force -Path (Split-Path $dest -Parent) | Out-Null
 if (Test-Path $dest) { Remove-Item $dest -Recurse -Force }
 Copy-Item $src $dest -Recurse
@@ -60,14 +76,14 @@ Remove-Item (Join-Path $dest ".ca-bundle.crt") -Force -ErrorAction SilentlyConti
 # 行首锚定必须允许前导空白，否则永远匹配不到 → 每次运行都会追加重复条目（KIMI 审阅 H1）。
 # v1.4.12（issue #39）：若本体已通过 profile bundles（package.json dsh.profile.bundles）加载，
 # 再注册 patch 会双加载 → webserver 重复路由崩溃——此时跳过注册。
-$profilePkg = Join-Path $env:USERPROFILE ".dsh\profiles\web\package.json"
+$profilePkg = Join-Path $ProfileDir "package.json"
 $bundled = $false
 if (Test-Path $profilePkg) {
   try {
     $bundled = [bool]((Get-Content $profilePkg -Raw | ConvertFrom-Json).dsh.profile.bundles -contains "dsh-plugin-marketplace")
   } catch { $bundled = $false }
 }
-$patch = Join-Path $env:USERPROFILE ".dsh\profiles\web\cordis.patch.yml"
+$patch = Join-Path $ProfileDir "cordis.patch.yml"
 $registered = $false
 if (Test-Path $patch) {
   $registered = [bool](Select-String -Path $patch -Pattern "^\s*name:\s+dsh-plugin-marketplace\s*$" -Quiet)
@@ -95,5 +111,5 @@ if ($bundled) {
 
 Write-Host ""
 Write-Host "✔ dsh-plugin-marketplace installed to $dest"
-Write-Host "  请重启 DSH（重新运行 dsh web）后刷新页面生效。"
-Write-Host "  Restart DSH (re-run dsh web), then refresh the page."
+Write-Host "  请重启 DSH 后刷新页面生效（桌面端重启应用；web 重新运行 dsh web）。"
+Write-Host "  Restart DSH, then refresh the page (desktop: restart the app; web: re-run dsh web)."
