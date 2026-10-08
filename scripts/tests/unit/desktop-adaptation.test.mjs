@@ -28,28 +28,32 @@ function check(name, actual, expected) {
   console.log(`${ok ? "PASS" : "FAIL"} ${name}: got ${JSON.stringify(actual)}, want ${JSON.stringify(expected)}`);
 }
 
-// ---- 1. 当前 profile 识别 ----
-const DIR_ENV = { DSH_PROFILE_DIR: "C:\\Users\\u\\.dsh\\profiles\\desktop" };
-check("DSH_PROFILE_DIR 解析出名字与目录", detectCurrentProfile(DIR_ENV, "C:\\Users\\u\\.dsh"), {
+// ---- 1. 当前 profile 识别（路径按平台构造：Windows 用盘符，POSIX 用绝对路径）----
+const IS_WIN = process.platform === "win32";
+const FAKE_HOME = IS_WIN ? "C:\\Users\\u\\.dsh" : "/home/u/.dsh";
+const DESKTOP_DIR = join(FAKE_HOME, "profiles", "desktop");
+const APP_OWNED_DIR = IS_WIN ? "D:\\apps\\harness\\profiles\\desktop" : "/opt/apps/harness/profiles/desktop";
+const DIR_ENV = { DSH_PROFILE_DIR: DESKTOP_DIR };
+check("DSH_PROFILE_DIR 解析出名字与目录", detectCurrentProfile(DIR_ENV, FAKE_HOME), {
   name: "desktop",
-  dir: "C:\\Users\\u\\.dsh\\profiles\\desktop"
+  dir: DESKTOP_DIR
 });
-check("DSH_PROFILE 仅名字时按共享树推导", detectCurrentProfile({ DSH_PROFILE: "headless" }, "C:\\Users\\u\\.dsh"), {
+check("DSH_PROFILE 仅名字时按共享树推导", detectCurrentProfile({ DSH_PROFILE: "headless" }, FAKE_HOME), {
   name: "headless",
-  dir: join("C:\\Users\\u\\.dsh", "profiles", "headless")
+  dir: join(FAKE_HOME, "profiles", "headless")
 });
-check("两者都缺失 → null（老环境回退）", detectCurrentProfile({}, "C:\\Users\\u\\.dsh"), null);
-check("非法名字被拒绝", detectCurrentProfile({ DSH_PROFILE: "../evil" }, "C:\\Users\\u\\.dsh"), null);
-check("basename 为 profiles 的根本身被拒绝", detectCurrentProfile({ DSH_PROFILE_DIR: "C:\\Users\\u\\.dsh\\profiles" }, "C:\\Users\\u\\.dsh"), null);
+check("两者都缺失 → null（老环境回退）", detectCurrentProfile({}, FAKE_HOME), null);
+check("非法名字被拒绝", detectCurrentProfile({ DSH_PROFILE: "../evil" }, FAKE_HOME), null);
+check("basename 为 profiles 的根本身被拒绝", detectCurrentProfile({ DSH_PROFILE_DIR: join(FAKE_HOME, "profiles") }, FAKE_HOME), null);
 check("目录优先于名字（应用自有 profile 不在共享树内）", detectCurrentProfile({
-  DSH_PROFILE_DIR: "D:\\apps\\harness\\profiles\\desktop",
+  DSH_PROFILE_DIR: APP_OWNED_DIR,
   DSH_PROFILE: "web"
-}, "C:\\Users\\u\\.dsh").name, "desktop");
+}, FAKE_HOME).name, "desktop");
 
 // profileDir 跟随启动器：桌面端目标 profile 必须落到启动器给的目录
-refreshCurrentProfile(DIR_ENV, "C:\\Users\\u\\.dsh");
+refreshCurrentProfile(DIR_ENV, FAKE_HOME);
 setTargetProfile("desktop");
-check("profileDir 跟随启动器目录", profileDir(), "C:\\Users\\u\\.dsh\\profiles\\desktop");
+check("profileDir 跟随启动器目录", profileDir(), DESKTOP_DIR);
 check("isCurrentProfile 命中桌面 profile", isCurrentProfile("desktop"), true);
 check("isCurrentProfile 不命中别的 profile", isCurrentProfile("web"), false);
 check("currentProfile 暴露名字", currentProfile()?.name, "desktop");
