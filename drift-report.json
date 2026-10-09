@@ -1,13 +1,27 @@
 {
-  "generated_at": "2026-10-08T23:18:23.133Z",
-  "count": 1,
+  "generated_at": "2026-10-09T05:30:44.236Z",
+  "count": 3,
   "items": [
     {
-      "full_name": "huhu23333/dsh-plugin-subagent-model-route",
-      "previous": "agent",
-      "current": "resource",
-      "desc_now": "DSH client plugin: annotate every subagent with the model route it actually ran on (parent-catalog rows + child session header).",
+      "full_name": "nicearrack/dsh-translator",
+      "previous": "document",
+      "current": "other",
+      "desc_now": "DSH 有道风格划词翻译插件，支持免费 API 与大模型双引擎。 Youdao-style select-to-translate for DSH, with Free API and LLM engines.",
+      "desc_prev": "基于 DSH 的有道风格划词翻译：划选即现「译」按钮，harness 自带大模型，零 API key / Youdao-style word-selection translation for DSH: select text, click 「译」, powered by the harness's own LLM, no API keys"
+    },
+    {
+      "full_name": "xling001/dsh-reading-companion",
+      "previous": "other",
+      "current": "memory",
+      "desc_now": "DSH 的本地 TXT 书架 + 不剧透 AI 陪读：按你的进度滚动阅读，AI 只看得见你读过的部分，并把摘抄与感想整理成一份你自己可编辑的结构化背景笔记。",
       "desc_prev": null
+    },
+    {
+      "full_name": "pearjelly/deep-blend",
+      "previous": "coding",
+      "current": "vision",
+      "desc_now": "Create and refine Blender product scenes in DSH: editable recipes, model imports, real previews, saved revisions and PNG/MP4 delivery.",
+      "desc_prev": "Blender 3D animation workbench for DeepSeek Harness (dsh): SceneSpec is the source of truth and .blend is a compiled artifact — 16 tools for scene specs, previews, visual review and delivery renders."
     }
   ]
 }
