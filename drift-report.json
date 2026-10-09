@@ -1,27 +1,27 @@
 {
-  "generated_at": "2026-10-09T11:45:12.737Z",
+  "generated_at": "2026-10-09T19:35:37.034Z",
   "count": 3,
   "items": [
     {
-      "full_name": "Y1X1n/dsh-prompt-optimizer",
-      "previous": "coding",
-      "current": "model",
-      "desc_now": "DeepSeek Harness 插件 · 发送栏一键「优化」提示词草稿：五维诊断 + 改写稿 SSE 流式上屏，可替换 / 复制 / 撤回，模型路由默认跟随当前会话。",
-      "desc_prev": "针对Deepseek Harness开发的提示词优化插件，感谢Jerry(@ruijiaang-lab)开发Mac端"
-    },
-    {
-      "full_name": "chengshenyangtai/dsh-workbuddy-trae-qoder-connect",
-      "previous": "tool",
-      "current": "vision",
-      "desc_now": "把 WorkBuddy（多账号/企业版）、Trae CN / TRAE SOLO CN、Qoder CN 三家订阅聚合进同一个 DSH 模型选择器：会话内换模型不丢历史、积分倍率、逐模型思考档位、每日自动签到、读图与 Agent 工具调用。One DSH plugin aggregating WorkBuddy / Trae / Qoder subscriptions into one model picker: mid-session switching, credit multipliers, reasoning effort, daily check-in, vision, tools.",
-      "desc_prev": "One DSH plugin for WorkBuddy / Qoder / Trae: auto check-in, multi-channel aggregation, in-session model switching, reasoning effort."
-    },
-    {
-      "full_name": "Nakie-zjm/dsh-session-delete",
+      "full_name": "Ayuilos/Miffan",
       "previous": "web-ui",
-      "current": "resource",
-      "desc_now": "给 DeepSeek Harness Desktop侧栏会话菜单加一项永久删除：删除会话日志与投影缓存并摘除工作区记账，失败时不留半删目录树。| Permanent session delete for the DeepSeek Harness sidebar: removes a Session's log and projection cache, failure-safe, no runtime dependencies.",
-      "desc_prev": "Permanent session delete for the DeepSeek Harness sidebar: removes a Session's log and projection cache, failure-safe, no runtime dependencies."
+      "current": "vision",
+      "desc_now": "RikkaHub fork，Android AI 客户端。支持 ChatGPT 订阅登录使用、跨应用划词悬浮翻译、助手工作区文件隔离、远程云电脑控制、文档与 HTML 预览、可定制动态角色。",
+      "desc_prev": "RikkaHub fork，Android AI 客户端。支持 ChatGPT 订阅登录使用、跨应用划词悬浮翻译、助手工作区文件隔离、远程工作区、文档与 HTML 预览、可定制动态角色。"
+    },
+    {
+      "full_name": "john-walks-slow/dsh-set-model",
+      "previous": "tool",
+      "current": "conversation",
+      "desc_now": "Model policy for DeepSeek Harness (DSH): free mode set_model/list_models, preset mode switch_preset/list_presets, configurable stage-to-model policy prompt, plan-mode staging, and a bundled Web settings page.",
+      "desc_prev": "Per-agent model switching for DeepSeek Harness: set_model / list_models agent tools with provider whitelist and token-budget guardrails, plus plan-mode model staging and cache-safe active-model context."
+    },
+    {
+      "full_name": "LanYun417/dsh-expert-suite",
+      "previous": "other",
+      "current": "agent",
+      "desc_now": "面向 DSH（DeepSeek Harness）的专家与专家团插件：给 AI 加\"角色与团队\"两个协作维度——用一个领域专家的身份干活，或拉起一支多 Agent 团队按流程交付。",
+      "desc_prev": null
     }
   ]
 }
