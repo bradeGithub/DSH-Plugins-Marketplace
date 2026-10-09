@@ -1,27 +1,27 @@
 {
-  "generated_at": "2026-10-09T05:30:44.236Z",
+  "generated_at": "2026-10-09T11:45:12.737Z",
   "count": 3,
   "items": [
     {
-      "full_name": "nicearrack/dsh-translator",
-      "previous": "document",
-      "current": "other",
-      "desc_now": "DSH 有道风格划词翻译插件，支持免费 API 与大模型双引擎。 Youdao-style select-to-translate for DSH, with Free API and LLM engines.",
-      "desc_prev": "基于 DSH 的有道风格划词翻译：划选即现「译」按钮，harness 自带大模型，零 API key / Youdao-style word-selection translation for DSH: select text, click 「译」, powered by the harness's own LLM, no API keys"
-    },
-    {
-      "full_name": "xling001/dsh-reading-companion",
-      "previous": "other",
-      "current": "memory",
-      "desc_now": "DSH 的本地 TXT 书架 + 不剧透 AI 陪读：按你的进度滚动阅读，AI 只看得见你读过的部分，并把摘抄与感想整理成一份你自己可编辑的结构化背景笔记。",
-      "desc_prev": null
-    },
-    {
-      "full_name": "pearjelly/deep-blend",
+      "full_name": "Y1X1n/dsh-prompt-optimizer",
       "previous": "coding",
+      "current": "model",
+      "desc_now": "DeepSeek Harness 插件 · 发送栏一键「优化」提示词草稿：五维诊断 + 改写稿 SSE 流式上屏，可替换 / 复制 / 撤回，模型路由默认跟随当前会话。",
+      "desc_prev": "针对Deepseek Harness开发的提示词优化插件，感谢Jerry(@ruijiaang-lab)开发Mac端"
+    },
+    {
+      "full_name": "chengshenyangtai/dsh-workbuddy-trae-qoder-connect",
+      "previous": "tool",
       "current": "vision",
-      "desc_now": "Create and refine Blender product scenes in DSH: editable recipes, model imports, real previews, saved revisions and PNG/MP4 delivery.",
-      "desc_prev": "Blender 3D animation workbench for DeepSeek Harness (dsh): SceneSpec is the source of truth and .blend is a compiled artifact — 16 tools for scene specs, previews, visual review and delivery renders."
+      "desc_now": "把 WorkBuddy（多账号/企业版）、Trae CN / TRAE SOLO CN、Qoder CN 三家订阅聚合进同一个 DSH 模型选择器：会话内换模型不丢历史、积分倍率、逐模型思考档位、每日自动签到、读图与 Agent 工具调用。One DSH plugin aggregating WorkBuddy / Trae / Qoder subscriptions into one model picker: mid-session switching, credit multipliers, reasoning effort, daily check-in, vision, tools.",
+      "desc_prev": "One DSH plugin for WorkBuddy / Qoder / Trae: auto check-in, multi-channel aggregation, in-session model switching, reasoning effort."
+    },
+    {
+      "full_name": "Nakie-zjm/dsh-session-delete",
+      "previous": "web-ui",
+      "current": "resource",
+      "desc_now": "给 DeepSeek Harness Desktop侧栏会话菜单加一项永久删除：删除会话日志与投影缓存并摘除工作区记账，失败时不留半删目录树。| Permanent session delete for the DeepSeek Harness sidebar: removes a Session's log and projection cache, failure-safe, no runtime dependencies.",
+      "desc_prev": "Permanent session delete for the DeepSeek Harness sidebar: removes a Session's log and projection cache, failure-safe, no runtime dependencies."
     }
   ]
 }
