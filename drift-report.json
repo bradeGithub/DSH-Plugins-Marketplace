@@ -1,41 +1,27 @@
 {
-  "generated_at": "2026-10-12T12:23:26.128Z",
-  "count": 5,
+  "generated_at": "2026-10-12T15:07:56.452Z",
+  "count": 3,
   "items": [
     {
-      "full_name": "ljcoder2015/dsh-canvas-flow",
+      "full_name": "xiaolu511/dsh-hot-restart",
       "previous": "other",
-      "current": "agent",
-      "desc_now": "dsh-canvas-flow，deepseek harness 无限画布插件，在画布上，搭出你的工作流。",
-      "desc_prev": "dsh-canvas-flow"
-    },
-    {
-      "full_name": "Zoragyx/dsh-phone-pair",
-      "previous": "web-ui",
       "current": "tool",
-      "desc_now": "手机上的 DSH 客户端（通用配对版）：密码锁屏 + 内置前端 + 与自己的电脑配对；附可选配套插件",
-      "desc_prev": "手机上的 DSH 客户端（通用配对版）：密码锁屏 + 内置前端 + 与自己的电脑配对；附可选配套插件。灵感与配对思路来自开源插件 @linxin666/dsh-remote-web-ui（Apache-2.0），感谢原作者；本项目与其无隶属关系。"
+      "desc_now": "DSH 热重启插件：窗口内一个固定按钮，一键关闭并自动重开 DeepSeek Harness，全程零控制台窗口；内置自检系统，出问题点一下就能生成可直接定位的诊断报告 · Hot-restart plugin for DSH, with a built-in self-check that writes a one-file diagnostic report",
+      "desc_prev": "DSH 热重启插件：窗口内一个固定按钮，一键关闭并自动重开 DeepSeek Harness，全程零控制台窗口 · Hot-restart plugin for DSH: one fixed in-window button that relaunches the app automatically, no console window"
     },
     {
-      "full_name": "zhao-guang-ai/dsh-quote-annotate-pro",
+      "full_name": "caob23/dsh-origin-bridge",
+      "previous": "document",
+      "current": "tool",
+      "desc_now": "在对话里驱动本机 Origin/OriginPro：导入 .dat/.csv/.txt 与工作站 .bin，绘图、拟合、改样式、导出图片并保存可编辑的 .opju。dsh 插件，27 个 MCP 工具。第三方工具，与 OriginLab 无关联。",
+      "desc_prev": "Drive local Origin/OriginPro from chat: import .dat/.csv/.xlsx and workstation .bin, plot, fit, export, save editable .opju. dsh (DeepSeek Harness) plugin, 25 MCP tools."
+    },
+    {
+      "full_name": "FuSheng-cs/dsh-trae-relay",
       "previous": "other",
-      "current": "conversation",
-      "desc_now": "Selection quoting and anchored annotations for DSH conversations: quote a passage and the model receives the exact turn, role and text. · 划词批注与引用锚点：选中文字带锚点进入输入框，可跳回原文并高亮；发送后模型知道是哪一轮、谁说的。",
-      "desc_prev": null
-    },
-    {
-      "full_name": "2026heshao/dsh-skill-mcp-board",
-      "previous": "web-ui",
       "current": "tool",
-      "desc_now": "All-in-one board for DeepSeek Harness: MCP manager + Skills + tool-usage tailor + direct markets (WorkBuddy connectors, SkillHub 190k+ skills) with one-click install · DSH 一体化看板：MCP/技能/工具账本/三大市场直连安装",
-      "desc_prev": "DeepSeek Harness (DSH) plugin · unified Skill + MCP board for the Web UI — global panel page, JSON import, profile-backed Host Remote management · DSH 技能与 MCP 管理面板"
-    },
-    {
-      "full_name": "furkancak1r/dsh-composer-plus",
-      "previous": "conversation",
-      "current": "web-ui",
-      "desc_now": "DeepSeek Harness composer helpers: input history, Shift+Tab /plan toggle, one-click Continue, drag-and-drop queue reordering, Copy deeplink",
-      "desc_prev": "DeepSeek Harness composer helpers: input history, one-click Continue, drag-and-drop queue reordering"
+      "desc_now": "TRAE CN relay for DeepSeek Harness: embedded console, daily check-in, multiple accounts, rotation, model discovery, reasoning strengths and visibility controls. Automation off by default; authorized use only.",
+      "desc_prev": "DeepSeek Harness plugin for managed TRAE CN relay, native account controls and V4.1 Flash reasoning levels"
     }
   ]
 }
