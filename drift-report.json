@@ -1,27 +1,20 @@
 {
-  "generated_at": "2026-10-12T15:07:56.452Z",
-  "count": 3,
+  "generated_at": "2026-10-12T23:01:30.324Z",
+  "count": 2,
   "items": [
     {
-      "full_name": "xiaolu511/dsh-hot-restart",
-      "previous": "other",
-      "current": "tool",
-      "desc_now": "DSH 热重启插件：窗口内一个固定按钮，一键关闭并自动重开 DeepSeek Harness，全程零控制台窗口；内置自检系统，出问题点一下就能生成可直接定位的诊断报告 · Hot-restart plugin for DSH, with a built-in self-check that writes a one-file diagnostic report",
-      "desc_prev": "DSH 热重启插件：窗口内一个固定按钮，一键关闭并自动重开 DeepSeek Harness，全程零控制台窗口 · Hot-restart plugin for DSH: one fixed in-window button that relaunches the app automatically, no console window"
+      "full_name": "BillCx330/dsh-plugin-notify-sounds",
+      "previous": "notify",
+      "current": "other",
+      "desc_now": "DeepSeek Harness原生风格提示音插件",
+      "desc_prev": "DeepSeek Harness的提醒插件"
     },
     {
-      "full_name": "caob23/dsh-origin-bridge",
-      "previous": "document",
+      "full_name": "zhengqiuyang/dsh-read-guard",
+      "previous": "conversation",
       "current": "tool",
-      "desc_now": "在对话里驱动本机 Origin/OriginPro：导入 .dat/.csv/.txt 与工作站 .bin，绘图、拟合、改样式、导出图片并保存可编辑的 .opju。dsh 插件，27 个 MCP 工具。第三方工具，与 OriginLab 无关联。",
-      "desc_prev": "Drive local Origin/OriginPro from chat: import .dat/.csv/.xlsx and workstation .bin, plot, fit, export, save editable .opju. dsh (DeepSeek Harness) plugin, 25 MCP tools."
-    },
-    {
-      "full_name": "FuSheng-cs/dsh-trae-relay",
-      "previous": "other",
-      "current": "tool",
-      "desc_now": "TRAE CN relay for DeepSeek Harness: embedded console, daily check-in, multiple accounts, rotation, model discovery, reasoning strengths and visibility controls. Automation off by default; authorized use only.",
-      "desc_prev": "DeepSeek Harness plugin for managed TRAE CN relay, native account controls and V4.1 Flash reasoning levels"
+      "desc_now": "Deterministic prompt-injection interception for DeepSeek Harness — scans what the agent READS before it enters model context; credential files quarantined on path alone",
+      "desc_prev": "Deterministic prompt-injection interception for DeepSeek Harness — scans what the agent READS before it enters model context"
     }
   ]
 }
