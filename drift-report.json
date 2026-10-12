@@ -1,41 +1,41 @@
 {
-  "generated_at": "2026-10-12T05:20:24.416Z",
+  "generated_at": "2026-10-12T12:23:26.128Z",
   "count": 5,
   "items": [
     {
-      "full_name": "yyh-001/dsh-meme",
-      "previous": "notify",
-      "current": "tool",
-      "desc_now": "DeepSeek Harness 表情包插件：输入框一键发图、文字 token 斗图、情绪主动发图、AI 自动学图，图库市场一键安装。 · Meme/sticker plugin for DeepSeek Harness: one-click picker in the composer, text-token memes, mood-driven sending, AI learns your images, marketplace packs.",
-      "desc_prev": "DeepSeek Harness 的表情包插件——找得到、发得出、学得会，纯文本斗图、情绪主动发图、像 QQ/微信 一样发图、AI 自动学图、自定义表情包 、多种风格随意切换。"
-    },
-    {
-      "full_name": "Vncntvx/dsh-zotero",
-      "previous": "tool",
-      "current": "memory",
-      "desc_now": "Zotero plugin for DeepSeek Harness: search papers, read full-text PDFs and notes, extract relevant passages, and inspect sources in the conversation tab.",
-      "desc_prev": "Zotero toolkit for DeepSeek harness; Turn your Zotero library into an evidence store for agents."
-    },
-    {
-      "full_name": "v587d/capital-generation",
-      "previous": "tool",
-      "current": "agent",
-      "desc_now": "面向中国股市散户的金融投资智能体。Next-Gen AI-Driven Capital Generation.",
-      "desc_prev": "面向中国股市散户的金融投资智能体。Next-Gen AI-Driven Capital Generation."
-    },
-    {
-      "full_name": "Moolight/dsh-shader-workbench",
+      "full_name": "ljcoder2015/dsh-canvas-flow",
       "previous": "other",
-      "current": "coding",
-      "desc_now": "节点式 GLSL 工作台（DSH / DeepSeek Harness 插件）：拖节点出图 → Shadertoy 兼容实时预览 → 热重载 → 本地材质资源管理（图片 / 音频 / 歌词）。可跨编译导出 HLSL / MSL / SPIR-V，支持导入 Shadertoy 源码。零第三方运行时依赖，8 个自带示例，169 个用例。",
-      "desc_prev": "节点式 GLSL 工作台（DSH / DeepSeek Harness 插件）：拖节点出图 → Shadertoy 兼容实时预览 → 热重载 → 本地材质资源管理。零第三方运行时依赖，7 个自带示例，104 个用例。"
+      "current": "agent",
+      "desc_now": "dsh-canvas-flow，deepseek harness 无限画布插件，在画布上，搭出你的工作流。",
+      "desc_prev": "dsh-canvas-flow"
     },
     {
-      "full_name": "Lucifer-xD/zadloop-ultimate-toolkit",
+      "full_name": "Zoragyx/dsh-phone-pair",
       "previous": "web-ui",
-      "current": "vision",
-      "desc_now": "One-install ZadLoop toolkit: Context Surgery, Undo, mode switching, full session transfer, and 70 modern themes.",
-      "desc_prev": "One-install ZadLoop toolkit: Context Surgery, Undo, mode switching, full session transfer, and 70 modern themes."
+      "current": "tool",
+      "desc_now": "手机上的 DSH 客户端（通用配对版）：密码锁屏 + 内置前端 + 与自己的电脑配对；附可选配套插件",
+      "desc_prev": "手机上的 DSH 客户端（通用配对版）：密码锁屏 + 内置前端 + 与自己的电脑配对；附可选配套插件。灵感与配对思路来自开源插件 @linxin666/dsh-remote-web-ui（Apache-2.0），感谢原作者；本项目与其无隶属关系。"
+    },
+    {
+      "full_name": "zhao-guang-ai/dsh-quote-annotate-pro",
+      "previous": "other",
+      "current": "conversation",
+      "desc_now": "Selection quoting and anchored annotations for DSH conversations: quote a passage and the model receives the exact turn, role and text. · 划词批注与引用锚点：选中文字带锚点进入输入框，可跳回原文并高亮；发送后模型知道是哪一轮、谁说的。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "2026heshao/dsh-skill-mcp-board",
+      "previous": "web-ui",
+      "current": "tool",
+      "desc_now": "All-in-one board for DeepSeek Harness: MCP manager + Skills + tool-usage tailor + direct markets (WorkBuddy connectors, SkillHub 190k+ skills) with one-click install · DSH 一体化看板：MCP/技能/工具账本/三大市场直连安装",
+      "desc_prev": "DeepSeek Harness (DSH) plugin · unified Skill + MCP board for the Web UI — global panel page, JSON import, profile-backed Host Remote management · DSH 技能与 MCP 管理面板"
+    },
+    {
+      "full_name": "furkancak1r/dsh-composer-plus",
+      "previous": "conversation",
+      "current": "web-ui",
+      "desc_now": "DeepSeek Harness composer helpers: input history, Shift+Tab /plan toggle, one-click Continue, drag-and-drop queue reordering, Copy deeplink",
+      "desc_prev": "DeepSeek Harness composer helpers: input history, one-click Continue, drag-and-drop queue reordering"
     }
   ]
 }
