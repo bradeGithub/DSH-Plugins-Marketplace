@@ -1,13 +1,27 @@
 {
-  "generated_at": "2026-10-13T06:18:05.781Z",
-  "count": 1,
+  "generated_at": "2026-10-13T12:02:48.491Z",
+  "count": 3,
   "items": [
     {
-      "full_name": "zxc663/shisan-xinuo-dsh-plugin",
-      "previous": "coding",
+      "full_name": "1225Sakura/oh-my-deepseekharness",
+      "previous": "agent",
+      "current": "web-ui",
+      "desc_now": "DeepSeek Harness 的多智能体编排层 —— 42 skills / 33 角色卡 / 55 MCP 工具 / graph DAG 运行时 / team 流水线 / HUD 面板。OMC/OMX 理念的 dsh 原生适配。",
+      "desc_prev": "Multi-agent orchestration layer for DeepSeek Harness (omd) — autopilot/ralph/team modes, 19 role cards, 40 bilingual skills, bundled MCP state server. OMC/OMX adaptation."
+    },
+    {
+      "full_name": "GRmaid/dsh-quick-session",
+      "previous": "other",
+      "current": "conversation",
+      "desc_now": "一个在DSH里实现类似zcode，codex那种不选工作区也能开会话功能的DSH插件，还在改进中",
+      "desc_prev": "DSH plugin: start a session without picking a workspace; each quick session gets its own scratch directory."
+    },
+    {
+      "full_name": "lanluohaisi/dsh-lighthouse-expert",
+      "previous": "other",
       "current": "tool",
-      "desc_now": "DeepSeek Harness 运行时治理插件：把工程纪律从提示词层下沉到执行层——L3 拦截+审批链、真值收口（宿主真跑验证命令）、规则包 Config 化、工具预算；四臂对照已验证机制面｜White-box runtime governance plugin for DSH. Engineering validation done, not released.",
-      "desc_prev": "DSH 工作流插件（开发中）：把工程纪律转化为运行时控制——拦截、门控、证据与规则资源层，白盒可改｜Developer preview, not released."
+      "desc_now": "🚀体验轻量云插件 — 腾讯云轻量应用服务器（Lighthouse）连接器：扫码授权后，在 DeepSeek Harness 中对话式管理你的云服务器（实例/防火墙/快照/监控等 60 项云端能力，敏感操作自动走审批）",
+      "desc_prev": null
     }
   ]
 }
