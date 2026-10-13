@@ -1,20 +1,13 @@
 {
-  "generated_at": "2026-10-12T23:01:30.324Z",
-  "count": 2,
+  "generated_at": "2026-10-13T06:18:05.781Z",
+  "count": 1,
   "items": [
     {
-      "full_name": "BillCx330/dsh-plugin-notify-sounds",
-      "previous": "notify",
-      "current": "other",
-      "desc_now": "DeepSeek Harness原生风格提示音插件",
-      "desc_prev": "DeepSeek Harness的提醒插件"
-    },
-    {
-      "full_name": "zhengqiuyang/dsh-read-guard",
-      "previous": "conversation",
+      "full_name": "zxc663/shisan-xinuo-dsh-plugin",
+      "previous": "coding",
       "current": "tool",
-      "desc_now": "Deterministic prompt-injection interception for DeepSeek Harness — scans what the agent READS before it enters model context; credential files quarantined on path alone",
-      "desc_prev": "Deterministic prompt-injection interception for DeepSeek Harness — scans what the agent READS before it enters model context"
+      "desc_now": "DeepSeek Harness 运行时治理插件：把工程纪律从提示词层下沉到执行层——L3 拦截+审批链、真值收口（宿主真跑验证命令）、规则包 Config 化、工具预算；四臂对照已验证机制面｜White-box runtime governance plugin for DSH. Engineering validation done, not released.",
+      "desc_prev": "DSH 工作流插件（开发中）：把工程纪律转化为运行时控制——拦截、门控、证据与规则资源层，白盒可改｜Developer preview, not released."
     }
   ]
 }
