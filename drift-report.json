@@ -1,27 +1,34 @@
 {
-  "generated_at": "2026-10-14T01:06:31.209Z",
-  "count": 3,
+  "generated_at": "2026-10-14T07:32:32.597Z",
+  "count": 4,
   "items": [
     {
-      "full_name": "TwinsEarth/dsh-windows2macos",
+      "full_name": "KCNyu/clawock",
       "previous": "tool",
-      "current": "notify",
-      "desc_now": "DSH: W2M — one DeepSeek account, one instruction, every online Windows/macOS machine runs the same project. Rabbit relay + per-machine Localside + eight DSH tools. Accounts are isolated per fleet, devices sign with Ed25519 keys, and /run works from a WeChat window.",
-      "desc_prev": "DSH: W2M — one DeepSeek account, one instruction, every online Windows/macOS machine runs the same project. Rabbit relay + per-machine Localside + five DSH tools."
-    },
-    {
-      "full_name": "xiaoxianxian/multi-proxy",
-      "previous": "agent",
       "current": "coding",
-      "desc_now": "多 Agent 编排中枢：把 Codex / Cursor / Hermes / DSH 等 AI 编程代理当员工统一管理——协议转换、成本台账、熔断、任务编排与 Web 面板。不是模型切换器，切的是活。",
-      "desc_prev": null
+      "desc_now": "Investment workflows for AI agents: evidence, opposing cases, and outcomes checked by Python.",
+      "desc_prev": "AI argues. Code settles. The losses stay on the page. A real HK + US brokerage account run by agents that must debate every call, settled by code the model never touches. Strategies are plugins whose parameter searches can only propose. Install the same workflow into OpenClaw, Claude Code, Codex, or DeepSeek Harness."
     },
     {
-      "full_name": "xuan25/dsh-webhook-dispatcher",
+      "full_name": "john-walks-slow/dsh-set-model",
+      "previous": "conversation",
+      "current": "tool",
+      "desc_now": "Through Jev or through its own tool calls, the agent switches model presets and thinking depth on its own. A DeepSeek Harness plugin: set_model/list_models and switch_preset/list_presets behind independent switches, Jev auto-switching, Plan Mode staging, and a Web settings page.",
+      "desc_prev": "Model policy for DeepSeek Harness (DSH): free mode set_model/list_models, preset mode switch_preset/list_presets, configurable stage-to-model policy prompt, plan-mode staging, and a bundled Web settings page."
+    },
+    {
+      "full_name": "Kerberos255/dsh-plugin-diagnostics",
       "previous": "other",
-      "current": "agent",
-      "desc_now": "dsh-webhook-dispatcher gives a dsh deployment inbound webhook dispatch: when an HTTP caller reaches one of the plugin's endpoints, a fresh, isolated agent session handles the delivered content. ",
-      "desc_prev": null
+      "current": "tool",
+      "desc_now": "Privacy-restricted JSONL lifecycle, tool and failure diagnostics for DeepSeek Harness plugins.",
+      "desc_prev": "统一收集本地插件的加载、失败与任务状态，脱敏写入按日轮转的 JSONL 日志。"
+    },
+    {
+      "full_name": "GuoMonth/dsh-linko",
+      "previous": "memory",
+      "current": "coding",
+      "desc_now": "Open-source, local-first envelope messaging for DeepSeek Harness: a TypeScript node, human-first inbox, explainable collaborator discovery, and bounded LAN recovery.",
+      "desc_prev": "Open-source, local-first collaboration mesh for DeepSeek Harness: evidence-backed agent discovery, explainable routing, subjective trust ledgers, and bounded LAN gossip."
     }
   ]
 }
