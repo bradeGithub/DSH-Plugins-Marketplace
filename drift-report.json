@@ -1,0 +1,27 @@
+{
+  "generated_at": "2026-10-14T01:06:31.209Z",
+  "count": 3,
+  "items": [
+    {
+      "full_name": "TwinsEarth/dsh-windows2macos",
+      "previous": "tool",
+      "current": "notify",
+      "desc_now": "DSH: W2M — one DeepSeek account, one instruction, every online Windows/macOS machine runs the same project. Rabbit relay + per-machine Localside + eight DSH tools. Accounts are isolated per fleet, devices sign with Ed25519 keys, and /run works from a WeChat window.",
+      "desc_prev": "DSH: W2M — one DeepSeek account, one instruction, every online Windows/macOS machine runs the same project. Rabbit relay + per-machine Localside + five DSH tools."
+    },
+    {
+      "full_name": "xiaoxianxian/multi-proxy",
+      "previous": "agent",
+      "current": "coding",
+      "desc_now": "多 Agent 编排中枢：把 Codex / Cursor / Hermes / DSH 等 AI 编程代理当员工统一管理——协议转换、成本台账、熔断、任务编排与 Web 面板。不是模型切换器，切的是活。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xuan25/dsh-webhook-dispatcher",
+      "previous": "other",
+      "current": "agent",
+      "desc_now": "dsh-webhook-dispatcher gives a dsh deployment inbound webhook dispatch: when an HTTP caller reaches one of the plugin's endpoints, a fresh, isolated agent session handles the delivered content. ",
+      "desc_prev": null
+    }
+  ]
+}
