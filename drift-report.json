@@ -1,13 +1,34 @@
 {
-  "generated_at": "2026-10-15T15:03:15.900Z",
-  "count": 1,
+  "generated_at": "2026-10-15T19:59:44.058Z",
+  "count": 4,
   "items": [
     {
-      "full_name": "rezon-aki/dsh-streamfold",
-      "previous": "conversation",
+      "full_name": "mili1360/dsh-history-fold",
+      "previous": "other",
+      "current": "model",
+      "desc_now": "DSH plugin: folds the oldest part of a session history into one message backed by a lossless local archive, so a long session sends fewer tokens. No model-written summary; everything recoverable.",
+      "desc_prev": "DSH plugin: folds the oldest part of a session history into one message backed by a lossless local archive. No model-written summary, everything recoverable."
+    },
+    {
+      "full_name": "JMX-4869/dsh-mood",
+      "previous": "other",
+      "current": "memory",
+      "desc_now": "给 DeepSeek Harness 加一层心情。33 种心情各自持有数值，每 3~6 小时自己变 —— 它会累、会烦、会好奇；也会因为一轮里工具老报错而烦躁。附带：心情日记（每天 23:59 自己写）、跨会话记忆、品味库（判断的轨迹，跨会话带着看东西）、时事抓取（RSS / 网页 / 视频抽帧）、可选的主动开口。全部数据在本地、可搬到任意盘。MIT 开源。",
+      "desc_prev": "给 DeepSeek Harness 加一层心情。33 种心情（基础 / 复合 / 当代）各自持有数值，每 3~6 小时自己变 —— 它会累、会烦、会好奇。附带每日心情日记、时事、可选的主动开口。MIT 开源。"
+    },
+    {
+      "full_name": "yutao8/dsh-custom-style",
+      "previous": "other",
+      "current": "web-ui",
+      "desc_now": "给 DeepSeek Harness 注入你自己的 CSS：在设置界面里新增的「自定义样式」一栏直接编辑样式文件，即可调整弹窗宽度、导航宽度、字号与内容居中；约两秒生效，不改应用本体、无需重启。 ｜ Inject custom CSS into the DeepSeek Harness GUI from a new Custom CSS section in Settings — dialog width, nav width, font size and content centering; applied in about two seconds, no app patching or restart.",
+      "desc_prev": "Inject custom CSS into the DeepSeek Harness GUI and tune it from a settings section - no app patching, no restart."
+    },
+    {
+      "full_name": "ShirohaChan/dsh-session-artifacts",
+      "previous": "other",
       "current": "tool",
-      "desc_now": "流式折叠：会话窗口展示增强——运行时自动展开最新思考小窗、旧过程行折成一条摘要，跑完把思考与工具调用折起而穿插正文保留；逐帧推进，不依赖历史是否加载完。 · Stream Fold: a transcript display enhancement — the newest thinking window opens itself while older process rows fold into one summary; a finished turn folds its thinking and tool calls away and interleaved prose stays.",
-      "desc_prev": "流式折叠：一个更好的 DSH 会话窗口——运行中自动展开最新思考小窗，其余过程行折成短摘要；跑完自动折起、穿插正文保留；收起/展开按 3 行一组错峰；跑完自动回到提问处。零依赖、零构建。"
+      "desc_now": "Delete a DSH session together with the workspace artifacts that session produced - the file list is reconstructed from the session log and previewed with its total size. The artifacts can also be deleted on their own, keeping the conversation.",
+      "desc_prev": null
     }
   ]
 }
