@@ -1,20 +1,13 @@
 {
-  "generated_at": "2026-10-15T10:07:10.411Z",
-  "count": 2,
+  "generated_at": "2026-10-15T15:03:15.900Z",
+  "count": 1,
   "items": [
     {
-      "full_name": "ljwzhaoxiaoniu/DLR",
-      "previous": "other",
-      "current": "coding",
-      "desc_now": "DLR (Decoupled Logic Representation) + Three-Level Semantic Modeling (TSM) — a data-source-level semantic-layer paradigm, its TypeScript service (LanceDB + Neo4j), the dsh integration, and two benchmark scenarios: BIRD mini-dev (500/500) and Cloud-OpsBench (JRA 752/754).",
-      "desc_prev": null
-    },
-    {
-      "full_name": "StarCried/starlite-dsh",
-      "previous": "other",
+      "full_name": "rezon-aki/dsh-streamfold",
+      "previous": "conversation",
       "current": "tool",
-      "desc_now": "A lightweight VRM companion for DeepSeek Harness on Windows. One plugin for the desktop app, native CLI/Web and WSL2, with animation mapping and interactive bubbles.",
-      "desc_prev": "A privacy-conscious Inochi2D desktop companion for DeepSeek Harness on Windows 11 + WSL2."
+      "desc_now": "流式折叠：会话窗口展示增强——运行时自动展开最新思考小窗、旧过程行折成一条摘要，跑完把思考与工具调用折起而穿插正文保留；逐帧推进，不依赖历史是否加载完。 · Stream Fold: a transcript display enhancement — the newest thinking window opens itself while older process rows fold into one summary; a finished turn folds its thinking and tool calls away and interleaved prose stays.",
+      "desc_prev": "流式折叠：一个更好的 DSH 会话窗口——运行中自动展开最新思考小窗，其余过程行折成短摘要；跑完自动折起、穿插正文保留；收起/展开按 3 行一组错峰；跑完自动回到提问处。零依赖、零构建。"
     }
   ]
 }
