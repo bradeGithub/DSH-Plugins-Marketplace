@@ -1,27 +1,48 @@
 {
-  "generated_at": "2026-10-16T09:51:22.162Z",
-  "count": 3,
+  "generated_at": "2026-10-16T15:01:50.252Z",
+  "count": 6,
   "items": [
     {
-      "full_name": "sixtysevenlf/dsh-blender-plugin",
-      "previous": "tool",
-      "current": "web-ui",
-      "desc_now": "DSH x Blender direct realtime plugin v2.0 — an AI drives Blender over a direct TCP channel (no MCP): 16 tools, 28 families / 186 ops (viewport frames, click-to-pick, render profiling, headless offload) + a right-sidebar panel (live only) with click-to-context & @-mentions. Addon: DSH Blender Bridge. skill: sixtysevenlf/dsh-skill-blender-modeling",
-      "desc_prev": "DSH x Blender direct realtime plugin v1.0 — let an AI model drive Blender over a direct TCP channel: viewport frames, custom-angle renders, inner-loop search, render profiling, safe decimation, headless offload, one-call GUI launch (15 tools + blender_rt_plan: 28 families / 183 ops). 配套 skill：sixtysevenlf/dsh-skill-blender-modeling"
+      "full_name": "dream12347/dsh-session-manager",
+      "previous": "other",
+      "current": "resource",
+      "desc_now": "DSH 会话管理插件：删除（回收站恢复/彻底清除）、统计、继续/暂停、打开日志目录、对话顶部抽屉、工作区分组与排序、上下文压缩阈值设置。DSH session manager: delete with trash/restore/purge, stats, continue/pause, log folder, header drawer, workspace grouping, context compaction threshold.",
+      "desc_prev": "DSH 会话管理插件：删除（回收站恢复/彻底清除）、统计、继续/暂停、打开日志目录、对话顶部抽屉、工作区分组与排序、上下文压缩阈值设置。DSH session manager: delete with trash/restore/purge, stats, continue/pause, log folder, header drawer, workspace grouping, context compaction threshold."
     },
     {
-      "full_name": "Xiaofei-fei/dsh-prompt-history",
+      "full_name": "Clarklevis1995/dsh-plugin-mobile-gateway",
       "previous": "memory",
-      "current": "coding",
-      "desc_now": "DSH web plugin: terminal-style composer — shell history (↑/↓, prefix search, Ctrl+R), Codex-style completion and next-prompt prediction, selection toolbar (copy/quote/side chat), right-click paste, draggable chat TOC, and a parallel side-chat thread in the right sidebar.",
-      "desc_prev": "Bash-like prompt history for the DSH web composer: Up/Down arrows recall previously submitted messages, sourced from the session's own message log (zero config, zero extra storage)."
+      "current": "other",
+      "desc_now": "以websocket为通信方式的dsh网关插件，支持在同一网域内移动端的接入，实现移动端的dsh app",
+      "desc_prev": "以websocket为通信方式的dsh网关插件，支持在同一网域内移动端的接入，实现移动端的dsh app"
+    },
+    {
+      "full_name": "NOirBRight/dsh-llm-ollama",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "Native Ollama Cloud provider and Web configuration plugin for DeepSeek Harness",
+      "desc_prev": "Native Ollama Cloud provider and Web configuration plugin for DeepSeek Harness"
     },
     {
       "full_name": "ifrankwang/openspec-agents",
-      "previous": "agent",
-      "current": "coding",
-      "desc_now": "AI 写的代码常常只到「能跑」。这套插件装在 Claude Code / Codex / ZCode / DeepSeek Harness / OpenCode 上，按生产级标准审查 OpenSpec 变更：空实现、假成功、测试放水，过不了。",
-      "desc_prev": "OpenSpec 流程的 Agent Team：面向实施阶段的多 Agent 工作流编排。"
+      "previous": "coding",
+      "current": "tool",
+      "desc_now": "OpenSpec 的配套插件，兼容 Claude Code / Codex / ZCode / DeepSeek Harness / OpenCode：提案标准更严（澄清在前、改动范围与契约变更逐条确认），实施由多 Agent 分工审查，按生产级标准把控到收口。",
+      "desc_prev": "AI 写的代码常常只到「能跑」。这套插件装在 Claude Code / Codex / ZCode / DeepSeek Harness / OpenCode 上，按生产级标准审查 OpenSpec 变更：空实现、假成功、测试放水，过不了。"
+    },
+    {
+      "full_name": "popu2do/dsh-call-session",
+      "previous": "other",
+      "current": "notify",
+      "desc_now": "Multi-session collaboration for DeepSeek Harness: peer session calls, a shared blackboard, and a read-only topology canvas.",
+      "desc_prev": "Pure native cross-session collaboration plugin for DeepSeek Harness (DSH)"
+    },
+    {
+      "full_name": "qikairo7/dsh-web-search-fetch",
+      "previous": "tool",
+      "current": "resource",
+      "desc_now": "DSH 多源搜索与网页正文整理插件：原生 web_search / web_fetch 后面聚合多路服务，支持匿名体验、自动预设、来源与差异记录。",
+      "desc_prev": "DSH 多来源搜索与网页正文整理插件：免密钥首次使用、搜索融合、正文去重互补、来源与差异记录，沿用原生 web_search / web_fetch。"
     }
   ]
 }
