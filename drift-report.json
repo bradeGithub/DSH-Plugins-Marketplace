@@ -1,20 +1,27 @@
 {
-  "generated_at": "2026-10-16T04:03:55.215Z",
-  "count": 2,
+  "generated_at": "2026-10-16T09:51:22.162Z",
+  "count": 3,
   "items": [
     {
-      "full_name": "nailiang002-wq/deepseek-girl-harness",
-      "previous": "other",
-      "current": "model",
-      "desc_now": "DeepSeek Harness Desktop 互动角色：换装、白饭、摸头、问候、登录账户余额和本机今日用量预估。 / Mascot with outfits, rice, greetings, balances & local usage estimates.",
-      "desc_prev": "DeepSeek Harness Desktop 互动角色插件：三套服装、任务表情、三口白饭、摸头鼓脸、铁盆帽与手写问候。 / Interactive mascot with outfits, rice feeding and greetings."
+      "full_name": "sixtysevenlf/dsh-blender-plugin",
+      "previous": "tool",
+      "current": "web-ui",
+      "desc_now": "DSH x Blender direct realtime plugin v2.0 — an AI drives Blender over a direct TCP channel (no MCP): 16 tools, 28 families / 186 ops (viewport frames, click-to-pick, render profiling, headless offload) + a right-sidebar panel (live only) with click-to-context & @-mentions. Addon: DSH Blender Bridge. skill: sixtysevenlf/dsh-skill-blender-modeling",
+      "desc_prev": "DSH x Blender direct realtime plugin v1.0 — let an AI model drive Blender over a direct TCP channel: viewport frames, custom-angle renders, inner-loop search, render profiling, safe decimation, headless offload, one-call GUI launch (15 tools + blender_rt_plan: 28 families / 183 ops). 配套 skill：sixtysevenlf/dsh-skill-blender-modeling"
     },
     {
-      "full_name": "hs666-ai/dsh-tencent-docs-bridge",
-      "previous": "other",
-      "current": "resource",
-      "desc_now": "Unofficial DSH plugin bridging Tencent Docs official MCP endpoint (docs.qq.com) · 腾讯文档官方 MCP 桥（社区非官方）",
-      "desc_prev": null
+      "full_name": "Xiaofei-fei/dsh-prompt-history",
+      "previous": "memory",
+      "current": "coding",
+      "desc_now": "DSH web plugin: terminal-style composer — shell history (↑/↓, prefix search, Ctrl+R), Codex-style completion and next-prompt prediction, selection toolbar (copy/quote/side chat), right-click paste, draggable chat TOC, and a parallel side-chat thread in the right sidebar.",
+      "desc_prev": "Bash-like prompt history for the DSH web composer: Up/Down arrows recall previously submitted messages, sourced from the session's own message log (zero config, zero extra storage)."
+    },
+    {
+      "full_name": "ifrankwang/openspec-agents",
+      "previous": "agent",
+      "current": "coding",
+      "desc_now": "AI 写的代码常常只到「能跑」。这套插件装在 Claude Code / Codex / ZCode / DeepSeek Harness / OpenCode 上，按生产级标准审查 OpenSpec 变更：空实现、假成功、测试放水，过不了。",
+      "desc_prev": "OpenSpec 流程的 Agent Team：面向实施阶段的多 Agent 工作流编排。"
     }
   ]
 }
