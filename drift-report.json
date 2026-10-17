@@ -1,27 +1,41 @@
 {
-  "generated_at": "2026-10-17T09:33:56.380Z",
-  "count": 3,
+  "generated_at": "2026-10-17T13:51:42.788Z",
+  "count": 5,
   "items": [
     {
-      "full_name": "dingminhua/dsh-service-portal",
-      "previous": "tool",
-      "current": "web-ui",
-      "desc_now": "Expose any local service on a random cloudflared domain with one password — QR code for LAN, QR + password for public, per-node routing managed in the DSH settings panel.",
-      "desc_prev": null
+      "full_name": "jiangnanquan/dsh-ux",
+      "previous": "web-ui",
+      "current": "notify",
+      "desc_now": "DSH (DeepSeek Harness) Web UI 增强插件：25 套终端美学主题、中文优先字体、文字墨色与官方峰谷提醒 · 江南泉个人开发并免费开源",
+      "desc_prev": "DSH web UI 增强插件 + 无边框 Electron 桌面壳"
     },
     {
-      "full_name": "baom1ng/dsh-local-plugin-source",
-      "previous": "conversation",
-      "current": "tool",
-      "desc_now": "An in-app plugin source for DeepSeek Harness: list the local plugin folder in Settings > Plugins > Local plugins and install, reinstall, enable, disable or remove those bundles through the profile Plugin Manager.",
-      "desc_prev": "Turn a local folder into an in-app plugin source for DeepSeek Harness Desktop: list, install, enable/disable and remove local plugin bundles from Settings ? Plugins ? Local plugins."
-    },
-    {
-      "full_name": "zhangjie-2007/dsh-voice",
+      "full_name": "chimneyQ/dsh-model-rotator",
       "previous": "other",
-      "current": "conversation",
-      "desc_now": "DSH 插件：任务完成 / 需要你做选择 / 开始新对话时，用微软 Edge 神经语音播报（晓伊声线，本地缓存 mp3，零依赖，Windows）",
-      "desc_prev": "DSH 插件：任务完成 / 需要你做选择时，用微软 Edge 神经语音播报（晓伊声线，本地缓存 mp3，零依赖）"
+      "current": "tool",
+      "desc_now": "Model auto-ranking and transparent failover for DeepSeek Harness: ranks discovered models by measured connectivity and speed, switches to the next candidate inside the same turn when the current one fails without output, and ships a searchable channel-grouped model list with per-model and per-channel switches plus a quota-aware cooldown.",
+      "desc_prev": "Model auto-ranking and transparent failover for DeepSeek Harness: ranks discovered models by measured connectivity and speed, switches to the next candidate inside the same turn when the current one fails without output, and ships a searchable channel-grouped model list with per-model and per-channel switches plus a quota-aware cooldown."
+    },
+    {
+      "full_name": "chimneyQ/dsh-context-toolkit",
+      "previous": "memory",
+      "current": "coding",
+      "desc_now": "Keeps bulk output out of the conversation from both ends: a routing gate refuses flooding calls (curl/wget in any shell, web_fetch/read_page), and output already inside is slimmed after the tool runs — JSON re-encoded losslessly, tables windowed with line numbers, logs folded keeping diagnostics — originals readable byte-for-byte via ctk_retrieve.",
+      "desc_prev": "Keeps bulk output out of the conversation from both ends: a routing gate refuses flooding calls (curl/wget in any shell, web_fetch/read_page), and output already inside is slimmed after the tool runs — JSON re-encoded losslessly, tables windowed with line numbers, logs folded keeping diagnostics — originals readable byte-for-byte via ctk_retrieve."
+    },
+    {
+      "full_name": "7gzgn/dsh-gui-guard",
+      "previous": "vision",
+      "current": "agent",
+      "desc_now": "Windows GUI automation reliability layer: probe whether a window is minimized, foreground or DPI-scaled, then click and type with the coordinate space and activation order handled for you. Zero dependencies, local only.",
+      "desc_prev": "Windows GUI automation reliability layer: probe whether a window is minimized, foreground or DPI-scaled, then click and type with the coordinate space and activation order handled for you. Zero dependencies, local only."
+    },
+    {
+      "full_name": "01men/ybkkasi",
+      "previous": "agent",
+      "current": "model",
+      "desc_now": "企业 AI 资源管理平台 —— 把 MCP 服务 / Skill / Agent / AI 应用 统一成一套可管、可算、可审的资产。一套身份、一套权限、一套计量、一套审计。自托管 · MIT。",
+      "desc_prev": "面向 DeepSeek Harness（dsh）团队的企业 AI 管控台 —— MCP/Skill/Agent/应用，一套身份、权限、计量、审计"
     }
   ]
 }
