@@ -1,13 +1,27 @@
 {
-  "generated_at": "2026-10-17T03:56:10.924Z",
-  "count": 1,
+  "generated_at": "2026-10-17T09:33:56.380Z",
+  "count": 3,
   "items": [
     {
-      "full_name": "momo20012002/dsh-hmos-emulator",
-      "previous": "coding",
-      "current": "vision",
-      "desc_now": "DSH鸿蒙模拟器侧边栏标签页：管理/启动模拟器、构建部署 HarmonyOS 应用，查看设备日志、截图与代码检查结果；同时向 AI 提供 8 个鸿蒙调试工具。",
-      "desc_prev": "DSH better-sidebar 侧边栏标签页:一键启动鸿蒙模拟器、构建并部署 HarmonyOS 应用到模拟器。"
+      "full_name": "dingminhua/dsh-service-portal",
+      "previous": "tool",
+      "current": "web-ui",
+      "desc_now": "Expose any local service on a random cloudflared domain with one password — QR code for LAN, QR + password for public, per-node routing managed in the DSH settings panel.",
+      "desc_prev": null
+    },
+    {
+      "full_name": "baom1ng/dsh-local-plugin-source",
+      "previous": "conversation",
+      "current": "tool",
+      "desc_now": "An in-app plugin source for DeepSeek Harness: list the local plugin folder in Settings > Plugins > Local plugins and install, reinstall, enable, disable or remove those bundles through the profile Plugin Manager.",
+      "desc_prev": "Turn a local folder into an in-app plugin source for DeepSeek Harness Desktop: list, install, enable/disable and remove local plugin bundles from Settings ? Plugins ? Local plugins."
+    },
+    {
+      "full_name": "zhangjie-2007/dsh-voice",
+      "previous": "other",
+      "current": "conversation",
+      "desc_now": "DSH 插件：任务完成 / 需要你做选择 / 开始新对话时，用微软 Edge 神经语音播报（晓伊声线，本地缓存 mp3，零依赖，Windows）",
+      "desc_prev": "DSH 插件：任务完成 / 需要你做选择时，用微软 Edge 神经语音播报（晓伊声线，本地缓存 mp3，零依赖）"
     }
   ]
 }
