@@ -1,62 +1,20 @@
 {
-  "generated_at": "2026-10-18T14:09:39.928Z",
-  "count": 8,
+  "generated_at": "2026-10-18T17:31:19.328Z",
+  "count": 2,
   "items": [
     {
-      "full_name": "Axiaohungry/dsh-llm-workbuddy",
-      "previous": "other",
+      "full_name": "6mt/dsh-control",
+      "previous": "tool",
       "current": "web-ui",
-      "desc_now": "在deepseek harness中使用workbuddy api，因为公司只提供workbuddy积分",
-      "desc_prev": "在deepseek harness中使用workbuddy api，因为公司只提供workbuddy积分"
+      "desc_now": "多机 dsh 控制：从本地一个窗口驱动你其他服务器上的 dsh——远端会话原生进侧栏，整台远端界面也能搬进来。与同名技能项目不同，本插件解决的是跨机器。· Control the dsh instances on your other machines from one local window.",
+      "desc_prev": "本地一个窗口，驱动你所有机器上的 dsh · Drive the dsh instances on your other machines from one local window"
     },
     {
-      "full_name": "Ianzhyh/workbuddy-to-dsh",
+      "full_name": "sixrg7734/dsh-sw-approval",
       "previous": "other",
       "current": "tool",
-      "desc_now": "把本机 WorkBuddy 桌面端已登录的模型（DeepSeek / GLM / Kimi / MiniMax 等）变成本地的 OpenAI 与 Anthropic 兼容接口 —— Claude Code / opencode / Cursor / Trae / Cherry Studio / LobeChat 等任意支持自定义 Base URL 的客户端可直连。附网页控制台与 DeepSeek Harness 原生插件。零依赖，仅监听 127.0.0.1。",
-      "desc_prev": "把本机 WorkBuddy 桌面端已登录的模型（DeepSeek / GLM / Kimi / MiniMax 等）变成本地的 OpenAI 与 Anthropic 兼容接口 —— Claude Code / opencode / Cursor / Trae / Cherry Studio / LobeChat 等任意支持自定义 Base URL 的客户端可直连。附网页控制台与 DeepSeek Harness 原生插件。零依赖，仅监听 127.0.0.1。"
-    },
-    {
-      "full_name": "fyjgtddco/DSH-SW-and-CAD",
-      "previous": "tool",
-      "current": "web-ui",
-      "desc_now": "机械技术工程师福音！！！专为SW和CAD设计的插件！现在，内置DeepSeek Harness“工程模式”，让DeepSeek Harness以“完成工图”作为第一目标，避免分心，此插件还可以以SW一键转化为CAD图纸，无需任何操作。现在，你只需要说一句命令，就可以去睡觉了，让此插件帮你完成任务吧！",
-      "desc_prev": "机械技术工程师福音！！！专为SW和CAD设计的插件！现在，内置DeepSeek Harness“工程模式”，让DeepSeek Harness以“完成工图”作为第一目标，避免分心，此插件还可以以SW一键转化为CAD图纸，无需任何操作。现在，你只需要说一句命令，就可以去睡觉了，让此插件帮你完成任务吧！"
-    },
-    {
-      "full_name": "Mooling0602/dsh-web-file-uploader",
-      "previous": "web-ui",
-      "current": "tool",
-      "desc_now": "A file-upload plugin for the DeepSeek Harness.",
-      "desc_prev": "A file-upload plugin for the DeepSeek Harness web UI."
-    },
-    {
-      "full_name": "KratosLee-6/Html-ninefox",
-      "previous": "other",
-      "current": "document",
-      "desc_now": "Html九尾狐 · 本地优先的 HTML 创作工作台：需求 → 分析 → 组合 → 生成 → PDF / PNG / PPTX / Word 导出，离线可用，AI 可选",
-      "desc_prev": "html九尾狐，用来制作html的工作台，让你那些散落的html能放到一起，再打散重组，一切如新"
-    },
-    {
-      "full_name": "algerkong/dsh-image-preview",
-      "previous": "other",
-      "current": "web-ui",
-      "desc_now": "Image previews for DSH sessions: read_image, user/assistant/Markdown/present images, a full-size lightbox with zoom, rotate, pan, download, sidebar and native file actions.",
-      "desc_prev": "Image previews for DSH sessions: read_image, user/assistant/Markdown/present images, a full-size lightbox with zoom, rotate, pan, download, sidebar and native file actions."
-    },
-    {
-      "full_name": "lcy0121/dsh-plugin-compat-check",
-      "previous": "tool",
-      "current": "coding",
-      "desc_now": "检查已安装DSH插件的版本声明、API风险与覆盖限制；提供兼容性面板、agent工具及可用源码位置。Check installed DSH plugins for declaration/API risks, with a compatibility panel, agent tool, source locations when available and coverage limits.",
-      "desc_prev": "体检你已装的 DSH 插件与当前 DSH 版本是否兼容，给出 file:line 与原因（CLI 形态也可预检尚未安装的插件）/ Check whether your installed DeepSeek Harness plugins work on your current DSH version — with file:line and reason. The CLI can also pre-check plugins you have not installed yet."
-    },
-    {
-      "full_name": "M1r0er/dsh-workspace-gate",
-      "previous": "tool",
-      "current": "resource",
-      "desc_now": "工作区插件门控：插件照常加载，按工作区（目录）把它不该占的提示词前缀摘掉——工具 schema 与提示词段不再进模型上下文。Workspace-scoped plugin gate for DeepSeek Harness (dsh).",
-      "desc_prev": "工作区插件门控：插件照常加载，按工作区（目录）把它不该占的提示词前缀摘掉——工具 schema 与提示词段不再进模型上下文。Workspace-scoped plugin gate for DeepSeek Harness (dsh)."
+      "desc_now": "DeepSeek Harness 插件，仅对可信 SolidWorks 建模操作自动放行，兼顾效率与沙箱安全",
+      "desc_prev": "专注于dsh对于soildwork建模的审批"
     }
   ]
 }
