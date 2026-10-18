@@ -1,20 +1,13 @@
 {
-  "generated_at": "2026-10-18T04:05:04.362Z",
-  "count": 2,
+  "generated_at": "2026-10-18T09:18:21.654Z",
+  "count": 1,
   "items": [
     {
-      "full_name": "xingzhen199186/dsh-mini-remote",
+      "full_name": "denceee/dsh-compat-adapter",
       "previous": "tool",
-      "current": "web-ui",
-      "desc_now": "本插件适应多种使用场景，将注意力支配权交还给用户。移动端提供「单帧」、「聊天」和「完整」三种模式，用户可以选择彻底屏蔽执行噪声，也可随时展开完整轨迹；PC端提供远程窗口功能，可在多台设备上以桌面端原生UI界面操作核心设备上的deepseek harness。",
-      "desc_prev": "DSH 极简风远程移动端，提供「单帧」、「聊天」和「完整」三种模式，将注意力支配权交还给用户。另附PC端远程窗口功能。"
-    },
-    {
-      "full_name": "InformationDS/DSHAIKanBan",
-      "previous": "memory",
       "current": "coding",
-      "desc_now": "AIKanBan 产品需求（PRD）：Deepseek Harness 桌面版的项目看板与跨对话交接。20 个功能小 PRD、公共规则与 106 个验收场景；实施代码保留在 archive 分支。",
-      "desc_prev": "AIKanBan for DSH：任务分配给对话完成的 Trello 式项目看板插件。全宽看板视图 Tab、拖拽流转、跨会话版本化记忆交接、看板内新建对话与绑定。"
+      "desc_now": "DSH 前置/基座适配插件：把 Claude Code / Codex / WorkBuddy / OpenCode / GitHub Copilot 的 hooks 与 rules，通过显式声明适配到 DSH seam。5 家 vendor、112 个事件（102 真实/精确 + 10 自述 Approximate）、29 个原生翻译点；含自建 Copilot 桥、真实文件监听、真实 git worktree 检测、官方 LSP 接入。每条适配逐项列出损失，fail-closed，不发布虚假能力。",
+      "desc_prev": "DSH 前置/基座适配插件：把 Claude Code / Codex / WorkBuddy / OpenCode / GitHub Copilot 的 hooks 与 rules，通过显式声明适配到 DSH seam。5 家 vendor、85 个事件，每条适配逐项列出损失，fail-closed。"
     }
   ]
 }
