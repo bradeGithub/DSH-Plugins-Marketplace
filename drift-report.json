@@ -1,20 +1,27 @@
 {
-  "generated_at": "2026-10-19T10:39:22.917Z",
-  "count": 2,
+  "generated_at": "2026-10-19T13:08:47.763Z",
+  "count": 3,
   "items": [
     {
-      "full_name": "MuQY1818/ds-bot-mobile-web",
-      "previous": "other",
-      "current": "conversation",
-      "desc_now": "A mobile-first Web interface for your self-hosted DS Bot team. Install a DSH plugin, scan to connect, and keep chatting from your phone.",
-      "desc_prev": "DS Bot Mobile Web — a mobile interface and secure QR access for your existing self-hosted Bot team"
+      "full_name": "xiciyang/inference-serving",
+      "previous": "model",
+      "current": "memory",
+      "desc_now": "Deploy a checkpoint as a reachable inference endpoint in DSH: probe, backend select, three-stage health check, registration, auto-degrade (memory/concurrency/precision/port), rollback, teardown — hash-chained audit log. 154 tests.",
+      "desc_prev": "本地项目：inference-serving"
     },
     {
-      "full_name": "ya123-4/archify-skill-dsh",
-      "previous": "tool",
-      "current": "web-ui",
-      "desc_now": "Archify 3.0.1 skill 的 DeepSeek Harness 插件包：把架构、工作流、时序、数据流和生命周期图生成可交互 HTML，支持暗/亮主题与导出。 | DeepSeek Harness plugin bundle exposing the Archify 3.0.1 skill: architecture, workflow, sequence, dataflow and lifecycle diagrams as explorable HTML with dark/light themes and export.",
-      "desc_prev": "DeepSeek Harness plugin bundle that exposes the Archify 3.0.1 skill for architecture / workflow / sequence / dataflow / lifecycle diagrams."
+      "full_name": "exoticknight/dsh-system1",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "Asks System One models for yes/no, choice, score, and image-box judgments with probabilities, via an agent tool or a plugin service | 调用 System One 模型做是非、选择、评分和图片定位判断并返回概率，提供 agent 工具和插件服务",
+      "desc_prev": "System One foundation and Cordis plugin for DeepSeek Harness | DeepSeek Harness 的 System One 基础能力与 Cordis 插件"
+    },
+    {
+      "full_name": "xiciyang/dsh-visual-memory",
+      "previous": "memory",
+      "current": "vision",
+      "desc_now": "Lossless visual memory for DSH agents: store an image once, address it by sha256, read exact pixels, compare past frames, recall by text/tag/turn — no second vision model in the loop.",
+      "desc_prev": null
     }
   ]
 }
