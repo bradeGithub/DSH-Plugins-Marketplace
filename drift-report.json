@@ -1,0 +1,76 @@
+{
+  "generated_at": "2026-10-19T04:48:40.127Z",
+  "count": 10,
+  "items": [
+    {
+      "full_name": "Axiaohungry/dsh-llm-workbuddy",
+      "previous": "web-ui",
+      "current": "other",
+      "desc_now": "在deepseek harness中使用workbuddy api，因为公司只提供workbuddy积分",
+      "desc_prev": "在deepseek harness中使用workbuddy api，因为公司只提供workbuddy积分"
+    },
+    {
+      "full_name": "OMSociety/dsh-git-forge",
+      "previous": "web-ui",
+      "current": "tool",
+      "desc_now": "DSH 插件：Git 凭据与推送权限管理器。哪个项目能用哪个账号、允许推到哪些 host，一处说清。账号库与 token 只落在宿主侧。按项目授权决定 agent 用哪个账号，push 拦截决定这个项目允许推到哪。",
+      "desc_prev": "DSH 插件：Git 凭据与推送权限管理器。哪个项目能用哪个账号、允许推到哪些 host，一处说清。账号库与 token 只落在宿主侧。按项目授权决定 agent 用哪个账号，push 拦截决定这个项目允许推到哪。"
+    },
+    {
+      "full_name": "pg527322814/dsh-bayes-predict",
+      "previous": "other",
+      "current": "resource",
+      "desc_now": "dsh-贝叶斯个股预测插件：卡尔曼增益融合的上涨概率估计、策略回测与全市场选股、自选股实时跟踪（A 股 + 美股）",
+      "desc_prev": "dsh-贝叶斯个股预测插件：多指标信号融合的上涨概率估计、趋势状态识别与持仓风险度量（A 股 + 美股）"
+    },
+    {
+      "full_name": "sleepinginsummer/dsh-rtk-optimizer",
+      "previous": "other",
+      "current": "coding",
+      "desc_now": "DSH 插件：bash 命令改写建议 + 工具输出压缩，挂在工具事件上全局生效，本身不注册模型工具。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "sleepinginsummer/dsh-hashline-edit-pro",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "DSH 插件：哈希锚点编辑工具（hashline_read / replace / undo_last_replace），用内容哈希定位，不依赖行号或字符串匹配。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "cainiao1992/dsh-codebuddy-auth",
+      "previous": "tool",
+      "current": "other",
+      "desc_now": "[DEPRECATED] Unmaintained — use shatyuka/dsh-llm-codebuddy or corrinehu/dsh-workbuddy-connect",
+      "desc_prev": "Tencent CodeBuddy provider plugin for DeepSeek Harness: OAuth login, token refresh, and model sync via native dsh seams"
+    },
+    {
+      "full_name": "sleepinginsummer/dsh-fff",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "DSH 插件：模糊路径查找 + 索引内容搜索（find_files / resolve_file / related_files），移植自 pi-fff。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "zxc663/shisan-xinuo-dsh-plugin",
+      "previous": "tool",
+      "current": "conversation",
+      "desc_now": "DeepSeek Harness（DSH）运行时治理插件：L3 拦截＋真值收口＋规则 Config 化＋提示词管理后台，把工程纪律下沉为运行时强制｜0.1 MVP 已发布",
+      "desc_prev": "DeepSeek Harness 运行时治理插件：把工程纪律从提示词层下沉到执行层——L3 拦截+审批链、真值收口（宿主真跑验证命令）、规则包 Config 化、工具预算；四臂对照已验证机制面｜White-box runtime governance plugin for DSH. Engineering validation done, not released."
+    },
+    {
+      "full_name": "LobotomyCorporation/dsh-token-bar",
+      "previous": "model",
+      "current": "web-ui",
+      "desc_now": "A per-turn token usage strip for DeepSeek Harness: a segmented bar plus a written legend in every reply's icon row, showing this turn's uncached input / cache read / output split.",
+      "desc_prev": "A per-turn token usage strip for DeepSeek Harness: a segmented bar plus a written legend under every reply, showing this turn's uncached input / cache read / output split."
+    },
+    {
+      "full_name": "daha1216/dsh-skills-manager",
+      "previous": "resource",
+      "current": "web-ui",
+      "desc_now": "🧩 DeepSeek Harness 本地技能可视化管理面板：一站式查看/新建/编辑技能，精准配置模型与用户调用策略，支持在线预览、即时搜索与安全回收 (Skills Manager for DSH)",
+      "desc_prev": "DeepSeek Harness 技能管理插件：设置页列出/查看/新建/编辑/删除本地技能，切换模型调用与用户调用策略，支持一键在文件管理器中打开技能目录"
+    }
+  ]
+}
