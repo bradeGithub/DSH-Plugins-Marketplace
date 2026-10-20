@@ -1,48 +1,13 @@
 {
-  "generated_at": "2026-10-19T20:04:46.407Z",
-  "count": 6,
+  "generated_at": "2026-10-19T23:50:22.751Z",
+  "count": 1,
   "items": [
     {
-      "full_name": "sixtysevenlf/dsh-blender-plugin",
-      "previous": "web-ui",
-      "current": "tool",
-      "desc_now": "DSH × Blender 直连实时插件：15 个模型工具让 AI 驱动 GUI Blender；v2.5 活动状态置顶并可一键暂停 AI，原生选中/集合/子元素直送 DSH，随包建模 skill，支持 WSL / Windows / macOS。",
-      "desc_prev": "DSH x Blender direct realtime plugin v2.0 — an AI drives Blender over a direct TCP channel (no MCP): 16 tools, 28 families / 186 ops (viewport frames, click-to-pick, render profiling, headless offload) + a right-sidebar panel (live only) with click-to-context & @-mentions. Addon: DSH Blender Bridge. skill: sixtysevenlf/dsh-skill-blender-modeling"
-    },
-    {
-      "full_name": "chipweaver/veripower",
-      "previous": "web-ui",
-      "current": "coding",
-      "desc_now": "Give your coding agent a workflow for chip front-end design and verification.",
-      "desc_prev": "An open-source agent flow from natural language spec through Verilog RTL and UVM verification to front-end signoff on commercial EDA tools"
-    },
-    {
-      "full_name": "TinyBOOOOM/dsh-cliproxyapi-pro",
-      "previous": "tool",
-      "current": "model",
-      "desc_now": "把 CLIProxyAPI（CPA）里的模型，一键接进 DeepSeek Harness（DSH）的模型选择器。",
-      "desc_prev": "CLIProxyAPI provider for DeepSeek Harness: multiple accounts, model discovery and sync into the DSH model picker, per-model overrides. DSH 的 CLIProxyAPI 接入插件。"
-    },
-    {
-      "full_name": "JeffTsuiCUG/dsh-connect-minimaxcode",
+      "full_name": "lo2589/deepseek-harness-media",
       "previous": "other",
-      "current": "resource",
-      "desc_now": "Bring MiniMax Code desktop app models into DeepSeek Harness: zero-config, no API key, Anthropic Messages compatible, dynamic model catalog, and the credit balance plus expiring credits shown in the composer and plugin page. Unofficial plugin; relies on MiniMax non-public client APIs, for study and research use only.",
-      "desc_prev": "Bring MiniMax Code desktop app models into DeepSeek Harness (DSH). Unofficial, MIT."
-    },
-    {
-      "full_name": "Maple-Yoli/dsh-notice-card",
-      "previous": "conversation",
-      "current": "web-ui",
-      "desc_now": "Focus-free notification cards for DeepSeek Harness on Windows. Turn finished, approval pending, question pending. Follows the system theme, DPI and text size, lands on the monitor under the pointer, and draws text with GDI ClearType.",
-      "desc_prev": "Focus-free notification cards for DeepSeek Harness on Windows: turn finished, approval pending, question pending."
-    },
-    {
-      "full_name": "woshipixiu1234/dsh-invest-bundle",
-      "previous": "tool",
-      "current": "document",
-      "desc_now": "DSH investment research bundle: 10 tools + 23 skills adapted from ai-berkshire. A six-phase workflow runs four parallel agents (Duan Yongping / Buffett / Munger / Li Lu) and ships a chart-rich PDF with cover, tables, captions and page numbers. MIT licensed.",
-      "desc_prev": "DSH investment research bundle: 6 tools (search/fetch/audit/verify/rigor/channels) + 22 skills adapted from ai-berkshire, MIT licensed."
+      "current": "vision",
+      "desc_now": "use glm/minimax/openai/claude api in your deepseek harness",
+      "desc_prev": "use glm/minimax/openai/claude api in your deepseek harness"
     }
   ]
 }
