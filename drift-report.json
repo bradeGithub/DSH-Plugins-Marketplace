@@ -1,27 +1,48 @@
 {
-  "generated_at": "2026-10-20T10:24:48.757Z",
-  "count": 3,
+  "generated_at": "2026-10-20T17:00:48.428Z",
+  "count": 6,
   "items": [
     {
-      "full_name": "hugoyee75-cmyk/dsh-token-metrics",
-      "previous": "web-ui",
-      "current": "tool",
-      "desc_now": "DSH 插件：统计所有经过 DeepSeek Harness 的模型调用——Token 用量、成本核算（含峰谷计价）、供应商余额与配额，并按模型/供应商/项目/来源/账号/日期拆分。A token usage, cost and provider-balance plugin for DeepSeek Harness.",
-      "desc_prev": "把经过 DeepSeek Harness 的每一次模型调用记下来，在侧边栏给你一个 Token 用量统计页。按模型/供应商/项目/来源/账号/日期拆分，带缓存命中率、趋势图表与自更新。A Token usage statistics plugin for DeepSeek Harness."
+      "full_name": "Jesseovo/last30days-skill-cn",
+      "previous": "memory",
+      "current": "resource",
+      "desc_now": "给 AI Agent 的中文互联网研究 Skill：检索 8 大平台最近 30 天的讨论，追踪跨平台热点，生成附原始来源的报告，并提供每日全网热榜。支持 Claude Code、Codex、OpenClaw。",
+      "desc_prev": "给 AI Agent 的中文互联网研究 Skill：检索 8 大平台最近 30 天的讨论，追踪跨平台热点，生成附原始来源的报告，并提供每日全网热榜。支持 Claude Code、Codex、OpenClaw。"
     },
     {
-      "full_name": "mocilukalbj/dsh-open-code-review",
-      "previous": "vision",
-      "current": "tool",
-      "desc_now": "Code review for DeepSeek Harness with your own model — Alibaba Open Code Review selects files and resolves rules; native tools, sandboxed, no extra API key.",
-      "desc_prev": "Alibaba Open Code Review for DeepSeek Harness: native review tools, host-model delegation, and optional OCR-managed reviews."
-    },
-    {
-      "full_name": "ddtcorex/maestro-reviewer",
-      "previous": "agent",
+      "full_name": "Scorp1o117/dsh-motion-ui",
+      "previous": "conversation",
       "current": "web-ui",
-      "desc_now": "AI merge-request review engine and GitLab CI reviewer: one secrets-holding reviewer project, secret-free bridge jobs, per-project AI providers, Docker image ddtcorex/maestro-reviewer",
-      "desc_prev": "Pluggable merge-request review pipeline for DeepSeek Harness (webhook, orchestrator, findings) with a GitLab provider"
+      "desc_now": "Interactive UI, HTML/SVG diagrams and animation for DeepSeek Harness Web",
+      "desc_prev": "Interactive UI, HTML/SVG diagrams and animation for DeepSeek Harness Web"
+    },
+    {
+      "full_name": "CrazyShout/dsh-ssh-remote",
+      "previous": "tool",
+      "current": "coding",
+      "desc_now": "SSH remote development for DeepSeek Harness: native files and terminals, remote editing, @ references, port forwarding, resumable transfers, and in-app updates. Powered by your OpenSSH config.",
+      "desc_prev": "SSH remote workspaces for DeepSeek Harness: browse/read/write remote files, run remote commands, with connection status dots."
+    },
+    {
+      "full_name": "Respawn-ID/dsh-rhine-splash",
+      "previous": "other",
+      "current": "web-ui",
+      "desc_now": "Rhine Lab theme for DeepSeek Harness — 莱茵生命主题：开屏动画、界面主题、品牌标志与附加功能",
+      "desc_prev": "Rhine Lab style boot splash bundle for DeepSeek Harness desktop — 莱茵生命风格的 DeepSeek Harness 开屏动画插件"
+    },
+    {
+      "full_name": "SepTem61r/dsh-aliyun-ecs-connect",
+      "previous": "other",
+      "current": "coding",
+      "desc_now": "One command starts your Aliyun ECS, finds its current public IP, and opens an SSH terminal — no console login, no copy-paste. Built for students who only power the server up when they need it. A DeepSeek Harness plugin. ｜ 给“用时才开”的学生党：一句话开机并自动连上。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "Maple-Yoli/dsh-notice-card",
+      "previous": "web-ui",
+      "current": "notify",
+      "desc_now": "Windows 桌面端专用的 DeepSeek Harness 通知卡：任务跑完、等你审批、等你回答时在屏幕角落弹出。跟随系统主题与 DPI，落在鼠标那块屏幕，文字用 GDI ClearType 绘制，不抢焦点。没有网页端那一半，不提供浏览器通知、页面浮层或标签页标题标记。Windows desktop only, no web build: a native notice card that never takes focus.",
+      "desc_prev": "Focus-free notification cards for DeepSeek Harness on Windows. Turn finished, approval pending, question pending. Follows the system theme, DPI and text size, lands on the monitor under the pointer, and draws text with GDI ClearType."
     }
   ]
 }
