@@ -1,55 +1,27 @@
 {
-  "generated_at": "2026-10-20T04:31:09.293Z",
-  "count": 7,
+  "generated_at": "2026-10-20T10:24:48.757Z",
+  "count": 3,
   "items": [
     {
-      "full_name": "xyrrrrr-r/dsh-eval-control",
-      "previous": "agent",
-      "current": "tool",
-      "desc_now": "DSH 会话轨迹分析插件：上下文演化、团队协作图、工具错误证据链、智能告警、会话对比与导出，兼作 aeval 评测控制",
-      "desc_prev": "Host-side DSH evaluation control plugin for aeval：一次评测试次的配置注入、预算封顶与证据归属"
-    },
-    {
-      "full_name": "tearslee/dsh-workbuddy2api",
-      "previous": "other",
-      "current": "resource",
-      "desc_now": "⚠️ 已停止维护（2026-10-20）—— 上游删库，改用 magpie：magpie-community/plugins#packages/workbuddy",
-      "desc_prev": "DeepSeek Harness (dsh) plugin: supervise a workbuddy2api gateway process and auto-register its models as an LLM provider"
-    },
-    {
-      "full_name": "AndroidSix/dsh-multi-router",
-      "previous": "other",
-      "current": "model",
-      "desc_now": "DeepSeek Harness（DSH）多账号路由插件：WorkBuddy / Trae / Qoder 账号池、模型路由与额度轮换",
-      "desc_prev": "Multi-account WorkBuddy, Trae and Qoder routing for DeepSeek Harness"
-    },
-    {
-      "full_name": "c-ling/dsh-plugin-peak-pricing",
-      "previous": "coding",
-      "current": "web-ui",
-      "desc_now": "DeepSeek 峰谷定价时段徽章（DSH 双面插件，纯 UI、无状态、无网络请求）",
-      "desc_prev": "DeepSeek 峰谷定价时段徽章（DSH 双面插件，纯 UI、无状态、无网络请求）"
-    },
-    {
-      "full_name": "whh110112/human-writing-skills",
-      "previous": "tool",
-      "current": "other",
-      "desc_now": "Natural AI-assisted writing: multilingual editing, chunked long-form collaboration and continuity review. Skills + DSH plugin.",
-      "desc_prev": "Advanced multilingual AI humanizer and writing toolkit for natural prose, voice preservation, long-form continuity, and focused audits."
-    },
-    {
-      "full_name": "Dengzi555/dsh-quotalk",
+      "full_name": "hugoyee75-cmyk/dsh-token-metrics",
       "previous": "web-ui",
-      "current": "coding",
-      "desc_now": "DeepSeek Harness 桌面端划词追问，在原生侧边栏中结合上下文实时解释文字与代码。",
-      "desc_prev": "DeepSeek Harness 桌面端划词追问：引用到主对话，或在原生侧边栏中结合上下文实时追问。"
+      "current": "tool",
+      "desc_now": "DSH 插件：统计所有经过 DeepSeek Harness 的模型调用——Token 用量、成本核算（含峰谷计价）、供应商余额与配额，并按模型/供应商/项目/来源/账号/日期拆分。A token usage, cost and provider-balance plugin for DeepSeek Harness.",
+      "desc_prev": "把经过 DeepSeek Harness 的每一次模型调用记下来，在侧边栏给你一个 Token 用量统计页。按模型/供应商/项目/来源/账号/日期拆分，带缓存命中率、趋势图表与自更新。A Token usage statistics plugin for DeepSeek Harness."
     },
     {
-      "full_name": "qftuftfutg/apk-devkit",
-      "previous": "coding",
+      "full_name": "mocilukalbj/dsh-open-code-review",
+      "previous": "vision",
       "current": "tool",
-      "desc_now": "Dsh插件工具集：解包、回编、签名、DEX、文件、压缩包、图片、哈希",
-      "desc_prev": "APK 开发调试工具集：解包、回编、签名、DEX、文件、压缩包、图片、哈希（DSH 插件，Windows）"
+      "desc_now": "Code review for DeepSeek Harness with your own model — Alibaba Open Code Review selects files and resolves rules; native tools, sandboxed, no extra API key.",
+      "desc_prev": "Alibaba Open Code Review for DeepSeek Harness: native review tools, host-model delegation, and optional OCR-managed reviews."
+    },
+    {
+      "full_name": "ddtcorex/maestro-reviewer",
+      "previous": "agent",
+      "current": "web-ui",
+      "desc_now": "AI merge-request review engine and GitLab CI reviewer: one secrets-holding reviewer project, secret-free bridge jobs, per-project AI providers, Docker image ddtcorex/maestro-reviewer",
+      "desc_prev": "Pluggable merge-request review pipeline for DeepSeek Harness (webhook, orchestrator, findings) with a GitLab provider"
     }
   ]
 }
