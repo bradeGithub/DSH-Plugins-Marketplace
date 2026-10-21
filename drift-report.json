@@ -1,20 +1,41 @@
 {
-  "generated_at": "2026-10-21T00:46:23.257Z",
-  "count": 2,
+  "generated_at": "2026-10-21T07:46:22.219Z",
+  "count": 5,
   "items": [
     {
-      "full_name": "01men/ybkkasi",
+      "full_name": "nailiang002-wq/deepseek-girl-harness",
       "previous": "model",
-      "current": "tool",
-      "desc_now": "One control plane for every AI asset — MCP servers, skills, agents, AI apps. Self-hosted ledger with lifecycle state machine, 85 permission points, department × agent × skill cost attribution, and audit trail. MIT, zero runtime deps (Node 22 + node:sqlite). 企业 AI 资产治理。",
-      "desc_prev": "企业 AI 资源管理平台 —— 把 MCP 服务 / Skill / Agent / AI 应用 统一成一套可管、可算、可审的资产。一套身份、一套权限、一套计量、一套审计。自托管 · MIT。"
+      "current": "web-ui",
+      "desc_now": "DeepSeek Harness Desktop 小鲸鱼：手绘转轮、五套换装、白饭互动，摸头显示余额与今日用量。 / Companion with a compact action wheel, outfits, rice and a head-pat ledger.",
+      "desc_prev": "DeepSeek Harness Desktop 互动角色：换装、白饭、摸头、问候、登录账户余额和本机今日用量预估。 / Mascot with outfits, rice, greetings, balances & local usage estimates."
+    },
+    {
+      "full_name": "wyx135230/DeepSeek-Office",
+      "previous": "web-ui",
+      "current": "document",
+      "desc_now": "Built with the dsh-bot plugin, this is an immersive 2.5D office game where you interact and collaborate with your agent employees.基于dsh-bot插件制作，沉浸式2.5D办公室游戏，与你的agent员工交互协作",
+      "desc_prev": null
+    },
+    {
+      "full_name": "woshishadowhunter/dsh-seed-society",
+      "previous": "memory",
+      "current": "other",
+      "desc_now": "DeepSeek Harness plugin for the seed-society runtime: MCP bridge (mcp__society__*) plus six yogacara seed skills. Published from the seed-society monorepo via git subtree; requires DSH >=0.2.0-rc.1 <0.3.0.",
+      "desc_prev": "Yogacara eight-consciousness agent society plugin for DeepSeek Harness: mneme memory consolidation tuning, llm-deepseek reasoning fix, MCP society bridge, and six seed skills"
+    },
+    {
+      "full_name": "xindong/dsh-client-canvas",
+      "previous": "other",
+      "current": "document",
+      "desc_now": "AI-native multimodal canvas for DeepSeek Harness. Preview images, video, audio, 3D models, PDFs, documents and code; connect ideas and collaborate with agents in a persistent local workspace.",
+      "desc_prev": null
     },
     {
       "full_name": "chengzhao-dev/dsh-quarto-book",
-      "previous": "web-ui",
-      "current": "coding",
-      "desc_now": "为 Quarto Book 写章节、校验结构并维护可复用主题；不改业务代码，只在 type: book 的仓库里出现。",
-      "desc_prev": "Quarto Book writing & theme skills for DeepSeek Harness - chapter authoring, structure checks, reusable book theme"
+      "previous": "coding",
+      "current": "web-ui",
+      "desc_now": "为 Quarto Book 写章节、检查结构并维护主题。",
+      "desc_prev": "为 Quarto Book 写章节、校验结构并维护可复用主题；不改业务代码，只在 type: book 的仓库里出现。"
     }
   ]
 }
