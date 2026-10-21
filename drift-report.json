@@ -1,27 +1,20 @@
 {
-  "generated_at": "2026-10-20T21:47:19.653Z",
-  "count": 3,
+  "generated_at": "2026-10-21T00:46:23.257Z",
+  "count": 2,
   "items": [
     {
-      "full_name": "FeatherHunter/dsh-opencode-palette",
-      "previous": "coding",
-      "current": "web-ui",
-      "desc_now": "🎨 38 款主题，一键给 DSH 换装：37 款 OpenCode 经典配色 + 25 套 IP 预置（哈利波特 / 赛博朋克2077 / 原神 / 库洛米 / 哆啦A梦…），深浅两版都有 | 38 one-click themes for DSH",
-      "desc_prev": "🎨 为长时间编程而生：38 款 opencode 护眼配色，一键换上 DSH | 38 eye-friendly opencode themes for DeepSeek Harness, one click"
+      "full_name": "01men/ybkkasi",
+      "previous": "model",
+      "current": "tool",
+      "desc_now": "One control plane for every AI asset — MCP servers, skills, agents, AI apps. Self-hosted ledger with lifecycle state machine, 85 permission points, department × agent × skill cost attribution, and audit trail. MIT, zero runtime deps (Node 22 + node:sqlite). 企业 AI 资产治理。",
+      "desc_prev": "企业 AI 资源管理平台 —— 把 MCP 服务 / Skill / Agent / AI 应用 统一成一套可管、可算、可审的资产。一套身份、一套权限、一套计量、一套审计。自托管 · MIT。"
     },
     {
-      "full_name": "dengpeihua/dsh-browser-use",
-      "previous": "tool",
-      "current": "vision",
-      "desc_now": "为 DeepSeek Harness 提供真实浏览器操作能力：网页浏览与信息提取、表单填写、多标签页协作和多步骤任务执行；支持增量 DOM、会话隔离、截图、操作结果检查与证据归档回读。",
-      "desc_prev": "Native DeepSeek Harness browser-agent plugin with session-isolated Chromium, CDP, and DOM tools"
-    },
-    {
-      "full_name": "towNingtek/swarm",
-      "previous": "other",
-      "current": "agent",
-      "desc_now": "Self-hosted AI office run by a swarm: AI agents take an EPIC's issues in parallel, a judge accepts work only when its acceptance criteria pass. Isolated DeepSeek Harness site per customer.",
-      "desc_prev": "Run your own AI office platform: invite customers, give each an isolated DeepSeek Harness site, meter model use."
+      "full_name": "chengzhao-dev/dsh-quarto-book",
+      "previous": "web-ui",
+      "current": "coding",
+      "desc_now": "为 Quarto Book 写章节、校验结构并维护可复用主题；不改业务代码，只在 type: book 的仓库里出现。",
+      "desc_prev": "Quarto Book writing & theme skills for DeepSeek Harness - chapter authoring, structure checks, reusable book theme"
     }
   ]
 }
