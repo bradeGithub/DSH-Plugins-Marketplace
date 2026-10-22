@@ -1,55 +1,48 @@
 {
-  "generated_at": "2026-10-22T15:04:24.781Z",
-  "count": 7,
+  "generated_at": "2026-10-22T20:13:56.838Z",
+  "count": 6,
   "items": [
     {
       "full_name": "masknull/dsh-qoder-connect",
-      "previous": "model",
-      "current": "web-ui",
+      "previous": "web-ui",
+      "current": "model",
       "desc_now": "将 Qoder（国内版/国际版）以 PAT 接入 DeepSeek Harness —— 侧栏额度展示、上下文窗口切换、模型自由开关、每日自动签到。Qoder CN & Global models for DeepSeek Harness via PAT. 支持 DSH 0.2.1-rc.1+。",
       "desc_prev": "将 Qoder（国内版/国际版）以 PAT 接入 DeepSeek Harness —— 侧栏额度展示、上下文窗口切换、模型自由开关、每日自动签到。Qoder CN & Global models for DeepSeek Harness via PAT. 支持 DSH 0.2.1-rc.1+。"
     },
     {
-      "full_name": "lohana20061023-29/dsh-font-probe",
-      "previous": "tool",
-      "current": "coding",
-      "desc_now": "DSH 字体插件：中英文字体分设、正文字号与代码字号、字距/行距/段距/首行缩进四根滑块，吸底总预览 + 确认制，配置写回 profile，不动 app.asar。",
-      "desc_prev": "DSH 字体插件：中英文字体分设、正文字号与代码字号、字距/行距/段距/首行缩进四根滑块，吸底总预览 + 确认制，配置写回 profile，不动 app.asar。"
+      "full_name": "c-ling/dsh-plugin-pet",
+      "previous": "coding",
+      "current": "web-ui",
+      "desc_now": "DeepSeek Harness 0.2.1+（Web / 桌面端）桌面电子宠物插件：实时心情浮层、头像菜单进入的独立宠物页面、内置/自定义/Codex 精灵图与本地养成系统。",
+      "desc_prev": "DeepSeek Harness 桌面电子宠物插件：跟随 agent 状态变换心情的内置/自定义/Codex 精灵图伙伴。"
     },
     {
-      "full_name": "zhiqiangme/dsh-plugins",
-      "previous": "tool",
+      "full_name": "feiwell/dsh-enhance-prompt",
+      "previous": "conversation",
+      "current": "document",
+      "desc_now": "在 DeepSeek-Harness 桌面版的输入栏一键把草稿改写成更清晰、更具体的提示词：日常办公 / 代码开发 / 设计创意三种收束模式，支持一键还原原文。",
+      "desc_prev": "这是一个提示词增强插件"
+    },
+    {
+      "full_name": "Carrick-K7/dsh-keep-going",
+      "previous": "conversation",
       "current": "other",
-      "desc_now": null,
-      "desc_prev": null
+      "desc_now": "DISCONTINUED (2026-10-22). Final version: 0.3.0. Historical DSH restart-recovery plugin; no further development or maintenance.",
+      "desc_prev": "Restart DSH, then carry on: the answer in progress finishes, DSH closes in an orderly way, and every conversation the restart interrupted is woken."
     },
     {
-      "full_name": "bbaz123/dsh-confirmation-resolution",
+      "full_name": "EagleClark/dsh-genshin-account",
       "previous": "tool",
-      "current": "coding",
-      "desc_now": "DSH 待确认事项决策插件：register-decide-complete 状态机，V1/V2 双账本与代码级守卫。",
-      "desc_prev": "DeepSeek Harness plugin for post-task confirmation items: a code-level session guard, a fixed V1 decision matrix (quality vs real user impact), and an opt-in versioned V2 engine (goal-fit, evidence trust, scenario policies, approval). Verified against DSH 0.2.0-rc.2."
+      "current": "web-ui",
+      "desc_now": "DeepSeek Harness 插件：把你的原神账号读进来 —— 角色练度、命座、天赋、面板、武器、圣遗物 —— 然后在对话里直接问（agent 调用工具查），也能在 GUI 里看（侧边栏「原神账号」页面）。",
+      "desc_prev": "DeepSeek Harness ??:????????????????(GOOD ?? / Enka.Network / ??? ????),?? agent ??? GUI ????"
     },
     {
-      "full_name": "dsh-plugin-collection/dsh-group-status",
-      "previous": "other",
-      "current": "resource",
-      "desc_now": "DSH 侧栏折叠分组聚合徽标：收起的文件夹行显示进行中 / 待审批 / 已完成 / 定时任务 / 等待评审的聚合状态，带数字与悬停明细。分组状态 / 折叠徽标 / 侧栏状态。｜ Aggregate status badges on collapsed workspace folders in the DSH sidebar: running, pending, done, scheduled and waiting-review states, with counts and hover details.",
-      "desc_prev": "DSH 侧栏折叠分组聚合徽标：收起的文件夹行显示进行中 / 待审批 / 已完成 / 定时任务 / 等待评审的聚合状态，带数字与悬停明细。分组状态 / 折叠徽标 / 侧栏状态。｜ Aggregate status badges on collapsed workspace folders in the DSH sidebar: running, pending, done, scheduled and waiting-review states, with counts and hover details."
-    },
-    {
-      "full_name": "LyaxZ/dsh-goodies",
-      "previous": "web-ui",
-      "current": "notify",
-      "desc_now": "DeepSeek Harness Web 界面的一小组小功能：模型菜单里的思考强度滑块、运行状态旁的实时速度与本轮用量、每条回答的输入/输出/缓存成绩单，以及每轮结束的完成通知。各自独立开关，都只作用于界面，不改模型请求，也不上传数据。",
-      "desc_prev": "DeepSeek Harness Web 界面的一小组小功能：模型菜单里的思考强度滑块、运行状态旁的实时速度与本轮用量、每条回答的输入/输出/缓存成绩单。三项各自独立开关，都只作用于界面，不改模型请求，也不上传数据。"
-    },
-    {
-      "full_name": "golddream-y/ratel-dsh-lumina",
-      "previous": "other",
-      "current": "conversation",
-      "desc_now": "Customizable motion for DeepSeek Harness: composer glow, send transitions and streaming feedback, with per-effect controls and reduced-motion support.",
-      "desc_prev": null
+      "full_name": "QingJing5906/dsh-push",
+      "previous": "agent",
+      "current": "web-ui",
+      "desc_now": "DevDock · DeepSeek Harness 的研发账号与服务管理套件。首批：GitHub 多账号、仓库管理、工作区推送与推送前 Agent 审查；后续接入 Cloudflare Workers/Pages 与 npm。",
+      "desc_prev": "DeepSeek Harness 的 GitHub 与 Git 管理插件：多账号登录切换、仓库浏览与管理、工作区版本树、一键推送、推送前 Agent 审查。"
     }
   ]
 }
