@@ -22,6 +22,13 @@
       "current": "notify",
       "desc_now": "命令在 DeepSeek Harness 里等待审批时，用 Edge / Windows 桌面通知提醒你。",
       "desc_prev": null
+    },
+    {
+      "full_name": "LyaxZ/dsh-goodies",
+      "previous": "model",
+      "current": "web-ui",
+      "desc_now": "DeepSeek Harness Web 界面的一小组小功能：模型菜单里的思考强度滑块、运行状态旁的实时速度与本轮用量、每条回答的输入/输出/缓存成绩单。三项各自独立开关，都只作用于界面，不改模型请求，也不上传数据。",
+      "desc_prev": "A Codex-style effort slider, a live tokens/second and turn-total readout, and a per-answer report for the DeepSeek Harness Web GUI."
     }
   ]
 }
