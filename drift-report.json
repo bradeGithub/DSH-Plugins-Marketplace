@@ -1,13 +1,48 @@
 {
-  "generated_at": "2026-10-21T23:31:15.807Z",
-  "count": 1,
+  "generated_at": "2026-10-22T04:20:00.860Z",
+  "count": 6,
   "items": [
     {
-      "full_name": "pavel-logachev/dsh-mobile",
-      "previous": "tool",
+      "full_name": "Sutera-Diffusus/dsh-whale-musume",
+      "previous": "coding",
+      "current": "web-ui",
+      "desc_now": "DeepSeek Harness 桌宠：元气鲸鱼娘，45 项成就、3 个小游戏、跨端存档迁移；按工具类型切换工作姿态，桌面端与旧版 Web 双端支持（desktop pet / mascot，local-first）",
+      "desc_prev": "DeepSeek Harness 桌宠插件：元气鲸鱼娘看板娘陪你写代码 🐋 支持 DSH 桌面端 0.2.0-rc.2 与旧版 Web（desktop pet / mascot，local-first）"
+    },
+    {
+      "full_name": "ljcoder2015/dsh-canvas-flow",
+      "previous": "agent",
+      "current": "web-ui",
+      "desc_now": "Build your workflow on an infinite canvas — text, design, app, image and video cards wired together on DeepSeek Harness.",
+      "desc_prev": "dsh-canvas-flow，deepseek harness 无限画布插件，在画布上，搭出你的工作流。"
+    },
+    {
+      "full_name": "Shuffle-1992/dsh-dispatch",
+      "previous": "web-ui",
       "current": "coding",
-      "desc_now": "DeepSeek Harness Android app: control your DeepSeek Harness agents from your phone. The agent runs on your PC; a host plugin inside DSH pairs the phone by QR code over Wi-Fi or Tailscale, no cloud. Chats of all projects, live replies, photos and files, steer, agent questions, notifications. Unofficial, MIT.",
-      "desc_prev": "Unofficial Android client for DeepSeek Harness: chats, tasks and live agent replies from your phone. The agent stays on your PC; pairing by QR code."
+      "desc_now": "DeepSeek Harness 插件：把任务派发给本机 ZCode / OpenCode / Qoder / WorkBuddy 四个 AI 编程 CLI。面板可监视/终止/续跑，单写者文件锁 + 用量台账 + 按额度自动降级；走官方 CLI，不反代、不碰凭据。",
+      "desc_prev": "把任务派发给本机 ZCode CLI 无头进程的 DeepSeek Harness 插件：面板可监视/终止/续跑/换通道；单写者文件锁 + 用量台账 + 降级链。支持付费套餐与免费额度（Start Plan 活动赠送）两种额度，后者托管官方 agent 走 app-server。"
+    },
+    {
+      "full_name": "Mt-Youya/dsh-plugins",
+      "previous": "other",
+      "current": "resource",
+      "desc_now": "A plugin collection for DeepSeek Harness (DSH). Install this one bundle to get every plugin listed below; each plugin can also be installed on its own.",
+      "desc_prev": null
+    },
+    {
+      "full_name": "2384418321/dsh-integration-settings",
+      "previous": "tool",
+      "current": "other",
+      "desc_now": "DSH 设置页：MCP 管理与思考档位解锁（本地分叉版）— 思考档位与可用模型清单分离，先预览差异再写入。",
+      "desc_prev": "DSH 设置插件：MCP 管理 / Skill 管理 / 全局人设 / 思考解锁——打开页面自动识别 OpenAI 兼容网关真正支持的思考档位并一键写回配置"
+    },
+    {
+      "full_name": "little-traincar/dsh-comm",
+      "previous": "other",
+      "current": "coding",
+      "desc_now": "给你的DSH加入集成串口、TCP服务端、TCP客户端、UDP功能的调试助手，模型可直接读到调试助手接收，发送的内容，也可代替你向对端发送数据",
+      "desc_prev": null
     }
   ]
 }
