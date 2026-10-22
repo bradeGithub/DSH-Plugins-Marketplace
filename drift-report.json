@@ -1,34 +1,55 @@
 {
-  "generated_at": "2026-10-22T10:04:14.429Z",
-  "count": 3,
+  "generated_at": "2026-10-22T15:04:24.781Z",
+  "count": 7,
   "items": [
     {
-      "full_name": "yogsoth-ai/de-anthropocentric-research-engine",
-      "previous": "tool",
+      "full_name": "masknull/dsh-qoder-connect",
+      "previous": "model",
       "current": "web-ui",
-      "desc_now": "Give an AI a research direction: it runs literature synthesis, gap validation, hypothesis formation and experiment design itself. 267 markdown skills form a research graph: 51 operations built from 216 atomic steps, any order, explicit backtracking; the plan is approved before it runs and interrupted runs resume. npx install, no runtime, no API key",
-      "desc_prev": "A 267-skill research graph in pure markdown — 51 research operations built from 216 single-purpose steps, composed in any order with explicit backtracking. One npx install, no runtime, no MCP bindings. The AI is the researcher; you set the direction."
+      "desc_now": "将 Qoder（国内版/国际版）以 PAT 接入 DeepSeek Harness —— 侧栏额度展示、上下文窗口切换、模型自由开关、每日自动签到。Qoder CN & Global models for DeepSeek Harness via PAT. 支持 DSH 0.2.1-rc.1+。",
+      "desc_prev": "将 Qoder（国内版/国际版）以 PAT 接入 DeepSeek Harness —— 侧栏额度展示、上下文窗口切换、模型自由开关、每日自动签到。Qoder CN & Global models for DeepSeek Harness via PAT. 支持 DSH 0.2.1-rc.1+。"
     },
     {
-      "full_name": "ADkun/dsh-subagent-mgm",
-      "previous": "agent",
-      "current": "resource",
-      "desc_now": "DeepSeek Harness Web UI 插件：子智能体目录按创建时间倒序；子智能体运行时自动在右侧栏打开它的会话、结束时自动关闭；子智能体失败时把真实原因交回父智能体。Subagent management bundle for the DSH Web UI.",
+      "full_name": "lohana20061023-29/dsh-font-probe",
+      "previous": "tool",
+      "current": "coding",
+      "desc_now": "DSH 字体插件：中英文字体分设、正文字号与代码字号、字距/行距/段距/首行缩进四根滑块，吸底总预览 + 确认制，配置写回 profile，不动 app.asar。",
+      "desc_prev": "DSH 字体插件：中英文字体分设、正文字号与代码字号、字距/行距/段距/首行缩进四根滑块，吸底总预览 + 确认制，配置写回 profile，不动 app.asar。"
+    },
+    {
+      "full_name": "zhiqiangme/dsh-plugins",
+      "previous": "tool",
+      "current": "other",
+      "desc_now": null,
       "desc_prev": null
     },
     {
-      "full_name": "In-clude/dsh-approval-reminder",
+      "full_name": "bbaz123/dsh-confirmation-resolution",
+      "previous": "tool",
+      "current": "coding",
+      "desc_now": "DSH 待确认事项决策插件：register-decide-complete 状态机，V1/V2 双账本与代码级守卫。",
+      "desc_prev": "DeepSeek Harness plugin for post-task confirmation items: a code-level session guard, a fixed V1 decision matrix (quality vs real user impact), and an opt-in versioned V2 engine (goal-fit, evidence trust, scenario policies, approval). Verified against DSH 0.2.0-rc.2."
+    },
+    {
+      "full_name": "dsh-plugin-collection/dsh-group-status",
       "previous": "other",
-      "current": "notify",
-      "desc_now": "命令在 DeepSeek Harness 里等待审批时，用 Edge / Windows 桌面通知提醒你。",
-      "desc_prev": null
+      "current": "resource",
+      "desc_now": "DSH 侧栏折叠分组聚合徽标：收起的文件夹行显示进行中 / 待审批 / 已完成 / 定时任务 / 等待评审的聚合状态，带数字与悬停明细。分组状态 / 折叠徽标 / 侧栏状态。｜ Aggregate status badges on collapsed workspace folders in the DSH sidebar: running, pending, done, scheduled and waiting-review states, with counts and hover details.",
+      "desc_prev": "DSH 侧栏折叠分组聚合徽标：收起的文件夹行显示进行中 / 待审批 / 已完成 / 定时任务 / 等待评审的聚合状态，带数字与悬停明细。分组状态 / 折叠徽标 / 侧栏状态。｜ Aggregate status badges on collapsed workspace folders in the DSH sidebar: running, pending, done, scheduled and waiting-review states, with counts and hover details."
     },
     {
       "full_name": "LyaxZ/dsh-goodies",
-      "previous": "model",
-      "current": "web-ui",
-      "desc_now": "DeepSeek Harness Web 界面的一小组小功能：模型菜单里的思考强度滑块、运行状态旁的实时速度与本轮用量、每条回答的输入/输出/缓存成绩单。三项各自独立开关，都只作用于界面，不改模型请求，也不上传数据。",
-      "desc_prev": "A Codex-style effort slider, a live tokens/second and turn-total readout, and a per-answer report for the DeepSeek Harness Web GUI."
+      "previous": "web-ui",
+      "current": "notify",
+      "desc_now": "DeepSeek Harness Web 界面的一小组小功能：模型菜单里的思考强度滑块、运行状态旁的实时速度与本轮用量、每条回答的输入/输出/缓存成绩单，以及每轮结束的完成通知。各自独立开关，都只作用于界面，不改模型请求，也不上传数据。",
+      "desc_prev": "DeepSeek Harness Web 界面的一小组小功能：模型菜单里的思考强度滑块、运行状态旁的实时速度与本轮用量、每条回答的输入/输出/缓存成绩单。三项各自独立开关，都只作用于界面，不改模型请求，也不上传数据。"
+    },
+    {
+      "full_name": "golddream-y/ratel-dsh-lumina",
+      "previous": "other",
+      "current": "conversation",
+      "desc_now": "Customizable motion for DeepSeek Harness: composer glow, send transitions and streaming feedback, with per-effect controls and reduced-motion support.",
+      "desc_prev": null
     }
   ]
 }
