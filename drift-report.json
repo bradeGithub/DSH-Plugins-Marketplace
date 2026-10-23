@@ -1,13 +1,41 @@
 {
-  "generated_at": "2026-10-23T09:58:19.279Z",
-  "count": 1,
+  "generated_at": "2026-10-23T17:06:57.404Z",
+  "count": 5,
   "items": [
     {
-      "full_name": "2310770803/dsh-session-copy",
-      "previous": "other",
+      "full_name": "Whning0513/awesome-deepseek-skills",
+      "previous": "agent",
       "current": "resource",
-      "desc_now": "One button in the DSH session header: copy a deep link, the whole conversation as Markdown, or the working directory. · DSH 会话标题栏一键复制：深度链接、整段对话 Markdown、工作目录。",
-      "desc_prev": "DSH session-header copy menu: deep link, Markdown, and working directory"
+      "desc_now": "Pinned and statically verified Agent Skills for DeepSeek and DSH.",
+      "desc_prev": "Pinned and statically verified Agent Skills for DeepSeek and DSH."
+    },
+    {
+      "full_name": "disantosmyha-cloud/tempguard",
+      "previous": "tool",
+      "current": "notify",
+      "desc_now": "Windows CPU/GPU temperature watchdog: four-state fuse, persistent alert outbox, email/QQ alerting, DSH plugin",
+      "desc_prev": "Windows CPU/GPU 温度看门狗：四态熔断、演习模式、CSV 日志"
+    },
+    {
+      "full_name": "Num86/dsh-functions",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "一级菜单旁添加可供插件接入的“功能”菜单栏，可以快捷添加插件功能，也可以自定义插件功能置入。v0.4.0 现已集成“重启dsh”功能 ",
+      "desc_prev": "一级菜单旁添加可供插件接入的“功能”菜单栏，可以快捷添加插件功能，也可以自定义插件功能置入。v0.4.0 现已集成“重启dsh”功能"
+    },
+    {
+      "full_name": "439436269-ctrl/dsh-blend-preview",
+      "previous": "web-ui",
+      "current": "other",
+      "desc_now": "Legacy name; moved to dsh-preview-blender",
+      "desc_prev": "Preview Blender .blend files in the DeepSeek Harness right Sidebar: cached headless GLB export plus a dependency-free WebGL viewer with scene statistics."
+    },
+    {
+      "full_name": "439436269-ctrl/dsh-stl-preview",
+      "previous": "web-ui",
+      "current": "other",
+      "desc_now": "Legacy name; moved to dsh-preview-stl",
+      "desc_prev": "Preview STL meshes in the DeepSeek Harness right Sidebar: dependency-free WebGL viewport plus size, volume, surface area and watertightness."
     }
   ]
 }
