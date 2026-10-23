@@ -1,41 +1,20 @@
 {
-  "generated_at": "2026-10-23T17:06:57.404Z",
-  "count": 5,
+  "generated_at": "2026-10-23T21:32:29.330Z",
+  "count": 2,
   "items": [
     {
-      "full_name": "Whning0513/awesome-deepseek-skills",
-      "previous": "agent",
-      "current": "resource",
-      "desc_now": "Pinned and statically verified Agent Skills for DeepSeek and DSH.",
-      "desc_prev": "Pinned and statically verified Agent Skills for DeepSeek and DSH."
-    },
-    {
-      "full_name": "disantosmyha-cloud/tempguard",
-      "previous": "tool",
-      "current": "notify",
-      "desc_now": "Windows CPU/GPU temperature watchdog: four-state fuse, persistent alert outbox, email/QQ alerting, DSH plugin",
-      "desc_prev": "Windows CPU/GPU 温度看门狗：四态熔断、演习模式、CSV 日志"
-    },
-    {
-      "full_name": "Num86/dsh-functions",
-      "previous": "other",
-      "current": "tool",
-      "desc_now": "一级菜单旁添加可供插件接入的“功能”菜单栏，可以快捷添加插件功能，也可以自定义插件功能置入。v0.4.0 现已集成“重启dsh”功能 ",
-      "desc_prev": "一级菜单旁添加可供插件接入的“功能”菜单栏，可以快捷添加插件功能，也可以自定义插件功能置入。v0.4.0 现已集成“重启dsh”功能"
-    },
-    {
-      "full_name": "439436269-ctrl/dsh-blend-preview",
+      "full_name": "Lphehe/dsh-composer-assist",
       "previous": "web-ui",
-      "current": "other",
-      "desc_now": "Legacy name; moved to dsh-preview-blender",
-      "desc_prev": "Preview Blender .blend files in the DeepSeek Harness right Sidebar: cached headless GLB export plus a dependency-free WebGL viewer with scene statistics."
+      "current": "coding",
+      "desc_now": "DSH 输入框助手：预测下一句、补全草稿、按需润色。建议按会话保留，Tab 只填入草稿、不自动发送。源码可见，修改须事先书面许可。",
+      "desc_prev": "Context-aware composer predictions for DeepSeek Harness · 上下文感知输入预测、草稿补全与润色；会话独立保留，过期响应不覆盖新输入，Tab 接受但不发送。"
     },
     {
-      "full_name": "439436269-ctrl/dsh-stl-preview",
+      "full_name": "gulagala001/oh-my-agents-above-all",
       "previous": "web-ui",
-      "current": "other",
-      "desc_now": "Legacy name; moved to dsh-preview-stl",
-      "desc_prev": "Preview STL meshes in the DeepSeek Harness right Sidebar: dependency-free WebGL viewport plus size, volume, surface area and watertightness."
+      "current": "conversation",
+      "desc_now": "Codex, Grok Build, Cursor, Pi and ZCode presets with native conversations, code review, document conversion and workflow controls.",
+      "desc_prev": "DSH 深度代理预设：Codex、Grok Build、Cursor、Pi、ZCode，主题与可选 OMD 增强"
     }
   ]
 }
