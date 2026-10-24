@@ -1,27 +1,20 @@
 {
-  "generated_at": "2026-10-24T07:19:54.345Z",
-  "count": 3,
+  "generated_at": "2026-10-24T10:00:00.148Z",
+  "count": 2,
   "items": [
     {
-      "full_name": "mr-mihu/dsh-dbhub-live",
-      "previous": "memory",
-      "current": "conversation",
-      "desc_now": "DSH 数据库 MCP 插件：把 DBHub 接入 DeepSeek Harness，让 AI 在对话里直接查询 MySQL / PostgreSQL / MariaDB / SQLite / SQL Server。",
-      "desc_prev": "DSH 数据库 MCP 桥接插件：让 AI 直接查询 MySQL / PostgreSQL / MariaDB / SQLite / SQL Server。按工作区动态配置连接（可改名、可跨工作区复制），AI 自助配置管理，密码与连接串零知识（永不进入模型上下文），每次执行独立进程。"
+      "full_name": "shiyan688/dsh-novel-craft",
+      "previous": "resource",
+      "current": "other",
+      "desc_now": "面向中文小说作者的开源 DSH 写作插件：点赞/点踩提炼可编辑的文风偏好，支持候选稿、章节管理与局部改稿。MIT；需 DeepSeek Harness 和自备模型。",
+      "desc_prev": "dsh-novel-craft —— 跑在 DeepSeek Harness 上的开源 AI 小说写作插件。目的：让 AI 写出你觉得对味的文字。方法：你只点赞、点踩，模型自己总结规律，写进一份几百字节的偏好档案；正文不进写稿上下文。775 条断言 / 7 个测试文件，MIT。"
     },
     {
-      "full_name": "exoticknight/dsh-system1",
-      "previous": "tool",
-      "current": "agent",
-      "desc_now": "Connect TypeSafe/Jev, Cloudflare/Clef, Nace/Drex, self-hosted Laya, and custom decision providers through one interface. Agents and plugins can classify, filter, score, or locate objects in images with structured results. | 通过同一接口连接 TypeSafe/Jev、Cloudflare/Clef、Nace/Drex、本地 Laya 与自定义决策提供商；Agent 和插件可分类、筛选、评分或定位图片目标，并获得结构化结果。",
-      "desc_prev": "Asks System One models for yes/no, choice, score, and image-box judgments with probabilities, via an agent tool or a plugin service | 调用 System One 模型做是非、选择、评分和图片定位判断并返回概率，提供 agent 工具和插件服务"
-    },
-    {
-      "full_name": "qwe3120695033/prompt-enhancer",
-      "previous": "model",
+      "full_name": "1315577677/dsh-dot-plugin",
+      "previous": "agent",
       "current": "conversation",
-      "desc_now": "DSH composer plugin + Windows global hotkey + $p skill: four-tier prompt enhancement (base / standard / professional / system) that never changes intent or invents requirements — one shared rules source behind all three entries.",
-      "desc_prev": "One-click prompt enhancer for Windows hotkeys and portable agent skills ($p). Four tiers, Skill-token protection, DeepSeek/OpenAI-compatible APIs, and adaptable to Codex, WorkBuddy, Trae, IDEA ACP, and other agent hosts."
+      "desc_now": "Turn DeepSeek Harness into a personal assistant: one chat that plans, delegates to background workers, reviews, and reports back.",
+      "desc_prev": "DSH Dot: a persistent read-only-first proactive agent for DeepSeek Harness, with user-approved execution."
     }
   ]
 }
