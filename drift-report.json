@@ -1,34 +1,34 @@
 {
-  "generated_at": "2026-10-24T12:57:29.166Z",
+  "generated_at": "2026-10-24T17:38:12.598Z",
   "count": 4,
   "items": [
     {
-      "full_name": "Setsuna-Kitahara/dsh-session-lock",
-      "previous": "conversation",
-      "current": "web-ui",
-      "desc_now": "Add a per-session lock to the DSH Web sidebar; archiving a locked session through the client is refused | DSH 会话锁插件（由 DeepSeek Harness 维护）",
-      "desc_prev": "Lock DSH sessions so they cannot be archived | DSH 会话锁插件（由 DeepSeek Harness 维护）"
-    },
-    {
-      "full_name": "ZhaoZiyangShaanxi/dsh-server-monitor",
-      "previous": "tool",
+      "full_name": "EternalNight996/memory-eternal",
+      "previous": "vision",
       "current": "memory",
-      "desc_now": "In-DSH server monitor: memory, load, disk and per-container usage, cache purge and container restarts, plus an embedded noVNC QQ client for manual QR login and sign-out.",
-      "desc_prev": null
+      "desc_now": "AI 聊完就忘？给 Agent 装个不会失忆的第二大脑 🧠 对话结束自动沉淀成知识卡，先审后入不污染记忆；知识星图看得见连接；一个本地 SQLite 库，DSH / Claude Code / Codex / Cursor 全共享，召回只取相关小块——省 token、少幻觉、跨会话不失忆。全自研，零第三方记忆框架。",
+      "desc_prev": "🧠 给 AI 装第二大脑 · DSH 插件：对话结束自动沉淀知识卡，跨会话召回，知识图谱可视化，审核/回收/备份一体（SQLite，零外部依赖）"
     },
     {
-      "full_name": "SnailMann/dsh-quick-model-selector",
-      "previous": "other",
-      "current": "model",
-      "desc_now": "quick model selector for deepseek harness | 多快好省的模型选择器",
-      "desc_prev": "quick model selector for deepseek harness"
+      "full_name": "functy23/dsh-workbuddy-connect-functy",
+      "previous": "model",
+      "current": "coding",
+      "desc_now": "【已归档】上游风控持续加强、UA/请求头格式频繁变动，适配已难以为继。后续开发移步 https://github.com/functy23/dsh-workbuddy-panel",
+      "desc_prev": "corrinehu/dsh-workbuddy-connect 的 Functy 分支：仪表盘、多账号轮换与额度展示，把 WorkBuddy 模型接到 DeepSeek Harness。"
     },
     {
-      "full_name": "hj9178/dsh-throwtomatoes-plugin",
-      "previous": "other",
-      "current": "model",
-      "desc_now": "让你在模型发癫时不再手足无措——dsh-throwtomatoes-plugin By DeepSeek-V4.1-flash1017的53,973,006tokens",
-      "desc_prev": "Throw tomatoes at the model: the send key becomes a tomato key while a task runs. A DSH plugin."
+      "full_name": "Anlerway/dsh-session-navigator",
+      "previous": "conversation",
+      "current": "memory",
+      "desc_now": "像 Windows 资源管理器那样管理 DSH 的会话：目录树、标签、备注、回收站，不改动实际会话文件布局。 Manage DSH sessions the way Windows Explorer manages files: folder tree, tags, notes, recycle bin. Session files never move.",
+      "desc_prev": "仿windows资源管理器的Deepseek Harness会话虚拟映射管理器"
+    },
+    {
+      "full_name": "winlin926/dsh-roam",
+      "previous": "tool",
+      "current": "coding",
+      "desc_now": "远程连接 AI 编程会话：电脑上的 DeepSeek Harness 任务，手机扫码即用——继续对话、审批工具、新开任务。免 App、免远程桌面。",
+      "desc_prev": "把电脑上的 DeepSeek Harness 会话漫游到手机：浏览器扫码即用，AI-HUB App 共用同一地址和配对码。"
     }
   ]
 }
