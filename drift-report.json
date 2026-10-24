@@ -1,20 +1,34 @@
 {
-  "generated_at": "2026-10-24T10:00:00.148Z",
-  "count": 2,
+  "generated_at": "2026-10-24T12:57:29.166Z",
+  "count": 4,
   "items": [
     {
-      "full_name": "shiyan688/dsh-novel-craft",
-      "previous": "resource",
-      "current": "other",
-      "desc_now": "面向中文小说作者的开源 DSH 写作插件：点赞/点踩提炼可编辑的文风偏好，支持候选稿、章节管理与局部改稿。MIT；需 DeepSeek Harness 和自备模型。",
-      "desc_prev": "dsh-novel-craft —— 跑在 DeepSeek Harness 上的开源 AI 小说写作插件。目的：让 AI 写出你觉得对味的文字。方法：你只点赞、点踩，模型自己总结规律，写进一份几百字节的偏好档案；正文不进写稿上下文。775 条断言 / 7 个测试文件，MIT。"
+      "full_name": "Setsuna-Kitahara/dsh-session-lock",
+      "previous": "conversation",
+      "current": "web-ui",
+      "desc_now": "Add a per-session lock to the DSH Web sidebar; archiving a locked session through the client is refused | DSH 会话锁插件（由 DeepSeek Harness 维护）",
+      "desc_prev": "Lock DSH sessions so they cannot be archived | DSH 会话锁插件（由 DeepSeek Harness 维护）"
     },
     {
-      "full_name": "1315577677/dsh-dot-plugin",
-      "previous": "agent",
-      "current": "conversation",
-      "desc_now": "Turn DeepSeek Harness into a personal assistant: one chat that plans, delegates to background workers, reviews, and reports back.",
-      "desc_prev": "DSH Dot: a persistent read-only-first proactive agent for DeepSeek Harness, with user-approved execution."
+      "full_name": "ZhaoZiyangShaanxi/dsh-server-monitor",
+      "previous": "tool",
+      "current": "memory",
+      "desc_now": "In-DSH server monitor: memory, load, disk and per-container usage, cache purge and container restarts, plus an embedded noVNC QQ client for manual QR login and sign-out.",
+      "desc_prev": null
+    },
+    {
+      "full_name": "SnailMann/dsh-quick-model-selector",
+      "previous": "other",
+      "current": "model",
+      "desc_now": "quick model selector for deepseek harness | 多快好省的模型选择器",
+      "desc_prev": "quick model selector for deepseek harness"
+    },
+    {
+      "full_name": "hj9178/dsh-throwtomatoes-plugin",
+      "previous": "other",
+      "current": "model",
+      "desc_now": "让你在模型发癫时不再手足无措——dsh-throwtomatoes-plugin By DeepSeek-V4.1-flash1017的53,973,006tokens",
+      "desc_prev": "Throw tomatoes at the model: the send key becomes a tomato key while a task runs. A DSH plugin."
     }
   ]
 }
