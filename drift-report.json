@@ -1,62 +1,13 @@
 {
-  "generated_at": "2026-10-25T17:51:44.502Z",
-  "count": 8,
+  "generated_at": "2026-10-25T20:59:27.232Z",
+  "count": 1,
   "items": [
     {
-      "full_name": "jcs130/dsh-minecraft-agent",
+      "full_name": "micellince/dsh-long-novel-workbench",
       "previous": "agent",
-      "current": "memory",
-      "desc_now": "Minecraft Agent for DeepSeek Harness Web/Desktop: live game view, native reasoning and tools, configurable personas, server notebooks and local survival knowledge. / 我的世界智能体",
-      "desc_prev": null
-    },
-    {
-      "full_name": "sunbigfly/dsh-multi-user-service",
-      "previous": "tool",
-      "current": "coding",
-      "desc_now": "DSH 多用户服务：在公司或团队服务器上共用一套 DSH，集中管理成员账号、权限、会话、文件与用量。模型、工具、终端、代码和沙箱均沿用 DSH 原生能力。已验证 DSH 0.2.1-rc.2。",
-      "desc_prev": "DSH 多用户服务：在公司或团队服务器上运行一套 DSH，供多人通过浏览器登录；成员拥有独立会话与文件，管理员统一管理账号、权限、用量与并发。服务端业务扩展，适配 DSH 0.2.1-rc.2，支持 Linux/WSL。"
-    },
-    {
-      "full_name": "yuanshuoSY/dsh-coder-preset",
-      "previous": "tool",
-      "current": "conversation",
-      "desc_now": "DeepSeek Harness 的 Coder 预设，集成了 35 项 Matt Pocock 在工程方面的技能，专用于 Coder 会话",
-      "desc_prev": "Coder agent preset for DeepSeek Harness, bundling 35 Matt Pocock engineering skills scoped to Coder sessions. Configuration and Markdown only."
-    },
-    {
-      "full_name": "tableau-China/dsh-workload-report",
-      "previous": "model",
-      "current": "resource",
-      "desc_now": "A DeepSeek Harness plugin for effort & token insights by date and workspace, plus multi-device sync. DSH 工作量报告插件：按日期与工作区看清「我的付出」与 Token 消耗，含日历热力图 / 时刻分析 / 工作区占比 / 模型用量，可导出自包含 HTML 报告，并支持多设备用量同步（COS / GitHub / Gitea / 共享目录）。",
-      "desc_prev": "A DeepSeek Harness plugin for effort & token insights by date and workspace.DSH 工作量报告插件：按日期与工作区看清「我的付出」与 Token 消耗，含日历热力图 / 时刻分析 / 工作区占比，可导出自包含 HTML 报告。"
-    },
-    {
-      "full_name": "meng-lx/dsh-auto-restart",
-      "previous": "tool",
-      "current": "conversation",
-      "desc_now": "由 agent 自己发起的重启：倒计时后确认整机空闲，再唤醒原会话。Agent-initiated restart: counts down, confirms the whole machine is idle, then wakes up the original session.",
-      "desc_prev": "等整个 DSH 都空闲下来再安全地重启它，重启完成后自动回到原会话说一句话。Restart DSH only when idle, then wake the original session."
-    },
-    {
-      "full_name": "PlusQi/dsh-tokstats",
-      "previous": "other",
-      "current": "resource",
-      "desc_now": "token 花在哪一目了然：tokstats 跨会话用量统计（模型与工作区排行）、tokprev 发送前 token 预告、promptopt 草稿结构化整理。",
-      "desc_prev": "个人 DeepSeek Harness (DSH) 插件集"
-    },
-    {
-      "full_name": "bestlike093/dsh-cyrene-balance",
-      "previous": "notify",
-      "current": "model",
-      "desc_now": "昔涟桌面桌宠（DeepSeek Harness 版）：透明置顶 Live2D 立绘，会眨眼、跟随鼠标、说话，看余额与系统状态；接管对话提问、风险审批与任务进度。作者：柒柒（bestlike093）。素材最原始来源为《崩坏：星穹铁道》官方美术（HoYoverse / 米哈游），仅供个人本机使用。",
-      "desc_prev": "在 DeepSeek Harness 里查询 DeepSeek API 余额与今日消费，支持今日额度上限、超限提醒与只看今日额度 / 只看余额。DSH 插件。"
-    },
-    {
-      "full_name": "coldgust/dsh-translation-assistant",
-      "previous": "tool",
-      "current": "vision",
-      "desc_now": "A DeepSeek Harness plugin: paste text, drop a file, or paste a screenshot to translate; proofread the result side by side with the source; let a second model score it and rewrite what it criticises; and process a whole folder of documents from the workspace drawer. ",
-      "desc_prev": "A DeepSeek Harness plugin that adds a translation workspace to the Web GUI: translate text, an image, or a whole file, compare source and translation segment by segment, edit the output, switch the model per session, and keep every document on this device."
+      "current": "web-ui",
+      "desc_now": "长篇中文小说工作台（DSH 插件）。围绕「读—批注—审—改」：正文页优先的连续阅读与页内编辑、读者批注、四路审阅（逻辑·注意力·AI 味·读者）、段落级提案、全文动作 run，配合注意力设计、账本与世界地图。",
+      "desc_prev": "长篇中文小说工作台：章节/时间线/事实账本/伏笔/冲突/人物/高光/审稿/提案/对齐/9 Agent 分工/名家风格预设，AI 可直接生成与审稿。"
     }
   ]
 }
