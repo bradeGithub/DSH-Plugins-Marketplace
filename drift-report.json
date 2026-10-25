@@ -1,13 +1,55 @@
 {
-  "generated_at": "2026-10-25T00:26:52.706Z",
-  "count": 1,
+  "generated_at": "2026-10-25T07:44:29.830Z",
+  "count": 7,
   "items": [
     {
-      "full_name": "KLRSL/dsh-packer",
-      "previous": "memory",
+      "full_name": "ShawnRen57/omni-learning-anything",
+      "previous": "document",
       "current": "tool",
-      "desc_now": "把 Skills、会话、已装插件和设置封成一个 zip，换电脑时一键开箱；敏感内容先脱敏或加密。Seals your Skills, sessions, plugins and settings into one zip and unseals them on a new machine.",
-      "desc_prev": "dsh-packer：把本地 DSH 资产（Skills / 会话 / Profile / 设置 / 记忆）按模块打包成 zip（v0.3.0，纯 JS 实现，不调用外部命令）——迁移、分享、恢复与隐私扫描。Pack your DSH assets into modules for migration and sharing."
+      "desc_now": "Omni Learning Anything: portable Agent Skill for personalized learning plans and illustrated daily lessons in files and cloud documents. 通用学习助手。",
+      "desc_prev": "Omni Learning Anything: portable Agent Skill for personalized learning plans and daily PDF lessons. 通用学习助手。"
+    },
+    {
+      "full_name": "yxue301603/dsh-quick-prompts",
+      "previous": "web-ui",
+      "current": "conversation",
+      "desc_now": "常用话术一键填入草稿。Quick prompts for DeepSeek Harness: pinned shortcuts, project scopes and recent use.",
+      "desc_prev": "DeepSeek Harness 原生常用指令快捷面板 · Pinned prompts, project scopes, search and safe draft insertion."
+    },
+    {
+      "full_name": "yxue301603/dsh-everyday-plugins",
+      "previous": "tool",
+      "current": "memory",
+      "desc_now": "DSH 日常工具箱：找回草稿、收藏回答、定位长对话。Eight native DeepSeek Harness tools, install together or separately.",
+      "desc_prev": "DSH 日常工具箱 · Eight native everyday plugins"
+    },
+    {
+      "full_name": "ThzxxArt/dsh-search-tools",
+      "previous": "web-ui",
+      "current": "tool",
+      "desc_now": "为 DeepSeek Harness 提供可插拔的网页搜索与正文抓取：支持 SearXNG 搜索、Readability 正文提取，全部在 Web 设置页完成配置。",
+      "desc_prev": "为 DeepSeek Harness 提供可插拔的网页搜索与正文抓取：支持 SearXNG 搜索、Readability 正文提取，全部在 Web 设置页完成配置。（Adapter-first web search and readable page fetching for DeepSeek Harness, configured entirely in the Web UI.）"
+    },
+    {
+      "full_name": "yxue301603/dsh-draft-history",
+      "previous": "tool",
+      "current": "conversation",
+      "desc_now": "找回误清空的输入内容。Per-chat draft history for DeepSeek Harness, with preview, guarded restore and undo.",
+      "desc_prev": "DeepSeek Harness 原生插件 · 草稿历史 · 自动记录会话草稿、预览历史和安全恢复。"
+    },
+    {
+      "full_name": "yxue301603/dsh-answer-library",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "保存好用的回答与选句。Local answer bookmarks for DeepSeek Harness, with tags, search and JSON/Markdown backups.",
+      "desc_prev": "DeepSeek Harness 原生插件 · 回答收藏 · 保存回答与摘录，按标签检索，复制或插入草稿。"
+    },
+    {
+      "full_name": "yxue301603/dsh-selection-actions",
+      "previous": "other",
+      "current": "model",
+      "desc_now": "选中消息直接引用追问。Quoted follow-ups, explanation and translation drafts from selected DeepSeek Harness text.",
+      "desc_prev": "DeepSeek Harness 原生插件 · 选文操作 · 选中回答后引用追问、解释或翻译，预览后填入草稿。"
     }
   ]
 }
