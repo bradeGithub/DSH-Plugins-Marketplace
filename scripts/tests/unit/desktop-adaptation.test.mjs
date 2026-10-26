@@ -10,6 +10,7 @@ import { homedir, tmpdir } from "node:os";
 
 import {
   detectCurrentProfile,
+  pickSoleProfile,
   refreshCurrentProfile,
   setTargetProfile,
   profileDir,
@@ -58,6 +59,14 @@ check("isCurrentProfile 命中桌面 profile", isCurrentProfile("desktop"), true
 check("isCurrentProfile 不命中别的 profile", isCurrentProfile("web"), false);
 check("currentProfile 暴露名字", currentProfile()?.name, "desktop");
 check("非当前 profile 仍按共享树拼路径", profileDir("web"), join(process.env.DSH_HOME ?? join(homedir(), ".dsh"), "profiles", "web"));
+
+// 桌面端 env 缺失时的兜底：磁盘上只有一个已初始化 profile 才跟随，多个不猜
+// （对应安装反馈 #284/#285/#290/#292/#293/#300/#302/#305/#318 的 profiles/web ENOENT）
+check("唯一已初始化 profile 被采用", pickSoleProfile(["desktop"]), "desktop");
+check("两个 profile 不猜", pickSoleProfile(["desktop", "web"]), null);
+check("零个 profile 返回 null", pickSoleProfile([]), null);
+check("非法目录名被过滤后仍可判唯一", pickSoleProfile(["desktop", "../evil", "profiles"]), "desktop");
+check("非数组输入不崩", pickSoleProfile(undefined), null);
 
 // ---- 2. 内置插件管理器适配器 ----
 const adapter = createPluginManagerAdapter();
