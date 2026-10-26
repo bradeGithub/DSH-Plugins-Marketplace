@@ -18,5 +18,11 @@
         "license": "MIT"
       }
     }
+  ],
+  "removals": [
+    {
+      "repo": "xiciyang/dsh-publish-guard",
+      "reason": "仓库已删除（GitHub 返回 404），所有者主动请求下架；npm 上的 @xiciyang/dsh-publish-guard 与该索引条目无关。redirects 必须给 meta 指向真实插件，无法表达「只删不加」，故用 removals。"
+    }
   ]
 }
