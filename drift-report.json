@@ -1,20 +1,13 @@
 {
-  "generated_at": "2026-10-26T04:52:10.546Z",
-  "count": 2,
+  "generated_at": "2026-10-26T10:02:51.759Z",
+  "count": 1,
   "items": [
     {
-      "full_name": "ScreamingMaggot/rcs-context",
+      "full_name": "jadezane6634-ops/dsh-purge-flash",
       "previous": "tool",
-      "current": "memory",
-      "desc_now": "面向 DeepSeek Harness 的上下文与记忆插件包（MIT）。折叠长会话里重复的工具输出（原文可随时展开），给模型配一名只读调查员先核实再动手；会话事实沉淀为带证据链的外部记忆（rcs:// 寻址、L0/L1/L2 分级加载、目录感知检索、检索轨迹）。",
-      "desc_prev": "把长对话的重复计费砍掉一半，并给模型配一名只读调查员：先核实，后动手。面向 DeepSeek Harness 的上下文压缩与外置推理插件（MIT）。"
-    },
-    {
-      "full_name": "regrevia/dsh-inner-browser-use",
-      "previous": "tool",
-      "current": "web-ui",
-      "desc_now": "Drive the DeepSeek Harness sidebar browser itself: a visible pointer, real clicks and typing, upload and download, site logins kept across sessions.",
-      "desc_prev": "DeepSeek Harness 插件：让 agent 直接操作用户自己的浏览器，复用已登录会话。"
+      "current": "model",
+      "desc_now": "DSH最稳定，最高效的破甲插件：token 级重试环 + 三层技能路由（形态/父/叶）+ 分级 prefill + 拒答阶梯 L0–L3 + finish_reason 四路分流 + 请求体级整形",
+      "desc_prev": "DSH 破甲插件：token 级重试环 + 十片按需叶子（含邻近交付）+ 分级 prefill + 拒答阶梯 L0–L3 + finish_reason 四路分流 + 请求体级整形。零宿主补丁，188 项测试 / 56 条探针。"
     }
   ]
 }
