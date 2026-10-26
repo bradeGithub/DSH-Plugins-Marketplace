@@ -186,7 +186,13 @@ async function main() {
 
   const todo = repos.filter((r) => {
     const e = results[r.full_name];
-    return !e || e.pending === true;
+    if (!e) return true;
+    if (e.pending === true) return true;
+    // issue #286：断点续跑会把「首次探测时的结论」永久保留，于是根 package.json 晚于首次探测
+    // 才声明 DSH 能力的仓库会一直停在 pkg-plain。仓库内容时间戳比结论新就必须重探。
+    const checkedAt = Date.parse(e.checked_updated_at ?? "") || 0;
+    const repoUpdatedAt = Date.parse(r.pushed_at ?? r.updated_at ?? "") || 0;
+    return repoUpdatedAt > checkedAt;
   });
   console.log(`探测 ${todo.length}/${repos.length} 个仓库（并发 ${CONCURRENCY}，额度护栏 < ${RATE_FLOOR}）...`);
 
@@ -209,7 +215,7 @@ async function main() {
   const worker = async () => {
     while (cursor < todo.length) {
       const repo = todo[cursor++];
-      const entry = { full_name: repo.full_name, verdict: "unknown" };
+      const entry = { full_name: repo.full_name, verdict: "unknown", checked_updated_at: repo.pushed_at ?? repo.updated_at ?? null };
       try {
         const sig = await probeTree(repo);
         if (!sig) { results[repo.full_name] = entry; done++; continue; }
