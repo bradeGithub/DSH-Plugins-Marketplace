@@ -11,6 +11,8 @@ import { homedir, tmpdir } from "node:os";
 import {
   detectCurrentProfile,
   pickSoleProfile,
+  listInitializedProfiles,
+  resolveProfileWithDesktopFallback,
   refreshCurrentProfile,
   setTargetProfile,
   profileDir,
@@ -67,6 +69,35 @@ check("两个 profile 不猜", pickSoleProfile(["desktop", "web"]), null);
 check("零个 profile 返回 null", pickSoleProfile([]), null);
 check("非法目录名被过滤后仍可判唯一", pickSoleProfile(["desktop", "../evil", "profiles"]), "desktop");
 check("非数组输入不崩", pickSoleProfile(undefined), null);
+
+// listInitializedProfiles / resolveProfileWithDesktopFallback（桌面端兜底的纯函数部分）
+const fakeReaddir = (entries) => async () => entries;
+const fakeStat = (present) => async (p) => {
+  if (present.includes(p)) return { isFile: () => true };
+  throw Object.assign(new Error("ENOENT"), { code: "ENOENT" });
+};
+const SCAN_BASE = "/profiles-root";
+/** 构造 resolveProfileWithDesktopFallback 需要的 fs 注入（names = 已初始化 profile 目录名） */
+const scanWith = (names) => ({
+  readdirImpl: fakeReaddir(names.map((name) => ({ name, isDirectory: () => true }))),
+  statImpl: fakeStat(names.map((name) => join(SCAN_BASE, name, "package.json"))),
+  profilesBase: SCAN_BASE,
+});
+check("列目录失败 → 空数组", await listInitializedProfiles(async () => { throw new Error("boom"); }, "/base", fakeStat([])), []);
+check("非目录条目被跳过", await listInitializedProfiles(fakeReaddir([
+  { name: "file.txt", isDirectory: () => false },
+  { name: "desktop", isDirectory: () => true },
+]), "/base", fakeStat([join("/base", "desktop", "package.json")])), ["desktop"]);
+check("没有 package.json 的目录被跳过", await listInitializedProfiles(fakeReaddir([
+  { name: "web", isDirectory: () => true },
+]), "/base", fakeStat([])), []);
+
+check("非 Electron 不做兜底", await resolveProfileWithDesktopFallback({ profile: "web", source: "default", electron: false }), { profile: "web", soleFollowed: false });
+check("electron 但未注入 fs 能力 → 当空列表", await resolveProfileWithDesktopFallback({ profile: "web", source: "default", electron: true }), { profile: "web", soleFollowed: false });
+check("来源非默认值不做兜底", await resolveProfileWithDesktopFallback({ profile: "web", source: "config", electron: true, ...scanWith(["desktop"]) }), { profile: "web", soleFollowed: false });
+check("唯一 profile 与当前一致 → 不切换", await resolveProfileWithDesktopFallback({ profile: "desktop", source: "default", electron: true, ...scanWith(["desktop"]) }), { profile: "desktop", soleFollowed: false });
+check("唯一 profile 不同 → 切换并标记兜底", await resolveProfileWithDesktopFallback({ profile: "web", source: "default", electron: true, ...scanWith(["desktop"]) }), { profile: "desktop", soleFollowed: true });
+check("多个 profile → 不猜", await resolveProfileWithDesktopFallback({ profile: "web", source: "default", electron: true, ...scanWith(["desktop", "web"]) }), { profile: "web", soleFollowed: false });
 
 // ---- 2. 内置插件管理器适配器 ----
 const adapter = createPluginManagerAdapter();
