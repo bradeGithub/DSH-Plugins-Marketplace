@@ -1240,6 +1240,18 @@ async function main() {
         log(`适配层：${r.from} → ${r.meta.full_name}`);
       }
     }
+    // 下架清单（adaptor.removals）：仓库已删除 / 所有者主动请求下架、且**没有**替代目标时用。
+    // redirects 的语义必须是「错误条目 → 真实插件」（meta.full_name 必填），表达不了纯删除，
+    // 硬塞一个不存在的 meta 只会再造一条死链，所以单独留这个数组（issue #314）。
+    const removals = Array.isArray(adaptor.removals)
+      ? adaptor.removals.map((r) => (r && typeof r.repo === "string" ? r.repo : null)).filter(Boolean)
+      : [];
+    if (removals.length > 0) {
+      const removedSet = new Set(removals);
+      const before = repos.length;
+      repos = repos.filter((r) => !removedSet.has(r.full_name));
+      if (repos.length !== before) log(`下架清单：移除 ${before - repos.length} 条（${removals.join(", ")}）`);
+    }
   }
 
   // 人工验证标注（market_tags）：随构建注入，两种模式都打（skills 栏目同样展示）。
