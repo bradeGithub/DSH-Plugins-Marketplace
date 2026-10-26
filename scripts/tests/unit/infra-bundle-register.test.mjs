@@ -32,6 +32,7 @@ function createFakeFs({
   includePackage = true,
   includeMain = true,
   failWriteAt = null,
+  writeEnoent = false,
   failRenameAt = null,
   realPath = null,
 } = {}) {
@@ -74,6 +75,12 @@ function createFakeFs({
     async writeFile(path, text) {
       writeCount++;
       writes.push({ path, text });
+      if (writeEnoent) {
+        // 目标 profile 目录不存在时 node 的真实行为：ENOENT 指向 <dir>/package.json.tmp
+        const error = new Error(`ENOENT: no such file or directory, open '${path}'`);
+        error.code = "ENOENT";
+        throw error;
+      }
       if (failWriteAt === writeCount) throw new Error("manifest write failed");
       files.set(path, text);
     },
@@ -393,6 +400,13 @@ await test("package.json 存在但损坏时不自建（仍报错，避免静默�
 
   await assert.rejects(() => register(h), /bundleNoProfilePkg/);
   assert.equal(h.fs.files.get(PACKAGE_FILE), "{ not json");
+});
+
+await test("目标 profile 目录不存在 → 抛可操作提示而非裸 ENOENT", async () => {
+  const h = createHarness({ writeEnoent: true });
+
+  await assert.rejects(() => register(h), /bundleProfileDirMissing/);
+  assert.equal(h.logs.some((line) => line.includes("bundleRecorded")), false);
 });
 
 console.log(`\n${passed} passed, ${failed} failed`);
