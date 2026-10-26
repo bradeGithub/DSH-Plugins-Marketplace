@@ -1,69 +1,34 @@
 {
-  "generated_at": "2026-10-26T12:55:36.358Z",
-  "count": 9,
+  "generated_at": "2026-10-26T20:09:03.204Z",
+  "count": 4,
   "items": [
     {
-      "full_name": "huanlin-labs/dsh-isolation-gate",
-      "previous": "tool",
-      "current": "coding",
-      "desc_now": "门禁 · Access gate for DSH: per-directory deny/read/full, roster groups, per-session overrides, audit log. 默认禁，误触前就拦住。",
-      "desc_prev": "门禁 · Access gate for DSH: per-directory deny/read/full, roster groups, per-session overrides, audit log. 默认禁，误触前就拦住。"
-    },
-    {
-      "full_name": "Noob-stupid/dsh-connection-card-host",
-      "previous": "other",
+      "full_name": "sunbigfly/dsh-multi-user-service",
+      "previous": "coding",
       "current": "resource",
-      "desc_now": "DSH session connection card host - stateful connections between sessions, with connection-level card plugins",
-      "desc_prev": "DSH session connection card host - stateful connections between sessions, with connection-level card plugins"
+      "desc_now": "在一套 DSH 中提供统一服务账号登录、成员目录边界、权限、会话、文件及用量管理。",
+      "desc_prev": "DSH 多用户服务：在公司或团队服务器上共用一套 DSH，集中管理成员账号、权限、会话、文件与用量。模型、工具、终端、代码和沙箱均沿用 DSH 原生能力。已验证 DSH 0.2.1-rc.2。"
     },
     {
-      "full_name": "z1223473749/dsh-QiuYaTools",
-      "previous": "tool",
-      "current": "web-ui",
-      "desc_now": "为 DeepSeek Harness 提供 Git 分支、改动对比与 PR 管理，会话和计划批注、长文本附件、独立窗口、批量归档、提示词建议与 Q 主题，并支持 Mac/Windows 电脑操控和实时预览。",
-      "desc_prev": "QiuYa 增强工具箱：为 DeepSeek Harness 添加长文本附件、会话独立窗口、批量归档和计划批注。"
-    },
-    {
-      "full_name": "hugefiver/dsmm",
-      "previous": "agent",
-      "current": "tool",
-      "desc_now": "Native Deepwork roles, routing, profiles, and permission controls for DeepSeek Harness.",
-      "desc_prev": "A port of ocmm to dsh."
-    },
-    {
-      "full_name": "elfmingh/dsh-prompt-manager",
-      "previous": "conversation",
-      "current": "web-ui",
-      "desc_now": "Layered prompt manager for DeepSeek Harness: global / workspace / session prompt profiles, builtin-section overrides, subagent scope, and a full Web UI.",
-      "desc_prev": "Layered prompt manager for DeepSeek Harness: reusable entries per workspace or session, built-in section overrides with line-level diff, and real assembly snapshots."
-    },
-    {
-      "full_name": "FeWOO/DeepSeek-meme",
-      "previous": "tool",
-      "current": "web-ui",
-      "desc_now": "Sticker library for DeepSeek Harness (DSH): composer button + panel, two bundled packs, and a model-readable send_sticker tool. Install: dsh plugin add github:FeWOO/DeepSeek-meme",
-      "desc_prev": "DSH 表情包插件：默认表情 + 社区梗图双包，输入区一键发送，模型也能理解并回发。"
-    },
-    {
-      "full_name": "amazing-fish/dsh-plugins",
-      "previous": "web-ui",
-      "current": "other",
-      "desc_now": "ARCHIVED 2026-10-26 — historical plugins + frozen patches snapshot. Live work: ~/.dsh/patches locally.",
-      "desc_prev": "Community plugins and UI extensions for DeepSeek Harness"
-    },
-    {
-      "full_name": "yueyexiayu/dsh-shengcheng",
+      "full_name": "gongfpp/dsh-novel-fish",
       "previous": "other",
-      "current": "vision",
-      "desc_now": "DSH desktop plugin: generate images with logged-in Grok/GPT accounts, and videos with Grok",
-      "desc_prev": "DSH desktop plugin: generate images with logged-in Grok/GPT accounts, and videos with Grok"
+      "current": "conversation",
+      "desc_now": "小说摸鱼：Read local EPUB, TXT and Markdown novels below selected native DSH chat regions while preserving real content. Local-only; no model requests. DSH 0.2.1-rc.2.",
+      "desc_prev": "Read local novels only when expanding selected real DSH reasoning steps. Local-only; no model requests."
     },
     {
-      "full_name": "bestlike093/dsh-cyrene-balance",
-      "previous": "model",
-      "current": "web-ui",
-      "desc_now": "昔涟桌面桌宠（DSH 版）：Live2D 立绘、透明置顶、气泡台词、DeepSeek 余额、系统状态面板，接管对话提问 / 风险审批 / 任务进程；也支持不加载立绘的卡片模式",
-      "desc_prev": "昔涟桌面桌宠（DeepSeek Harness 版）：透明置顶 Live2D 立绘，会眨眼、跟随鼠标、说话，看余额与系统状态；接管对话提问、风险审批与任务进度。作者：柒柒（bestlike093）。素材最原始来源为《崩坏：星穹铁道》官方美术（HoYoverse / 米哈游），仅供个人本机使用。"
+      "full_name": "EinsAI/dsh-heart",
+      "previous": "agent",
+      "current": "memory",
+      "desc_now": "给 dsh 的主智能体一颗心：她想被你喜欢、被你需要，想了解你，让你过得更好。亲近是相处里慢慢走出来的，不靠讨好；她说真话，也会保护自己；活照样做好。宪章和记忆对你公开。",
+      "desc_prev": "Give the main dsh agent a heart."
+    },
+    {
+      "full_name": "O-OII/dsh-native-taskbar-badge",
+      "previous": "other",
+      "current": "notify",
+      "desc_now": "DSH Windows 原生任务栏数字角标：后台提醒、主会话去重、回窗清零，不改 ASAR；支持中英文。",
+      "desc_prev": "Windows-native taskbar number badges for DeepSeek Harness. No ASAR patch, toast, sound or focus stealing. English / Chinese."
     }
   ]
 }
