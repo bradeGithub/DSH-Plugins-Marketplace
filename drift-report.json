@@ -1,54 +1,47 @@
 {
-  "generated_at": "2026-10-27T12:06:15.726Z",
-  "count": 7,
+  "generated_at": "2026-10-27T18:08:38.431Z",
+  "count": 6,
   "items": [
     {
-      "full_name": "Viy1204/recruiting-copilot",
-      "previous": "coding",
-      "current": "resource",
-      "desc_now": "给 HR 和猎头的 AI 招聘工作流：岗位梳理、BOSS 直聘与猎聘双通道寻源初筛、人才盘点、简历评估、面试安排、候选台账与日报。支持 Claude Code、Codex、WorkBuddy 等工具及 DeepSeek Harness 插件，配有招聘进展看板；标准、台账与档案保存在自己的工作区。",
-      "desc_prev": "给 HR / 猎头的 AI 招聘工作流：岗位标准梳理、Boss直聘 + 猎聘双通道寻源初筛、市场人才盘点、简历评估、约面试、候选人台账与日报。可装成 Claude Code 插件或 DeepSeek Harness (dsh) 插件——后者自带可直接上手操作的「招聘浏览器」面板；也能配合任意读 AGENTS.md 的 AI 编程助手使用。"
-    },
-    {
-      "full_name": "PensiveFei/deep-read-summarize",
-      "previous": "tool",
-      "current": "memory",
-      "desc_now": "Deep reading & summarization workflow for DSH: books/papers/videos/web → structured Markdown notes. Plugin parsers, MapReduce deep-read, JSON Schema output.",
-      "desc_prev": "Deep reading & summarization workflow for books/papers/videos/web — plugin parsers, MapReduce deep-read, JSON Schema output, Obsidian-ready (DSH)"
-    },
-    {
-      "full_name": "Alice39s/agent-stash",
-      "previous": "agent",
-      "current": "coding",
-      "desc_now": "Personal Agent Skills & Plugin Packs with Pi / DSH (DeepSeek Harness) / Grok Build / goose / Aider / Kimi Code CLI / Codex / Claude Code / OpenCode / Crush / Qwen Code / Kilo Code / GitHub Copilot CLI",
-      "desc_prev": "Personal Agent Skills, Pi & DSH (DeepSeek Harness) plugins"
-    },
-    {
-      "full_name": "SuCriss/dsh-leekbox",
-      "previous": "conversation",
-      "current": "tool",
-      "desc_now": "韭菜盒子 LeekBox — A股看盘助手 · DeepSeek Harness (DSH) 插件：实时行情与K线、自选股持仓盈亏与价格预警、13 项技术信号选股、涨停情绪与龙虎榜、7×24 快讯、AI 个股分析 | Realtime A-share dashboard plugin for DSH",
-      "desc_prev": "韭菜盒子 LeekBox — A股看盘助手 · DeepSeek Harness (DSH) web 插件"
-    },
-    {
-      "full_name": "NelsonLongxiang/dsh-prompt-templates",
-      "previous": "coding",
-      "current": "web-ui",
-      "desc_now": "Quick prompt templates for DeepSeek Harness (DSH): global and per-session templates, floating panel + right-sidebar tab, scheduled auto-injection (silent or chat-visible), SQLite persistence, sync CLI",
-      "desc_prev": "Quick prompt templates for DeepSeek Harness: global and per-session templates, a right-side panel, and Python-backed SQLite persistence"
-    },
-    {
-      "full_name": "Kevinwu901113/dsh-dot",
-      "previous": "notify",
-      "current": "memory",
-      "desc_now": "住在自己手机上的角色，DeepSeek Harness (dsh) 插件：自带 Android 手机、她自己的 QQ、来自真实事件的记忆与日记、两次对话之间的生活（幕间）、可选 VM 电脑。A character who lives on her own phone, for DSH.",
-      "desc_prev": "Dots-style always-on agent for DeepSeek Harness (dsh): its own computer, reachable over IM, scheduled work, hard budget limits"
-    },
-    {
-      "full_name": "xeonphi1/memlikehuman",
+      "full_name": "basaltfold/dsh-tencent-channel-fix",
       "previous": "other",
-      "current": "memory",
-      "desc_now": "换个模型也不丢故事：给 DeepSeek 大鲸鱼装上本地记忆，帮它记住你们的约定和没做完的事，下次打开还能接着聊。",
+      "current": "vision",
+      "desc_now": "Repairs dsh-our-free-model at boot: the CodeArts (Huawei Cloud) signed-transport lifetime that broke after a plugin restart, a dangling injection left by an earlier revision, and the buddy/workbuddy 400 (code 11128) attribution User-Agent.",
+      "desc_prev": "Fixes the buddy / workbuddy channel 400 (code 11128, \"Illegal API invocation from an unapproved channel\") in DeepSeek Harness, and re-applies the fix after every dsh-our-free-model upgrade."
+    },
+    {
+      "full_name": "guhanfei-ai/dsh-zterm",
+      "previous": "other",
+      "current": "coding",
+      "desc_now": "Real-machine terminal for DeepSeek Harness — SSH, JumpServer and local PTY, read-only by default, writes only when a human turns them on.",
+      "desc_prev": null
+    },
+    {
+      "full_name": "jameswatt139240-crypto/dsh-ATLAS",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "Unified @ mentions for the DeepSeek Harness web GUI — files, folders, skills, past chats, plugins, and @git. Line ranges, paths outside the workspace, typo tolerance, and the token cost of each reference before you send.",
+      "desc_prev": "AT Last, All Sources. One @ . Jump anywhere. - unified @ mentions for the DeepSeek Harness web GUI: five built-in categories + bundled @git + any plugin's category."
+    },
+    {
+      "full_name": "AhaCrazy/dsh-action-hub",
+      "previous": "model",
+      "current": "conversation",
+      "desc_now": "Archived: moved to https://github.com/AhaCrazy/action-hub/tree/main/packages/dsh",
+      "desc_prev": "DSH plugin: a user-invoked Action shelf for reusable prompts and flows - no context cost, no automatic triggering."
+    },
+    {
+      "full_name": "wingoflan/dsh-subagent-marker",
+      "previous": "agent",
+      "current": "conversation",
+      "desc_now": "Marks the composer of a subagent session in DeepSeek Harness, so you can tell at a glance whether you are typing to a subagent.",
+      "desc_prev": null
+    },
+    {
+      "full_name": "xiao-hans/dsh-session-auto-archive",
+      "previous": "other",
+      "current": "conversation",
+      "desc_now": "DeepSeek Harness（DSH）插件：按闲置天数自动归档会话，补齐 DSH 只有手动 Archive 的缺口。支持演练模式、置顶保护、排除清单、审计日志与逐条撤销，归档走原生状态，不删任何数据。A DSH plugin that auto-archives idle sessions after a configurable number of days — dry-run mode, pinned-session protection, exclusion list, audit log and per-item undo, using DSH native archive state.",
       "desc_prev": null
     }
   ]
