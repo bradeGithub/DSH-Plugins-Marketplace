@@ -1,69 +1,27 @@
 {
-  "generated_at": "2026-10-28T16:54:43.067Z",
-  "count": 9,
+  "generated_at": "2026-10-28T22:44:04.052Z",
+  "count": 3,
   "items": [
     {
-      "full_name": "STARDUSTLC666/dsh-ppt",
-      "previous": "tool",
-      "current": "document",
-      "desc_now": "DSH 演示文稿：HTML / 可编辑 PPTX / 工程包、轻量编辑、数字溯源与现场推演，可选 AI 审阅。欢迎提交 issues 和 PR。",
-      "desc_prev": "把材料制作成 HTML 放映、可编辑 PPTX 和可继续修改的工程文件。 欢迎提交 issues 和 PR。"
-    },
-    {
-      "full_name": "STARDUSTLC666/dsh-ffmpeg",
-      "previous": "tool",
-      "current": "other",
-      "desc_now": "DSH 音视频处理：本机 FFmpeg 裁切、拼接、转码、字幕、音轨、GIF 与帧提取。欢迎提交 issues 和 PR。",
-      "desc_prev": "用自然语言调用 FFmpeg，处理已有音视频文件。 欢迎提交 issues 和 PR。"
-    },
-    {
-      "full_name": "STARDUSTLC666/dsh-voice",
-      "previous": "other",
+      "full_name": "getpapi/papi",
+      "previous": "coding",
       "current": "tool",
-      "desc_now": "DSH 语音工具：Edge TTS 朗读、兼容 ASR 转写、工作区文件保护与并发输出。欢迎提交 issues 和 PR。",
-      "desc_prev": "把文字生成语音，或通过兼容接口把音频转为文字。 欢迎提交 issues 和 PR。"
+      "desc_now": "Vibe code as a team. Plan, build, review and release with your AI assistant.",
+      "desc_prev": "Your AI starts every session from zero. Your project stays on course. Structured plan, build and review cycles for any MCP-capable AI coding tool."
     },
     {
-      "full_name": "STARDUSTLC666/dsh-calendar",
-      "previous": "other",
+      "full_name": "TYEclipse/dsh-color",
+      "previous": "coding",
+      "current": "vision",
+      "desc_now": "Color toolbox for DeepSeek Harness (dsh): parse/convert any CSS color, WCAG contrast plus the nearest passing color, named-color lookup, palettes, blending, CIEDE2000 difference, Oklab ramps and color-vision-deficiency simulation - zero runtime deps, pure math",
+      "desc_prev": "Color toolbox for DeepSeek Harness (dsh): parse/convert any CSS color (hex, rgb, hsl, hwb, named), WCAG contrast ratios with AA/AAA verdicts, nearest passing color for a contrast target, named-color lookup, harmonious palettes (7 types), color adjustments and alpha/premultiplied blending — zero runtime dependencies, pure math"
+    },
+    {
+      "full_name": "qwh15622336051/dsh-prompt-optimizer",
+      "previous": "conversation",
       "current": "tool",
-      "desc_now": "DSH 日历工作台：CalDAV 日程管理、月 / 周 / 议程视图与 ICS 预览导入。欢迎提交 issues 和 PR。",
-      "desc_prev": "连接 CalDAV 日历，在 DSH 中查看、创建和调整日程。 欢迎提交 issues 和 PR。"
-    },
-    {
-      "full_name": "STARDUSTLC666/dsh-suite",
-      "previous": "tool",
-      "current": "memory",
-      "desc_now": "DSH 组合包：一次安装 18 个独立插件，覆盖邮件、日历、记忆、媒体与开发工具；更新由用户选择。欢迎提交 issues 和 PR。",
-      "desc_prev": "一次安装 18 个独立 DSH 插件，并统一组合它们的默认配置。 欢迎提交 issues 和 PR。"
-    },
-    {
-      "full_name": "lohana20061023-29/dsh-media-downloader",
-      "previous": "memory",
-      "current": "web-ui",
-      "desc_now": "DSH 媒体下载插件：粘一条链接弹出选择器，B 站多画质 / 抖音无水印 / 小红书图文原图三套原生解析，YouTube 等站点交给 yt-dlp。封面只保留 16:9 原图，作者头像与图文整组图片可单独勾选；复制链接时屏幕角落先提示，登录用独立 profile 不影响日常浏览器。",
-      "desc_prev": "DSH 媒体下载插件：粘一条链接自动弹选择器，B 站多画质 / 抖音无水印 / 小红书图文原图三套原生解析，YouTube 等站点交给 yt-dlp。封面可按原图、16:9、4:3 分开下，图文笔记整组图片可选，登录用独立 profile 不影响日常浏览器。"
-    },
-    {
-      "full_name": "STARDUSTLC666/dsh-flakefinder",
-      "previous": "other",
-      "current": "resource",
-      "desc_now": "DSH 偶发测试调查：重复运行、失败记录、工作区隔离列表与写操作确认。欢迎提交 issues 和 PR。",
-      "desc_prev": "重复运行测试，找出偶发失败用例并保留调查记录。 欢迎提交 issues 和 PR。"
-    },
-    {
-      "full_name": "junarch/voice_for_dsh",
-      "previous": "document",
-      "current": "tool",
-      "desc_now": "DSH 朗读插件：每轮回答先改写成口语稿再朗读；系统语音／豆包／本地 Kokoro 三引擎，本地离线、内容不出本机。Read-aloud plugin for DeepSeek Harness: browser TTS, Doubao, or an optional local Kokoro model.",
-      "desc_prev": "DSH Web 语音朗读插件：每轮输出口语化转写后朗读（代码/表格自动跳过）；免费浏览器 TTS + 可选豆包云 TTS。Read-aloud plugin for DeepSeek Harness web."
-    },
-    {
-      "full_name": "LynnHMa/FK-The-AI",
-      "previous": "model",
-      "current": "other",
-      "desc_now": "可以殴打的“大肥鱼”桌宠！",
-      "desc_prev": "AI不听话？乱动项目？Token浪费？那就揍它一顿！"
+      "desc_now": "Prompt optimizer for the DeepSeek Harness composer: rewrite a plain-language draft into a precise prompt, using any model you have already configured.",
+      "desc_prev": "Prompt optimizer and message retract/edit for the DeepSeek Harness composer"
     }
   ]
 }
