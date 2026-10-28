@@ -1,27 +1,27 @@
 {
-  "generated_at": "2026-10-28T08:31:19.739Z",
+  "generated_at": "2026-10-28T11:22:36.993Z",
   "count": 3,
   "items": [
     {
-      "full_name": "kingOfSoySauce/dsh-skin-market",
-      "previous": "web-ui",
-      "current": "coding",
-      "desc_now": "DSH皮肤市场Skin Market 已收录五百+皮肤、桌宠、开屏动画等；有便捷的社区收录入口，并且已有多位开发者提交皮肤；有在线页面方便在线浏；有方便安装管理本地皮肤的插件",
-      "desc_prev": "DeepSeek Harness skin market 皮肤市场 已收录200+DSH 皮肤 完善评分系统加人工审核，有便捷的社区收录入口；有在线页面方便在线浏览，也有插件方便管理本地皮肤"
-    },
-    {
-      "full_name": "flymysql/dsh-remote",
-      "previous": "tool",
-      "current": "coding",
-      "desc_now": "Remote-work assistant for DeepSeek Harness (DSH): SSH into any machine, pick a remote workspace, and work on it with 22 rw_* tools, conflict-aware SFTP mirror, embedded PTY terminal, port forwarding, and multi-hop jumps - under the same sandbox policy as a local session.",
-      "desc_prev": "Remote-work assistant for DeepSeek Harness (DSH): connect SSH (key or password), pick a remote workspace, operate with rw_* tools, and SFTP-mirror it into a real local DSH workspace."
-    },
-    {
-      "full_name": "GDWhisper/dsh-ntr",
-      "previous": "other",
+      "full_name": "yanwenzong1-pixel/xinlan-dsh-plugin",
+      "previous": "notify",
       "current": "tool",
-      "desc_now": "让你的Deepseek harness成为一个统一的agent入口，轻松接入codebuddy、claude code、opencode、qoder",
-      "desc_prev": null
+      "desc_now": "DSH 扩展坞｜给 DeepSeek Harness 插上更多接口：快速追加、PTC 派活、中断报警与自用桌宠。全自动派发规格包实测 token 缓存命中 99.6%、约 ¥5.47/亿 token（需严格自动派发 + Ponytail + DeepSeek V4.1-Flash）。",
+      "desc_prev": "DSH 扩展坞｜给 DeepSeek Harness（DSH）插上更多接口：输入框预存文案/预存命令一键追加、一句话把整件事派给 PTC 子代理、长任务中断分级报警。DSH plugins for DeepSeek Harness: quick-append / ptc-task / dialogue-alert"
+    },
+    {
+      "full_name": "mili1360/dsh-history-fold",
+      "previous": "model",
+      "current": "memory",
+      "desc_now": "你的助手记得昨天——直到上下文撑不住。DSH 自带压实写摘要（有损），这个插件保留全文：折叠的消息原样归档到本地，替换它的是真实前缀构成的提取式索引，不加一句模型生成的话。笔记还能从会话日志重建。Persistent memory for DeepSeek Harness: fold old history into one extractive index backed by a verbatim local archive. Nothing summarised, nothing invented, and the notes can be rebuilt from the session logs.",
+      "desc_prev": "DSH 会话越长越慢、每轮越贵？把最老的历史折叠成一条带索引的消息，全文归档到本地、随时能沿路径找回来，不调用模型写摘要。DeepSeek Harness plugin: folds the oldest history span into one indexed message backed by a lossless local archive."
+    },
+    {
+      "full_name": "shy3130/dsh-quota",
+      "previous": "tool",
+      "current": "web-ui",
+      "desc_now": "DeepSeek Harness 状态栏多厂商额度监控插件：GLM · OpenCode Go · Kimi · 小米 · DeepSeek（余额+消耗），附 Token 用量统计",
+      "desc_prev": "DeepSeek Harness 插件：输入框下方显示当前模型所属厂商（智谱 GLM / OpenCode Go，可扩展）的套餐额度，点击查看明细"
     }
   ]
 }
