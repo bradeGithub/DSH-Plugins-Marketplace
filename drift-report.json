@@ -1,13 +1,27 @@
 {
-  "generated_at": "2026-10-28T01:27:18.946Z",
-  "count": 1,
+  "generated_at": "2026-10-28T08:31:19.739Z",
+  "count": 3,
   "items": [
     {
-      "full_name": "Nihao7-L/dsh-prompt-chain",
-      "previous": "conversation",
-      "current": "web-ui",
-      "desc_now": "One-click prompt booster 💪 — if the result is too short, continue generating 🔜; if you don't like it, regenerate 🔄. Your history is auto-saved 🕐 and you can roll back ↩️ anytime. Results sync back to the input box with a line-by-line diff view. 🗺️ A visual UI 🎨 lets you place the prompt 🪄 button and its icon 📍 wherever you want.",
-      "desc_prev": "One-click prompt rewriting in the DSH composer — keep going for up to 5 rounds, diff every change, and jump back to any version."
+      "full_name": "kingOfSoySauce/dsh-skin-market",
+      "previous": "web-ui",
+      "current": "coding",
+      "desc_now": "DSH皮肤市场Skin Market 已收录五百+皮肤、桌宠、开屏动画等；有便捷的社区收录入口，并且已有多位开发者提交皮肤；有在线页面方便在线浏；有方便安装管理本地皮肤的插件",
+      "desc_prev": "DeepSeek Harness skin market 皮肤市场 已收录200+DSH 皮肤 完善评分系统加人工审核，有便捷的社区收录入口；有在线页面方便在线浏览，也有插件方便管理本地皮肤"
+    },
+    {
+      "full_name": "flymysql/dsh-remote",
+      "previous": "tool",
+      "current": "coding",
+      "desc_now": "Remote-work assistant for DeepSeek Harness (DSH): SSH into any machine, pick a remote workspace, and work on it with 22 rw_* tools, conflict-aware SFTP mirror, embedded PTY terminal, port forwarding, and multi-hop jumps - under the same sandbox policy as a local session.",
+      "desc_prev": "Remote-work assistant for DeepSeek Harness (DSH): connect SSH (key or password), pick a remote workspace, operate with rw_* tools, and SFTP-mirror it into a real local DSH workspace."
+    },
+    {
+      "full_name": "GDWhisper/dsh-ntr",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "让你的Deepseek harness成为一个统一的agent入口，轻松接入codebuddy、claude code、opencode、qoder",
+      "desc_prev": null
     }
   ]
 }
