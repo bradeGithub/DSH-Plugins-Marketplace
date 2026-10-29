@@ -1,20 +1,27 @@
 {
-  "generated_at": "2026-10-29T10:53:23.425Z",
-  "count": 2,
+  "generated_at": "2026-10-29T12:51:32.525Z",
+  "count": 3,
   "items": [
     {
-      "full_name": "Vncntvx/dsh-zotero",
-      "previous": "memory",
-      "current": "web-ui",
-      "desc_now": "Zotero plugin for DeepSeek Harness: search and read papers in conversation, audit the literature trail, and browse the literature panel.",
-      "desc_prev": "Zotero plugin for DeepSeek Harness: search papers, read full-text PDFs and notes, extract relevant passages, and inspect sources in the conversation tab."
+      "full_name": "Octo-o-o-o/chatgpt-pro-research",
+      "previous": "web-ui",
+      "current": "tool",
+      "desc_now": "DSH 插件：可恢复的 ChatGPT Pro 多轮网页调研、逐条判据裁决与本地报告。Resumable research with local delivery.",
+      "desc_prev": "DeepSeek Harness 插件：用 ChatGPT Pro 网页会话做无人值守多轮调研，记录与产物落盘，侧边栏管理主题。"
     },
     {
-      "full_name": "milkly909-code/dsh-plugin-starlight-protocol",
-      "previous": "coding",
-      "current": "web-ui",
-      "desc_now": "DeepSeek Harness 外观套件：深空动态天体背景、赛博朋克 2077 HUD 主题、开机认证序列，以及无边框窗口下的侧栏折叠按钮修复",
-      "desc_prev": "星轨协议 2077 (Starlight Protocol) — DeepSeek Harness 旗舰级综合外观系统：集成冷启动认证序列、赛博朋克 2077 HUD 终端主题、深空全景天体引擎与左上角战术侧边栏折叠总控"
+      "full_name": "YokosWY/dsh-calibration-tier",
+      "previous": "tool",
+      "current": "notify",
+      "desc_now": "DSH 输入框档位条：一框五模式——思考（常规/严格/极致）、循环（轻量/交付/极致）、对抗、检索（一格轮换：本地/增量/全量）、代理（一格轮换：默认/效率/性能）；配套 agent_delegate（spawn / claude-code / codex 三后端，自配 API 故障自动回退官方并提醒）与 verify_claims。",
+      "desc_prev": "dsh-calibration-tier（简称 CT）｜一框四模式：思考（常规/严格/极致）、循环（轻量/交付/极致）、对抗（可叠加的对抗审查）、检索（本地/增量/全量，可叠加找技能）；思考与循环互斥切换，对抗与检索可叠加。模型经 clarify_tier / forge_level 读取。"
+    },
+    {
+      "full_name": "Wanyi424/dsh-performance",
+      "previous": "web-ui",
+      "current": "coding",
+      "desc_now": "小而美？看清 DSH 的 CPU、内存与卡顿：按插件、终端、MCP 拆分占用，对照卡顿时刻，复制诊断报告。仅限 Windows x64。",
+      "desc_prev": "查看 DSH 的 CPU、内存和界面响应，分析进程占用与后台插件采样数据，并复制诊断报告。支持 Windows x64。"
     }
   ]
 }
