@@ -1,27 +1,20 @@
 {
-  "generated_at": "2026-10-28T22:44:04.052Z",
-  "count": 3,
+  "generated_at": "2026-10-29T05:24:53.745Z",
+  "count": 2,
   "items": [
     {
-      "full_name": "getpapi/papi",
-      "previous": "coding",
-      "current": "tool",
-      "desc_now": "Vibe code as a team. Plan, build, review and release with your AI assistant.",
-      "desc_prev": "Your AI starts every session from zero. Your project stays on course. Structured plan, build and review cycles for any MCP-capable AI coding tool."
-    },
-    {
-      "full_name": "TYEclipse/dsh-color",
-      "previous": "coding",
+      "full_name": "lizhiyao/oh-my-knowledge",
+      "previous": "memory",
       "current": "vision",
-      "desc_now": "Color toolbox for DeepSeek Harness (dsh): parse/convert any CSS color, WCAG contrast plus the nearest passing color, named-color lookup, palettes, blending, CIEDE2000 difference, Oklab ramps and color-vision-deficiency simulation - zero runtime deps, pure math",
-      "desc_prev": "Color toolbox for DeepSeek Harness (dsh): parse/convert any CSS color (hex, rgb, hsl, hwb, named), WCAG contrast ratios with AA/AAA verdicts, nearest passing color for a contrast target, named-color lookup, harmonious palettes (7 types), color adjustments and alpha/premultiplied blending — zero runtime dependencies, pure math"
+      "desc_now": "OMK helps people and agents build, maintain, and reuse valuable knowledge from real work and collaboration, with readable content, traceable sources, and revision history for future tasks.",
+      "desc_prev": "OMK — Evidence-backed evaluation and observability for prompts, RAG, skills, agents, and workflows. Native Codex, Claude Code, and DeepSeek Harness support."
     },
     {
-      "full_name": "qwh15622336051/dsh-prompt-optimizer",
+      "full_name": "xiao-hans/dsh-session-auto-archive",
       "previous": "conversation",
-      "current": "tool",
-      "desc_now": "Prompt optimizer for the DeepSeek Harness composer: rewrite a plain-language draft into a precise prompt, using any model you have already configured.",
-      "desc_prev": "Prompt optimizer and message retract/edit for the DeepSeek Harness composer"
+      "current": "web-ui",
+      "desc_now": "DeepSeek Harness（DSH）插件：按闲置天数自动归档会话，补齐 DSH 只有手动 Archive 的缺口；回到会话自动取消归档，配合「按最近活跃」排序让老会话回到顶部。支持演练模式、置顶保护、排除清单、跟随主题的折叠设置卡片、归档历史与逐条撤销，归档走原生状态，不删任何数据。",
+      "desc_prev": "DeepSeek Harness（DSH）插件：按闲置天数自动归档会话，补齐 DSH 只有手动 Archive 的缺口。支持演练模式、置顶保护、排除清单、审计日志与逐条撤销，归档走原生状态，不删任何数据。A DSH plugin that auto-archives idle sessions after a configurable number of days — dry-run mode, pinned-session protection, exclusion list, audit log and per-item undo, using DSH native archive state."
     }
   ]
 }
