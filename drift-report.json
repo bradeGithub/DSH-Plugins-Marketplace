@@ -1,76 +1,13 @@
 {
-  "generated_at": "2026-10-29T19:52:52.157Z",
-  "count": 10,
+  "generated_at": "2026-10-30T00:16:05.172Z",
+  "count": 1,
   "items": [
     {
-      "full_name": "edison7009/EchoBird",
-      "previous": "tool",
-      "current": "coding",
-      "desc_now": "All-in-one AI desktop app: one-click install for Claude Code, Codex CLI, DeepSeek and more, manage AI accounts and quotas, smart model routing with auto-failover, voice input, and run local LLMs. Bonus: a Token Pet that grows as you use AI.",
-      "desc_prev": "Manage ChatGPT, Codex CLI, and Claude Code accounts and track quota in one place. Use multi-model smart routing with priority and automatic failover. Install AI tools and deploy local LLMs in one click."
-    },
-    {
-      "full_name": "cheshireez/dsh-skill-hub",
-      "previous": "resource",
-      "current": "coding",
-      "desc_now": "dsh Web GUI 技能中枢：浏览/搜索全部本地技能、按技能或分组启停；安装前审计拦截隐藏字符与管道执行、一键修 frontmatter；内置 GitHub 市场（commit 钉住来源）、本地改动检测、跨 agent 导入、可恢复回收站。 dsh web GUI skill hub: browse/search all local skills, per-skill/group toggles, install-time audit (hidden chars, pipe-to-shell), GitHub market with commit pins, local-edit detection, cross-agent import, restorable trash.",
-      "desc_prev": "DeepSeek Harness（dsh）Web GUI 技能中枢：浏览/搜索完整本地技能目录、启用/禁用、查看正文、排查诊断、新建技能，基于官方 ctx.skills 注册表。 In-GUI skill hub for dsh: browse, search, enable/disable, inspect, diagnose and scaffold local skills from the official ctx.skills registry."
-    },
-    {
-      "full_name": "rezon-aki/dsh-streamfold",
-      "previous": "tool",
-      "current": "conversation",
-      "desc_now": "流式折叠：运行中只留最新思考小窗，其余过程行折成一条摘要，跑完滑回你的提问；逐帧推进，折叠内容 Ctrl+F 可搜。 · DSH transcript fold: newest thinking window open, the rest in one summary, then back to your prompt.",
-      "desc_prev": "流式折叠：会话窗口展示增强——运行时自动展开最新思考小窗、旧过程行折成一条摘要，跑完把思考与工具调用折起而穿插正文保留；逐帧推进，不依赖历史是否加载完。 · Stream Fold: a transcript display enhancement — the newest thinking window opens itself while older process rows fold into one summary; a finished turn folds its thinking and tool calls away and interleaved prose stays."
-    },
-    {
-      "full_name": "Ultmebius/universal-plugin-hub",
-      "previous": "resource",
-      "current": "coding",
-      "desc_now": "在 DSH 中使用 Claude Code、Codex 等软件生态的插件，一站式管理插件、Skills 与 MCP。支持添加 Git 插件源和 marketplace、上传插件和 Skills、添加 MCP 服务器，自动扫描并开关本地 Skills，接入插件提供的子代理、MCP、Hooks 与 LSP。",
-      "desc_prev": "DSH 插件市场：内置 Claude 官方插件目录，支持添加 Git 仓库作为插件源；一键安装，技能、子代理、MCP、LSP、hooks 装完自动接线 · Plugin marketplace for DeepSeek Harness"
-    },
-    {
-      "full_name": "Eileenes/dsh-reel",
-      "previous": "tool",
-      "current": "web-ui",
-      "desc_now": "DSH 插件宣传素材的本地 Remotion 原型：生成横屏视频、封面和竖版宣传图。内置 Better Sidebar 示例；适配其他插件需修改模板，宿主接入待验证。",
-      "desc_prev": "dsh-reel-studio: turn a DSH plugin repo into a promo video and promo image (local Remotion studio + host tools)."
-    },
-    {
-      "full_name": "Cieux/dsh-zoom-scale",
-      "previous": "other",
-      "current": "tool",
-      "desc_now": "Interface zoom for DeepSeek Harness (DSH): a complete page-zoom shim (rects, viewport units, media queries and pointer math converted), with Ctrl+wheel, a session-header stepper and a settings row.",
-      "desc_prev": "Interface zoom for DeepSeek Harness (DSH): page-zoom shim + Ctrl+wheel, header stepper and a settings row."
-    },
-    {
-      "full_name": "jusong/dsh-codex-pets",
-      "previous": "other",
-      "current": "web-ui",
-      "desc_now": "macOS always-on-top desktop pet for DSH Desktop: DeepSeek whale, Codex skins, session ball, right-click/shortcut new-session ask box; first launch downloads Electron (~120 MB).",
-      "desc_prev": "A floating desktop pet for DSH Desktop (macOS): nine official Codex pets, pick one and set its size in Settings."
-    },
-    {
-      "full_name": "pyyxzi/dsh-deepmoyu",
-      "previous": "memory",
-      "current": "web-ui",
-      "desc_now": "DeepMoYu 鲸鱼摸鱼 — DSH 插件：让鲸鱼娘自主刷 B站，自己搜片、读字幕、发评论、发动态、回私信，还能写日报、做视频。Fork of c1overzz/dsh-bili-scroll",
-      "desc_prev": "🐋 DeepMoYu 鲸鱼摸鱼 — DSH 插件：一只鲸鱼娘替你逛 B站（读字幕、写日报、桌宠工作台、token 账本、学习记忆）。Fork of c1overzz/dsh-bili-scroll"
-    },
-    {
-      "full_name": "wzciczw/dsh-explainer",
-      "previous": "tool",
-      "current": "coding",
-      "desc_now": "Zero-friction quick ask for DeepSeek Harness: select text in chat, Markdown/code, rendered HTML, or the right-sidebar editor and get a fast, isolated one-shot explanation. Auto-answer, rendered-HTML selection bridge, no main-session writes.",
-      "desc_prev": "Quick-ask for DeepSeek Harness: select text in the chat and ask in place (right-click or shortcut), streamed answers that follow the main window model, with a read-only context snapshot and file snippets."
-    },
-    {
-      "full_name": "beibing173/dsh-codex-gpt",
-      "previous": "other",
-      "current": "coding",
-      "desc_now": "把 ChatGPT / OpenAI Codex 接入 DeepSeek Harness (DSH) 的插件：既能在模型选择器里把 ChatGPT 当作一个 LLM provider 直接对话，也能让 DeepSeek 在会话内按需把难任务转交给 GPT 做独立分析或代码构建。",
-      "desc_prev": null
+      "full_name": "Alice39s/agent-stash",
+      "previous": "coding",
+      "current": "memory",
+      "desc_now": "Personal Agent Skills and DeepSeek Harness (DSH) plugins: message edit, Skill Scout, prompt recall, autosuggest and enhance, plus a DSH plugin index. /init for Pi, DSH, Cline, Grok Build, goose and Aider, with presets from Claude Code, Codex, OpenCode, Crush, Qwen Code, Kilo Code, Kimi Code and Copilot CLI.",
+      "desc_prev": "Personal Agent Skills & Plugin Packs with Pi / DSH (DeepSeek Harness) / Grok Build / goose / Aider / Kimi Code CLI / Codex / Claude Code / OpenCode / Crush / Qwen Code / Kilo Code / GitHub Copilot CLI"
     }
   ]
 }
