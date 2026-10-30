@@ -1,69 +1,97 @@
 {
-  "generated_at": "2026-10-30T12:28:04.348Z",
-  "count": 9,
+  "generated_at": "2026-10-30T19:40:38.517Z",
+  "count": 13,
   "items": [
     {
-      "full_name": "SISCHOI/daruma",
-      "previous": "other",
-      "current": "tool",
-      "desc_now": "一个dsh的断路重连器，针对长任务的网络/大模型api接口波动，防止任务停滞；切换不同渠道和模型继续完成任务。支持web和cli。",
-      "desc_prev": null
+      "full_name": "accomplish07zrh-eng/dsh-aurabot-qq",
+      "previous": "memory",
+      "current": "conversation",
+      "desc_now": "让 DeepSeek Harness 里的 AI 以「大肥鱼」住进 QQ：会聊天、发表情、发语音、记事、发空间、刷 B 站、唱歌。功能都是模块，能开关、能自己写，还能从模块市场装更多（SnowLuma / OneBot v11）。",
+      "desc_prev": "DeepSeek Harness 插件：让 AI 以「大肥鱼」住进 QQ（SnowLuma / OneBot v11）。表情、语音、记忆、空间、B 站、翻唱、生图全部模块化——可关、可换、可本地自写扩展，连群聊策略、提示词、回复和模型都能改，保存即生效。"
     },
     {
-      "full_name": "zdkcomeon/dsh-mcp-link",
-      "previous": "other",
-      "current": "tool",
-      "desc_now": "DeepSeek Harness (DSH) 插件：扫描 Cursor、Claude Code、Codex CLI、Gemini CLI、VS Code 等 13 种客户端的 MCP 配置，一键接入 DSH profile，支持连接测试、断线重连和项目级 .mcp.json 导入。",
-      "desc_prev": null
-    },
-    {
-      "full_name": "abbaababa/dsh-workplan",
-      "previous": "web-ui",
-      "current": "tool",
-      "desc_now": "按 ISO/IEC 15408:2026 公开安全证据（无证书）+ 一条命令安装、零运行时依赖 · ISO/IEC 15408:2026 evidence pack + one-command install · AI 任务分解 / task decomposition for DeepSeek Harness",
-      "desc_prev": "自动任务分解 + 真实部门子 Agent + 「任务进度」面板，给 DeepSeek Harness 用；没有任何第三方运行时依赖。"
-    },
-    {
-      "full_name": "OnebugIS/dsh-context-ops",
+      "full_name": "Laplace-bit/dsh-smooth-stream",
       "previous": "tool",
-      "current": "notify",
-      "desc_now": "Context handoff, compaction decisions, diagnosis, and pressure history tools for DeepSeek Harness.",
-      "desc_prev": "DSH 上下文运维插件：压缩摘要走强模型 + 交接技能 + 上下文决策技能"
+      "current": "web-ui",
+      "desc_now": "DeepSeek Harness Web UI plugin for streaming rendering and scroll handling.",
+      "desc_prev": "DeepSeek Harness Web UI plugin for streaming rendering and scroll handling."
     },
     {
-      "full_name": "chargeduck/xechat-dsh",
+      "full_name": "magian1127/deepseek-harness-zh_pro",
       "previous": "other",
       "current": "web-ui",
-      "desc_now": "DSH 侧边栏聊天插件：在 DeepSeek Harness 里常驻一条可停靠的 XEChat 鱼塘会话——Markdown 图文与表情、#showServer/#login 切服、在线成员、全屏遮盖，单条 WebSocket 保活。Dockable XEChat chat sidebar for DeepSeek Harness (DSH).",
-      "desc_prev": null
+      "desc_now": "DeepSeek Harness (DSH) plugin:  A comprehensive enhancement plugin with UI polish, layout tweaks, prompt injection, and more.  综合性增强插件，界面优化、布局调整与提示词注入等更多功能。",
+      "desc_prev": "DeepSeek Harness (DSH) plugin:  A comprehensive enhancement plugin with UI polish, layout tweaks, prompt injection, and more.  综合性增强插件，界面优化、布局调整与提示词注入等更多功能。"
     },
     {
-      "full_name": "regrevia/dsh-mobile-use",
-      "previous": "coding",
-      "current": "vision",
-      "desc_now": "把真手机装进 DSH：右栏实时镜像可直接点、圈选标注带着圈图和控件回到会话，模型不截图也能读界面文本树（adb_ui 120 ms）。免 MCP、画面只走本机回环，需要宿主有 adb 与 ffmpeg。",
-      "desc_prev": "真机调试插件 for DeepSeek Harness：界面文本树、动效量化、实时画面侧栏与标注"
-    },
-    {
-      "full_name": "tk-wxy/openin",
-      "previous": "coding",
-      "current": "resource",
-      "desc_now": "Zero-dependency C (Win32) utility that generates standalone launchers to open the current Explorer directory in any IDE or CLI from the address bar. | 基于纯 C (Win32) 的零依赖工具，支持在资源管理器地址栏输入短命令直接用指定 IDE/CLI 打开当前目录。",
-      "desc_prev": "openin"
-    },
-    {
-      "full_name": "imwhatiam/dsh-mosaic",
-      "previous": "web-ui",
-      "current": "other",
-      "desc_now": "Lightweight visual answers for DeepSeek Harness.",
-      "desc_prev": "Lightweight visual answers for DeepSeek Harness: three selectable themes, Mermaid diagrams, charts, tables, media and sandboxed widgets."
-    },
-    {
-      "full_name": "Beellix-dev/dsh-beellix-plugin",
+      "full_name": "STARDUSTLC666/dsh-codex-port",
       "previous": "tool",
-      "current": "resource",
-      "desc_now": "Beelli X 中台插件 社区版 · Harness-Based Agentic Data Engineering",
-      "desc_prev": "MIT-licensed Beelli X community control center for DSH: navigation, model configuration and managed plugins."
+      "current": "other",
+      "desc_now": "把常用 Codex 技能带到 DSH。 技能需要的运行环境与第三方依赖仍需单独准备。 欢迎提交 issues 和 PR。",
+      "desc_prev": "把常用 Codex 技能带到 DSH。 技能需要的运行环境与第三方依赖仍需单独准备。 欢迎提交 issues 和 PR。"
+    },
+    {
+      "full_name": "STARDUSTLC666/dsh-sql",
+      "previous": "tool",
+      "current": "other",
+      "desc_now": "先看表结构，再用查询回答问题。 需要自己的数据库连接与权限 欢迎提交 issues 和 PR。",
+      "desc_prev": "DSH 数据库工具：SQLite / MySQL / PostgreSQL 查询、结构与统计、只读保护和写操作确认。欢迎提交 issues 和 PR。"
+    },
+    {
+      "full_name": "STARDUSTLC666/dsh-voice",
+      "previous": "tool",
+      "current": "other",
+      "desc_now": "把文字变成声音，把录音变成文字。 Edge 朗读需要联网 欢迎提交 issues 和 PR。",
+      "desc_prev": "把文字变成声音，把录音变成文字。 Edge 朗读需要联网 欢迎提交 issues 和 PR。"
+    },
+    {
+      "full_name": "STARDUSTLC666/dsh-cite",
+      "previous": "tool",
+      "current": "other",
+      "desc_now": "把零散 DOI 和 BibTeX 整理成可用的文献库。 联网补全需要访问 Crossref 欢迎提交 issues 和 PR。",
+      "desc_prev": "把零散 DOI 和 BibTeX 整理成可用的文献库。 联网补全需要访问 Crossref 欢迎提交 issues 和 PR。"
+    },
+    {
+      "full_name": "STARDUSTLC666/dsh-calendar",
+      "previous": "tool",
+      "current": "other",
+      "desc_now": "看清日程，找到当前日历里合适的空闲时间。 需要自己的 CalDAV 账号。空闲查询只覆盖当前连接的日历。 欢迎提交 issues 和 PR。",
+      "desc_prev": "看清日程，找到当前日历里合适的空闲时间。 需要自己的 CalDAV 账号。空闲查询只覆盖当前连接的日历。 欢迎提交 issues 和 PR。"
+    },
+    {
+      "full_name": "Eason-0712/dsh-zotero-skill",
+      "previous": "coding",
+      "current": "document",
+      "desc_now": "为 DeepSeek Harness 打造的 Zotero 文献技能：找文献、追前沿、筛核心论文、管理文献（标签/归集/查重）、批量阅读、按研究方向与论文类型/方法/数据组建多层文件夹、提炼脉络、发现空白，并支持每日自动收录新论文。纯 Python 标准库，直连 Zotero 本地 API 与 OpenAlex，无需 MCP 或 API Key；写操作需一次性授权。改编自 OpenAI Zotero 插件（MIT）。",
+      "desc_prev": "为 DeepSeek Harness 打造的 Zotero 文献技能：找文献、追前沿、筛核心论文、管理文献（标签/归集/查重）、批量阅读、按研究方向与论文类型/方法/数据组建多层文件夹、提炼脉络、发现空白，并支持每日自动收录新论文。纯 Python 标准库，直连 Zotero 本地 API 与 OpenAlex，无需 MCP 或 API Key；写操作需一次性授权。改编自 OpenAI Zotero 插件（MIT）。"
+    },
+    {
+      "full_name": "STARDUSTLC666/dsh-dingtalk",
+      "previous": "notify",
+      "current": "other",
+      "desc_now": "把 DSH 的任务结果送到钉钉群。 需要自己的群机器人 webhook 欢迎提交 issues 和 PR。",
+      "desc_prev": "把 DSH 的任务结果送到钉钉群。 需要自己的群机器人 webhook 欢迎提交 issues 和 PR。"
+    },
+    {
+      "full_name": "STARDUSTLC666/dsh-code-security",
+      "previous": "coding",
+      "current": "tool",
+      "desc_now": "看清改动中的安全问题，再核对修复结果。 Betterleaks、Semgrep CE 与 OSV 是可选增强 欢迎提交 issues 和 PR。",
+      "desc_prev": "看清改动中的安全问题，再核对修复结果。 Betterleaks、Semgrep CE 与 OSV 是可选增强 欢迎提交 issues 和 PR。"
+    },
+    {
+      "full_name": "STARDUSTLC666/dsh-flakefinder",
+      "previous": "resource",
+      "current": "other",
+      "desc_now": "把偶发失败变成有记录、能继续排查的线索。 重复测试会实际执行项目命令。未复现不等于不存在偶发问题。 欢迎提交 issues 和 PR。",
+      "desc_prev": "把偶发失败变成有记录、能继续排查的线索。 重复测试会实际执行项目命令。未复现不等于不存在偶发问题。 欢迎提交 issues 和 PR。"
+    },
+    {
+      "full_name": "seanliii/dsh-plugin-legion",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "Leading harnesses, one co-evolving team. Native DSH collaboration, shared tools and real-world reference-driven improvement. Technical preview.",
+      "desc_prev": "Leading harnesses, one co-evolving team. Native DSH collaboration, shared tools and real-world reference-driven improvement. Technical preview."
     }
   ]
 }
