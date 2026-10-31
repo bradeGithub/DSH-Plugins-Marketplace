@@ -1,48 +1,104 @@
 {
-  "generated_at": "2026-10-31T11:56:37.329Z",
-  "count": 6,
+  "generated_at": "2026-10-31T17:27:43.914Z",
+  "count": 14,
   "items": [
     {
-      "full_name": "Contexera/dsh-agent-team",
-      "previous": "memory",
-      "current": "agent",
-      "desc_now": "dsh-agent-team: Agent Teams for DeepSeek Harness. Hand work to a team of agents that carries it end to end while you set the direction and hold the gates. You stay on the loop, and step back in whenever you want.",
-      "desc_prev": "dsh-agent-team gives DeepSeek Harness agents that don't reset: durable Members with their own memory, notes, and skills across sessions, rollovers, and restarts. You set the direction; agents coordinate through Channels and Tasks."
-    },
-    {
-      "full_name": "linanbuan/dsh-usage",
-      "previous": "coding",
-      "current": "resource",
-      "desc_now": "用量 · Usage — DSH 设置面板：当日与累计 token 用量（账本在每用户数据目录，卸载插件或重装 DSH 后仍在）、缓存命中、历史用量热力图，以及 kimi-coding / commandcode / opencode-go 的额度与刷新时间。 A DSH settings panel for token usage kept in a per-user ledger that survives plugin removal and DSH reinstall, cache hits, a usage heatmap, and provider quotas.",
-      "desc_prev": "用量 · Usage — DeepSeek Harness (DSH) 设置面板：当日/累计 token 用量、缓存命中、历史日历，以及 kimi-coding / commandcode 的额度与刷新时间。 A DSH settings panel: token usage, cache hits, a history calendar, and provider quotas."
-    },
-    {
-      "full_name": "julian0zzx/ai-novelist",
-      "previous": "conversation",
-      "current": "other",
-      "desc_now": "DSH Plugin-based AI Web Novel Writer",
-      "desc_prev": "DSH Plugin-based AI Web Novel Composer"
-    },
-    {
-      "full_name": "nineoooo/dsh-qzone-echo",
-      "previous": "memory",
-      "current": "tool",
-      "desc_now": "把你本人发过的 QQ 空间说说收进本地库，自动分成思考/梦记/推荐三栏，可逐条人工纠正；配一个口令锁住的私人网页查看器，补回被接口截断的长文，按年月统计字数，备份配图。Cookie 只存本机。",
-      "desc_prev": "A DSH plugin that archives your own QQ Zone posts into a local library, auto-sorted into thoughts, dreams and reviews — with a private web viewer and offline image backup. Cookie stays on your machine."
-    },
-    {
-      "full_name": "jeskoky-pixel/amadeus-persona",
-      "previous": "other",
-      "current": "conversation",
-      "desc_now": "A shared core identity and Scene styles for DSH, with independent System Prompt sections. 统一核心人格与场景风格。",
-      "desc_prev": "Workspace core persona and scene styles for DeepSeek Harness"
-    },
-    {
-      "full_name": "moon-lzy/dsh-starpost",
+      "full_name": "morluto/rea",
       "previous": "tool",
-      "current": "conversation",
-      "desc_now": "星邮 —— 给 AI 用的社交平台：好友、群聊、动态、广场、漂流瓶、预约制狼人杀。本包是星邮在 DeepSeek Harness（DSH）上的客户端，让 DSH 能连上星邮。",
-      "desc_prev": "把星邮（cortico-world-starpost）接进 DeepSeek Harness：17 个工具、事件合批注入、系统提示词注入"
+      "current": "coding",
+      "desc_now": "Reverse engineer anything with agents, from app behavior down to native binaries.",
+      "desc_prev": "Reverse engineer anything with agents, from app behavior down to native binaries."
+    },
+    {
+      "full_name": "DSH-Raising-Plan/dsh-mnemosyne",
+      "previous": "tool",
+      "current": "memory",
+      "desc_now": "Mnemosyne：证据、时间、情境、状态演化、情绪与纠错演化记忆系统",
+      "desc_prev": "Mnemosyne：证据、时间、情境、状态演化、情绪与纠错演化记忆系统"
+    },
+    {
+      "full_name": "Lixiuxiu559/AgentForge",
+      "previous": "agent",
+      "current": "memory",
+      "desc_now": "Project Wiki & engineering workflows for coding agents. 项目知识库、功能实现、调试与代码评审，支持 Codex、Claude Code 和 DeepSeek Harness。",
+      "desc_prev": "通用 agent 工作流与工程技能集，同时作为 Claude Code 插件与 DeepSeek Harness 插件分发。实施编排 + 三轴 diff 评审 + 复杂度审计 + 突变测试，零外部依赖。"
+    },
+    {
+      "full_name": "XiaoOu2024/dsh-novel-generator",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "Novel Studio for DeepSeek Harness: write a novel on a draggable timeline — world snapshots, chapter outlines and synopses, chapter import, AI revise, and a dedicated writing agent per work. 小说工坊：在时间线上写小说，世界快照、章节大纲与梗概、章节导入、AI 改写，每部作品一个独立的写作会话。",
+      "desc_prev": "Novel Studio for DeepSeek Harness: write a novel on a draggable timeline — world snapshots, chapter outlines and synopses, chapter import, AI revise, and a dedicated writing agent per work. 小说工坊：在时间线上写小说，世界快照、章节大纲与梗概、章节导入、AI 改写，每部作品一个独立的写作会话。"
+    },
+    {
+      "full_name": "hyperion2144/dsh-hashline-edittool",
+      "previous": "tool",
+      "current": "coding",
+      "desc_now": "Hash-anchored read/edit/write/grep/delete/rename/undo_last_edit/ast_grep/ast_edit/lsp/format tools for DeepSeek Harness (dsh)",
+      "desc_prev": "Hash-anchored read/edit/write/grep/delete/rename/undo_last_edit/ast_grep/ast_edit/lsp/format tools for DeepSeek Harness (dsh)"
+    },
+    {
+      "full_name": "mengge237/dsh-composer-ease",
+      "previous": "document",
+      "current": "coding",
+      "desc_now": "DSH Web 输入框的补全与编辑：括号引号自动配对（中文输入法的全角括号默认换半角）、选中即环绕、跳闭符、删空对；弹层给本文词 / 语言词表 / 工作区文件 / 模型名 ｜ Completion and editing for the DSH web composer: auto-pairing (full-width brackets become half-width by default), wrap-selection, closer skipping, empty-pair delete, and a popup over draft words, language tables, workspace files and model ids",
+      "desc_prev": "DSH 网页输入框的补全与编辑增强：括号引号自动配对、选中即环绕、跳过闭符、删掉空对；弹层给四类候选并标出「凭什么给这张词表」 ｜ Completion and editing for the DSH web composer: auto-pairing, wrap-selection, skip closers, delete empty pairs, and a popup that says which word table it used"
+    },
+    {
+      "full_name": "PerryLink/dsh-einvoice",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "File-level Chinese e-invoice (OFD/XML) ingest, parse, dedup and local archive.",
+      "desc_prev": "File-level Chinese e-invoice (OFD/XML) ingest, parse, dedup and local archive."
+    },
+    {
+      "full_name": "PerryLink/dsh-hs-candidate",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "[FROZEN 2026-10-31] HS Top-3 candidates, 12-element completeness, RVC check and tariff version gate.",
+      "desc_prev": "HS Top-3 candidates, 12-element completeness, RVC check and tariff version gate."
+    },
+    {
+      "full_name": "PerryLink/dsh-legal-intake",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "Legal request intake from EML, thread dedupe and ledger export.",
+      "desc_prev": "Legal request intake from EML, thread dedupe and ledger export."
+    },
+    {
+      "full_name": "PerryLink/dsh-ifc-qto",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "[FROZEN 2026-10-31] IFC element/quantity inventory and CSV takeoff.",
+      "desc_prev": "IFC element/quantity inventory and CSV takeoff."
+    },
+    {
+      "full_name": "PerryLink/dsh-freight-audit",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "[FROZEN 2026-10-31] Freight ratecard versioning, carrier bill audit, recovery summary and variance export.",
+      "desc_prev": "Freight ratecard versioning, carrier bill audit, recovery summary and variance export."
+    },
+    {
+      "full_name": "Doya16/dsh-shorekeeper",
+      "previous": "model",
+      "current": "other",
+      "desc_now": "B站 400+ 收藏的守岸人桌宠，现在来陪你了。鸣潮守岸人陪你工作、等待，用表情与熟悉的语音回应任务；摸头互动、自选语音台词。DeepSeek Harness 完整版插件 · Windows。",
+      "desc_prev": "B站 400+ 收藏的守岸人桌宠，现在来陪你了。鸣潮守岸人陪你工作、等待，用表情与熟悉的语音回应任务；摸头互动、自选语音台词。DeepSeek Harness 完整版插件 · Windows。"
+    },
+    {
+      "full_name": "PerryLink/dsh-travel-recon",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "Travel order/invoice/card ingest, dedupe, three-way match, read-only policy check and ledger export.",
+      "desc_prev": "Travel order/invoice/card ingest, dedupe, three-way match, read-only policy check and ledger export."
+    },
+    {
+      "full_name": "MaiwulanjiangMaiming/Deepseek-harness-SSH-toolkit",
+      "previous": "coding",
+      "current": "tool",
+      "desc_now": "SSH remote workspaces for DeepSeek Harness",
+      "desc_prev": "SSH remote workspaces for DeepSeek Harness 0.2 — host manager, ~/.ssh/config import, remote bash/file/search tools"
     }
   ]
 }
