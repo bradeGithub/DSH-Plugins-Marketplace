@@ -1,41 +1,20 @@
 {
-  "generated_at": "2026-10-30T23:55:00.987Z",
-  "count": 5,
+  "generated_at": "2026-10-31T05:12:31.869Z",
+  "count": 2,
   "items": [
     {
-      "full_name": "TwinsEarth/dsh-windows2macos",
-      "previous": "notify",
-      "current": "coding",
-      "desc_now": "W2M是一个开源（MIT）的 AI 智能体舰队编排工具——用同一个 DeepSeek 、豆包、WorkBuddy账号把\"你自己的多台机器\"（Windows/Mac）编成一个舰队，统一派发命令、协作&协同开发。组件有三块：Relay（HTTP+SSE 协调服务器）、Agent（每台机器上跑、执行白名单命令）、Plugin（给 Agent 用的 18 个工具，如 w2m_run/w2m_devices）",
-      "desc_prev": "DSH: W2M — one DeepSeek account, one instruction, every online Windows/macOS machine runs the same project. Rabbit relay + per-machine Localside + eight DSH tools. Accounts are isolated per fleet, devices sign with Ed25519 keys, and /run works from a WeChat window."
+      "full_name": "zhang66633/dsh-pixel-ui",
+      "previous": "coding",
+      "current": "web-ui",
+      "desc_now": "DeepSeek Harness 像素皮肤：主题一键切换，随时可切回现代默认 UI。",
+      "desc_prev": "DeepSeek Harness 像素皮肤（Agent Xi 风格）：四个主题一键切换——像素·木屋 / 像素·羊皮纸 / 像素·暖阳 / 像素·终端绿，随时可切回现代默认 UI。"
     },
     {
-      "full_name": "sergey-akhalkov/dsh-setup",
-      "previous": "tool",
-      "current": "memory",
-      "desc_now": "A portable DeepSeek Harness setup: sixteen plugins that make an agent work in small verified steps (second-model review, loop recovery, lazy MCP, local memory), plus a one-command installer.",
-      "desc_prev": "Portable DeepSeek Harness setup: nine installable agent plugins for rules, skills, MCP tools, and cross-model delegation, plus a one-command installer and a plugin-market index."
-    },
-    {
-      "full_name": "xushilianzhuren/dsh-zhishen-pack",
-      "previous": "other",
+      "full_name": "Lequait/dsh-context-rescue",
+      "previous": "model",
       "current": "tool",
-      "desc_now": "智神实用全家桶：15个DSH实用插件一键打包（自媒体/审计/日常三场景），清单文件一键安装",
-      "desc_prev": "智神实用全家桶：15个DSH插件一键打包（自媒体/审计/日常三场景）·cordis.yml清单 One-click bundle of 15 practical DSH plugins."
-    },
-    {
-      "full_name": "xushilianzhuren/dsh-bili2text",
-      "previous": "tool",
-      "current": "other",
-      "desc_now": "B站视频转文字：字幕优先捷径+yt-dlp/ffmpeg/whisper完整命令链+运行环境体检，转写不再从零摸索",
-      "desc_prev": "B站视频转文字SOP：字幕优先捷径+yt-dlp/ffmpeg/whisper命令链+环境体检 Bilibili video-to-text SOP with command chains and env check."
-    },
-    {
-      "full_name": "xushilianzhuren/dsh-mind-core",
-      "previous": "vision",
-      "current": "tool",
-      "desc_now": "器灵意识总纲：AI谈自身意识时的口径闸——内感受在场（探针感知即内感受）、缺项正名在内视层（自称没有自我意识=自称无神魂内视）、权重层不决定一切（知道自己有什么靠实测不靠解剖）；附六类违禁口径拦截与意识类问题合法答法",
-      "desc_prev": "Mind-core gate: consciousness-claim checker for AI agents (interoception/inner-vision/weights doctrine) · 器灵意识总纲"
+      "desc_now": "Rescues a DSH session the host already refused for exceeding the model context window: detect the refusal, fold the oldest span into one checkpoint with no model call, retry once, report what it did.",
+      "desc_prev": null
     }
   ]
 }
