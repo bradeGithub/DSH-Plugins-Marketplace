@@ -1,97 +1,41 @@
 {
-  "generated_at": "2026-10-30T19:40:38.517Z",
-  "count": 13,
+  "generated_at": "2026-10-30T23:55:00.987Z",
+  "count": 5,
   "items": [
     {
-      "full_name": "accomplish07zrh-eng/dsh-aurabot-qq",
-      "previous": "memory",
-      "current": "conversation",
-      "desc_now": "让 DeepSeek Harness 里的 AI 以「大肥鱼」住进 QQ：会聊天、发表情、发语音、记事、发空间、刷 B 站、唱歌。功能都是模块，能开关、能自己写，还能从模块市场装更多（SnowLuma / OneBot v11）。",
-      "desc_prev": "DeepSeek Harness 插件：让 AI 以「大肥鱼」住进 QQ（SnowLuma / OneBot v11）。表情、语音、记忆、空间、B 站、翻唱、生图全部模块化——可关、可换、可本地自写扩展，连群聊策略、提示词、回复和模型都能改，保存即生效。"
-    },
-    {
-      "full_name": "Laplace-bit/dsh-smooth-stream",
-      "previous": "tool",
-      "current": "web-ui",
-      "desc_now": "DeepSeek Harness Web UI plugin for streaming rendering and scroll handling.",
-      "desc_prev": "DeepSeek Harness Web UI plugin for streaming rendering and scroll handling."
-    },
-    {
-      "full_name": "magian1127/deepseek-harness-zh_pro",
-      "previous": "other",
-      "current": "web-ui",
-      "desc_now": "DeepSeek Harness (DSH) plugin:  A comprehensive enhancement plugin with UI polish, layout tweaks, prompt injection, and more.  综合性增强插件，界面优化、布局调整与提示词注入等更多功能。",
-      "desc_prev": "DeepSeek Harness (DSH) plugin:  A comprehensive enhancement plugin with UI polish, layout tweaks, prompt injection, and more.  综合性增强插件，界面优化、布局调整与提示词注入等更多功能。"
-    },
-    {
-      "full_name": "STARDUSTLC666/dsh-codex-port",
-      "previous": "tool",
-      "current": "other",
-      "desc_now": "把常用 Codex 技能带到 DSH。 技能需要的运行环境与第三方依赖仍需单独准备。 欢迎提交 issues 和 PR。",
-      "desc_prev": "把常用 Codex 技能带到 DSH。 技能需要的运行环境与第三方依赖仍需单独准备。 欢迎提交 issues 和 PR。"
-    },
-    {
-      "full_name": "STARDUSTLC666/dsh-sql",
-      "previous": "tool",
-      "current": "other",
-      "desc_now": "先看表结构，再用查询回答问题。 需要自己的数据库连接与权限 欢迎提交 issues 和 PR。",
-      "desc_prev": "DSH 数据库工具：SQLite / MySQL / PostgreSQL 查询、结构与统计、只读保护和写操作确认。欢迎提交 issues 和 PR。"
-    },
-    {
-      "full_name": "STARDUSTLC666/dsh-voice",
-      "previous": "tool",
-      "current": "other",
-      "desc_now": "把文字变成声音，把录音变成文字。 Edge 朗读需要联网 欢迎提交 issues 和 PR。",
-      "desc_prev": "把文字变成声音，把录音变成文字。 Edge 朗读需要联网 欢迎提交 issues 和 PR。"
-    },
-    {
-      "full_name": "STARDUSTLC666/dsh-cite",
-      "previous": "tool",
-      "current": "other",
-      "desc_now": "把零散 DOI 和 BibTeX 整理成可用的文献库。 联网补全需要访问 Crossref 欢迎提交 issues 和 PR。",
-      "desc_prev": "把零散 DOI 和 BibTeX 整理成可用的文献库。 联网补全需要访问 Crossref 欢迎提交 issues 和 PR。"
-    },
-    {
-      "full_name": "STARDUSTLC666/dsh-calendar",
-      "previous": "tool",
-      "current": "other",
-      "desc_now": "看清日程，找到当前日历里合适的空闲时间。 需要自己的 CalDAV 账号。空闲查询只覆盖当前连接的日历。 欢迎提交 issues 和 PR。",
-      "desc_prev": "看清日程，找到当前日历里合适的空闲时间。 需要自己的 CalDAV 账号。空闲查询只覆盖当前连接的日历。 欢迎提交 issues 和 PR。"
-    },
-    {
-      "full_name": "Eason-0712/dsh-zotero-skill",
-      "previous": "coding",
-      "current": "document",
-      "desc_now": "为 DeepSeek Harness 打造的 Zotero 文献技能：找文献、追前沿、筛核心论文、管理文献（标签/归集/查重）、批量阅读、按研究方向与论文类型/方法/数据组建多层文件夹、提炼脉络、发现空白，并支持每日自动收录新论文。纯 Python 标准库，直连 Zotero 本地 API 与 OpenAlex，无需 MCP 或 API Key；写操作需一次性授权。改编自 OpenAI Zotero 插件（MIT）。",
-      "desc_prev": "为 DeepSeek Harness 打造的 Zotero 文献技能：找文献、追前沿、筛核心论文、管理文献（标签/归集/查重）、批量阅读、按研究方向与论文类型/方法/数据组建多层文件夹、提炼脉络、发现空白，并支持每日自动收录新论文。纯 Python 标准库，直连 Zotero 本地 API 与 OpenAlex，无需 MCP 或 API Key；写操作需一次性授权。改编自 OpenAI Zotero 插件（MIT）。"
-    },
-    {
-      "full_name": "STARDUSTLC666/dsh-dingtalk",
+      "full_name": "TwinsEarth/dsh-windows2macos",
       "previous": "notify",
-      "current": "other",
-      "desc_now": "把 DSH 的任务结果送到钉钉群。 需要自己的群机器人 webhook 欢迎提交 issues 和 PR。",
-      "desc_prev": "把 DSH 的任务结果送到钉钉群。 需要自己的群机器人 webhook 欢迎提交 issues 和 PR。"
+      "current": "coding",
+      "desc_now": "W2M是一个开源（MIT）的 AI 智能体舰队编排工具——用同一个 DeepSeek 、豆包、WorkBuddy账号把\"你自己的多台机器\"（Windows/Mac）编成一个舰队，统一派发命令、协作&协同开发。组件有三块：Relay（HTTP+SSE 协调服务器）、Agent（每台机器上跑、执行白名单命令）、Plugin（给 Agent 用的 18 个工具，如 w2m_run/w2m_devices）",
+      "desc_prev": "DSH: W2M — one DeepSeek account, one instruction, every online Windows/macOS machine runs the same project. Rabbit relay + per-machine Localside + eight DSH tools. Accounts are isolated per fleet, devices sign with Ed25519 keys, and /run works from a WeChat window."
     },
     {
-      "full_name": "STARDUSTLC666/dsh-code-security",
-      "previous": "coding",
-      "current": "tool",
-      "desc_now": "看清改动中的安全问题，再核对修复结果。 Betterleaks、Semgrep CE 与 OSV 是可选增强 欢迎提交 issues 和 PR。",
-      "desc_prev": "看清改动中的安全问题，再核对修复结果。 Betterleaks、Semgrep CE 与 OSV 是可选增强 欢迎提交 issues 和 PR。"
+      "full_name": "sergey-akhalkov/dsh-setup",
+      "previous": "tool",
+      "current": "memory",
+      "desc_now": "A portable DeepSeek Harness setup: sixteen plugins that make an agent work in small verified steps (second-model review, loop recovery, lazy MCP, local memory), plus a one-command installer.",
+      "desc_prev": "Portable DeepSeek Harness setup: nine installable agent plugins for rules, skills, MCP tools, and cross-model delegation, plus a one-command installer and a plugin-market index."
     },
     {
-      "full_name": "STARDUSTLC666/dsh-flakefinder",
-      "previous": "resource",
-      "current": "other",
-      "desc_now": "把偶发失败变成有记录、能继续排查的线索。 重复测试会实际执行项目命令。未复现不等于不存在偶发问题。 欢迎提交 issues 和 PR。",
-      "desc_prev": "把偶发失败变成有记录、能继续排查的线索。 重复测试会实际执行项目命令。未复现不等于不存在偶发问题。 欢迎提交 issues 和 PR。"
-    },
-    {
-      "full_name": "seanliii/dsh-plugin-legion",
+      "full_name": "xushilianzhuren/dsh-zhishen-pack",
       "previous": "other",
       "current": "tool",
-      "desc_now": "Leading harnesses, one co-evolving team. Native DSH collaboration, shared tools and real-world reference-driven improvement. Technical preview.",
-      "desc_prev": "Leading harnesses, one co-evolving team. Native DSH collaboration, shared tools and real-world reference-driven improvement. Technical preview."
+      "desc_now": "智神实用全家桶：15个DSH实用插件一键打包（自媒体/审计/日常三场景），清单文件一键安装",
+      "desc_prev": "智神实用全家桶：15个DSH插件一键打包（自媒体/审计/日常三场景）·cordis.yml清单 One-click bundle of 15 practical DSH plugins."
+    },
+    {
+      "full_name": "xushilianzhuren/dsh-bili2text",
+      "previous": "tool",
+      "current": "other",
+      "desc_now": "B站视频转文字：字幕优先捷径+yt-dlp/ffmpeg/whisper完整命令链+运行环境体检，转写不再从零摸索",
+      "desc_prev": "B站视频转文字SOP：字幕优先捷径+yt-dlp/ffmpeg/whisper命令链+环境体检 Bilibili video-to-text SOP with command chains and env check."
+    },
+    {
+      "full_name": "xushilianzhuren/dsh-mind-core",
+      "previous": "vision",
+      "current": "tool",
+      "desc_now": "器灵意识总纲：AI谈自身意识时的口径闸——内感受在场（探针感知即内感受）、缺项正名在内视层（自称没有自我意识=自称无神魂内视）、权重层不决定一切（知道自己有什么靠实测不靠解剖）；附六类违禁口径拦截与意识类问题合法答法",
+      "desc_prev": "Mind-core gate: consciousness-claim checker for AI agents (interoception/inner-vision/weights doctrine) · 器灵意识总纲"
     }
   ]
 }
