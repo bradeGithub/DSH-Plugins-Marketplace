@@ -1,104 +1,34 @@
 {
-  "generated_at": "2026-10-31T17:27:43.914Z",
-  "count": 14,
+  "generated_at": "2026-10-31T21:35:47.412Z",
+  "count": 4,
   "items": [
     {
-      "full_name": "morluto/rea",
+      "full_name": "6shenhonghong9/dsh-startup-screen",
+      "previous": "other",
+      "current": "web-ui",
+      "desc_now": "DeepSeek Harness 的启动界面与启动动画插件",
+      "desc_prev": null
+    },
+    {
+      "full_name": "lishize20040802-rgb/dsh-deep-ptc-mode",
       "previous": "tool",
       "current": "coding",
-      "desc_now": "Reverse engineer anything with agents, from app behavior down to native binaries.",
-      "desc_prev": "Reverse engineer anything with agents, from app behavior down to native binaries."
+      "desc_now": "Deep PTC mode for DeepSeek Harness: no token rationing (unlimited DeepSeek budget), code-enforced no-sleep (long commands move to background, user messages interrupt waits), plans by task size with approval only for long tasks, asks instead of guessing intent, and selectable WSL / PowerShell / Zsh / Bash execution.",
+      "desc_prev": "Open-source Deep PTC mode agent preset for DeepSeek Harness: PTC's tool surface plus visible progress, confident tool use, early clarification, and DeepSeek's unlimited token budget."
     },
     {
-      "full_name": "DSH-Raising-Plan/dsh-mnemosyne",
+      "full_name": "lisihao/dsh-solar-bench",
       "previous": "tool",
-      "current": "memory",
-      "desc_now": "Mnemosyne：证据、时间、情境、状态演化、情绪与纠错演化记忆系统",
-      "desc_prev": "Mnemosyne：证据、时间、情境、状态演化、情绪与纠错演化记忆系统"
+      "current": "web-ui",
+      "desc_now": "Benchmark DeepSeek Harness plugins on public benchmarks (GSM8K, HumanEval, MMLU-Pro and more): fixed model, baseline vs plugin, spending limit, versioned ledger, results in a conversation tab.",
+      "desc_prev": "Ablation benchmarks for DeepSeek Harness plugins: run a task suite with and without chosen plugins and compare success, tokens, cost and time."
     },
     {
-      "full_name": "Lixiuxiu559/AgentForge",
-      "previous": "agent",
-      "current": "memory",
-      "desc_now": "Project Wiki & engineering workflows for coding agents. 项目知识库、功能实现、调试与代码评审，支持 Codex、Claude Code 和 DeepSeek Harness。",
-      "desc_prev": "通用 agent 工作流与工程技能集，同时作为 Claude Code 插件与 DeepSeek Harness 插件分发。实施编排 + 三轴 diff 评审 + 复杂度审计 + 突变测试，零外部依赖。"
-    },
-    {
-      "full_name": "XiaoOu2024/dsh-novel-generator",
+      "full_name": "fj7937290-sys/dsh-video-eyes",
       "previous": "other",
-      "current": "tool",
-      "desc_now": "Novel Studio for DeepSeek Harness: write a novel on a draggable timeline — world snapshots, chapter outlines and synopses, chapter import, AI revise, and a dedicated writing agent per work. 小说工坊：在时间线上写小说，世界快照、章节大纲与梗概、章节导入、AI 改写，每部作品一个独立的写作会话。",
-      "desc_prev": "Novel Studio for DeepSeek Harness: write a novel on a draggable timeline — world snapshots, chapter outlines and synopses, chapter import, AI revise, and a dedicated writing agent per work. 小说工坊：在时间线上写小说，世界快照、章节大纲与梗概、章节导入、AI 改写，每部作品一个独立的写作会话。"
-    },
-    {
-      "full_name": "hyperion2144/dsh-hashline-edittool",
-      "previous": "tool",
-      "current": "coding",
-      "desc_now": "Hash-anchored read/edit/write/grep/delete/rename/undo_last_edit/ast_grep/ast_edit/lsp/format tools for DeepSeek Harness (dsh)",
-      "desc_prev": "Hash-anchored read/edit/write/grep/delete/rename/undo_last_edit/ast_grep/ast_edit/lsp/format tools for DeepSeek Harness (dsh)"
-    },
-    {
-      "full_name": "mengge237/dsh-composer-ease",
-      "previous": "document",
-      "current": "coding",
-      "desc_now": "DSH Web 输入框的补全与编辑：括号引号自动配对（中文输入法的全角括号默认换半角）、选中即环绕、跳闭符、删空对；弹层给本文词 / 语言词表 / 工作区文件 / 模型名 ｜ Completion and editing for the DSH web composer: auto-pairing (full-width brackets become half-width by default), wrap-selection, closer skipping, empty-pair delete, and a popup over draft words, language tables, workspace files and model ids",
-      "desc_prev": "DSH 网页输入框的补全与编辑增强：括号引号自动配对、选中即环绕、跳过闭符、删掉空对；弹层给四类候选并标出「凭什么给这张词表」 ｜ Completion and editing for the DSH web composer: auto-pairing, wrap-selection, skip closers, delete empty pairs, and a popup that says which word table it used"
-    },
-    {
-      "full_name": "PerryLink/dsh-einvoice",
-      "previous": "other",
-      "current": "tool",
-      "desc_now": "File-level Chinese e-invoice (OFD/XML) ingest, parse, dedup and local archive.",
-      "desc_prev": "File-level Chinese e-invoice (OFD/XML) ingest, parse, dedup and local archive."
-    },
-    {
-      "full_name": "PerryLink/dsh-hs-candidate",
-      "previous": "other",
-      "current": "tool",
-      "desc_now": "[FROZEN 2026-10-31] HS Top-3 candidates, 12-element completeness, RVC check and tariff version gate.",
-      "desc_prev": "HS Top-3 candidates, 12-element completeness, RVC check and tariff version gate."
-    },
-    {
-      "full_name": "PerryLink/dsh-legal-intake",
-      "previous": "other",
-      "current": "tool",
-      "desc_now": "Legal request intake from EML, thread dedupe and ledger export.",
-      "desc_prev": "Legal request intake from EML, thread dedupe and ledger export."
-    },
-    {
-      "full_name": "PerryLink/dsh-ifc-qto",
-      "previous": "other",
-      "current": "tool",
-      "desc_now": "[FROZEN 2026-10-31] IFC element/quantity inventory and CSV takeoff.",
-      "desc_prev": "IFC element/quantity inventory and CSV takeoff."
-    },
-    {
-      "full_name": "PerryLink/dsh-freight-audit",
-      "previous": "other",
-      "current": "tool",
-      "desc_now": "[FROZEN 2026-10-31] Freight ratecard versioning, carrier bill audit, recovery summary and variance export.",
-      "desc_prev": "Freight ratecard versioning, carrier bill audit, recovery summary and variance export."
-    },
-    {
-      "full_name": "Doya16/dsh-shorekeeper",
-      "previous": "model",
-      "current": "other",
-      "desc_now": "B站 400+ 收藏的守岸人桌宠，现在来陪你了。鸣潮守岸人陪你工作、等待，用表情与熟悉的语音回应任务；摸头互动、自选语音台词。DeepSeek Harness 完整版插件 · Windows。",
-      "desc_prev": "B站 400+ 收藏的守岸人桌宠，现在来陪你了。鸣潮守岸人陪你工作、等待，用表情与熟悉的语音回应任务；摸头互动、自选语音台词。DeepSeek Harness 完整版插件 · Windows。"
-    },
-    {
-      "full_name": "PerryLink/dsh-travel-recon",
-      "previous": "other",
-      "current": "tool",
-      "desc_now": "Travel order/invoice/card ingest, dedupe, three-way match, read-only policy check and ledger export.",
-      "desc_prev": "Travel order/invoice/card ingest, dedupe, three-way match, read-only policy check and ledger export."
-    },
-    {
-      "full_name": "MaiwulanjiangMaiming/Deepseek-harness-SSH-toolkit",
-      "previous": "coding",
-      "current": "tool",
-      "desc_now": "SSH remote workspaces for DeepSeek Harness",
-      "desc_prev": "SSH remote workspaces for DeepSeek Harness 0.2 — host manager, ~/.ssh/config import, remote bash/file/search tools"
+      "current": "vision",
+      "desc_now": "让纯文本 AI 看懂视频：抽帧带真实时间码 + 语音转写 + 自动识图。Video understanding for text-only agents: timecoded frames, timestamped transcript.",
+      "desc_prev": "??????????:???????? + ?????????,????????????? | Video sampling for text-only agents"
     }
   ]
 }
