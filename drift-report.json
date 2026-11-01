@@ -1,34 +1,34 @@
 {
-  "generated_at": "2026-10-31T21:35:47.412Z",
+  "generated_at": "2026-11-01T01:10:13.489Z",
   "count": 4,
   "items": [
     {
-      "full_name": "6shenhonghong9/dsh-startup-screen",
-      "previous": "other",
-      "current": "web-ui",
-      "desc_now": "DeepSeek Harness 的启动界面与启动动画插件",
-      "desc_prev": null
+      "full_name": "xushilianzhuren/dsh-constitution-seed",
+      "previous": "memory",
+      "current": "tool",
+      "desc_now": "宪法种子注入器：每个新会话开局自动注入工作区规则文件的有界摘录与哈希清单，幂等判重，文件变更自动重推",
+      "desc_prev": "宪法种子注入器：每个新会话开局自动注入工作区规则文件的有界摘录与哈希清单，幂等判重，文件变更自动重推"
     },
     {
-      "full_name": "lishize20040802-rgb/dsh-deep-ptc-mode",
-      "previous": "tool",
-      "current": "coding",
-      "desc_now": "Deep PTC mode for DeepSeek Harness: no token rationing (unlimited DeepSeek budget), code-enforced no-sleep (long commands move to background, user messages interrupt waits), plans by task size with approval only for long tasks, asks instead of guessing intent, and selectable WSL / PowerShell / Zsh / Bash execution.",
-      "desc_prev": "Open-source Deep PTC mode agent preset for DeepSeek Harness: PTC's tool surface plus visible progress, confident tool use, early clarification, and DeepSeek's unlimited token budget."
+      "full_name": "xushilianzhuren/dsh-task-order",
+      "previous": "memory",
+      "current": "tool",
+      "desc_now": "任务顺序闸：开场体检/先查后造防重造轮子/台账活性巡检/交接捡活，六件原生只读工具",
+      "desc_prev": "任务顺序闸：开场体检/先查后造防重造轮子/台账活性巡检/交接捡活，六件原生只读工具"
     },
     {
-      "full_name": "lisihao/dsh-solar-bench",
-      "previous": "tool",
-      "current": "web-ui",
-      "desc_now": "Benchmark DeepSeek Harness plugins on public benchmarks (GSM8K, HumanEval, MMLU-Pro and more): fixed model, baseline vs plugin, spending limit, versioned ledger, results in a conversation tab.",
-      "desc_prev": "Ablation benchmarks for DeepSeek Harness plugins: run a task suite with and without chosen plugins and compare success, tokens, cost and time."
+      "full_name": "xushilianzhuren/dsh-verify-kit",
+      "previous": "memory",
+      "current": "other",
+      "desc_now": "交付验证闸：出口前三道纯本地闸（违令句扫/宣称拦截/发前三检），零依赖装上即用",
+      "desc_prev": "交付验证闸：出口前三道纯本地闸（违令句扫/宣称拦截/发前三检），零依赖装上即用"
     },
     {
-      "full_name": "fj7937290-sys/dsh-video-eyes",
-      "previous": "other",
-      "current": "vision",
-      "desc_now": "让纯文本 AI 看懂视频：抽帧带真实时间码 + 语音转写 + 自动识图。Video understanding for text-only agents: timecoded frames, timestamped transcript.",
-      "desc_prev": "??????????:???????? + ?????????,????????????? | Video sampling for text-only agents"
+      "full_name": "xushilianzhuren/dsh-frame-kit",
+      "previous": "memory",
+      "current": "tool",
+      "desc_now": "槽序格式钩：十一槽结构化输出（判断先行过程殿后）+词面验槽，槽是工具不是仪式",
+      "desc_prev": "槽序格式钩：十一槽结构化输出（判断先行过程殿后）+词面验槽，槽是工具不是仪式"
     }
   ]
 }
