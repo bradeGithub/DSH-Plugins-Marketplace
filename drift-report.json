@@ -1,48 +1,13 @@
 {
-  "generated_at": "2026-11-01T09:18:01.982Z",
-  "count": 6,
+  "generated_at": "2026-11-01T12:46:57.625Z",
+  "count": 1,
   "items": [
     {
-      "full_name": "Cerbur/clutch-dsh",
-      "previous": "coding",
-      "current": "document",
-      "desc_now": "Open-source DSH plugins for DeepSeek Harness：Git Worktree session management（会话管理）、Session Title（会话标题）、Fireworks（庆祝特效）与 Office（Agent 办公室），面向 AI coding workflows。",
-      "desc_prev": "Open-source DSH plugins for DeepSeek Harness：Git Worktree session management（会话管理）、Session Title（会话标题）与 Fireworks（庆祝特效），面向 AI coding workflows。"
-    },
-    {
-      "full_name": "xiaxi626/dsh-skills-nexus",
-      "previous": "web-ui",
-      "current": "tool",
-      "desc_now": "DSH Skills Nexus — 从安装、版本管理到跨机器、跨 Agent 协同，DSH 技能全生命周期管理 · Full lifecycle management for DSH skills",
-      "desc_prev": "DSH skill package manager — register any git repo with a SKILL.md as a DSH skill, or link local skill directories. Update, enable/disable, version-pin, health-check, and export/import across machines. CLI + web panel."
-    },
-    {
-      "full_name": "745403lkh/dsh-ai-browser",
-      "previous": "vision",
-      "current": "tool",
-      "desc_now": "基于 DeepSeek Harness 的 AI 浏览器，主打比其它 AI 浏览器更精细的权限管理：四档窗口权限 × 按工作区隔离的站点名单，支持域名/子域/路径精确匹配与逐站点「无需授权访问」；同时支持内嵌浏览、多标签和下载管理。 / An AI browser for DeepSeek Harness with finer-grained permission control: four window levels x per-workspace site lists, domain/subdomain/path matching and per-site no-auth toggles, plus embedded browsing, tabs and downloads.",
-      "desc_prev": "基于 DeepSeek Harness 的 AI 浏览器：会话右侧应用内浏览器（多窗口），AI 可读取/点击/输入/滚动/截图/下载，含每窗口四级权限、风险警告、主动授权与断点续传下载。An AI browser for DeepSeek Harness: in-app multi-window browser with page reading, clicking, typing, scrolling, screenshots and downloads, per-window four-level permissions, risk warnings, proactive authorization and resumable downloads."
-    },
-    {
-      "full_name": "EaveBounty/dsh-plugin-graph",
+      "full_name": "wx-98/DSH-folder",
       "previous": "other",
-      "current": "memory",
-      "desc_now": "Plugin graph · DeepSeek Harness sidebar panel: installed-plugin relationship graph, skill usage stats and token cache-cost analysis.",
+      "current": "coding",
+      "desc_now": "Folder explorer plugin for DeepSeek Harness: VSCode-like file tree with type icons, file operations and Add to Chat actions.",
       "desc_prev": null
-    },
-    {
-      "full_name": "379385796-sys/dsh-chat-comfort",
-      "previous": "conversation",
-      "current": "web-ui",
-      "desc_now": "Chat bubble, spacing, and reading enhancements for Windows DSH Desktop, with conservative component compatibility checks.",
-      "desc_prev": "Conservative chat reading enhancements for Windows DSH Desktop 0.2.1-rc.2."
-    },
-    {
-      "full_name": "EviMing/dsh-qq-approval-notify",
-      "previous": "tool",
-      "current": "notify",
-      "desc_now": "让 DSH 申请权限前先发 QQ 私信，失败则 Windows 通知，再失败放弃通知",
-      "desc_prev": "DeepSeek Harness plugin: forward permission requests (including sandbox escalation) to the owner QQ via a local NapCat, with a Windows notification fallback."
     }
   ]
 }
