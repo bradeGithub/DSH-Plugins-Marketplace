@@ -1,34 +1,48 @@
 {
-  "generated_at": "2026-11-01T01:10:13.489Z",
-  "count": 4,
+  "generated_at": "2026-11-01T09:18:01.982Z",
+  "count": 6,
   "items": [
     {
-      "full_name": "xushilianzhuren/dsh-constitution-seed",
-      "previous": "memory",
-      "current": "tool",
-      "desc_now": "宪法种子注入器：每个新会话开局自动注入工作区规则文件的有界摘录与哈希清单，幂等判重，文件变更自动重推",
-      "desc_prev": "宪法种子注入器：每个新会话开局自动注入工作区规则文件的有界摘录与哈希清单，幂等判重，文件变更自动重推"
+      "full_name": "Cerbur/clutch-dsh",
+      "previous": "coding",
+      "current": "document",
+      "desc_now": "Open-source DSH plugins for DeepSeek Harness：Git Worktree session management（会话管理）、Session Title（会话标题）、Fireworks（庆祝特效）与 Office（Agent 办公室），面向 AI coding workflows。",
+      "desc_prev": "Open-source DSH plugins for DeepSeek Harness：Git Worktree session management（会话管理）、Session Title（会话标题）与 Fireworks（庆祝特效），面向 AI coding workflows。"
     },
     {
-      "full_name": "xushilianzhuren/dsh-task-order",
-      "previous": "memory",
+      "full_name": "xiaxi626/dsh-skills-nexus",
+      "previous": "web-ui",
       "current": "tool",
-      "desc_now": "任务顺序闸：开场体检/先查后造防重造轮子/台账活性巡检/交接捡活，六件原生只读工具",
-      "desc_prev": "任务顺序闸：开场体检/先查后造防重造轮子/台账活性巡检/交接捡活，六件原生只读工具"
+      "desc_now": "DSH Skills Nexus — 从安装、版本管理到跨机器、跨 Agent 协同，DSH 技能全生命周期管理 · Full lifecycle management for DSH skills",
+      "desc_prev": "DSH skill package manager — register any git repo with a SKILL.md as a DSH skill, or link local skill directories. Update, enable/disable, version-pin, health-check, and export/import across machines. CLI + web panel."
     },
     {
-      "full_name": "xushilianzhuren/dsh-verify-kit",
-      "previous": "memory",
-      "current": "other",
-      "desc_now": "交付验证闸：出口前三道纯本地闸（违令句扫/宣称拦截/发前三检），零依赖装上即用",
-      "desc_prev": "交付验证闸：出口前三道纯本地闸（违令句扫/宣称拦截/发前三检），零依赖装上即用"
+      "full_name": "745403lkh/dsh-ai-browser",
+      "previous": "vision",
+      "current": "tool",
+      "desc_now": "基于 DeepSeek Harness 的 AI 浏览器，主打比其它 AI 浏览器更精细的权限管理：四档窗口权限 × 按工作区隔离的站点名单，支持域名/子域/路径精确匹配与逐站点「无需授权访问」；同时支持内嵌浏览、多标签和下载管理。 / An AI browser for DeepSeek Harness with finer-grained permission control: four window levels x per-workspace site lists, domain/subdomain/path matching and per-site no-auth toggles, plus embedded browsing, tabs and downloads.",
+      "desc_prev": "基于 DeepSeek Harness 的 AI 浏览器：会话右侧应用内浏览器（多窗口），AI 可读取/点击/输入/滚动/截图/下载，含每窗口四级权限、风险警告、主动授权与断点续传下载。An AI browser for DeepSeek Harness: in-app multi-window browser with page reading, clicking, typing, scrolling, screenshots and downloads, per-window four-level permissions, risk warnings, proactive authorization and resumable downloads."
     },
     {
-      "full_name": "xushilianzhuren/dsh-frame-kit",
-      "previous": "memory",
-      "current": "tool",
-      "desc_now": "槽序格式钩：十一槽结构化输出（判断先行过程殿后）+词面验槽，槽是工具不是仪式",
-      "desc_prev": "槽序格式钩：十一槽结构化输出（判断先行过程殿后）+词面验槽，槽是工具不是仪式"
+      "full_name": "EaveBounty/dsh-plugin-graph",
+      "previous": "other",
+      "current": "memory",
+      "desc_now": "Plugin graph · DeepSeek Harness sidebar panel: installed-plugin relationship graph, skill usage stats and token cache-cost analysis.",
+      "desc_prev": null
+    },
+    {
+      "full_name": "379385796-sys/dsh-chat-comfort",
+      "previous": "conversation",
+      "current": "web-ui",
+      "desc_now": "Chat bubble, spacing, and reading enhancements for Windows DSH Desktop, with conservative component compatibility checks.",
+      "desc_prev": "Conservative chat reading enhancements for Windows DSH Desktop 0.2.1-rc.2."
+    },
+    {
+      "full_name": "EviMing/dsh-qq-approval-notify",
+      "previous": "tool",
+      "current": "notify",
+      "desc_now": "让 DSH 申请权限前先发 QQ 私信，失败则 Windows 通知，再失败放弃通知",
+      "desc_prev": "DeepSeek Harness plugin: forward permission requests (including sandbox escalation) to the owner QQ via a local NapCat, with a Windows notification fallback."
     }
   ]
 }
