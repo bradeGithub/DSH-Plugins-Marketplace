@@ -1,13 +1,27 @@
 {
-  "generated_at": "2026-11-01T12:46:57.625Z",
-  "count": 1,
+  "generated_at": "2026-11-01T17:03:51.361Z",
+  "count": 3,
   "items": [
     {
-      "full_name": "wx-98/DSH-folder",
-      "previous": "other",
-      "current": "coding",
-      "desc_now": "Folder explorer plugin for DeepSeek Harness: VSCode-like file tree with type icons, file operations and Add to Chat actions.",
-      "desc_prev": null
+      "full_name": "huanlin-labs/dsh-skill-cockpit",
+      "previous": "tool",
+      "current": "model",
+      "desc_now": "DSH 技能驾驶舱：技能启停、预设挂载与用量统计",
+      "desc_prev": "Skill cockpit for DSH: one page listing every skill the machine exposes, why a skill is invisible, per-skill usage counts, and a one-file toggle."
+    },
+    {
+      "full_name": "ousiqwq/dsh-file-bridge",
+      "previous": "tool",
+      "current": "web-ui",
+      "desc_now": "DeepSeek Harness 远程文件下载：在网页预览中下载到当前设备，保留原生预览与界面样式。 | Remote file downloads for DeepSeek Harness: save files to your current device alongside native previews and UI styling.",
+      "desc_prev": "Download files to your browser from DeepSeek Harness, alongside native previews. MIT."
+    },
+    {
+      "full_name": "SMPcosy/dsh-member-manager",
+      "previous": "web-ui",
+      "current": "model",
+      "desc_now": "DSH plugin for a runnable company org: departments, employee codes, dual M/P channels, DAG task-graph dispatch, audit & cost attribution — with a roster overlay for display names, roles, skills and model overrides. Zero runtime deps.",
+      "desc_prev": "DeepSeek Harness (DSH) plugin for team member management: two-level group→member org structure, Chinese display names & aliases, job titles & duties, skill tagging, retire/restore, and per-member model overrides. Ships as host tools + a Web management panel; keeps its own overlay registry so the immutable DSH core is never touched. MIT licensed."
     }
   ]
 }
