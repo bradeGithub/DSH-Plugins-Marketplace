@@ -1,41 +1,34 @@
 {
-  "generated_at": "2026-11-02T09:30:23.363Z",
-  "count": 5,
+  "generated_at": "2026-11-02T13:50:04.738Z",
+  "count": 4,
   "items": [
     {
-      "full_name": "duhu2000/dsh-mcp-connector",
-      "previous": "resource",
-      "current": "tool",
-      "desc_now": "MCP Connector for DeepSeek Harness: a data marketplace connecting enterprise, financial, legal, patent and research data. Manage authorization, search tools and troubleshoot MCP connections. Supports OAuth, API keys and HTTP/stdio.",
-      "desc_prev": "DeepSeek Harness MCP Connector: connect servers, search tools across active connections, and troubleshoot discovery. Includes a continuously updated catalog; supports OAuth 2.0 PKCE, API keys, Streamable HTTP/stdio, and mcpServers JSON import."
+      "full_name": "huanlin-labs/dsh-isolation-gate",
+      "previous": "coding",
+      "current": "resource",
+      "desc_now": "DSH 权限隔离门禁：按目录与操作授权，拦截高危文件操作",
+      "desc_prev": "门禁 · Access gate for DSH: per-directory deny/read/full, roster groups, per-session overrides, audit log. 默认禁，误触前就拦住。"
     },
     {
-      "full_name": "sakikoTGW/dsh-plugin-tailor",
-      "previous": "other",
+      "full_name": "643048695/dsh-subagent-role-router",
+      "previous": "agent",
       "current": "tool",
-      "desc_now": "Make a repository look and read like it is ready to ship: 8-dimension / 44-check audit, 3 README layout engines, a 12-file deterministic brand kit with WCAG contrast QA, bilingual drafts, and pre-release verification. DSH plugin + CLI.",
-      "desc_prev": "Tailor a repository to fit: 8-dimension maturity audit, 7 README styles, bilingual drafts, deterministic brand assets, pre-release verification. DSH plugin."
+      "desc_now": "DSH subagent router: per-role routing with candidate pools, cross-provider failover, fork window slicing, mid-run and batch model switching — plus header critters showing who is running, for how long and on how many tokens, and model-callable routing tools.",
+      "desc_prev": "DSH subagent route picker: per-role routing (explore/plan/patch), multi-model rotation, cross-provider failover, and fork active-window slicing."
     },
     {
-      "full_name": "herenfor/dsh-runtime-tuning",
-      "previous": "conversation",
+      "full_name": "keyblues/dsh-plugin-everything",
+      "previous": "tool",
       "current": "web-ui",
-      "desc_now": "DeepSeek Harness 主程序内部的调优插件：工具执行、文件工具、沙箱与凭据保护、聊天界面的修复和优化，每项用真实会话数据验证。",
-      "desc_prev": "DSH 运行时优化实验：从真实会话数据里找 agent 的时间浪费，再用插件修掉"
+      "desc_now": "DSH plugin: whole-disk file search through the official Everything SDK (Everything64.dll in-process via N-API FFI) — millisecond queries, no es.exe or HTTP server, Web UI tool cards. DSH 插件：经官方 Everything SDK 在进程内查询全盘索引，毫秒级返回，无需 es.exe 与 HTTP 服务。",
+      "desc_prev": "DeepSeek Harness (DSH) plugin — instant whole-disk file search through the local voidtools Everything index. DSH 插件：接入本机 Everything 索引，全盘秒级搜索文件。"
     },
     {
-      "full_name": "xbzbing/dsh-privacy-gateway",
+      "full_name": "brickhu/dsh-plugins",
       "previous": "other",
-      "current": "conversation",
-      "desc_now": "DSH 插件：密钥、Cookie、个人信息在发给模型前自动脱敏，回复里还原。装上即用，覆盖所有模型。 / A DSH plugin: keys, cookies and personal data are redacted before they reach the model, and restored in the reply. Install once, covers every model.",
-      "desc_prev": "DSH 进程级脱敏网关：出站把密钥、Cookie、个人信息换成占位符，入站还原；一处拦截覆盖所有走 fetch() 的 provider。/ Process-wide redaction gateway for DeepSeek Harness: masks secrets in outgoing model requests and restores placeholders in replies, for every provider that goes through fetch()."
-    },
-    {
-      "full_name": "xiaoran0829/dsh-session-deliverables",
-      "previous": "other",
-      "current": "document",
-      "desc_now": "DSH Web 插件：会话顶栏「文件」视图，列出本会话交付的文件（Word/Excel/PPT/图片/视频），一键按附件下载，内外网一致。",
-      "desc_prev": "DSH Web plugin: per-session deliverables view with one-click attachment download."
+      "current": "web-ui",
+      "desc_now": "DeepSeek Harness plugins — Reference Links panel (dsh-links-panel): every URL of a conversation in the right sidebar.",
+      "desc_prev": "deepseek harness plugins"
     }
   ]
 }
