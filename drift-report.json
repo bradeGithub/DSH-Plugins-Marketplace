@@ -1,13 +1,41 @@
 {
-  "generated_at": "2026-11-02T01:44:08.747Z",
-  "count": 1,
+  "generated_at": "2026-11-02T09:30:23.363Z",
+  "count": 5,
   "items": [
     {
-      "full_name": "GIT121995/dsh-feiyu-wardrobe",
-      "previous": "model",
+      "full_name": "duhu2000/dsh-mcp-connector",
+      "previous": "resource",
+      "current": "tool",
+      "desc_now": "MCP Connector for DeepSeek Harness: a data marketplace connecting enterprise, financial, legal, patent and research data. Manage authorization, search tools and troubleshoot MCP connections. Supports OAuth, API keys and HTTP/stdio.",
+      "desc_prev": "DeepSeek Harness MCP Connector: connect servers, search tools across active connections, and troubleshoot discovery. Includes a continuously updated catalog; supports OAuth 2.0 PKCE, API keys, Streamable HTTP/stdio, and mcpServers JSON import."
+    },
+    {
+      "full_name": "sakikoTGW/dsh-plugin-tailor",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "Make a repository look and read like it is ready to ship: 8-dimension / 44-check audit, 3 README layout engines, a 12-file deterministic brand kit with WCAG contrast QA, bilingual drafts, and pre-release verification. DSH plugin + CLI.",
+      "desc_prev": "Tailor a repository to fit: 8-dimension maturity audit, 7 README styles, bilingual drafts, deterministic brand assets, pre-release verification. DSH plugin."
+    },
+    {
+      "full_name": "herenfor/dsh-runtime-tuning",
+      "previous": "conversation",
       "current": "web-ui",
-      "desc_now": "🐋 大肥鱼衣橱 — DSH 插件：token 花销变鱼粮 + 侧边栏换装小游戏（Q版/少女版双身形、整套穿着立绘、悬浮小鲸鱼，纯本地离线）",
-      "desc_prev": "🐋 大肥鱼衣橱 — DSH 插件：token 花销变鱼粮，解锁 21 件原创换装 + 1080×1440 饲养报告卡（纯本地，零额外模型调用）"
+      "desc_now": "DeepSeek Harness 主程序内部的调优插件：工具执行、文件工具、沙箱与凭据保护、聊天界面的修复和优化，每项用真实会话数据验证。",
+      "desc_prev": "DSH 运行时优化实验：从真实会话数据里找 agent 的时间浪费，再用插件修掉"
+    },
+    {
+      "full_name": "xbzbing/dsh-privacy-gateway",
+      "previous": "other",
+      "current": "conversation",
+      "desc_now": "DSH 插件：密钥、Cookie、个人信息在发给模型前自动脱敏，回复里还原。装上即用，覆盖所有模型。 / A DSH plugin: keys, cookies and personal data are redacted before they reach the model, and restored in the reply. Install once, covers every model.",
+      "desc_prev": "DSH 进程级脱敏网关：出站把密钥、Cookie、个人信息换成占位符，入站还原；一处拦截覆盖所有走 fetch() 的 provider。/ Process-wide redaction gateway for DeepSeek Harness: masks secrets in outgoing model requests and restores placeholders in replies, for every provider that goes through fetch()."
+    },
+    {
+      "full_name": "xiaoran0829/dsh-session-deliverables",
+      "previous": "other",
+      "current": "document",
+      "desc_now": "DSH Web 插件：会话顶栏「文件」视图，列出本会话交付的文件（Word/Excel/PPT/图片/视频），一键按附件下载，内外网一致。",
+      "desc_prev": "DSH Web plugin: per-session deliverables view with one-click attachment download."
     }
   ]
 }
