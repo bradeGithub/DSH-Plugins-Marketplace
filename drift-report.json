@@ -1,34 +1,27 @@
 {
-  "generated_at": "2026-11-02T13:50:04.738Z",
-  "count": 4,
+  "generated_at": "2026-11-02T20:37:02.325Z",
+  "count": 3,
   "items": [
     {
-      "full_name": "huanlin-labs/dsh-isolation-gate",
-      "previous": "coding",
-      "current": "resource",
-      "desc_now": "DSH 权限隔离门禁：按目录与操作授权，拦截高危文件操作",
-      "desc_prev": "门禁 · Access gate for DSH: per-directory deny/read/full, roster groups, per-session overrides, audit log. 默认禁，误触前就拦住。"
+      "full_name": "PerryLink/dsh-ticktick",
+      "previous": "resource",
+      "current": "web-ui",
+      "desc_now": "MOVED to dsh-dida — https://github.com/PerryLink/dsh-dida. This repository is a pointer/backup; the old npm package @perrylink/dsh-ticktick is deprecated.",
+      "desc_prev": "TickTick (Dida365) task bridge for DeepSeek Harness: Session-header task panel (list filter, undone/completed views, search, drag reorder), 11 curated agent tools, settings card, over the official TickTick MCP endpoint."
     },
     {
-      "full_name": "643048695/dsh-subagent-role-router",
-      "previous": "agent",
+      "full_name": "Jisiyong-A/dsh-plugin-background-compaction",
+      "previous": "model",
       "current": "tool",
-      "desc_now": "DSH subagent router: per-role routing with candidate pools, cross-provider failover, fork window slicing, mid-run and batch model switching — plus header critters showing who is running, for how long and on how many tokens, and model-callable routing tools.",
-      "desc_prev": "DSH subagent route picker: per-role routing (explore/plan/patch), multi-model rotation, cross-provider failover, and fork active-window slicing."
+      "desc_now": "Zero-latency compaction for DeepSeek Harness: background speculative summaries cut the compaction stall from 16 s to 7 ms for ~2% extra tokens (measured). 零等待上下文压缩——16s 降到 7ms，只多花 2% token。",
+      "desc_prev": "Speculative background compaction engine for DeepSeek Harness: precomputes summary at 72% watermark, serves instantly with 0ms model latency on pressure."
     },
     {
-      "full_name": "keyblues/dsh-plugin-everything",
-      "previous": "tool",
-      "current": "web-ui",
-      "desc_now": "DSH plugin: whole-disk file search through the official Everything SDK (Everything64.dll in-process via N-API FFI) — millisecond queries, no es.exe or HTTP server, Web UI tool cards. DSH 插件：经官方 Everything SDK 在进程内查询全盘索引，毫秒级返回，无需 es.exe 与 HTTP 服务。",
-      "desc_prev": "DeepSeek Harness (DSH) plugin — instant whole-disk file search through the local voidtools Everything index. DSH 插件：接入本机 Everything 索引，全盘秒级搜索文件。"
-    },
-    {
-      "full_name": "brickhu/dsh-plugins",
-      "previous": "other",
-      "current": "web-ui",
-      "desc_now": "DeepSeek Harness plugins — Reference Links panel (dsh-links-panel): every URL of a conversation in the right sidebar.",
-      "desc_prev": "deepseek harness plugins"
+      "full_name": "spartawhy117/dsh-token-dash",
+      "previous": "model",
+      "current": "coding",
+      "desc_now": "DSH Token 看板：按供应商的月度预算、订阅配额（GLM / Kimi Coding）与账户余额；支持当天 / 7 天 / 30 天 / 全部范围查看费用与真实 Tokens，可本地导出 / 导入备份。",
+      "desc_prev": "DSH 底栏 Token 看板：月度预算、模型费用/用量、账户余额与官方 usage 入口"
     }
   ]
 }
