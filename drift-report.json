@@ -1,55 +1,76 @@
 {
-  "generated_at": "2026-11-03T12:33:38.291Z",
-  "count": 7,
+  "generated_at": "2026-11-03T19:42:23.017Z",
+  "count": 10,
   "items": [
     {
-      "full_name": "tasuma-qwq/baifanyu-ofm-bridge",
-      "previous": "document",
-      "current": "other",
-      "desc_now": "DSH Web / qq-bridge 的 OFM 接入：默认 DeepSeek 免费池，保留思考档位与手动选模，支持自有账号和轮换回执。",
-      "desc_prev": "白饭鱼的 Our Free Model 接入核心：渠道主备、额度冷却、任务档位、阶段计时与安全重试，附离线演示"
+      "full_name": "WSL043/dsh-codex-subscription",
+      "previous": "resource",
+      "current": "vision",
+      "desc_now": "Use your ChatGPT Plus / Pro (Codex) subscription in DeepSeek Harness (DSH): GPT-6 & Codex models, images, web search and quota via ChatGPT sign-in — no OpenAI API key. Beta: control DSH from the ChatGPT mobile app. 在 DSH 中使用 ChatGPT 订阅，并可用 ChatGPT 手机 App 远程控制。",
+      "desc_prev": "Use your ChatGPT Plus / Pro (Codex) subscription in DeepSeek Harness (DSH): GPT-6 & Codex models, images, web search and quota via ChatGPT sign-in — no OpenAI API key. Beta: control DSH from the ChatGPT mobile app. 在 DSH 中使用 ChatGPT 订阅，并可用 ChatGPT 手机 App 远程控制。"
     },
     {
-      "full_name": "xiseliuli/dsh-as-mcp",
+      "full_name": "huaguoxingkong/dsh-prompt-rewriter",
       "previous": "other",
-      "current": "coding",
-      "desc_now": "Expose a running DeepSeek Harness as an MCP server, so Claude Code, Codex or any MCP client can drive its workspaces, sessions, files, shell and agent tools, and read token usage and cost receipts.",
-      "desc_prev": "dsh-as-mcp"
+      "current": "conversation",
+      "desc_now": "输入框旁一键提示词增强：把半成品草稿原地改成可执行的提示词，只改不发送。",
+      "desc_prev": "输入框旁一键提示词增强：把半成品草稿原地改成可执行的提示词，只改不发送。"
     },
     {
-      "full_name": "LeoLourson/MacroStress-DSH",
-      "previous": "other",
-      "current": "agent",
-      "desc_now": "Plugin-based macro stress testing over MCP. A person names an event; an LLM agent writes the scenario from a corpus of sources, and the person approves it. Models in levels, from the economy to industries and companies, fill in the paths and reprice positions; each model and asset type is a plugin. Output: loss quantiles, ES95, scenario price.",
-      "desc_prev": "Portfolio stress tests under macro scenarios: a Bayesian VAR with stochastic volatility drives the paths, and loss percentiles with expected shortfall come back over MCP."
-    },
-    {
-      "full_name": "latte03/dsh-select-quote",
-      "previous": "conversation",
+      "full_name": "anweat/dsh-web-search-pro",
+      "previous": "agent",
       "current": "tool",
-      "desc_now": "为 DSH 增加划词批注、引用、划词翻译、侧边子代理提问，链接用默认浏览器打开。选中的原文连同评论随下一条消息交给模型，正文保留高亮与序号角标、可跳回原文；菜单可划词浮出或从右键打开，翻译可单独指定模型。",
-      "desc_prev": "在对话里划词加批注——把选中的原文连同你的评论一起交给模型，并让它在回答里明确指出说的是哪一段。"
+      "desc_now": "Enhanced, persistent web search plugin for DeepSeek Harness (multi-engine search, SQLite+LRU cache, platform backends, Playwright rendering)",
+      "desc_prev": "Enhanced, persistent web search plugin for DeepSeek Harness (multi-engine search, SQLite+LRU cache, platform backends, Playwright rendering)"
     },
     {
-      "full_name": "NoCandles/dsh-stock-bar",
-      "previous": "notify",
-      "current": "tool",
-      "desc_now": "DeepSeek Harness 插件：窗口顶部常驻股票行情条——自选股、持仓（股数与成本）、盈亏、K线/分时图、盘口、成交记录、预警、AI 复盘。",
-      "desc_prev": "DeepSeek Harness plugin: always-on stock quotes strip at the top of the window - watchlist, holdings (shares & cost), P&L, candlestick/intraday charts, order book, trade ledger, alerts, AI review."
-    },
-    {
-      "full_name": "OldQin-Aurora001/portwrench",
+      "full_name": "sikadi233-hub/minecraft-dev",
       "previous": "tool",
-      "current": "web-ui",
-      "desc_now": "PortWrench panel for DSH: view local listening ports, see which app owns each one, and close the target process tree. Requires PortWrench (Windows) to be installed and running.",
-      "desc_prev": "Windows-local port viewer and killer for AI agents · Windows 本地端口查看与关闭工具"
+      "current": "coding",
+      "desc_now": "Minecraft dev for DeepSeek Harness (dsh): Paper/Spigot/Fabric/Forge/NeoForge across MC 1.7.10-26.3, offline API signature indexes, deterministic sharded pipeline (mc_arbitrate, 21 audit rules). Apache-2.0. ｜ 面向 DeepSeek Harness 的 Minecraft 开发：全时代插件与模组、18 份离线 API 索引、分片仲裁引擎 mc_arbitrate（21 条规则）。Apache-2.0。",
+      "desc_prev": "Minecraft development plugin for DeepSeek Harness: skills & tools for Paper/Spigot plugins and Fabric/Forge/NeoForge mods, MC 1.7.10-26.x"
     },
     {
-      "full_name": "shendao325/dsh-freebridge",
-      "previous": "model",
+      "full_name": "lijiaqi-AI-Product-Manager/dsh-agent-compare",
+      "previous": "agent",
       "current": "tool",
-      "desc_now": "DSH 一体化插件：匿名免费模型桥接 + Token 用量统计 + 按需网络分流 + 桌面操作编排 + 操作边界守门 + 插件级故障隔离，装完即用",
-      "desc_prev": "DSH 插件：免账号、免 API Key 接入匿名免费 LLM 上游（Kilo Gateway / OVHcloud），装好即出现在模型选择器"
+      "desc_now": "同一需求，两版真跑，体验后审查采用。Two live builds for one task in DeepSeek Harness.",
+      "desc_prev": "同一需求，两版真跑，体验后审查采用。Two live builds for one task in DeepSeek Harness."
+    },
+    {
+      "full_name": "Mrsirlila/dsh-pocket-plus",
+      "previous": "coding",
+      "current": "other",
+      "desc_now": "把 DeepSeek Harness 装进口袋，扫一次码就进去。内网 / Tailscale / Cloudflare 三条链路自动择优，断线自动切换。",
+      "desc_prev": "把 DeepSeek Harness 装进你的口袋，对原作者shaobeichen的版本源码用deepseek跑了一点修改，并且做出了能使用的APK手机版进行操作，能够自动一键公网内网互通"
+    },
+    {
+      "full_name": "jikllji/DSH-JI-Plugins",
+      "previous": "web-ui",
+      "current": "other",
+      "desc_now": "Personal Jikllji-Plugins for Deepseek Harness",
+      "desc_prev": "Personal Jikllji-Plugins for Deepseek Harness"
+    },
+    {
+      "full_name": "LeiSureYu/dsh-smart-download",
+      "previous": "tool",
+      "current": "coding",
+      "desc_now": "DSH 多线程下载插件：内置 aria2、自动探测并回退 curl；断点续传、摘要校验、批量/后台下载、可取消重试的下载管理器。Windows / Linux / macOS 六平台完整支持，HarmonyOS 1.9.1 起可用。",
+      "desc_prev": "DSH 多线程下载插件：内置 aria2、自动探测并回退 curl；断点续传、摘要校验、批量/后台下载、可取消重试的下载管理器。Windows / Linux / macOS 六平台完整支持。"
+    },
+    {
+      "full_name": "leoan698-tom/dsh-sessivra",
+      "previous": "conversation",
+      "current": "model",
+      "desc_now": "DSH Sessivra：会话通信与任务协作，共享裁决、关联回复、验收后放行、上下文引用与会话树。npm: dsh-plugin-sessivra",
+      "desc_prev": "Session-to-session messaging with linked replies, native context references and conversation trees for DeepSeek Harness."
+    },
+    {
+      "full_name": "dadazhangn/dsh-prompt-snippets",
+      "previous": "web-ui",
+      "current": "conversation",
+      "desc_now": "Crash-safe prompt snippet library for DeepSeek Harness — {{placeholder}} fill forms, dropdown enums, version history, one-click insert.",
+      "desc_prev": "DSH Prompt Snippets plugin: save reusable prompts (with categories and {{placeholders}}), insert via /snippet command or a one-click dock panel."
     }
   ]
 }
