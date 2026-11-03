@@ -1,13 +1,55 @@
 {
-  "generated_at": "2026-11-03T03:46:20.200Z",
-  "count": 1,
+  "generated_at": "2026-11-03T12:33:38.291Z",
+  "count": 7,
   "items": [
     {
-      "full_name": "HaroldZ32/My-Power-Dsh",
+      "full_name": "tasuma-qwq/baifanyu-ofm-bridge",
+      "previous": "document",
+      "current": "other",
+      "desc_now": "DSH Web / qq-bridge 的 OFM 接入：默认 DeepSeek 免费池，保留思考档位与手动选模，支持自有账号和轮换回执。",
+      "desc_prev": "白饭鱼的 Our Free Model 接入核心：渠道主备、额度冷却、任务档位、阶段计时与安全重试，附离线演示"
+    },
+    {
+      "full_name": "xiseliuli/dsh-as-mcp",
+      "previous": "other",
+      "current": "coding",
+      "desc_now": "Expose a running DeepSeek Harness as an MCP server, so Claude Code, Codex or any MCP client can drive its workspaces, sessions, files, shell and agent tools, and read token usage and cost receipts.",
+      "desc_prev": "dsh-as-mcp"
+    },
+    {
+      "full_name": "LeoLourson/MacroStress-DSH",
+      "previous": "other",
+      "current": "agent",
+      "desc_now": "Plugin-based macro stress testing over MCP. A person names an event; an LLM agent writes the scenario from a corpus of sources, and the person approves it. Models in levels, from the economy to industries and companies, fill in the paths and reprice positions; each model and asset type is a plugin. Output: loss quantiles, ES95, scenario price.",
+      "desc_prev": "Portfolio stress tests under macro scenarios: a Bayesian VAR with stochastic volatility drives the paths, and loss percentiles with expected shortfall come back over MCP."
+    },
+    {
+      "full_name": "latte03/dsh-select-quote",
+      "previous": "conversation",
+      "current": "tool",
+      "desc_now": "为 DSH 增加划词批注、引用、划词翻译、侧边子代理提问，链接用默认浏览器打开。选中的原文连同评论随下一条消息交给模型，正文保留高亮与序号角标、可跳回原文；菜单可划词浮出或从右键打开，翻译可单独指定模型。",
+      "desc_prev": "在对话里划词加批注——把选中的原文连同你的评论一起交给模型，并让它在回答里明确指出说的是哪一段。"
+    },
+    {
+      "full_name": "NoCandles/dsh-stock-bar",
+      "previous": "notify",
+      "current": "tool",
+      "desc_now": "DeepSeek Harness 插件：窗口顶部常驻股票行情条——自选股、持仓（股数与成本）、盈亏、K线/分时图、盘口、成交记录、预警、AI 复盘。",
+      "desc_prev": "DeepSeek Harness plugin: always-on stock quotes strip at the top of the window - watchlist, holdings (shares & cost), P&L, candlestick/intraday charts, order book, trade ledger, alerts, AI review."
+    },
+    {
+      "full_name": "OldQin-Aurora001/portwrench",
       "previous": "tool",
-      "current": "memory",
-      "desc_now": "A DeepSeek Harness plugin bundle: the specialist roster, team plane, workmates, memory, verification, and a native dsh-Go interface.",
-      "desc_prev": "Just another Deepseek Harness agent tool"
+      "current": "web-ui",
+      "desc_now": "PortWrench panel for DSH: view local listening ports, see which app owns each one, and close the target process tree. Requires PortWrench (Windows) to be installed and running.",
+      "desc_prev": "Windows-local port viewer and killer for AI agents · Windows 本地端口查看与关闭工具"
+    },
+    {
+      "full_name": "shendao325/dsh-freebridge",
+      "previous": "model",
+      "current": "tool",
+      "desc_now": "DSH 一体化插件：匿名免费模型桥接 + Token 用量统计 + 按需网络分流 + 桌面操作编排 + 操作边界守门 + 插件级故障隔离，装完即用",
+      "desc_prev": "DSH 插件：免账号、免 API Key 接入匿名免费 LLM 上游（Kilo Gateway / OVHcloud），装好即出现在模型选择器"
     }
   ]
 }
