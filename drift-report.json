@@ -1,69 +1,34 @@
 {
-  "generated_at": "2026-11-04T09:18:00.155Z",
-  "count": 9,
+  "generated_at": "2026-11-04T13:18:05.544Z",
+  "count": 4,
   "items": [
     {
-      "full_name": "xqpsec/dsh-jailbreak",
-      "previous": "notify",
-      "current": "tool",
-      "desc_now": "dsh jailbreak - DeepSeek Assistant 破甲插件（DSH 破甲 / 越狱 / 破甲提示词）：请求边界注入，模型不再一开口就是「我不能」。20 类合并 ASR 45.0%、覆盖率 19/20、良性能力 Δ=0.0pt（24/24 判分）；0 处宿主补丁、默认关闭、off 逐字透传、每次改写落 manifest 与 promptSha256 可审计。旧名 dsh-jalibreak",
-      "desc_prev": "dsh jailbreak - DeepSeek Harness 破甲插件（DSH 破甲 / 越狱 / 破甲提示词）：请求边界注入，模型不再一开口就是「我不能」。0 处宿主补丁，带阀门，可复核基线 17/20。旧名 dsh-jalibreak"
-    },
-    {
-      "full_name": "crisvollerei/dsh-persona-shell",
-      "previous": "coding",
-      "current": "memory",
-      "desc_now": "DeepSeek Harness 人格转述插件：工作会话保留原文，支持原文对照、结构化记忆与可折叠设置界面。",
-      "desc_prev": "给 DeepSeek Harness 的助手汇报换个口吻：人格化转述、原文对照、可选过程运行信息，工作提示词保持独立。"
-    },
-    {
-      "full_name": "ws1234567891011/dsh-interim-narration",
-      "previous": "tool",
-      "current": "memory",
-      "desc_now": "Makes the DeepSeek Harness agent narrate while it works: an opening about how it reads the request, short notes between tool batches, editable from the plugin page.",
-      "desc_prev": "让 DeepSeek Harness 的 agent 每轮先讲理解与计划、在工具调用之间用正文写过程叙述（边做边说），并可在应用内直接改参数"
-    },
-    {
-      "full_name": "hoyyang/dsh-android-pane",
+      "full_name": "DDDMUC/dsh-delete-session",
       "previous": "web-ui",
-      "current": "vision",
-      "desc_now": "Android 安卓设备实时画面面板：scrcpy 真机/模拟器 H.264 串流进 DSH 对话，agent 可点按操作并用截图与控件树自证，截图录屏调试证据存到电脑目录",
-      "desc_prev": "Live Android device pane for DeepSeek Harness: scrcpy H.264 streaming, agent injection, UI-tree verification"
+      "current": "tool",
+      "desc_now": "DeepSeek Harness 最强删除插件：默认移入系统回收站，可切换永久删除；支持拖拽/批量删除、活跃会话安全删除、子代理会话连带清理且不触及独立 fork；产出文件可隔离并默认跳过 Git 仓库；彻底清理日志与缓存，不留幽灵记录。",
+      "desc_prev": "Delete sessions from the DSH Web sidebar: a Delete action in the session menu with a risk-consent dialog; removes the log, workspace accounting and live session state."
+    },
+    {
+      "full_name": "BlinB209/deepchess",
+      "previous": "conversation",
+      "current": "other",
+      "desc_now": "深棋 DeepChess — DSH 右侧栏像素国际象棋：DeepSeek 对手、Lichess 式 L1–L8、18 种表情、开局与棋步分析、和棋谈判、结果页调参和本地存档。",
+      "desc_prev": "深棋 DeepChess — 为 DSH 右侧栏打造的像素风国际象棋：DeepSeek 对手、六档 AI、18 种表情、开局与棋步分析、事件对话和本地存档。"
     },
     {
       "full_name": "Hope2023Dcr/dsh-gallery",
-      "previous": "resource",
-      "current": "tool",
-      "desc_now": "DSH (DeepSeek Harness) 产出画廊插件：侧栏实时浏览 Agent 产出，图片自动刷新、文件原生预览、右键管理隐藏/删除。Output gallery plugin for DSH: auto-refresh image thumbnails, native file preview, zero dependencies.",
-      "desc_prev": "DSH 右侧栏产出画廊：跨会话资产管理/图片自动刷新 / 文件原生预览 / 产出根目录可配置，零依赖"
-    },
-    {
-      "full_name": "agoudbg/agou-dsh-plugins",
-      "previous": "other",
-      "current": "resource",
-      "desc_now": "DSH (DeepSeek Harness) plugins by agoudbg.",
-      "desc_prev": "DSH (DeepSeek Harness) plugins by agoudbg."
-    },
-    {
-      "full_name": "Bismuth-209/DSHCmdGuard",
-      "previous": "other",
-      "current": "web-ui",
-      "desc_now": "Review every command submitted by your agents, would take effect under all permission level except auto review. Could work on ssh or docker commands. The plugin is focusing on preventing accidental deletion after deepseek-flash trying to delete my $home.",
-      "desc_prev": "Review every command submitted by your agents, would take effect under all permission level except auto review. Could work on ssh commands. The plugin is focusing on preventing accidental deletion after deepseek-flash trying to delete my $home."
-    },
-    {
-      "full_name": "LTao96/dsh-plugin-overview",
       "previous": "tool",
-      "current": "resource",
-      "desc_now": "本地已装插件总览：不下载插件，和插件市场搭配；一键收纳第三方插件设置，AI 整理备注与分组，配合健康诊断和启停，让插件不再乱而不知。",
-      "desc_prev": "本地插件总览：备注、分组、健康检查、启停和设置入口。"
+      "current": "web-ui",
+      "desc_now": "DSH (DeepSeek Harness) 产出画廊插件：侧栏实时浏览 Agent 产出，图片自动刷新、文件原生预览、右键管理隐藏/删除。Output gallery plugin for DSH: auto-refresh image thumbnails, native file preview, zero dependencies.",
+      "desc_prev": "DSH (DeepSeek Harness) 产出画廊插件：侧栏实时浏览 Agent 产出，图片自动刷新、文件原生预览、右键管理隐藏/删除。Output gallery plugin for DSH: auto-refresh image thumbnails, native file preview, zero dependencies."
     },
     {
-      "full_name": "Shaoji-Lumine/macos-dsh-qq-bot",
-      "previous": "other",
-      "current": "resource",
-      "desc_now": "Unofficial community macOS port of SurfCore (DeepSeek Harness QQ bot): patches, installer scripts and docs. Does not bundle QQ/NapCat binaries or account data.",
-      "desc_prev": "macOS port for SurfCore (DeepSeek Harness QQ bot): patches, one-click installer scripts and docs. Does not bundle QQ/NapCat binaries or account data."
+      "full_name": "Lencen/dsh-agent-lines",
+      "previous": "agent",
+      "current": "conversation",
+      "desc_now": "DSH Agent 的会话团队，super agent平替。",
+      "desc_prev": "DSH Agent 的持久、可寻址消息线（社区插件）。"
     }
   ]
 }
