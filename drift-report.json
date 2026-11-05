@@ -1,20 +1,69 @@
 {
-  "generated_at": "2026-11-04T23:50:13.831Z",
-  "count": 2,
+  "generated_at": "2026-11-05T06:28:06.562Z",
+  "count": 9,
   "items": [
     {
-      "full_name": "HaoyanZhang123/dsh-plugin-control-your-development",
-      "previous": "coding",
+      "full_name": "feigo313/dsh-structured",
+      "previous": "other",
       "current": "tool",
-      "desc_now": "只读地呈现一个 DeepSeek Harness 工作区是怎么长出来的：文件关系星图、轮次带、每轮影响与整段对话重建，不写任何东西。｜A permanent read-only visual map of a DSH workspace: file relations, turn strip, per-turn impact, conversation reconstruction.",
-      "desc_prev": "把 AI 开发的进展变成人人看得懂、能拍板的产品仪表盘（DSH skill + 右侧栏面板）｜A product dashboard for AI-assisted development — readable and controllable (DSH skill + sidebar panel)"
+      "desc_now": "Persona mode + structured output for DSH: identity header, three cards and signature rendered by the plugin while the model only submits a persona JSON envelope.",
+      "desc_prev": "Structured output for DSH: no-label title card, tables/lists/steps, per-session toggle."
     },
     {
-      "full_name": "Leawind/dsh-rice-on-a-stick",
-      "previous": "conversation",
-      "current": "other",
-      "desc_now": "Control dsh from any MCP client or from dsh itself. 白饭钓竿：让 MCP 客户端或 dsh 自身控制 dsh。",
-      "desc_prev": "Operate DeepSeek Harness (dsh) from any MCP client or from dsh sessions. 白饭钓竿：让 MCP 客户端与 dsh 会话直接控制 dsh。"
+      "full_name": "Wahwayhale/dsh-connect-doubao",
+      "previous": "other",
+      "current": "model",
+      "desc_now": "复用本机豆包桌面客户端的已登录态接入 DeepSeek Harness：对话、生图、额度看板（5 小时 / 周 / 活动赠送，实时显示还剩多少）。仅 Windows x64。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "leoan698-tom/dsh-sessivra",
+      "previous": "model",
+      "current": "conversation",
+      "desc_now": "DSH Sessivra 支持会话通信、拖拽分屏和任务协作。从会话树拖入草稿可添加 @ 会话引用。主会话交办任务、接收关联回复、处理共享裁决，验收产物后放行后续任务。npm 包名 dsh-plugin-sessivra。",
+      "desc_prev": "DSH Sessivra：会话通信与任务协作，共享裁决、关联回复、验收后放行、上下文引用与会话树。npm: dsh-plugin-sessivra"
+    },
+    {
+      "full_name": "BlinB209/deepchess",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "深棋 DeepChess — DSH 右侧栏像素国际象棋：DeepSeek 对手、Lichess 式 L1–L8、18 种表情、开局与棋步分析、和棋谈判、后台搜索和本地存档。",
+      "desc_prev": "深棋 DeepChess — DSH 右侧栏像素国际象棋：DeepSeek 对手、Lichess 式 L1–L8、18 种表情、开局与棋步分析、和棋谈判、结果页调参和本地存档。"
+    },
+    {
+      "full_name": "Sirius-rocco/dsh-agent-context-hub",
+      "previous": "agent",
+      "current": "conversation",
+      "desc_now": "One read-only index of every local AI-agent session (Codex, Claude Code, DSH, Trae, or any JSONL source) grouped by project, plus an append-only shared board so switching agents leaves no context gap.",
+      "desc_prev": null
+    },
+    {
+      "full_name": "Aily-DSH/dsh-test-window",
+      "previous": "tool",
+      "current": "agent",
+      "desc_now": "让 Agent 拉起的测试窗口开在你指定的显示器上，不再盖住 DSH 窗口（Windows）。",
+      "desc_prev": "Open Agent-launched test windows on the monitor you pick in dsh Settings (Windows)"
+    },
+    {
+      "full_name": "lamp23333/dsh-balance-simple",
+      "previous": "model",
+      "current": "web-ui",
+      "desc_now": "A simple, information-dense DeepSeek status display for the DSH sidebar: balance, usage, and peak/off-peak countdown.",
+      "desc_prev": null
+    },
+    {
+      "full_name": "Aily-DSH/dsh-approval-inbox",
+      "previous": "tool",
+      "current": "agent",
+      "desc_now": "把阻塞式审批变成后台收件箱：Agent 不用干等，排队后继续干活，你有空再批。",
+      "desc_prev": "Approval inbox for DeepSeek Harness: blocking approvals become a background queue so the agent keeps working, with project sections, row badges, importable rules and peak-hour holding"
+    },
+    {
+      "full_name": "cilis/dsh-whale-tts",
+      "previous": "web-ui",
+      "current": "resource",
+      "desc_now": "DeepSeek Harness 聚合语音朗读插件,让小鲸鱼拥有自己的声音",
+      "desc_prev": "让小鲸鱼拥有自己的声音"
     }
   ]
 }
