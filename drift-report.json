@@ -1,20 +1,20 @@
 {
-  "generated_at": "2026-11-06T02:22:15.773Z",
+  "generated_at": "2026-11-06T12:45:53.194Z",
   "count": 2,
   "items": [
     {
-      "full_name": "omdsh-dev/dsh-sidechain",
-      "previous": "web-ui",
-      "current": "model",
-      "desc_now": "DSH 侧会话插件：/btw 后台侧问，/side 独立追问；继承已完成上下文，使用 DSH 原生侧栏标签，主会话保持可用。",
-      "desc_prev": "DSH 侧会话插件：/side 持续性侧会话（Codex 风格）与 /btw 一次性侧问（Claude 风格）——在临时 fork 中运行、不写入主会话历史；Web UI 右侧链面板内嵌对话，主会话保持不变"
+      "full_name": "whitequeen306/dsh-logistics",
+      "previous": "tool",
+      "current": "other",
+      "desc_now": "Whole-project code review for DeepSeek Harness: five specialist reviewers, one severity-ordered report, relation graph, and progress-aware runs.",
+      "desc_prev": "Project housekeeping for DeepSeek Harness: 12 /logi-* commands, seven specialist review subagents, health score, and a baseline gate."
     },
     {
-      "full_name": "songzhou666/gov-hub",
-      "previous": "tool",
-      "current": "coding",
-      "desc_now": "给 AI coding agent 的项目地图：DSH 插件 / Agent Skill，一条 lookup 直达权威文件，实测 10 次查询导航成本降低 96.7%~99.3%。纯本地、可逆、无遥测。",
-      "desc_prev": "项目地图 Project Map for agent workspaces: AI reaches authoritative files directly instead of brute-force folder scanning. 96.7%~99.3% nav-cost cut, up to 5.8x faster Q&A. DSH plugin + standalone skill."
+      "full_name": "Fyerl/dsh-2d-model-picker",
+      "previous": "model",
+      "current": "other",
+      "desc_now": "2D Model Picker for DeepSeek Harness — select a model and reasoning effort in one drag.",
+      "desc_prev": "2D Model Picker for DeepSeek Harness — select a model and reasoning effort in one drag. 二维模型选择器：一次拖动选定模型与推理强度。"
     }
   ]
 }
