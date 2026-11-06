@@ -1,55 +1,20 @@
 {
-  "generated_at": "2026-11-05T22:17:30.941Z",
-  "count": 7,
+  "generated_at": "2026-11-06T02:22:15.773Z",
+  "count": 2,
   "items": [
     {
-      "full_name": "Nekomeow114/dsh-tieba-dive",
-      "previous": "coding",
-      "current": "other",
-      "desc_now": "百度贴吧的 DSH 插件：自动读帖、生成日报、签到（顺手关注）；回帖可选，带每轮/每日/间隔/去重四道限制。支持人设与日记，可按 DeepSeek 谷时在后台运行。",
-      "desc_prev": "百度贴吧的 DSH 插件：自动读帖、生成日报、签到（顺手关注）；回帖可选，带每轮/每日/间隔/去重四道限制。支持人设与日记，可按 DeepSeek 谷时在后台运行。"
+      "full_name": "omdsh-dev/dsh-sidechain",
+      "previous": "web-ui",
+      "current": "model",
+      "desc_now": "DSH 侧会话插件：/btw 后台侧问，/side 独立追问；继承已完成上下文，使用 DSH 原生侧栏标签，主会话保持可用。",
+      "desc_prev": "DSH 侧会话插件：/side 持续性侧会话（Codex 风格）与 /btw 一次性侧问（Claude 风格）——在临时 fork 中运行、不写入主会话历史；Web UI 右侧链面板内嵌对话，主会话保持不变"
     },
     {
-      "full_name": "lishize20040802-rgb/dsh-deep-ptc-mode",
+      "full_name": "songzhou666/gov-hub",
       "previous": "tool",
-      "current": "agent",
-      "desc_now": "Lightweight adaptive Deep PTC: live host presets, plugin cooperation and interruptible jobs. / 轻量自适配深度 PTC：动态宿主预设、插件协作与官方兜底、后台可插话。",
-      "desc_prev": "Lightweight Deep PTC: tool/skill discovery, multi-plugin cooperation, official fallback and interruptible jobs. / 轻量深度 PTC：工具与技能按需发现、多插件协作、官方兜底、后台可插话。"
-    },
-    {
-      "full_name": "tyvtjhj/system-resource-monitor",
-      "previous": "coding",
-      "current": "web-ui",
-      "desc_now": "一个只在本机运行的轻量硬件看板，也是 DSH 的原生插件。 Flask 在后台采集，前端是零构建的单文件 HTML；DSH 插件提供侧边栏完整面板、 输入框下方实时挂件和 `hardware_monitor_status` 工具。默认只服务本机， 不需要数据库，不向云端发送数据。",
-      "desc_prev": "该项目是一个电脑资源监测项目，目标是实现集合进入dsh，并且也可以正常使用桌面端功能，我只是做整合和适配，项目主体开发为协助者"
-    },
-    {
-      "full_name": "hongdougao111/dsh-bagu",
-      "previous": "other",
-      "current": "notify",
-      "desc_now": "AI 对外说话前的一道门。聊天、评论、邮件、commit、PR、文档、注释都管：过了就发，没过就打回，附一句怎么改。",
-      "desc_prev": "数具体物、撑场面的话、留白词，再算结构腔密度。只读不改写，给坐标不给成品。查一段话里有没有可以指认的机器痕迹。"
-    },
-    {
-      "full_name": "a1249070611/dsh-hoi4-modding",
-      "previous": "other",
       "current": "coding",
-      "desc_now": "DeepSeek Harness skill bundle for HOI4 1.19.3 modding: focus trees, tech-tree UI, tank designer, 3D tank models, DDS icons, scripted GUI/topbar, CJK fonts, 14 bundled Python tools, a 23-workshop-mod survey and an agent-teams playbook. No game assets.",
-      "desc_prev": "DeepSeek Harness skill bundle for Hearts of Iron IV (HOI4) 1.19.3 modding — focus trees, events, decisions, MUI, GUI, DDS, verifier, installer"
-    },
-    {
-      "full_name": "2DogsLee/dsh-watcher",
-      "previous": "agent",
-      "current": "other",
-      "desc_now": "DeepSeek Harness (DSH) 插件 API 面自动比对引擎 + 本地挂载体检 + 升级预告：升级前一条命令看清插件依赖的 API/配置/挂载链路变了没有",
-      "desc_prev": "DeepSeek Harness (DSH) 插件 API 面自动比对引擎：升级前一条命令看清插件依赖的 API/配置字段变了没有 · Auto diff engine for DSH plugin-breaking changes, with CI watch & agent skill"
-    },
-    {
-      "full_name": "martin2026US-lab/dsh-go-siwc",
-      "previous": "other",
-      "current": "conversation",
-      "desc_now": "Preview withdrawn: v0.2.1 rejects valid chat requests. Installation paused; corrected build in local trials.",
-      "desc_prev": "Independent SIWC provider plugin for DSH Go: local OAuth, remembered login and account-scoped Responses."
+      "desc_now": "给 AI coding agent 的项目地图：DSH 插件 / Agent Skill，一条 lookup 直达权威文件，实测 10 次查询导航成本降低 96.7%~99.3%。纯本地、可逆、无遥测。",
+      "desc_prev": "项目地图 Project Map for agent workspaces: AI reaches authoritative files directly instead of brute-force folder scanning. 96.7%~99.3% nav-cost cut, up to 5.8x faster Q&A. DSH plugin + standalone skill."
     }
   ]
 }
