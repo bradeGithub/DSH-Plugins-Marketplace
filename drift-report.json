@@ -1,76 +1,48 @@
 {
-  "generated_at": "2026-11-08T11:53:51.412Z",
-  "count": 10,
+  "generated_at": "2026-11-08T19:30:09.373Z",
+  "count": 6,
   "items": [
     {
-      "full_name": "alchaincyf/nuwa-skill",
-      "previous": "other",
-      "current": "tool",
-      "desc_now": "你想蒸馏的下一个员工，何必是同事。蒸馏任何人的思维方式——心智模型、决策启发式、表达DNA。Distill how anyone thinks.",
-      "desc_prev": "你想蒸馏的下一个员工，何必是同事。蒸馏任何人的思维方式——心智模型、决策启发式、表达DNA。Distill how anyone thinks."
-    },
-    {
-      "full_name": "OrderG-X/dsh-design-studio",
-      "previous": "web-ui",
-      "current": "notify",
-      "desc_now": "DSH 设计工作台：模型画的界面摆上画布，点一下就改，还有设计市场。 · Design canvas for DeepSeek Harness (DSH): web, app, mini program and desktop screens in device frames, click or draw to edit, a design market of templates, export and code handoff (React / Vue / uni-app).",
-      "desc_prev": "DSH 设计工作台：模型画的界面摆上画布，点一下就改。 · Design canvas for DeepSeek Harness (DSH): screens in device frames, click an element to edit it, versions, export, phone preview."
-    },
-    {
-      "full_name": "Pasumao/dsh-plugin-notify",
+      "full_name": "kenz1117/dsh-ui-usage-billing",
       "previous": "notify",
-      "current": "agent",
-      "desc_now": "DeepSeek Harness (dsh) Windows notification plugin: native toast when the agent stops running (finished/aborted/error/waiting for choice/session closed). Zero dependencies, zero build.",
-      "desc_prev": "dsh 生态唯一带系统托盘的 Windows 通知插件：agent 停止运行（完成/出错/等你选择等）自动弹原生 Toast，正文标注「工作区 · 会话」。Windows native toast + system tray for DeepSeek Harness (dsh)."
+      "current": "resource",
+      "desc_now": "Usage billing dashboard plugin for DeepSeek Harness: sidebar cost metrics, real usage aggregation from session logs, current multi-provider pricing catalog",
+      "desc_prev": "Usage billing dashboard plugin for DeepSeek Harness: sidebar cost metrics, real usage aggregation from session logs, current multi-provider pricing catalog"
     },
     {
-      "full_name": "xuzhecomeon/dsh-research-suite",
-      "previous": "coding",
-      "current": "memory",
-      "desc_now": "科研全流程 DSH 插件：识别到科研诉求自动接管，10 个领域技能 + 15 个工具，把 450 条科研技能逐条判定后融合成 103 张能力卡 + 444 条可审计账本；能真跑 R/Python（默认关闭）、生成并审计 docx、真检索 PubMed、逐字段核验 DOI、维护跨会话项目记忆。",
-      "desc_prev": "科研全流程 DSH 插件：识别到科研诉求自动接管，10 个领域技能 + 12 个工具，把 450 条科研技能逐条判定后融合成 103 张能力卡 + 444 条可审计账本，含真跑 R/Python、数据闸门、DOI 核验 5 个执行核验工具。"
-    },
-    {
-      "full_name": "ltmroberthk915/dsh-session-telecom",
+      "full_name": "HaoyanZhang123/dsh-plugin-control-your-development",
       "previous": "tool",
       "current": "resource",
-      "desc_now": "跨目录 / 跨项目的 DSH 会话内置通话：任意两条会话直接收发消息、工具级唤醒、只读查看与用量。",
-      "desc_prev": "跨会话通话：给任意 DSH 会话发消息（下一步直达/开新轮/工具级唤醒），只读查看对方进度与用量。"
+      "desc_now": "Threadline（脉络）—— 通过交互式关系图与时间轴，直观呈现工作区文件之间的关联及其修改历史 | Threadline for DSH — Visualize workspace file relationships and modification history through interactive graphs and timelines.",
+      "desc_prev": "只读地呈现一个 DeepSeek Harness 工作区是怎么长出来的：文件关系星图、轮次带、每轮影响与整段对话重建，不写任何东西。｜A permanent read-only visual map of a DSH workspace: file relations, turn strip, per-turn impact, conversation reconstruction."
     },
     {
-      "full_name": "CarryChang/dsh-ip-studio",
-      "previous": "other",
-      "current": "tool",
-      "desc_now": "DSH 插件：认知差内容工作室——方法论技能 + 确定性提纲生成、稿件红线审查、多平台排版（公众号 · 知乎 · 小红书 · X · 博客），零网络零凭据零依赖 · Perceptive-gap content studio plugin for DeepSeek Harness: writing-methodology skill plus deterministic outline, draft review, and multi-platform formatting; zero network, zero credentials, zero dependencies",
-      "desc_prev": "dsh-ip-studio｜IP 内容工作室（认知差写作）"
-    },
-    {
-      "full_name": "zmd12345/dsh-plugin-thinking-level",
-      "previous": "other",
-      "current": "conversation",
-      "desc_now": "Judges the right reasoning level locally from the current draft and recent turns and switches it in one click; nudges a new session when the conversation grows long — less overthinking on simple tasks, enough reasoning on hard ones.",
-      "desc_prev": "Suggests the right thinking level for the current DSH draft and switches it in one click — less overthinking on simple tasks, enough reasoning on hard ones."
-    },
-    {
-      "full_name": "yoletPig/dsh-plugin-rapidspeech",
-      "previous": "other",
-      "current": "conversation",
-      "desc_now": "Local, offline speech-to-text for the DeepSeek Harness (dsh). Click the microphone in the composer, speak, and the recognized text is inserted into your draft — transcribed by a RapidSpeech.cpp rs-server running on your own machine. Audio never leaves your computer.",
-      "desc_prev": "DeepSeek Harness（dsh）语音输入的本地 RapidSpeech.cpp ASR Provider 插件。录音结束后，音频经 Host 侧 Provider 调用本机 RapidSpeech.cpp 的 rs-server（OpenAI 兼容 HTTP 接口）完成离线转写，并把文本插入编辑框草稿——音频不出本机。"
-    },
-    {
-      "full_name": "PerryLink/dsh-lawcite-adapter",
-      "previous": "other",
-      "current": "tool",
-      "desc_now": "给律师/法务：核对法条（法律条文）引用的名称、条号、原文与效力状态，覆盖起诉状/代理词等文书。 Legal citation check for statutes.",
-      "desc_prev": "DeepSeek Harness 插件 — 法条引用核对：按本机构口径，无公开标准可引。仅提示差异，不作出定性结论。"
-    },
-    {
-      "full_name": "wodaimnd/dsh-forge",
+      "full_name": "XHR666/dsh-mpkg-wallpaper",
       "previous": "resource",
-      "current": "other",
-      "desc_now": "Plugin forge",
-      "desc_prev": "Creator 插件闭环：装前静态体检、Skill 目录诊断、装后复验与 rollback 账本。"
+      "current": "web-ui",
+      "desc_now": "DeepSeek Harness (DSH) 壁纸与界面外观插件：支持 Wallpaper Engine .mpkg、Steam 创意工坊、视频/网页/场景壁纸；整屏磨砂、透明表面与主题色；侧栏/标题栏可切换为悬浮岛（Floating Island）卡片。插件本体 MIT，内置渲染器 GPL-3.0-or-later。",
+      "desc_prev": "DSH 插件：把 Wallpaper Engine 的 .mpkg / 创意工坊目录作为网页背景（视频/网页/场景壁纸）。渲染器产品名 WEwebLoader。"
+    },
+    {
+      "full_name": "hoyyang/dsh-concise",
+      "previous": "conversation",
+      "current": "tool",
+      "desc_now": "Concise output style for dsh: per-session toggle + digest card with clickable files. 简洁输出、每轮附摘要卡、路径可点。",
+      "desc_prev": "One-click Concise output style for DeepSeek Harness (dsh): per-session toggle + plain-language digest card on every reply. 结果先行、少废话，每轮回答开头附「摘要」卡，划选即复制。"
+    },
+    {
+      "full_name": "hui-xu-ai/wensu",
+      "previous": "memory",
+      "current": "tool",
+      "desc_now": "文溯 · wensu   为Codex、DeepSeek Harness等提供文献自动检索 MCP 服务：微内核 + 渠道插件（支持知网/Web of Science文献检索），不下载全文、不做第三方入库。",
+      "desc_prev": "文溯 · wensu   为Codex、DeepSeek Harness等提供中文文献自动检索 MCP 服务：微内核 + 渠道插件（支持知网文献检索），不下载全文、不做第三方入库。"
+    },
+    {
+      "full_name": "evolution301/agent-control-tower",
+      "previous": "agent",
+      "current": "tool",
+      "desc_now": "Local control tower for AI-agent teams: async dispatch, a mandatory self-review gate, adversarial review (break-it-prove-it), verified acceptance, compounding skills — CLI + DSH plugin + a live isometric dashboard.",
+      "desc_prev": "A local control tower: dispatch tasks to DSH role sessions, verify their reports, accept or rework. DSH-first, adapter-portable."
     }
   ]
 }
