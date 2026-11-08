@@ -1,34 +1,41 @@
 {
-  "generated_at": "2026-11-08T00:18:49.304Z",
-  "count": 4,
+  "generated_at": "2026-11-08T05:39:35.182Z",
+  "count": 5,
   "items": [
     {
-      "full_name": "lishize20040802-rgb/dsh-deep-ptc-mode",
-      "previous": "agent",
-      "current": "web-ui",
-      "desc_now": "Deep PTC mode for DSH: fixes reporting, asking, reachability, planning and context/token use; plugin-first with official PTC fallback, dynamic preset/tool loading, creative lab, dsh-go screen control and dsh-ops-tested external-tool adaptation.",
-      "desc_prev": "Lightweight adaptive Deep PTC: live host presets, plugin cooperation and interruptible jobs. / 轻量自适配深度 PTC：动态宿主预设、插件协作与官方兜底、后台可插话。"
-    },
-    {
-      "full_name": "TYEclipse/dsh-chem",
+      "full_name": "ltmroberthk915/dsh-session-telecom",
       "previous": "other",
       "current": "tool",
-      "desc_now": "Deterministic chemistry math for DeepSeek Harness: molar mass, mole conversions, solutions, pH/buffers, exact-rational balancing, limiting reagents, empirical/molecular formulas from elemental analysis and weak acid/base equilibrium — zero runtime dependencies",
-      "desc_prev": "Deterministic chemistry math for DeepSeek Harness: formula parsing + molar mass, mass/mole/particle conversions, solution concentration, pH math, exact integer equation balancing (charge-conserving) and ideal-gas arithmetic — zero runtime dependencies"
+      "desc_now": "跨会话通话：给任意 DSH 会话发消息（下一步直达/开新轮/工具级唤醒），只读查看对方进度与用量。",
+      "desc_prev": "DeepSeek Harness session communication without vendored runtime dependencies"
     },
     {
-      "full_name": "2869949486/dsh-opencode-routing",
-      "previous": "tool",
-      "current": "web-ui",
-      "desc_now": "dsh plugin: OpenCode Go control panel - account pool with automatic failover, quota routing that falls back to a DeepSeek official subscription on upstream limits and returns after 10 stable minutes, a current-route banner, upstream status with error codes, and a per-model usage dashboard (10 languages)",
-      "desc_prev": "dsh plugin: OpenCode account pool with automatic failover, quota routing and a per-model usage dashboard in one Settings page (merged from dsh-opencode-quota-router + dsh-opencode-usage-settings)"
+      "full_name": "yuna78/dsh-deck-studio",
+      "previous": "other",
+      "current": "vision",
+      "desc_now": "Deckline · turn a chat into a PPT: image-deck workbench plugin for DeepSeek Harness (DSH). Storyboard, per-page AI image generation with revisions, 8 design styles, fullscreen playback, PDF/PPTX export. 用对话做 PPT。",
+      "desc_prev": null
     },
     {
-      "full_name": "Artenx/dsh-monkeyai-sessions",
+      "full_name": "xuzhecomeon/dsh-research-suite",
       "previous": "tool",
-      "current": "conversation",
-      "desc_now": "Read and continue your MonkeyAI conversations inside DeepSeek Harness: browse session history and send new instructions to pick up where you left off in the MonkeyAI client",
-      "desc_prev": "DeepSeek Harness plugin for MonkeyAI remote sessions: full history, live prompts, stop & model switching"
+      "current": "coding",
+      "desc_now": "科研全流程 DSH 插件：识别到科研诉求自动接管，10 个领域技能 + 12 个工具，把 450 条科研技能逐条判定后融合成 103 张能力卡 + 444 条可审计账本，含真跑 R/Python、数据闸门、DOI 核验 5 个执行核验工具。",
+      "desc_prev": "科研全流程 DSH 插件：识别到科研诉求自动接管，10 个领域技能 + 7 个工具，把 592 个科研技能逐条判定后融合成 103 张能力卡 + 586 条可审计账本。"
+    },
+    {
+      "full_name": "MoonSand/dsh-ui-optimize",
+      "previous": "web-ui",
+      "current": "coding",
+      "desc_now": "Switches that tune how DSH looks and behaves across the whole interface — each one independent, more coming as the shell grows. Theme gallery plus sidebar panel folding, with reload/restart actions at the sidebar foot. · 调 DSH 整体观感与操作的开关集合，各自独立、持续增加：主题画廊 + 侧栏面板收纳，侧栏底部另有刷新/重启按钮。",
+      "desc_prev": "Minimalist theme gallery (8 themes, one palette per scheme) plus desktop Reload/Restart actions for the DeepSeek Harness web interface - two features, each with its own switch. · DSH 界面优化：8 套极简主题（浅色与深色各一组配色）+ 侧栏底部的刷新/重启按钮，两个功能各有独立开关。"
+    },
+    {
+      "full_name": "a5899/dsh-powershell",
+      "previous": "agent",
+      "current": "tool",
+      "desc_now": "DSH plugin: run PowerShell commands directly from the agent (inline code, no script files) with an explicit UAC-elevated tool, live streamed output, and an always-on 'prefer commands over scripts' policy.",
+      "desc_prev": "DSH plugin: run PowerShell commands directly from the agent with UAC-elevated mode, live output, and a command-first policy."
     }
   ]
 }
