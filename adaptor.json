@@ -14,8 +14,36 @@
         "stargazers_count": 1,
         "updated_at": "2026-08-14T00:00:00.000Z",
         "default_branch": "main",
-        "topics": ["dsh-plugin", "museai", "deepseek-harness"],
+        "topics": [
+          "dsh-plugin",
+          "museai",
+          "deepseek-harness"
+        ],
         "license": "MIT"
+      }
+    },
+    {
+      "from": "Fishsb/dsh-prompt-enhancer",
+      "to": "Fishsb/dsh-voice-prompt-enhancer",
+      "reason": "仓库与 npm 包已整体改名为 dsh-voice-prompt-enhancer（原 dsh-prompt-enhancer 的 npm 名已被他人占用）。GitHub 会把旧仓库地址重定向到新仓库，于是 topic 扫描同时收到新旧两条记录：旧条目的描述与版本已过期（描述里\"语音输入插件功能增强\"、\"一键重启\"都不成立），且 npm 版本显示成 0.0.0-stage。重定向到新条目，避免重复展示与错误信息。",
+      "meta": {
+        "full_name": "Fishsb/dsh-voice-prompt-enhancer",
+        "name": "dsh-voice-prompt-enhancer",
+        "description": "DeepSeek-Harness (DSH) 插件：✨ 提示词一键增强（5 模式·模型链·记忆链）+ 💬 语音输入增强（热键·说完自动停·口水词清理·语音纠错），识别由官方 speechToText 提供，插件不自带引擎",
+        "html_url": "https://github.com/Fishsb/dsh-voice-prompt-enhancer",
+        "stargazers_count": 121,
+        "updated_at": "2026-11-05T00:00:00.000Z",
+        "default_branch": "main",
+        "topics": [
+          "deepseek",
+          "deepseek-harness",
+          "dsh-plugin",
+          "dsh",
+          "prompt-enhancement",
+          "voice-input",
+          "speech-to-text"
+        ],
+        "license": "Apache-2.0"
       }
     }
   ],
