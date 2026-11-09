@@ -1,13 +1,55 @@
 {
-  "generated_at": "2026-11-09T00:10:22.986Z",
-  "count": 1,
+  "generated_at": "2026-11-09T05:51:47.161Z",
+  "count": 7,
   "items": [
     {
-      "full_name": "BrianHIO-x/dsh-think-expand",
+      "full_name": "eee1723/dsh-houdini",
       "previous": "other",
+      "current": "tool",
+      "desc_now": "DeepSeek Harness Desktop 插件，让 AI Agent 用自然语言构建、检查和维护可编辑的 SideFX Houdini 工程，支持程序化建模、HDA、场景诊断与渲染。 | A DeepSeek Harness Desktop plugin that lets AI agents build, inspect, and maintain editable SideFX Houdini projects with natural language, including procedural modeling, HDAs, scene diagnostics, and rendering.",
+      "desc_prev": "deepseek harness plugin for houdini. ai agnet for houdini"
+    },
+    {
+      "full_name": "Burns1028/moa-plus",
+      "previous": "agent",
+      "current": "memory",
+      "desc_now": "Building a Mixture of Agents system for DeepSeek Harness: persistent agents, shared knowledge, direct communication and independent review.",
+      "desc_prev": "MoA+ — Advancing intelligence through multi-agent collaboration. Building a Mixture of Agents system; currently an unofficial DeepSeek Harness rc.3 preview."
+    },
+    {
+      "full_name": "liang-today/dsh-liangxiang",
+      "previous": "web-ui",
       "current": "conversation",
-      "desc_now": "DSH Web 插件：手动点开的 Think 不再被自动收起，并提供每会话一键展开或收起全部 Think 的开关。/ DSH Web plugin: Think rows you open by hand stay open, plus a per-session switch to open or close every Think row.",
-      "desc_prev": "DeepSeek Harness plugin that auto-expands Think rows while reasoning"
+      "desc_now": "梁股开盘了！梁相是DeepSeek Harness插件：对话攒香火，夯拉定梁位；早午晚三盘做多做空，午夜揭晓，在线香火与收益跨日保留。",
+      "desc_prev": "众香成势，梁子显相。DeepSeek Harness 的 WebUI 插件，欢迎一起打梁。"
+    },
+    {
+      "full_name": "ccccty/proposal-generator-cn",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "项目书生成 - 军工/国家级科研项目申报书撰写技能包（DSH plugin）：文体铁律、七步工作流（末道 humanizer 去 AI 味）、自检/转换/复查工具链",
+      "desc_prev": "项目书生成 - 科研项目申报书撰写技能包（DSH plugin）"
+    },
+    {
+      "full_name": "stjq12/dsh-remote-control",
+      "previous": "tool",
+      "current": "web-ui",
+      "desc_now": "在原生界面中，使用另一台电脑的DeepSeek Harness实例，控件和功能保留完整。",
+      "desc_prev": "Two-way remote control for DeepSeek Harness"
+    },
+    {
+      "full_name": "liangdabiao/dsh-seekmoney",
+      "previous": "other",
+      "current": "resource",
+      "desc_now": "dsh-seekmoney · 用户痛点发现器 DeepSeek Harness（dsh）插件：从社交媒体找商机，发现用户核心痛点——5 阶段流程（多平台采集 → 语义聚类 → 深度分析 → 优先级评分 → MVP 计划）+ 确定性优先级评分系统（需求 40% + 市场 30% + 竞争 30%）。 Pain point finder dsh plugin: 5-stage methodology + deterministic priority scoring",
+      "desc_prev": "Pain point finder dsh plugin: 5-stage methodology + deterministic priority scoring"
+    },
+    {
+      "full_name": "wodaimnd/multi-platform-releaser",
+      "previous": "coding",
+      "current": "other",
+      "desc_now": "Multi-forge publishing for local DSH plugins",
+      "desc_prev": "Multi-forge publishing for local DSH plugins: tick any of GitHub / Gitee / Codeberg plus npm, fill the metadata once, then create every repository, push the same commit to each remote, tag, Release and npm publish from a single button. · 多代码平台发布插件：一键把本地 DSH 插件同时发布到 GitHub / Gitee / Codeberg / npm——同一个 commit 推到每个远端，各自建仓、各自发 Release；每个平台用自己账号的令牌，某个…"
     }
   ]
 }
