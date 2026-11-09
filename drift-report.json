@@ -1,48 +1,13 @@
 {
-  "generated_at": "2026-11-08T19:30:09.373Z",
-  "count": 6,
+  "generated_at": "2026-11-09T00:10:22.986Z",
+  "count": 1,
   "items": [
     {
-      "full_name": "kenz1117/dsh-ui-usage-billing",
-      "previous": "notify",
-      "current": "resource",
-      "desc_now": "Usage billing dashboard plugin for DeepSeek Harness: sidebar cost metrics, real usage aggregation from session logs, current multi-provider pricing catalog",
-      "desc_prev": "Usage billing dashboard plugin for DeepSeek Harness: sidebar cost metrics, real usage aggregation from session logs, current multi-provider pricing catalog"
-    },
-    {
-      "full_name": "HaoyanZhang123/dsh-plugin-control-your-development",
-      "previous": "tool",
-      "current": "resource",
-      "desc_now": "Threadline（脉络）—— 通过交互式关系图与时间轴，直观呈现工作区文件之间的关联及其修改历史 | Threadline for DSH — Visualize workspace file relationships and modification history through interactive graphs and timelines.",
-      "desc_prev": "只读地呈现一个 DeepSeek Harness 工作区是怎么长出来的：文件关系星图、轮次带、每轮影响与整段对话重建，不写任何东西。｜A permanent read-only visual map of a DSH workspace: file relations, turn strip, per-turn impact, conversation reconstruction."
-    },
-    {
-      "full_name": "XHR666/dsh-mpkg-wallpaper",
-      "previous": "resource",
-      "current": "web-ui",
-      "desc_now": "DeepSeek Harness (DSH) 壁纸与界面外观插件：支持 Wallpaper Engine .mpkg、Steam 创意工坊、视频/网页/场景壁纸；整屏磨砂、透明表面与主题色；侧栏/标题栏可切换为悬浮岛（Floating Island）卡片。插件本体 MIT，内置渲染器 GPL-3.0-or-later。",
-      "desc_prev": "DSH 插件：把 Wallpaper Engine 的 .mpkg / 创意工坊目录作为网页背景（视频/网页/场景壁纸）。渲染器产品名 WEwebLoader。"
-    },
-    {
-      "full_name": "hoyyang/dsh-concise",
-      "previous": "conversation",
-      "current": "tool",
-      "desc_now": "Concise output style for dsh: per-session toggle + digest card with clickable files. 简洁输出、每轮附摘要卡、路径可点。",
-      "desc_prev": "One-click Concise output style for DeepSeek Harness (dsh): per-session toggle + plain-language digest card on every reply. 结果先行、少废话，每轮回答开头附「摘要」卡，划选即复制。"
-    },
-    {
-      "full_name": "hui-xu-ai/wensu",
-      "previous": "memory",
-      "current": "tool",
-      "desc_now": "文溯 · wensu   为Codex、DeepSeek Harness等提供文献自动检索 MCP 服务：微内核 + 渠道插件（支持知网/Web of Science文献检索），不下载全文、不做第三方入库。",
-      "desc_prev": "文溯 · wensu   为Codex、DeepSeek Harness等提供中文文献自动检索 MCP 服务：微内核 + 渠道插件（支持知网文献检索），不下载全文、不做第三方入库。"
-    },
-    {
-      "full_name": "evolution301/agent-control-tower",
-      "previous": "agent",
-      "current": "tool",
-      "desc_now": "Local control tower for AI-agent teams: async dispatch, a mandatory self-review gate, adversarial review (break-it-prove-it), verified acceptance, compounding skills — CLI + DSH plugin + a live isometric dashboard.",
-      "desc_prev": "A local control tower: dispatch tasks to DSH role sessions, verify their reports, accept or rework. DSH-first, adapter-portable."
+      "full_name": "BrianHIO-x/dsh-think-expand",
+      "previous": "other",
+      "current": "conversation",
+      "desc_now": "DSH Web 插件：手动点开的 Think 不再被自动收起，并提供每会话一键展开或收起全部 Think 的开关。/ DSH Web plugin: Think rows you open by hand stay open, plus a per-session switch to open or close every Think row.",
+      "desc_prev": "DeepSeek Harness plugin that auto-expands Think rows while reasoning"
     }
   ]
 }
