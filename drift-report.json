@@ -1,55 +1,83 @@
 {
-  "generated_at": "2026-11-09T05:51:47.161Z",
-  "count": 7,
+  "generated_at": "2026-11-09T14:29:23.185Z",
+  "count": 11,
   "items": [
     {
-      "full_name": "eee1723/dsh-houdini",
-      "previous": "other",
-      "current": "tool",
-      "desc_now": "DeepSeek Harness Desktop 插件，让 AI Agent 用自然语言构建、检查和维护可编辑的 SideFX Houdini 工程，支持程序化建模、HDA、场景诊断与渲染。 | A DeepSeek Harness Desktop plugin that lets AI agents build, inspect, and maintain editable SideFX Houdini projects with natural language, including procedural modeling, HDAs, scene diagnostics, and rendering.",
-      "desc_prev": "deepseek harness plugin for houdini. ai agnet for houdini"
-    },
-    {
-      "full_name": "Burns1028/moa-plus",
-      "previous": "agent",
+      "full_name": "hoyyang/dsh-smart-compact",
+      "previous": "model",
       "current": "memory",
-      "desc_now": "Building a Mixture of Agents system for DeepSeek Harness: persistent agents, shared knowledge, direct communication and independent review.",
-      "desc_prev": "MoA+ — Advancing intelligence through multi-agent collaboration. Building a Mixture of Agents system; currently an unofficial DeepSeek Harness rc.3 preview."
+      "desc_now": "Context window auto-management for DeepSeek Harness: lossless zero-model rollover, budget reminders, notes.",
+      "desc_prev": "Codex-style context window auto-management for DeepSeek Harness — lossless zero-model context rollover"
     },
     {
-      "full_name": "liang-today/dsh-liangxiang",
-      "previous": "web-ui",
-      "current": "conversation",
-      "desc_now": "梁股开盘了！梁相是DeepSeek Harness插件：对话攒香火，夯拉定梁位；早午晚三盘做多做空，午夜揭晓，在线香火与收益跨日保留。",
-      "desc_prev": "众香成势，梁子显相。DeepSeek Harness 的 WebUI 插件，欢迎一起打梁。"
+      "full_name": "corvus-dsh/dsh-paradise",
+      "previous": "other",
+      "current": "agent",
+      "desc_now": null,
+      "desc_prev": null
     },
     {
-      "full_name": "ccccty/proposal-generator-cn",
+      "full_name": "corvus-dsh/dsh-observer",
+      "previous": "other",
+      "current": "agent",
+      "desc_now": null,
+      "desc_prev": null
+    },
+    {
+      "full_name": "xkzdwb/DSH-UseWebDeepseek-WhenEasyWork",
       "previous": "other",
       "current": "tool",
-      "desc_now": "项目书生成 - 军工/国家级科研项目申报书撰写技能包（DSH plugin）：文体铁律、七步工作流（末道 humanizer 去 AI 味）、自检/转换/复查工具链",
-      "desc_prev": "项目书生成 - 科研项目申报书撰写技能包（DSH plugin）"
+      "desc_now": "让 DSH 的轻量问题走 chat.deepseek.com 网页端的插件：真实浏览器 + 零依赖 CDP，注册成 ask_deepseek_web 工具",
+      "desc_prev": null
     },
     {
-      "full_name": "stjq12/dsh-remote-control",
-      "previous": "tool",
-      "current": "web-ui",
-      "desc_now": "在原生界面中，使用另一台电脑的DeepSeek Harness实例，控件和功能保留完整。",
-      "desc_prev": "Two-way remote control for DeepSeek Harness"
-    },
-    {
-      "full_name": "liangdabiao/dsh-seekmoney",
+      "full_name": "Selenium39/dsh-bpmn",
       "previous": "other",
-      "current": "resource",
-      "desc_now": "dsh-seekmoney · 用户痛点发现器 DeepSeek Harness（dsh）插件：从社交媒体找商机，发现用户核心痛点——5 阶段流程（多平台采集 → 语义聚类 → 深度分析 → 优先级评分 → MVP 计划）+ 确定性优先级评分系统（需求 40% + 市场 30% + 竞争 30%）。 Pain point finder dsh plugin: 5-stage methodology + deterministic priority scoring",
-      "desc_prev": "Pain point finder dsh plugin: 5-stage methodology + deterministic priority scoring"
+      "current": "web-ui",
+      "desc_now": "BPMN 2.0 visual modeler plugin for DeepSeek Harness (DSH) — a bpmn-js powered workbench panel inside the DSH Web GUI, with workspace file scan / edit / atomic save via loopback RPC.",
+      "desc_prev": null
     },
     {
-      "full_name": "wodaimnd/multi-platform-releaser",
-      "previous": "coding",
-      "current": "other",
-      "desc_now": "Multi-forge publishing for local DSH plugins",
-      "desc_prev": "Multi-forge publishing for local DSH plugins: tick any of GitHub / Gitee / Codeberg plus npm, fill the metadata once, then create every repository, push the same commit to each remote, tag, Release and npm publish from a single button. · 多代码平台发布插件：一键把本地 DSH 插件同时发布到 GitHub / Gitee / Codeberg / npm——同一个 commit 推到每个远端，各自建仓、各自发 Release；每个平台用自己账号的令牌，某个…"
+      "full_name": "Leo-sail/dsh-plugin-agent-collaboration",
+      "previous": "agent",
+      "current": "conversation",
+      "desc_now": "Bots 团队 for DeepSeek Harness (DSH): persistent Bots, group rooms, leader triage, shared experience and durable runs — an installable DSH plugin.",
+      "desc_prev": "Persistent Bots, group rooms and a durable run ledger for DeepSeek Harness (DSH) — an installable DSH plugin."
+    },
+    {
+      "full_name": "Gaudi-XIX/dsh-pocket-glide",
+      "previous": "tool",
+      "current": "notify",
+      "desc_now": "DSH 的手机接入层：人离开电脑，长任务照样往前走——微信提醒点链接直达、秒开跟手，发送、流式、审批、排队全闭环，手机上还能直接管 DS Bot 团队。它跑在宿主进程里，不把桌面投到手机：没有构建步骤，只有一个运行时依赖；局域网直连，Cloudflare 临时隧道重启自愈回连。",
+      "desc_prev": "Pocket DSH Glide — a deliberately small, touch-first phone plugin for a running DSH host: pair by QR/PIN, read sessions and history, send messages, stream replies, approve tool permissions. Runs inside the host process, not as a desktop mirror: no build step, one runtime dependency, LAN listener plus an optional Cloudflare quick tunnel."
+    },
+    {
+      "full_name": "dingchenhui0618-arch/dsh-pua-receipt",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "给 DeepSeek Harness 的 /pua 加回执：对比施压前后各 N 轮工具调用与验证步骤，判定「改了做法 / 只是重述 / 无变化」",
+      "desc_prev": null
+    },
+    {
+      "full_name": "liangdabiao/dsh-xhs-validator",
+      "previous": "tool",
+      "current": "memory",
+      "desc_now": "dsh-xhs-validator · 小红书商业验证 DeepSeek Harness（dsh）插件：小红书商业创意验证——5 阶段流程（关键词生成 → 数据抓取 → 痛点分析 → 竞争分析 → 验证报告）+ TikHub API 工具获取真实笔记与评论数据。XHS business validation dsh plugin: 5-stage methodology + TikHub API tools",
+      "desc_prev": "XHS business validation dsh plugin: 5-stage methodology + TikHub API tools"
+    },
+    {
+      "full_name": "liangdabiao/dsh-ecom-video-seedance",
+      "previous": "other",
+      "current": "conversation",
+      "desc_now": "dsh-ecom-video-seedance · 带货视频拆解  DeepSeek Harness（dsh）插件：**带货视频反向拆解与 Seedance 复刻提示词生成**——把带货爆款视频\"看懂\"（拆成镜头卡片），\"翻译\"成即梦（Seedance）能直接执行的提示词。支持忠实复刻/自然流/付费流三种风格。 侧栏是「带货视频拆解」工作台（布局对齐「投资尽调」）：概览 / 我的分镜 / 生成历史 / 拆解·创作 / S-A-C-S-C 规范。.Ecom video seedance dsh plugin",
+      "desc_prev": "Ecom video seedance dsh plugin"
+    },
+    {
+      "full_name": "aoilang/dsh-english-cards",
+      "previous": "other",
+      "current": "agent",
+      "desc_now": "Save English learning cards while interacting with DeepSeek Harness. 在DeepSeek Harness里使用英文时，自动保存英语学习卡片，利用和Agent的日常交互提高英语。",
+      "desc_prev": "Save English learning cards while interacting with DeepSeek Harness. 在使用DeepSeek Harness时自动保存英语学习卡片"
     }
   ]
 }
