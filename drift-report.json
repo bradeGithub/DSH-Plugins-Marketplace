@@ -1,13 +1,55 @@
 {
-  "generated_at": "2026-11-10T23:27:53.807Z",
-  "count": 1,
+  "generated_at": "2026-11-11T05:52:18.740Z",
+  "count": 7,
   "items": [
     {
-      "full_name": "WaterDJiang/wtt-dsh-plugin",
+      "full_name": "Alice-Marx/dsh-model-router",
+      "previous": "web-ui",
+      "current": "other",
+      "desc_now": "Model Router and Bot plugin for DeepSeek Harness",
+      "desc_prev": "Model Router and GALGame plugin for DeepSeek Harness"
+    },
+    {
+      "full_name": "taxueseek/argo",
       "previous": "resource",
       "current": "tool",
-      "desc_now": "DeepSeek Harness 的开源 AI 创作画布。整理项目资料、引用卡片与文件、调用本机 Skill，并管理创作成果和版本。",
-      "desc_prev": "WTT 的 DeepSeek Harness（DSH）插件合集：自由创作画布、课程制作等工作流"
+      "desc_now": "Multi-engine search and deep research for AI agents across 300+ sources, 18 languages, and MCP / CLI.",
+      "desc_prev": "专门为 agent 打造的开源 agent 搜索工具，具备 300的搜索源及多语言搜索能力，覆盖中文/英文/学术/代码/购物/金融/新闻/百科。"
+    },
+    {
+      "full_name": "ruisenbai/dsh-annotation",
+      "previous": "tool",
+      "current": "coding",
+      "desc_now": "在主会话或侧栏选中文字即可添加注解，编辑框跟随原文。也可以标注文件和代码差异，将多条注解随消息发送，再从注解记录跳回出处。",
+      "desc_prev": "Select text in replies, diffs, or files → annotate → send with a message; replies address each annotation in order, with source navigation for easy reference."
+    },
+    {
+      "full_name": "Panther-w/dsh-opencode-go-usage-badge",
+      "previous": "notify",
+      "current": "web-ui",
+      "desc_now": "一个安静无感的 DSH 一行小徽标：看 OpenCode Go 额度，切到 DeepSeek 官方模型自动显示余额。无需设置，安静运行。 A quiet, one-line DSH sidebar badge for OpenCode Go quota, switching to the DeepSeek official balance. No setup; it just runs quietly.",
+      "desc_prev": "轻量级 DSH 侧栏徽标：监控 OpenCode Go 的 5 小时、周、月额度，也支持 DeepSeek 官方余额；随当前对话的模型来源自动在额度与余额之间切换。简洁不占空间、只读安全、低额度变色提醒。 A lightweight DSH sidebar badge for OpenCode Go quota (5-hour, weekly, monthly) with DeepSeek official balance; follows the current conversation's model source, read-only, low-quota color warnings."
+    },
+    {
+      "full_name": "goatliamia/trajectory-tree",
+      "previous": "tool",
+      "current": "agent",
+      "desc_now": "Visualize real agent traces, explore Eval metrics, and build reports with linked evidence across Codex, Claude Code, Pi, and DSH.",
+      "desc_prev": "Visualize and diagnose agent trajectories across DSH, Pi and Codex: execution paths, context composition, tool use and evidence-based analysis."
+    },
+    {
+      "full_name": "Zevin-Labs/task-workbench",
+      "previous": "conversation",
+      "current": "other",
+      "desc_now": "DeepSeek Harness 本机任务工作台：任务、想法池与日/周/月复盘。数据只留在本地 SQLite，AI 帮整理，人来确认。",
+      "desc_prev": "Local-first task workbench for DeepSeek Harness: today/week/all-task views, idea pool, and daily/weekly/monthly reviews. Humans and agents share one write path."
+    },
+    {
+      "full_name": "cfour-hi/dsh-plugin-devicex",
+      "previous": "web-ui",
+      "current": "other",
+      "desc_now": "能够查看当前设备一切信息的 DSH 插件，支持 Mac 和 WIndows 系统。",
+      "desc_prev": "一个持久化的 DSH 插件：用一页优雅的中文/英文界面看尽当前设备的一切——硬件、系统、软件、 网络、安全与权限、进程——并对非硬件的一切直接操作（结束进程、退出/启动/卸载应用、启停登录项、 修改主机名/音量/深色模式、开关 Wi-Fi/防火墙、设置 DNS、卸载 Homebrew 包、清空废纸篓、睡眠/锁定、 跳转系统设置……）。同一套操作同时暴露给 Agent 模型，作为 device_info / device_control 两个工具。"
     }
   ]
 }
