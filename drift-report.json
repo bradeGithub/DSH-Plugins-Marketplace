@@ -1,55 +1,55 @@
 {
-  "generated_at": "2026-11-11T05:52:18.740Z",
+  "generated_at": "2026-11-11T13:43:53.515Z",
   "count": 7,
   "items": [
     {
-      "full_name": "Alice-Marx/dsh-model-router",
-      "previous": "web-ui",
-      "current": "other",
-      "desc_now": "Model Router and Bot plugin for DeepSeek Harness",
-      "desc_prev": "Model Router and GALGame plugin for DeepSeek Harness"
+      "full_name": "regrevia/Envoy",
+      "previous": "tool",
+      "current": "document",
+      "desc_now": "把链接分享给你的 AI：提取网页、视频与本地媒体中的可追溯材料。 / Share links with your AI: extract traceable material from web pages, videos, and local media.",
+      "desc_prev": "把链接分享给你的 AI：提取网页、视频与本地媒体中的可追溯材料。 / Share links with your AI: extract traceable material from web pages, videos, and local media."
     },
     {
-      "full_name": "taxueseek/argo",
-      "previous": "resource",
+      "full_name": "EnderDAG/dsh-quote-archive",
+      "previous": "memory",
       "current": "tool",
-      "desc_now": "Multi-engine search and deep research for AI agents across 300+ sources, 18 languages, and MCP / CLI.",
-      "desc_prev": "专门为 agent 打造的开源 agent 搜索工具，具备 300的搜索源及多语言搜索能力，覆盖中文/英文/学术/代码/购物/金融/新闻/百科。"
+      "desc_now": "Local group-chat quote archive for DeepSeek Harness: an agent-callable quote tool plus the full AstrBot management page (library, statistics, insights, trash, people, collections, collaboration); optional SnowLuma / OneBot v11 QQ channel. Node.js 22.13+.",
+      "desc_prev": "Archive, search, and recall group-chat quotes in DeepSeek Harness with a local SQLite library, a SnowLuma / OneBot v11 QQ channel, and the original AstrBot management page."
     },
     {
-      "full_name": "ruisenbai/dsh-annotation",
+      "full_name": "pomelotea-yuzu/dsh-cona",
       "previous": "tool",
       "current": "coding",
-      "desc_now": "在主会话或侧栏选中文字即可添加注解，编辑框跟随原文。也可以标注文件和代码差异，将多条注解随消息发送，再从注解记录跳回出处。",
-      "desc_prev": "Select text in replies, diffs, or files → annotate → send with a message; replies address each annotation in order, with source navigation for easy reference."
+      "desc_now": "A project development management plugin for DeepSeek Harness (DSH), connecting research, planning, coding, and validation through customizable project trees, ongoing analysis, cross-chat continuity, and optional spec-driven workflows. Currently in the design phase.",
+      "desc_prev": "Scaffold for a planned DeepSeek Harness (DSH) plugin: checkpoints, controlled delivery and file rollback. Spun off from the sealed Cona prototype — plain Node ESM, cross-platform, no in-house sandbox. Currently docs, specs and repository gates only; no plugin code yet. MIT."
     },
     {
-      "full_name": "Panther-w/dsh-opencode-go-usage-badge",
-      "previous": "notify",
-      "current": "web-ui",
-      "desc_now": "一个安静无感的 DSH 一行小徽标：看 OpenCode Go 额度，切到 DeepSeek 官方模型自动显示余额。无需设置，安静运行。 A quiet, one-line DSH sidebar badge for OpenCode Go quota, switching to the DeepSeek official balance. No setup; it just runs quietly.",
-      "desc_prev": "轻量级 DSH 侧栏徽标：监控 OpenCode Go 的 5 小时、周、月额度，也支持 DeepSeek 官方余额；随当前对话的模型来源自动在额度与余额之间切换。简洁不占空间、只读安全、低额度变色提醒。 A lightweight DSH sidebar badge for OpenCode Go quota (5-hour, weekly, monthly) with DeepSeek official balance; follows the current conversation's model source, read-only, low-quota color warnings."
-    },
-    {
-      "full_name": "goatliamia/trajectory-tree",
-      "previous": "tool",
+      "full_name": "xyzzing/dsh-minder-hooks",
+      "previous": "other",
       "current": "agent",
-      "desc_now": "Visualize real agent traces, explore Eval metrics, and build reports with linked evidence across Codex, Claude Code, Pi, and DSH.",
-      "desc_prev": "Visualize and diagnose agent trajectories across DSH, Pi and Codex: execution paths, context composition, tool use and evidence-based analysis."
+      "desc_now": "Capture-first hooks for DeepSeek Harness (dsh): a local, human-readable record of what your AI agent actually did.",
+      "desc_prev": null
     },
     {
-      "full_name": "Zevin-Labs/task-workbench",
-      "previous": "conversation",
-      "current": "other",
-      "desc_now": "DeepSeek Harness 本机任务工作台：任务、想法池与日/周/月复盘。数据只留在本地 SQLite，AI 帮整理，人来确认。",
-      "desc_prev": "Local-first task workbench for DeepSeek Harness: today/week/all-task views, idea pool, and daily/weekly/monthly reviews. Humans and agents share one write path."
+      "full_name": "zhuifengqug/dsh-ant",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "玄驹：DeepSeek Harness 的多智能体团队插件（AgentTeams 分支版）。一句话组队，队长派活、队员并行、依赖自动调度，全中文任务与全中文协议。",
+      "desc_prev": null
     },
     {
-      "full_name": "cfour-hi/dsh-plugin-devicex",
-      "previous": "web-ui",
-      "current": "other",
-      "desc_now": "能够查看当前设备一切信息的 DSH 插件，支持 Mac 和 WIndows 系统。",
-      "desc_prev": "一个持久化的 DSH 插件：用一页优雅的中文/英文界面看尽当前设备的一切——硬件、系统、软件、 网络、安全与权限、进程——并对非硬件的一切直接操作（结束进程、退出/启动/卸载应用、启停登录项、 修改主机名/音量/深色模式、开关 Wi-Fi/防火墙、设置 DNS、卸载 Homebrew 包、清空废纸篓、睡眠/锁定、 跳转系统设置……）。同一套操作同时暴露给 Agent 模型，作为 device_info / device_control 两个工具。"
+      "full_name": "wodaimnd/multi-platform-releaser",
+      "previous": "other",
+      "current": "coding",
+      "desc_now": "Multi-forge publishing for local DSH plugins: tick any of GitHub / Gitee / Codeberg plus npm, fill the metadata once, then create every repository, push the same commit to each remote, tag, Release and npm publish from a single button. · 多代码平台发布插件：一键把本地 DSH 插件同时发布到 GitHub / Gitee / Codeberg / npm——同一个 commit 推到每个远端，各自建仓、各自发 Release；每个平台用自己账号的令牌，某个…",
+      "desc_prev": "Multi-forge publishing for local DSH plugins"
+    },
+    {
+      "full_name": "SonicloudTech/dsh-sonicloud-device",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "The Sonicloud smart mouse plugin brings voice typing, translation, search, and AI conversations to DeepSeek Harness. 声云智能鼠标插件，让你在 DeepSeek Harness 中轻松使用语音打字、翻译、搜索和 AI 对话。",
+      "desc_prev": "Deepseek Harness 声云设备插件"
     }
   ]
 }
