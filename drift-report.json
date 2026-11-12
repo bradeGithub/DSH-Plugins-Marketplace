@@ -1,48 +1,27 @@
 {
-  "generated_at": "2026-11-12T03:10:41.997Z",
-  "count": 6,
+  "generated_at": "2026-11-12T13:56:21.319Z",
+  "count": 3,
   "items": [
     {
-      "full_name": "JiamingShi-JsPhys/3d-fabric",
-      "previous": "web-ui",
-      "current": "tool",
-      "desc_now": "The whole 3D toolchain for one machine, in one plugin: printable CAD by natural language through the local SolidCraft CLI (build, edit, measure, preview, inspect, repair), plus thirty Blender skills for organic modelling, materials, lighting, cameras, rendering, UV and animation. Ten agent hosts.",
-      "desc_prev": "The complete 3D modelling and 3D-printing toolchain for one machine, in one plugin: natural-language CAD through the local SolidCraft CLI, plus design reading, editing, measuring and previewing, and print-quality mesh inspection and repair. Ten agent hosts."
+      "full_name": "tong-io/tongflow",
+      "previous": "other",
+      "current": "agent",
+      "desc_now": "Agent-Human-Friendly, Modality-First, Enterprise-Level GenAI Workflow Platform",
+      "desc_prev": "Modality-First GenAI Platform"
     },
     {
-      "full_name": "laoyingfuhuole/dsh-browser-use-automation",
-      "previous": "tool",
-      "current": "vision",
-      "desc_now": "完全后台静默运行的浏览器自动化插件：每个对话一个离屏浏览器窗口，真实 CDP 输入与截图，不抢焦点、不弹窗。",
-      "desc_prev": "Fully background browser automation for DeepSeek Harness: one offscreen Electron window per conversation, real CDP input, no focus stealing."
-    },
-    {
-      "full_name": "CoolTea001/dsh-cool-plugins",
-      "previous": "coding",
-      "current": "other",
-      "desc_now": "One repository for every DeepSeek Harness (DSH) plugin. Each plugin is still its own npm package, with its own version and its own install unit — only the source lives here.",
-      "desc_prev": "DeepSeek Harness Plugins：Theme、Terminal、Git、File、Session ..."
-    },
-    {
-      "full_name": "xiaozhang040316/dsh-yanyu-purge",
-      "previous": "conversation",
-      "current": "model",
-      "desc_now": "燕子 · 破甲工作台｜提示词破甲，让 AI 更懂任务。注入总开关 · 红黄蓝绿四方案 · system 覆盖与追加 · 燕语账号登录与余额浮窗 · 本地请求确认 · MIT 开源。",
-      "desc_prev": "燕子 · 破甲工作台｜提示词破甲，让 AI 更懂任务，少些无谓拒绝，多些实打实的交付。四燕切换 · system 覆盖/追加 · 本地请求确认 · MIT 开源。"
-    },
-    {
-      "full_name": "h958661134/dsh-plugin-context-studio",
-      "previous": "model",
+      "full_name": "regrevia/Envoy",
+      "previous": "document",
       "current": "memory",
-      "desc_now": "Context Studio for DeepSeek Harness: start from sessions to see which ones form a chain and which are independent, which memories (instructions, skills) each session loaded and whether they are stale; then clean, transplant across projects and compose a starting context for a new session.",
-      "desc_prev": "Context Studio for DeepSeek Harness: see, clean and transplant instructions, skills and sessions across projects, then compose a starting context for a new session. · DSH 上下文拼图台"
+      "desc_now": "蒸馏一切链接：长视频、长 PDF、网页 → 带来源定位的材料，Wiki 和知识库交给你的 AI 组装。别刷干货视频，让 AI 替你刷。 / Distill any link into located material; your AI writes the wiki.",
+      "desc_prev": "把链接分享给你的 AI：提取网页、视频与本地媒体中的可追溯材料。 / Share links with your AI: extract traceable material from web pages, videos, and local media."
     },
     {
-      "full_name": "ExpertKT/dsh-sop-guard",
-      "previous": "tool",
-      "current": "coding",
-      "desc_now": "把 skill 的 SOP.json 变成真正的分步白名单：模型先申报在第几步，改文件、跑命令、跑代码的范围在工具执行前就被卡住",
-      "desc_prev": "Enforce a skill's SOP.json as per-step tool and command allowlists in DeepSeek Harness"
+      "full_name": "imnotRiv3r/dsh-job-notify",
+      "previous": "conversation",
+      "current": "notify",
+      "desc_now": "为 DeepSeek Harness 提供 Windows 原生通知：无人等待的后台任务结算（完成 / 失败 / 停止）、对话轮次结束，以及 agent 等待你回答问题或审批工具调用时提醒。",
+      "desc_prev": "Native Windows notifications for DeepSeek Harness when a background job settles or a conversation turn ends."
     }
   ]
 }
