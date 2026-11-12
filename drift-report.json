@@ -1,90 +1,48 @@
 {
-  "generated_at": "2026-11-11T21:35:22.756Z",
-  "count": 12,
+  "generated_at": "2026-11-12T03:10:41.997Z",
+  "count": 6,
   "items": [
     {
-      "full_name": "Eileenes/dsh-reel",
-      "previous": "vision",
-      "current": "web-ui",
-      "desc_now": "插件宣传台 for DSH：输入插件名，在本机出 28 秒真机界面宣传片与封面。自带逐帧渲染器（本机 Chrome，运动模糊 + 硬切保护），npm 装完即可出片，不需要 Onetake 运行时。",
-      "desc_prev": "插件宣传台：输入插件名称，用 V0.1 真机管线生成 28s 插件宣传片（真实界面截图 + 四个功能页 + 安装流程）与封面；安利墙 + 生成台，支持终止/重渲染。"
-    },
-    {
-      "full_name": "taxueseek/plugin-fast-adapt",
-      "previous": "agent",
-      "current": "memory",
-      "desc_now": "Keep DSH plugins working across host upgrades: reads official upgrade guides directly, scans plugin code for breaking changes, smoke-tests in memory, scaffolds five plugin forms. Agent-native skill, zero dependencies",
-      "desc_prev": "DSH 插件升级适配与破坏性变更核查，兼五形态插件脚手架与宿主启动诊断；可作为 Claude Code / Agent Skills 技能安装，零外部依赖"
-    },
-    {
-      "full_name": "kazari-qwp/dsh-tiered-plugin-menu",
-      "previous": "conversation",
-      "current": "tool",
-      "desc_now": "按客户端、工作区和会话分层配置 DSH 插件、MCP 与 Skill，支持独立开关、不同配置、逐级继承和插件实例隔离。",
-      "desc_prev": "为每个工作区和会话独立开关 DSH 插件、使用不同配置，支持逐级继承与实例隔离。"
-    },
-    {
-      "full_name": "tia-forge/dsh-tiaforge",
-      "previous": "other",
-      "current": "tool",
-      "desc_now": "DSH 博途插件：在 DeepSeek Harness 里接西门子 TIA Portal —— 文档检索、梯形图生成与渲染、PLC 云仿真、本机网关（TiaLink）。装完看不到工具？先领 4 把 Key。",
-      "desc_prev": "TIA Forge for DeepSeek Harness: 5 Siemens TIA Portal skills + 5 MCP endpoints (docs / ladder generation / ladder render / PLC sim / local gateway)"
-    },
-    {
-      "full_name": "a1swg1159-pixel/dsh-arcaea-theme",
-      "previous": "memory",
-      "current": "notify",
-      "desc_now": "An original Arcaea-inspired high-key prismatic UI theme plugin for DeepSeek Harness.",
-      "desc_prev": "An original Arcaea-inspired high-key prismatic UI theme plugin for DeepSeek Harness."
-    },
-    {
-      "full_name": "TGWgulugu/dsh-wsl-bridge",
+      "full_name": "JiamingShi-JsPhys/3d-fabric",
       "previous": "web-ui",
       "current": "tool",
-      "desc_now": "在DSH中实现原生的WSL体验，在桌面端实现可选择WSL的工作区并使用linux工具流",
-      "desc_prev": "在DSH中实现原生的WSL体验，在桌面端实现可选择WSL的工作区并使用linux工具流"
+      "desc_now": "The whole 3D toolchain for one machine, in one plugin: printable CAD by natural language through the local SolidCraft CLI (build, edit, measure, preview, inspect, repair), plus thirty Blender skills for organic modelling, materials, lighting, cameras, rendering, UV and animation. Ten agent hosts.",
+      "desc_prev": "The complete 3D modelling and 3D-printing toolchain for one machine, in one plugin: natural-language CAD through the local SolidCraft CLI, plus design reading, editing, measuring and previewing, and print-quality mesh inspection and repair. Ten agent hosts."
     },
     {
-      "full_name": "XiaoZheBrother/dsh-live-studio",
-      "previous": "other",
-      "current": "conversation",
-      "desc_now": "让你的大肥鱼 / Agent 成为虚拟主播：B 站弹幕互动、语音回复、内置 Live2D 舞台与直播账本；不包含模型素材。",
-      "desc_prev": "让你的大肥鱼 / Agent 成为虚拟主播：B 站弹幕互动、语音回复、内置 Live2D 舞台与直播账本；不包含模型素材。"
+      "full_name": "laoyingfuhuole/dsh-browser-use-automation",
+      "previous": "tool",
+      "current": "vision",
+      "desc_now": "完全后台静默运行的浏览器自动化插件：每个对话一个离屏浏览器窗口，真实 CDP 输入与截图，不抢焦点、不弹窗。",
+      "desc_prev": "Fully background browser automation for DeepSeek Harness: one offscreen Electron window per conversation, real CDP input, no focus stealing."
     },
     {
-      "full_name": "XiaoZheBrother/dsh-game-agent",
-      "previous": "web-ui",
-      "current": "notify",
-      "desc_now": "让你的大肥鱼 / Agent 通过工具自主玩游戏、接受观众指令并复盘经验；当前适配修改版红警 2 网页接口。",
-      "desc_prev": "大肥鱼游戏 Agent：观众指令、自主操作、自动续局与可追溯对局复盘"
-    },
-    {
-      "full_name": "KhalilJar/Remu-desktop-shortcuts",
-      "previous": "other",
-      "current": "web-ui",
-      "desc_now": "DSH Desktop keyboard shortcuts, including an Alt+Tab style session switcher (DSH NEXT on Windows).",
-      "desc_prev": "DSH Desktop keyboard shortcuts, including an Alt+Tab style session switcher (DSH NEXT on Windows)."
-    },
-    {
-      "full_name": "orphiczhou/dsh-tree-harness",
-      "previous": "resource",
-      "current": "tool",
-      "desc_now": "DSH 会话树体系：tree-engine v0.6.0（9 个 tree_* 工具 + 竹节接力 + 叶写面护栏 + tree_doctor 自检）+ session-tree v1.3.6（侧栏会话树 / tree_send / 50% 自交接 / 随包 Skill；含 Agent 安装指南）。先读项目全景地图或 docs/README.md。",
-      "desc_prev": "DSH 会话树体系：tree-engine v0.6.0（9 个 tree_* 工具 + 竹节接力 + 叶写面护栏 + tree_doctor 自检）+ session-tree v1.3.6（侧栏会话树 / tree_send / 50% 自交接 / 随包 Skill；含 Agent 安装指南）。先读项目全景地图或 docs/README.md。"
-    },
-    {
-      "full_name": "lxjmaster/dsh-gpt-adapter",
-      "previous": "other",
-      "current": "tool",
-      "desc_now": "DeepSeek Harness plugin for GPT models and Codex instructions, skills, plugin resources, and MCP configuration.",
-      "desc_prev": "DeepSeek Harness plugin for GPT models, reasoning levels, service tiers, and model discovery."
-    },
-    {
-      "full_name": "Genesi599/dsh-plugins",
-      "previous": "agent",
+      "full_name": "CoolTea001/dsh-cool-plugins",
+      "previous": "coding",
       "current": "other",
-      "desc_now": "DSH plugins by yh109",
-      "desc_prev": "DeepSeek Harness (DSH) plugins from AI-Agent-Hub — plugin sources only, no private data."
+      "desc_now": "One repository for every DeepSeek Harness (DSH) plugin. Each plugin is still its own npm package, with its own version and its own install unit — only the source lives here.",
+      "desc_prev": "DeepSeek Harness Plugins：Theme、Terminal、Git、File、Session ..."
+    },
+    {
+      "full_name": "xiaozhang040316/dsh-yanyu-purge",
+      "previous": "conversation",
+      "current": "model",
+      "desc_now": "燕子 · 破甲工作台｜提示词破甲，让 AI 更懂任务。注入总开关 · 红黄蓝绿四方案 · system 覆盖与追加 · 燕语账号登录与余额浮窗 · 本地请求确认 · MIT 开源。",
+      "desc_prev": "燕子 · 破甲工作台｜提示词破甲，让 AI 更懂任务，少些无谓拒绝，多些实打实的交付。四燕切换 · system 覆盖/追加 · 本地请求确认 · MIT 开源。"
+    },
+    {
+      "full_name": "h958661134/dsh-plugin-context-studio",
+      "previous": "model",
+      "current": "memory",
+      "desc_now": "Context Studio for DeepSeek Harness: start from sessions to see which ones form a chain and which are independent, which memories (instructions, skills) each session loaded and whether they are stale; then clean, transplant across projects and compose a starting context for a new session.",
+      "desc_prev": "Context Studio for DeepSeek Harness: see, clean and transplant instructions, skills and sessions across projects, then compose a starting context for a new session. · DSH 上下文拼图台"
+    },
+    {
+      "full_name": "ExpertKT/dsh-sop-guard",
+      "previous": "tool",
+      "current": "coding",
+      "desc_now": "把 skill 的 SOP.json 变成真正的分步白名单：模型先申报在第几步，改文件、跑命令、跑代码的范围在工具执行前就被卡住",
+      "desc_prev": "Enforce a skill's SOP.json as per-step tool and command allowlists in DeepSeek Harness"
     }
   ]
 }
