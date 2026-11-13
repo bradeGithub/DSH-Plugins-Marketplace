@@ -1,83 +1,34 @@
 {
-  "generated_at": "2026-11-13T13:51:40.585Z",
-  "count": 11,
+  "generated_at": "2026-11-13T20:12:57.558Z",
+  "count": 4,
   "items": [
     {
-      "full_name": "tingfeng347/dsh-vscode-workbench",
-      "previous": "coding",
-      "current": "document",
-      "desc_now": "DeepSeek Harness 的 VS Code 风格工作台：资源管理器、Monaco 编辑、Markdown 与 PDF 预览、全文搜索、Git 暂存与提交、可分屏的官方终端和内置或系统浏览器都在同一界面，右侧可直接和 DSH 对话，主题、布局与语言服务在 DSH 设置中统一管理。",
-      "desc_prev": "DeepSeek Harness 的 VS Code 风格本地开发工作台：文件管理、Monaco 编辑、文档预览、搜索、Git、分屏终端与 DSH 对话一体化。"
-    },
-    {
-      "full_name": "mobius-2046/dsh-harmonyos-agent",
-      "previous": "coding",
-      "current": "vision",
-      "desc_now": "DSH 的 HarmonyOS 应用开发 agent：一个 harmony 工具 15 个动作（构建/编译/依赖/装机/启动/多设备/日志/截图/应用生命周期/环境诊断/签名/界面操作/文件传输/崩溃日志/离线文档），plan / goal / build 三模式预设，以及网页端 hilog 面板。",
-      "desc_prev": "DSH 的 HarmonyOS 应用开发 agent：plan / goal / build 三模式预设，ArkTS、hvigor、ohpm、hdc 技能，一个 harmony 工具（build/run/devices/deploy/logs），以及 Web GUI 里的 hilog 面板。"
-    },
-    {
-      "full_name": "27Synthesis/dsh-go-fish-panel",
-      "previous": "web-ui",
+      "full_name": "Moeblack/dsh-message-edit",
+      "previous": "conversation",
       "current": "memory",
-      "desc_now": "鱼·观测台：给 dsh-fish 在 DSH Go 手机上加观测台与设置面板，包括：观测台 + 作息 / 上网 / 说话与记忆三页设置，57 项设置能够直接改。解决了dsh-fish在手机DSH Go上无法正常使用的问题。",
-      "desc_prev": "给 dsh-fish（大肥鱼）在 DSH Go 手机 App 上加观测台与设置面板的原生插件"
+      "desc_now": "DSH 插件：分支式消息编辑、重掷、重试与版本时间线 | DSH plugin: branch-based message editing, reroll, retry, version timeline",
+      "desc_prev": "DSH 插件：分支式消息编辑、重掷、重试与版本时间线 | DSH plugin: branch-based message editing, reroll, retry, version timeline"
     },
     {
-      "full_name": "ycAlphi/dsh-labscript",
+      "full_name": "Nekomeow114/dsh-tieba-dive",
+      "previous": "web-ui",
+      "current": "other",
+      "desc_now": "百度贴吧的 DSH 插件：自动读帖、生成日报、签到（顺手关注）；回帖可选，带每轮/每日/间隔/去重四道限制。支持人设与日记，可按 DeepSeek 谷时在后台运行。",
+      "desc_prev": "百度贴吧的 DSH 插件：自动读帖、生成日报、签到（顺手关注）；回帖可选，带每轮/每日/间隔/去重四道限制。支持人设与日记，可按 DeepSeek 谷时在后台运行。"
+    },
+    {
+      "full_name": "CynthiaYX/dsh-plan-act-models",
       "previous": "other",
-      "current": "web-ui",
-      "desc_now": "DeepSeek Harness plugin for labscript-suite: runmanager panel read/write, engage + wait, YAML fixed-operation protocols with postprocess write-back, panel snapshots/restore, hard limits, and per-shot HDF5 analysis.",
-      "desc_prev": null
+      "current": "conversation",
+      "desc_now": "在 DeepSeek Harness 的对话框里加一个模式下拉框：Plan、Act 与自定义模式各用一组模型与思考复杂度，并可各带一段提示词；进入 plan 与批准计划时自动切换（思路来自 RooCode），Plan 与 Act 支持按工作区覆盖。",
+      "desc_prev": "在 DeepSeek Harness 的对话框里加一个模式下拉框：Plan、Act 与自定义模式各用一组模型与思考复杂度，并可各带一段提示词；进入 plan 与批准计划时自动切换（思路来自 RooCode），Plan 与 Act 支持按工作区覆盖。"
     },
     {
-      "full_name": "kadaliao/dsh-plugins",
-      "previous": "resource",
-      "current": "vision",
-      "desc_now": "A collection of plugins for DeepSeek Harness: small, focused additions to the chat, the composer and the workspace.",
-      "desc_prev": "A collection of plugins for DeepSeek Harness: small, focused additions to the chat, the composer and the workspace."
-    },
-    {
-      "full_name": "odysseykernelt/dsh-dashcam",
-      "previous": "other",
-      "current": "tool",
-      "desc_now": "A dashcam for your AI plugins: records what they actually do in a tamper-evident ledger. Does not block.",
-      "desc_prev": "A dashcam for your AI plugins: records what they actually do in a tamper-evident ledger. Does not block."
-    },
-    {
-      "full_name": "dichi123456/dsh-molingTex",
-      "previous": "document",
-      "current": "resource",
-      "desc_now": "墨灵 LaTeX 的 DSH 插件：右侧栏 LaTeX 工作台（目录树 / 编辑 / 编译 / 日志 / PDF / SyncTeX 双向定位）+ 5 个 Agent 工具，让模型直接编译论文、读报错、定位源码行。",
-      "desc_prev": "?? LaTeX ? DSH ??:??? LaTeX ???(??? / ?? / ?? / PDF)+ 5 ? Agent ??"
-    },
-    {
-      "full_name": "DerekZhangbj/dsh-compaction-selective",
-      "previous": "conversation",
-      "current": "web-ui",
-      "desc_now": "Human-directed selective compaction for DeepSeek Harness (DSH). ｜ 中文：由人指定压缩哪几轮的 DSH 插件，把已结束的一段对话折成一条摘要（工具/面板/＋菜单三个入口，执行前人工确认）。",
-      "desc_prev": "Human-directed selective compaction for DeepSeek Harness: compact an explicitly requested span of finished turns into one summary, with a mandatory approval prompt."
-    },
-    {
-      "full_name": "SiliconSailor/dsh-dual-browser",
-      "previous": "tool",
-      "current": "web-ui",
-      "desc_now": "Agent browser for DeepSeek Harness: hidden sessions for private research, visible sessions in Edge or Chrome, eight browser_* tools and a sidebar panel.",
-      "desc_prev": null
-    },
-    {
-      "full_name": "LXinH3RT/dsh-auto-relay",
-      "previous": "conversation",
+      "full_name": "ShawnZhangGy/dsh-whale-reminder",
+      "previous": "web-ui",
       "current": "notify",
-      "desc_now": "DSH Host plugin: open a continuation session when a conversation keeps compressing near its context limit, and increment the session title's trailing number.",
-      "desc_prev": "DSH Host plugin: open a continuation session when a conversation keeps compressing near its context limit, and increment the session title's trailing number."
-    },
-    {
-      "full_name": "liancheng2020/dsh-aihot-radar",
-      "previous": "resource",
-      "current": "notify",
-      "desc_now": "AIHOT 雷达 · DSH 插件：Codex/Claude/Antigravity 额度重置实时推送 + AI 资讯 Agent 工具 + AI 日报",
-      "desc_prev": "AIHOT 雷达 · DSH 插件：Codex/Claude/Antigravity 额度重置推送 + AIHOT 资讯日报与 Agent 工具"
+      "desc_now": "DSH 会话提醒插件：Windows 系统通知 + 声音 + 窗口内浮层 + 任务栏/托盘闪烁；点击通知可直达会话（提到最前并聚焦输入框 / 只提窗 / 只提醒三档），DSH 在前台时不打扰，中英双语，已归档与子代理不计入未读",
+      "desc_prev": "DSH 会话提醒插件：Windows 系统通知 + 声音 + 窗口内浮层 + 任务栏/托盘闪烁，通知可点击直达会话 / desktop notifications, sounds, in-window overlay and taskbar/tray blink for DeepSeek Harness; click a toast to jump straight to that session"
     }
   ]
 }
