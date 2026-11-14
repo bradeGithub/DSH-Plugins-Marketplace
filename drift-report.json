@@ -1,13 +1,55 @@
 {
-  "generated_at": "2026-11-14T01:15:59.016Z",
-  "count": 1,
+  "generated_at": "2026-11-14T09:11:30.402Z",
+  "count": 7,
   "items": [
     {
-      "full_name": "efrem-labs/niro-releases",
-      "previous": "tool",
+      "full_name": "fyjgtddco/DSH-SW-and-CAD",
+      "previous": "other",
+      "current": "document",
+      "desc_now": "担心AI在SW上面画的好看，实际组装又是另外一个事故？有这个项目在！材料、力学、规范三重校核，凭可追溯证据交付工图。让AI画的图真正能进入工程世界，而不是只是一个漂亮的玩具（暂时停更看论文和研究结构，暂时停更一小波）",
+      "desc_prev": "担心AI在SW上面画的好看，实际组装又是另外一个事故？有这个项目在！材料、力学、规范三重校核，凭可追溯证据交付工图。让AI画的图真正能进入工程世界，而不是只是一个漂亮的玩具"
+    },
+    {
+      "full_name": "gigaflw/dsh-fft-paper-trading",
+      "previous": "other",
+      "current": "conversation",
+      "desc_now": "在 DSH 中进行模拟交易，支持 A 股与商品期货（stock & futures paper trading），本地账本，内置 FTShare 数据源与 K 线，无需购买 API Key 也可用日 K 收盘价练习",
+      "desc_prev": "在 DSH 中进行模拟交易，支持 A 股和商品期货，本地账本，内置 FTShare 数据源与 K 线，无需购买 API Key 也可使用日K收盘价练习"
+    },
+    {
+      "full_name": "GuYou9799/dsh-turn-sieve",
+      "previous": "web-ui",
+      "current": "conversation",
+      "desc_now": "回合筛：在对话里原位筛除低价值问答或单条消息，被选中处直接高亮、可撤销",
+      "desc_prev": "DSH 插件「回合筛」：在对话里原位筛除低价值问答、单条消息或回合内提示卡片，✓ 确认 / ✕ 取消，被筛除内容立即从模型可见上下文与对话界面消失，可一步撤销；明亮液态玻璃面板含玻璃/动效开关。"
+    },
+    {
+      "full_name": "1010231693/dsh-auto-compaction",
+      "previous": "notify",
+      "current": "tool",
+      "desc_now": "本地模型友好的 DSH 会话自动压缩：空闲时用交接文档替换最旧历史，避免本地模型全量 prefill；触发点可调，压缩后可随时回滚，任务中途也能按余量提前压缩（默认关闭）。",
+      "desc_prev": "Idle-time handoff compaction for DeepSeek Harness: ratio-based trigger, handoff checkpoint, no full re-prefill."
+    },
+    {
+      "full_name": "AwenJackson/dsh-volc-balance-card",
+      "previous": "web-ui",
       "current": "coding",
-      "desc_now": "NIRO 0.4 — Your desktop Coding Agents on iPhone. Universal Search, real session continuation, Qwen Code, Kimi Code, Hermes, OpenCode, ZCode and DSH; Mac Bridge installers and docs.",
-      "desc_prev": "Niro — iPhone companion for MiMo Desktop, OpenCode, ZCode and DeepSeek Harness (DSH) on your Mac. Release binaries and documentation."
+      "desc_now": "DSH sidebar card: Volcengine (火山引擎) account balance and Ark Coding/Agent plan quota, with in-card AK/SK setup.",
+      "desc_prev": null
+    },
+    {
+      "full_name": "yeweiliang7063/dsh-tcm",
+      "previous": "conversation",
+      "current": "model",
+      "desc_now": "DSH 中医预设「岐黄经方（学习版）」2.2.1：先给一行大白话结论，再按经方思路七段讲清辨证定位、治则治法、方名与加减方向、推荐穴位、配伍禁忌、药典用量警示、调护与就医提示；危险动作打 🚨⚠️ 标签，古文翻成白话。只讲思路，不给剂量，不出处方笺。《npm 上的 dsh-tcm 1.3.0 是旧版、已废弃，请勿安装   》！！！    ",
+      "desc_prev": "DSH 中医预设「岐黄经方」插件：systemPrompt 变量 + 中医资料库设置 + 经方预设"
+    },
+    {
+      "full_name": "V1Y0h/dsh-animebar",
+      "previous": "other",
+      "current": "web-ui",
+      "desc_now": "DeepSeek Harness 插件：Bangumi 番表查询 + 捕获复盘面板，数据全部留在本地",
+      "desc_prev": "Ask DeepSeek Harness what anime airs today."
     }
   ]
 }
