@@ -1,69 +1,13 @@
 {
-  "generated_at": "2026-11-14T17:07:49.526Z",
-  "count": 9,
+  "generated_at": "2026-11-14T22:35:22.870Z",
+  "count": 1,
   "items": [
     {
-      "full_name": "TencentCloudBase/CloudBase-AI-Toolkit",
-      "previous": "coding",
-      "current": "tool",
-      "desc_now": "Backend for AI Agents — Database, Auth, Functions,Storage,Hosting via Plugin, Skills & MCP.",
-      "desc_prev": "Backend for AI coding agents on CloudBase — database, auth, functions via Plugin, Skills & MCP."
-    },
-    {
-      "full_name": "guohwa/dsh-plugin-image-workbench",
-      "previous": "other",
-      "current": "conversation",
-      "desc_now": "Bluxe 手绘工坊 · 生图工作台：装在 DSH 侧栏的 AI 生图工作台插件，内置账号池装好即用，输入提示词一键生成图文 / 摄影配图，也能接你自己的 OpenAI 兼容接口。",
-      "desc_prev": "Bluxe手绘工坊 · 生图工作台 DSH 插件：内置号池运行时，装一个插件即可独立运行；可配置任意 OpenAI 兼容接口（Base URL / API Key / 模型）。"
-    },
-    {
-      "full_name": "Mr54233/dsh-restart-now",
-      "previous": "web-ui",
-      "current": "other",
-      "desc_now": "DSH 桌面版一键重启与关闭，支持 Windows 和 macOS · One-click restart and close for DSH Desktop",
-      "desc_prev": "One-click full-app restart plugin for DeepSeek Harness desktop (DSH) — 侧边栏一键重启 DeepSeek Harness 桌面版"
-    },
-    {
-      "full_name": "GuYou9799/dsh-turn-sieve",
-      "previous": "tool",
-      "current": "model",
-      "desc_now": "Turn Sieve (回合筛) — DeepSeek Harness 插件：在对话里原位筛除低价值问答或单条消息，可随时撤销。Prune low-value parts of a DSH chat in place — a whole exchange, one message or in-turn notices — with instant undo.",
-      "desc_prev": "回合筛：在对话里原位筛除低价值问答或单条消息，被选中处直接高亮、可撤销；附带更新失败排查工具。"
-    },
-    {
-      "full_name": "winlin926/dsh-roam",
-      "previous": "coding",
-      "current": "tool",
-      "desc_now": "已停止维护；请迁移到 winlin926/dsh-remote-connect，用手机浏览器继续 DeepSeek Harness 会话。",
-      "desc_prev": "远程连接 AI 编程会话：电脑上的 DeepSeek Harness 任务，手机扫码即用——继续对话、审批工具、新开任务。免 App、免远程桌面。"
-    },
-    {
-      "full_name": "Richard-He-happy/dsh-bohr-arena",
-      "previous": "other",
-      "current": "vision",
-      "desc_now": "DSH plugins distilling two Bohr contests: Product Arena (academic writing period 2, academic efficiency period 3) and Scientific Facilities (format parsing, instrument vision/simulator, biomedical prediction, contest operations).",
-      "desc_prev": "Two DSH plugins distilling the Bohr Product Arena period-2 (academic writing) and period-3 (academic efficiency) contest playbooks: skill blueprints, per-task playbooks, submission mechanics, cloud pipeline, and scoring strategy."
-    },
-    {
-      "full_name": "Haitang-Hub/dsh-infinite-canvas",
+      "full_name": "yangjili6/video-understanding-kit",
       "previous": "vision",
       "current": "tool",
-      "desc_now": "无限画布 | DeepSeek Harness 插件：Agent 驱动的无限 AI 创作画布，在节点画布上生成图片/视频/音频并导出；内置零依赖本地桥（MCP stdio/HTTP + 浏览器内工具执行器）、技能系统与节点插件市场。",
-      "desc_prev": "无限画布 —— DSH 桌面端插件，把无限画布创作（多模态节点、AI 生成、工程管理）内置画布桥 + MCP 服务，供 AI Agent 直接调用，可与 3D 导演台插件协作。"
-    },
-    {
-      "full_name": "Feahter/dsh-plugins",
-      "previous": "other",
-      "current": "tool",
-      "desc_now": "Ten open-source plugins for DeepSeek Harness (dsh): offline voice input, GitHub manager, session archive + PDCA, skills/agents health checks, mind map, context library, task ledger. Bilingual EN/中文.",
-      "desc_prev": "Feahter's DeepSeek Harness plugins (realtime voice input, GitHub project manager) and a format-1 plugin market index"
-    },
-    {
-      "full_name": "LeoAndJellyfish/dsh-plugin-index",
-      "previous": "notify",
-      "current": "other",
-      "desc_now": "LeoAndJellyfish 维护的 DSH 插件索引，收录自有及第三方插件，保留原作者与固定的上游安装来源。",
-      "desc_prev": "LeoAndJellyfish 公开发布的 DSH 插件索引，包含技能库、线程对话和微信历史源。"
+      "desc_now": "DSH专用，这个工具不同于传统的AI理解视频流程（定时切帧-切出的帧猜测上下文），而是以1-12FPS一帧来尽可能获取视频的内容，再以网格的形式存入每一帧；网格使用预训练模型进行分组（相同的场景/内容会尽可能在一个网格大组中），这样你的AI在使用了这个插件/工具后能够更好的形容看到的视频，并且可以减少token消耗",
+      "desc_prev": "DSH专用，这个工具不同于传统的AI理解视频流程（定时切帧-切出的帧猜测上下文），而是以1-12FPS一帧来尽可能获取视频的内容，再以网格的形式存入每一帧；网格使用预训练模型进行分组（相同的场景/内容会尽可能在一个网格大组中），这样你的AI在使用了这个插件/工具后能够更好的形容看到的视频，并且不会花什么token；我接下来会在缩短完成这个流程所需要的时长上做努力（目前中端手机在OCR与ASR全开启的情况下让AI完成一个这样的工作流时长需要原视频的1.5倍～3倍左右），解决这个工具最大的痛点。"
     }
   ]
 }
