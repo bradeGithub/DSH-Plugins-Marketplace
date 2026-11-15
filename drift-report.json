@@ -1,48 +1,27 @@
 {
-  "generated_at": "2026-11-15T06:02:53.434Z",
-  "count": 6,
+  "generated_at": "2026-11-15T13:51:13.377Z",
+  "count": 3,
   "items": [
     {
-      "full_name": "pgmi-builds/better-dsh",
-      "previous": "memory",
-      "current": "coding",
-      "desc_now": "MOVED to pgmi-builds/super-dsh — better-dsh & super-dsh now maintained there (npm better-dsh unchanged)",
-      "desc_prev": "Make your dsh ready for serious coding. (Tools x Schemas)^REPL. skill://, ctx://, agent://, dvc://, dsh://, IPython REPL, Context as Variables, cross compaction recallable, full context revive. hash-edit, dvc://browser, subagent as a function, workflow as a function."
-    },
-    {
-      "full_name": "GuYou9799/dsh-turn-sieve",
-      "previous": "model",
-      "current": "web-ui",
-      "desc_now": "Turn Sieve (回合筛) — DeepSeek Harness 插件：在对话里原位筛除低价值问答或单条消息，可随时撤销。Prune low-value parts of a DSH chat in place — whole turns, single messages or just your own prompt — and undo any time.",
-      "desc_prev": "Turn Sieve (回合筛) — DeepSeek Harness 插件：在对话里原位筛除低价值问答或单条消息，可随时撤销。Prune low-value parts of a DSH chat in place — a whole exchange, one message or in-turn notices — with instant undo."
-    },
-    {
-      "full_name": "Chenpi-Sakura/harness-supervisor",
-      "previous": "other",
-      "current": "conversation",
-      "desc_now": "Make other harnesses work for yours. Turn native AI harnesses into subagents your main harness can command and manage. | 让你的主 Harness 当老板，其他 Harness 来干活。把各家原生 Harness 变成它可委派、可管理的子智能体。",
-      "desc_prev": null
-    },
-    {
-      "full_name": "1010231693/dsh-bat-runner",
+      "full_name": "TacitSay/dsh-compact-arsenal",
       "previous": "web-ui",
-      "current": "coding",
-      "desc_now": "一个可以在DSH中运行任何bat脚本的插件，终端日志直接显示在DSH主界面，可控制启停，可设置日志面板外观，可任意拖动/缩放。",
-      "desc_prev": "浮在 DSH 界面上的本地脚本日志面板：逐字显示 bat/cmd 输出，可自己运行/停止脚本，可选接收 BatRunner 启动器转发的日志。"
+      "current": "tool",
+      "desc_now": "对上下文的不同内容提供不同的压缩方式,可配置的压缩触发阈值",
+      "desc_prev": "可配置的上下文压缩插件：总压缩 / 思考压缩 / 工具输出压缩，带左栏面板（DeepSeek Harness）"
     },
     {
-      "full_name": "ChenYichener/dsh-nce",
-      "previous": "memory",
-      "current": "web-ui",
-      "desc_now": "144 New Concept English Book 1 lessons in one DSH panel — one page per lesson, SRS flashcards, and exercise papers graded by your own model.",
-      "desc_prev": "DSH plugin: a New Concept English Book 1 study panel with one-page lessons, SRS flashcards and a mistake notebook. Textbook data is not bundled."
+      "full_name": "yeweiliang7063/dsh-tcm",
+      "previous": "model",
+      "current": "other",
+      "desc_now": "装上以后，DSH 里多出一个「中医 · 岐黄经方（学习版）」预设，能陪你按经方思路学中医：先像坐诊一样问清寒热、出汗、二便、睡眠、舌象、六部脉，再按《黄帝内经》《难经》《伤寒杂病论》讲清这个证属哪一经、病机在哪、该用哪一类方、该取哪几个穴，并教你服后怎么核对方向对不对。只讲思路，不给剂量，不出处方笺。《npm 上的 dsh-tcm 1.3.0 是旧版、已废弃，请勿安装   》！！！    ",
+      "desc_prev": "DSH 中医预设「岐黄经方（学习版）」2.2.2：先给一行大白话结论，再按经方思路七段讲清辨证定位、治则治法、方名与加减方向、推荐穴位、配伍禁忌、药典用量警示、调护与就医提示；危险动作打 🚨⚠️ 标签，古文翻成白话。只讲思路，不给剂量，不出处方笺。《npm 上的 dsh-tcm 1.3.0 是旧版、已废弃，请勿安装   》！！！    "
     },
     {
-      "full_name": "Planckbaka/dsh-superagent-relay",
-      "previous": "resource",
-      "current": "agent",
-      "desc_now": "Superagent Relay: a community preview of persistent Worker tickets for DeepSeek Harness.",
-      "desc_prev": "Superagent Relay: a community preview of persistent Worker tickets for DeepSeek Harness."
+      "full_name": "hanhan9999999999999999999/remote-connect-dsh",
+      "previous": "tool",
+      "current": "vision",
+      "desc_now": "DSH 插件 dsh-remote-connect — 手机扫码远程操作电脑上的 DSH，两台电脑之间互相同步插件 / 技能 / 规则 / 配置 / 会话。开源，MIT。",
+      "desc_prev": "DSH 插件 dsh-remote-connect — 手机扫码远程操作电脑上的 DSH，两台电脑之间互相同步插件 / 技能 / 规则 / 配置 / 会话。开源，MIT。"
     }
   ]
 }
