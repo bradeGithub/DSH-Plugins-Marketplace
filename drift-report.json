@@ -1,20 +1,34 @@
 {
-  "generated_at": "2026-11-16T00:43:48.793Z",
-  "count": 2,
+  "generated_at": "2026-11-16T06:13:07.473Z",
+  "count": 4,
   "items": [
     {
-      "full_name": "klaus-2/dsh-redline",
+      "full_name": "JAdpp/dsh-whale-galgame",
       "previous": "web-ui",
-      "current": "vision",
-      "desc_now": "Visual feedback & design review for DeepSeek Harness: click any UI element in the browser, comment, tweak CSS live, and send structured context + screenshot to your agent.",
-      "desc_prev": "Point at any element on the page, adjust it live, and send structured visual feedback to your DeepSeek Harness agent."
+      "current": "document",
+      "desc_now": "办公推gal两不误~面向DeepSeek Harness的跨会话事件感知Galgame引擎与界面插件，支持大肥鱼/GPT/Claude/Grok/Gemini/Kimi多位模型娘角色",
+      "desc_prev": "打工推gal两不误~面向DeepSeek Harness的跨会话事件感知Galgame引擎与界面插件，支持大肥鱼/GPT/Claude/Grok/Gemini/Kimi多位模型娘角色"
     },
     {
-      "full_name": "klaus-2/dsh-nextsteps",
+      "full_name": "surfishs/dsh-prompt-enhance",
       "previous": "conversation",
       "current": "web-ui",
-      "desc_now": "Suggested follow-up prompts for DeepSeek Harness chat: AI-generated next steps as clickable cards under every agent turn — one click sends the reply, zero typing. 15 languages.",
-      "desc_prev": "Suggested next-step prompts under every finished agent turn in the DeepSeek Harness chat — one click sends the followup."
+      "desc_now": "DSH Web GUI 的提示词增强插件：一键把输入框草稿改写为结构化提示词，支持停靠结果卡、回填、复制、重新生成与撤销。 | Prompt enhancement plugin for the DSH web GUI: turn a composer draft into a structured prompt with a docked result card, apply, copy, regenerate and undo.",
+      "desc_prev": "DSH Web GUI 的提示词增强插件：一键把输入框草稿改写为结构化提示词，支持预览、回填、复制与撤销"
+    },
+    {
+      "full_name": "gimhol/dsh-git-suite",
+      "previous": "coding",
+      "current": "other",
+      "desc_now": "A Git suite for DSH Web covering everyday Git work, with GitHub, Gitee, and GitLab pull requests plus AI commit messages and reviews.",
+      "desc_prev": "A Git suite for DSH Web: history, branches, refs, per-file diffs, and branch switching. More Git operations coming. · DSH Web 的 Git 套件：提交历史、分支、引用树、逐文件差异与分支切换，更多 Git 操作开发中。"
+    },
+    {
+      "full_name": "Frank-Fan-1058/dsh-document-view",
+      "previous": "conversation",
+      "current": "tool",
+      "desc_now": "边看文档，边聊 AI — DeepSeek Harness 分栏文档视图：文档居中、会话常驻右侧，一行命令安装，零网络请求零文件读写",
+      "desc_prev": "边看文档，边聊 AI：DSH 分栏文档视图插件（文档居中 + 右侧会话）"
     }
   ]
 }
