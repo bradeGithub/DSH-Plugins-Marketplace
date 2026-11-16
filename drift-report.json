@@ -1,34 +1,20 @@
 {
-  "generated_at": "2026-11-16T06:13:07.473Z",
-  "count": 4,
+  "generated_at": "2026-11-16T13:24:49.404Z",
+  "count": 2,
   "items": [
     {
-      "full_name": "JAdpp/dsh-whale-galgame",
-      "previous": "web-ui",
-      "current": "document",
-      "desc_now": "办公推gal两不误~面向DeepSeek Harness的跨会话事件感知Galgame引擎与界面插件，支持大肥鱼/GPT/Claude/Grok/Gemini/Kimi多位模型娘角色",
-      "desc_prev": "打工推gal两不误~面向DeepSeek Harness的跨会话事件感知Galgame引擎与界面插件，支持大肥鱼/GPT/Claude/Grok/Gemini/Kimi多位模型娘角色"
-    },
-    {
-      "full_name": "surfishs/dsh-prompt-enhance",
-      "previous": "conversation",
-      "current": "web-ui",
-      "desc_now": "DSH Web GUI 的提示词增强插件：一键把输入框草稿改写为结构化提示词，支持停靠结果卡、回填、复制、重新生成与撤销。 | Prompt enhancement plugin for the DSH web GUI: turn a composer draft into a structured prompt with a docked result card, apply, copy, regenerate and undo.",
-      "desc_prev": "DSH Web GUI 的提示词增强插件：一键把输入框草稿改写为结构化提示词，支持预览、回填、复制与撤销"
-    },
-    {
-      "full_name": "gimhol/dsh-git-suite",
+      "full_name": "QZyme/dsh-besson-tools",
       "previous": "coding",
-      "current": "other",
-      "desc_now": "A Git suite for DSH Web covering everyday Git work, with GitHub, Gitee, and GitLab pull requests plus AI commit messages and reviews.",
-      "desc_prev": "A Git suite for DSH Web: history, branches, refs, per-file diffs, and branch switching. More Git operations coming. · DSH Web 的 Git 套件：提交历史、分支、引用树、逐文件差异与分支切换，更多 Git 操作开发中。"
+      "current": "web-ui",
+      "desc_now": "DSH 插件（bundle，v2.3.0）：9 个独立组件 + Web 左栏入口面板；教程检索与学习路线、版本对比、环境搭建、工程体检、迁移清单。217 篇数据来自 beishanair.github.io（2026-11-07 同步）。",
+      "desc_prev": "DSH 插件（7 个独立组件）：北山Besson Minecraft 模组开发教程 — 检索/路线规划/版本对比/环境清单/正文抓取，217 篇数据（2026-11-07），适配 DSH 0.2.2-rc.1+，插件栏一键安装"
     },
     {
-      "full_name": "Frank-Fan-1058/dsh-document-view",
-      "previous": "conversation",
-      "current": "tool",
-      "desc_now": "边看文档，边聊 AI — DeepSeek Harness 分栏文档视图：文档居中、会话常驻右侧，一行命令安装，零网络请求零文件读写",
-      "desc_prev": "边看文档，边聊 AI：DSH 分栏文档视图插件（文档居中 + 右侧会话）"
+      "full_name": "NoCandles/dsh-stock-bar",
+      "previous": "tool",
+      "current": "web-ui",
+      "desc_now": "DeepSeek Harness 插件：窗口顶部常驻股票行情条——自选与持仓盈亏、K线/分时、五档盘口、成交流水、价格预警、AI 复盘（可追问/定时跟踪），装了 dsh-better-sidebar 时还可作为右侧栏「股票」页打开。",
+      "desc_prev": "DeepSeek Harness 插件：窗口顶部常驻股票行情条——自选股、持仓（股数与成本）、盈亏、K线/分时图、盘口、成交记录、预警、AI 复盘。"
     }
   ]
 }
