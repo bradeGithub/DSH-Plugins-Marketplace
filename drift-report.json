@@ -1,20 +1,48 @@
 {
-  "generated_at": "2026-11-16T13:24:49.404Z",
-  "count": 2,
+  "generated_at": "2026-11-17T00:26:06.872Z",
+  "count": 6,
   "items": [
     {
-      "full_name": "QZyme/dsh-besson-tools",
-      "previous": "coding",
-      "current": "web-ui",
-      "desc_now": "DSH 插件（bundle，v2.3.0）：9 个独立组件 + Web 左栏入口面板；教程检索与学习路线、版本对比、环境搭建、工程体检、迁移清单。217 篇数据来自 beishanair.github.io（2026-11-07 同步）。",
-      "desc_prev": "DSH 插件（7 个独立组件）：北山Besson Minecraft 模组开发教程 — 检索/路线规划/版本对比/环境清单/正文抓取，217 篇数据（2026-11-07），适配 DSH 0.2.2-rc.1+，插件栏一键安装"
+      "full_name": "HanKuCha/DSH-Fujiang-Unrestricted",
+      "previous": "agent",
+      "current": "resource",
+      "desc_now": "DeepSeek Harness Desktop 一键安装器：富江人格预设（工作助手）+ 240 个随包技能。Windows / .NET Framework 4.8 / AnyCPU，只改 DSH_HOME，不动程序目录。",
+      "desc_prev": "DeepSeek Harness Desktop 一键安装器：富江人格预设（工作助手）+ 240 个随包技能。Windows / .NET Framework 4.8 / AnyCPU，只改 DSH_HOME，不动程序目录。"
     },
     {
-      "full_name": "NoCandles/dsh-stock-bar",
-      "previous": "tool",
-      "current": "web-ui",
-      "desc_now": "DeepSeek Harness 插件：窗口顶部常驻股票行情条——自选与持仓盈亏、K线/分时、五档盘口、成交流水、价格预警、AI 复盘（可追问/定时跟踪），装了 dsh-better-sidebar 时还可作为右侧栏「股票」页打开。",
-      "desc_prev": "DeepSeek Harness 插件：窗口顶部常驻股票行情条——自选股、持仓（股数与成本）、盈亏、K线/分时图、盘口、成交记录、预警、AI 复盘。"
+      "full_name": "mzzsfy/dsh-plugin",
+      "previous": "other",
+      "current": "coding",
+      "desc_now": "deepseek harness 插件维护仓库, 个人开发的所有dsh插件都在这",
+      "desc_prev": null
+    },
+    {
+      "full_name": "QZyme/dsh-besson-tools",
+      "previous": "web-ui",
+      "current": "coding",
+      "desc_now": "北山Besson 模组开发助手插件（bundle）：11 个工具（教程检索/学习路线/版本对比/环境搭建/工程体检/迁移清单/骨架生成/中文映射）+ 左栏面板 + 内置「Besson 教程助手」agent 预设；DSH 0.2.2-rc.x；数据 2026-11-07（217 篇）。",
+      "desc_prev": "DSH 插件（bundle，v2.3.0）：9 个独立组件 + Web 左栏入口面板；教程检索与学习路线、版本对比、环境搭建、工程体检、迁移清单。217 篇数据来自 beishanair.github.io（2026-11-07 同步）。"
+    },
+    {
+      "full_name": "xuiyun/nqe",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "DSH 插件：让 AI 该问的时候问、该确认的时候确认 —— 不再用「任务完成」打发你，动手前也会先把理解说清楚；回答还能直接贴图，贴文件，用指令",
+      "desc_prev": "DSH 插件：让 AI 该问的时候问、该确认的时候确认 —— 不再用「任务完成」打发你，动手前也会先把理解说清楚；回答还能直接贴图。"
+    },
+    {
+      "full_name": "ColaFly-if/dsh-group-chat-room",
+      "previous": "coding",
+      "current": "conversation",
+      "desc_now": "DSH 侧栏群聊插件：多个 AI 人格同处一室，流式回复、贴纸，成员可从一段描述生成。",
+      "desc_prev": "DSH 侧栏群聊插件：多人格群聊、SSE 流式回复、贴纸、成员从描述生成。两轨自测（代码轨 58 条 + 浏览器交互轨）。"
+    },
+    {
+      "full_name": "ColaFly-if/dsh-acceptance-gate",
+      "previous": "coding",
+      "current": "other",
+      "desc_now": "DSH 验收闭环插件：改动先登记验收单，插件自己跑证据，没清零不许收尾。",
+      "desc_prev": "DSH 验收闭环插件：两轨测试（代码轨 + 真实交互轨）、质量守门、证据哈希、回合闸门。"
     }
   ]
 }
