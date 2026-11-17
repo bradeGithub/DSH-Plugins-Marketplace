@@ -1,55 +1,20 @@
 {
-  "generated_at": "2026-11-17T10:50:40.477Z",
-  "count": 7,
+  "generated_at": "2026-11-17T13:59:28.211Z",
+  "count": 2,
   "items": [
     {
-      "full_name": "JMINN0/dsh-go-plugin-adb",
-      "previous": "vision",
-      "current": "coding",
-      "desc_now": "让 AI 在手机内部拿到真 adb shell（uid 2000，无 root、不踢掉你的 Shizuku）",
-      "desc_prev": "安卓手机上的 adb 插件：在手机内部给自己开一个 adb shell，无需 root、无需电脑，关 WiFi 也能用。AI 助手用它可以装 App、看日志、截图、执行 shell 命令。 / Android adb plugin that gives an AI agent a real adb shell from inside the phone — no root, no PC."
+      "full_name": "ygzhang-lab/dsh-plugin-git-commit-push",
+      "previous": "agent",
+      "current": "tool",
+      "desc_now": "0 Token Git 提交推送插件，一次调用完成按 Conventional 为每个变更文件自动生成提交信息并按 type(scope) 拆成多次提交后一次推送到Git，必要时询问打标签。One-call Conventional-Commits git workflow for DeepSeek Harness: survey + one commit per type(scope) + optional tag + push, plus a /git-commit-push slash command that runs with no model involvement",
+      "desc_prev": "One-call Conventional-Commits git workflow for DSH: survey + commit + optional tag + push, plus a /commit-push slash command that runs with no model involvement. Windows and macOS/Linux."
     },
     {
-      "full_name": "sweet560/dsh-plugin-deepseek-chat",
-      "previous": "memory",
-      "current": "conversation",
-      "desc_now": "将 DeepSeek Chat 网页端嵌入 DSH 桌面会话，支持桌面与网页双向桥接、条件触发自动闭环和半自动带回；v1.4.0 新增实验性全自动投递通道，按指定区块提炼审查意见并自动提交下一轮，遇完成、重启或需用户验收时弹卡由你掌控。",
-      "desc_prev": "DeepSeek Chat (chat.deepseek.com) as a DSH sidebar panel: full main-area chat, last-conversation memory, crash containment."
-    },
-    {
-      "full_name": "MeruSu/dsh-better-setting-page",
-      "previous": "other",
-      "current": "web-ui",
-      "desc_now": "The DeepSeek Harness settings dialog fills the window instead of an 800px modal, its section rail collapses to a 56px column of icons, and pages you never open can be hidden from that rail.",
-      "desc_prev": "Full-screen settings page with a collapsible navigation rail for DeepSeek Harness (placeholder release)."
-    },
-    {
-      "full_name": "c3115644151/dsh-inbox-bridge",
-      "previous": "notify",
-      "current": "conversation",
-      "desc_now": "DSH 插件：让 agent 像维护者一样盯着你的仓库——CI 挂了就修、请你评审就审、指派给你的 issue 就接。按会话订阅仓库自己取数，要紧的事不等你开口就开一轮。只读 GitHub。",
-      "desc_prev": "DeepSeek Harness plugin: poll any external source (CI, issues, mail, any command) and inject new events at turn boundaries, with delivered/handled bookkeeping, resurfacing and auto-close"
-    },
-    {
-      "full_name": "baibiaowang/dsh-voice-input-wb-asr",
-      "previous": "other",
-      "current": "conversation",
-      "desc_now": "Free speech-to-text for DeepSeek Harness. Hold the composer microphone and the text is typed into the input box as you speak; on release the whole take is recognized once more and replaces the preview. Also wb_transcribe for long audio and video (WorkBuddy does not bill speech input).",
-      "desc_prev": "Hold-to-talk voice input for DeepSeek Harness, transcribed on the WorkBuddy cloud — no local speech model required."
-    },
-    {
-      "full_name": "akeno6388/dsh-plugin-avalonia-mcp",
-      "previous": "coding",
-      "current": "web-ui",
-      "desc_now": "This makes the \"AI edits Avalonia UI\" loop a one-time install: it wires up the cdp-cli MCP automatically and adds build, launch, restart, reconnect, health check, a selector guide, and self-update, so after installing once, everything needed to drive and verify UI changes is ready.",
-      "desc_prev": "Avalonia 前端 MCP 基建：CDP 接入 + 开发循环工具（构建/启动/重启/重连/体检）+ GitHub 自更新"
-    },
-    {
-      "full_name": "gsnowdrift/dsh-java-ops",
-      "previous": "other",
-      "current": "coding",
-      "desc_now": "给 AI 装上操作 Java 服务的手：编译、启停重启、调接口、读数据库，自己改、自己启、自己验。",
-      "desc_prev": "DeepSeek Harness 插件：Java/Spring Boot 服务启停、重启、构建与 SQL 查询"
+      "full_name": "BillyWang-7/dsh-turn-bell",
+      "previous": "web-ui",
+      "current": "notify",
+      "desc_now": "收工铃 Turn Bell — DeepSeek Harness 原生通知：一轮回答结束或需要你确认时，用应用自己的图标与声音弹出系统通知，点击横幅直接跳到对应会话。macOS / Windows / Linux.",
+      "desc_prev": "Native DeepSeek Harness notifications in the app's own icon and sound — when a turn finishes or the agent needs your confirmation."
     }
   ]
 }
