@@ -1,20 +1,97 @@
 {
-  "generated_at": "2026-11-17T13:59:28.211Z",
-  "count": 2,
+  "generated_at": "2026-11-17T21:05:43.587Z",
+  "count": 13,
   "items": [
     {
-      "full_name": "ygzhang-lab/dsh-plugin-git-commit-push",
-      "previous": "agent",
-      "current": "tool",
-      "desc_now": "0 Token Git 提交推送插件，一次调用完成按 Conventional 为每个变更文件自动生成提交信息并按 type(scope) 拆成多次提交后一次推送到Git，必要时询问打标签。One-call Conventional-Commits git workflow for DeepSeek Harness: survey + one commit per type(scope) + optional tag + push, plus a /git-commit-push slash command that runs with no model involvement",
-      "desc_prev": "One-call Conventional-Commits git workflow for DSH: survey + commit + optional tag + push, plus a /commit-push slash command that runs with no model involvement. Windows and macOS/Linux."
+      "full_name": "STARDUSTLC666/dsh-remotion",
+      "previous": "other",
+      "current": "web-ui",
+      "desc_now": "DeepSeek Harness React 视频创作工作台：内置官方 Remotion 技能、工程检索、模板库、素材排序、Studio 预览与本地 MP4 导出，支持原生清透 / 米白纸感 / Claude 暖书卷 / 8-Bit 像素 / 晴空薄荷五套明亮工作台主题。欢迎提交 issues 和 PR。",
+      "desc_prev": "DSH React 视频工作台：官方 Remotion 技能、工程检索、模板、素材排序、Studio 预览与 MP4 导出。欢迎提交 issues 和 PR。"
     },
     {
-      "full_name": "BillyWang-7/dsh-turn-bell",
+      "full_name": "lhh010/dsh-minigames",
       "previous": "web-ui",
-      "current": "notify",
-      "desc_now": "收工铃 Turn Bell — DeepSeek Harness 原生通知：一轮回答结束或需要你确认时，用应用自己的图标与声音弹出系统通知，点击横幅直接跳到对应会话。macOS / Windows / Linux.",
-      "desc_prev": "Native DeepSeek Harness notifications in the app's own icon and sound — when a turn finishes or the agent needs your confirmation."
+      "current": "memory",
+      "desc_now": "DSH 小游戏面板：172 款离线小游戏（六类分类+经典策展），3D 可旋转魔方、双陆棋、疯狂八号、抓娃娃机、N-Back 记忆训练、深海潜水等原创机制，等模型回复时的摸鱼神器。",
+      "desc_prev": "DSH 小游戏面板：164 款离线小游戏（六类分类+经典策展），多米诺连锁、蛋糕等分几何、吹牛骰心理博弈、丝路商队套利、炼金合成、引力弹弓等原创机制，等模型回复时的摸鱼神器。"
+    },
+    {
+      "full_name": "STARDUSTLC666/dsh-hyperframes",
+      "previous": "other",
+      "current": "web-ui",
+      "desc_now": "DeepSeek Harness HTML 视频创作工作台：内置官方 HyperFrames 技能、工程检索、模板库、素材排序、浏览器预览与本地 MP4 导出，支持原生清透 / 米白纸感 / Claude 暖书卷 / 8-Bit 像素 / 晴空薄荷五套明亮工作台主题。欢迎提交 issues 和 PR。",
+      "desc_prev": "DSH HTML 视频工作台：官方 HyperFrames 技能、工程检索、模板、素材排序、预览与本地 MP4 导出。欢迎提交 issues 和 PR。"
+    },
+    {
+      "full_name": "STARDUSTLC666/dsh-ffmpeg",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "DeepSeek Harness 音视频处理插件：本机 FFmpeg 探测、剪辑转码、字幕烧录、抽帧与 GIF 导出。欢迎提交 issues 和 PR。",
+      "desc_prev": "DSH 音视频处理：本机 FFmpeg 裁切、转码、字幕、音轨、GIF、抽帧与视频总览图。欢迎提交 issues 和 PR。"
+    },
+    {
+      "full_name": "STARDUSTLC666/dsh-calendar",
+      "previous": "tool",
+      "current": "web-ui",
+      "desc_now": "DeepSeek Harness 原生日历工作台：连接 CalDAV（Google/iCloud/Nextcloud/自建），支持月/周/议程视图、空闲时段查找、ICS 预览导入、多套布局配色及五种界面主题切换（原生清透/米白纸感/Claude 暖书卷/8-Bit 像素/晴空薄荷）。欢迎提交 issues 和 PR。",
+      "desc_prev": "DeepSeek Harness 原生日历工作台。连接 CalDAV，切换月、周和议程视图，查找空闲时段，预览并导入 ICS，可选多套布局和配色。欢迎提交 PR。"
+    },
+    {
+      "full_name": "omdsh-dev/dsh-better-dsh",
+      "previous": "conversation",
+      "current": "agent",
+      "desc_now": "DSH一站式增强套件，让多代理协作更高效，让复杂任务从想法走向交付",
+      "desc_prev": "把单一会话不可能的巨任务拆成无数可验证子系统，大规模并行有纪律执行"
+    },
+    {
+      "full_name": "goatliamia/trajectory-tree",
+      "previous": "agent",
+      "current": "web-ui",
+      "desc_now": "Visualize agent traces, explore Eval metrics and evidence-linked reports for DSH, Pi, Codex and Claude Code, plus an Antigravity context sidebar.",
+      "desc_prev": "Visualize real agent traces, explore Eval metrics, and build reports with linked evidence across Codex, Claude Code, Pi, and DSH."
+    },
+    {
+      "full_name": "STARDUSTLC666/dsh-flakefinder",
+      "previous": "resource",
+      "current": "tool",
+      "desc_now": "DeepSeek Harness 偶发测试排查插件：多轮复跑、失败率统计、差异追踪与工作区隔离清单。欢迎提交 issues 和 PR。",
+      "desc_prev": "DSH 偶发测试调查：重复运行、失败记录、工作区隔离列表与写操作确认。欢迎提交 issues 和 PR。"
+    },
+    {
+      "full_name": "superShen0916/dsh-work-skin",
+      "previous": "web-ui",
+      "current": "coding",
+      "desc_now": "打开 DSH，今天在海边写代码。换到晴窗猫咪，连气泡和代码块都换成暖米色。内置 13 套高清主题，适配宽窄窗口，也能上传自己的图或动手扩展。",
+      "desc_prev": "DSH 一键换肤 · 13 套插画主题，支持壁纸预览、切换与恢复默认"
+    },
+    {
+      "full_name": "yjnmedia/dsh-skill-order",
+      "previous": "other",
+      "current": "resource",
+      "desc_now": "DSH 技能控制（别名技能管家）：分组排序、行内改名、导入本机目录或 zip，改完斜杠菜单立刻生效。",
+      "desc_prev": "DSH 技能管家：排序、改名、自动规范，改完立刻生效。"
+    },
+    {
+      "full_name": "SLZ2025/dsh-del-chat",
+      "previous": "conversation",
+      "current": "web-ui",
+      "desc_now": "Adds a Delete archive item to the DSH sidebar Session menu: permanently removes an archived Session JSONL log, projection cache and Workspace record from disk, then drops the row from the sidebar without a restart.",
+      "desc_prev": "DSH plugin: a “Delete conversation” item in the Session header menu that permanently removes an archived Session log, projection cache and Workspace record."
+    },
+    {
+      "full_name": "guiheng123/dsh-rollback",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "让每次修改文件都可以撤回，回滚本身也可以被回滚",
+      "desc_prev": null
+    },
+    {
+      "full_name": "wuxiaozp/dsh-netgate",
+      "previous": "coding",
+      "current": "tool",
+      "desc_now": "NetGate for DeepSeek Harness: one switch that cuts the model off the internet on phone (dsh-go) and Windows (DSH Desktop), with most local work left intact.",
+      "desc_prev": "NetGate for DeepSeek Harness: one switch that cuts the model off the internet on phone (dsh-go) and Windows (DSH Desktop), while coding keeps working."
     }
   ]
 }
