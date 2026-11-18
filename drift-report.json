@@ -1,41 +1,104 @@
 {
-  "generated_at": "2026-11-18T03:50:41.945Z",
-  "count": 5,
+  "generated_at": "2026-11-18T14:53:00.531Z",
+  "count": 14,
   "items": [
     {
       "full_name": "lhh010/dsh-minigames",
-      "previous": "memory",
-      "current": "coding",
-      "desc_now": "DSH 小游戏面板：176 款离线小游戏（六类分类+经典策展），编程机器人指令谜题、光轮对决、炮台弹道对决、弹珠瀑布、3D 魔方等原创机制，等模型回复时的摸鱼神器。",
-      "desc_prev": "DSH 小游戏面板：172 款离线小游戏（六类分类+经典策展），3D 可旋转魔方、双陆棋、疯狂八号、抓娃娃机、N-Back 记忆训练、深海潜水等原创机制，等模型回复时的摸鱼神器。"
+      "previous": "coding",
+      "current": "web-ui",
+      "desc_now": "DSH 小游戏面板：180 款离线小游戏（六类分类+经典策展），圈地争夺、消防救火、牧羊犬群体驯服、旗帜竞猜、3D 魔方等原创机制，等模型回复时的摸鱼神器。",
+      "desc_prev": "DSH 小游戏面板：176 款离线小游戏（六类分类+经典策展），编程机器人指令谜题、光轮对决、炮台弹道对决、弹珠瀑布、3D 魔方等原创机制，等模型回复时的摸鱼神器。"
     },
     {
-      "full_name": "ECCVIK/LMTAgent",
+      "full_name": "ifrankwang/openspec-agents",
+      "previous": "tool",
+      "current": "coding",
+      "desc_now": "OpenSpec 流程插件：提案前先澄清需求，并对提案文档做一轮复核；实施在独立 worktree 中进行，不影响主仓库，每轮以一个任务组为单位推进；实施由开发与审核两个 Agent 分工，功能有问题或质量不通过时不允许结束，问题会退回开发 Agent 修复；内置多类规范 skill 作为质量审查基准，支持 Vue 前端与 Java 后端项目。",
+      "desc_prev": "OpenSpec 的配套插件，兼容 Claude Code / Codex / ZCode / DeepSeek Harness / OpenCode：提案标准更严（澄清在前、改动范围与契约变更逐条确认），实施由多 Agent 分工审查，按生产级标准把控到收口。"
+    },
+    {
+      "full_name": "LinXueyuanStdio/dsh-git",
+      "previous": "other",
+      "current": "web-ui",
+      "desc_now": "Local Git + GitHub (Code/Issues/PRs/Actions) in the official DSH right sidebar; commit messages written by your DSH model.",
+      "desc_prev": "dsh plugin of git"
+    },
+    {
+      "full_name": "DrizzleGig/dsh-novel-beat",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "让故事怎么发展，由你决定！「拍板」帮助小说作者掌控全书剧情走向。人物命运、关系变化、秘密揭晓、重大转折，每一个重要选择都由你做主。你可以决定故事走哪条路，也能随时回看全书做过的选择，了解当初还有哪些可能。想改变剧情？右栏「拍板台」让你一眼看清全书决策，提前预览改动会影响哪些正文、设定和后续剧情，再安全回退、重新选择。过去的故事路线依然可以查看，不必害怕推翻旧决定。无论你是在创作，还是期待一个真正由自己掌控的故事，都能让每个选择有迹可循，让故事始终沿着你想要的方向发展。",
+      "desc_prev": "AI 写小说时，关键剧情不该由模型顺手决定。「拍板」在影响故事走向的岔路暂停，给你 2–4 个真不同的走向和各自代价；你选的写进全书账本，写作按段推进、逐段登记。DSH 插件，默认关闭，不写正文，不依赖其他插件。"
+    },
+    {
+      "full_name": "DrizzleGig/dsh-novel-voice",
+      "previous": "other",
+      "current": "resource",
+      "desc_now": "想让 AI 写出你喜欢的小说风格，甚至形成独属于自己的文风？「创作风格」支持导入你喜欢的小说和自己的原创作品，从中提炼写作特点，建立专属风格档案。无论你是想让 AI 写出喜欢的故事风格，还是寻找、打磨自己的独特文风，都可以把喜欢的作品和自己的创作变成风格素材，让 AI 按照你喜欢的方式写小说。",
+      "desc_prev": "把你喜欢的小说变成 AI 写作的风格：喜欢什么样的小说，就从什么样的作品开始；想形成什么样的文风，就把它一点点变成自己的风格。"
+    },
+    {
+      "full_name": "tangolee/dsh-sidebar-tuner",
+      "previous": "web-ui",
+      "current": "coding",
+      "desc_now": "DSH 桌面端侧栏样式与对话区排版：字体选择与修改、双栏布局、桌面端图标列设置、终端字体 | Sidebar and conversation typography for the DSH desktop UI: font picking and editing, two-column layout, icon rail settings, terminal fonts",
+      "desc_prev": "dsh侧边栏字体、样式修改插件"
+    },
+    {
+      "full_name": "Chsw-CC/dsh-lazy-tools",
+      "previous": "resource",
+      "current": "tool",
+      "desc_now": "On-demand tool loading for DeepSeek Harness: the core set stays native, the long tail sits behind one toolbox entry, so about 36k tokens of tool schemas stop riding along with every request.",
+      "desc_prev": "On-demand tool and skill loading for DeepSeek Assistant: one toolbox replaces the standing tool catalog, cutting prompt tokens."
+    },
+    {
+      "full_name": "xiaomao361/dsh-jand",
+      "previous": "other",
+      "current": "notify",
+      "desc_now": "DeepSeek Harness plugin for encrypted file handoffs and cross-device agent collaboration via Jand.",
+      "desc_prev": null
+    },
+    {
+      "full_name": "duroey/dsh-study-tree",
+      "previous": "web-ui",
+      "current": "conversation",
+      "desc_now": "A DeepSeek Harness plugin for branching learning conversations with real session forks and tree navigation.",
+      "desc_prev": "Learn through real DeepSeek Harness session forks, a tree navigator, and native Agent chat. 学习导航：一个节点，一个真实会话。"
+    },
+    {
+      "full_name": "Fatelikeshit/dsh-card-lan",
       "previous": "tool",
       "current": "web-ui",
-      "desc_now": "Multi-agent software engineering orchestrator for DeepSeek Harness (DSH): 1:1 session workspaces, AI blueprint sharding, 4-Wave DAG dispatch, PG/SQLite WAL fact store & docked console",
-      "desc_prev": "⚡ WorkBuddy × DSH Brand Blue 8-Role Software Engineering & Security Multi-Agent Cluster (gstack + 4-Wave Bounded DAG + 6 Slots + PostgreSQL Engine) for DeepSeek Harness (DSH Desktop)"
+      "desc_now": "局域网棋牌桌：21 点 / 斗地主 / 跑得快 / 掼蛋 / 炸金花 / 德州 / 日麻（四人·三人），UDP 房间发现 + 房主权威牌局，支持密码/观战/人机补位/掉线重连。",
+      "desc_prev": "局域网 21 点牌桌：DeepSeek Harness 插件，UDP 房间发现 + 房主权威牌局 + 房间密码 / 观战 / 浮层显示设置"
     },
     {
-      "full_name": "c3115644151/dsh-inbox-bridge",
-      "previous": "conversation",
-      "current": "model",
-      "desc_now": "DSH 插件：让每个会话自己盯 GitHub——它提的 PR 被评审、CI 挂了、派给它的 issue 有人回，下一轮自动进上下文，空闲时还能自己开一轮。只读，不改仓库。",
-      "desc_prev": "DSH 插件：让 agent 像维护者一样盯着你的仓库——CI 挂了就修、请你评审就审、指派给你的 issue 就接。按会话订阅仓库自己取数，要紧的事不等你开口就开一轮。只读 GitHub。"
+      "full_name": "pengtang1024/dsh-paste-image",
+      "previous": "tool",
+      "current": "vision",
+      "desc_now": "Paste or drop almost any image into DeepSeek Harness: XPM, BMP/DIB, SVG and ICO are converted to real PNG in the renderer.",
+      "desc_prev": "Paste any image into DeepSeek Harness: converts XPM/BMP/TIFF and MIME-lying images to real PNG in the renderer"
     },
     {
-      "full_name": "SeekAfterSeek/dsh-chrome-only",
-      "previous": "notify",
-      "current": "tool",
-      "desc_now": "【已归档 · V1.0】DSH 浏览器方案第一代：所有跳转强制 Google Chrome。后继：dsh-url-router（V3.0，按国内外分流）。",
-      "desc_prev": "DeepSeek Harness bundle: every browser navigation goes to Google Chrome - tools, guard, prompt rule, and a Chrome handoff so dsh web never opens the OS default browser."
+      "full_name": "Cheemsup/dsh-plugin-console",
+      "previous": "tool",
+      "current": "web-ui",
+      "desc_now": "DSH 侧边栏插件控制台：查看 DSH 插件信息、会话来源与工具归属，预演上下文内容与插件禁用影响，并支持提示词/工具定制首次请求。",
+      "desc_prev": "DSH plugin console: inspect plugin composition, session origins, and tool ownership; preview and customize the first model request."
+    },
+    {
+      "full_name": "7nian173/dsh-session-orchestrator",
+      "previous": "agent",
+      "current": "conversation",
+      "desc_now": "让 DeepSeek Harness 里的多个会话可以互相创建、互相跳转、互相写信。",
+      "desc_prev": null
     },
     {
       "full_name": "songsenand/yingzao",
-      "previous": "other",
-      "current": "agent",
+      "previous": "agent",
+      "current": "web-ui",
       "desc_now": "A dsh plugin for mechanical CAD — the agent generates, the plugin closes the loop.",
-      "desc_prev": null
+      "desc_prev": "A dsh plugin for mechanical CAD — the agent generates, the plugin closes the loop."
     }
   ]
 }
