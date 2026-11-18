@@ -1,97 +1,41 @@
 {
-  "generated_at": "2026-11-17T21:05:43.587Z",
-  "count": 13,
+  "generated_at": "2026-11-18T03:50:41.945Z",
+  "count": 5,
   "items": [
     {
-      "full_name": "STARDUSTLC666/dsh-remotion",
-      "previous": "other",
-      "current": "web-ui",
-      "desc_now": "DeepSeek Harness React 视频创作工作台：内置官方 Remotion 技能、工程检索、模板库、素材排序、Studio 预览与本地 MP4 导出，支持原生清透 / 米白纸感 / Claude 暖书卷 / 8-Bit 像素 / 晴空薄荷五套明亮工作台主题。欢迎提交 issues 和 PR。",
-      "desc_prev": "DSH React 视频工作台：官方 Remotion 技能、工程检索、模板、素材排序、Studio 预览与 MP4 导出。欢迎提交 issues 和 PR。"
-    },
-    {
       "full_name": "lhh010/dsh-minigames",
-      "previous": "web-ui",
-      "current": "memory",
-      "desc_now": "DSH 小游戏面板：172 款离线小游戏（六类分类+经典策展），3D 可旋转魔方、双陆棋、疯狂八号、抓娃娃机、N-Back 记忆训练、深海潜水等原创机制，等模型回复时的摸鱼神器。",
-      "desc_prev": "DSH 小游戏面板：164 款离线小游戏（六类分类+经典策展），多米诺连锁、蛋糕等分几何、吹牛骰心理博弈、丝路商队套利、炼金合成、引力弹弓等原创机制，等模型回复时的摸鱼神器。"
+      "previous": "memory",
+      "current": "coding",
+      "desc_now": "DSH 小游戏面板：176 款离线小游戏（六类分类+经典策展），编程机器人指令谜题、光轮对决、炮台弹道对决、弹珠瀑布、3D 魔方等原创机制，等模型回复时的摸鱼神器。",
+      "desc_prev": "DSH 小游戏面板：172 款离线小游戏（六类分类+经典策展），3D 可旋转魔方、双陆棋、疯狂八号、抓娃娃机、N-Back 记忆训练、深海潜水等原创机制，等模型回复时的摸鱼神器。"
     },
     {
-      "full_name": "STARDUSTLC666/dsh-hyperframes",
-      "previous": "other",
-      "current": "web-ui",
-      "desc_now": "DeepSeek Harness HTML 视频创作工作台：内置官方 HyperFrames 技能、工程检索、模板库、素材排序、浏览器预览与本地 MP4 导出，支持原生清透 / 米白纸感 / Claude 暖书卷 / 8-Bit 像素 / 晴空薄荷五套明亮工作台主题。欢迎提交 issues 和 PR。",
-      "desc_prev": "DSH HTML 视频工作台：官方 HyperFrames 技能、工程检索、模板、素材排序、预览与本地 MP4 导出。欢迎提交 issues 和 PR。"
-    },
-    {
-      "full_name": "STARDUSTLC666/dsh-ffmpeg",
-      "previous": "other",
-      "current": "tool",
-      "desc_now": "DeepSeek Harness 音视频处理插件：本机 FFmpeg 探测、剪辑转码、字幕烧录、抽帧与 GIF 导出。欢迎提交 issues 和 PR。",
-      "desc_prev": "DSH 音视频处理：本机 FFmpeg 裁切、转码、字幕、音轨、GIF、抽帧与视频总览图。欢迎提交 issues 和 PR。"
-    },
-    {
-      "full_name": "STARDUSTLC666/dsh-calendar",
+      "full_name": "ECCVIK/LMTAgent",
       "previous": "tool",
       "current": "web-ui",
-      "desc_now": "DeepSeek Harness 原生日历工作台：连接 CalDAV（Google/iCloud/Nextcloud/自建），支持月/周/议程视图、空闲时段查找、ICS 预览导入、多套布局配色及五种界面主题切换（原生清透/米白纸感/Claude 暖书卷/8-Bit 像素/晴空薄荷）。欢迎提交 issues 和 PR。",
-      "desc_prev": "DeepSeek Harness 原生日历工作台。连接 CalDAV，切换月、周和议程视图，查找空闲时段，预览并导入 ICS，可选多套布局和配色。欢迎提交 PR。"
+      "desc_now": "Multi-agent software engineering orchestrator for DeepSeek Harness (DSH): 1:1 session workspaces, AI blueprint sharding, 4-Wave DAG dispatch, PG/SQLite WAL fact store & docked console",
+      "desc_prev": "⚡ WorkBuddy × DSH Brand Blue 8-Role Software Engineering & Security Multi-Agent Cluster (gstack + 4-Wave Bounded DAG + 6 Slots + PostgreSQL Engine) for DeepSeek Harness (DSH Desktop)"
     },
     {
-      "full_name": "omdsh-dev/dsh-better-dsh",
+      "full_name": "c3115644151/dsh-inbox-bridge",
       "previous": "conversation",
+      "current": "model",
+      "desc_now": "DSH 插件：让每个会话自己盯 GitHub——它提的 PR 被评审、CI 挂了、派给它的 issue 有人回，下一轮自动进上下文，空闲时还能自己开一轮。只读，不改仓库。",
+      "desc_prev": "DSH 插件：让 agent 像维护者一样盯着你的仓库——CI 挂了就修、请你评审就审、指派给你的 issue 就接。按会话订阅仓库自己取数，要紧的事不等你开口就开一轮。只读 GitHub。"
+    },
+    {
+      "full_name": "SeekAfterSeek/dsh-chrome-only",
+      "previous": "notify",
+      "current": "tool",
+      "desc_now": "【已归档 · V1.0】DSH 浏览器方案第一代：所有跳转强制 Google Chrome。后继：dsh-url-router（V3.0，按国内外分流）。",
+      "desc_prev": "DeepSeek Harness bundle: every browser navigation goes to Google Chrome - tools, guard, prompt rule, and a Chrome handoff so dsh web never opens the OS default browser."
+    },
+    {
+      "full_name": "songsenand/yingzao",
+      "previous": "other",
       "current": "agent",
-      "desc_now": "DSH一站式增强套件，让多代理协作更高效，让复杂任务从想法走向交付",
-      "desc_prev": "把单一会话不可能的巨任务拆成无数可验证子系统，大规模并行有纪律执行"
-    },
-    {
-      "full_name": "goatliamia/trajectory-tree",
-      "previous": "agent",
-      "current": "web-ui",
-      "desc_now": "Visualize agent traces, explore Eval metrics and evidence-linked reports for DSH, Pi, Codex and Claude Code, plus an Antigravity context sidebar.",
-      "desc_prev": "Visualize real agent traces, explore Eval metrics, and build reports with linked evidence across Codex, Claude Code, Pi, and DSH."
-    },
-    {
-      "full_name": "STARDUSTLC666/dsh-flakefinder",
-      "previous": "resource",
-      "current": "tool",
-      "desc_now": "DeepSeek Harness 偶发测试排查插件：多轮复跑、失败率统计、差异追踪与工作区隔离清单。欢迎提交 issues 和 PR。",
-      "desc_prev": "DSH 偶发测试调查：重复运行、失败记录、工作区隔离列表与写操作确认。欢迎提交 issues 和 PR。"
-    },
-    {
-      "full_name": "superShen0916/dsh-work-skin",
-      "previous": "web-ui",
-      "current": "coding",
-      "desc_now": "打开 DSH，今天在海边写代码。换到晴窗猫咪，连气泡和代码块都换成暖米色。内置 13 套高清主题，适配宽窄窗口，也能上传自己的图或动手扩展。",
-      "desc_prev": "DSH 一键换肤 · 13 套插画主题，支持壁纸预览、切换与恢复默认"
-    },
-    {
-      "full_name": "yjnmedia/dsh-skill-order",
-      "previous": "other",
-      "current": "resource",
-      "desc_now": "DSH 技能控制（别名技能管家）：分组排序、行内改名、导入本机目录或 zip，改完斜杠菜单立刻生效。",
-      "desc_prev": "DSH 技能管家：排序、改名、自动规范，改完立刻生效。"
-    },
-    {
-      "full_name": "SLZ2025/dsh-del-chat",
-      "previous": "conversation",
-      "current": "web-ui",
-      "desc_now": "Adds a Delete archive item to the DSH sidebar Session menu: permanently removes an archived Session JSONL log, projection cache and Workspace record from disk, then drops the row from the sidebar without a restart.",
-      "desc_prev": "DSH plugin: a “Delete conversation” item in the Session header menu that permanently removes an archived Session log, projection cache and Workspace record."
-    },
-    {
-      "full_name": "guiheng123/dsh-rollback",
-      "previous": "other",
-      "current": "tool",
-      "desc_now": "让每次修改文件都可以撤回，回滚本身也可以被回滚",
+      "desc_now": "A dsh plugin for mechanical CAD — the agent generates, the plugin closes the loop.",
       "desc_prev": null
-    },
-    {
-      "full_name": "wuxiaozp/dsh-netgate",
-      "previous": "coding",
-      "current": "tool",
-      "desc_now": "NetGate for DeepSeek Harness: one switch that cuts the model off the internet on phone (dsh-go) and Windows (DSH Desktop), with most local work left intact.",
-      "desc_prev": "NetGate for DeepSeek Harness: one switch that cuts the model off the internet on phone (dsh-go) and Windows (DSH Desktop), while coding keeps working."
     }
   ]
 }
