@@ -1,69 +1,27 @@
 {
-  "generated_at": "2026-11-18T22:48:34.473Z",
-  "count": 9,
+  "generated_at": "2026-11-19T03:32:58.669Z",
+  "count": 3,
   "items": [
     {
-      "full_name": "Yzm889/TianZheng-ai-plugin",
-      "previous": "other",
+      "full_name": "Sivan757/dsh-agent-plugins-market",
+      "previous": "coding",
       "current": "tool",
-      "desc_now": "天正建筑 AI 插件 · T20/T30 天正建筑 MCP connector for DeepSeek Harness — 让 AI 直接生成真天正对象：墙体、门窗、轴网、柱、楼梯、阳台、天正文字",
-      "desc_prev": "天正建筑 AI 插件 · T20/T30 天正建筑 MCP connector for DeepSeek Harness — 让 AI 直接生成真天正对象：墙体、门窗、轴网、柱、楼梯、阳台、天正文字"
+      "desc_now": "Skills and extensions manager for DeepSeek Harness (DSH). Install Claude Code, Codex, Cursor and Kimi plugin repositories as they are, without waiting for a DSH port.",
+      "desc_prev": "One-stop skills, subagent, MCP and LSP manager for DeepSeek Harness (DSH) — compatible with Claude Code, Codex, Cursor, Kimi and other agent plugin layouts."
     },
     {
-      "full_name": "wangjianghu/dsh-composer-lists",
-      "previous": "conversation",
-      "current": "coding",
-      "desc_now": "Ordered/unordered list editing for the DeepSeek Harness composer — auto numbering, marker-aware caret moves, blank-line flow, undoable AI prompt polish. 输入框列表编排：自动编号、标记感知光标、空行编排、可撤销的 AI 提示词优化。",
-      "desc_prev": "Ordered/unordered list editing for the DeepSeek Harness composer — auto numbering, marker-aware caret moves, blank-line flow, undoable AI prompt polish. 输入框列表编排：自动编号、标记感知光标、空行编排、可撤销的 AI 提示词优化。"
-    },
-    {
-      "full_name": "keli-wen/cospan",
-      "previous": "tool",
-      "current": "coding",
-      "desc_now": "Unified orchestration across coding agents — connect Antigravity, Codex, Claude Code, and DeepSeek Harness through one async delegation protocol.",
-      "desc_prev": "Unified orchestration across coding agents — connect Antigravity, Codex, Claude Code, and DeepSeek Harness through one async delegation protocol."
-    },
-    {
-      "full_name": "chocobo77/llama-dsh-launcher",
-      "previous": "tool",
-      "current": "other",
-      "desc_now": "llama.cpp 与 DeepSeek Harness(DSH) 的桌面管理器：参数方案、一键更新、Tauri 桌面壳接管、插件修复与实时监测",
-      "desc_prev": "一款llama.cpp与DeepSeek Harness的多功能管理工具"
-    },
-    {
-      "full_name": "781237194/agile-workbench",
-      "previous": "other",
-      "current": "coding",
-      "desc_now": "PM工作台（Agile Workbench）：本地优先的多角色项目工作台（Electron + DeepSeek Harness）。需求流程：分析师写正文 → 产品评审 → Owner评审门 → PM派开发 → 测试独立复验 → Owner本人验收（代管不可代验需求）。缺陷流程：任意角色立单（复现+验收标准）→ PM派开发 → 修复提交 → 测试复验 → PM/测试验收。一句话安装：dsh-agile-workbench",
-      "desc_prev": "PM工作台（Agile Workbench）：本地优先的多角色项目工作台（Electron + DeepSeek Harness）。需求流程：分析师写正文 → 产品评审 → Owner评审门 → PM派开发 → 测试独立复验 → Owner本人验收（代管不可代验需求）。缺陷流程：任意角色立单（复现+验收标准）→ PM派开发 → 修复提交 → 测试复验 → PM/测试验收。一句话安装：dsh-agile-workbench"
-    },
-    {
-      "full_name": "timxiang-948/dsh-composer-model-controls",
-      "previous": "conversation",
-      "current": "web-ui",
-      "desc_now": "Reasoning-effort control for the DSH composer: adaptive effort slider with track and border tint, Shift+Tab cycling, and the built-in model menu left untouched.",
-      "desc_prev": "Reasoning-effort control for the DSH composer: adaptive effort slider with track and border tint, Shift+Tab cycling, and the built-in model menu left untouched."
-    },
-    {
-      "full_name": "visangela/dsh-novel-assistant",
-      "previous": "other",
-      "current": "vision",
-      "desc_now": "给DSH加一个最懂你的“小说助手”：前面写过什么不会忘，改一章不会崩十章，写完能自己核对一遍，还能实时可视化情节进展，人物关系和场景地图 | Long-form fiction assistant for DSH with hard-fact validation, revision reconciliation, and generated relationship / plot / scene maps.",
-      "desc_prev": "给DSH加一个最懂你的“小说助手”：前面写过什么不会忘，改一章不会崩十章，写完能自己核对一遍，还能实时可视化情节进展，人物关系和场景地图 | Long-form fiction assistant for DSH with hard-fact validation, revision reconciliation, and generated relationship / plot / scene maps."
-    },
-    {
-      "full_name": "xuanqing-95/dsh-personal-workbench",
+      "full_name": "surfishs/dsh-prompt-enhance",
       "previous": "web-ui",
       "current": "conversation",
-      "desc_now": "DeepSeek Harness 的个人 AI 工作台。集中查看今天的计划、AI 已交付的成果和等你处理的事项，点开成果或原对话继续跟进。",
-      "desc_prev": "个人主控台：DeepSeek Harness 的计划、AI 日报、助手与项目总览，由玄清设计。"
+      "desc_now": "DSH Web GUI 的提示词增强插件：一键把草稿改写为结构化提示词，支持结果卡、回填、复制、重新生成、撤销与右键快捷设置。 | Prompt enhancement plugin for the DSH web GUI: one-click structured rewrite with a result card, apply, copy, regenerate, undo and a right-click settings card.",
+      "desc_prev": "DSH Web GUI 的提示词增强插件：一键把输入框草稿改写为结构化提示词，支持停靠结果卡、回填、复制、重新生成与撤销。 | Prompt enhancement plugin for the DSH web GUI: turn a composer draft into a structured prompt with a docked result card, apply, copy, regenerate and undo."
     },
     {
-      "full_name": "tbx709/dsh-prompt-gate",
-      "previous": "conversation",
-      "current": "tool",
-      "desc_now": "The first message of a new session is held: dsh rewrites it, shows you the result, and only unlocks its tools after you approve. ",
-      "desc_prev": null
+      "full_name": "BiXianGoGo/dsh-ESPemotion-pool",
+      "previous": "other",
+      "current": "conversation",
+      "desc_now": "鲸汐ESP情绪插件：把每轮对话读成 E/S/P 三轴，先分四态，再按形状归名字；500 条种子冷启动，787 测试。",
+      "desc_prev": "DSH 插件：三轴情绪状态 + 思考轨迹打点（E/S/P，四态、形状、种子冷启动）"
     }
   ]
 }
