@@ -1,41 +1,27 @@
 {
-  "generated_at": "2026-11-19T22:52:45.682Z",
-  "count": 5,
+  "generated_at": "2026-11-20T07:04:23.610Z",
+  "count": 3,
   "items": [
     {
-      "full_name": "Amesawa-000/dsh-ppt-image-studio",
+      "full_name": "cxydaizihao520/dsh-session-coordinator",
       "previous": "other",
-      "current": "web-ui",
-      "desc_now": "DSH 插件：图形化配置生图 API，让 agent 为 PPT 生成配图，也可以直接作为侧边栏生图工具。",
-      "desc_prev": "DSH 插件：图形化配置生图 API，让 agent 为 PPT 生成配图，也可以直接作为侧边栏生图工具。"
-    },
-    {
-      "full_name": "simveit/dsh-matriarc",
-      "previous": "web-ui",
-      "current": "coding",
-      "desc_now": "Matriarc: a second model plans and reviews the work of a DeepSeek Harness (dsh) session, through a DSH subagent plugin that runs another coding agent.",
-      "desc_prev": "Matriarc: a second model plans and reviews the work of a DeepSeek Harness (dsh) session, through a DSH subagent plugin that runs another coding agent."
-    },
-    {
-      "full_name": "Kapozux/dsh-xiaobenben",
-      "previous": "agent",
-      "current": "web-ui",
-      "desc_now": "小本本 · DeepSeek Harness 插件：住在右下角的鲸鱼娘桌宠，点一下翻一件你和 AI 干过的真事；台词可用你自己的模型写（选了才发送）。附 agent 年度回顾。",
-      "desc_prev": "小本本 · DeepSeek Harness plugin: agent year-in-review + 翻旧账 (works with dsh-pet)"
-    },
-    {
-      "full_name": "yugyq/dsh-composer-quill",
-      "previous": "web-ui",
-      "current": "conversation",
-      "desc_now": "在 DSH 的输入框里提前把话写好：回合结束后给出下一句，打字时补完后半句，顺手修掉错字和标点。",
-      "desc_prev": "在 DSH 的输入框里提前把话写好：下一句预测、补写与改写，按 Tab 才采用，绝不自动发送"
-    },
-    {
-      "full_name": "kuoxinxin/dsh-handy-toolkits",
-      "previous": "coding",
-      "current": "tool",
-      "desc_now": null,
+      "current": "model",
+      "desc_now": "在 DeepSeek Harness 中，让各自保留历史的独立会话分工、交叉复核，并在批准的范围内共享上下文。",
       "desc_prev": null
+    },
+    {
+      "full_name": "afeiaswell/dsh-hkm",
+      "previous": "web-ui",
+      "current": "notify",
+      "desc_now": "DeepSeek Harness 热键管理面板：查看并修改 DSH 快捷键，扫描系统与第三方来源，并可将窗口最小化到 Windows 通知区域。",
+      "desc_prev": "Hotkey manager panel for DeepSeek Harness: browse and edit DSH shortcuts, scan system and third-party sources, and minimize the window to the Windows notification area."
+    },
+    {
+      "full_name": "DevTarlow/dsh-peak-price-pal",
+      "previous": "model",
+      "current": "web-ui",
+      "desc_now": "A DeepSeek Harness plugin: DeepSeek halves its rates off-peak. A small indicator icon in the composer shows which rate is live, plus your balance and today's spend.",
+      "desc_prev": "A DeepSeek Harness plugin: DeepSeek halves its rates off-peak. A small sun or moon in the composer shows which rate is live, plus your balance and today's spend."
     }
   ]
 }
