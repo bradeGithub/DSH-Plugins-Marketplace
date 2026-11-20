@@ -1,27 +1,55 @@
 {
-  "generated_at": "2026-11-20T07:04:23.610Z",
-  "count": 3,
+  "generated_at": "2026-11-20T14:46:45.000Z",
+  "count": 7,
   "items": [
     {
-      "full_name": "cxydaizihao520/dsh-session-coordinator",
+      "full_name": "STARDUSTLC666/dsh-ppt",
+      "previous": "document",
+      "current": "resource",
+      "desc_now": "DeepSeek Harness 大师级演示文稿引擎与工作台：支持零资料调研核验与 SLOP-13 事实溯源、20 套标杆范本与弱模型零调用自检修复、24 主题 / 35+ 原生可编辑图谱（Mermaid/公式/代码/魔力象限/雷达/哑铃/热力图）、Office 直吞与双屏提词台，导出离线 HTML + 100% 可编辑 PPTX。欢迎 PR 与 Issues。",
+      "desc_prev": "DeepSeek Harness 演示文稿生成与编辑工作台：输入材料即可导出离线 HTML 放映、可编辑 PPTX 与工程包，支持按页编辑、数据推演与预审演练，以及原生清透 / 米白纸感 / Claude 暖书卷 / 8-Bit 像素 / 晴空薄荷五套明亮工作台主题。欢迎提交 issues 和 PR。"
+    },
+    {
+      "full_name": "westwall586/dsh-westwall-plugins",
       "previous": "other",
-      "current": "model",
-      "desc_now": "在 DeepSeek Harness 中，让各自保留历史的独立会话分工、交叉复核，并在批准的范围内共享上下文。",
+      "current": "resource",
+      "desc_now": "DeepSeek Harness 插件合集：友好表达、Feed Ultra 等；npm 安装、各包独立版本。",
+      "desc_prev": "DeepSeek Harness Plugins"
+    },
+    {
+      "full_name": "Caramel-Geass/dsh-conversation-branches",
+      "previous": "conversation",
+      "current": "web-ui",
+      "desc_now": "DeepSeek Harness 插件：选中对话中的文字即可在右侧面板追问，不打断主对话。需要 DSH ≥ 0.2.1-rc.3。",
       "desc_prev": null
     },
     {
-      "full_name": "afeiaswell/dsh-hkm",
-      "previous": "web-ui",
-      "current": "notify",
-      "desc_now": "DeepSeek Harness 热键管理面板：查看并修改 DSH 快捷键，扫描系统与第三方来源，并可将窗口最小化到 Windows 通知区域。",
-      "desc_prev": "Hotkey manager panel for DeepSeek Harness: browse and edit DSH shortcuts, scan system and third-party sources, and minimize the window to the Windows notification area."
+      "full_name": "Hao0311/dsh-price-badge",
+      "previous": "conversation",
+      "current": "model",
+      "desc_now": "Peak/off-peak DeepSeek API pricing badge in the DeepSeek Harness composer, shown only while the session model is a DeepSeek route.",
+      "desc_prev": "Peak/off-peak DeepSeek API pricing badge in the DeepSeek Harness composer, shown only while the session model is a DeepSeek route."
     },
     {
-      "full_name": "DevTarlow/dsh-peak-price-pal",
-      "previous": "model",
-      "current": "web-ui",
-      "desc_now": "A DeepSeek Harness plugin: DeepSeek halves its rates off-peak. A small indicator icon in the composer shows which rate is live, plus your balance and today's spend.",
-      "desc_prev": "A DeepSeek Harness plugin: DeepSeek halves its rates off-peak. A small sun or moon in the composer shows which rate is live, plus your balance and today's spend."
+      "full_name": "Hao0311/dsh-deferred-approvals",
+      "previous": "other",
+      "current": "agent",
+      "desc_now": "Non-blocking approvals and timed questions for DeepSeek Harness: permission requests park as pending items while the model keeps working, and ask_user_question runs in timed mode.",
+      "desc_prev": "Non-blocking approvals and timed questions for DeepSeek Harness: permission requests park as pending items while the model keeps working, and ask_user_question runs in timed mode."
+    },
+    {
+      "full_name": "aaa8leitingpifa/dsh-daily-push",
+      "previous": "notify",
+      "current": "resource",
+      "desc_now": "每日推送：DSH 插件雷达。GitHub 与 npm 全量对照（G / G∩N / N 角标）+ 三榜并列 + 中文搜索，能看你正在做什么再推荐，可填 GitHub 令牌提高上限。",
+      "desc_prev": "每日推送：DSH 插件雷达。星数榜 / 新建榜 / 活跃榜三榜并列，官方仓库单独追踪，内置咨询、关注列表与已装插件更新提醒。"
+    },
+    {
+      "full_name": "JMINN0/dsh-go-second-screen",
+      "previous": "tool",
+      "current": "vision",
+      "desc_now": "安卓「后台屏」：用虚拟屏让 AI 在后台操作手机，完全不抢用户主屏和键盘。无 root，scrcpy + app_process，含悬浮窗实时预览。让 AI 操控手机时你可以继续刷手机。",
+      "desc_prev": "让 AI 在后台操作手机，不抢你的屏幕 —— 虚拟屏 + 浏览器控制 + 实测 1500 行"
     }
   ]
 }
