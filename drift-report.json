@@ -1,20 +1,27 @@
 {
-  "generated_at": "2026-11-21T00:15:06.216Z",
-  "count": 2,
+  "generated_at": "2026-11-21T06:45:11.269Z",
+  "count": 3,
   "items": [
     {
-      "full_name": "Hana-ame/dsh-gear-grid-model",
-      "previous": "other",
-      "current": "model",
-      "desc_now": "把 composer 的 model seat 换成 Gear Grid（2D Cosmic Shifter）风格：元素×强度 2D 网格，一次选择模型与推理等级。数据复用 ctx.modelDirectories，只做显示层。",
-      "desc_prev": "把 composer 的 model seat 换成 Gear Grid（2D Cosmic Shifter）风格：元素×强度 2D 网格，一次选择模型与推理等级。数据复用 ctx.modelDirectories，只做显示层。"
+      "full_name": "taxueseek/dsh-suggestion-chips",
+      "previous": "conversation",
+      "current": "web-ui",
+      "desc_now": "Clickable suggestion chips + Tab ghost text under every DeepSeek Harness reply — stance-ranked, L0 deterministic fallback, high-risk safe gate · 回复建议按钮与 Tab 幽灵投影，高危操作安全门禁",
+      "desc_prev": "Clickable suggestion chips under every reply for DeepSeek Harness"
     },
     {
-      "full_name": "Gaudi-XIX/dsbot-session-create",
-      "previous": "tool",
+      "full_name": "dhr2333/dsh-ledger",
+      "previous": "coding",
       "current": "web-ui",
-      "desc_now": "给 DSH 加四个会话工具的宿主插件。放弃界面与云端中转，直接调用宿主会话控制器；派会话钉死派活者模型与全权限档，停下的会话一律续投同一条不另开。终态标记只管回执，不拦续投；派单台账可查，未知会话拒投。",
-      "desc_prev": "会话编排层：Chief 能把活派给别的 Bot，却派不进「某个项目的那个会话」；宿主已有开会话的原语，但没开成工具。这个插件把原语开成四个工具（建会话、插话、读回话、列派单），派单只追加自己的台账，不另造调度器。"
+      "desc_now": "本地、纯文本、复式的 DSH 账本面板（Beancount）：Agent 提案，你审批和对账。",
+      "desc_prev": "Local-first Beancount ledger panel for DSH: agents propose, you approve and reconcile. Ships a managed Python engine and ledger template."
+    },
+    {
+      "full_name": "coldrainthreeautumnleaves/dsh-concierge",
+      "previous": "other",
+      "current": "web-ui",
+      "desc_now": "DeepSeek Harness 维护中心：应用与插件更新、回退与启停、GitHub 来源与 npm 安装、启动加速、聊天性能面板、打字机。",
+      "desc_prev": null
     }
   ]
 }
