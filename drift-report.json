@@ -1,20 +1,34 @@
 {
-  "generated_at": "2026-11-22T02:24:54.179Z",
-  "count": 2,
+  "generated_at": "2026-11-22T10:05:56.333Z",
+  "count": 4,
   "items": [
     {
-      "full_name": "1624318455/dsh-plugin-tts",
-      "previous": "web-ui",
-      "current": "other",
-      "desc_now": "Read DeepSeek Harness replies aloud — zero-config Edge TTS, local voice cloning when you want it. Gapless long reads.",
-      "desc_prev": "Edge TTS voice plugin for DeepSeek Harness: read assistant replies aloud, auto-read toggle, voice settings panel (free, no API key)"
+      "full_name": "bloodarea/dsh-agent-team-ui-testing",
+      "previous": "coding",
+      "current": "vision",
+      "desc_now": "Frontend GUI debugging and testing for DeepSeekHarness agents: Web/Chromium ships 44 browser_* tools (43 execution + a discovery entry) for structured GUI automation, visual comparison, dynamic frames, annotations and network debugging; 3D has a Blender viewport (observation, annotation, screenshots); other targets are planned.",
+      "desc_prev": "Frontend GUI debugging and testing for DeepSeekHarness agents: Web/Chromium is implemented with 37 browser_* tools for structured GUI automation, visual comparison, dynamic frame analysis, annotation read/write and network debugging; Windows/Linux/macOS desktop, Android, TUI, HarmonyOS, mini programs, games and 3D (nine environments) are planned."
     },
     {
-      "full_name": "hechenhao9/dsh-judge-loop",
+      "full_name": "AIcivilization/dsh-pick",
+      "previous": "other",
+      "current": "resource",
+      "desc_now": "DSH 插件选型助手：把 dshmarket、dsh-plugin-shop、官方和 npm 的 3 万多个插件合成一个榜，去噪排名、AI 精选、一键安装，插件作者可领 README 排名徽章。Pick the right DeepSeek Harness plugin from 30k+.",
+      "desc_prev": "DSH 插件选购顾问：说需求 → 算去噪指标 → 给首选/备选/不推荐。Plugin advisor for DeepSeek Harness: pick the right plugin from 2,250+ candidates with denoised npm metrics."
+    },
+    {
+      "full_name": "Starlit-Sky-code/dsh-experience-optimizer",
       "previous": "agent",
-      "current": "tool",
-      "desc_now": "Two rival AI teams for DeepSeek Harness: a blind professor writes the rubric, a tutor has to meet it, and every claim is checked against real files. 95 分交付 / 双团队评审 / 可核证据",
-      "desc_prev": "Delivery quality gate for DeepSeek Harness: a blind professor writes the rubric, a tutor meets it, a local script enforces the evidence. ????? / ????? / gate ????"
+      "current": "model",
+      "desc_now": "DSH plugin diet, compatibility diagnostics, and workflow blueprints",
+      "desc_prev": "DSH plugin diet, compatibility diagnostics, and workflow blueprints"
+    },
+    {
+      "full_name": "yjh248619/dsh-floating-assistant",
+      "previous": "conversation",
+      "current": "vision",
+      "desc_now": "悬浮助手（dsh-floating-assistant）：任意 Windows 应用里划词即解释/总结/翻译，答案流式落在原生置顶卡里；深度模式带窗口文本与只读文件，截图/扫描件可用 OCR 取词，页内多卡并存与连续追问。npm: dsh-floating-assistant",
+      "desc_prev": "划词助手 Plus（dsh-select-assist-plus）：DSH / Codex / Claude 桌面划词浮窗，支持解释、总结、翻译与引用进当前会话，含 LaTeX 公式渲染、多窗口并存、折叠与最小化到任务栏。"
     }
   ]
 }
