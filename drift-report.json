@@ -1,48 +1,20 @@
 {
-  "generated_at": "2026-11-21T22:02:23.298Z",
-  "count": 6,
+  "generated_at": "2026-11-22T02:24:54.179Z",
+  "count": 2,
   "items": [
     {
-      "full_name": "Leo3-7/dsh-obsidian-inbox",
-      "previous": "conversation",
+      "full_name": "1624318455/dsh-plugin-tts",
+      "previous": "web-ui",
+      "current": "other",
+      "desc_now": "Read DeepSeek Harness replies aloud — zero-config Edge TTS, local voice cloning when you want it. Gapless long reads.",
+      "desc_prev": "Edge TTS voice plugin for DeepSeek Harness: read assistant replies aloud, auto-read toggle, voice settings panel (free, no API key)"
+    },
+    {
+      "full_name": "hechenhao9/dsh-judge-loop",
+      "previous": "agent",
       "current": "tool",
-      "desc_now": "DSH skill: ingest the conclusions/mistakes/projects from conversations into an Obsidian vault via a 7-step workflow with two-level validation. 把对话结论/错题/项目按七步流程整理进 Obsidian 的 DeepSeek Harness 技能。",
-      "desc_prev": "DSH skill: ingest the conclusions/mistakes/projects from conversations into an Obsidian vault via a 7-step workflow with two-level validation. 把对话结论/错题/项目按七步流程整理进 Obsidian 的 DeepSeek Harness 技能。"
-    },
-    {
-      "full_name": "JiewiW/dsh-step-governor",
-      "previous": "other",
-      "current": "tool",
-      "desc_now": "DSH 确定性步数治理插件（L2）：步级熔断（pre-step reject）+ 工具支线熔断（pre-execute deny），五档模式默认 g1g2 强拦截，fail-open",
-      "desc_prev": "实验·未发布：DSH 确定性步数治理插件（pre-step reject / pre-execute deny），shadow 默认、fail-open"
-    },
-    {
-      "full_name": "beidou6972yh/dsh-bw-router",
-      "previous": "other",
-      "current": "model",
-      "desc_now": "WB 模型路由：网关 + DSH 插件 + Skill/MCP（DeepSeek Harness）。含分段计划、按段选模、会话内切模、确认与花费回写。",
-      "desc_prev": "B&W (小棒 & 灰狼) — DeepSeek Harness plugin: plan a task into stages, pick the right model per stage, and switch models in-session without losing context."
-    },
-    {
-      "full_name": "flashvayne/dsh-live-captions",
-      "previous": "other",
-      "current": "tool",
-      "desc_now": "DSH 实时字幕插件：识别系统声音和麦克风，支持双语字幕，多种语言互译，一键生成会议纪要",
-      "desc_prev": "DSH 实时字幕插件：识别系统声音和麦克风，支持双语字幕，多种语言互译，一键生成总结纪要"
-    },
-    {
-      "full_name": "Raysnows/dsh-live-compact-x",
-      "previous": "model",
-      "current": "tool",
-      "desc_now": "dsh-live-compact 的 fork（原作 MerkyorLynn, MIT）：净收益门槛、零副本存储（索引 + 日志回读）、大刀/小刀两级压缩",
-      "desc_prev": "dsh-live-compact fork: net-gain gate + zero-copy v2 store (index + log read-back)"
-    },
-    {
-      "full_name": "panchongyang/Converge",
-      "previous": "other",
-      "current": "memory",
-      "desc_now": "A shared cognition tree for preserving decisions, assumptions, rejected alternatives, and human confirmations across AI sessions.",
-      "desc_prev": null
+      "desc_now": "Two rival AI teams for DeepSeek Harness: a blind professor writes the rubric, a tutor has to meet it, and every claim is checked against real files. 95 分交付 / 双团队评审 / 可核证据",
+      "desc_prev": "Delivery quality gate for DeepSeek Harness: a blind professor writes the rubric, a tutor meets it, a local script enforces the evidence. ????? / ????? / gate ????"
     }
   ]
 }
