@@ -1,62 +1,69 @@
 {
-  "generated_at": "2026-11-23T07:03:38.377Z",
-  "count": 8,
+  "generated_at": "2026-11-23T17:05:38.155Z",
+  "count": 9,
   "items": [
     {
-      "full_name": "STARDUSTLC666/dsh-hyperframes",
-      "previous": "web-ui",
-      "current": "tool",
-      "desc_now": "DeepSeek Harness HTML 视频创作工作台：默认 OP-DSH 硬件多轨导演台（实时监看屏 / 24-LED 矩阵 / 可擦洗多轨时间轴，1 键切表单），内置官方 HyperFrames 21 项技能、模板库、素材排序、Studio 预览、本地 MP4 导出与 13 套风格 / 8 套字体。欢迎提交 issues 和 PR。",
-      "desc_prev": "DeepSeek Harness HTML 视频创作工作台：内置官方 HyperFrames 技能、工程检索、模板库、素材排序、浏览器预览与本地 MP4 导出，支持原生清透 / 米白纸感 / Claude 暖书卷 / 8-Bit 像素 / 晴空薄荷五套明亮工作台主题。欢迎提交 issues 和 PR。"
-    },
-    {
-      "full_name": "angel291592/dsh-submodel",
-      "previous": "agent",
-      "current": "model",
-      "desc_now": "Two-way cross-model delegation for the official DSH subagent: routine execution runs on a cheap route (e.g. DeepSeek Flash), architecture-level code/logic escalates to a strong expert route (e.g. Claude), so routine token spend stays cheap. 官方 subagent 的双向跨模型派活：常规执行走便宜模型、难题升级强模型，token 花在刀刃上。",
-      "desc_prev": "官方 subagent 的默认策略包：装上一次配好「什么时候自己干、什么时候派出去、派给谁」。"
-    },
-    {
-      "full_name": "STARDUSTLC666/dsh-calendar",
-      "previous": "web-ui",
-      "current": "notify",
-      "desc_now": "DeepSeek Harness 原生日历工作台：默认 Bento 卡片工作室与今日聚焦条（倒计时/冲突提醒/快速新建），连接 CalDAV（Google/iCloud/Nextcloud/自建），支持月/周/议程视图、拖拽改期、空闲时段查找、ICS 预览导入与 13 套风格 / 8 套字体。欢迎提交 issues 和 PR。",
-      "desc_prev": "DeepSeek Harness 原生日历工作台：连接 CalDAV（Google/iCloud/Nextcloud/自建），支持月/周/议程视图、空闲时段查找、ICS 预览导入、多套布局配色及五种界面主题切换（原生清透/米白纸感/Claude 暖书卷/8-Bit 像素/晴空薄荷）。欢迎提交 issues 和 PR。"
-    },
-    {
-      "full_name": "STARDUSTLC666/dsh-voice",
+      "full_name": "OMSociety/dsh-ppt-maker",
       "previous": "tool",
-      "current": "web-ui",
-      "desc_now": "DeepSeek Harness 许愿式语音插件 + 5 主题 Voice Studio：6 大场景预设、自然语言模糊选声、目标时长校准、HTML5 交互播放器、零密钥 Edge TTS / 声音克隆、卡拉 OK 字幕、播客 BGM 闪避及视频直传说话人区分转写。欢迎提交 issues 和 PR。",
-      "desc_prev": "DeepSeek Harness 语音插件：零密钥 Edge TTS 朗读、音色试听、兼容 ASR 转写与工作区输出保护。欢迎提交 issues 和 PR。"
+      "current": "document",
+      "desc_now": "DSH PPT 创客：DeepSeek Harness 的 PPT / PowerPoint 幻灯片插件。十二个 ppt_* 工具创建、改稿、质检并导出可编辑 .pptx / PDF，可导入已有 PPT，内置 30 套设计系统与右侧栏可视化工作台",
+      "desc_prev": "DSH 插件：内置 ppt-maker 技能与十一个 ppt_* 工具，创建、编辑、逆向、质检与导出 PPT，本地直接生成 .pptx。"
     },
     {
-      "full_name": "STARDUSTLC666/dsh-code-security",
+      "full_name": "Wasabi2575/dsh-workflow-canvas",
       "previous": "coding",
+      "current": "web-ui",
+      "desc_now": "A visual multi-agent workflow canvas for DeepSeek Harness: parallel subagents, conditional branching & Lead decision gates in the sidebar. DSH 侧边栏可视化多智能体工作流画布——真并行、条件分流、Lead 拍板，像当老板一样直观编排 AI 团队 ↖(^ω^)↗",
+      "desc_prev": "An visual, editable subagent-workflow canvas for DeepSeek Harness, docked in the sidebar. 一个subagent工作流的画布编辑器插件，在侧边栏打开。图形界面编排agent工作流会给你一种当老板的感觉，看着应该会很爽↖(^ω^)↗"
+    },
+    {
+      "full_name": "11350613/SymPy-Calculate",
+      "previous": "coding",
+      "current": "tool",
+      "desc_now": "A third-party DeepSeek Harness preset that preconfigures the SymPy environment, saving exploration tokens.",
+      "desc_prev": "A third-party DeepSeek Harness agent preset based on minimal. It adds one stateless tool, sympy_calculate, which runs a complete Python script in a fresh process against a local SymPy checkout."
+    },
+    {
+      "full_name": "DeepLifeStudio/dsh-lark-studio",
+      "previous": "document",
       "current": "resource",
-      "desc_now": "DeepSeek Harness 代码安全工作台：默认 OP-SEC 精密雷达态势仪（OLED 屏 + 24-LED 矩阵 + 代码显微舱，1 键切列表），支持 40+ 规则静态扫描、Git 改动审查、依赖审计、SARIF 导出、修复复核与 13 套风格 / 8 套字体。欢迎提交 issues 和 PR。",
-      "desc_prev": "DeepSeek Harness 代码安全工作台：本地静态扫描、Git 改动审查、依赖审计与修复复核，支持 5 套工作台主题（原生清透 / 米白纸感 / Claude 暖书卷 / 8-Bit 像素 / 晴空薄荷）与微交互动效。欢迎提交 issues 和 PR。"
+      "desc_now": "专为 DeepSeek Harness 生态打造的大模型原生（LLM-Native）飞书全域协同与多维表格智能工作台插件。",
+      "desc_prev": "专为 DeepSeek Harness 生态打造的大模型原生（LLM-Native）飞书全域协同与多维表格智能工作台插件。"
     },
     {
-      "full_name": "DrizzleGig/dsh-novel-kit",
-      "previous": "web-ui",
-      "current": "memory",
-      "desc_now": "给长篇与同人写作的工作台：剧情决策、世界契约、长篇记忆、文风四段依据每次动笔前装配好；一章一条链（计划→开章→写→检查→落账，中断可恢复）。同人世界观逐条审阅后应用，草稿切作品不丢，默认关闭不占工具列表。",
-      "desc_prev": "Novel-writing engine for DSH: seven novel_* tools take a chapter from plan to committed text, with a six-tab panel; reads beat/fade/voice/fanfic ledgers in place."
+      "full_name": "Qquanwei/dsh-powerful-subtitle-studio",
+      "previous": "conversation",
+      "current": "other",
+      "desc_now": "视频生字幕， 字幕生成，字幕翻译，多人字幕生成，字幕校准，一键生成字幕",
+      "desc_prev": "把一集视频转成字幕：百炼转写，当前会话翻译，输出 SRT、软字幕或烧录视频。"
     },
     {
-      "full_name": "fenglin233o/dsh-jingshen",
+      "full_name": "BobAnderssoon/dafeiyu-desktop-pet",
       "previous": "other",
-      "current": "conversation",
-      "desc_now": "精神 · fenglin 的个人 AI 助手插件。以《精神现象学》探索 AGI 架构，在 DeepSeek Harness 中支持跨会话自主活动、可打断的语音通话和连续视觉。",
-      "desc_prev": null
+      "current": "web-ui",
+      "desc_now": "住在边栏里，会呼吸、会思考、会工作的二次元大肥鱼赛博宠物",
+      "desc_prev": "住在边栏里，会呼吸、会思考的2次元大肥鱼桌宠"
     },
     {
-      "full_name": "scottzhb-hue/dsh-ai-translation",
-      "previous": "tool",
-      "current": "memory",
-      "desc_now": "AI-aided translation, inside DeepSeek Harness. Based on dsh-cait by JoviLecca.",
-      "desc_prev": "AI-aided translation, inside DeepSeek Harness. Based on dsh-cait by JoviLecca."
+      "full_name": "top10xiaowangzi-byte/dsh-daily-checkin",
+      "previous": "coding",
+      "current": "web-ui",
+      "desc_now": "DeepSeek Harness 插件：启动自动完成 WorkBuddy / WPS 灵犀 / Qoder / MiniMax Code / 码道 CodeArts 的每日签到与积分领取，会话标题栏面板显示结果、积分余额，失败可重试。",
+      "desc_prev": "DeepSeek Harness 插件：启动时自动完成 WorkBuddy / WPS 灵犀 / Qoder 每日签到，标题栏面板显示结果并支持失败重试，面板挂 shell.overlay。"
+    },
+    {
+      "full_name": "shidesheng0218/dsh-duplex",
+      "previous": "conversation",
+      "current": "tool",
+      "desc_now": "Hands-free voice mode for DeepSeek Harness: read replies aloud, dictate into the composer, answer approvals by voice (high-risk tools need a second confirmation). 语音双工｜朗读、语音输入、语音审批。",
+      "desc_prev": "Hands-free voice mode for DeepSeek Harness: read replies aloud, dictate into the composer, approve by voice (planned). 语音双工｜说需求、听结论、语音审批。"
+    },
+    {
+      "full_name": "liudengxing/dsh-bailian-model-catalog",
+      "previous": "resource",
+      "current": "vision",
+      "desc_now": "DSH 插件：为阿里百炼 Token Plan 路由补齐模型目录与输入模态，支持图片输入与多模态。Completes the pi-ai model catalog and input modalities for Alibaba Cloud Bailian Token Plan routes, so vision models declare text+image.",
+      "desc_prev": "DSH 插件：为阿里百炼 Token Plan 路由补齐模型目录与输入模态，让视觉模型正常收图"
     }
   ]
 }
