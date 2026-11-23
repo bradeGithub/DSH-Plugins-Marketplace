@@ -1,0 +1,62 @@
+{
+  "generated_at": "2026-11-23T07:03:38.377Z",
+  "count": 8,
+  "items": [
+    {
+      "full_name": "STARDUSTLC666/dsh-hyperframes",
+      "previous": "web-ui",
+      "current": "tool",
+      "desc_now": "DeepSeek Harness HTML 视频创作工作台：默认 OP-DSH 硬件多轨导演台（实时监看屏 / 24-LED 矩阵 / 可擦洗多轨时间轴，1 键切表单），内置官方 HyperFrames 21 项技能、模板库、素材排序、Studio 预览、本地 MP4 导出与 13 套风格 / 8 套字体。欢迎提交 issues 和 PR。",
+      "desc_prev": "DeepSeek Harness HTML 视频创作工作台：内置官方 HyperFrames 技能、工程检索、模板库、素材排序、浏览器预览与本地 MP4 导出，支持原生清透 / 米白纸感 / Claude 暖书卷 / 8-Bit 像素 / 晴空薄荷五套明亮工作台主题。欢迎提交 issues 和 PR。"
+    },
+    {
+      "full_name": "angel291592/dsh-submodel",
+      "previous": "agent",
+      "current": "model",
+      "desc_now": "Two-way cross-model delegation for the official DSH subagent: routine execution runs on a cheap route (e.g. DeepSeek Flash), architecture-level code/logic escalates to a strong expert route (e.g. Claude), so routine token spend stays cheap. 官方 subagent 的双向跨模型派活：常规执行走便宜模型、难题升级强模型，token 花在刀刃上。",
+      "desc_prev": "官方 subagent 的默认策略包：装上一次配好「什么时候自己干、什么时候派出去、派给谁」。"
+    },
+    {
+      "full_name": "STARDUSTLC666/dsh-calendar",
+      "previous": "web-ui",
+      "current": "notify",
+      "desc_now": "DeepSeek Harness 原生日历工作台：默认 Bento 卡片工作室与今日聚焦条（倒计时/冲突提醒/快速新建），连接 CalDAV（Google/iCloud/Nextcloud/自建），支持月/周/议程视图、拖拽改期、空闲时段查找、ICS 预览导入与 13 套风格 / 8 套字体。欢迎提交 issues 和 PR。",
+      "desc_prev": "DeepSeek Harness 原生日历工作台：连接 CalDAV（Google/iCloud/Nextcloud/自建），支持月/周/议程视图、空闲时段查找、ICS 预览导入、多套布局配色及五种界面主题切换（原生清透/米白纸感/Claude 暖书卷/8-Bit 像素/晴空薄荷）。欢迎提交 issues 和 PR。"
+    },
+    {
+      "full_name": "STARDUSTLC666/dsh-voice",
+      "previous": "tool",
+      "current": "web-ui",
+      "desc_now": "DeepSeek Harness 许愿式语音插件 + 5 主题 Voice Studio：6 大场景预设、自然语言模糊选声、目标时长校准、HTML5 交互播放器、零密钥 Edge TTS / 声音克隆、卡拉 OK 字幕、播客 BGM 闪避及视频直传说话人区分转写。欢迎提交 issues 和 PR。",
+      "desc_prev": "DeepSeek Harness 语音插件：零密钥 Edge TTS 朗读、音色试听、兼容 ASR 转写与工作区输出保护。欢迎提交 issues 和 PR。"
+    },
+    {
+      "full_name": "STARDUSTLC666/dsh-code-security",
+      "previous": "coding",
+      "current": "resource",
+      "desc_now": "DeepSeek Harness 代码安全工作台：默认 OP-SEC 精密雷达态势仪（OLED 屏 + 24-LED 矩阵 + 代码显微舱，1 键切列表），支持 40+ 规则静态扫描、Git 改动审查、依赖审计、SARIF 导出、修复复核与 13 套风格 / 8 套字体。欢迎提交 issues 和 PR。",
+      "desc_prev": "DeepSeek Harness 代码安全工作台：本地静态扫描、Git 改动审查、依赖审计与修复复核，支持 5 套工作台主题（原生清透 / 米白纸感 / Claude 暖书卷 / 8-Bit 像素 / 晴空薄荷）与微交互动效。欢迎提交 issues 和 PR。"
+    },
+    {
+      "full_name": "DrizzleGig/dsh-novel-kit",
+      "previous": "web-ui",
+      "current": "memory",
+      "desc_now": "给长篇与同人写作的工作台：剧情决策、世界契约、长篇记忆、文风四段依据每次动笔前装配好；一章一条链（计划→开章→写→检查→落账，中断可恢复）。同人世界观逐条审阅后应用，草稿切作品不丢，默认关闭不占工具列表。",
+      "desc_prev": "Novel-writing engine for DSH: seven novel_* tools take a chapter from plan to committed text, with a six-tab panel; reads beat/fade/voice/fanfic ledgers in place."
+    },
+    {
+      "full_name": "fenglin233o/dsh-jingshen",
+      "previous": "other",
+      "current": "conversation",
+      "desc_now": "精神 · fenglin 的个人 AI 助手插件。以《精神现象学》探索 AGI 架构，在 DeepSeek Harness 中支持跨会话自主活动、可打断的语音通话和连续视觉。",
+      "desc_prev": null
+    },
+    {
+      "full_name": "scottzhb-hue/dsh-ai-translation",
+      "previous": "tool",
+      "current": "memory",
+      "desc_now": "AI-aided translation, inside DeepSeek Harness. Based on dsh-cait by JoviLecca.",
+      "desc_prev": "AI-aided translation, inside DeepSeek Harness. Based on dsh-cait by JoviLecca."
+    }
+  ]
+}
