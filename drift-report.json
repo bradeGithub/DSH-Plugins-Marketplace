@@ -1,69 +1,13 @@
 {
-  "generated_at": "2026-11-23T17:05:38.155Z",
-  "count": 9,
+  "generated_at": "2026-11-23T20:18:19.332Z",
+  "count": 1,
   "items": [
     {
-      "full_name": "OMSociety/dsh-ppt-maker",
-      "previous": "tool",
-      "current": "document",
-      "desc_now": "DSH PPT 创客：DeepSeek Harness 的 PPT / PowerPoint 幻灯片插件。十二个 ppt_* 工具创建、改稿、质检并导出可编辑 .pptx / PDF，可导入已有 PPT，内置 30 套设计系统与右侧栏可视化工作台",
-      "desc_prev": "DSH 插件：内置 ppt-maker 技能与十一个 ppt_* 工具，创建、编辑、逆向、质检与导出 PPT，本地直接生成 .pptx。"
-    },
-    {
-      "full_name": "Wasabi2575/dsh-workflow-canvas",
-      "previous": "coding",
-      "current": "web-ui",
-      "desc_now": "A visual multi-agent workflow canvas for DeepSeek Harness: parallel subagents, conditional branching & Lead decision gates in the sidebar. DSH 侧边栏可视化多智能体工作流画布——真并行、条件分流、Lead 拍板，像当老板一样直观编排 AI 团队 ↖(^ω^)↗",
-      "desc_prev": "An visual, editable subagent-workflow canvas for DeepSeek Harness, docked in the sidebar. 一个subagent工作流的画布编辑器插件，在侧边栏打开。图形界面编排agent工作流会给你一种当老板的感觉，看着应该会很爽↖(^ω^)↗"
-    },
-    {
-      "full_name": "11350613/SymPy-Calculate",
-      "previous": "coding",
-      "current": "tool",
-      "desc_now": "A third-party DeepSeek Harness preset that preconfigures the SymPy environment, saving exploration tokens.",
-      "desc_prev": "A third-party DeepSeek Harness agent preset based on minimal. It adds one stateless tool, sympy_calculate, which runs a complete Python script in a fresh process against a local SymPy checkout."
-    },
-    {
-      "full_name": "DeepLifeStudio/dsh-lark-studio",
-      "previous": "document",
-      "current": "resource",
-      "desc_now": "专为 DeepSeek Harness 生态打造的大模型原生（LLM-Native）飞书全域协同与多维表格智能工作台插件。",
-      "desc_prev": "专为 DeepSeek Harness 生态打造的大模型原生（LLM-Native）飞书全域协同与多维表格智能工作台插件。"
-    },
-    {
-      "full_name": "Qquanwei/dsh-powerful-subtitle-studio",
-      "previous": "conversation",
-      "current": "other",
-      "desc_now": "视频生字幕， 字幕生成，字幕翻译，多人字幕生成，字幕校准，一键生成字幕",
-      "desc_prev": "把一集视频转成字幕：百炼转写，当前会话翻译，输出 SRT、软字幕或烧录视频。"
-    },
-    {
-      "full_name": "BobAnderssoon/dafeiyu-desktop-pet",
-      "previous": "other",
-      "current": "web-ui",
-      "desc_now": "住在边栏里，会呼吸、会思考、会工作的二次元大肥鱼赛博宠物",
-      "desc_prev": "住在边栏里，会呼吸、会思考的2次元大肥鱼桌宠"
-    },
-    {
-      "full_name": "top10xiaowangzi-byte/dsh-daily-checkin",
-      "previous": "coding",
-      "current": "web-ui",
-      "desc_now": "DeepSeek Harness 插件：启动自动完成 WorkBuddy / WPS 灵犀 / Qoder / MiniMax Code / 码道 CodeArts 的每日签到与积分领取，会话标题栏面板显示结果、积分余额，失败可重试。",
-      "desc_prev": "DeepSeek Harness 插件：启动时自动完成 WorkBuddy / WPS 灵犀 / Qoder 每日签到，标题栏面板显示结果并支持失败重试，面板挂 shell.overlay。"
-    },
-    {
-      "full_name": "shidesheng0218/dsh-duplex",
-      "previous": "conversation",
-      "current": "tool",
-      "desc_now": "Hands-free voice mode for DeepSeek Harness: read replies aloud, dictate into the composer, answer approvals by voice (high-risk tools need a second confirmation). 语音双工｜朗读、语音输入、语音审批。",
-      "desc_prev": "Hands-free voice mode for DeepSeek Harness: read replies aloud, dictate into the composer, approve by voice (planned). 语音双工｜说需求、听结论、语音审批。"
-    },
-    {
-      "full_name": "liudengxing/dsh-bailian-model-catalog",
+      "full_name": "TZYCeng/dsh-model-visibility",
       "previous": "resource",
-      "current": "vision",
-      "desc_now": "DSH 插件：为阿里百炼 Token Plan 路由补齐模型目录与输入模态，支持图片输入与多模态。Completes the pi-ai model catalog and input modalities for Alibaba Cloud Bailian Token Plan routes, so vision models declare text+image.",
-      "desc_prev": "DSH 插件：为阿里百炼 Token Plan 路由补齐模型目录与输入模态，让视觉模型正常收图"
+      "current": "coding",
+      "desc_now": "模型显示：保留现有功能的最终维护版。后续开发转到 TZYCeng/DSH-The-Model-List。",
+      "desc_prev": "DeepSeek Harness plugin: choose which models appear in the chat model menu, with per-model capability tags (reasoning, effort levels, context window, modalities, kind) merged from adapter, relay and catalog. / DSH 插件：管理模型菜单里显示哪些模型，并标注推理、思考强度、上下文窗口、模态与类型。"
     }
   ]
 }
