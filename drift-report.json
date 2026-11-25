@@ -1,146 +1,27 @@
 {
-  "generated_at": "2026-11-24T17:25:07.016Z",
-  "count": 20,
+  "generated_at": "2026-11-25T02:43:16.103Z",
+  "count": 3,
   "items": [
     {
-      "full_name": "Lain-in-coding/dsh-grok-search",
+      "full_name": "Contexera/dsh-agent-team",
       "previous": "tool",
-      "current": "coding",
-      "desc_now": "告别官方搜索扣费！自动接管 DeepSeek Harness 原生 web_search，不走官方付费搜索、不烧模型 Token； Rust 内核驱动，轻快强悍，可视化接入 Grok、Tavily、Exa、TinyFish、Firecrawl，五源无缝兜底。",
-      "desc_prev": "为 DeepSeek Harness 接入可视化 Grok 主搜索与 Tavily、Exa、TinyFish、Firecrawl 自动回退，复用 grok-search-rs。"
-    },
-    {
-      "full_name": "tm5452/dsh-workspace-explorer",
-      "previous": "tool",
-      "current": "document",
-      "desc_now": "DeepSeek Harness 的跨平台资源管理器，适配 Windows、macOS 和 Linux，支持多标签文件浏览、独立预览窗口和本地 PDF、Office 预览。",
-      "desc_prev": "DeepSeek Harness Windows 桌面端资源管理器，支持多标签浏览、文件拖放、图片与音视频预览，以及大文件按需加载。"
-    },
-    {
-      "full_name": "jackxiao17/dsh-session-cleaner",
-      "previous": "web-ui",
-      "current": "conversation",
-      "desc_now": "DSH 会话清理：冷会话直接回收，已打开/最近浏览会话确认后通过官方句柄关闭；支持恢复、定时任务暂停/恢复与彻底删除。要求 DSH >=0.2.3-alpha.2 <0.3.0 | DSH session cleaner with reversible recycle bin, confirmed force delete for open sessions, and official lifecycle disposal; requires DSH >=0.2.3-alpha.2 <0.3.0",
-      "desc_prev": "DSH 会话清理：把会话连子代理整棵树搬进真回收站，删除即清干净（记账/置顶/归档/投影缓存行/定时任务），恢复回侧栏原位；已在 DSH 0.2.2-rc.5 复核 | DSH session cleaner: moves a session and its whole subagent tree into a real recycle bin, clears every trace on delete (accounting, pins, archive, projection cache, schedules), restores to the original sidebar slot; verified on DSH 0.2.2-rc.5"
-    },
-    {
-      "full_name": "yicun0316/dsh-claude-slider",
-      "previous": "web-ui",
-      "current": "model",
-      "desc_now": "DSH / DeepSeek Harness 液态玻璃推理强度滑块插件：9 款自然与人文 Canvas 动效、莫奈动态取色与随鼠流光框、60fps 输入框像素萌宠剧场、立绘游标与反馈音效。Claude-style reasoning slider plugin for DSH.",
-      "desc_prev": "DSH / DeepSeek Harness 推理强度滑块插件：Claude 风格拖拽滑块 + 23 种 Canvas 粒子动效 + 客制动效自由组合 + 配色与图标自定义。Claude-style reasoning-effort slider plugin for DSH."
-    },
-    {
-      "full_name": "RestRegular/dsh-powerup",
-      "previous": "other",
-      "current": "web-ui",
-      "desc_now": "Install this plugin and you can: right-click Trajectory rows to copy, quote, export, fork and copy step refs; add stop reasons to background jobs; one-click install/update plugins; make the sidebar a drag-sortable icon grid with folders and back/restart/close tiles; switch running sessions from the title; locate the current session in the workspace",
-      "desc_prev": "Power-Up — small, opt-in upgrades for DeepSeek Harness."
-    },
-    {
-      "full_name": "wangtengteng498/dsh-easysnap-plugin",
-      "previous": "conversation",
-      "current": "vision",
-      "desc_now": "Capture straight into the chat. Click the camera by the composer, park the always-on-top frame over any window, hit Snap, and the framed area lands as an image attachment — no saving, no dragging. The frame stays open: snap again and again and send several at once. The click-through hole keeps the app under it usable. ",
-      "desc_prev": "Capture straight into the chat. Click the camera by the composer, park the always-on-top frame over any window, hit Snap, and the framed area lands as an image attachment — no saving, no dragging. The frame stays open: snap again and again and send several at once. The click-through hole keeps the app under it usable. "
-    },
-    {
-      "full_name": "Yuaneen/dsh-token-gateway",
-      "previous": "notify",
-      "current": "model",
-      "desc_now": "Token budget gateway for DeepSeek Harness: one admission gate for every model call.",
-      "desc_prev": "Token budget gateway for DeepSeek Harness: one admission gate for every model call, session/day/month cost caps, alert/block/degrade, and a /gateway control surface."
-    },
-    {
-      "full_name": "nan1010082085/aigc-suite-skills",
-      "previous": "other",
-      "current": "web-ui",
-      "desc_now": "漫剧（AI 短剧）创作技能套件：从小说 / 想法到成片的 18 个 Claude Code / WorkBuddy skill，覆盖剧本、人物·场景·道具素材、分镜、出片执行、机检质检与成片回流",
-      "desc_prev": "漫剧（AI 短剧）创作技能套件：从小说/想法到成片的 14 个 Claude Code skill"
-    },
-    {
-      "full_name": "miorin-chan/dsh-workspace-default-preset",
-      "previous": "other",
       "current": "agent",
-      "desc_now": "Set the default Agent preset for new DeepSeek Harness sessions in each workspace.",
-      "desc_prev": null
+      "desc_now": "dsh-agent-team: Agent Teams for DeepSeek Harness. Hand work to a team of agents that carries it end to end while you set the direction and hold the gates. You stay on the loop, and step back in whenever you want.",
+      "desc_prev": "dsh-agent-team: Agent Teams for DeepSeek Harness. Hand work to a team of agents that carries it end to end while you set the direction and hold the gates. You stay on the loop, and step back in whenever you want."
     },
     {
-      "full_name": "miorin-chan/dsh-preset-switch",
-      "previous": "other",
-      "current": "agent",
-      "desc_now": "Switch the Agent preset of an idle DeepSeek Harness session.",
-      "desc_prev": null
-    },
-    {
-      "full_name": "miorin-chan/dsh-preview-file-navigation",
+      "full_name": "Nico-2222/dsh-mys-checkin",
       "previous": "tool",
       "current": "web-ui",
-      "desc_now": "Browse and search workspace files in the DeepSeek Harness sidebar and open them in the built-in preview.",
-      "desc_prev": null
+      "desc_now": "MiYoushe (米游社) 全游戏每日签到 for DeepSeek Harness — 原神 / 星穹铁道 / 绝区零 / 崩坏3 / 未定事件簿 / 崩坏学园2。仅限国服（mainland China servers only）。",
+      "desc_prev": "MiYoushe (米游社) 全游戏每日签到 for DeepSeek Harness — 原神 / 星穹铁道 / 绝区零 / 崩坏3 / 未定事件簿 / 崩坏学园2。仅限国服（mainland China servers only）。"
     },
     {
-      "full_name": "miorin-chan/dsh-atlas-atlas",
-      "previous": "other",
-      "current": "resource",
-      "desc_now": "Install and manage the workspace, session, list, plugin, and mobile Atlas bundles from one page in DeepSeek Harness.",
-      "desc_prev": "Manage the workspace, session, plugin, and mobile bundles of 模块化改良计划 in DeepSeek Harness."
-    },
-    {
-      "full_name": "miorin-chan/dsh-atlas-session",
-      "previous": "other",
-      "current": "memory",
-      "desc_now": "A DeepSeek Harness bundle for suggested next actions, private closing notes, preset switching, sound alerts, and title history.",
-      "desc_prev": null
-    },
-    {
-      "full_name": "miorin-chan/dsh-workspace-list-toggle",
-      "previous": "resource",
-      "current": "web-ui",
-      "desc_now": "Cycle the DeepSeek Harness sidebar between all sessions, a collapsed list, and sessions needing attention.",
-      "desc_prev": null
-    },
-    {
-      "full_name": "miorin-chan/dsh-atlas-plugin",
+      "full_name": "KevinZhangNothing/dsh-nico",
       "previous": "other",
       "current": "web-ui",
-      "desc_now": "A DeepSeek Harness bundle with a Plugins panel shortcut, source reinstallation, and security review drafts for plugin updates.",
-      "desc_prev": null
-    },
-    {
-      "full_name": "miorin-chan/dsh-session-caesura",
-      "previous": "other",
-      "current": "memory",
-      "desc_now": "Save a private closing note in a DeepSeek Harness session without sending another message.",
-      "desc_prev": null
-    },
-    {
-      "full_name": "miorin-chan/dsh-atlas-workspace",
-      "previous": "other",
-      "current": "tool",
-      "desc_now": "A DeepSeek Harness bundle for switching workspaces and sessions, browsing files, showing workspace badges, and setting workspace defaults.",
-      "desc_prev": null
-    },
-    {
-      "full_name": "miorin-chan/dsh-session-draft",
-      "previous": "other",
-      "current": "web-ui",
-      "desc_now": "Mark sessions with unsent drafts in the DeepSeek Harness sidebar.",
-      "desc_prev": null
-    },
-    {
-      "full_name": "miorin-chan/dsh-workspace-switcher",
-      "previous": "other",
-      "current": "tool",
-      "desc_now": "Search and switch sessions or navigate the workspace tree from a shared dialog in DeepSeek Harness.",
-      "desc_prev": null
-    },
-    {
-      "full_name": "hua-ri/dsh-ops",
-      "previous": "agent",
-      "current": "tool",
-      "desc_now": "DSH 一体化运维插件：SSH 远程运维 / Kubernetes 集群管理 / Helm Chart 管理",
-      "desc_prev": "DSH 一体化运维插件：SSH / K8s / Helm / ArgoCD / Argo Workflows"
+      "desc_now": "Nico — 按住右 ⌘ 说一句，本地 AI 替我操作电脑。DSH cordis 插件：本地 SenseVoice 识别 → DSH 固定会话 → CosyVoice2 流式播报，可选 Live2D 鲸鱼娘悬浮窗。",
+      "desc_prev": "Nico — 按住右⌘说一句，本地 AI 替我操作电脑。DSH cordis plugin: SenseVoice STT + headless session + hotkey daemon."
     }
   ]
 }
