@@ -1,41 +1,41 @@
 {
-  "generated_at": "2026-11-26T15:43:27.172Z",
+  "generated_at": "2026-11-26T21:45:19.132Z",
   "count": 5,
   "items": [
     {
-      "full_name": "ppy-web/dsh-plugin-xiaomi-mimo-tts",
-      "previous": "web-ui",
-      "current": "other",
-      "desc_now": "音色工坊 · 给 DSH 换副百变好嗓子！支持小米 MiMo / 豆包 / Breeze / DeepSeek / 本地 MOSS 10+ 语音引擎，流式朗读、实时字幕响应球、多角色录音棚 (/director 有声剧) 及桌宠/听书/QQ Bot/AI Passport 联动",
-      "desc_prev": "为 DSH 添加 Xiaomi MiMo TTS、豆包 Seed TTS，浏览器语音；音频下载、 UI 音效、桌宠联动、QQBot 语音；"
+      "full_name": "Merziller/prompt-fusion",
+      "previous": "tool",
+      "current": "web-ui",
+      "desc_now": "Prompt Fusion: semantic prompt enhancement with fidelity checks, one-button DSH UI, CLI, Skills and MCP. Produced by 禾杨智绘工作室; developed by Merziller.",
+      "desc_prev": "Agent-neutral prompt-rule core: DSH one-button, portable Skills, CLI, MCP stdio/HTTP and REST/OpenAPI. Quality limitations disclosed; not a semantic rewriter."
     },
     {
-      "full_name": "KDB-Wind/dsh-minimal-anchored",
+      "full_name": "0xnirlin/dsh-plugin-ziztu",
       "previous": "tool",
       "current": "agent",
-      "desc_now": "Archived early DeepSeek Harness preset. Incompatible with current versions. / DeepSeek Harness 早期插件，已归档，当前版本不可用。",
-      "desc_prev": "DeepSeek Harness preset: first round uses the official Minimal tools, then unlocks full Standard. 复现 Project2 评测中更高分的 We/Let's 思维链（Minimal 99/96 vs Standard 91/92），改善 Windows 上 DeepSeek V4 Pro 的 Let me 现象。"
+      "desc_now": "Ziztu MCP plugin for DeepSeek Harness: connect Ziztu Clip Maker (getziztu.com/clipper) and Ziztu Studio from your agent.",
+      "desc_prev": "Ziztu for DeepSeek Harness: plan, write and make micro dramas and anime episodes from your agent, through Ziztu's MCP server."
     },
     {
-      "full_name": "ruochen361/dsh-work-summary",
-      "previous": "other",
-      "current": "tool",
-      "desc_now": "Scheduled daily, weekly and monthly work reports for DeepSeek Harness: collect the day's traces, validate structure, save reports, and push the next checklist onto a board.",
-      "desc_prev": null
+      "full_name": "QuinnKevin/dsh-concept-explainer",
+      "previous": "web-ui",
+      "current": "memory",
+      "desc_now": "Explain a selected concept in a DeepSeek Harness conversation in a right-sidebar tab; save it as a Markdown note or branch the conversation with the explanation appended. MIT licensed.",
+      "desc_prev": "Explain an unfamiliar concept selected in a DeepSeek Harness conversation in an isolated right-sidebar tab; the conversation is read-only and the explanation prompt is customizable."
     },
     {
-      "full_name": "clown-lee/dsh-trae-bridge",
-      "previous": "other",
-      "current": "coding",
-      "desc_now": "DeepSeek Harness plugin: use Trae IDE built-in models (Doubao, DeepSeek, GLM, Kimi, Seed) as a DSH provider, plus daily check-in.",
-      "desc_prev": "把 Trae 桌面端自带的模型接进 DeepSeek Harness，零配置、不需要 API Key"
-    },
-    {
-      "full_name": "Asthestarsfalll/answer-card",
-      "previous": "other",
+      "full_name": "fairyqinglan/dsh-usage-dashboard",
+      "previous": "model",
       "current": "web-ui",
-      "desc_now": "macOS 通用 AI Agent 置顶悬浮回答卡片：支持 Antigravity、DeepSeek Harness (DSH) 与 Zed，不切窗完成审批、作答与追问，支持完整键盘控制并动态自适应主题配色。",
-      "desc_prev": "macOS 屏幕悬浮卡片：DeepSeek Harness 需要你批准、回答或收尾时，把决定本身搬到屏幕上——点选项就等于在 DSH 里作答，不用切窗口。"
+      "desc_now": "Daily token usage dashboard for DeepSeek Harness — per-model breakdown, clickable day drill-down, theme-aware heatmap, CSV/JSON export. Zero dependencies, local-only.",
+      "desc_prev": "Daily token usage with a per-model breakdown for the DeepSeek Harness — zero deps, local-only, GitHub-style heatmap and multi-hue trend charts"
+    },
+    {
+      "full_name": "AppsGanin/dsh-qwen-subscription",
+      "previous": "other",
+      "current": "model",
+      "desc_now": "Qwen (qwen.ai) subscription as a DeepSeek Harness LLM provider: OAuth device-flow sign-in, account pool with failover, quota visibility, localized settings card.",
+      "desc_prev": null
     }
   ]
 }
