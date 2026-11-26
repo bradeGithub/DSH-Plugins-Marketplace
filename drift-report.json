@@ -1,62 +1,41 @@
 {
-  "generated_at": "2026-11-26T11:08:45.590Z",
-  "count": 8,
+  "generated_at": "2026-11-26T15:43:27.172Z",
+  "count": 5,
   "items": [
     {
-      "full_name": "neilweixing/dsh-jira-board",
-      "previous": "other",
-      "current": "web-ui",
-      "desc_now": "A DeepSeek Harness sidebar plugin that turns your self-hosted Jira issues into a priority-ordered card board. Each card copies its key, opens the issue, or starts a new Harness session that sends \"Please handle <KEY>\". Credentials stay on the host.",
-      "desc_prev": null
-    },
-    {
-      "full_name": "Feahter/dsh-plugins",
-      "previous": "tool",
-      "current": "web-ui",
-      "desc_now": "Eleven open-source plugins for DeepSeek Harness (dsh): offline voice input and speech output, GitHub panel, session archive + PDCA, skills/agents audits, mind map, context library, task ledger, novel pipeline. Bilingual EN/中文.",
-      "desc_prev": "Ten open-source plugins for DeepSeek Harness (dsh): offline voice input, GitHub manager, session archive + PDCA, skills/agents health checks, mind map, context library, task ledger. Bilingual EN/中文."
-    },
-    {
-      "full_name": "breakjck/dsh-aside-ask",
-      "previous": "model",
-      "current": "conversation",
-      "desc_now": "DeepSeek Harness 插件：在对话记录里圈出一段右键提问，答案走旁支子对话，不打断主对话；同一窗口可连续追问，可拖动并记住位置。",
-      "desc_prev": "自建的一个deepseek harness 插件，可以在主对话中进行旁支提问，并且会将提问结果写入上下文"
-    },
-    {
-      "full_name": "meya-ashuripehya/dsh-work-components",
-      "previous": "other",
-      "current": "vision",
-      "desc_now": "DSH 工作组件插件：在「工作组件」设置页统一挂载并管理控制其他工作软件的 MCP 服务器（Office / Blender / Unity / Figma / Photoshop / Chrome / Godot / Windows / 桌面控制 / Notion / Gmail / Cloudflare / GitHub / ComfyUI / FFmpeg / Obsidian / REA 逆向分析 / Cursor / Ghidra / ILSpy），另含游戏分组的棋类与牌类、会话控制、「通道」分组的 Telegram 和多模态工具 mm_send_image。",
-      "desc_prev": "DSH multimodal plugin prototype: settings page, image output, map/web cards"
-    },
-    {
-      "full_name": "Thomas-zz/dsh-luanji",
-      "previous": "tool",
-      "current": "memory",
-      "desc_now": "在 DSH 里和 AI 对话时，随手把一句话、一个念头、一张图留下来。先记住，不必先起标题、选分类。",
-      "desc_prev": "乱记 for DSH：本地优先的随手记录插件（划选引用、便签、可选云端同步）"
-    },
-    {
-      "full_name": "meng-lx/dsh-blueprint-tree",
-      "previous": "other",
-      "current": "tool",
-      "desc_now": "给 AI 一张工作图，给你一张检查图。DeepSeek Harness 可执行蓝图：按子图组织项目，按单元查看依赖、修改和测试。",
-      "desc_prev": null
-    },
-    {
-      "full_name": "Stook-404/dsh-trigger-prompts",
+      "full_name": "ppy-web/dsh-plugin-xiaomi-mimo-tts",
       "previous": "web-ui",
-      "current": "tool",
-      "desc_now": "DSH 插件：把各插件注册给 Agent 的工具、以及技能（skills）的触发说法汇总成一张中文清单——可搜索、一键复制、可置顶。入口在「对话 / 轨迹 / 画廊」右侧。",
-      "desc_prev": "DSH 插件:把各已装插件注册给 Agent 的工具描述(触发提示词)汇总成「触发词」面板,可搜索、一键复制、可置顶。入口在「对话/轨迹/画廊」右侧。"
+      "current": "other",
+      "desc_now": "音色工坊 · 给 DSH 换副百变好嗓子！支持小米 MiMo / 豆包 / Breeze / DeepSeek / 本地 MOSS 10+ 语音引擎，流式朗读、实时字幕响应球、多角色录音棚 (/director 有声剧) 及桌宠/听书/QQ Bot/AI Passport 联动",
+      "desc_prev": "为 DSH 添加 Xiaomi MiMo TTS、豆包 Seed TTS，浏览器语音；音频下载、 UI 音效、桌宠联动、QQBot 语音；"
     },
     {
-      "full_name": "CarviS0302/dsh-editable-question-options",
-      "previous": "vision",
+      "full_name": "KDB-Wind/dsh-minimal-anchored",
+      "previous": "tool",
+      "current": "agent",
+      "desc_now": "Archived early DeepSeek Harness preset. Incompatible with current versions. / DeepSeek Harness 早期插件，已归档，当前版本不可用。",
+      "desc_prev": "DeepSeek Harness preset: first round uses the official Minimal tools, then unlocks full Standard. 复现 Project2 评测中更高分的 We/Let's 思维链（Minimal 99/96 vs Standard 91/92），改善 Windows 上 DeepSeek V4 Pro 的 Let me 现象。"
+    },
+    {
+      "full_name": "ruochen361/dsh-work-summary",
+      "previous": "other",
+      "current": "tool",
+      "desc_now": "Scheduled daily, weekly and monthly work reports for DeepSeek Harness: collect the day's traces, validate structure, save reports, and push the next checklist onto a board.",
+      "desc_prev": null
+    },
+    {
+      "full_name": "clown-lee/dsh-trae-bridge",
+      "previous": "other",
       "current": "coding",
-      "desc_now": "Edit ask_user_question option cards in place — 编辑选项、修改选项、自定义选项；选中接近的选项后就地调整名称与细节，保留原选项并回传修改说明。",
-      "desc_prev": "Edit ask_user_question option cards before answering: pick the closest option, adjust its label and details in place, and submit the original choice together with your revision."
+      "desc_now": "DeepSeek Harness plugin: use Trae IDE built-in models (Doubao, DeepSeek, GLM, Kimi, Seed) as a DSH provider, plus daily check-in.",
+      "desc_prev": "把 Trae 桌面端自带的模型接进 DeepSeek Harness，零配置、不需要 API Key"
+    },
+    {
+      "full_name": "Asthestarsfalll/answer-card",
+      "previous": "other",
+      "current": "web-ui",
+      "desc_now": "macOS 通用 AI Agent 置顶悬浮回答卡片：支持 Antigravity、DeepSeek Harness (DSH) 与 Zed，不切窗完成审批、作答与追问，支持完整键盘控制并动态自适应主题配色。",
+      "desc_prev": "macOS 屏幕悬浮卡片：DeepSeek Harness 需要你批准、回答或收尾时，把决定本身搬到屏幕上——点选项就等于在 DSH 里作答，不用切窗口。"
     }
   ]
 }
