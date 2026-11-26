@@ -1,16 +1,16 @@
 {
-  "generated_at": "2026-11-26T00:49:56.779Z",
+  "generated_at": "2026-11-26T12:03:02.304Z",
   "counts": {
-    "bundle-plugin": 27790,
-    "multi-plugin": 1015,
-    "gone": 542,
-    "cordis-plugin": 2257,
-    "manual": 1170,
-    "pkg-plain": 1887,
-    "script": 331,
-    "skill": 354,
+    "bundle-plugin": 27930,
+    "multi-plugin": 1016,
+    "gone": 545,
+    "cordis-plugin": 2267,
+    "manual": 1176,
+    "pkg-plain": 1892,
+    "script": 333,
+    "skill": 355,
     "agent-preset": 62,
-    "empty": 33,
+    "empty": 32,
     "unknown": 4
   },
   "repos": [
@@ -608,6 +608,11 @@
       "full_name": "1105623876/dsh-bench",
       "verdict": "pkg-plain",
       "checked_updated_at": "2026-08-16T08:32:36Z"
+    },
+    {
+      "full_name": "1107186916/dsh-plugin-markdown-tone",
+      "verdict": "cordis-plugin",
+      "checked_updated_at": "2026-11-26T09:12:52Z"
     },
     {
       "full_name": "111111AAA111111/dsh-premise-guard-cn",
@@ -1303,7 +1308,7 @@
     {
       "full_name": "1475505/miliastra-beyond-simulator",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-24T11:12:26Z"
+      "checked_updated_at": "2026-11-26T08:38:44Z"
     },
     {
       "full_name": "1479650473/dsh-question-composer",
@@ -1920,6 +1925,11 @@
       "checked_updated_at": "2026-09-12T00:25:35Z"
     },
     {
+      "full_name": "1804608397/dsh-plugin-browser-bridge",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T06:25:36Z"
+    },
+    {
       "full_name": "1804608397/dsh-plugin-linux-computer-use",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-11-25T04:43:29Z"
@@ -2397,7 +2407,7 @@
     {
       "full_name": "2019wakeup/dsh-reader",
       "verdict": "multi-plugin",
-      "checked_updated_at": "2026-11-25T09:43:03Z"
+      "checked_updated_at": "2026-11-26T10:34:17Z"
     },
     {
       "full_name": "2020141461073/dsh-second-thoughts",
@@ -2417,7 +2427,7 @@
     {
       "full_name": "2026heshao/dsh-armory",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T18:39:00Z"
+      "checked_updated_at": "2026-11-26T08:06:00Z"
     },
     {
       "full_name": "2026heshao/dsh-draft-attachments",
@@ -2561,7 +2571,7 @@
     {
       "full_name": "214140846/browser-hands",
       "verdict": "script",
-      "checked_updated_at": "2026-11-23T06:45:11Z"
+      "checked_updated_at": "2026-11-26T03:15:14Z"
     },
     {
       "full_name": "2151649856sjs-create/joycode-proxy",
@@ -3199,7 +3209,7 @@
     {
       "full_name": "2BingLing/dsh-market",
       "verdict": "pkg-plain",
-      "checked_updated_at": "2026-11-25T16:34:59Z"
+      "checked_updated_at": "2026-11-26T01:39:57Z"
     },
     {
       "full_name": "2DHardty/dsh-renpy-skin",
@@ -3592,7 +3602,7 @@
     {
       "full_name": "414s857/dsh-codesentry",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T18:24:30Z"
+      "checked_updated_at": "2026-11-26T03:33:56Z"
     },
     {
       "full_name": "415748393/draft-meter",
@@ -4710,6 +4720,11 @@
       "checked_updated_at": "2026-11-23T18:16:47Z"
     },
     {
+      "full_name": "862287884-alt/dsh-month-timer",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T10:34:25Z"
+    },
+    {
       "full_name": "862930522/opencode-anchored-standard",
       "verdict": "pkg-plain",
       "checked_updated_at": "2026-08-24T02:19:06Z"
@@ -5468,7 +5483,7 @@
     {
       "full_name": "A3Boy/dsh-web-tools",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-24T16:37:45Z"
+      "checked_updated_at": "2026-11-26T09:24:13Z"
     },
     {
       "full_name": "a410702849/dsh-floating-qa",
@@ -5587,7 +5602,7 @@
     {
       "full_name": "a86582751/dsh-nexttavern",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T14:46:57Z"
+      "checked_updated_at": "2026-11-26T08:49:24Z"
     },
     {
       "full_name": "a895047059/dsh-stack-diagram",
@@ -6759,7 +6774,7 @@
     {
       "full_name": "AdamPlatin123/dsh-plugin-radar",
       "verdict": "pkg-plain",
-      "checked_updated_at": "2026-11-23T01:57:59Z"
+      "checked_updated_at": "2026-11-26T03:25:32Z"
     },
     {
       "full_name": "AdamPlatin123/dsh-tonghuashun",
@@ -6844,6 +6859,11 @@
       "full_name": "addxing/replicate-android-feature",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-09-24T01:44:07Z"
+    },
+    {
+      "full_name": "Ade-hale/dsh-skill-conflicts",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T06:53:44Z"
     },
     {
       "full_name": "adeahejshshsh/coldbrew-dsh",
@@ -7134,7 +7154,7 @@
     {
       "full_name": "advance-lion/dsh-feishu-subscription",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-20T05:08:50Z"
+      "checked_updated_at": "2026-11-26T03:44:44Z"
     },
     {
       "full_name": "advance-lion/dsh-history-plugin",
@@ -7159,7 +7179,7 @@
     {
       "full_name": "ADWMC/helm-d",
       "verdict": "pkg-plain",
-      "checked_updated_at": "2026-11-25T23:11:34Z"
+      "checked_updated_at": "2026-11-26T10:10:39Z"
     },
     {
       "full_name": "AdyVany/dsh-balance-reminder",
@@ -7440,7 +7460,7 @@
     {
       "full_name": "agentscope-ai/ReMe",
       "verdict": "manual",
-      "checked_updated_at": "2026-11-25T23:54:03Z"
+      "checked_updated_at": "2026-11-26T08:59:28Z"
     },
     {
       "full_name": "AgentsDanceAI/AIStore",
@@ -7725,7 +7745,7 @@
     {
       "full_name": "ai-timon/timon",
       "verdict": "manual",
-      "checked_updated_at": "2026-11-25T23:43:57Z"
+      "checked_updated_at": "2026-11-26T09:36:52Z"
     },
     {
       "full_name": "ai-tool-labs/dsh-converter",
@@ -7902,7 +7922,7 @@
     {
       "full_name": "AIcivilization/dsh-vps-manager",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-24T07:04:50Z"
+      "checked_updated_at": "2026-11-26T03:38:23Z"
     },
     {
       "full_name": "Aicksion/dsh-clean-desktop-shell-pro",
@@ -8217,7 +8237,7 @@
     {
       "full_name": "AIpRoBuilder/FlowX",
       "verdict": "manual",
-      "checked_updated_at": "2026-11-25T22:39:37Z"
+      "checked_updated_at": "2026-11-26T08:05:58Z"
     },
     {
       "full_name": "AIR-pixel/air-pixel-liquid-glass",
@@ -8345,7 +8365,7 @@
     {
       "full_name": "AITabby/dockyard-dsh",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-18T08:16:02Z"
+      "checked_updated_at": "2026-11-26T04:05:52Z"
     },
     {
       "full_name": "aitcmhk-web/DSH-bot",
@@ -9020,7 +9040,7 @@
     {
       "full_name": "alchaincyf/huashu-design",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-26T00:00:16Z"
+      "checked_updated_at": "2026-11-26T10:23:15Z"
     },
     {
       "full_name": "alchaincyf/huashu-excel",
@@ -10338,7 +10358,7 @@
     {
       "full_name": "amlyczz/dsh-agy-link",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T22:37:20Z"
+      "checked_updated_at": "2026-11-26T02:13:38Z"
     },
     {
       "full_name": "amlyczz/dsh-lark-link",
@@ -10413,6 +10433,11 @@
       "full_name": "amstlkqp114514/dsh-desktop-tweaks",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-10-19T08:59:51Z"
+    },
+    {
+      "full_name": "amuerrr/dsh-plugin-campus-news",
+      "verdict": "gone",
+      "checked_updated_at": "2026-11-26T10:39:12Z"
     },
     {
       "full_name": "amumulam/dsh-tldraw-canvas",
@@ -10574,7 +10599,7 @@
     {
       "full_name": "anbeime/skill",
       "verdict": "skill",
-      "checked_updated_at": "2026-11-25T20:40:12Z"
+      "checked_updated_at": "2026-11-26T10:23:40Z"
     },
     {
       "full_name": "anbulang/dsh-connect-teleagent",
@@ -10955,7 +10980,7 @@
     {
       "full_name": "angel291592/dsh-submodel",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T15:53:00Z"
+      "checked_updated_at": "2026-11-26T07:33:41Z"
     },
     {
       "full_name": "Angela-lwh/dsh-archive-purge",
@@ -10965,7 +10990,7 @@
     {
       "full_name": "angelky7/dsh-browser-control",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T14:23:39Z"
+      "checked_updated_at": "2026-11-26T02:34:29Z"
     },
     {
       "full_name": "angelky7/dsh-origin-bridge",
@@ -11449,7 +11474,7 @@
     {
       "full_name": "Ansellwan/DeepSeekHarness-Session-Delete",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-16T12:51:03Z"
+      "checked_updated_at": "2026-11-26T03:55:53Z"
     },
     {
       "full_name": "Anseya/flow-tower-context",
@@ -11736,7 +11761,7 @@
     {
       "full_name": "anywhere-labs/Agents-Anywhere",
       "verdict": "skill",
-      "checked_updated_at": "2026-11-25T20:59:03Z"
+      "checked_updated_at": "2026-11-26T09:39:58Z"
     },
     {
       "full_name": "anywhere-labs/deepseek-harness-desktop",
@@ -11745,7 +11770,7 @@
     {
       "full_name": "anywhere-labs/dsh-desktop",
       "verdict": "pkg-plain",
-      "checked_updated_at": "2026-11-25T23:56:29Z"
+      "checked_updated_at": "2026-11-26T10:29:14Z"
     },
     {
       "full_name": "anywhere-labs/framefactory-plugin",
@@ -12331,6 +12356,11 @@
     {
       "full_name": "Archer76/dsh-memory-evolve-suite",
       "verdict": "bundle-plugin"
+    },
+    {
+      "full_name": "Archerkattri/dsh-account-hub",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T03:38:25Z"
     },
     {
       "full_name": "Archerkattri/dsh-qwen-websearch",
@@ -13217,6 +13247,11 @@
       "checked_updated_at": "2026-10-19T22:55:59Z"
     },
     {
+      "full_name": "AstDen/dsh-mesh-toolkit",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T08:43:39Z"
+    },
+    {
       "full_name": "astelirons-ai/dsh-local-monitor",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-11-11T17:30:42Z"
@@ -13300,6 +13335,11 @@
       "full_name": "Astervolans/dsh-literature-search",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-10-07T05:25:15Z"
+    },
+    {
+      "full_name": "Asthestarsfalll/answer-card",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T10:07:58Z"
     },
     {
       "full_name": "Asthestarsfalll/dsh-answer-card",
@@ -13406,6 +13446,11 @@
       "checked_updated_at": "2026-09-28T09:42:26Z"
     },
     {
+      "full_name": "asun-labs/dsh-remotion-studio",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T08:00:21Z"
+    },
+    {
       "full_name": "Asuna486-desuwa/dsh-safety-net",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-09-08T07:32:12Z"
@@ -13418,7 +13463,7 @@
     {
       "full_name": "Asuta/dsh-cdx-plus",
       "verdict": "pkg-plain",
-      "checked_updated_at": "2026-11-25T17:10:40Z"
+      "checked_updated_at": "2026-11-26T06:28:13Z"
     },
     {
       "full_name": "Asuta/dsh-client-ui-settings-model-advanced",
@@ -13739,7 +13784,7 @@
     {
       "full_name": "aureth-labs/dsh-aurabot-qq",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T14:17:36Z"
+      "checked_updated_at": "2026-11-26T10:07:43Z"
     },
     {
       "full_name": "Auron0901/CET_assistant",
@@ -14047,7 +14092,7 @@
     {
       "full_name": "awesome-dsh-plugin/awesome-dsh-plugin",
       "verdict": "pkg-plain",
-      "checked_updated_at": "2026-11-25T23:56:28Z"
+      "checked_updated_at": "2026-11-26T10:04:43Z"
     },
     {
       "full_name": "awesome-dsh-plugin/dsh-find-plugin",
@@ -14280,8 +14325,8 @@
     },
     {
       "full_name": "AXTUT/dsh-plugin-dualtransfer-trial",
-      "verdict": "multi-plugin",
-      "checked_updated_at": "2026-11-11T18:20:56Z"
+      "verdict": "pkg-plain",
+      "checked_updated_at": "2026-11-26T06:26:35Z"
     },
     {
       "full_name": "axuan-1314/dsh-keepsake",
@@ -15127,6 +15172,11 @@
       "checked_updated_at": "2026-10-23T06:04:43Z"
     },
     {
+      "full_name": "BaihaiMianbaofang/dsh-liangdeng",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T07:47:34Z"
+    },
+    {
       "full_name": "BaihaWhite/attach-plus",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-08-25T03:46:08Z"
@@ -15256,6 +15306,11 @@
       "full_name": "bailynlove/web-search-opencode-responses",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-08-22T11:09:00Z"
+    },
+    {
+      "full_name": "Baimacao/dsh-course-autoplay",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T00:38:37Z"
     },
     {
       "full_name": "Baimacao/dsh-pipem",
@@ -16696,7 +16751,7 @@
     {
       "full_name": "Bemly/dsh-plug",
       "verdict": "manual",
-      "checked_updated_at": "2026-11-25T18:42:33Z"
+      "checked_updated_at": "2026-11-26T04:03:59Z"
     },
     {
       "full_name": "ben7am1n/dsh-browser",
@@ -16925,7 +16980,7 @@
     {
       "full_name": "bestnite/search",
       "verdict": "pkg-plain",
-      "checked_updated_at": "2026-11-23T07:30:00Z"
+      "checked_updated_at": "2026-11-26T04:49:45Z"
     },
     {
       "full_name": "betsunninda9-lgtm/dsh-model-groups",
@@ -18709,6 +18764,11 @@
       "checked_updated_at": "2026-11-08T09:10:28Z"
     },
     {
+      "full_name": "boozik3412/dsh-media-artifacts",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T08:44:15Z"
+    },
+    {
       "full_name": "borgez/dsh-project-mcp",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-11-17T03:37:42Z"
@@ -18909,7 +18969,7 @@
     {
       "full_name": "BotHarness/DeepSeekBot",
       "verdict": "pkg-plain",
-      "checked_updated_at": "2026-11-25T21:05:19Z"
+      "checked_updated_at": "2026-11-26T09:34:46Z"
     },
     {
       "full_name": "BotHarness/dsh-skill",
@@ -18959,7 +19019,7 @@
     {
       "full_name": "bowenliang123/dsh-context",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T15:00:26Z"
+      "checked_updated_at": "2026-11-26T10:17:16Z"
     },
     {
       "full_name": "bowenliang123/dsh-plugin-checker",
@@ -19307,7 +19367,7 @@
     {
       "full_name": "breakjck/dsh-aside-ask",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T09:28:59Z"
+      "checked_updated_at": "2026-11-26T02:27:56Z"
     },
     {
       "full_name": "breakstring/cfKanban",
@@ -19400,7 +19460,7 @@
     {
       "full_name": "Britneycode/dsh-fish-soul",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T07:34:44Z"
+      "checked_updated_at": "2026-11-26T08:07:58Z"
     },
     {
       "full_name": "Britneycode/dsh-live-room",
@@ -19508,7 +19568,7 @@
     {
       "full_name": "bruc3van/awesome-dsh-plugin-pro",
       "verdict": "multi-plugin",
-      "checked_updated_at": "2026-11-25T09:46:13Z"
+      "checked_updated_at": "2026-11-26T03:43:41Z"
     },
     {
       "full_name": "bruc3van/bruce-md2word",
@@ -19522,7 +19582,7 @@
     {
       "full_name": "bruc3van/dsh-desktop-pro",
       "verdict": "pkg-plain",
-      "checked_updated_at": "2026-11-25T11:17:00Z"
+      "checked_updated_at": "2026-11-26T05:30:01Z"
     },
     {
       "full_name": "bruc3van/dsh-desktop-safe-market",
@@ -19773,7 +19833,7 @@
     {
       "full_name": "buger-gif/cyber-im-avatar",
       "verdict": "skill",
-      "checked_updated_at": "2026-11-24T07:01:12Z"
+      "checked_updated_at": "2026-11-26T06:02:20Z"
     },
     {
       "full_name": "buger-gif/dsh-remote-huaweicloud-devbridge",
@@ -19956,7 +20016,7 @@
     {
       "full_name": "Burns1028/moa-plus",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T21:26:13Z"
+      "checked_updated_at": "2026-11-26T09:32:16Z"
     },
     {
       "full_name": "Burntgogi/dsh-locale-ko",
@@ -19992,6 +20052,61 @@
       "full_name": "Butt91/flameox",
       "verdict": "gone",
       "checked_updated_at": "2026-10-14T05:34:09Z"
+    },
+    {
+      "full_name": "butterfly301/dsh-brand-pack-loader",
+      "verdict": "cordis-plugin",
+      "checked_updated_at": "2026-11-26T03:37:08Z"
+    },
+    {
+      "full_name": "butterfly301/dsh-confetti",
+      "verdict": "cordis-plugin",
+      "checked_updated_at": "2026-11-26T03:37:11Z"
+    },
+    {
+      "full_name": "butterfly301/dsh-crew-morale",
+      "verdict": "cordis-plugin",
+      "checked_updated_at": "2026-11-26T03:37:14Z"
+    },
+    {
+      "full_name": "butterfly301/dsh-locale-pack-loader",
+      "verdict": "cordis-plugin",
+      "checked_updated_at": "2026-11-26T03:37:18Z"
+    },
+    {
+      "full_name": "butterfly301/dsh-ocean-background",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T03:37:24Z"
+    },
+    {
+      "full_name": "butterfly301/dsh-pirate-mode",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T03:37:29Z"
+    },
+    {
+      "full_name": "butterfly301/dsh-prompt-loader",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T03:37:32Z"
+    },
+    {
+      "full_name": "butterfly301/dsh-rotate-status-text",
+      "verdict": "cordis-plugin",
+      "checked_updated_at": "2026-11-26T03:37:36Z"
+    },
+    {
+      "full_name": "butterfly301/dsh-session-terms",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T03:37:41Z"
+    },
+    {
+      "full_name": "butterfly301/dsh-sound-pack-loader",
+      "verdict": "cordis-plugin",
+      "checked_updated_at": "2026-11-26T03:37:45Z"
+    },
+    {
+      "full_name": "butterfly301/dsh-window-shake",
+      "verdict": "cordis-plugin",
+      "checked_updated_at": "2026-11-26T03:37:50Z"
     },
     {
       "full_name": "ButterHost69/dsh-mermaid-diagram",
@@ -20283,7 +20398,7 @@
     {
       "full_name": "c1overzz/dsh-bili-scroll",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T15:42:53Z"
+      "checked_updated_at": "2026-11-26T08:19:12Z"
     },
     {
       "full_name": "c225820h/DeepSeek_Harness-SMB",
@@ -21360,7 +21475,7 @@
     {
       "full_name": "CarviS0302/dsh-editable-question-options",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-23T06:44:44Z"
+      "checked_updated_at": "2026-11-26T02:31:53Z"
     },
     {
       "full_name": "CaseyTso/analyze_image_tool",
@@ -21375,6 +21490,11 @@
       "full_name": "caseyyy/dsh-goal-planner",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-08-29T09:23:44Z"
+    },
+    {
+      "full_name": "Casper-Mars/dsh-agent-uiux",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T07:40:47Z"
     },
     {
       "full_name": "CassiaTw1g/dsh-new-session",
@@ -21577,6 +21697,11 @@
       "checked_updated_at": "2026-10-17T18:45:05Z"
     },
     {
+      "full_name": "cattreemaybe/ai-wish-001-timetable",
+      "verdict": "pkg-plain",
+      "checked_updated_at": "2026-11-26T09:24:09Z"
+    },
+    {
       "full_name": "Catwb/dsh-solution-ledger",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-11-21T12:40:07Z"
@@ -21754,12 +21879,12 @@
     {
       "full_name": "ccch1mneyyy/dsh-Go",
       "verdict": "manual",
-      "checked_updated_at": "2026-11-26T00:02:18Z"
+      "checked_updated_at": "2026-11-26T10:36:39Z"
     },
     {
       "full_name": "ccch1mneyyy/dsh-TUI",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T23:42:19Z"
+      "checked_updated_at": "2026-11-26T10:13:47Z"
     },
     {
       "full_name": "ccch1mneyyy/dsh-working-activity",
@@ -22146,6 +22271,11 @@
       "checked_updated_at": "2026-11-12T10:21:40Z"
     },
     {
+      "full_name": "cenweixin199/dsh-figma-spec",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T07:29:01Z"
+    },
+    {
       "full_name": "CEQ151/dsh_codex_style_plugin",
       "verdict": "multi-plugin"
     },
@@ -22157,7 +22287,7 @@
     {
       "full_name": "Cerbur/clutch-dsh",
       "verdict": "pkg-plain",
-      "checked_updated_at": "2026-11-24T15:06:40Z"
+      "checked_updated_at": "2026-11-26T01:26:16Z"
     },
     {
       "full_name": "cerebrixos-org/dsh-asimovbox",
@@ -22791,6 +22921,11 @@
       "full_name": "CharlieChang1216/dsh-whale-jump",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-10-18T07:30:36Z"
+    },
+    {
+      "full_name": "Charlieeeo/dsh-next-reply",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T06:18:24Z"
     },
     {
       "full_name": "Charlieeeo/dsh-next-reply-chips",
@@ -23671,7 +23806,7 @@
     {
       "full_name": "ChenJun25/dsh-console-hm",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T14:07:19Z"
+      "checked_updated_at": "2026-11-26T03:30:34Z"
     },
     {
       "full_name": "ChenJun25/dsh-console-plugin",
@@ -23701,7 +23836,7 @@
     {
       "full_name": "chenkezhen480/dsh-world",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T19:24:01Z"
+      "checked_updated_at": "2026-11-26T10:06:03Z"
     },
     {
       "full_name": "chenkezhen480/evolution-computer-use",
@@ -24068,7 +24203,7 @@
     {
       "full_name": "chenxiachan/thoughtdag",
       "verdict": "pkg-plain",
-      "checked_updated_at": "2026-11-25T19:39:48Z"
+      "checked_updated_at": "2026-11-26T10:21:45Z"
     },
     {
       "full_name": "chenxiang6663635/job-workbench",
@@ -24311,7 +24446,7 @@
     {
       "full_name": "cherrchen/dsh-plugin-multi-root-workspace",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T02:31:12Z"
+      "checked_updated_at": "2026-11-26T09:55:38Z"
     },
     {
       "full_name": "cherrchen/dsh-plugin-scaffold",
@@ -24422,6 +24557,11 @@
       "full_name": "chibslee/dsh-session-search",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-11-20T06:42:59Z"
+    },
+    {
+      "full_name": "chibslee/dsh-sidecar",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T10:13:26Z"
     },
     {
       "full_name": "chichibunoc/dsh-anima-draw",
@@ -25222,7 +25362,7 @@
     {
       "full_name": "ChubbyFishy-qwq/dsh-whale-chess",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-22T05:49:39Z"
+      "checked_updated_at": "2026-11-26T07:46:00Z"
     },
     {
       "full_name": "chucan1/dsh-plugin-xt-memory",
@@ -25321,7 +25461,7 @@
     {
       "full_name": "chuspeeism/dashi-taskboard",
       "verdict": "pkg-plain",
-      "checked_updated_at": "2026-11-25T10:30:10Z"
+      "checked_updated_at": "2026-11-26T09:33:48Z"
     },
     {
       "full_name": "chuuu4536-gh/dsh-jp-vocab",
@@ -25971,7 +26111,7 @@
     {
       "full_name": "Clarklevis1995/dsh-mobile",
       "verdict": "manual",
-      "checked_updated_at": "2026-11-25T14:25:26Z"
+      "checked_updated_at": "2026-11-26T02:50:57Z"
     },
     {
       "full_name": "Clarklevis1995/dsh-plugin-mobile-gateway",
@@ -26186,7 +26326,7 @@
     {
       "full_name": "cloader/dsh-taskboard",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T05:20:36Z"
+      "checked_updated_at": "2026-11-26T01:30:20Z"
     },
     {
       "full_name": "clockclock1/dsh-nitro",
@@ -26277,6 +26417,16 @@
       "verdict": "bundle-plugin"
     },
     {
+      "full_name": "clown-lee/dsh-qwenwork-bridge",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T09:47:12Z"
+    },
+    {
+      "full_name": "clown-lee/dsh-trae-bridge",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T09:46:51Z"
+    },
+    {
       "full_name": "clown139880/dsh-live2d-avatar",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-09-28T16:19:06Z"
@@ -26294,7 +26444,7 @@
     {
       "full_name": "clumsy-dot/dsh-plugin-conversation-archive",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-24T14:57:51Z"
+      "checked_updated_at": "2026-11-26T08:23:26Z"
     },
     {
       "full_name": "Cluodwaters/dsh-paper-workbench",
@@ -26319,7 +26469,7 @@
     {
       "full_name": "CM-Silence/dsh-mo-image",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-22T15:59:31Z"
+      "checked_updated_at": "2026-11-26T10:10:19Z"
     },
     {
       "full_name": "cm860712ch-cloud/dsh-quick-input",
@@ -27285,6 +27435,11 @@
       "full_name": "Congcong19655/dsh-projects",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-11-15T05:16:12Z"
+    },
+    {
+      "full_name": "Congxiang1994/dsh-qa-mode",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T06:22:27Z"
     },
     {
       "full_name": "congyaqwq/dsh-quick-prompts",
@@ -28875,6 +29030,11 @@
       "checked_updated_at": "2026-10-05T03:54:56Z"
     },
     {
+      "full_name": "CYF736222347/dsh-programming-mode-zh",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T01:41:20Z"
+    },
+    {
       "full_name": "CYF736222347/dsh-workspace-status-board",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-11-22T15:43:54Z"
@@ -29344,6 +29504,11 @@
       "checked_updated_at": "2026-11-13T17:02:59Z"
     },
     {
+      "full_name": "Daaaaavid-zhou/dsh-camera",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T10:51:50Z"
+    },
+    {
       "full_name": "Daaaaxianer/dsh-billing-bar",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-11-09T09:32:08Z"
@@ -29463,7 +29628,7 @@
     {
       "full_name": "daha1216/dsh-adult-tension",
       "verdict": "manual",
-      "checked_updated_at": "2026-11-25T17:03:45Z"
+      "checked_updated_at": "2026-11-26T10:25:20Z"
     },
     {
       "full_name": "daha1216/dsh-font-customizer",
@@ -29859,6 +30024,11 @@
       "checked_updated_at": "2026-09-12T05:31:12Z"
     },
     {
+      "full_name": "DAnonyvinciT/dsh-preset-composer",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T04:46:12Z"
+    },
+    {
       "full_name": "Danreelkow/HDCS",
       "verdict": "manual",
       "checked_updated_at": "2026-09-18T17:53:02Z"
@@ -30046,7 +30216,7 @@
     {
       "full_name": "Darianliu23/dsh-stardew-blind-whale-farmer",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-23T13:25:44Z"
+      "checked_updated_at": "2026-11-26T08:13:26Z"
     },
     {
       "full_name": "darianzes/dsh-plugin-rag-eval-suite",
@@ -30250,12 +30420,12 @@
     {
       "full_name": "dataelement/bisheng",
       "verdict": "manual",
-      "checked_updated_at": "2026-11-25T08:27:12Z"
+      "checked_updated_at": "2026-11-26T10:25:12Z"
     },
     {
       "full_name": "dataelement/dsh-desktop",
       "verdict": "cordis-plugin",
-      "checked_updated_at": "2026-11-26T00:02:23Z"
+      "checked_updated_at": "2026-11-26T10:22:46Z"
     },
     {
       "full_name": "dataelement/dsh-plugin-coaligne",
@@ -30445,7 +30615,7 @@
     {
       "full_name": "DawnCHL/dsh-islands-ui",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-24T14:35:41Z"
+      "checked_updated_at": "2026-11-26T06:47:51Z"
     },
     {
       "full_name": "dawnliming/dsh-chinese-mode",
@@ -30653,7 +30823,7 @@
     {
       "full_name": "DayuanJiang/next-ai-draw-io",
       "verdict": "pkg-plain",
-      "checked_updated_at": "2026-11-25T23:54:42Z"
+      "checked_updated_at": "2026-11-26T10:30:27Z"
     },
     {
       "full_name": "dayutech/dsh-handy",
@@ -30941,7 +31111,7 @@
     {
       "full_name": "DDDMUC/dsh-free-search",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T23:56:30Z"
+      "checked_updated_at": "2026-11-26T08:11:46Z"
     },
     {
       "full_name": "DDDMUC/dsh-log-trim",
@@ -31698,7 +31868,7 @@
     {
       "full_name": "delta-box/deltabox-lite",
       "verdict": "pkg-plain",
-      "checked_updated_at": "2026-11-24T08:47:49Z"
+      "checked_updated_at": "2026-11-26T04:52:53Z"
     },
     {
       "full_name": "Delta-Water/dsh-conservative-anchor",
@@ -31790,9 +31960,14 @@
       "checked_updated_at": "2026-11-14T16:49:43Z"
     },
     {
+      "full_name": "Demonese/dsh-remember-reasoning-effort",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T08:34:09Z"
+    },
+    {
       "full_name": "Demonese/dsh-remember-workspace-settings",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T11:15:20Z"
+      "checked_updated_at": "2026-11-26T03:18:26Z"
     },
     {
       "full_name": "demxyuanli/dsh-canvas",
@@ -31848,6 +32023,11 @@
       "full_name": "dengnianchen/dsh-restart",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-11-05T09:56:02Z"
+    },
+    {
+      "full_name": "dengnianchen/dsh-workspace-panels",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T05:18:20Z"
     },
     {
       "full_name": "dengpeihua/dsh-browser-use",
@@ -31922,7 +32102,7 @@
     {
       "full_name": "DennisZhangOiler/dsh-rd-workflow",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T10:04:51Z"
+      "checked_updated_at": "2026-11-26T09:56:32Z"
     },
     {
       "full_name": "Depar7ure/dsh-desktop-web-refresh",
@@ -32224,12 +32404,12 @@
     {
       "full_name": "Devin-AXIS/deepseek-design",
       "verdict": "pkg-plain",
-      "checked_updated_at": "2026-11-25T22:32:38Z"
+      "checked_updated_at": "2026-11-26T09:45:55Z"
     },
     {
       "full_name": "Devin-AXIS/iPolloWork",
       "verdict": "pkg-plain",
-      "checked_updated_at": "2026-11-25T16:43:52Z"
+      "checked_updated_at": "2026-11-26T10:28:33Z"
     },
     {
       "full_name": "Devin-AXIS/jev-dsh-decision",
@@ -32679,7 +32859,7 @@
     {
       "full_name": "dickpy/dsh-imagegen",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-23T08:40:54Z"
+      "checked_updated_at": "2026-11-26T02:38:49Z"
     },
     {
       "full_name": "didclawapp-ai/DSH-Office",
@@ -33038,12 +33218,12 @@
     {
       "full_name": "dingminhua/dsh-connect-trae",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T10:39:10Z"
+      "checked_updated_at": "2026-11-26T02:22:14Z"
     },
     {
       "full_name": "dingminhua/dsh-connect-workbuddy",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T18:49:08Z"
+      "checked_updated_at": "2026-11-26T09:59:28Z"
     },
     {
       "full_name": "dingminhua/dsh-ldvh",
@@ -33203,7 +33383,7 @@
     {
       "full_name": "Diomchen/dsh-better-tag",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-18T02:16:08Z"
+      "checked_updated_at": "2026-11-26T03:40:53Z"
     },
     {
       "full_name": "Diomchen/dsh-cross-agent",
@@ -33368,6 +33548,11 @@
       "full_name": "djt889/dsh-drag-to-attachment",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-08-17T12:54:31Z"
+    },
+    {
+      "full_name": "DK-Zhu/mcp-consult",
+      "verdict": "pkg-plain",
+      "checked_updated_at": "2026-11-26T03:27:44Z"
     },
     {
       "full_name": "dk2064/dsh-craft-anything",
@@ -34846,7 +35031,7 @@
     {
       "full_name": "dream-num/dsh-univer-office",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T19:17:42Z"
+      "checked_updated_at": "2026-11-26T06:01:52Z"
     },
     {
       "full_name": "dream-num/dsh-univer-plugin",
@@ -34855,7 +35040,7 @@
     {
       "full_name": "dream-num/univer-workspace",
       "verdict": "pkg-plain",
-      "checked_updated_at": "2026-11-25T22:09:01Z"
+      "checked_updated_at": "2026-11-26T10:24:01Z"
     },
     {
       "full_name": "dream-office/dsh-cross-workspace",
@@ -35297,6 +35482,11 @@
       "checked_updated_at": "2026-11-25T17:55:04Z"
     },
     {
+      "full_name": "drscrewdriver/dsh-progress-union",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T08:42:43Z"
+    },
+    {
       "full_name": "drscrewdriver/dsh-reference-session-collector",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-11-25T17:07:04Z"
@@ -35370,6 +35560,11 @@
       "checked_updated_at": "2026-11-15T16:12:40Z"
     },
     {
+      "full_name": "DrWang1/dsh-mode-cycle-by-tab",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T03:41:42Z"
+    },
+    {
       "full_name": "DrWang1/dsh-plugin-mode-cycle",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-11-24T06:20:46Z"
@@ -35432,7 +35627,7 @@
     {
       "full_name": "ds-hu/dsh-tailcat-remote",
       "verdict": "cordis-plugin",
-      "checked_updated_at": "2026-11-24T16:45:41Z"
+      "checked_updated_at": "2026-11-26T06:53:56Z"
     },
     {
       "full_name": "ds-hu/dsh-task-manager",
@@ -35608,7 +35803,7 @@
     {
       "full_name": "dsh-market/dsh-market",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T23:56:29Z"
+      "checked_updated_at": "2026-11-26T10:28:51Z"
     },
     {
       "full_name": "dsh-mixxed/dsh-client-ui-filesystem",
@@ -35962,7 +36157,7 @@
     {
       "full_name": "dsh-tauri/deepseek-harness-desktop",
       "verdict": "pkg-plain",
-      "checked_updated_at": "2026-11-25T23:56:29Z"
+      "checked_updated_at": "2026-11-26T08:50:33Z"
     },
     {
       "full_name": "dsh-teamwork/dsh-teamwork",
@@ -36178,6 +36373,11 @@
       "checked_updated_at": "2026-11-11T05:33:06Z"
     },
     {
+      "full_name": "dtapps/dsh-git-guard",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T08:13:33Z"
+    },
+    {
       "full_name": "dtdths/dsh-mixer",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-11-12T03:02:19Z"
@@ -36333,7 +36533,7 @@
     {
       "full_name": "duhu2000/dsh-mcp-connector",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T08:31:42Z"
+      "checked_updated_at": "2026-11-26T05:58:29Z"
     },
     {
       "full_name": "duhu2000/dsh-pre-duediligence",
@@ -36392,7 +36592,7 @@
     {
       "full_name": "duma520/dsh-run2skill",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T20:40:24Z"
+      "checked_updated_at": "2026-11-26T06:03:38Z"
     },
     {
       "full_name": "duma520/dsh-session-manager-patch",
@@ -36556,7 +36756,7 @@
     {
       "full_name": "Duskriver/dsh-opencode-go",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T22:45:21Z"
+      "checked_updated_at": "2026-11-26T09:35:39Z"
     },
     {
       "full_name": "dusktin71-lang/dsh-lessons",
@@ -37088,7 +37288,7 @@
     {
       "full_name": "easychen/jing-chan-os",
       "verdict": "manual",
-      "checked_updated_at": "2026-11-25T23:16:47Z"
+      "checked_updated_at": "2026-11-26T02:10:43Z"
     },
     {
       "full_name": "Easyhoov/dsh-mimo-asr",
@@ -37180,7 +37380,7 @@
     {
       "full_name": "Ebony-Vinyl/dsh-our-free-model",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-26T00:02:26Z"
+      "checked_updated_at": "2026-11-26T10:36:18Z"
     },
     {
       "full_name": "Ebony-Vinyl/EAC-design-world",
@@ -37190,7 +37390,7 @@
     {
       "full_name": "Ebony-Vinyl/EAC-Desktop",
       "verdict": "manual",
-      "checked_updated_at": "2026-11-25T23:23:48Z"
+      "checked_updated_at": "2026-11-26T10:11:29Z"
     },
     {
       "full_name": "Ebony-Vinyl/EAC-Pack",
@@ -37350,7 +37550,7 @@
     {
       "full_name": "ECNU/EduWork",
       "verdict": "manual",
-      "checked_updated_at": "2026-11-25T18:27:19Z"
+      "checked_updated_at": "2026-11-26T07:48:09Z"
     },
     {
       "full_name": "EcRal5t/everything-search-mcp",
@@ -37517,7 +37717,7 @@
     {
       "full_name": "edison7009/EchoBird",
       "verdict": "pkg-plain",
-      "checked_updated_at": "2026-11-25T17:53:35Z"
+      "checked_updated_at": "2026-11-26T09:01:10Z"
     },
     {
       "full_name": "edisoncks/dsh-cookie-renew",
@@ -37987,7 +38187,7 @@
     {
       "full_name": "elegant01/dsh-codearts",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T05:17:03Z"
+      "checked_updated_at": "2026-11-26T02:28:09Z"
     },
     {
       "full_name": "elegant01/dsh-honey-guard",
@@ -38047,6 +38247,11 @@
     {
       "full_name": "elevenmoon999/dsh-clash-proxy",
       "verdict": "bundle-plugin"
+    },
+    {
+      "full_name": "eleysia111/agy-video-reader",
+      "verdict": "script",
+      "checked_updated_at": "2026-11-26T02:21:53Z"
     },
     {
       "full_name": "elfgzp/dsh-agent-team-playbook",
@@ -38426,7 +38631,7 @@
     {
       "full_name": "elysia395/dsh-wallpaper-engine",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T23:56:30Z"
+      "checked_updated_at": "2026-11-26T10:32:01Z"
     },
     {
       "full_name": "Elysian1knight/Elysian-repository",
@@ -39116,6 +39321,11 @@
       "checked_updated_at": "2026-11-02T15:00:44Z"
     },
     {
+      "full_name": "EricZhou0815/dsh-chrome-dictation",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T03:46:55Z"
+    },
+    {
       "full_name": "EricZhouziRui/dsh-session-purge",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-11-07T11:08:16Z"
@@ -39392,6 +39602,11 @@
       "full_name": "Ethan-decoy/QuestBranch-DSH",
       "verdict": "pkg-plain",
       "checked_updated_at": "2026-11-06T09:10:03Z"
+    },
+    {
+      "full_name": "Ethan-lamlam/dsh-notes",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T09:07:00Z"
     },
     {
       "full_name": "ethan0084/dsh-cockpit",
@@ -39683,9 +39898,19 @@
       "checked_updated_at": "2026-11-04T07:38:06Z"
     },
     {
+      "full_name": "EverMind-AI/EverMe",
+      "verdict": "manual",
+      "checked_updated_at": "2026-11-26T01:13:22Z"
+    },
+    {
       "full_name": "EverMind-AI/EverOS",
       "verdict": "pkg-plain",
-      "checked_updated_at": "2026-11-25T20:55:20Z"
+      "checked_updated_at": "2026-11-26T10:28:23Z"
+    },
+    {
+      "full_name": "EverMind-AI/Plugins",
+      "verdict": "manual",
+      "checked_updated_at": "2026-11-26T01:12:57Z"
     },
     {
       "full_name": "EverMind-AI/SkillCorpus",
@@ -40685,7 +40910,7 @@
     {
       "full_name": "Fanqi89/dsh-craft-anything",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T21:10:29Z"
+      "checked_updated_at": "2026-11-26T09:14:40Z"
     },
     {
       "full_name": "fanrj3/dsh-presence",
@@ -40844,6 +41069,11 @@
       "full_name": "Farzin-CS/DeepSeek-Harness-RTL",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-11-06T00:53:11Z"
+    },
+    {
+      "full_name": "FashionChen111/Mail-Assistant-Plugin",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T02:25:17Z"
     },
     {
       "full_name": "fashionmascherine-svg/dsh-polymarket-knowhow",
@@ -41120,7 +41350,7 @@
     {
       "full_name": "Feahter/dsh-plugins",
       "verdict": "multi-plugin",
-      "checked_updated_at": "2026-11-22T09:03:45Z"
+      "checked_updated_at": "2026-11-26T07:52:23Z"
     },
     {
       "full_name": "FeatherHunter/dsh-chinese-skill-patch",
@@ -41135,7 +41365,7 @@
     {
       "full_name": "FeatherHunter/dsh-mattpocock-skills-deck",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T08:52:41Z"
+      "checked_updated_at": "2026-11-26T07:32:55Z"
     },
     {
       "full_name": "FeatherHunter/dsh-opencode-palette",
@@ -42049,7 +42279,7 @@
     {
       "full_name": "Fei-Craft/DS-Bot",
       "verdict": "manual",
-      "checked_updated_at": "2026-11-25T23:47:01Z"
+      "checked_updated_at": "2026-11-26T10:29:25Z"
     },
     {
       "full_name": "fei-hang/DeepSeekHarnessSDK",
@@ -42103,7 +42333,7 @@
     {
       "full_name": "feifandiv/dsh-annotation",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-24T11:17:36Z"
+      "checked_updated_at": "2026-11-26T05:49:25Z"
     },
     {
       "full_name": "feifandiv/dsh-feifan-life",
@@ -42123,12 +42353,12 @@
     {
       "full_name": "feifandiv/dsh-skins",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-08T16:58:33Z"
+      "checked_updated_at": "2026-11-26T05:50:03Z"
     },
     {
       "full_name": "feifandiv/dsh-unread-badge",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-13T02:08:12Z"
+      "checked_updated_at": "2026-11-26T05:49:53Z"
     },
     {
       "full_name": "feifandiv/dsh-video-preview",
@@ -42546,7 +42776,7 @@
     {
       "full_name": "fengshenx/dsh-leader-agent",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T14:58:29Z"
+      "checked_updated_at": "2026-11-26T08:23:52Z"
     },
     {
       "full_name": "fengshenx/dsh-leader-kit",
@@ -42915,7 +43145,7 @@
     {
       "full_name": "ffyfox/dsh-desktop-linux",
       "verdict": "manual",
-      "checked_updated_at": "2026-11-24T15:40:37Z"
+      "checked_updated_at": "2026-11-26T09:36:22Z"
     },
     {
       "full_name": "ffyfox/dsh-linux-desktop",
@@ -43078,7 +43308,7 @@
     {
       "full_name": "finogeeks/finsafe",
       "verdict": "script",
-      "checked_updated_at": "2026-11-25T14:25:16Z"
+      "checked_updated_at": "2026-11-26T01:46:03Z"
     },
     {
       "full_name": "Fioraen/My-code-warehouse",
@@ -43688,7 +43918,7 @@
     {
       "full_name": "flizzywine/dsh-tavern",
       "verdict": "cordis-plugin",
-      "checked_updated_at": "2026-11-25T23:27:24Z"
+      "checked_updated_at": "2026-11-26T09:53:07Z"
     },
     {
       "full_name": "FLL123-Arch/game-crash-doctor",
@@ -44050,7 +44280,7 @@
     {
       "full_name": "flymysql/dsh-remote",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T10:15:29Z"
+      "checked_updated_at": "2026-11-26T10:08:08Z"
     },
     {
       "full_name": "flynow-harness/dsh-plugin-agent-workflow",
@@ -44409,7 +44639,7 @@
     {
       "full_name": "fotor-ai/fotor-agent-plugins",
       "verdict": "pkg-plain",
-      "checked_updated_at": "2026-11-24T12:32:30Z"
+      "checked_updated_at": "2026-11-26T02:04:23Z"
     },
     {
       "full_name": "foukusa/stca-agent-skill",
@@ -44444,7 +44674,7 @@
     {
       "full_name": "fourzkw/dsh-drawai",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T13:13:01Z"
+      "checked_updated_at": "2026-11-26T09:52:41Z"
     },
     {
       "full_name": "Fouxiuan/dsh-free-bili-scroll",
@@ -44829,7 +45059,7 @@
     {
       "full_name": "freestylefly/awesome-gpt-image-2",
       "verdict": "pkg-plain",
-      "checked_updated_at": "2026-11-25T23:56:12Z"
+      "checked_updated_at": "2026-11-26T10:03:15Z"
     },
     {
       "full_name": "freestylefly/wesight",
@@ -45601,7 +45831,7 @@
     {
       "full_name": "FuRongJun-1999/dsh-memory",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T17:10:35Z"
+      "checked_updated_at": "2026-11-26T07:47:55Z"
     },
     {
       "full_name": "Furry-wucheng/dsh-story-mode",
@@ -45823,7 +46053,7 @@
     {
       "full_name": "fwerkor/local-shell-mcp",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T12:35:30Z"
+      "checked_updated_at": "2026-11-26T08:38:55Z"
     },
     {
       "full_name": "Fwkkk666/dsh-time-stop-theme",
@@ -46031,6 +46261,11 @@
       "checked_updated_at": "2026-11-11T04:49:03Z"
     },
     {
+      "full_name": "fzjmaclearn/zack-calendar",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T06:07:14Z"
+    },
+    {
       "full_name": "fzlong/dsh-balance-eta",
       "verdict": "manual",
       "checked_updated_at": "2026-09-11T19:41:23Z"
@@ -46100,9 +46335,19 @@
       "checked_updated_at": "2026-11-25T12:21:22Z"
     },
     {
+      "full_name": "G-TY/dsh-restart-refresh",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T08:37:55Z"
+    },
+    {
+      "full_name": "G-TY/dsh-tokens",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T09:16:45Z"
+    },
+    {
       "full_name": "g-yixuan/dsh-sidenote",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-24T02:05:53Z"
+      "checked_updated_at": "2026-11-26T10:33:28Z"
     },
     {
       "full_name": "g1998815/dsh-workspace-tools",
@@ -46118,6 +46363,11 @@
       "full_name": "G1en-114/dsh-failbook",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-09-12T00:25:53Z"
+    },
+    {
+      "full_name": "G33s3Fr13s/dsh-weread-free-library",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T06:43:11Z"
     },
     {
       "full_name": "g4yzx/dsh-persona-cetacea",
@@ -46205,8 +46455,8 @@
     },
     {
       "full_name": "Galaxy-2001/Rhine-Lab-Codex-Theme",
-      "verdict": "manual",
-      "checked_updated_at": "2026-11-07T05:39:55Z"
+      "verdict": "pkg-plain",
+      "checked_updated_at": "2026-11-26T10:06:49Z"
     },
     {
       "full_name": "Galaxy-VN/dsh-pixel-themes",
@@ -46568,12 +46818,12 @@
     {
       "full_name": "Gaudi-XIX/dsbot-session-create",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-20T17:39:05Z"
+      "checked_updated_at": "2026-11-26T03:29:30Z"
     },
     {
       "full_name": "Gaudi-XIX/dsh-agy-cli",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-22T02:47:15Z"
+      "checked_updated_at": "2026-11-26T04:08:12Z"
     },
     {
       "full_name": "Gaudi-XIX/dsh-pocket-glide",
@@ -47890,6 +48140,11 @@
       "checked_updated_at": "2026-11-11T17:45:14Z"
     },
     {
+      "full_name": "github-yousen/dsh-workbuddy-browser",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T03:40:09Z"
+    },
+    {
       "full_name": "github798383392/dsh-skill-filmora-2026",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-10-21T17:51:48Z"
@@ -48130,7 +48385,7 @@
     {
       "full_name": "gluztm/dsh-chief",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T15:54:44Z"
+      "checked_updated_at": "2026-11-26T09:04:50Z"
     },
     {
       "full_name": "gluztm/DSHGuard",
@@ -49183,6 +49438,31 @@
       "checked_updated_at": "2026-11-07T04:44:57Z"
     },
     {
+      "full_name": "gpboyer2/dsh-archived-open",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T06:55:23Z"
+    },
+    {
+      "full_name": "gpboyer2/dsh-finish-line",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T06:55:32Z"
+    },
+    {
+      "full_name": "gpboyer2/dsh-session-title-on-turnend",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T06:55:33Z"
+    },
+    {
+      "full_name": "gpboyer2/dsh-toolcall-text-guard",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T06:55:34Z"
+    },
+    {
+      "full_name": "gpboyer2/dsh-web-fetch-open",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T06:55:27Z"
+    },
+    {
       "full_name": "GPIOX/dsh-api-balance",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-09-09T10:16:42Z"
@@ -49242,7 +49522,7 @@
     {
       "full_name": "grape-dev/grape-dsh",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-23T08:26:30Z"
+      "checked_updated_at": "2026-11-26T01:42:37Z"
     },
     {
       "full_name": "GrapeCityXA/dsh-plugin-spreadjs-driver",
@@ -49331,7 +49611,7 @@
     {
       "full_name": "green-dalii/dsh-plugin-dev-skill",
       "verdict": "skill",
-      "checked_updated_at": "2026-11-23T01:21:19Z"
+      "checked_updated_at": "2026-11-26T08:29:13Z"
     },
     {
       "full_name": "green-dalii/dsh-shift-router",
@@ -49817,6 +50097,11 @@
       "checked_updated_at": "2026-10-27T13:53:07Z"
     },
     {
+      "full_name": "guhanfei-ai/dsh-workspace-cake",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T06:36:22Z"
+    },
+    {
       "full_name": "guhanfei-ai/dsh-worldsense",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-10-27T13:43:58Z"
@@ -50273,6 +50558,11 @@
       "checked_updated_at": "2026-11-14T01:57:23Z"
     },
     {
+      "full_name": "guweijie7/dsh-liquid-glass",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T07:44:02Z"
+    },
+    {
       "full_name": "guwenwu112233-dot/dsh-media-sideba",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-10-16T07:10:58Z"
@@ -50335,7 +50625,7 @@
     {
       "full_name": "guzhou079-arch/deepseek-harness-android",
       "verdict": "manual",
-      "checked_updated_at": "2026-11-25T20:57:47Z"
+      "checked_updated_at": "2026-11-26T06:15:07Z"
     },
     {
       "full_name": "guzhou079-arch/dsh-plugin-android-vscreen",
@@ -51147,7 +51437,7 @@
     {
       "full_name": "Han-1413141/dsh-cost-meter",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T15:06:31Z"
+      "checked_updated_at": "2026-11-26T03:54:38Z"
     },
     {
       "full_name": "Han-1413141/dsh-jev-thinkout",
@@ -51258,6 +51548,11 @@
       "full_name": "HandsYe/dsh-llm-motomoto",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-09-30T07:14:01Z"
+    },
+    {
+      "full_name": "HandsYe/dsh-off-work-countdown",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T07:52:05Z"
     },
     {
       "full_name": "HandsYe/dsh-remote-status",
@@ -51424,7 +51719,7 @@
     {
       "full_name": "hanliang97/MatrixMedia",
       "verdict": "pkg-plain",
-      "checked_updated_at": "2026-11-25T23:13:42Z"
+      "checked_updated_at": "2026-11-26T09:53:56Z"
     },
     {
       "full_name": "hanlinlibham/dsh-native-tui",
@@ -52179,7 +52474,7 @@
     {
       "full_name": "harryzhz/dsh-lark-bridge",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-23T08:11:45Z"
+      "checked_updated_at": "2026-11-26T10:23:23Z"
     },
     {
       "full_name": "Harua79/dsh-balance-ledger",
@@ -52434,7 +52729,7 @@
     {
       "full_name": "Haven-hvn/deepseek-harness-web3-agent-stack",
       "verdict": "pkg-plain",
-      "checked_updated_at": "2026-11-04T21:30:23Z"
+      "checked_updated_at": "2026-11-26T05:17:25Z"
     },
     {
       "full_name": "having5548/deepseek-harness-desktop",
@@ -52582,6 +52877,11 @@
       "full_name": "hbycwzm001/dsh-plugin-media-extract",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-11-21T15:10:21Z"
+    },
+    {
+      "full_name": "hbycwzm001/dsh-plugin-voiceover",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T05:16:05Z"
     },
     {
       "full_name": "hccccc01333/dsh-analytics",
@@ -52759,6 +53059,11 @@
       "full_name": "hechenhao9/dsh-judge-loop",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-11-22T01:57:11Z"
+    },
+    {
+      "full_name": "Hector387420489/dsh-session-reaper",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T07:27:50Z"
     },
     {
       "full_name": "Hed1an/dsh-bring-local-llm",
@@ -53101,7 +53406,7 @@
     {
       "full_name": "helloHub1212/dsh-windows-mcp",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T23:55:31Z"
+      "checked_updated_at": "2026-11-26T10:34:50Z"
     },
     {
       "full_name": "helloHupc/dsh-wander-chat",
@@ -54003,7 +54308,7 @@
     {
       "full_name": "HHHHK1/dsh-knowledge-vault",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T10:38:51Z"
+      "checked_updated_at": "2026-11-26T05:38:31Z"
     },
     {
       "full_name": "hhhmhhh233/dsh-find-anywhere",
@@ -54137,7 +54442,7 @@
     {
       "full_name": "Hieupt1904/project-flow-explainer",
       "verdict": "skill",
-      "checked_updated_at": "2026-11-19T17:10:31Z"
+      "checked_updated_at": "2026-11-26T10:01:14Z"
     },
     {
       "full_name": "hifengzy/dsh-plugin-deepseek-peak-hours",
@@ -54311,7 +54616,7 @@
     {
       "full_name": "himovo/movo",
       "verdict": "manual",
-      "checked_updated_at": "2026-11-25T12:06:44Z"
+      "checked_updated_at": "2026-11-26T09:05:03Z"
     },
     {
       "full_name": "hinayoung23/dsh-cordis-plugin-kit",
@@ -54337,6 +54642,11 @@
       "full_name": "Hipple/dsh-go-magpie",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-11-24T01:31:11Z"
+    },
+    {
+      "full_name": "hippone/dsh-aurora-background",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T07:42:53Z"
     },
     {
       "full_name": "HiQ-AI/dingtalk-dsh-assistant",
@@ -54590,7 +54900,7 @@
     {
       "full_name": "hkkz9522/dsh-session-manager",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T06:56:19Z"
+      "checked_updated_at": "2026-11-25T23:38:15Z"
     },
     {
       "full_name": "hl3207/dsh-movie",
@@ -55788,7 +56098,7 @@
     {
       "full_name": "HsiangNianian/dsh-auto-continue",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-23T00:32:33Z"
+      "checked_updated_at": "2026-11-26T09:43:55Z"
     },
     {
       "full_name": "hsliuustc0106/dsh-jiuwen-adapter",
@@ -56558,6 +56868,11 @@
       "full_name": "huanyu-a/dsh-memory-gate",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-11-12T09:33:37Z"
+    },
+    {
+      "full_name": "huanyu-a/dsh-profile-config-sync",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T09:17:38Z"
     },
     {
       "full_name": "huanyuLv/dsh-balance-tide",
@@ -57346,6 +57661,11 @@
       "checked_updated_at": "2026-11-11T03:14:19Z"
     },
     {
+      "full_name": "huyuanxin/dsh-doc-anchor-viewer",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T03:22:26Z"
+    },
+    {
       "full_name": "huyuanxin/dsh-ziwei-doushu",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-11-13T00:28:39Z"
@@ -57458,6 +57778,11 @@
       "full_name": "hxh230802/dsh-tray-restart",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-11-02T08:40:59Z"
+    },
+    {
+      "full_name": "hxliu4mcgill/iMem-skill",
+      "verdict": "manual",
+      "checked_updated_at": "2026-11-26T01:06:14Z"
     },
     {
       "full_name": "hxlog/dsh-mcp-tools",
@@ -57675,7 +58000,7 @@
     {
       "full_name": "hyhmrright/brooks-lint",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T21:00:42Z"
+      "checked_updated_at": "2026-11-26T09:00:03Z"
     },
     {
       "full_name": "hyizhou/dsh-spark-input",
@@ -58215,7 +58540,7 @@
     {
       "full_name": "Ianzhyh/workbuddy-to-dsh",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T09:24:11Z"
+      "checked_updated_at": "2026-11-26T09:34:39Z"
     },
     {
       "full_name": "Iaotle/dsh-plugin-forge-forgejo",
@@ -58376,6 +58701,11 @@
       "checked_updated_at": "2026-11-02T12:24:12Z"
     },
     {
+      "full_name": "Ice-Bearmax/canghai",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T07:35:02Z"
+    },
+    {
       "full_name": "ice-kele/dsh-llm-guardian",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-09-12T00:25:05Z"
@@ -58426,12 +58756,17 @@
     {
       "full_name": "IceApriler/dsh-remote-mobile",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-20T08:44:18Z"
+      "checked_updated_at": "2026-11-26T09:13:57Z"
     },
     {
       "full_name": "icearia0219/dsh-memory-spaces",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-11-07T03:34:30Z"
+    },
+    {
+      "full_name": "ICEAXEMAN/dsh-lm-studio-polish",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T00:29:14Z"
     },
     {
       "full_name": "iceBear662/dsh-vision-edge-doubao",
@@ -58629,7 +58964,7 @@
     {
       "full_name": "icyaaaww/dsh-soul",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T12:44:44Z"
+      "checked_updated_at": "2026-11-26T04:07:09Z"
     },
     {
       "full_name": "icyaaaww/dsh-time-machine",
@@ -58743,7 +59078,7 @@
     {
       "full_name": "idoall/dsh-session-colors",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-04T14:24:23Z"
+      "checked_updated_at": "2026-11-26T09:28:01Z"
     },
     {
       "full_name": "idoall/dsh-update-status",
@@ -58813,7 +59148,7 @@
     {
       "full_name": "iflytek/skillhub",
       "verdict": "manual",
-      "checked_updated_at": "2026-11-25T21:47:38Z"
+      "checked_updated_at": "2026-11-26T10:02:03Z"
     },
     {
       "full_name": "ifplusor/prac",
@@ -58993,7 +59328,7 @@
     {
       "full_name": "iJetLi/dsh-providers-hub",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T13:03:36Z"
+      "checked_updated_at": "2026-11-26T09:47:34Z"
     },
     {
       "full_name": "ijgvt/short-drama-director-dsh",
@@ -59008,7 +59343,7 @@
     {
       "full_name": "Ikalus1988/MisakaNet",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T14:23:38Z"
+      "checked_updated_at": "2026-11-26T00:19:40Z"
     },
     {
       "full_name": "ikanger/dsh-env-backup",
@@ -59062,7 +59397,7 @@
     {
       "full_name": "ikevss/dsh-tencent-meeting",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T11:21:54Z"
+      "checked_updated_at": "2026-11-26T04:46:50Z"
     },
     {
       "full_name": "ikeyuchen/dsh-imagekit",
@@ -59849,7 +60184,7 @@
     {
       "full_name": "infraredsqy/dsh-superworker",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T20:31:37Z"
+      "checked_updated_at": "2026-11-26T03:27:00Z"
     },
     {
       "full_name": "ingk888766-cloud/dsh-anti-interrupt",
@@ -60453,7 +60788,7 @@
     {
       "full_name": "islibaodong/dsh-login",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-24T11:55:01Z"
+      "checked_updated_at": "2026-11-26T07:25:02Z"
     },
     {
       "full_name": "Islulua/dsh-code-navigator",
@@ -61374,7 +61709,7 @@
     {
       "full_name": "jackxiao17/dsh-session-cleaner",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-24T10:40:11Z"
+      "checked_updated_at": "2026-11-26T07:21:47Z"
     },
     {
       "full_name": "jackxu925/dsh-pwa",
@@ -61413,6 +61748,11 @@
       "full_name": "JackyYangxx/dsh-plugins",
       "verdict": "multi-plugin",
       "checked_updated_at": "2026-08-27T12:55:47Z"
+    },
+    {
+      "full_name": "JackyZhou0227/dsh-phone-fleet",
+      "verdict": "multi-plugin",
+      "checked_updated_at": "2026-11-26T10:26:05Z"
     },
     {
       "full_name": "JackZo400/dsh-carryover",
@@ -62250,7 +62590,7 @@
     {
       "full_name": "Jaylor-Wang/dsh-awesome-optimizer",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-19T13:22:38Z"
+      "checked_updated_at": "2026-11-26T08:09:09Z"
     },
     {
       "full_name": "Jaylor-Wang/dsh-awesome-preset",
@@ -62863,7 +63203,7 @@
     {
       "full_name": "JeremyWangCY/dsh-rea",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-18T13:54:44Z"
+      "checked_updated_at": "2026-11-25T16:28:48Z"
     },
     {
       "full_name": "JeremyWangCY/win-pilot",
@@ -62913,7 +63253,7 @@
     {
       "full_name": "JERRY-hub26/dsh-claude-pet",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T22:26:03Z"
+      "checked_updated_at": "2026-11-26T06:32:07Z"
     },
     {
       "full_name": "JERRY-hub26/dsh-hello-plugin2611",
@@ -63152,7 +63492,7 @@
     {
       "full_name": "Jesseovo/last30days-skill-cn",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T16:46:56Z"
+      "checked_updated_at": "2026-11-26T07:45:59Z"
     },
     {
       "full_name": "jessicacui99/dsh-plugin-token-cost",
@@ -63162,7 +63502,7 @@
     {
       "full_name": "Jessicaisleep/dsh-dsml-guard",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-04T06:45:06Z"
+      "checked_updated_at": "2026-11-26T01:39:03Z"
     },
     {
       "full_name": "Jessicaisleep/dsh-genshin-pet",
@@ -63807,7 +64147,7 @@
     {
       "full_name": "Jianli233/dsh-coserwiki-reminder",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-24T09:50:00Z"
+      "checked_updated_at": "2026-11-26T06:25:23Z"
     },
     {
       "full_name": "jianlong-ww/dsh-explorer-editor",
@@ -64333,7 +64673,7 @@
     {
       "full_name": "JimLiu/open-artifact",
       "verdict": "pkg-plain",
-      "checked_updated_at": "2026-11-25T23:43:50Z"
+      "checked_updated_at": "2026-11-26T10:08:44Z"
     },
     {
       "full_name": "JimLiu/open-artifacts",
@@ -64586,7 +64926,7 @@
     {
       "full_name": "jingyi0605/Codingns4DSH",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T13:00:42Z"
+      "checked_updated_at": "2026-11-26T00:49:17Z"
     },
     {
       "full_name": "jingyingruodi/dsh-headless-display",
@@ -65452,7 +65792,7 @@
     {
       "full_name": "JochenYang/dsh-app",
       "verdict": "pkg-plain",
-      "checked_updated_at": "2026-11-22T17:19:35Z"
+      "checked_updated_at": "2026-11-26T09:29:02Z"
     },
     {
       "full_name": "JochenYang/dsh-plugins",
@@ -65630,7 +65970,7 @@
     {
       "full_name": "JoeyZzZzZz/treasure-map",
       "verdict": "script",
-      "checked_updated_at": "2026-11-25T22:56:54Z"
+      "checked_updated_at": "2026-11-26T10:16:08Z"
     },
     {
       "full_name": "JoFe2/kaleidosphere-dsh-plugin",
@@ -66752,7 +67092,7 @@
     {
       "full_name": "Joseph2Young/dsh-connect-doubaowork",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T13:07:02Z"
+      "checked_updated_at": "2026-11-26T00:54:41Z"
     },
     {
       "full_name": "JosephHy/dsh-md-plus",
@@ -67281,7 +67621,7 @@
     {
       "full_name": "juliiiiiiiu/my-cozy-dsh",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-23T11:27:03Z"
+      "checked_updated_at": "2026-11-26T10:01:13Z"
     },
     {
       "full_name": "juliiiiiiiu/session-stickies-manage-your-attention",
@@ -68277,7 +68617,7 @@
     {
       "full_name": "kadaliao/dsh-bots",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T17:41:12Z"
+      "checked_updated_at": "2026-11-26T10:37:05Z"
     },
     {
       "full_name": "kadaliao/dsh-images",
@@ -69423,7 +69763,7 @@
     {
       "full_name": "kejixiaoliang/awesome-dsh-plugins",
       "verdict": "manual",
-      "checked_updated_at": "2026-11-25T13:39:55Z"
+      "checked_updated_at": "2026-11-26T09:31:17Z"
     },
     {
       "full_name": "kejuecy/dsh-skills",
@@ -69457,7 +69797,7 @@
     {
       "full_name": "kelai141/dsh-mobile-apk",
       "verdict": "manual",
-      "checked_updated_at": "2026-11-25T17:48:39Z"
+      "checked_updated_at": "2026-11-26T06:10:31Z"
     },
     {
       "full_name": "kelai141/dsh-shell-termux",
@@ -69532,7 +69872,7 @@
     {
       "full_name": "keli-wen/cospan",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T16:39:36Z"
+      "checked_updated_at": "2026-11-26T07:36:56Z"
     },
     {
       "full_name": "kelingfeng9/dshcj",
@@ -69657,7 +69997,7 @@
     {
       "full_name": "kenryu42/cc-safety-net",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T14:13:28Z"
+      "checked_updated_at": "2026-11-26T09:11:14Z"
     },
     {
       "full_name": "kentleenot/dsh-trading-toolkit",
@@ -69667,12 +70007,12 @@
     {
       "full_name": "kentzjh-cmd/tmem",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-24T15:22:18Z"
+      "checked_updated_at": "2026-11-26T01:22:17Z"
     },
     {
       "full_name": "kenz1117/dsh-engram",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-24T06:24:41Z"
+      "checked_updated_at": "2026-11-26T09:16:12Z"
     },
     {
       "full_name": "kenz1117/dsh-ui-rainbowspeak",
@@ -70470,7 +70810,7 @@
     {
       "full_name": "killher1/dsh-claude-preset",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-26T00:04:12Z"
+      "checked_updated_at": "2026-11-26T09:15:12Z"
     },
     {
       "full_name": "KILLSTARSX/dsh-bili-gate",
@@ -70908,6 +71248,11 @@
       "full_name": "kirahvi03/Hackathon--Plug-In",
       "verdict": "multi-plugin",
       "checked_updated_at": "2026-10-19T13:12:37Z"
+    },
+    {
+      "full_name": "Kirakila7/dsh-plugin-devlog-poster",
+      "verdict": "cordis-plugin",
+      "checked_updated_at": "2026-11-26T02:05:01Z"
     },
     {
       "full_name": "kirako1/dsh-bili-live",
@@ -71371,7 +71716,7 @@
     {
       "full_name": "KKL08/dsh-plastic-memory",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-24T03:26:38Z"
+      "checked_updated_at": "2026-11-26T10:30:23Z"
     },
     {
       "full_name": "KKLL2025/dsh-project-anchor",
@@ -72251,7 +72596,7 @@
     {
       "full_name": "KouzakiUmi/dsh-antigravity-acp",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T19:17:39Z"
+      "checked_updated_at": "2026-11-26T08:07:26Z"
     },
     {
       "full_name": "KouzakiUmi/dsh-code-pill",
@@ -72549,6 +72894,11 @@
       "checked_updated_at": "2026-08-17T14:55:23Z"
     },
     {
+      "full_name": "ku4nc4/dsh-history-window",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T09:51:14Z"
+    },
+    {
       "full_name": "kuailexiaozixin/dsh-skill-mcp-market",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-11-12T13:00:22Z"
@@ -72796,7 +73146,7 @@
     {
       "full_name": "kunkundi/crossdesk",
       "verdict": "multi-plugin",
-      "checked_updated_at": "2026-11-26T00:01:46Z"
+      "checked_updated_at": "2026-11-26T10:36:25Z"
     },
     {
       "full_name": "KUNTING0701/dsh-aurora-bg",
@@ -72881,7 +73231,7 @@
     {
       "full_name": "KurutoDenzeru/tersio",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T03:04:48Z"
+      "checked_updated_at": "2026-11-26T07:08:24Z"
     },
     {
       "full_name": "kusesad-1122/dsh-context-compactor",
@@ -73051,7 +73401,7 @@
     {
       "full_name": "KYCOMING/dsh-english-gym",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-24T03:41:11Z"
+      "checked_updated_at": "2026-11-26T08:08:10Z"
     },
     {
       "full_name": "KYCOMING/dsh-product-design",
@@ -73446,6 +73796,11 @@
       "full_name": "Lahm919/dsh-hindsight-keys",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-11-19T08:47:39Z"
+    },
+    {
+      "full_name": "laibanet/dsh-code-review-tab",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T07:21:04Z"
     },
     {
       "full_name": "Lain-in-coding/dsh-grok-search",
@@ -73951,7 +74306,7 @@
     {
       "full_name": "laose66/dsh-idle-shutdown",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T08:13:19Z"
+      "checked_updated_at": "2026-11-26T06:19:00Z"
     },
     {
       "full_name": "laosji/clamicro",
@@ -73991,7 +74346,7 @@
     {
       "full_name": "LaoYueHanNi/dsh-git-worktree",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-10-30T08:48:20Z"
+      "checked_updated_at": "2026-11-26T03:44:32Z"
     },
     {
       "full_name": "LaoYueHanNi/dsh-session-tools",
@@ -74421,7 +74776,7 @@
     {
       "full_name": "lcestou/dsh-oh-my-claude",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T22:51:36Z"
+      "checked_updated_at": "2026-11-26T05:52:30Z"
     },
     {
       "full_name": "lcf2212dev/dsh-bits",
@@ -74457,6 +74812,11 @@
       "full_name": "lcgash/dsh-plugin-uw",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-11-04T22:40:20Z"
+    },
+    {
+      "full_name": "lcgash/dsh-session-beacon",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T07:20:52Z"
     },
     {
       "full_name": "lchqi1998/dsh-n8n-plugin",
@@ -74978,7 +75338,7 @@
     {
       "full_name": "LeeRolling/dsh-boot-suite",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T15:32:39Z"
+      "checked_updated_at": "2026-11-26T03:15:50Z"
     },
     {
       "full_name": "LeeRolling/dsh-notify-context",
@@ -75053,7 +75413,7 @@
     {
       "full_name": "leezhian/dsh-worktree-env",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T15:32:12Z"
+      "checked_updated_at": "2026-11-26T09:47:56Z"
     },
     {
       "full_name": "left0ver/dsh-file-review",
@@ -75268,7 +75628,7 @@
     {
       "full_name": "lemoncat7/dsh-knowledge",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-21T07:35:12Z"
+      "checked_updated_at": "2026-11-26T08:24:03Z"
     },
     {
       "full_name": "lemoncat7/dsh-partner",
@@ -75639,7 +75999,7 @@
     {
       "full_name": "lennney/stop-that-shit",
       "verdict": "pkg-plain",
-      "checked_updated_at": "2026-11-25T13:50:56Z"
+      "checked_updated_at": "2026-11-26T08:56:37Z"
     },
     {
       "full_name": "leno-whale/dsh-leno-film-eye",
@@ -76085,7 +76445,7 @@
     {
       "full_name": "lerwa2025-a11y/dsh-doclib",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-13T08:20:54Z"
+      "checked_updated_at": "2026-11-26T08:03:34Z"
     },
     {
       "full_name": "lerwa2025-a11y/dsh-plugin-groups",
@@ -76550,7 +76910,7 @@
     {
       "full_name": "lhh010/dsh-minigames",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T13:46:45Z"
+      "checked_updated_at": "2026-11-26T10:36:57Z"
     },
     {
       "full_name": "lhh010/dsh-paste-input",
@@ -76778,6 +77138,11 @@
       "full_name": "liaimei/dsh-cost-breakdown",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-11-20T09:11:36Z"
+    },
+    {
+      "full_name": "Liam-liyaming/dsh-result-comments",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T07:13:59Z"
     },
     {
       "full_name": "liamugong/dsh--web-fetch",
@@ -77492,8 +77857,8 @@
     },
     {
       "full_name": "licos03010102/dsh-prompt-optimize-button",
-      "verdict": "empty",
-      "checked_updated_at": "2026-11-25T23:26:39Z"
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T01:53:58Z"
     },
     {
       "full_name": "licyer/dsh-token-monitor",
@@ -77504,6 +77869,16 @@
       "full_name": "lidaiyue/dsh-acp-client",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-11-25T08:22:37Z"
+    },
+    {
+      "full_name": "lidaiyue/dsh-eye-theme",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T09:50:25Z"
+    },
+    {
+      "full_name": "lidaiyue/dsh-market-indices",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T09:53:49Z"
     },
     {
       "full_name": "lidaqi001/dsh-claude-code-delegate",
@@ -77834,7 +78209,7 @@
     {
       "full_name": "liguobao/ds-harness-remote",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T22:45:37Z"
+      "checked_updated_at": "2026-11-26T10:33:14Z"
     },
     {
       "full_name": "liguobao/dsh-desktop",
@@ -78021,7 +78396,7 @@
     {
       "full_name": "lijiaqi-AI-Product-Manager/dsh-agent-compare",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T22:05:45Z"
+      "checked_updated_at": "2026-11-26T09:41:35Z"
     },
     {
       "full_name": "lijiaqi-AI-Product-Manager/dsh-bug-gps",
@@ -78728,7 +79103,7 @@
     {
       "full_name": "LingMowen/dsh-magpie-hub",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-24T10:40:24Z"
+      "checked_updated_at": "2026-11-26T02:14:56Z"
     },
     {
       "full_name": "LingQi-07-std/dsh-client-ui-git",
@@ -78975,7 +79350,7 @@
     {
       "full_name": "linhuanwen/dsh-plugin-agent-browser",
       "verdict": "multi-plugin",
-      "checked_updated_at": "2026-11-25T16:53:45Z"
+      "checked_updated_at": "2026-11-26T09:44:54Z"
     },
     {
       "full_name": "linhut/dsh-manager",
@@ -79207,6 +79582,11 @@
       "full_name": "linsport/dsh-persona-manager",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-11-23T06:11:55Z"
+    },
+    {
+      "full_name": "lintaojlu/dsh-inplace-edit",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T10:39:02Z"
     },
     {
       "full_name": "lintwosix-beep/dsh-pet-chat",
@@ -79557,7 +79937,7 @@
     {
       "full_name": "lishize20040802-rgb/dsh-deep-ptc-mode",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T14:58:29Z"
+      "checked_updated_at": "2026-11-26T09:19:36Z"
     },
     {
       "full_name": "lishize20040802-rgb/dsh-rigor-4",
@@ -79658,6 +80038,11 @@
       "full_name": "lisihao/dsh-solar-bench",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-10-31T23:34:36Z"
+    },
+    {
+      "full_name": "lisiluan/dsh-capability-map",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T09:50:29Z"
     },
     {
       "full_name": "Lisk809/dsh-dream-incubator",
@@ -79920,7 +80305,7 @@
     {
       "full_name": "LittleChenLiya/dsh-superagent",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T14:45:16Z"
+      "checked_updated_at": "2026-11-26T09:48:42Z"
     },
     {
       "full_name": "littleDogWang/dsh-agora",
@@ -80434,12 +80819,12 @@
     {
       "full_name": "LiuLi-Kuang/dsh-liang-feng-gu",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-23T17:59:50Z"
+      "checked_updated_at": "2026-11-26T07:00:11Z"
     },
     {
       "full_name": "LiuLi-Kuang/dsh-token-burner",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-23T18:14:50Z"
+      "checked_updated_at": "2026-11-26T07:00:03Z"
     },
     {
       "full_name": "liuli-zsl/dsh-unreal-engine-skills",
@@ -80480,6 +80865,11 @@
       "full_name": "liumorrisclaw/dsh-composer-input-history",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-10-18T05:13:02Z"
+    },
+    {
+      "full_name": "liunian1888/dsh-memory-star-map",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T02:13:53Z"
     },
     {
       "full_name": "liunianlh/dsh-aihot",
@@ -80573,12 +80963,12 @@
     {
       "full_name": "liustack/modlens",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T14:11:10Z"
+      "checked_updated_at": "2026-11-26T10:20:40Z"
     },
     {
       "full_name": "liustack/modsearch",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T23:55:52Z"
+      "checked_updated_at": "2026-11-26T08:21:40Z"
     },
     {
       "full_name": "liustack/pptfast",
@@ -81072,6 +81462,11 @@
       "full_name": "liyupi/dsh-kun-like-pet",
       "verdict": "pkg-plain",
       "checked_updated_at": "2026-11-20T11:52:49Z"
+    },
+    {
+      "full_name": "liyupi/vibefather",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T07:37:33Z"
     },
     {
       "full_name": "liyuqian/dsh-flutter-sandbox",
@@ -81806,7 +82201,7 @@
     {
       "full_name": "lloydzhou/dsh-subagent-codebuddy",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T02:40:24Z"
+      "checked_updated_at": "2026-11-26T06:52:34Z"
     },
     {
       "full_name": "lls578/dsh-fish-radar",
@@ -82639,6 +83034,11 @@
       "checked_updated_at": "2026-11-08T04:11:39Z"
     },
     {
+      "full_name": "LoneyKnight/dsh-sys-swarm",
+      "verdict": "gone",
+      "checked_updated_at": "2026-11-26T09:02:23Z"
+    },
+    {
       "full_name": "Long-Alex/dsh-session-menu-plus",
       "verdict": "cordis-plugin",
       "checked_updated_at": "2026-11-07T02:35:11Z"
@@ -82701,7 +83101,7 @@
     {
       "full_name": "longguanhong0755/dsh-ssh",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T10:31:08Z"
+      "checked_updated_at": "2026-11-26T08:12:03Z"
     },
     {
       "full_name": "longhao666666/dsh-ask-mode",
@@ -83249,7 +83649,7 @@
     {
       "full_name": "louke6572/dsh-Dfy",
       "verdict": "cordis-plugin",
-      "checked_updated_at": "2026-11-24T07:23:17Z"
+      "checked_updated_at": "2026-11-26T09:37:06Z"
     },
     {
       "full_name": "louke6572/dsh-whale-widget-plus",
@@ -83365,6 +83765,11 @@
       "checked_updated_at": "2026-11-03T12:07:43Z"
     },
     {
+      "full_name": "loveeveryone-Mr-niu/dsh-keykeeper",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T07:39:10Z"
+    },
+    {
       "full_name": "lovehin/dsh-websearch-keyless",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-10-28T08:57:28Z"
@@ -83411,7 +83816,7 @@
     {
       "full_name": "loveowie/delivery-loop",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T05:55:35Z"
+      "checked_updated_at": "2026-11-26T08:18:14Z"
     },
     {
       "full_name": "Lovepeace-art/dsh-android-phone",
@@ -83762,7 +84167,7 @@
     {
       "full_name": "lqshow/dsh-wechat-studio",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-24T02:24:33Z"
+      "checked_updated_at": "2026-11-26T09:45:13Z"
     },
     {
       "full_name": "LR611415/dsh-plugin-documents",
@@ -83797,7 +84202,7 @@
     {
       "full_name": "Lroyia/dsh-book-reader",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-16T07:35:36Z"
+      "checked_updated_at": "2026-11-26T07:09:45Z"
     },
     {
       "full_name": "lrplrplrp/dsh-live2d",
@@ -83907,6 +84312,11 @@
       "full_name": "lsit27/dsh-footer-buttons",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-11-25T18:19:13Z"
+    },
+    {
+      "full_name": "lsit27/dsh-mobile-route-priority",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T03:44:59Z"
     },
     {
       "full_name": "lsit27/dsh-restart",
@@ -84089,7 +84499,7 @@
     {
       "full_name": "ltmroberthk915/markpilot",
       "verdict": "multi-plugin",
-      "checked_updated_at": "2026-11-20T14:32:39Z"
+      "checked_updated_at": "2026-11-26T02:56:38Z"
     },
     {
       "full_name": "LTP414/dsh-btw-marginalia",
@@ -84224,7 +84634,7 @@
     {
       "full_name": "lucagiftzek/dsh-mail",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-01T23:39:57Z"
+      "checked_updated_at": "2026-11-26T02:44:33Z"
     },
     {
       "full_name": "lucagiftzek/dsh-note-keeper",
@@ -84974,6 +85384,11 @@
       "checked_updated_at": "2026-11-11T07:32:18Z"
     },
     {
+      "full_name": "LunateTy/dsh-account-avatar",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T03:57:02Z"
+    },
+    {
       "full_name": "lunatic-eclipse/dsh-codebuddy-bridge",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-11-14T15:21:07Z"
@@ -85070,6 +85485,11 @@
       "full_name": "luojiahao-cn/dsh-literature-lab",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-11-21T07:32:54Z"
+    },
+    {
+      "full_name": "luojuee/dsh-voice-fish",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T03:46:48Z"
     },
     {
       "full_name": "luokexiaoguo/dsh-redact-gateway",
@@ -86910,6 +87330,11 @@
       "checked_updated_at": "2026-09-02T16:29:15Z"
     },
     {
+      "full_name": "macroguo-ghy/dsh-codex-migration",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T08:31:02Z"
+    },
+    {
       "full_name": "madage/dsh-self-improved",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-11-05T02:27:34Z"
@@ -87516,6 +87941,11 @@
       "checked_updated_at": "2026-11-18T00:37:47Z"
     },
     {
+      "full_name": "manyuemeiquqi/dsh-gta6",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T08:41:31Z"
+    },
+    {
       "full_name": "manzhushaka/dsh-expert-center",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-10-21T02:18:34Z"
@@ -87618,7 +88048,7 @@
     {
       "full_name": "maplewf/dsh-kube",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T04:14:22Z"
+      "checked_updated_at": "2026-11-26T06:04:28Z"
     },
     {
       "full_name": "Mappedinfo/dsh-cron-scheduler",
@@ -88035,7 +88465,7 @@
     {
       "full_name": "Mars-Sea/dsh-deeppilot",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-14T00:45:52Z"
+      "checked_updated_at": "2026-11-26T03:45:29Z"
     },
     {
       "full_name": "mars401/dsh-session-batch-manager",
@@ -88069,7 +88499,7 @@
     {
       "full_name": "marsken88/dsh-studio",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T10:28:18Z"
+      "checked_updated_at": "2026-11-26T08:02:37Z"
     },
     {
       "full_name": "MarsStorm/dsh-hierarchical-fishmemory",
@@ -88657,7 +89087,7 @@
     {
       "full_name": "MaxBill/dsh-file-explorer",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T09:26:26Z"
+      "checked_updated_at": "2026-11-26T09:05:20Z"
     },
     {
       "full_name": "Maxc100/dsh-cloud-backup",
@@ -88937,6 +89367,11 @@
       "full_name": "mba1398/dsh-done",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-09-18T03:44:10Z"
+    },
+    {
+      "full_name": "mbcc5732/dsh-screenshot",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T09:26:35Z"
     },
     {
       "full_name": "mbj733/dsh-edit-resend",
@@ -89659,12 +90094,12 @@
     {
       "full_name": "MemTensor/memmy-agent",
       "verdict": "pkg-plain",
-      "checked_updated_at": "2026-11-25T23:50:05Z"
+      "checked_updated_at": "2026-11-26T09:51:40Z"
     },
     {
       "full_name": "MemTensor/MemOS",
       "verdict": "manual",
-      "checked_updated_at": "2026-11-25T23:55:04Z"
+      "checked_updated_at": "2026-11-26T09:57:58Z"
     },
     {
       "full_name": "MEMZ-Edge01/GrokBot_in_DeepseekHerness",
@@ -89708,7 +90143,7 @@
     {
       "full_name": "meng-lx/dsh-blueprint-tree",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-21T18:36:19Z"
+      "checked_updated_at": "2026-11-26T09:13:58Z"
     },
     {
       "full_name": "Meng-XinXue/bettergui",
@@ -90180,7 +90615,7 @@
     {
       "full_name": "Merziller/prompt-fusion",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T22:11:51Z"
+      "checked_updated_at": "2026-11-26T03:39:20Z"
     },
     {
       "full_name": "MeshTok/dsh-plugin-meshmoe",
@@ -90329,12 +90764,12 @@
     {
       "full_name": "mexiaosqwq/dsh-web-mobile",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T20:35:00Z"
+      "checked_updated_at": "2026-11-26T06:59:50Z"
     },
     {
       "full_name": "meya-ashuripehya/dsh-work-components",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-05T16:10:07Z"
+      "checked_updated_at": "2026-11-26T06:08:21Z"
     },
     {
       "full_name": "meyaomiao/dsh-files-native",
@@ -90586,7 +91021,7 @@
     {
       "full_name": "Miaotofu01/Study-Mate",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T21:07:05Z"
+      "checked_updated_at": "2026-11-26T10:34:07Z"
     },
     {
       "full_name": "miaoxingyunduo/dsh-session-cost",
@@ -90675,7 +91110,7 @@
     {
       "full_name": "MichengAI/dsh-archive-manager",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T11:18:46Z"
+      "checked_updated_at": "2026-11-26T09:13:55Z"
     },
     {
       "full_name": "MichengAI/dsh-automation",
@@ -90705,12 +91140,12 @@
     {
       "full_name": "MichengAI/dsh-codex-ui",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T14:14:53Z"
+      "checked_updated_at": "2026-11-26T04:25:30Z"
     },
     {
       "full_name": "MichengAI/dsh-im-connect",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T03:05:01Z"
+      "checked_updated_at": "2026-11-26T07:34:16Z"
     },
     {
       "full_name": "MichengAI/dsh-pua",
@@ -90725,7 +91160,7 @@
     {
       "full_name": "MichengAI/dsh-skills-manager",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T20:51:14Z"
+      "checked_updated_at": "2026-11-26T09:49:49Z"
     },
     {
       "full_name": "MickLife/mex",
@@ -91752,37 +92187,42 @@
     {
       "full_name": "miorin-chan/dsh-atlas-continuity",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T09:59:28Z"
+      "checked_updated_at": "2026-11-26T06:28:04Z"
     },
     {
       "full_name": "miorin-chan/dsh-atlas-list",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T11:19:22Z"
+      "checked_updated_at": "2026-11-26T05:28:04Z"
     },
     {
       "full_name": "miorin-chan/dsh-atlas-mobile",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T11:20:16Z"
+      "checked_updated_at": "2026-11-26T05:28:04Z"
     },
     {
       "full_name": "miorin-chan/dsh-atlas-plugin",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T11:19:42Z"
+      "checked_updated_at": "2026-11-26T05:28:04Z"
     },
     {
       "full_name": "miorin-chan/dsh-atlas-session",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T11:19:13Z"
+      "checked_updated_at": "2026-11-26T05:28:05Z"
     },
     {
       "full_name": "miorin-chan/dsh-atlas-visual",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T09:59:35Z"
+      "checked_updated_at": "2026-11-26T06:28:04Z"
     },
     {
       "full_name": "miorin-chan/dsh-atlas-workspace",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T11:18:52Z"
+      "checked_updated_at": "2026-11-26T05:28:05Z"
+    },
+    {
+      "full_name": "miorin-chan/dsh-auto-pin-session",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T05:26:02Z"
     },
     {
       "full_name": "miorin-chan/dsh-background-jobs-sidebar",
@@ -91793,6 +92233,11 @@
       "full_name": "miorin-chan/dsh-claudelike-ui",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-11-25T10:02:43Z"
+    },
+    {
+      "full_name": "miorin-chan/dsh-collapsed-sidebar-status",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T05:26:10Z"
     },
     {
       "full_name": "miorin-chan/dsh-composer-queue-indicator",
@@ -91883,6 +92328,11 @@
       "full_name": "miorin-chan/dsh-sidebar-brand",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-11-25T10:02:55Z"
+    },
+    {
+      "full_name": "miorin-chan/dsh-subtle-sidebar",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T05:26:17Z"
     },
     {
       "full_name": "miorin-chan/dsh-swipe-back",
@@ -92337,7 +92787,7 @@
     {
       "full_name": "MJ-CJM/DSH-Bot",
       "verdict": "pkg-plain",
-      "checked_updated_at": "2026-11-25T17:16:06Z"
+      "checked_updated_at": "2026-11-26T05:21:37Z"
     },
     {
       "full_name": "mj5809/dsh-peak-badge",
@@ -92941,7 +93391,7 @@
     {
       "full_name": "mochi-fish/dsh-fish",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T20:14:24Z"
+      "checked_updated_at": "2026-11-26T08:35:57Z"
     },
     {
       "full_name": "MochiNek0/dsh-ghost-prompt",
@@ -93323,7 +93773,7 @@
     {
       "full_name": "momasiku/dsh-pilot",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T08:49:18Z"
+      "checked_updated_at": "2026-11-26T05:19:11Z"
     },
     {
       "full_name": "Mombrane/dsh-subagent-monitor",
@@ -93489,6 +93939,11 @@
       "full_name": "monkey-sking/dsh-noagent-schedule",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-10-31T23:45:30Z"
+    },
+    {
+      "full_name": "monkey6501/dsh-turn-time",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T08:03:10Z"
     },
     {
       "full_name": "monkeydbobo/agent-board",
@@ -93983,7 +94438,7 @@
     {
       "full_name": "morluto/flameox",
       "verdict": "pkg-plain",
-      "checked_updated_at": "2026-11-24T14:03:27Z"
+      "checked_updated_at": "2026-11-26T01:10:35Z"
     },
     {
       "full_name": "morluto/gitcontribute",
@@ -94008,7 +94463,7 @@
     {
       "full_name": "morluto/rea",
       "verdict": "script",
-      "checked_updated_at": "2026-11-26T00:00:15Z"
+      "checked_updated_at": "2026-11-26T10:33:03Z"
     },
     {
       "full_name": "morluto/smokinggun",
@@ -94024,6 +94479,11 @@
       "full_name": "morning-cml/dsh-doorman",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-11-09T01:53:06Z"
+    },
+    {
+      "full_name": "morning-start/dsh-plugin-creator",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T08:08:59Z"
     },
     {
       "full_name": "morningluu/dsh-theme-scaramouche",
@@ -95561,7 +96021,7 @@
     {
       "full_name": "mvanhorn/last30days-skill",
       "verdict": "manual",
-      "checked_updated_at": "2026-11-26T00:02:20Z"
+      "checked_updated_at": "2026-11-26T10:36:52Z"
     },
     {
       "full_name": "Mvyvn/dsh-desktop-notify",
@@ -95987,7 +96447,7 @@
     {
       "full_name": "myYangyunfan/dsh_desktop",
       "verdict": "multi-plugin",
-      "checked_updated_at": "2026-11-25T14:31:04Z"
+      "checked_updated_at": "2026-11-26T08:29:08Z"
     },
     {
       "full_name": "myYangyunfan/dsh-deepisland",
@@ -96002,7 +96462,7 @@
     {
       "full_name": "mzd1478935-art/dsh-taskbar-dot",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T15:12:38Z"
+      "checked_updated_at": "2026-11-26T08:44:20Z"
     },
     {
       "full_name": "Mzgnk/dsh-bz",
@@ -96213,7 +96673,7 @@
     {
       "full_name": "nacivageer/dsh-see-now-more",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-16T17:26:30Z"
+      "checked_updated_at": "2026-11-26T09:26:27Z"
     },
     {
       "full_name": "nacivageer/dsh-skill-history",
@@ -97065,7 +97525,7 @@
     {
       "full_name": "neilweixing/dsh-jira-board",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-18T13:55:27Z"
+      "checked_updated_at": "2026-11-26T08:25:14Z"
     },
     {
       "full_name": "NEINC1/muche-dsh-plugin",
@@ -97155,7 +97615,7 @@
     {
       "full_name": "NekroAI/nekro-nxt",
       "verdict": "pkg-plain",
-      "checked_updated_at": "2026-11-18T00:29:57Z"
+      "checked_updated_at": "2026-11-26T04:32:19Z"
     },
     {
       "full_name": "Nektropy/dsh-starry-sky-theme",
@@ -97645,12 +98105,12 @@
     {
       "full_name": "nexu-io/open-design",
       "verdict": "pkg-plain",
-      "checked_updated_at": "2026-11-25T23:56:13Z"
+      "checked_updated_at": "2026-11-26T10:31:55Z"
     },
     {
       "full_name": "nexu-io/openmotion",
       "verdict": "script",
-      "checked_updated_at": "2026-11-25T23:31:12Z"
+      "checked_updated_at": "2026-11-26T10:33:32Z"
     },
     {
       "full_name": "Nexus-Aethra/DSH-plugin-switch",
@@ -97747,7 +98207,7 @@
     {
       "full_name": "nia-teams/agent-bridge",
       "verdict": "pkg-plain",
-      "checked_updated_at": "2026-11-25T10:29:20Z"
+      "checked_updated_at": "2026-11-26T04:07:20Z"
     },
     {
       "full_name": "niaccky/dsh-install-guard",
@@ -97986,6 +98446,11 @@
       "checked_updated_at": "2026-11-10T02:55:06Z"
     },
     {
+      "full_name": "Niefee/dsh-svn-viewer",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T09:07:38Z"
+    },
+    {
       "full_name": "nienieai/dsh-canmv-k230-bridge",
       "verdict": "cordis-plugin",
       "checked_updated_at": "2026-08-26T05:28:16Z"
@@ -98053,7 +98518,7 @@
     {
       "full_name": "NightFrost42/dsh-compaction-weave",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T15:04:02Z"
+      "checked_updated_at": "2026-11-26T08:53:02Z"
     },
     {
       "full_name": "nightosong/gord-dsh-saber-theme",
@@ -98177,7 +98642,7 @@
     {
       "full_name": "Nimbus318/dsh-niuma-broker",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T12:42:25Z"
+      "checked_updated_at": "2026-11-26T06:56:11Z"
     },
     {
       "full_name": "NiMo-Miku/dsh-memory-companion",
@@ -98251,7 +98716,7 @@
     {
       "full_name": "ningbainb/deepseek-harness-desktop",
       "verdict": "pkg-plain",
-      "checked_updated_at": "2026-11-25T13:02:12Z"
+      "checked_updated_at": "2026-11-26T08:04:05Z"
     },
     {
       "full_name": "ningbonb/dsh-client-ui-brand",
@@ -98929,7 +99394,7 @@
     {
       "full_name": "nocobase/nocobase",
       "verdict": "pkg-plain",
-      "checked_updated_at": "2026-11-02T01:07:57Z"
+      "checked_updated_at": "2026-11-26T08:34:43Z"
     },
     {
       "full_name": "Noct2vis/dsh-mastery-loop",
@@ -98959,7 +99424,7 @@
     {
       "full_name": "NoelJudeNoel/dshost-plugin",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T06:21:31Z"
+      "checked_updated_at": "2026-11-26T05:11:20Z"
     },
     {
       "full_name": "Noelune/dsh-agent-relay",
@@ -99127,7 +99592,7 @@
     {
       "full_name": "nomadop/session-watcher",
       "verdict": "pkg-plain",
-      "checked_updated_at": "2026-11-25T03:13:43Z"
+      "checked_updated_at": "2026-11-26T07:46:04Z"
     },
     {
       "full_name": "NoMana666/dsh-floatball",
@@ -99913,12 +100378,12 @@
     {
       "full_name": "Nwflower/dsh-chat-import",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T16:14:35Z"
+      "checked_updated_at": "2026-11-26T09:46:01Z"
     },
     {
       "full_name": "Nwflower/dsh-claude-style",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T17:34:22Z"
+      "checked_updated_at": "2026-11-26T09:13:14Z"
     },
     {
       "full_name": "Nwflower/dsh-file-claim",
@@ -100005,6 +100470,11 @@
       "full_name": "NYSM803/dsh-restart-button",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-11-11T12:22:22Z"
+    },
+    {
+      "full_name": "nysparia/dsh-latex-preview-panel",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T08:59:42Z"
     },
     {
       "full_name": "nyvaelefluffRuaRua/dsh-skill-mcp-nexus",
@@ -100192,7 +100662,7 @@
     {
       "full_name": "oceanbase/powercontext",
       "verdict": "manual",
-      "checked_updated_at": "2026-11-25T16:18:21Z"
+      "checked_updated_at": "2026-11-26T09:58:25Z"
     },
     {
       "full_name": "oceanjustinlin/qimen",
@@ -100223,6 +100693,11 @@
       "full_name": "Octen-Team/dsh-octen",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-10-08T07:13:45Z"
+    },
+    {
+      "full_name": "octer-ai/octer-ads-dsh",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T10:53:54Z"
     },
     {
       "full_name": "OctKwong30/dsh-conversation-jump",
@@ -100351,7 +100826,7 @@
     {
       "full_name": "offzen/gitea-search-mcp",
       "verdict": "pkg-plain",
-      "checked_updated_at": "2026-11-23T22:49:01Z"
+      "checked_updated_at": "2026-11-26T02:03:14Z"
     },
     {
       "full_name": "OGHong/dsh-ascii-sharks",
@@ -100441,7 +100916,7 @@
     {
       "full_name": "oil-oil/dsh-oil-ui",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T16:21:44Z"
+      "checked_updated_at": "2026-11-26T04:50:53Z"
     },
     {
       "full_name": "oil-oil/dsh-vision",
@@ -100861,22 +101336,22 @@
     {
       "full_name": "omdsh-dev/dsh-better-compact",
       "verdict": "cordis-plugin",
-      "checked_updated_at": "2026-11-18T09:03:05Z"
+      "checked_updated_at": "2026-11-26T07:33:12Z"
     },
     {
       "full_name": "omdsh-dev/dsh-better-dsh",
       "verdict": "cordis-plugin",
-      "checked_updated_at": "2026-11-17T14:59:27Z"
+      "checked_updated_at": "2026-11-26T04:39:48Z"
     },
     {
       "full_name": "omdsh-dev/dsh-better-goal",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-11T13:13:26Z"
+      "checked_updated_at": "2026-11-26T07:53:13Z"
     },
     {
       "full_name": "omdsh-dev/DSH-better-sidebar",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T23:56:27Z"
+      "checked_updated_at": "2026-11-26T10:00:35Z"
     },
     {
       "full_name": "omdsh-dev/dsh-better-workbench",
@@ -100930,7 +101405,7 @@
     {
       "full_name": "omdsh-dev/dsh-ego-browser",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T21:04:38Z"
+      "checked_updated_at": "2026-11-26T09:48:30Z"
     },
     {
       "full_name": "omdsh-dev/dsh-ernie-image",
@@ -100980,7 +101455,7 @@
     {
       "full_name": "omdsh-dev/dsh-genui",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T21:04:46Z"
+      "checked_updated_at": "2026-11-26T08:27:01Z"
     },
     {
       "full_name": "omdsh-dev/dsh-github-integration",
@@ -101048,7 +101523,7 @@
     {
       "full_name": "omdsh-dev/dsh-mnemon",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T23:32:22Z"
+      "checked_updated_at": "2026-11-26T06:02:48Z"
     },
     {
       "full_name": "omdsh-dev/dsh-mygo",
@@ -101439,7 +101914,7 @@
     {
       "full_name": "omnimux-ai/omnimux-client",
       "verdict": "pkg-plain",
-      "checked_updated_at": "2026-11-25T23:53:10Z"
+      "checked_updated_at": "2026-11-26T10:24:28Z"
     },
     {
       "full_name": "omoinoki/dsh-sekaisync-connect",
@@ -101876,7 +102351,7 @@
     {
       "full_name": "openBitFun/OpenBitFun",
       "verdict": "pkg-plain",
-      "checked_updated_at": "2026-11-25T21:49:25Z"
+      "checked_updated_at": "2026-11-26T10:27:13Z"
     },
     {
       "full_name": "openbkn-ai/bkn-dsh",
@@ -102002,7 +102477,7 @@
     {
       "full_name": "OpenPetsHQ/openpets",
       "verdict": "pkg-plain",
-      "checked_updated_at": "2026-11-25T19:42:10Z"
+      "checked_updated_at": "2026-11-26T09:21:13Z"
     },
     {
       "full_name": "openpilotcc/dsh-desktop",
@@ -102264,7 +102739,7 @@
     {
       "full_name": "OrderG-X/dsh-design-studio",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T10:51:02Z"
+      "checked_updated_at": "2026-11-26T08:23:49Z"
     },
     {
       "full_name": "OrderG-X/dsh-mac-computer-use",
@@ -102744,7 +103219,12 @@
     {
       "full_name": "outsmall/dsh-plugin-xc-compliance",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-24T11:48:52Z"
+      "checked_updated_at": "2026-11-26T03:15:41Z"
+    },
+    {
+      "full_name": "ouyang111/video-preview",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T06:10:36Z"
     },
     {
       "full_name": "OuYangxin12/dsh-status-bar",
@@ -103354,7 +103834,7 @@
     {
       "full_name": "pan17/dsh-tool-manager",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-24T09:00:09Z"
+      "checked_updated_at": "2026-11-26T05:34:28Z"
     },
     {
       "full_name": "pan17/dsh-wechat",
@@ -104412,7 +104892,7 @@
     {
       "full_name": "PensiveFei/deep-read-summarize",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T19:51:38Z"
+      "checked_updated_at": "2026-11-26T10:11:10Z"
     },
     {
       "full_name": "PensiveFei/dsh-secure-audit",
@@ -104981,7 +105461,7 @@
     {
       "full_name": "PerryLink/dsh-mcp-panel",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-23T09:17:45Z"
+      "checked_updated_at": "2026-11-26T09:11:05Z"
     },
     {
       "full_name": "PerryLink/dsh-medrec-qc",
@@ -105675,7 +106155,7 @@
     {
       "full_name": "Phant0Meow/dsh-meow-memory",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T22:10:25Z"
+      "checked_updated_at": "2026-11-26T07:14:02Z"
     },
     {
       "full_name": "Phant0Meow/dsh-meow-smooth",
@@ -105832,7 +106312,7 @@
     {
       "full_name": "Phoeky/dsh-scnet-connect",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-23T16:43:32Z"
+      "checked_updated_at": "2026-11-26T02:08:14Z"
     },
     {
       "full_name": "Phoeky/dsh-sensenova-pool",
@@ -106423,7 +106903,7 @@
     {
       "full_name": "pkkkkh/dsh-plugins-public",
       "verdict": "multi-plugin",
-      "checked_updated_at": "2026-11-24T12:56:29Z"
+      "checked_updated_at": "2026-11-26T05:01:22Z"
     },
     {
       "full_name": "pktheme/dsh-cost-slip",
@@ -106491,7 +106971,7 @@
     {
       "full_name": "plastic-labs/honcho",
       "verdict": "manual",
-      "checked_updated_at": "2026-11-25T23:53:20Z"
+      "checked_updated_at": "2026-11-26T09:22:13Z"
     },
     {
       "full_name": "Platato-DA/dsh-task-center",
@@ -106692,6 +107172,11 @@
       "checked_updated_at": "2026-11-06T02:44:47Z"
     },
     {
+      "full_name": "pn1024/dsh-automotive",
+      "verdict": "multi-plugin",
+      "checked_updated_at": "2026-11-26T02:26:44Z"
+    },
+    {
       "full_name": "pn1024/dsh-ppt-master",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-11-15T12:49:09Z"
@@ -106744,12 +107229,12 @@
     {
       "full_name": "poco-ai/Agentero",
       "verdict": "pkg-plain",
-      "checked_updated_at": "2026-11-25T19:19:36Z"
+      "checked_updated_at": "2026-11-26T10:21:02Z"
     },
     {
       "full_name": "poco-ai/agentero-dsh-plugin",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T16:41:29Z"
+      "checked_updated_at": "2026-11-26T07:07:35Z"
     },
     {
       "full_name": "Poepon/dsh-image-generation-responses",
@@ -106837,7 +107322,7 @@
     {
       "full_name": "polang233/dsh-plugin-index",
       "verdict": "cordis-plugin",
-      "checked_updated_at": "2026-11-25T15:15:58Z"
+      "checked_updated_at": "2026-11-26T10:25:25Z"
     },
     {
       "full_name": "polaris-smart/dph-fleet",
@@ -106995,6 +107480,11 @@
       "full_name": "pomelotea-yuzu/dsh-updater",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-08-25T12:47:51Z"
+    },
+    {
+      "full_name": "PonChunhui/dsh-gostc",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T00:43:04Z"
     },
     {
       "full_name": "Pondsi/dsh-diwen",
@@ -107531,6 +108021,11 @@
       "checked_updated_at": "2026-09-12T14:37:30Z"
     },
     {
+      "full_name": "Protonhydrogen/DSH-meeting",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T10:01:21Z"
+    },
+    {
       "full_name": "pscly/dsh-sub2api",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-11-24T07:25:55Z"
@@ -107539,6 +108034,11 @@
       "full_name": "psenY/gh-watch",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-09-22T22:00:37Z"
+    },
+    {
+      "full_name": "pseudonymzjt/dsh-direct-human-style",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T05:15:47Z"
     },
     {
       "full_name": "Psychic-Z/dsh-memory-assistant",
@@ -107911,7 +108411,7 @@
     {
       "full_name": "pykkkkk/EconTone-Studio",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T05:44:05Z"
+      "checked_updated_at": "2026-11-26T03:45:04Z"
     },
     {
       "full_name": "PyModel/dsh-research-plugins",
@@ -108004,7 +108504,7 @@
     {
       "full_name": "Q00/ouroboros",
       "verdict": "manual",
-      "checked_updated_at": "2026-11-25T23:51:38Z"
+      "checked_updated_at": "2026-11-26T10:32:32Z"
     },
     {
       "full_name": "Q1hangL/dsh-ask-guard",
@@ -108024,7 +108524,7 @@
     {
       "full_name": "q253595422/dsh-imagegen-video",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T12:41:33Z"
+      "checked_updated_at": "2026-11-26T08:33:53Z"
     },
     {
       "full_name": "q2560080107/dsh-hot-routes",
@@ -108727,6 +109227,16 @@
       "checked_updated_at": "2026-11-17T10:47:01Z"
     },
     {
+      "full_name": "qinghuidaqzp/dsh-focus-garden",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T04:48:30Z"
+    },
+    {
+      "full_name": "qinghuidaqzp/dsh-idea-dice",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T04:48:32Z"
+    },
+    {
       "full_name": "qinghuidaqzp/dsh-night-shift",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-11-19T08:02:04Z"
@@ -108735,6 +109245,16 @@
       "full_name": "qinghuidaqzp/dsh-pixel-report",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-11-19T08:02:16Z"
+    },
+    {
+      "full_name": "qinghuidaqzp/dsh-qinghui-quests",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T05:00:17Z"
+    },
+    {
+      "full_name": "qinghuidaqzp/dsh-qinghui-vision",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T05:00:15Z"
     },
     {
       "full_name": "qinghuidaqzp/dsh-workroom",
@@ -108831,6 +109351,11 @@
       "checked_updated_at": "2026-09-15T22:47:45Z"
     },
     {
+      "full_name": "qingshui59/dsh-drama-board",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T03:15:48Z"
+    },
+    {
       "full_name": "qingshuiliuyun/dsh-node-monitor",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-11-13T04:04:14Z"
@@ -108857,7 +109382,7 @@
     {
       "full_name": "QingYunA/answer-me-with-html",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T21:06:03Z"
+      "checked_updated_at": "2026-11-26T10:01:24Z"
     },
     {
       "full_name": "qingzhijie05/dsh-user-memory",
@@ -108876,6 +109401,11 @@
     {
       "full_name": "qingzhuo-cn/agent-fix",
       "verdict": "skill"
+    },
+    {
+      "full_name": "qiniu/dsh-agentapi",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T10:23:00Z"
     },
     {
       "full_name": "Qinling-Melon-Farmers/dsh-memoir",
@@ -109112,7 +109642,7 @@
     {
       "full_name": "qishuilalala/dsh-voice-mode",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T14:49:56Z"
+      "checked_updated_at": "2026-11-26T09:55:13Z"
     },
     {
       "full_name": "qisisiqi/dsh-bili-banghui",
@@ -109342,6 +109872,11 @@
       "checked_updated_at": "2026-11-18T00:47:44Z"
     },
     {
+      "full_name": "qiyaogongfang/dsh-rankings",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T09:08:09Z"
+    },
+    {
       "full_name": "qiyeren/dsh-eac-popup",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-08-28T15:31:30Z"
@@ -109409,7 +109944,7 @@
     {
       "full_name": "qkycir-123/dsh-run2skill",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-16T14:40:38Z"
+      "checked_updated_at": "2026-11-25T14:53:41Z"
     },
     {
       "full_name": "qldth/dsh-minimal-pro",
@@ -109537,6 +110072,11 @@
       "full_name": "qq1003240666/dsh-qingshi-plugin",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-11-06T16:55:42Z"
+    },
+    {
+      "full_name": "qq1003240666/qingshi-agent",
+      "verdict": "pkg-plain",
+      "checked_updated_at": "2026-11-26T08:30:19Z"
     },
     {
       "full_name": "qq1171910065/dsh-gba",
@@ -109975,7 +110515,7 @@
     {
       "full_name": "QuestMeet/questmeet-skill",
       "verdict": "skill",
-      "checked_updated_at": "2026-11-25T21:08:54Z"
+      "checked_updated_at": "2026-11-26T09:46:02Z"
     },
     {
       "full_name": "qui11zxy/dsh-hsr",
@@ -111042,7 +111582,7 @@
     {
       "full_name": "Rannist/balance-dsh",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-18T04:50:52Z"
+      "checked_updated_at": "2026-11-26T08:53:46Z"
     },
     {
       "full_name": "rannyrjjy/dsh-fuzz",
@@ -111057,7 +111597,7 @@
     {
       "full_name": "ranranyya/dsh-taskbridge",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-24T16:33:10Z"
+      "checked_updated_at": "2026-11-26T06:51:31Z"
     },
     {
       "full_name": "rans725/dsh-glass-ranswork",
@@ -111722,7 +112262,7 @@
     {
       "full_name": "rebornace/dsh-agent-enhancer",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-22T12:59:12Z"
+      "checked_updated_at": "2026-11-26T06:26:44Z"
     },
     {
       "full_name": "rebornace/dsh-composer-enhancer",
@@ -111907,7 +112447,7 @@
     {
       "full_name": "regrevia/dsh-fast-mode",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-22T14:47:28Z"
+      "checked_updated_at": "2026-11-26T08:14:44Z"
     },
     {
       "full_name": "regrevia/dsh-inner-browser-use",
@@ -111942,7 +112482,7 @@
     {
       "full_name": "regrevia/dsh-unlag",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T21:55:48Z"
+      "checked_updated_at": "2026-11-26T06:24:17Z"
     },
     {
       "full_name": "regrevia/dsh-vantage",
@@ -111952,7 +112492,7 @@
     {
       "full_name": "regrevia/Envoy",
       "verdict": "manual",
-      "checked_updated_at": "2026-11-25T20:23:14Z"
+      "checked_updated_at": "2026-11-26T08:46:06Z"
     },
     {
       "full_name": "regrevia/everything2chart",
@@ -113545,6 +114085,16 @@
       "checked_updated_at": "2026-10-31T05:24:24Z"
     },
     {
+      "full_name": "RonaWhite/dsh-gongwei",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T06:13:43Z"
+    },
+    {
+      "full_name": "RonaWhite/dsh-pet-voice-clone",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T06:32:01Z"
+    },
+    {
       "full_name": "rong-coder/dsh-office-tool",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-11-02T09:37:45Z"
@@ -113661,7 +114211,7 @@
     {
       "full_name": "roost-qq/dsh-roost",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T09:52:42Z"
+      "checked_updated_at": "2026-11-26T07:15:40Z"
     },
     {
       "full_name": "Root-7-KHX/ai-voice",
@@ -114554,7 +115104,7 @@
     {
       "full_name": "runzhliu/deepseek-harness-docker",
       "verdict": "skill",
-      "checked_updated_at": "2026-11-24T14:23:18Z"
+      "checked_updated_at": "2026-11-26T08:29:12Z"
     },
     {
       "full_name": "runzhliu/welink",
@@ -115813,17 +116363,17 @@
     {
       "full_name": "SAOS-3624/dsh-see-now",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T23:14:23Z"
+      "checked_updated_at": "2026-11-26T09:26:28Z"
     },
     {
       "full_name": "SAOS-3624/dsh-video-storyboard",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T15:20:49Z"
+      "checked_updated_at": "2026-11-26T03:07:12Z"
     },
     {
       "full_name": "SAOS-3624/dsh-watch-together",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T15:20:45Z"
+      "checked_updated_at": "2026-11-26T08:46:34Z"
     },
     {
       "full_name": "SAOS-3624/see-on-phone",
@@ -116822,7 +117372,7 @@
     {
       "full_name": "saya-ch/dsh-mobile",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T20:52:08Z"
+      "checked_updated_at": "2026-11-26T09:32:56Z"
     },
     {
       "full_name": "saya-ch/dsh-verbatim",
@@ -116952,7 +117502,7 @@
     {
       "full_name": "scarletkc/Hatoba",
       "verdict": "pkg-plain",
-      "checked_updated_at": "2026-11-25T08:28:04Z"
+      "checked_updated_at": "2026-11-26T09:59:25Z"
     },
     {
       "full_name": "scccy/dsh-enterworktree",
@@ -116988,6 +117538,11 @@
       "full_name": "Schaefer2197/flameox",
       "verdict": "gone",
       "checked_updated_at": "2026-10-18T19:25:05Z"
+    },
+    {
+      "full_name": "schllor/dsh-shell-picker",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T08:16:31Z"
     },
     {
       "full_name": "scholz91/dsh-crew",
@@ -117310,6 +117865,11 @@
     {
       "full_name": "sd3247930/SkyDome",
       "verdict": "pkg-plain"
+    },
+    {
+      "full_name": "sdadbbb/dsh-session-onlyclean",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T04:15:16Z"
     },
     {
       "full_name": "Sddft97/dsh-client-ui-skin-verdandi",
@@ -117668,6 +118228,11 @@
       "full_name": "seikuronya/dsh-ofm-extension",
       "verdict": "gone",
       "checked_updated_at": "2026-11-15T19:26:03Z"
+    },
+    {
+      "full_name": "seinan27/dsh-armor-suite",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T08:21:36Z"
     },
     {
       "full_name": "SeireiA/dsh-plugin-rtk",
@@ -118045,6 +118610,11 @@
       "verdict": "bundle-plugin"
     },
     {
+      "full_name": "setoya/dsh-panel-updater",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T05:39:26Z"
+    },
+    {
       "full_name": "Setsuna-Kitahara/dsh-session-lock",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-10-25T14:48:05Z"
@@ -118053,6 +118623,31 @@
       "full_name": "seudut/dsh-remote-sudo",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-10-25T06:42:16Z"
+    },
+    {
+      "full_name": "SEUMysteryMan/DSH_session-Conversation-File-Import",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T10:36:25Z"
+    },
+    {
+      "full_name": "SEUMysteryMan/DSH-Ark-Quota-Dashboard-Plugin",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T10:35:50Z"
+    },
+    {
+      "full_name": "SEUMysteryMan/DSH-GUI-Virtual-Desktop-and-Window-Control",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T10:37:29Z"
+    },
+    {
+      "full_name": "SEUMysteryMan/DSH-Long-Term-Memory",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T10:36:14Z"
+    },
+    {
+      "full_name": "SEUMysteryMan/DSH-Plugins",
+      "verdict": "gone",
+      "checked_updated_at": "2026-11-26T10:23:35Z"
     },
     {
       "full_name": "Sev7een/ds-api-usage",
@@ -118102,6 +118697,11 @@
       "full_name": "sevenhsu7/dsh-codex-like-markdown",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-11-06T01:34:43Z"
+    },
+    {
+      "full_name": "sevenqcx/dsh-seven-inbox",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T04:11:30Z"
     },
     {
       "full_name": "sevenqcx/dsh-usage-rings",
@@ -118557,7 +119157,7 @@
     {
       "full_name": "shanliuling/dsh-image-gen",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T16:26:29Z"
+      "checked_updated_at": "2026-11-26T08:56:09Z"
     },
     {
       "full_name": "shanliuling/skills-link",
@@ -119794,7 +120394,7 @@
     {
       "full_name": "shinji00222/dsh-persona-continuity-bot",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T10:53:55Z"
+      "checked_updated_at": "2026-11-26T05:34:02Z"
     },
     {
       "full_name": "shinji00222/dsh-windows-computer-use",
@@ -120699,6 +121299,11 @@
       "checked_updated_at": "2026-11-17T07:06:15Z"
     },
     {
+      "full_name": "SI-sases/sases-control",
+      "verdict": "skill",
+      "checked_updated_at": "2026-11-26T00:58:54Z"
+    },
+    {
       "full_name": "Si-xiyu/dsh-BiliBridge",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-11-18T07:46:36Z"
@@ -120958,6 +121563,11 @@
       "full_name": "SillyMeo-1/dont-guess-ask",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-11-24T16:27:04Z"
+    },
+    {
+      "full_name": "SillyMeo-1/dsh-see-touch",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T10:52:49Z"
     },
     {
       "full_name": "Siloet-phy/analog-liquid-glass-for-dsh",
@@ -121280,7 +121890,7 @@
     {
       "full_name": "siqyka/dsh-ssh-workspace",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-19T17:12:40Z"
+      "checked_updated_at": "2026-11-26T01:56:48Z"
     },
     {
       "full_name": "siqyka/dsh-stock-leek",
@@ -121300,7 +121910,7 @@
     {
       "full_name": "SiriLee/dsh-rewind",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T14:25:18Z"
+      "checked_updated_at": "2026-11-26T09:15:57Z"
     },
     {
       "full_name": "siripornjames148/flameox",
@@ -121409,7 +122019,7 @@
     {
       "full_name": "SISCHOI/daruma",
       "verdict": "pkg-plain",
-      "checked_updated_at": "2026-11-23T17:50:18Z"
+      "checked_updated_at": "2026-11-26T05:55:58Z"
     },
     {
       "full_name": "Siselea/dsh-motrix-download",
@@ -121714,7 +122324,7 @@
     {
       "full_name": "sjh9714/dsh-win32",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T03:29:10Z"
+      "checked_updated_at": "2026-11-26T10:04:22Z"
     },
     {
       "full_name": "sjh9714/profile-cover",
@@ -122390,6 +123000,11 @@
       "checked_updated_at": "2026-11-18T03:46:31Z"
     },
     {
+      "full_name": "slobaloncar/livelaunch-mcp",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T03:13:59Z"
+    },
+    {
       "full_name": "slohmaier/dsh-a11y-announcer",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-09-14T14:10:44Z"
@@ -122431,7 +123046,7 @@
     {
       "full_name": "slow-stack/mneme",
       "verdict": "pkg-plain",
-      "checked_updated_at": "2026-11-25T23:56:28Z"
+      "checked_updated_at": "2026-11-26T07:43:50Z"
     },
     {
       "full_name": "Slowdownnn/dsh-read-history",
@@ -122494,7 +123109,7 @@
     {
       "full_name": "Small-tailqwq/dsh-deep-whale",
       "verdict": "multi-plugin",
-      "checked_updated_at": "2026-11-25T17:04:43Z"
+      "checked_updated_at": "2026-11-26T04:49:10Z"
     },
     {
       "full_name": "Small-tailqwq/dsh-deepcel",
@@ -122544,7 +123159,7 @@
     {
       "full_name": "Smalldy/godot-bridge",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-24T07:22:52Z"
+      "checked_updated_at": "2026-11-26T08:42:32Z"
     },
     {
       "full_name": "SmallFiveAh/dsh-inkos",
@@ -123371,7 +123986,7 @@
     {
       "full_name": "sol5766/dshm",
       "verdict": "multi-plugin",
-      "checked_updated_at": "2026-11-24T13:56:28Z"
+      "checked_updated_at": "2026-11-26T05:52:50Z"
     },
     {
       "full_name": "sol5766/dshm_client",
@@ -123559,7 +124174,7 @@
     {
       "full_name": "sonbringer/dsh-plugin-session-forging",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T07:20:16Z"
+      "checked_updated_at": "2026-11-26T05:52:00Z"
     },
     {
       "full_name": "SonettoGu14/dsh-mcp-status",
@@ -123968,7 +124583,7 @@
     {
       "full_name": "Soren-ABT/dsh-knowledge",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T03:52:31Z"
+      "checked_updated_at": "2026-11-26T02:13:44Z"
     },
     {
       "full_name": "sorooy/dsh-read-aloud",
@@ -123993,7 +124608,7 @@
     {
       "full_name": "sorsama/deepseek-harness-mobile",
       "verdict": "pkg-plain",
-      "checked_updated_at": "2026-11-25T19:44:38Z"
+      "checked_updated_at": "2026-11-26T05:04:38Z"
     },
     {
       "full_name": "sorsama/deepseek-harness-relay",
@@ -124267,7 +124882,7 @@
     {
       "full_name": "sparkwj/dsh-magpie-loader",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T15:58:06Z"
+      "checked_updated_at": "2026-11-26T02:12:25Z"
     },
     {
       "full_name": "Sparrived/DSH-Deeptop",
@@ -125319,7 +125934,7 @@
     {
       "full_name": "STARDUSTLC666/dsh-ppt",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T12:58:14Z"
+      "checked_updated_at": "2026-11-26T08:58:06Z"
     },
     {
       "full_name": "STARDUSTLC666/dsh-ptc-minimal",
@@ -125328,7 +125943,7 @@
     {
       "full_name": "STARDUSTLC666/dsh-remotion",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T09:03:58Z"
+      "checked_updated_at": "2026-11-26T08:07:16Z"
     },
     {
       "full_name": "STARDUSTLC666/dsh-review",
@@ -126143,7 +126758,7 @@
     {
       "full_name": "STofone/dsh-cad-studio",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-24T07:21:09Z"
+      "checked_updated_at": "2026-11-26T05:51:51Z"
     },
     {
       "full_name": "Stolyarovmn/dsh-client-ui-plugin-market",
@@ -126202,7 +126817,7 @@
     {
       "full_name": "Stook-404/dsh-trigger-prompts",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-22T04:56:07Z"
+      "checked_updated_at": "2026-11-26T00:44:02Z"
     },
     {
       "full_name": "stopchewing/dsh-mcp-view",
@@ -126292,7 +126907,7 @@
     {
       "full_name": "strukto-ai/mirage",
       "verdict": "manual",
-      "checked_updated_at": "2026-11-25T23:33:25Z"
+      "checked_updated_at": "2026-11-26T10:07:15Z"
     },
     {
       "full_name": "Sttrevens/dsh-cost-meter",
@@ -127593,7 +128208,7 @@
     {
       "full_name": "superdesigndev/treg",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T23:56:24Z"
+      "checked_updated_at": "2026-11-26T10:37:10Z"
     },
     {
       "full_name": "superfish058/dsh-llm-proxy",
@@ -127774,7 +128389,7 @@
     {
       "full_name": "surfishs/dsh-prompt-enhance",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-20T03:50:51Z"
+      "checked_updated_at": "2026-11-26T08:31:06Z"
     },
     {
       "full_name": "Surtr-crimson/dsh-turn-dial",
@@ -127809,7 +128424,7 @@
     {
       "full_name": "susirsusir/dsh-follow-up-prompts",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-20T01:35:32Z"
+      "checked_updated_at": "2026-11-26T05:40:55Z"
     },
     {
       "full_name": "susu-the-heroine/dsh-consciousness",
@@ -128706,7 +129321,7 @@
     {
       "full_name": "T-Auto/dsh-ops",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T13:18:41Z"
+      "checked_updated_at": "2026-11-26T10:08:55Z"
     },
     {
       "full_name": "T-Auto/dsh-std",
@@ -128808,7 +129423,7 @@
     {
       "full_name": "Tabbit-Browser/dsh-tabbit",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-23T04:41:24Z"
+      "checked_updated_at": "2026-11-26T10:31:05Z"
     },
     {
       "full_name": "tabilet/tabilet-skills",
@@ -128961,7 +129576,7 @@
     {
       "full_name": "takboo/dsh-coopanion",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-19T18:51:15Z"
+      "checked_updated_at": "2026-11-26T06:47:17Z"
     },
     {
       "full_name": "takboo/dsh-session-bin",
@@ -129062,6 +129677,16 @@
       "full_name": "tan90tan90/dsh-custom-menu",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-11-11T04:02:49Z"
+    },
+    {
+      "full_name": "tanbopiao/jixia-publish",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T08:24:36Z"
+    },
+    {
+      "full_name": "tanbopiao/xuangui-check",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T08:25:39Z"
     },
     {
       "full_name": "tancheng33/dsh-code-runtime-container",
@@ -129346,6 +129971,11 @@
       "checked_updated_at": "2026-09-14T16:54:44Z"
     },
     {
+      "full_name": "Tanloon/dsh-share-chat-card",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T08:52:33Z"
+    },
+    {
       "full_name": "Tannnnhauser/pivot-web-search",
       "verdict": "manual",
       "checked_updated_at": "2026-11-02T03:27:10Z"
@@ -129364,6 +129994,11 @@
       "full_name": "tanqvv/dsh-provider-guard",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-11-17T05:02:45Z"
+    },
+    {
+      "full_name": "tanson515/dsh-usage",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T10:09:48Z"
     },
     {
       "full_name": "Tansukii/dsh-screenshot",
@@ -129411,7 +130046,7 @@
     {
       "full_name": "tao1020/dsh-chrome-use",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-22T18:26:21Z"
+      "checked_updated_at": "2026-11-26T10:27:46Z"
     },
     {
       "full_name": "tao1020/dsh-global-pins",
@@ -129461,7 +130096,7 @@
     {
       "full_name": "TaoruiLiu19/dsh-gsv",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-23T04:34:40Z"
+      "checked_updated_at": "2026-11-26T04:22:00Z"
     },
     {
       "full_name": "TaoruiLiu19/DSH-LLSA",
@@ -130101,12 +130736,12 @@
     {
       "full_name": "Tencent/BrowserSkill",
       "verdict": "script",
-      "checked_updated_at": "2026-11-25T23:56:22Z"
+      "checked_updated_at": "2026-11-26T10:05:16Z"
     },
     {
       "full_name": "Tencent/WeKnora",
       "verdict": "manual",
-      "checked_updated_at": "2026-11-25T23:55:06Z"
+      "checked_updated_at": "2026-11-26T10:06:32Z"
     },
     {
       "full_name": "TencentCloud/cloudq-for-dsh",
@@ -130121,7 +130756,7 @@
     {
       "full_name": "TencentCloud/tencentmeeting-cli",
       "verdict": "pkg-plain",
-      "checked_updated_at": "2026-11-23T09:50:49Z"
+      "checked_updated_at": "2026-11-26T06:24:59Z"
     },
     {
       "full_name": "TencentCloudADP/Tencent-ADP-dsh-plugin",
@@ -130136,7 +130771,7 @@
     {
       "full_name": "tencentmusic/modus",
       "verdict": "manual",
-      "checked_updated_at": "2026-11-20T03:41:40Z"
+      "checked_updated_at": "2026-11-26T03:09:32Z"
     },
     {
       "full_name": "tendayst/dsh-wake-relay",
@@ -130590,17 +131225,17 @@
     {
       "full_name": "the-beating-light-of-the-nail/awesome-dsh-plugin-stock",
       "verdict": "manual",
-      "checked_updated_at": "2026-11-08T14:38:30Z"
+      "checked_updated_at": "2026-11-26T05:59:24Z"
     },
     {
       "full_name": "the-beating-light-of-the-nail/awesome-dsh-tavern",
       "verdict": "manual",
-      "checked_updated_at": "2026-11-21T21:11:14Z"
+      "checked_updated_at": "2026-11-26T05:59:23Z"
     },
     {
       "full_name": "the-beating-light-of-the-nail/dsh-meme-hub",
       "verdict": "manual",
-      "checked_updated_at": "2026-11-15T02:08:47Z"
+      "checked_updated_at": "2026-11-26T05:59:21Z"
     },
     {
       "full_name": "The-Data-Galaxy/dsh-dpia-workbench",
@@ -130645,7 +131280,7 @@
     {
       "full_name": "theBigGavin/marketingdashboard",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T13:26:32Z"
+      "checked_updated_at": "2026-11-26T09:58:23Z"
     },
     {
       "full_name": "TheCarey/Dsh-astrbot-memory-bridge",
@@ -131485,7 +132120,7 @@
     {
       "full_name": "Thomas-zz/dsh-luanji",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-12T03:31:55Z"
+      "checked_updated_at": "2026-11-26T09:55:52Z"
     },
     {
       "full_name": "Thomas-zz/dsh-offpeak-queue",
@@ -131625,7 +132260,7 @@
     {
       "full_name": "thus-zhou/dsh-chapter-whale",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T13:27:36Z"
+      "checked_updated_at": "2026-11-26T02:13:40Z"
     },
     {
       "full_name": "thynon/dsh-at-plugins",
@@ -131670,7 +132305,7 @@
     {
       "full_name": "tianacloud/dsh-tiana",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-21T01:42:30Z"
+      "checked_updated_at": "2026-11-26T10:31:41Z"
     },
     {
       "full_name": "Tianbaidi/dsh-plugin-github-search",
@@ -131890,7 +132525,7 @@
     {
       "full_name": "tianxingdao/dsh-shell-switch",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-21T08:56:08Z"
+      "checked_updated_at": "2026-11-26T08:42:06Z"
     },
     {
       "full_name": "TianYa-DAO/dsh-pinned-sessions",
@@ -132411,6 +133046,11 @@
       "checked_updated_at": "2026-09-18T03:44:31Z"
     },
     {
+      "full_name": "Tino0713/dsh_wechat_bot_talkingabout",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T02:55:30Z"
+    },
+    {
       "full_name": "Tino0713/dsh-browser-mode",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-11-20T05:53:09Z"
@@ -132512,6 +133152,11 @@
       "full_name": "TIREEDMAN/dsh-mulanci",
       "verdict": "manual",
       "checked_updated_at": "2026-09-09T19:00:57Z"
+    },
+    {
+      "full_name": "tiregqw/controlgui",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T07:03:15Z"
     },
     {
       "full_name": "Tirpitz-39/dsh-no-guess",
@@ -132651,6 +133296,11 @@
       "checked_updated_at": "2026-11-24T15:13:20Z"
     },
     {
+      "full_name": "tkkpku/timebudget-guard",
+      "verdict": "cordis-plugin",
+      "checked_updated_at": "2026-11-26T01:54:49Z"
+    },
+    {
       "full_name": "tkliuxing/dsh-hypatia",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-10-08T06:02:55Z"
@@ -132663,7 +133313,7 @@
     {
       "full_name": "tkliuxing/dsh-video-forge",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T15:39:27Z"
+      "checked_updated_at": "2026-11-26T01:41:15Z"
     },
     {
       "full_name": "tkochj/dsh-storage",
@@ -133000,9 +133650,54 @@
       "checked_updated_at": "2026-11-04T08:05:09Z"
     },
     {
+      "full_name": "todrinkcho/dsh-better-titles",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T02:14:49Z"
+    },
+    {
+      "full_name": "todrinkcho/dsh-better-topbar",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T02:14:54Z"
+    },
+    {
+      "full_name": "todrinkcho/dsh-folders",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T02:14:53Z"
+    },
+    {
+      "full_name": "todrinkcho/dsh-http",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T02:14:44Z"
+    },
+    {
+      "full_name": "todrinkcho/dsh-plugins",
+      "verdict": "manual",
+      "checked_updated_at": "2026-11-26T02:14:58Z"
+    },
+    {
+      "full_name": "todrinkcho/dsh-recents",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T02:14:51Z"
+    },
+    {
+      "full_name": "todrinkcho/dsh-session-delete",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T02:14:48Z"
+    },
+    {
+      "full_name": "todrinkcho/dsh-shortlong",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T02:14:56Z"
+    },
+    {
       "full_name": "todrinkcho/dsh-task-chime-badge",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-11-19T17:22:59Z"
+    },
+    {
+      "full_name": "todrinkcho/dsh-usage",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T02:14:46Z"
     },
     {
       "full_name": "tofu-zyc/dsh-plugin-tofu-box",
@@ -133416,7 +134111,7 @@
     {
       "full_name": "topmindspace/dsh-super-kanban",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T08:14:31Z"
+      "checked_updated_at": "2026-11-26T03:30:43Z"
     },
     {
       "full_name": "topmindspace/dsh-super-mind",
@@ -133690,7 +134385,7 @@
     {
       "full_name": "Tranquillitatis-Lab/dsh-live-compact",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T18:47:21Z"
+      "checked_updated_at": "2026-11-26T03:15:16Z"
     },
     {
       "full_name": "Tranquillitatis-Lab/dsh-office-kit",
@@ -134087,6 +134782,11 @@
       "checked_updated_at": "2026-10-25T22:10:49Z"
     },
     {
+      "full_name": "TryToFindHeart/dsh-feishu-mcp",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T07:14:39Z"
+    },
+    {
       "full_name": "Ts-sound/dsh-skill-injector",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-11-13T13:13:38Z"
@@ -134203,7 +134903,7 @@
     {
       "full_name": "tt-a1i/archify",
       "verdict": "pkg-plain",
-      "checked_updated_at": "2026-11-26T00:01:16Z"
+      "checked_updated_at": "2026-11-26T10:31:36Z"
     },
     {
       "full_name": "TT-Wang/dsh-agent-swarm",
@@ -134646,7 +135346,7 @@
     {
       "full_name": "tw93/Mole",
       "verdict": "script",
-      "checked_updated_at": "2026-11-25T23:55:17Z"
+      "checked_updated_at": "2026-11-26T10:26:36Z"
     },
     {
       "full_name": "twanonymous/agent-dispatch-cli",
@@ -134922,7 +135622,7 @@
     {
       "full_name": "tyr1105/dsh-buddy",
       "verdict": "pkg-plain",
-      "checked_updated_at": "2026-11-18T02:00:22Z"
+      "checked_updated_at": "2026-11-26T01:28:08Z"
     },
     {
       "full_name": "tyrantblue/dsh-trek-mcp",
@@ -142649,12 +143349,17 @@
     {
       "full_name": "universe-st/dsh-game-material-master",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T03:51:36Z"
+      "checked_updated_at": "2026-11-26T08:59:52Z"
     },
     {
       "full_name": "universe-st/dsh-session-scheduler",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-11-17T13:12:32Z"
+    },
+    {
+      "full_name": "universe-st/dsh-workspace-category",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T03:24:48Z"
     },
     {
       "full_name": "uniwell9797/dsh-voice-f9",
@@ -143127,7 +143832,7 @@
     {
       "full_name": "V1ki/dsh-plugin-subscriptions",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T14:33:35Z"
+      "checked_updated_at": "2026-11-26T09:07:52Z"
     },
     {
       "full_name": "v1xingyue/dsh-auth-plugin",
@@ -143281,6 +143986,11 @@
       "full_name": "VanillaCreamer/dsh-plugin-visual-composer",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-09-12T00:40:30Z"
+    },
+    {
+      "full_name": "VanillaNahida/dsh-bluearchive-theme",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T06:24:41Z"
     },
     {
       "full_name": "vanish-2/dsh-update-all",
@@ -144243,6 +144953,11 @@
       "checked_updated_at": "2026-11-08T02:48:25Z"
     },
     {
+      "full_name": "VictoriaCloud360/dsh-llm-provider-audit",
+      "verdict": "script",
+      "checked_updated_at": "2026-11-26T03:28:43Z"
+    },
+    {
       "full_name": "VictorKozachek/dsh-dispatcher",
       "verdict": "multi-plugin",
       "checked_updated_at": "2026-11-12T15:39:36Z"
@@ -144352,6 +145067,11 @@
       "full_name": "vikasranax/dsh-plugin-cats",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-10-28T05:52:50Z"
+    },
+    {
+      "full_name": "Vikrant-Aleph/dsh-antigravity-gateway",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T06:28:29Z"
     },
     {
       "full_name": "Vikrant-Aleph/dsh-exa-tools",
@@ -144714,7 +145434,7 @@
     {
       "full_name": "Viy1204/recruiting-copilot",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-24T07:41:12Z"
+      "checked_updated_at": "2026-11-26T10:13:00Z"
     },
     {
       "full_name": "Viyangle/dsh-opencode-model-sync",
@@ -144752,7 +145472,7 @@
     {
       "full_name": "viztor/dsh-opencode-patch",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T09:53:44Z"
+      "checked_updated_at": "2026-11-26T09:43:01Z"
     },
     {
       "full_name": "viztor/dsh-tinyfish",
@@ -145010,7 +145730,7 @@
     {
       "full_name": "voidobserve/dsh-explorer-open-patch",
       "verdict": "manual",
-      "checked_updated_at": "2026-11-25T00:42:56Z"
+      "checked_updated_at": "2026-11-26T05:50:29Z"
     },
     {
       "full_name": "VoidPrim/dsh-wsl-windows-folder-picker",
@@ -145030,7 +145750,7 @@
     {
       "full_name": "volcengine/OpenViking",
       "verdict": "manual",
-      "checked_updated_at": "2026-11-25T23:55:36Z"
+      "checked_updated_at": "2026-11-26T10:33:45Z"
     },
     {
       "full_name": "vollegrewar/dsh-tool-highlight",
@@ -145138,7 +145858,7 @@
     {
       "full_name": "vshulcz/deja-vu",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T21:08:20Z"
+      "checked_updated_at": "2026-11-26T08:36:19Z"
     },
     {
       "full_name": "vshulcz/dsh-deja",
@@ -145477,7 +146197,7 @@
     {
       "full_name": "Wahwayhale/dsh-connect-doubao",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T15:18:59Z"
+      "checked_updated_at": "2026-11-26T07:29:15Z"
     },
     {
       "full_name": "Wahwayhale/dsh-connect-miaoshou",
@@ -145561,7 +146281,7 @@
     {
       "full_name": "walkinglabs/learn-harness-engineering",
       "verdict": "pkg-plain",
-      "checked_updated_at": "2026-11-25T23:56:03Z"
+      "checked_updated_at": "2026-11-26T10:34:23Z"
     },
     {
       "full_name": "walksls/dsh-degeneration-kit",
@@ -145922,6 +146642,11 @@
       "full_name": "Wang993/DSH_OrganizeFilesInTheSameWorkspace",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-10-18T06:00:38Z"
+    },
+    {
+      "full_name": "WangAnran123/dsh-companion-starter",
+      "verdict": "multi-plugin",
+      "checked_updated_at": "2026-11-26T09:40:54Z"
     },
     {
       "full_name": "wangbobo-coder/dsh-mcp-manager",
@@ -146709,6 +147434,11 @@
       "checked_updated_at": "2026-10-17T15:21:33Z"
     },
     {
+      "full_name": "warm-flame-core/dsh-jlc-art-pcb",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T09:26:51Z"
+    },
+    {
       "full_name": "warm-flame-core/dsh-learn-distill",
       "verdict": "skill",
       "checked_updated_at": "2026-11-09T04:53:22Z"
@@ -146766,7 +147496,7 @@
     {
       "full_name": "Wasabi2575/dsh-workflow-canvas",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T23:35:57Z"
+      "checked_updated_at": "2026-11-26T09:22:40Z"
     },
     {
       "full_name": "WASD258-jpg/dsh-context-surgery",
@@ -147223,7 +147953,7 @@
     {
       "full_name": "webkubor/dsh-bloom-theme",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T13:04:28Z"
+      "checked_updated_at": "2026-11-26T09:57:21Z"
     },
     {
       "full_name": "webkubor/dsh-env-inspector",
@@ -147550,7 +148280,7 @@
     {
       "full_name": "weichen704/dsh-chaoxing-assistant",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T08:07:42Z"
+      "checked_updated_at": "2026-11-26T09:42:06Z"
     },
     {
       "full_name": "weichengwu/dsh-web-control",
@@ -147812,7 +148542,7 @@
     {
       "full_name": "weiwenhao/dudu",
       "verdict": "pkg-plain",
-      "checked_updated_at": "2026-11-25T14:46:17Z"
+      "checked_updated_at": "2026-11-26T10:14:02Z"
     },
     {
       "full_name": "weixiaolv/dsh-sidebar-cards",
@@ -147984,12 +148714,12 @@
     {
       "full_name": "Wenaixi/dsh-ponytail",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-23T09:44:56Z"
+      "checked_updated_at": "2026-11-26T08:07:20Z"
     },
     {
       "full_name": "Wenaixi/dsh-superpower",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-20T08:43:00Z"
+      "checked_updated_at": "2026-11-26T01:31:58Z"
     },
     {
       "full_name": "wenbin-wb/dsh-bridge",
@@ -148247,7 +148977,7 @@
     {
       "full_name": "WestFox-AwA/dsh-wish-specializer",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-24T00:18:44Z"
+      "checked_updated_at": "2026-11-26T08:31:16Z"
     },
     {
       "full_name": "westwall586/dsh-westwall-plugins",
@@ -148338,7 +149068,7 @@
     {
       "full_name": "wgytcdx/dsh-typing-buddy",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-14T06:01:32Z"
+      "checked_updated_at": "2026-11-26T07:38:22Z"
     },
     {
       "full_name": "WH-kt/dsh-codexstyle-slide",
@@ -148624,7 +149354,7 @@
     {
       "full_name": "whiteguo233/OpenBiliClaw",
       "verdict": "manual",
-      "checked_updated_at": "2026-11-25T18:40:06Z"
+      "checked_updated_at": "2026-11-26T09:36:37Z"
     },
     {
       "full_name": "whitelonng/dsh-opencode-go-pool",
@@ -149043,6 +149773,11 @@
       "checked_updated_at": "2026-11-18T18:20:36Z"
     },
     {
+      "full_name": "William-JT-Shen/dsh-chat-web",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T07:50:29Z"
+    },
+    {
       "full_name": "William123666/dsh-reasoning-cn",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-08-19T06:37:44Z"
@@ -149279,7 +150014,7 @@
     {
       "full_name": "win4r/dsh-pi-review",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-22T08:21:38Z"
+      "checked_updated_at": "2026-11-26T06:54:34Z"
     },
     {
       "full_name": "winada82/dsh-telegram-bridge",
@@ -149407,7 +150142,7 @@
     {
       "full_name": "Windsander/Mebular",
       "verdict": "pkg-plain",
-      "checked_updated_at": "2026-11-25T22:58:36Z"
+      "checked_updated_at": "2026-11-26T09:36:42Z"
     },
     {
       "full_name": "Windsland52/dsh-auto-retry",
@@ -149893,6 +150628,11 @@
       "full_name": "wjc300000000-beep/dsh-plugin-open-source-first",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-11-10T08:21:41Z"
+    },
+    {
+      "full_name": "Wjc41164404/dsh-side-questions",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T07:25:45Z"
     },
     {
       "full_name": "WJDdidi-1/ai-context-doctor",
@@ -150423,7 +151163,7 @@
     {
       "full_name": "WNLUO/dsh-mobile-plugin",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T18:45:47Z"
+      "checked_updated_at": "2026-11-26T09:36:54Z"
     },
     {
       "full_name": "woaiCarlos/dsh-minimax-quota",
@@ -151107,7 +151847,7 @@
     {
       "full_name": "wqty123/dsh-browser",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T11:33:02Z"
+      "checked_updated_at": "2026-11-26T06:02:14Z"
     },
     {
       "full_name": "wqty123/dsh-dot",
@@ -151300,7 +152040,7 @@
     {
       "full_name": "WSL043/dsh-codex-subscription",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T23:10:47Z"
+      "checked_updated_at": "2026-11-26T09:01:18Z"
     },
     {
       "full_name": "WSL043/dsh-dictation",
@@ -151384,7 +152124,7 @@
     {
       "full_name": "wssfk12138/dsh-damage-pulse",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-20T14:59:40Z"
+      "checked_updated_at": "2026-11-26T03:23:39Z"
     },
     {
       "full_name": "wssfk12138/dsh-wechat-notify",
@@ -151848,7 +152588,7 @@
     {
       "full_name": "wunankun/dsh-task-traffic-light",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T04:04:26Z"
+      "checked_updated_at": "2026-11-26T06:00:54Z"
     },
     {
       "full_name": "wunengbiao/dsh-claude-plugins",
@@ -152570,6 +153310,11 @@
       "full_name": "wy7779/dsh-plugin-autoupdater",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-10-29T09:56:28Z"
+    },
+    {
+      "full_name": "WyankinzZ/dsh-plugin-abap-diff",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T01:20:41Z"
     },
     {
       "full_name": "wyb587285-dot/git-ai-tracker",
@@ -154196,7 +154941,7 @@
     {
       "full_name": "xbzbing/dsh-git-panel",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-24T05:46:42Z"
+      "checked_updated_at": "2026-11-26T01:52:24Z"
     },
     {
       "full_name": "xbzbing/dsh-github-message",
@@ -154211,7 +154956,7 @@
     {
       "full_name": "xbzbing/dsh-im-lark",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T14:45:34Z"
+      "checked_updated_at": "2026-11-26T07:10:07Z"
     },
     {
       "full_name": "xbzbing/dsh-im-wechat",
@@ -154230,7 +154975,7 @@
     {
       "full_name": "xbzbing/dsh-privacy-gateway",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-20T13:30:54Z"
+      "checked_updated_at": "2026-11-26T00:31:06Z"
     },
     {
       "full_name": "XcapeAxis/dsh-agent-ops",
@@ -154387,7 +155132,7 @@
     {
       "full_name": "XDTrees/dsh-xdpool",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T11:50:48Z"
+      "checked_updated_at": "2026-11-26T07:05:11Z"
     },
     {
       "full_name": "xdx888999/dsh-asc-studio",
@@ -154787,7 +155532,7 @@
     {
       "full_name": "xiajiajun516/dsh-config-manager",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T14:14:47Z"
+      "checked_updated_at": "2026-11-26T03:09:38Z"
     },
     {
       "full_name": "xiajiajun516/dsh-settings-organizer",
@@ -155598,6 +156343,11 @@
       "checked_updated_at": "2026-08-15T14:38:47Z"
     },
     {
+      "full_name": "xiaomengxinbb/dsh-message-workbench",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T10:49:48Z"
+    },
+    {
       "full_name": "xiaomengxinbb/dsh-qq-bridge",
       "verdict": "cordis-plugin"
     },
@@ -155822,7 +156572,7 @@
     {
       "full_name": "xiaoso456/dsh-tool-plus",
       "verdict": "cordis-plugin",
-      "checked_updated_at": "2026-11-20T23:36:19Z"
+      "checked_updated_at": "2026-11-26T05:03:31Z"
     },
     {
       "full_name": "xiaoso456/dsh-tool-step-note",
@@ -155837,7 +156587,7 @@
     {
       "full_name": "xiaoso456/dsh-workflow-lite",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-24T15:52:59Z"
+      "checked_updated_at": "2026-11-26T08:37:20Z"
     },
     {
       "full_name": "XiaoSong1223/dsh-release-guardian",
@@ -156714,6 +157464,11 @@
       "verdict": "cordis-plugin"
     },
     {
+      "full_name": "ximi-chen/dsh-supersede",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T06:10:27Z"
+    },
+    {
       "full_name": "ximiluoer/dsh-simple-notes",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-10-24T14:49:54Z"
@@ -156816,7 +157571,7 @@
     {
       "full_name": "xing-shuyin/keel",
       "verdict": "cordis-plugin",
-      "checked_updated_at": "2026-11-25T14:42:32Z"
+      "checked_updated_at": "2026-11-26T03:31:02Z"
     },
     {
       "full_name": "xing-shuyin/pi-web-ui",
@@ -156942,6 +157697,11 @@
       "full_name": "xingtu1996/dsh-xingtu-skills",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-11-03T06:44:42Z"
+    },
+    {
+      "full_name": "xingwang0/research-ml-modeling",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T08:02:25Z"
     },
     {
       "full_name": "xingxingbk-git/dsh-deepseek-chat",
@@ -157070,7 +157830,7 @@
     {
       "full_name": "xingyueDanYang/dsh-puppet-memory",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-24T13:50:27Z"
+      "checked_updated_at": "2026-11-26T10:31:44Z"
     },
     {
       "full_name": "xingzhen199186/dsh-advisor-group",
@@ -157438,7 +158198,7 @@
     {
       "full_name": "xiray-xia/dsh-remote-vs",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T01:20:46Z"
+      "checked_updated_at": "2026-11-26T05:39:55Z"
     },
     {
       "full_name": "XiRuize/fin-agent-workbench",
@@ -157826,7 +158586,7 @@
     {
       "full_name": "xmanrui/dsh-im",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T21:04:49Z"
+      "checked_updated_at": "2026-11-26T10:12:04Z"
     },
     {
       "full_name": "xmanrui/dsh-weixin",
@@ -158031,7 +158791,7 @@
     {
       "full_name": "xqpsec/dsh-jailbreak",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T12:57:05Z"
+      "checked_updated_at": "2026-11-26T09:14:54Z"
     },
     {
       "full_name": "xqpsec/dsh-jalibreak",
@@ -158461,7 +159221,7 @@
     {
       "full_name": "xuanyuanchumo/dsh-kaogong",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T03:45:38Z"
+      "checked_updated_at": "2026-11-26T02:45:32Z"
     },
     {
       "full_name": "xuanyuanchumo/dsh-recency-guard",
@@ -159955,6 +160715,11 @@
       "checked_updated_at": "2026-08-31T06:10:28Z"
     },
     {
+      "full_name": "yakovlev-i-a/dsh-openfoam-workbench",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T08:56:02Z"
+    },
+    {
       "full_name": "yakoylp/dsh-localnotify",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-09-10T14:21:17Z"
@@ -160055,7 +160820,7 @@
     {
       "full_name": "YAN3RA/dsh-thinking-guard",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-19T03:40:33Z"
+      "checked_updated_at": "2026-11-26T03:48:56Z"
     },
     {
       "full_name": "yan4342/dsh-session-roots",
@@ -160915,7 +161680,7 @@
     {
       "full_name": "YaoApp/yao",
       "verdict": "manual",
-      "checked_updated_at": "2026-11-25T23:52:23Z"
+      "checked_updated_at": "2026-11-26T06:13:11Z"
     },
     {
       "full_name": "YaoaY/dsh-conversation-accents",
@@ -161189,7 +161954,7 @@
     {
       "full_name": "yb-zhai/agent-memory",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T20:19:09Z"
+      "checked_updated_at": "2026-11-26T08:56:35Z"
     },
     {
       "full_name": "ybbms777/dsh-deepseek-pricing",
@@ -161210,6 +161975,11 @@
       "full_name": "ybytlai78-dev/dsh-pet-chat",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-10-26T12:33:11Z"
+    },
+    {
+      "full_name": "yc5991/dsh-wechatbot",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T04:08:14Z"
     },
     {
       "full_name": "ycAlphi/dsh-dokuwiki",
@@ -161784,7 +162554,7 @@
     {
       "full_name": "yexi-by/dsh-unrestricted",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T20:54:31Z"
+      "checked_updated_at": "2026-11-26T10:30:56Z"
     },
     {
       "full_name": "yexiao130/dsh-agent-status-bar",
@@ -161825,6 +162595,11 @@
       "full_name": "Yezery/dsh-image-download",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-09-13T15:32:10Z"
+    },
+    {
+      "full_name": "YEZIHANGISM/dsh-todo",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T06:11:40Z"
     },
     {
       "full_name": "yezisorft/dsh-netease-island",
@@ -161996,7 +162771,7 @@
     {
       "full_name": "ygzhang-lab/dsh-coding",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-23T07:02:46Z"
+      "checked_updated_at": "2026-11-26T02:10:00Z"
     },
     {
       "full_name": "ygzhang-lab/dsh-plugin-codex-coding",
@@ -162070,7 +162845,7 @@
     {
       "full_name": "yhm138/dsh-btw",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T10:15:14Z"
+      "checked_updated_at": "2026-11-26T05:37:10Z"
     },
     {
       "full_name": "yhm138/dsh-codex-session-pin",
@@ -162248,7 +163023,7 @@
     {
       "full_name": "yicun0316/dsh-claude-slider",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T03:07:28Z"
+      "checked_updated_at": "2026-11-26T07:15:26Z"
     },
     {
       "full_name": "yidao2000/dsh-local-background",
@@ -162381,7 +163156,7 @@
     {
       "full_name": "yikart/AiToEarn",
       "verdict": "manual",
-      "checked_updated_at": "2026-11-25T23:54:36Z"
+      "checked_updated_at": "2026-11-26T09:36:09Z"
     },
     {
       "full_name": "yikart/aitoearn-dsh-plugin",
@@ -162680,7 +163455,7 @@
     {
       "full_name": "YinkaiYu/chat-in-dsh",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-24T09:42:02Z"
+      "checked_updated_at": "2026-11-26T07:09:59Z"
     },
     {
       "full_name": "yinmyu/dsh-costops-hub",
@@ -162854,6 +163629,11 @@
       "full_name": "yitian951012/dsh-project-dev-flow",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-11-18T06:37:26Z"
+    },
+    {
+      "full_name": "Yituojuanjuana/dsh-skill-shelf",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T05:34:47Z"
     },
     {
       "full_name": "yiumanlenong/dsh-popup-notify",
@@ -163080,7 +163860,7 @@
     {
       "full_name": "yjl9903/AnimeGarden",
       "verdict": "pkg-plain",
-      "checked_updated_at": "2026-11-25T08:04:21Z"
+      "checked_updated_at": "2026-11-26T03:23:06Z"
     },
     {
       "full_name": "YJLTF/dsh-animation-studio",
@@ -163182,6 +163962,11 @@
       "full_name": "YKY0521/dsh-yangyu",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-11-05T11:42:53Z"
+    },
+    {
+      "full_name": "ykybl/dsh-altare",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T02:27:02Z"
     },
     {
       "full_name": "yl216/dsh-approval-alert",
@@ -163823,6 +164608,11 @@
       "checked_updated_at": "2026-11-15T10:11:25Z"
     },
     {
+      "full_name": "you-see-seeyou/dsh-shared-tree",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T03:00:35Z"
+    },
+    {
       "full_name": "YOU-SHOULD-KNOW-ME/dsh-rail-music",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-10-05T07:10:39Z"
@@ -163865,7 +164655,7 @@
     {
       "full_name": "youdotcom-oss/agent-skills",
       "verdict": "pkg-plain",
-      "checked_updated_at": "2026-11-25T08:20:44Z"
+      "checked_updated_at": "2026-11-26T01:40:47Z"
     },
     {
       "full_name": "youdotcom-oss/dsh-plugin-youcom",
@@ -164362,7 +165152,7 @@
     {
       "full_name": "ysr666/dsh-vision-router",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T15:47:56Z"
+      "checked_updated_at": "2026-11-26T09:45:25Z"
     },
     {
       "full_name": "ysthink/dsh-session-manager",
@@ -164495,7 +165285,7 @@
     {
       "full_name": "Yu-tao-Li/dsh-computer-use-win",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T17:34:11Z"
+      "checked_updated_at": "2026-11-26T10:28:38Z"
     },
     {
       "full_name": "Yu-tao-Li/dsh-pin",
@@ -164662,7 +165452,7 @@
     {
       "full_name": "Yuaneen/dsh-token-gateway",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T16:32:44Z"
+      "checked_updated_at": "2026-11-26T09:20:54Z"
     },
     {
       "full_name": "yuanfeng637-cmyk/dsh-skill-router-and-gate",
@@ -164916,7 +165706,7 @@
     {
       "full_name": "YuChenLiao/dsh-comfyui-workbench",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T07:39:54Z"
+      "checked_updated_at": "2026-11-26T06:19:18Z"
     },
     {
       "full_name": "YuChenLiao/dsh-dev-sandbox",
@@ -165312,7 +166102,7 @@
     {
       "full_name": "yujh129/dsh-literature-agents",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-22T09:22:03Z"
+      "checked_updated_at": "2026-11-26T04:20:11Z"
     },
     {
       "full_name": "yujiajie01/dsh-anime-schedule",
@@ -165734,6 +166524,11 @@
       "checked_updated_at": "2026-10-30T08:25:01Z"
     },
     {
+      "full_name": "Yunfung/dsh-plugin-hdc-phone",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T03:26:18Z"
+    },
+    {
       "full_name": "yunhenk/dsh-cacheback",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-11-03T14:33:45Z"
@@ -166024,7 +166819,7 @@
     {
       "full_name": "yushang657/DSH-YS-pojia",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T20:24:49Z"
+      "checked_updated_at": "2026-11-26T10:22:23Z"
     },
     {
       "full_name": "yusheng-zhu12/dsh-workspace-memory",
@@ -166179,7 +166974,7 @@
     {
       "full_name": "Yuuyuko-uu/dsh-fish-memory",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T13:27:44Z"
+      "checked_updated_at": "2026-11-26T07:35:26Z"
     },
     {
       "full_name": "Yuuyuko-uu/dsh-qq-bridge",
@@ -166189,7 +166984,7 @@
     {
       "full_name": "Yuuyuko-uu/dsh-qq-link",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T08:51:56Z"
+      "checked_updated_at": "2026-11-26T02:15:51Z"
     },
     {
       "full_name": "Yuuyuko-uu/dsh-speak-up",
@@ -166338,7 +167133,7 @@
     {
       "full_name": "yuyu654/dsh-drop-by",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-23T15:03:20Z"
+      "checked_updated_at": "2026-11-26T09:09:06Z"
     },
     {
       "full_name": "yuyu867/dsh-plugin-agnes-video",
@@ -166761,7 +167556,7 @@
     {
       "full_name": "yyh-001/dsh-meme",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T09:25:55Z"
+      "checked_updated_at": "2026-11-26T08:06:22Z"
     },
     {
       "full_name": "yyh-001/dsh-supermarket",
@@ -166771,7 +167566,7 @@
     {
       "full_name": "yyh-001/DSH-X",
       "verdict": "pkg-plain",
-      "checked_updated_at": "2026-11-25T23:49:11Z"
+      "checked_updated_at": "2026-11-26T08:30:55Z"
     },
     {
       "full_name": "Yyhy110421/dsh-broadcast",
@@ -166926,6 +167721,11 @@
       "full_name": "yyty947/dsh-advisor-chain",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-11-25T06:27:51Z"
+    },
+    {
+      "full_name": "yyx-123/dsh-workspace-improve",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T09:50:38Z"
     },
     {
       "full_name": "yyxcnasd/amadeus-for-dsh",
@@ -167150,6 +167950,11 @@
       "full_name": "YZz-S/dsh-workspace-files-explorer",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-09-18T03:45:21Z"
+    },
+    {
+      "full_name": "yzzshanyin-rgb/dsh-background-task-engine",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T06:47:13Z"
     },
     {
       "full_name": "yzzshanyin-rgb/dsh-niuma-timer",
@@ -167433,7 +168238,7 @@
     {
       "full_name": "zaimokuza-yoshiteru/dsh-acp-adapter",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-24T12:44:14Z"
+      "checked_updated_at": "2026-11-26T03:46:37Z"
     },
     {
       "full_name": "zaimokuza-yoshiteru/dsh-agent-teams-office",
@@ -167531,7 +168336,7 @@
     {
       "full_name": "zangxx66/dsh-prompt-setting",
       "verdict": "multi-plugin",
-      "checked_updated_at": "2026-11-21T05:48:45Z"
+      "checked_updated_at": "2026-11-26T02:55:40Z"
     },
     {
       "full_name": "zanhoulll/dsh-sticky-wall",
@@ -167546,7 +168351,7 @@
     {
       "full_name": "zaofan-make/dsh-qqbot",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T13:27:38Z"
+      "checked_updated_at": "2026-11-26T06:39:30Z"
     },
     {
       "full_name": "zaofan-make/dsh-qqbot-plugins",
@@ -167809,6 +168614,11 @@
       "checked_updated_at": "2026-10-23T17:11:57Z"
     },
     {
+      "full_name": "zcslack17858645276-del/dsh-app-restart",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T08:44:52Z"
+    },
+    {
       "full_name": "ZCX26324/dsh-gold-card",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-11-16T03:25:18Z"
@@ -167836,7 +168646,7 @@
     {
       "full_name": "zdalice/dsh-relay-compare",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T14:33:56Z"
+      "checked_updated_at": "2026-11-26T06:21:11Z"
     },
     {
       "full_name": "zdd3143/dsh-vision-click",
@@ -168470,7 +169280,7 @@
     {
       "full_name": "zenstory-ai/oh-story-dsh",
       "verdict": "pkg-plain",
-      "checked_updated_at": "2026-11-25T17:06:59Z"
+      "checked_updated_at": "2026-11-26T06:30:45Z"
     },
     {
       "full_name": "zenvertao/dsh-inline-comments",
@@ -168509,8 +169319,8 @@
     },
     {
       "full_name": "Zephyr-Axis/dsh-astrbot-unified",
-      "verdict": "multi-plugin",
-      "checked_updated_at": "2026-11-25T23:45:18Z"
+      "verdict": "manual",
+      "checked_updated_at": "2026-11-26T00:44:46Z"
     },
     {
       "full_name": "Zephyr-Song/agent-skill-pack",
@@ -168785,7 +169595,7 @@
     {
       "full_name": "zexadev/dsh-tether",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-22T08:21:07Z"
+      "checked_updated_at": "2026-11-26T03:10:23Z"
     },
     {
       "full_name": "zeyeyuki/dsh-gui-operator",
@@ -168804,6 +169614,11 @@
       "full_name": "ZF3373/dsh-algo-trainer",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-09-18T11:38:02Z"
+    },
+    {
+      "full_name": "ZF3373/dsh-mathmodel",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T06:18:37Z"
     },
     {
       "full_name": "zfdx123/dsh-atelier",
@@ -169344,7 +170159,7 @@
     {
       "full_name": "ZhangjiaxinGZS/dsh-role-team",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T16:39:25Z"
+      "checked_updated_at": "2026-11-26T02:19:53Z"
     },
     {
       "full_name": "zhangjie-2007/dsh-voice",
@@ -169862,6 +170677,11 @@
       "checked_updated_at": "2026-10-28T01:07:55Z"
     },
     {
+      "full_name": "zhaojiale001016/video-hub",
+      "verdict": "manual",
+      "checked_updated_at": "2026-11-26T09:23:55Z"
+    },
+    {
       "full_name": "ZhaoJun233/dsh-imagegen",
       "verdict": "cordis-plugin"
     },
@@ -169878,7 +170698,7 @@
     {
       "full_name": "zhaoolee/notes",
       "verdict": "pkg-plain",
-      "checked_updated_at": "2026-11-23T20:57:45Z"
+      "checked_updated_at": "2026-11-26T06:37:11Z"
     },
     {
       "full_name": "zhaopw5/dsh-translate-pin",
@@ -171059,7 +171879,7 @@
     {
       "full_name": "zhoushoujianwork/easyeda-agent",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T16:58:14Z"
+      "checked_updated_at": "2026-11-26T10:02:57Z"
     },
     {
       "full_name": "zhoushuoshi-code/dsh-live",
@@ -171163,7 +171983,7 @@
     {
       "full_name": "zhu1090093659/dsh-skins",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-22T07:07:04Z"
+      "checked_updated_at": "2026-11-26T04:06:33Z"
     },
     {
       "full_name": "zhu1090093659/dsh-trading",
@@ -171173,7 +171993,7 @@
     {
       "full_name": "zhu1090093659/dsh-web",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T23:56:27Z"
+      "checked_updated_at": "2026-11-26T09:39:47Z"
     },
     {
       "full_name": "zhu1090093659/dsh-web-ui",
@@ -171508,7 +172328,7 @@
     {
       "full_name": "zhuyansen/new-term-radar",
       "verdict": "manual",
-      "checked_updated_at": "2026-11-25T10:55:00Z"
+      "checked_updated_at": "2026-11-26T00:27:14Z"
     },
     {
       "full_name": "ZhuYanTech/dsh-biomni",
@@ -171665,6 +172485,11 @@
       "checked_updated_at": "2026-11-16T10:27:12Z"
     },
     {
+      "full_name": "Zi-Kong/dsh-tag",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T07:24:04Z"
+    },
+    {
       "full_name": "ZI-LV68/dsh-deepseek-model-router",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-09-18T03:45:26Z"
@@ -171809,7 +172634,7 @@
     {
       "full_name": "zilliztech/memsearch",
       "verdict": "manual",
-      "checked_updated_at": "2026-11-25T17:04:11Z"
+      "checked_updated_at": "2026-11-26T07:37:06Z"
     },
     {
       "full_name": "Zilong6666/dsh-task-workspace",
@@ -172061,7 +172886,7 @@
     {
       "full_name": "zixiaog/dsh-storage-monitor",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-21T16:42:10Z"
+      "checked_updated_at": "2026-11-26T09:19:34Z"
     },
     {
       "full_name": "zixin947/dsh-compact",
@@ -172101,7 +172926,7 @@
     {
       "full_name": "ZIye1208/dsh-github-mcp",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-24T06:48:10Z"
+      "checked_updated_at": "2026-11-26T00:59:26Z"
     },
     {
       "full_name": "ZIye1208/dsh-github-mcp-hint",
@@ -172167,6 +172992,11 @@
       "full_name": "zizaiwo/dsh_plugins",
       "verdict": "multi-plugin",
       "checked_updated_at": "2026-08-27T15:08:50Z"
+    },
+    {
+      "full_name": "zizhennini/nextskills",
+      "verdict": "manual",
+      "checked_updated_at": "2026-11-26T10:29:13Z"
     },
     {
       "full_name": "zizhongfeiyang/dsh-settings-drawer",
@@ -172503,12 +173333,12 @@
     {
       "full_name": "zman406986/Agent-Memory-CREMATOR",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T20:15:14Z"
+      "checked_updated_at": "2026-11-26T04:55:36Z"
     },
     {
       "full_name": "zman406986/dsh-bot",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-21T07:09:01Z"
+      "checked_updated_at": "2026-11-26T05:12:43Z"
     },
     {
       "full_name": "zman406986/dsh-Qwen-400-developer-role-fix",
@@ -173309,7 +174139,7 @@
     {
       "full_name": "ZSeven-W/dsh-harbor",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-20T20:12:18Z"
+      "checked_updated_at": "2026-11-26T01:43:37Z"
     },
     {
       "full_name": "ZSeven-W/dsh-ios",
@@ -173339,7 +174169,7 @@
     {
       "full_name": "ZSeven-W/openpencil",
       "verdict": "manual",
-      "checked_updated_at": "2026-11-25T20:28:52Z"
+      "checked_updated_at": "2026-11-26T09:29:02Z"
     },
     {
       "full_name": "ZSeven-W/rish-app",
@@ -173667,12 +174497,12 @@
     {
       "full_name": "zuorn/Tydora",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T08:29:18Z"
+      "checked_updated_at": "2026-11-26T07:57:05Z"
     },
     {
       "full_name": "zuosus/dsh-decision-engine",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-25T10:48:56Z"
+      "checked_updated_at": "2026-11-26T09:38:43Z"
     },
     {
       "full_name": "zuosus/dsh-model-flatmap",
@@ -173776,7 +174606,7 @@
     {
       "full_name": "zwebzzz/almost-for-ever",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-11T10:58:53Z"
+      "checked_updated_at": "2026-11-26T10:13:05Z"
     },
     {
       "full_name": "zwgblue/dsh-mcp-inspector",
@@ -173816,7 +174646,7 @@
     {
       "full_name": "zx-yk/dsh-codex-adapter",
       "verdict": "bundle-plugin",
-      "checked_updated_at": "2026-11-21T11:52:05Z"
+      "checked_updated_at": "2026-11-26T00:54:11Z"
     },
     {
       "full_name": "zx06/dsh-tavily",
@@ -174395,6 +175225,11 @@
       "full_name": "ZZR-rui-997/dsh-sidebar-quote",
       "verdict": "bundle-plugin",
       "checked_updated_at": "2026-11-25T09:49:44Z"
+    },
+    {
+      "full_name": "ZZR-rui-997/dsh-skill-switchboard",
+      "verdict": "bundle-plugin",
+      "checked_updated_at": "2026-11-26T00:59:48Z"
     },
     {
       "full_name": "zzsszz1122/dsh-agnes-media",
