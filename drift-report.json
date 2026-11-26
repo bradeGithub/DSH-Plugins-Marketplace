@@ -1,69 +1,20 @@
 {
-  "generated_at": "2026-11-25T16:22:43.163Z",
-  "count": 9,
+  "generated_at": "2026-11-26T00:26:14.491Z",
+  "count": 2,
   "items": [
     {
-      "full_name": "Mt-Youya/dsh-plugins",
-      "previous": "resource",
-      "current": "memory",
-      "desc_now": "DSH Web GUI 的「会话洞察」面板：解析 Claude Code / DSH / Codex 以及 Cursor / Pi / Antigravity / VS Code 系 / Cline·Roo 的会话日志，把模型每一轮实际收到的上下文拆开给人看——系统提示、工具定义、记忆与指令、历史、工具结果、图片各占多少，以及每个数字是精确的 usage 还是按字符折算的估算。A plugin collection for DeepSeek Harness (DSH). Install this one bundle to get every plugin listed below.",
-      "desc_prev": "A plugin collection for DeepSeek Harness (DSH). Install this one bundle to get every plugin listed below; each plugin can also be installed on its own."
-    },
-    {
-      "full_name": "efrem-labs/niro-releases",
+      "full_name": "killher1/dsh-claude-preset",
       "previous": "coding",
-      "current": "memory",
-      "desc_now": "NIRO 0.4 — Your coding agents on iPhone. Universal Search, Project Memory and session continuation for Hermes, DeepSeek Harness, OpenCode, Qwen Code, Kimi Code and MiMo. Mac Bridge installers and docs.",
-      "desc_prev": "NIRO 0.4 — Your desktop Coding Agents on iPhone. Universal Search, real session continuation, Qwen Code, Kimi Code, Hermes, OpenCode, ZCode and DSH; Mac Bridge installers and docs."
-    },
-    {
-      "full_name": "airainal/dsh-edge-companion",
-      "previous": "tool",
-      "current": "web-ui",
-      "desc_now": "Connects DeepSeek Harness to the user's logged-in Microsoft Edge: local bridge, MV3 side panel, and real-tab control over CDP.",
-      "desc_prev": "Drive DeepSeek Harness with your real, logged-in Microsoft Edge: MV3 extension + local CDP bridge + DSH plugin."
-    },
-    {
-      "full_name": "ashareapi/ashareapi-dsh-plugin",
-      "previous": "web-ui",
-      "current": "resource",
-      "desc_now": "A股数据 API 官方 DeepSeek Harness 插件 —— 桌面端 / Web UI 输个包名即装，94 个 A股工具（行情 / K线 / L2 大单 / 财务 / 资金 / 龙虎榜 / 板块 / 因子选股 / 量化回测 / 期货外汇 / 资讯公告），免费工具无需 Key｜Official DSH plugin, 94 A-share tools, free tools need no key",
-      "desc_prev": "A股数据 API 官方 DeepSeek Harness 插件 —— 桌面端 / Web UI 输个包名即装，31 个 A股工具（行情 / K线 / 分时 / 财务 / 资金 / 龙虎榜 / 板块 / 选股 / 量化回测），免费工具无需 Key｜Official DeepSeek Harness plugin for the A-Share Data API — install by name; 31 A-share tools (quotes, K-lines, financials, money flow, sectors, quant backtests), free tools need no key"
-    },
-    {
-      "full_name": "Ep1phanyw/project_manager",
-      "previous": "other",
-      "current": "tool",
-      "desc_now": "Project orchestration plugin for DeepSeek Harness (DSH): parallel subagent parts, plugin-executed acceptance checks, user-only approval.",
+      "current": "other",
+      "desc_now": null,
       "desc_prev": null
     },
     {
-      "full_name": "Travis13197/NatSci-Writing-skills",
+      "full_name": "Pondsi/dsh-diwen",
       "previous": "other",
-      "current": "tool",
-      "desc_now": "Skill that produces complete manuscripts and complete figure sets at Nature/Science standard, then revise, format and defend them. ",
-      "desc_prev": "Skill that produces complete manuscripts and complete figure sets at Nature/Science standard, then revise, format and defend them. "
-    },
-    {
-      "full_name": "houyanchao/dsh-open-model",
-      "previous": "other",
-      "current": "model",
-      "desc_now": "安装后，无需注册或登录，即可在 DSH 中使用免费 AI 模型。连接 ChatGPT 账号后，还能直接使用已有套餐的额度。",
-      "desc_prev": "在 DeepSeek Harness 中使用和管理 Kilo 匿名免费模型"
-    },
-    {
-      "full_name": "soffits/dsh-fallback-models",
-      "previous": "resource",
-      "current": "tool",
-      "desc_now": "Fallback model chain for DeepSeek Harness: when a model request keeps failing after DSH's own retries, the work continues on the next model in a configured list.",
-      "desc_prev": "Fallback model chain for DeepSeek Harness: when a model request keeps failing, the work continues on the next model in your list."
-    },
-    {
-      "full_name": "miorin-chan/dsh-local-plugin-reload",
-      "previous": "other",
-      "current": "resource",
-      "desc_now": "Identify local plugins in DeepSeek Harness and reinstall them from their original source.",
-      "desc_prev": "Identify local plugins in DeepSeek Harness and reinstall them from their original source."
+      "current": "agent",
+      "desc_now": "迪文（Diwen）dsh 插件：模型自行判断何时使用；AI↔AI 通讯（本体↔子代理、多 agent、机械化批处理）强制走迪文概念坐标。开源 CC BY 4.0，署名即用（Pondsi）。",
+      "desc_prev": "迪文（Diwen）dsh 插件：模型自行判断何时使用；AI↔AI 通讯（本体↔子代理、多 agent、机械化批处理）强制走迪文概念坐标。开源 CC BY 4.0，署名即用（Pondsi）。"
     }
   ]
 }
