@@ -1,41 +1,27 @@
 {
-  "generated_at": "2026-11-26T21:45:19.132Z",
-  "count": 5,
+  "generated_at": "2026-11-27T04:29:08.771Z",
+  "count": 3,
   "items": [
     {
-      "full_name": "Merziller/prompt-fusion",
+      "full_name": "omnimux-ai/omnimux-client",
+      "previous": "coding",
+      "current": "vision",
+      "desc_now": "Open-source local AI video studio & editor for e-commerce product videos, UGC ads & AI agent workflows (macOS/Windows). 开源本地 AI 电商带货与 UGC 短视频工作台，集成数字人资产库、灵感拆解、无限多模态画布与多轨剪辑。",
+      "desc_prev": "OmniMux — Local AI content commerce workbench for product videos, ads, and creator workflows. Built-in product & asset library, inspiration teardown, infinite multimodal canvas, and timeline editor for macOS & Windows."
+    },
+    {
+      "full_name": "linhuanwen/dsh-plugin-agent-browser",
       "previous": "tool",
       "current": "web-ui",
-      "desc_now": "Prompt Fusion: semantic prompt enhancement with fidelity checks, one-button DSH UI, CLI, Skills and MCP. Produced by 禾杨智绘工作室; developed by Merziller.",
-      "desc_prev": "Agent-neutral prompt-rule core: DSH one-button, portable Skills, CLI, MCP stdio/HTTP and REST/OpenAPI. Quality limitations disclosed; not a semantic rewriter."
+      "desc_now": "在 DeepSeek Harness 桌面端右侧栏里开一个 Agent 能操作、你能随时接管的真浏览器：16 个 browser_* 工具（快照 / 点选指路 / 标签页 / 拖拽 / 网络与 console 尾巴）+ 人机验证交接",
+      "desc_prev": "在 DeepSeek Harness 桌面端右侧栏里开一个 Agent 能操作、你能随时接管的真浏览器：11 个 browser_* 工具 + 人机验证交接"
     },
     {
-      "full_name": "0xnirlin/dsh-plugin-ziztu",
-      "previous": "tool",
-      "current": "agent",
-      "desc_now": "Ziztu MCP plugin for DeepSeek Harness: connect Ziztu Clip Maker (getziztu.com/clipper) and Ziztu Studio from your agent.",
-      "desc_prev": "Ziztu for DeepSeek Harness: plan, write and make micro dramas and anime episodes from your agent, through Ziztu's MCP server."
-    },
-    {
-      "full_name": "QuinnKevin/dsh-concept-explainer",
-      "previous": "web-ui",
-      "current": "memory",
-      "desc_now": "Explain a selected concept in a DeepSeek Harness conversation in a right-sidebar tab; save it as a Markdown note or branch the conversation with the explanation appended. MIT licensed.",
-      "desc_prev": "Explain an unfamiliar concept selected in a DeepSeek Harness conversation in an isolated right-sidebar tab; the conversation is read-only and the explanation prompt is customizable."
-    },
-    {
-      "full_name": "fairyqinglan/dsh-usage-dashboard",
-      "previous": "model",
-      "current": "web-ui",
-      "desc_now": "Daily token usage dashboard for DeepSeek Harness — per-model breakdown, clickable day drill-down, theme-aware heatmap, CSV/JSON export. Zero dependencies, local-only.",
-      "desc_prev": "Daily token usage with a per-model breakdown for the DeepSeek Harness — zero deps, local-only, GitHub-style heatmap and multi-hue trend charts"
-    },
-    {
-      "full_name": "AppsGanin/dsh-qwen-subscription",
+      "full_name": "Testiphi/dsh-stage-prose",
       "previous": "other",
-      "current": "model",
-      "desc_now": "Qwen (qwen.ai) subscription as a DeepSeek Harness LLM provider: OAuth device-flow sign-in, account pool with failover, quota visibility, localized settings card.",
-      "desc_prev": null
+      "current": "agent",
+      "desc_now": "Live, non-intrusive progress updates every N silent steps in DeepSeek Harness — auto-folded on completion to keep final answers clean.",
+      "desc_prev": "Progress narration and readable collapsed turns for DeepSeek Harness"
     }
   ]
 }
