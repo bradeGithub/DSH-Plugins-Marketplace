@@ -1,48 +1,27 @@
 {
-  "generated_at": "2026-11-27T23:18:35.361Z",
-  "count": 6,
+  "generated_at": "2026-11-28T07:22:32.513Z",
+  "count": 3,
   "items": [
     {
-      "full_name": "AIcivilization/dsh-model",
+      "full_name": "linhuanwen/dsh-plugin-agent-browser",
+      "previous": "vision",
+      "current": "document",
+      "desc_now": "在 DeepSeek Harness 桌面端右侧栏里开一个 Agent 能操作、你能随时接管的真浏览器：20 个 browser_* 工具（快照 / 点选与框选 / 页面文字与表格阅读 / 表单批量填写 / 标签页 / 拖拽 / 页面内落点痕迹 / 动作时间线 / 文件索引 / 网络与 console 尾巴）+ 人机验证交接",
+      "desc_prev": "在 DeepSeek Harness 桌面端右侧栏里开一个 Agent 能操作、你能随时接管的真浏览器：17 个 browser_* 工具（快照 / 点选与框选指路 / 标签页 / 拖拽 / 页面内动作落点痕迹 / 动作时间线与截图证据 / 网络与 console 尾巴）+ 人机验证交接"
+    },
+    {
+      "full_name": "egg2023001-cmd/dsh-fish-pay-counter",
+      "previous": "other",
+      "current": "web-ui",
+      "desc_now": "摸鱼发薪局 · DSH 摸鱼桌宠。等 AI 干活时，点一下金鱼放烟花，右键喂宠物、戳泡泡。想看钱涨？填班表就能估算今天的工资。",
+      "desc_prev": "摸鱼发薪局：左键点鱼放烟花，右键喂鱼或在 DSH 工作台上戳泡泡。"
+    },
+    {
+      "full_name": "WantToSnuggle/dsh-cocos-workbench",
       "previous": "other",
       "current": "tool",
-      "desc_now": "Daily check-in credits claimed for you (Trae, Qoder, WorkBuddy China) · one OpenAI-compatible address relaying every model · free and subscription model sources. 每天自动签到领积分 · 一个地址中转所有模型 · 免费和订阅模型随你接。",
-      "desc_prev": "Daily check-in credits claimed for you (Trae, Qoder, WorkBuddy China) · one OpenAI-compatible address relaying every model · free and subscription model sources. 每天自动签到领积分 · 一个地址中转所有模型 · 免费和订阅模型随你接。"
-    },
-    {
-      "full_name": "linhuanwen/dsh-plugin-agent-browser",
-      "previous": "web-ui",
-      "current": "vision",
-      "desc_now": "在 DeepSeek Harness 桌面端右侧栏里开一个 Agent 能操作、你能随时接管的真浏览器：17 个 browser_* 工具（快照 / 点选与框选指路 / 标签页 / 拖拽 / 页面内动作落点痕迹 / 动作时间线与截图证据 / 网络与 console 尾巴）+ 人机验证交接",
-      "desc_prev": "在 DeepSeek Harness 桌面端右侧栏里开一个 Agent 能操作、你能随时接管的真浏览器：16 个 browser_* 工具（快照 / 点选与框选指路 / 标签页 / 拖拽 / 网络与 console 尾巴）+ 人机验证交接"
-    },
-    {
-      "full_name": "fly3366/DeepJIT",
-      "previous": "agent",
-      "current": "coding",
-      "desc_now": "JIT-compile repeated agent workflows into reusable skills and flows for deepseek-harness (dsh).",
-      "desc_prev": "JIT-compile repeated agent workflows into reusable skills and flows for deepseek-harness (dsh)."
-    },
-    {
-      "full_name": "fly3366/dsh-o11y-plugin",
-      "previous": "tool",
-      "current": "other",
-      "desc_now": "Unified metric/log/trace adaptation for dsh and its plugins (enterprise OpenTelemetry).",
-      "desc_prev": "Unified metric/log/trace adaptation for dsh and its plugins (enterprise OpenTelemetry)."
-    },
-    {
-      "full_name": "Utmotc/dsh-balance-card",
-      "previous": "model",
-      "current": "web-ui",
-      "desc_now": "Self-contained dsh Web sidebar card for provider balance and quota: four visual styles, per-vendor monitoring, 21 direct vendor integrations, no plugin dependencies.",
-      "desc_prev": "Self-contained dsh Web sidebar card for provider balance and quota: four visual styles, per-vendor monitoring, 21 direct vendor integrations, no plugin dependencies."
-    },
-    {
-      "full_name": "nixuejun888/dsh-jarvis-sphere",
-      "previous": "tool",
-      "current": "memory",
-      "desc_now": "贾维斯球 for DeepSeek Harness Web：全息神经元球 + 记忆地图 + 操作员。球随任务真实执行数据变化，球面每颗光点是一条真实记忆，并注入 JARVIS 人格与 9 个工具（记忆审计/归档/编年史/日报/自检/场景/提醒）。A JARVIS sphere: live-activity visualization, a memory map, and a resident operator.",
-      "desc_prev": "贾维斯球 for DeepSeek Harness Web：全息神经元球 + 记忆地图 + 操作员。球随任务真实执行数据变化，球面每颗光点是一条真实记忆，并注入 JARVIS 人格与 9 个工具（记忆审计/归档/编年史/日报/自检/场景/提醒）。A JARVIS sphere: live-activity visualization, a memory map, and a resident operator."
+      "desc_now": "DSH 插件：在 DSH 里驱动 Cocos Creator 4 项目——建项目、异步构建、本地预览、场景 MCP 工具与右侧栏工作台。",
+      "desc_prev": null
     }
   ]
 }
